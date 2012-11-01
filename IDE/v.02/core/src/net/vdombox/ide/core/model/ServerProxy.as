@@ -6,6 +6,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
 	
+	import net.vdombox.ide.common.model.ProxyStorage;
 	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -174,6 +175,8 @@ package net.vdombox.ide.core.model
 			if ( !applicationProxy )
 			{
 				applicationProxy = new ApplicationProxy( applicationVO );
+				ProxyStorage.addProxy( ApplicationProxy.NAME + "/" + applicationVO.id );
+				
 				facade.registerProxy( applicationProxy );
 			}
 

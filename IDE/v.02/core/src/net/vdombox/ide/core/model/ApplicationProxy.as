@@ -5,6 +5,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.soap.Operation;
 	import mx.rpc.soap.SOAPFault;
 	
+	import net.vdombox.ide.common.model.ProxyStorage;
 	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
@@ -221,6 +222,8 @@ package net.vdombox.ide.core.model
 			if ( !pageProxy )
 			{
 				pageProxy = new PageProxy( pageVO ) as PageProxy;
+				ProxyStorage.addProxy( PageProxy.NAME + "/" + pageVO.applicationVO.id + "/" + pageVO.id );
+				
 				facade.registerProxy( pageProxy );
 			}
 			

@@ -5,6 +5,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.CheckIndexPageCommand;
 	import net.vdombox.ide.core.controller.CheckSelectedPageCommand;
 	import net.vdombox.ide.core.controller.CheckUpdateCommand;
+	import net.vdombox.ide.core.controller.ClearProxiesStorageCommand;
 	import net.vdombox.ide.core.controller.CloseApplicationManagerCommand;
 	import net.vdombox.ide.core.controller.CloseIDECommand;
 	import net.vdombox.ide.core.controller.CloseInitialWindowCommand;
@@ -286,6 +287,8 @@ package net.vdombox.ide.core
 		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
 		public static const SET_SELECTED_APPLICATION : String = "setSelectedApplication";
+		
+		public static const CLEAR_PROXY_STORAGE : String = "clearProxyStorage";
 		
 		public static const EDIT_APPLICATION_INFORMATION : String = "editApplicationInformation";
 		
@@ -602,6 +605,9 @@ package net.vdombox.ide.core
 			registerCommand( CHECK_UPDATE, CheckUpdateCommand );
 			registerCommand( WRITE_ERROR, AlertSystemCommand );
 			registerCommand( WRITE_QUESTION, AlertSystemCommand );
+			
+			registerCommand( CLEAR_PROXY_STORAGE, ClearProxiesStorageCommand );
+			
 		}
 	}
 }

@@ -27,8 +27,9 @@ package net.vdombox.ide.core.controller
 			
 			sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, statesProxy.selectedApplication );	
 			
-			settingsProxy.settings.lastApplicationID = applicationVO.id;
+			sendNotification( ApplicationFacade.CLEAR_PROXY_STORAGE );	
 			
+			settingsProxy.settings.lastApplicationID = applicationVO.id;
 		}
 		
 		private function get lastOpenedApplication(): ApplicationVO

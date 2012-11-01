@@ -3,7 +3,7 @@
 					   xmlns:mx="library://ns.adobe.com/flex/halo"
 					   xmlns:s="library://ns.adobe.com/flex/spark"
 					   preinitialize="application_preinitializeHandler(event)"
-					   applicationComplete="application_applicationCompleteHandler()">
+					   >
 
 	<fx:Metadata>  
 		[ ResourceBundle( "Core_General" ) ]
@@ -56,37 +56,23 @@
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.core.ApplicationFacade;
+			import net.vdombox.ide.core.model.LogProxy;
 
 			public static const NAME : String = "VdomIDE";
 
 			private var facade : ApplicationFacade = ApplicationFacade.getInstance( NAME );
-
+			
 			protected function application_preinitializeHandler( event : FlexEvent ) : void
 			{
-				facade.preinitalize( this );
-			}
-
-			protected function application_applicationCompleteHandler() : void
-			{
-				loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onUncaughtError);
+				LogProxy.clear();
 				
+				LogProxy.addLog("VDOM IDE ");
+				facade.preinitalize( this );
+				
+				LogProxy.addLog("VDOM IDE22  ");
 				facade.startup( this );
 			}
 			
-			private function onUncaughtError(e:UncaughtErrorEvent):void
-			{
-				// Do something with your error.
-				if (e.error is Error)
-				{
-					var error:Error = e.error as Error;
-					trace(error.errorID, error.name, error.message);
-				}
-				else
-				{
-					var errorEvent:ErrorEvent = e.error as ErrorEvent;
-					trace(errorEvent.errorID);
-				}
-			}
 		]]>
 	</fx:Script>
 </s:WindowedApplication>

@@ -6,6 +6,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.soap.Operation;
 	import mx.rpc.soap.SOAPFault;
 	
+	import net.vdombox.ide.common.model.ProxyStorage;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -431,6 +432,8 @@ package net.vdombox.ide.core.model
 			if ( !objectProxy )
 			{
 				objectProxy = new ObjectProxy( objectVO ) as ObjectProxy;
+				ProxyStorage.addProxy(  ObjectProxy.NAME + "/" + objectVO.pageVO.applicationVO.id + "/" + objectVO.pageVO.id + "/" + objectVO.id );
+				
 				facade.registerProxy( objectProxy );
 			}
 
