@@ -8,13 +8,14 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
+	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
 	public class RendererTransformedCommand extends SimpleCommand
 	{
-		private var renderers : Array;
+		private var rendererBase : RendererBase;
 		
 		override public function execute( notification : INotification ) : void
 		{
@@ -33,9 +34,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		
 			var attributes : Array = vdomObjectAttributesVO.attributes;
 
-			renderers = renderProxy.getRenderersByVO( vdomObjectAttributesVO.vdomObjectVO );
+			rendererBase = renderProxy.getRendererByVO( vdomObjectAttributesVO.vdomObjectVO );
 			
-			if( !renderers || renderers.length == 0 )
+			if( !rendererBase )
 				return;
 			
 			var hasAnotherAttributes : Boolean = false;
@@ -77,32 +78,21 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			if ( hasAnotherAttributes )
 			{
-				for each( renderer in renderers )
-				{
-					if ( renderer )
-					{
-						renderer.lock( true );
-						needForUpdateObject[ renderer ] = true;
-					}
-				}
+				rendererBase.lock( true );
+				needForUpdateObject[ rendererBase ] = true;
 			}
 			
 			sendNotification( Notifications.UPDATE_ATTRIBUTES, vdomObjectAttributesVO );
 		}
 		
 		private function applyAttribute( attributeVO : AttributeVO ) : void
-		{
-			var renderer : UIComponent;
-			
-			for each ( renderer in renderers )
-			{
-				if( attributeVO.name == "left" )
-					renderer.x = int( attributeVO.value );
-				else if( attributeVO.name == "top" )
-					renderer.y = int( attributeVO.value );
-				else
-					renderer[ attributeVO.name ] = int( attributeVO.value );
-			}
+		{		
+			if( attributeVO.name == "left" )
+				rendererBase.x = int( attributeVO.value );
+			else if( attributeVO.name == "top" )
+				rendererBase.y = int( attributeVO.value );
+			else
+				rendererBase[ attributeVO.name ] = int( attributeVO.value );
 		}
 		
 		private function getChangedAttributes( vdomObjectAttributesVO : VdomObjectAttributesVO ) : uint

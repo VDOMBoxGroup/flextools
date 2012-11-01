@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
-	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
+	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -10,10 +10,13 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var renderer : IRenderer = notification.getBody() as IRenderer;
+			var pageVO : PageVO = notification.getBody() as PageVO;
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 
-			renderProxy.removeRenderer( renderer );
+			if ( !( pageVO is PageVO ) )
+				return;
+			
+			renderProxy.removeRenderersByPage( pageVO );
 		}
 	}
 }

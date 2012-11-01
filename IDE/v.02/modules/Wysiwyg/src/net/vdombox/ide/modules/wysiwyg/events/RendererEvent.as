@@ -8,7 +8,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 	{
 		public static var CREATED : String = "rendererCreated";
 
-		public static var REMOVED : String = "rendererRemoved";
+		//public static var REMOVED : String = "rendererRemoved";
 
 		public static var RENDER_CHANGING : String = "rendererRenderChanging";
 

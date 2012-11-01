@@ -81,11 +81,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 			if ( renderVO && renderVO.vdomObjectVO )
 			{ 
 				var objectID : String = renderVO.vdomObjectVO.id;
-				
-				if ( !renderersIndex.hasOwnProperty( objectID ) )
-					renderersIndex[ objectID ] = [];
 
-				renderersIndex[ objectID ].push( renderer );
+				renderersIndex[ objectID ] = renderer;
 
 				if ( vdomObjectsName[ objectID ] )
 					renderVO.vdomObjectVO.name = vdomObjectsName[ objectID ];
@@ -131,16 +128,6 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 			return renderVO;
 		}
-
-		/**
-		 *
-		 * @param vdomObjectVO
-		 * @return
-		 */
-		public function getRenderersByVO( vdomObjectVO : IVDOMObjectVO ) : Array
-		{
-			return vdomObjectVO ? renderersIndex[ vdomObjectVO.id ] : [null];
-		}
 		
 		public function getRendererByVO( vdomObjectVO : IVDOMObjectVO ) : RendererBase
 		{
@@ -153,18 +140,18 @@ package net.vdombox.ide.modules.wysiwyg.model
 		{
 			var rendererBase : RendererBase = null;
 			
-			if ( renderersIndex[ ID ] && renderersIndex[ ID  ][0] )
-				rendererBase = renderersIndex[ID ][0];
+			if ( renderersIndex[ ID  ] )
+				rendererBase = renderersIndex[ID ];
 			
 			return rendererBase;
 		}
 		
 		public function setNormalScinToRenderers() : void
 		{
-			for each( var object : Array in renderersIndex )
+			for each( var object : RendererBase in renderersIndex )
 			{
-				if ( object.length > 0 )
-					object[0].setState = "normal";
+				if ( object )
+					object.setState = "normal";
 			}
 		}
 		
@@ -195,22 +182,35 @@ package net.vdombox.ide.modules.wysiwyg.model
 		 */
 		public function removeRenderer( renderer : IRenderer ) : void
 		{
-			var renderVO : RenderVO = IItemRenderer( renderer ).data as RenderVO;
+			
+			var renderVO : RenderVO = renderer.renderVO;
 
 			if ( renderVO && renderVO.vdomObjectVO && renderersIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
 			{
-				var index : int = renderersIndex[ renderVO.vdomObjectVO.id ].indexOf( renderer );
-
-				if ( index != -1 )
-				{
-					renderersIndex[ renderVO.vdomObjectVO.id ].splice( index, 1 );
-					trace("Delete");
-				}
+				delete renderersIndex[ renderVO.vdomObjectVO.id ]
+				trace("Delete");
 			}
 
 			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGED, renderer_renderchangedHandler );
 			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGING, renderer_renderchangingHandler );
 			
+		}
+		
+		public function removeRenderersByPage( pageVO : PageVO ) : void
+		{
+			var pageID : String = pageVO.id;
+			
+			for each( var rendererBase : RendererBase in renderersIndex )
+			{				
+				if ( rendererBase.vdomObjectVO.id == pageID )
+					removeRenderer( rendererBase );
+				else if ( rendererBase.vdomObjectVO is ObjectVO )
+				{
+					var objectVO : ObjectVO = rendererBase.vdomObjectVO as ObjectVO;
+					if ( objectVO.pageVO.id == pageID )
+						removeRenderer( rendererBase );
+				}
+			}
 		}
 		
 
@@ -350,23 +350,17 @@ package net.vdombox.ide.modules.wysiwyg.model
 		private function renderer_renderchangingHandler( event : RendererEvent ) : void
 		{
 			var renderer : IRenderer = event.currentTarget as IRenderer;
-			var renderers : Array;
+			var rendererBase : RendererBase;
 
 			if ( renderer.vdomObjectVO && renderersIndex.hasOwnProperty( renderer.vdomObjectVO.id ) )
-				renderers = renderersIndex[ renderer.vdomObjectVO.id ];
+				rendererBase = renderersIndex[ renderer.vdomObjectVO.id ];
 
 			var index : int = -1;
 
-			if ( renderers && renderers.length > 0 )
-				index = renderers.indexOf( renderer );
-			else
+			if ( !rendererBase  )
 				return;
 
-			if ( index != -1 )
-				renderers.splice( index, 1 );
-
-			if ( renderers.length == 0 )
-				delete renderersIndex[ renderer.vdomObjectVO.id ];
+			delete renderersIndex[ renderer.vdomObjectVO.id ];
 
 		}
 

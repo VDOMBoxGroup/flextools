@@ -105,7 +105,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.xmlPresentation = value;
 		}
 
-
 		override public function onRegister() : void
 		{
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
@@ -193,18 +192,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 						var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 						if ( selectedObject )
 						{
-							var renderers : Array = renderProxy.getRenderersByVO( selectedObject );
+							var rendererBase : RendererBase = renderProxy.getRendererByVO( selectedObject );
 
 							// find nesesary renderer
 
-							for each ( var renderer : RendererBase in renderers )
-							{
-								if ( renderer.renderVO.vdomObjectVO.id == selectedObject.id )
-								{
-									selRenderer = renderer;
-									break;
-								}
-							}
+							if ( rendererBase.renderVO.vdomObjectVO.id == selectedObject.id )
+								selRenderer = rendererBase;
 						}
 						// mark object
 						
@@ -228,7 +221,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					if ( multiSelectRenderers )
 					{
-						for each ( renderer in multiSelectRenderers )
+						for each ( var renderer : RendererBase in multiSelectRenderers )
 						{
 							renderer.setState = "normal";
 						}
@@ -370,7 +363,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var lineVO : LineVO;
 			
 			selectPage = statesProxy.selectedPage as IVDOMObjectVO;
-			pageRender = rendProxy.getRenderersByVO( selectPage )[0] as PageRenderer;
+			pageRender = rendProxy.getRendererByVO( selectPage ) as PageRenderer;
 			g = pageRender.linegroup.graphics;
 			g.clear();
 			g.lineStyle( 1, 0x0000FF );
@@ -626,7 +619,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.addEventListener( EditorEvent.RENDERER_TRANSFORMED, rendererTransformedHandler, false, 0, true );
 
 			editor.addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
-			editor.addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0 , true );
 			editor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
 			
 			editor.addEventListener( RendererEvent.MOUSE_DOWN, renderer_DownHandler, true, 0, true );
@@ -702,7 +694,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			editor.removeEventListener( EditorEvent.RENDERER_TRANSFORMED, rendererTransformedHandler );
 
 			editor.removeEventListener( RendererEvent.CREATED, renderer_createdHandler, true );
-			editor.removeEventListener( RendererEvent.REMOVED, renderer_removedHandler, true );
 			editor.removeEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true );
 			
 			editor.removeEventListener( RendererEvent.PASTE_SELECTED, renderer_pasteHandler, true );
@@ -983,30 +974,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function clearData() : void
 		{
 			editor.editorVO.vdomObjectVO = null;
+			listStates = null;
 		}
 
 		private function removedFromStageHandler( event : Event ) : void
 		{
-			
-			//for each( var render : RenderVO in editor.editorVO.renderVO.children )
-			//editor.editorVO.renderVO.children.splice(); 
-			
-			
-			
-				
-			/*for each ( var render : RenderVO in editorVO.renderVO.children )
-			{
-				sendNotification( Notifications.RENDERER_REMOVED, render );	
-			}
-			
-			editorVO.renderVO.children.splice( 0, editorVO.renderVO.children.length );
-				
-			sendNotification( Notifications.RENDERER_REMOVED, editorVO.renderVO );	*/
+			sendNotification( Notifications.RENDERER_REMOVED, editor.editorVO.vdomObjectVO );
 			
 			facade.removeMediator( mediatorName );
 			delete instancesNameList[ mediatorName ];
-			
-			
 		}
 
 		private function partAddedHandler( event : SkinPartEvent ) : void
@@ -1047,11 +1023,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function renderer_createdHandler( event : RendererEvent ) : void
 		{
 			sendNotification( Notifications.RENDERER_CREATED, event.target as IRenderer );
-		}
-
-		private function renderer_removedHandler( event : RendererEvent ) : void
-		{
-			sendNotification( Notifications.RENDERER_REMOVED, event.target as IRenderer );
 		}
 		
 		private var multiSelectRenderers : Object;

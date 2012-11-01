@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
+	import flash.system.System;
 	import flash.utils.Dictionary;
 	
 	import mx.core.IVisualElement;
@@ -22,9 +23,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			addEventListener( "tabRemoved", numTabChangedHandler );
 		}
 
-		private var _editors : Dictionary;
+		private var editors : Dictionary;
 
-		public function get editors():Dictionary
+		/*public function get editors():Dictionary
 		{
 			return _editors;
 		}
@@ -32,7 +33,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set editors(value:Dictionary):void
 		{
 			_editors = value;
-		}
+		}*/
 
 		public function get selectedEditor() : IEditor
 		{
@@ -127,17 +128,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		public function closeEditor( vdomObjectVO : IVDOMObjectVO ) : IEditor
 		{
-			var result : IEditor;
-			var tab : Tab;
-
-			result = getEditorByVO( vdomObjectVO );
+			var result : IEditor = getEditorByVO( vdomObjectVO );
 
 			if ( result )
 			{
-				tab = _editors[ result ];
+				var tab : Tab = editors[ result ];
 				removeTab( tab );
 
-				delete _editors[ result ];
+				delete editors[ result ];
 			}
 
 			return result;
@@ -147,14 +145,23 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			//			затычка нада разобраться в чем дело
 			if (tabBar.dataProvider == null )
-				return 
-			
+				return;
+				
 			var tab : Tab;
+			var editor : IEditor;
+			
 			while ( tabBar.dataProvider.length  > 0 ) 
 			{
 				tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;
+				editor = tab.getElementAt(0) as IEditor;
 				removeTab( tab );
-			}			
+				
+				delete editors[ editor ];
+			}
+			
+			editors = null;
+			
+			System.gc();
 		}
 		
 		private function numTabChangedHandler( event : Event ) : void
@@ -163,7 +170,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 			
 			var tab0 : Tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;
-			var tab1 : Tab
+			var tab1 : Tab;
 			
 			if( tabBar.dataProvider.length == 1 )
 			{
@@ -181,7 +188,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function selectedTabChangedHandler( event : Event ) : void
 		{
-			// CHANGE
 			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CHANGE ) );
 		}
 		

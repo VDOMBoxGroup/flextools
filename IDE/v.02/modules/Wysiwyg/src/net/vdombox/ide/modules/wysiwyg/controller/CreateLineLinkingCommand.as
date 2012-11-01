@@ -48,7 +48,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			
 			renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-			pageRenderer = renderProxy.getRenderersByVO( (rendererBase.renderVO.vdomObjectVO as ObjectVO).pageVO )[0] as PageRenderer;
+			pageRenderer = renderProxy.getRendererByVO( (rendererBase.renderVO.vdomObjectVO as ObjectVO).pageVO ) as PageRenderer;
 			
 			var listComponents : Array;
 			if ( body.ctrlKey as Boolean )
@@ -155,7 +155,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		private function foundComponents ( renderVO : RenderVO ) : Array
 		{
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-			var renderer : RendererBase = renderProxy.getRenderersByVO( renderVO.vdomObjectVO )[0] as RendererBase;
+			var renderer : RendererBase = renderProxy.getRendererByVO( renderVO.vdomObjectVO ) as RendererBase;
 			if (renderVO.children == null || !renderer || !renderer.visible )
 				return null;
 			
@@ -249,7 +249,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				var point : Point = new Point( marker.x, marker.y );
 				if ( marker.renderer.renderVO.parent )
 				{
-					var rend : RendererBase = renderProxy.getRenderersByVO( marker.renderer.renderVO.parent.vdomObjectVO )[0] as RendererBase;
+					var rend : RendererBase = renderProxy.getRendererByVO( marker.renderer.renderVO.parent.vdomObjectVO ) as RendererBase;
 					point = marker.localToGlobal(point);
 					
 					point=rend.dataGroup.globalToContent(point);
@@ -366,7 +366,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				var point : Point = new Point( marker.x, marker.y );
 				if ( marker.renderer.renderVO.parent )
 				{
-					var rend : RendererBase = renderProxy.getRenderersByVO( marker.renderer.renderVO.parent.vdomObjectVO )[0] as RendererBase;
+					var rend : RendererBase = renderProxy.getRendererByVO( marker.renderer.renderVO.parent.vdomObjectVO ) as RendererBase;
 					point = marker.localToGlobal(point);
 					
 					point=rend.dataGroup.globalToContent(point);

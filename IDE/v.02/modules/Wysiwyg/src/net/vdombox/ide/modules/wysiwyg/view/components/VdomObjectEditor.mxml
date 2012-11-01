@@ -156,7 +156,7 @@
 
 			private function addHandlers() : void
 			{
-				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
+				addEventListener( Event.REMOVED, removedFromStageHandler, false, 0, true );
 
 				addEventListener( RendererEvent.MOVE, renderer_moveHandler, true, 0, true );
 				addEventListener( RendererEvent.HTML_ADDED, renderer_htmlAddedHandler, true, 0, true );
@@ -170,7 +170,7 @@
 
 			private function removeHandlers() : void
 			{
-				removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+				removeEventListener( Event.REMOVED, removedFromStageHandler );
 				
 				removeEventListener( EditorEvent.UNDO, undo_fun );
 				removeEventListener( EditorEvent.REDO, redo_fun );
