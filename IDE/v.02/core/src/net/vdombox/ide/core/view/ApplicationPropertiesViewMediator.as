@@ -237,14 +237,6 @@ package net.vdombox.ide.core.view
 
 			applicationsIconsChoosWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteIconListHandler );
 		}
-		
-		[Bindable]
-		[Embed( source = "assets/radio_Off.png" )]
-		public static var radio_Off : Class;
-		
-		[Bindable]
-		[Embed( source = "assets/radio_On.png" )]
-		public static var radio_On : Class;
 
 		private function commitProperties() : void 
 		{
@@ -255,14 +247,14 @@ package net.vdombox.ide.core.view
 
 			if ( applicationVO && applicationVO.scriptingLanguage == "python" )
 			{
-				applicationPropertiesView.python.source = radio_On;
-				applicationPropertiesView.vscript.source = radio_Off;
+				applicationPropertiesView.python.source = ApplicationPropertiesView.radio_On;
+				applicationPropertiesView.vscript.source = ApplicationPropertiesView.radio_Off;
 				applicationPropertiesView.languageRBGroup.selectedValue = "python";
 			}
 			else
 			{
-				applicationPropertiesView.vscript.source = radio_On;
-				applicationPropertiesView.python.source = radio_Off;
+				applicationPropertiesView.vscript.source = ApplicationPropertiesView.radio_On;
+				applicationPropertiesView.python.source = ApplicationPropertiesView.radio_Off;
 				applicationPropertiesView.languageRBGroup.selectedValue = "vscript";
 			}
 
@@ -381,7 +373,7 @@ package net.vdombox.ide.core.view
 			appInfVO.name = applicationPropertiesView.txtapplicationName.text;
 			appInfVO.description = applicationPropertiesView.txtapplicationDescription.text;
 			appInfVO.version = applicationPropertiesView.txtapplicationVersion.text;
-			appInfVO.scriptingLanguage = applicationPropertiesView.vscript.source == radio_On ? "vscript" : "python";
+			appInfVO.scriptingLanguage = applicationPropertiesView.vscript.source == ApplicationPropertiesView.radio_On ? "vscript" : "python";
 
 			return appInfVO;
 		}
