@@ -156,7 +156,7 @@
 
 			private function addHandlers() : void
 			{
-				addEventListener( Event.REMOVED, removedFromStageHandler, false, 0, true );
+				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
 				addEventListener( RendererEvent.MOVE, renderer_moveHandler, true, 0, true );
 				addEventListener( RendererEvent.HTML_ADDED, renderer_htmlAddedHandler, true, 0, true );
@@ -164,7 +164,7 @@
 				addEventListener( TransformMarkerEvent.TRANSFORM_BEGIN, transformMarker_tansformBeginHandler, true, 0, true );
 				addEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformMarker_tansformCompleteHandler, true, 0, true );
 				
-				addEventListener( RendererEvent.EDITED, setTransformMarketHandler, true, 0, true );
+				addEventListener( RendererEvent.EDITED, setTransformMarketHandler, true );
 			}
 			
 

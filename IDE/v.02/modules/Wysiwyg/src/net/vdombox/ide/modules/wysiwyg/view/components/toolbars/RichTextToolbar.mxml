@@ -652,7 +652,7 @@
 						
 					default:
 					{
-						fontSelector.selectedIndex = 13;
+						fontSelector.selectedIndex = 8;
 						break;
 					}
 				}
@@ -708,7 +708,7 @@
 						
 					default:
 					{
-						sizeSelector.selectedIndex = 3;
+						sizeSelector.selectedIndex = 2;
 						break;
 					}
 				}
