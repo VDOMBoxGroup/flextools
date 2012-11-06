@@ -21,7 +21,7 @@ package net.vdombox.editors.parsers.python
 
 	public class PythonController extends Controller
 	{
-		public function PythonController( stage : Stage, textField : ScriptAreaComponent, __actionVO : IEventBaseVO )
+		public function PythonController( stage : Stage, textField : ScriptAreaComponent, __actionVO : Object )
 		{
 			fld = textField;
 			_actionVO = __actionVO;

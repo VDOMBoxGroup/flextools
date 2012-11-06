@@ -12,7 +12,6 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.base.Controller;
 	import net.vdombox.editors.parsers.base.Token;
-	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	
 	import ro.victordramba.thread.ThreadEvent;
 	import ro.victordramba.thread.ThreadsController;
@@ -21,7 +20,7 @@ package net.vdombox.editors.parsers.vscript
 	
 	public class VScriptController extends Controller
 	{
-		public function VScriptController( stage : Stage, textField : ScriptAreaComponent, __actionVO : IEventBaseVO )
+		public function VScriptController( stage : Stage, textField : ScriptAreaComponent, __actionVO : Object )
 		{
 			fld = textField;
 			

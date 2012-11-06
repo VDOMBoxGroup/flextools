@@ -60,7 +60,7 @@ package net.vdombox.editors.parsers.vscript
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
 		}
 		
-		public override function set actionVO( value : IEventBaseVO ) : void
+		public override function set actionVO( value : Object ) : void
 		{
 			_actionVO = value;
 			controller.actionVO = value;

@@ -14,7 +14,7 @@ package net.vdombox.editors.parsers.base
 		public var scriptAreaComponent : ScriptAreaComponent;
 		
 		protected var assistMenu : AssistMenu;
-		protected var _actionVO : IEventBaseVO;
+		protected var _actionVO : Object;
 		protected var _controller : Controller;
 		
 		public function BaseScriptEditor()
@@ -27,7 +27,7 @@ package net.vdombox.editors.parsers.base
 			
 		}
 		
-		public function set actionVO( actionVO : IEventBaseVO ) : void
+		public function set actionVO( actionVO : Object ) : void
 		{
 		}
 		

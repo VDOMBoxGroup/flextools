@@ -20,11 +20,23 @@ package net.vdombox.editors.parsers.base
 		protected var _classDB : ClassDB;
 		protected var _typeDB : TypeDB;
 		
+		private var _prevImport : Object;
+		
 		
 		public function Tokenizer()
 		{
 		}
 		
+		public function get prevImport():Object
+		{
+			return _prevImport;
+		}
+		
+		public function set prevImport(value:Object):void
+		{
+			_prevImport = value;
+		}
+
 		public function get classDB() : ClassDB
 		{
 			return _classDB;
@@ -43,6 +55,22 @@ package net.vdombox.editors.parsers.base
 		public function tokenByPos( pos : uint ) : Token
 		{
 			return null;
+		}
+		
+		public function addPrevImport( name : String ) : void
+		{
+			if ( !_prevImport )
+				_prevImport = {};
+			
+			_prevImport[ name ] = name;
+		}
+		
+		public function hasPrevImport( name : String ) : Boolean
+		{
+			if ( _prevImport )
+				return _prevImport.hasOwnProperty( name );
+			else
+				return false;
 		}
 	}
 }

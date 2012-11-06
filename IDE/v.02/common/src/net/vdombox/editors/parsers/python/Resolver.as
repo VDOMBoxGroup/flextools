@@ -168,11 +168,11 @@ package net.vdombox.editors.parsers.python
 				var ff : Object;
 				for each ( ff in t.parent.scope.imports.toArray() )
 				{
-					var field : Field;
 					if ( ff.source != ff.systemName )
 					{
-						field = HashLibraryArray.getTokenToLibraty( ff.source, ff.systemName, "python" );
-						a.push( StandardWordsProxy.getAutoCompleteItemVOByField( field, true ) );
+						var field : Field = HashLibraryArray.getTokenToLibraty( ff.source, ff.systemName, "python" );
+						if ( field )
+							a.push( StandardWordsProxy.getAutoCompleteItemVOByField( field, true ) );
 					}
 					else
 						a.push( new AutoCompleteItemVO( VDOMImage.Library, ff.name ) );

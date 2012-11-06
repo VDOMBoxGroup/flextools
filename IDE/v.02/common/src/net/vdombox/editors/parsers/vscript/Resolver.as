@@ -165,10 +165,10 @@ package net.vdombox.editors.parsers.vscript
 				var ff : Object;
 				for each ( ff in t.parent.scope.imports.toArray() )
 				{
-					var field : Field;
 					if ( ff.source != ff.systemName )
 					{
-						field = HashLibraryArray.getTokenToLibraty( ff.source, ff.systemName, "vscript" );
+						var field : Field  = HashLibraryArray.getTokenToLibraty( ff.source, ff.systemName, "vscript" );
+						
 						a.push( StandardWordsProxy.getAutoCompleteItemVOByField( field, true ) );
 					}
 					else

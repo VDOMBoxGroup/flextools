@@ -9,6 +9,7 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.parsers.base.Multiname;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.editors.parsers.base.Tokenizer;
+	import net.vdombox.ide.common.model._vo.LibraryVO;
 	
 	import ro.victordramba.util.HashMap;
 
@@ -493,9 +494,11 @@ package net.vdombox.editors.parsers.python
 				}
 				else if ( t.string == "*" )
 				{
-					for each ( var name : AutoCompleteItemVO in HashLibraryArray.getImportToLibraty( importFrom, "python" ) )
+					if ( actionVO is LibraryVO )
+						addPrevImport( actionVO.name );
+					
+					for each ( var name : AutoCompleteItemVO in HashLibraryArray.getImportToLibraty( importFrom, "python", prevImport ) )
 					{
-						
 						imports[ imports.length - 1 ].setValue( name.value, new ImportItemVO( name.value, name.value, importFrom ) );
 					}
 					

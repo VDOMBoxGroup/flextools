@@ -58,7 +58,12 @@ package net.vdombox.editors
 			return a;
 		}
 		
-		public static function getImportToLibraty( importFrom : String, lang : String ) : Vector.<AutoCompleteItemVO>
+		/*public static function getImportFiledToLibrary( importFrom : String, lang : String, prevImport : Object = null ) : Array
+		{
+			
+		}*/
+		
+		public static function getImportToLibraty( importFrom : String, lang : String, prevImport : Object = null) : Vector.<AutoCompleteItemVO>
 		{
 			if ( importToLibraries.hasKey( importFrom ) )
 			{
@@ -75,7 +80,13 @@ package net.vdombox.editors
 				
 				var string : String = hashLibraries[ path[0] ].libraryVO.script;
 				
-				var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( lang, string );;
+				var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( lang, string );
+				tokenizer.actionVO = hashLibraries[ path[0] ].libraryVO;
+				
+				tokenizer.prevImport = prevImport;
+				
+				if ( tokenizer.hasPrevImport( path[0] ) )
+					return a;
 				
 				while ( tokenizer.runSlice() )
 				{
@@ -96,9 +107,26 @@ package net.vdombox.editors
 				if ( t && t.parent && t.parent.scope.imports )
 				{
 					var importLibrary : ImportItemVO;
+					var fields : Vector.<AutoCompleteItemVO>;
+					var field : Field;
 					for each ( importLibrary in t.parent.scope.imports.toArray() )
 					{
-						a.push( new AutoCompleteItemVO( VDOMImage.Standard, importLibrary.name ) );
+						if ( importLibrary.source != importLibrary.systemName )
+						{
+							field = getTokenToLibraty( importLibrary.source, importLibrary.systemName, lang, prevImport );
+							if ( field )
+								a.push( StandardWordsProxy.getAutoCompleteItemVOByField( field, true ) );
+						}
+						else
+						{
+							fields = getImportToLibraty(importLibrary.source, lang, prevImport );
+						}
+						
+						if ( fields )
+							a.concat( fields );
+						else
+							a.push( new AutoCompleteItemVO( VDOMImage.Standard, importLibrary.name ) );
+					
 					}
 				}
 				
@@ -182,7 +210,7 @@ package net.vdombox.editors
 			return a;
 		}
 		
-		public static function getTokenToLibraty( importFrom : String, importToken : String, lang : String ) : Field
+		public static function getTokenToLibraty( importFrom : String, importToken : String, lang : String, prevImport : Object = null ) : Field
 		{			
 			var path : Array = importFrom.split( "." );
 			var path0 : String = path[0];
@@ -201,6 +229,11 @@ package net.vdombox.editors
 				var string : String = hashLibraries[ path0 ].libraryVO.script;
 				
 				var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( lang, string );
+				tokenizer.actionVO = hashLibraries[ path[0] ].libraryVO;
+				tokenizer.prevImport = prevImport;
+				
+				if ( tokenizer.hasPrevImport( path[0] ) )
+					return null;
 				
 				while ( tokenizer.runSlice() )
 				{
@@ -214,7 +247,7 @@ package net.vdombox.editors
 			
 			var scope : Field = t.scope;
 			
-			if ( t && t.scope && t.scope.members )
+			if ( scope && scope.members )
 			{	
 				var f : Field;
 				var flag : Boolean = false;
@@ -230,9 +263,11 @@ package net.vdombox.editors
 				}
 				
 				if ( flag )
+				{
 					return scope;
+				}
+					 
 			}
-			
 			return null;
 		}
 		
