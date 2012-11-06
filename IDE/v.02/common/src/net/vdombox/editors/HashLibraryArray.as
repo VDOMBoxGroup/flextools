@@ -1,5 +1,7 @@
 package net.vdombox.editors
 {
+	import mx.utils.ObjectUtil;
+	
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.FactoryTokenizers;
 	import net.vdombox.editors.parsers.ImportItemVO;
@@ -120,12 +122,14 @@ package net.vdombox.editors
 						else
 						{
 							fields = getImportToLibraty(importLibrary.source, lang, prevImport );
+							
+							if ( fields )
+								a.concat( fields );
+							else
+								a.push( new AutoCompleteItemVO( VDOMImage.Standard, importLibrary.name ) );
 						}
 						
-						if ( fields )
-							a.concat( fields );
-						else
-							a.push( new AutoCompleteItemVO( VDOMImage.Standard, importLibrary.name ) );
+						
 					
 					}
 				}
@@ -210,19 +214,29 @@ package net.vdombox.editors
 			return a;
 		}
 		
-		public static function getTokenToLibraty( importFrom : String, importToken : String, lang : String, prevImport : Object = null ) : Field
+		public static function getTokenToLibraty( importFrom : String, importToken : String, lang : String, _prevImport : Object = null ) : Field
 		{			
 			var path : Array = importFrom.split( "." );
 			var path0 : String = path[0];
 			
+			var prevImport : Object = ObjectUtil.copy( _prevImport );
+			
 			if ( !hashLibraries.hasOwnProperty( path0 ) )
+				return null;
+			
+			if ( prevImport && prevImport.hasOwnProperty( path0 ) )
 				return null;
 			
 			var t : Token;
 			
 			if ( fieldToLibraries.hasKey( path0 ) )
 			{
-				t = fieldToLibraries.getValue( path0 ) as Token;;
+				t = fieldToLibraries.getValue( path0 ) as Token;
+				
+				if ( !prevImport )
+					prevImport = {};
+				
+				prevImport[ importFrom ] = importFrom;
 			}
 			else
 			{
@@ -259,6 +273,21 @@ package net.vdombox.editors
 						scope = f;
 						flag = true;
 						break;
+					}
+				}
+				
+				if ( !flag )
+				{
+					var importItemVO : ImportItemVO;
+					for each ( importItemVO in scope.imports.toArray() )
+					{
+						f = getTokenToLibraty( importItemVO.source, importToken, lang, prevImport );
+						if ( f )
+						{
+							scope = f;
+							flag = true;
+							break;
+						}
 					}
 				}
 				

@@ -158,8 +158,8 @@ package net.vdombox.editors.parsers.python
 				if ( scope.isStatic )
 					isStatic = true;
 			}
-				//for static scope, add only static members
-				//current class
+			//for static scope, add only static members
+			//current class
 			for each ( f in tokenizer.members.toArray() )
 				a.push( StandardWordsProxy.getAutoCompleteItemVOByField( f ) );
 				
