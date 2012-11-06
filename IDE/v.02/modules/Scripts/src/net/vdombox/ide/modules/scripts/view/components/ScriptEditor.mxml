@@ -164,7 +164,7 @@
 			
 			public function setActionVO() : void
 			{
-				scriptEditor.actionVO = actionVO as IEventBaseVO;
+				scriptEditor.actionVO = actionVO;
 			}
 			
 			public function addScriptEditor() : void
