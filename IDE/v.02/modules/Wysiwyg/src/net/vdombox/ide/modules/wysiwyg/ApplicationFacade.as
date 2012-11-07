@@ -15,6 +15,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.CreatePageRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateToolsetCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.DeleteObjectCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.EditorCreatedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.EditorRemovedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetMultiLineCommand;
@@ -135,7 +136,7 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( Notifications.PAGE_TYPE_ITEM_RENDERER_CREATED, PageTypeItemRendererCreatedCommand );
 			
 			registerCommand( Notifications.CREATE_PAGE_REQUEST, CreatePageRequestCommand );
-			
+			registerCommand( Notifications.DELETE_OBJECT_REQUEST, DeleteObjectCommand );
 		}
 	}
 }

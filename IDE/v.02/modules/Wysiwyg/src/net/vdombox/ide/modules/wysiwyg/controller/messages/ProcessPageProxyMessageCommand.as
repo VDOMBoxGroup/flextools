@@ -61,12 +61,13 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						{
 							sendNotification( ApplicationFacade.SET_NULL );
 							var rendererBase : RendererBase = renderProxy.getRendererByID( body.objectVO.pageVO.id );
-							( rendererBase as PageRenderer ).removeTransformMarket();
+							if ( rendererBase )
+								PageRenderer(rendererBase).removeTransformMarket();
 						}
 						
 						sendNotification( Notifications.OBJECT_DELETED, body.objectVO );
 						rendererBase = renderProxy.getRendererByID( body.objectVO.id );
-						if ( rendererBase.renderVO.parent && rendererBase.renderVO.parent.vdomObjectVO is ObjectVO )
+						if ( rendererBase && rendererBase.renderVO.parent && rendererBase.renderVO.parent.vdomObjectVO is ObjectVO )
 						{
 							var objectVO : ObjectVO = rendererBase.renderVO.parent.vdomObjectVO as ObjectVO;
 							sendNotification( Notifications.GET_WYSIWYG, objectVO );

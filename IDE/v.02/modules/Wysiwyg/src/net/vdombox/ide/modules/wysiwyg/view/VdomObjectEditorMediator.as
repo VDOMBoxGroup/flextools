@@ -196,7 +196,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 							// find nesesary renderer
 
-							if ( rendererBase.renderVO.vdomObjectVO.id == selectedObject.id )
+							if ( rendererBase && rendererBase.renderVO.vdomObjectVO.id == selectedObject.id )
 								selRenderer = rendererBase;
 						}
 						// mark object

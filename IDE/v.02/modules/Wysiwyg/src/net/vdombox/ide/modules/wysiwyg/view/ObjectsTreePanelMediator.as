@@ -599,13 +599,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 							if ( objectXML.name().localName == "page" )
 								sendNotification( Notifications.DELETE_PAGE, { applicationVO: statesProxy.selectedApplication, pageVO: _pages[ objectXML.@id[0].toString() ] } );
 							else
-								sendNotification( Notifications.DELETE_OBJECT, { pageVO:  _pages[ objectXML.@pageID[0].toString() ], objectVO: renderProxy.getRendererByID( objectXML.@id[0].toString() ).renderVO.vdomObjectVO } );			
+								sendNotification( Notifications.DELETE_OBJECT_REQUEST, { pageVO:  _pages[ objectXML.@pageID[0].toString() ], objectID: objectXML.@id[0].toString() } );			
 						}		
 					}
 					else
 					{
 						if ( pageID )
-							sendNotification( Notifications.DELETE_OBJECT, { pageVO: renderProxy.getRendererByID( pageID ).renderVO.vdomObjectVO, objectVO: renderProxy.getRendererByID( objectID ).renderVO.vdomObjectVO } );
+							sendNotification( Notifications.DELETE_OBJECT_REQUEST, { pageVO: _pages[pageID], objectID: objectID } );
 						else
 							sendNotification( Notifications.DELETE_PAGE, { applicationVO: statesProxy.selectedApplication, pageVO: _pages[objectID] } );
 					}
