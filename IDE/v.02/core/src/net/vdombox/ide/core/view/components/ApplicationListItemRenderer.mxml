@@ -197,7 +197,7 @@
 		
 		<s:VGroup width="55%" height="100%" gap="0">
 			
-			<s:Label id="nameLabel"  width="120"
+			<s:Label id="nameLabel"  width="100%"
 					 fontSize="15" color="#fffafc"/>
 			
 			<mx:Spacer height="100%" />

@@ -548,7 +548,7 @@ package net.vdombox.ide.core.model
 			
 			for each ( actionXML in clientActionsXMLList )
 			{
-				clientActionVO = new ClientActionVO();
+				clientActionVO = new ClientActionVO("");
 				clientActionVO.setProperties( actionXML );
 				
 				if ( clientActionVO.id )
