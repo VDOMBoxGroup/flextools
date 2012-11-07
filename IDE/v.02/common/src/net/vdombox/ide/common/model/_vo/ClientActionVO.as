@@ -1,5 +1,6 @@
 package net.vdombox.ide.common.model._vo
 {
+	import mx.resources.ResourceManager;
 	import mx.utils.UIDUtil;
 	
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
@@ -10,6 +11,7 @@ package net.vdombox.ide.common.model._vo
 	 */	
 	public class ClientActionVO implements IEventBaseVO
 	{
+		private var _typeID : String;
 		private var _top : int;
 		
 		private var _left : int;
@@ -22,11 +24,19 @@ package net.vdombox.ide.common.model._vo
 		private var _objectName : String;
 		
 		private var _name : String;
+		private var _help : String;
 		
 		private var _parameters : Array = [];
 		
 		[Bindable]
 		public var used : Boolean = false;
+		
+		private var propertyRE : RegExp = /#Lang\((\w+)\)/g;
+		
+		public function ClientActionVO( typeID : String )
+		{
+			_typeID = typeID;
+		}
 
 		public function get id() : String
 		{
@@ -109,7 +119,26 @@ package net.vdombox.ide.common.model._vo
 		public function setParameters( value : Array ) : void
 		{
 			_parameters = value; 
+		}
+		
+		public function get help():String
+		{				
+			var matchResult : Array = String( _help ).match( propertyRE );
+			var matchItem : String;
+			var phraseID : String;
 			
+			var value : String = _help;
+			
+			if ( matchResult && matchResult.length > 0 )
+			{
+				for each ( matchItem in matchResult )
+				{
+					phraseID = matchItem.substring( 6, matchItem.length - 1 );
+					value = value.replace( matchItem, ResourceManager.getInstance().getString( _typeID, phraseID ) );
+				}
+			}
+			
+			return value;
 		}
 		//TODO: Разобраться с переименованием!
 		public function setProperties( propertiesXML : XML ) : void
@@ -135,6 +164,11 @@ package net.vdombox.ide.common.model._vo
 			
 			if( testValue !== null )
 				_name = testValue;
+			
+			testValue = propertiesXML.@Help[ 0 ];
+			
+			if( testValue !== null )
+				_help = testValue;
 			
 			testValue = propertiesXML.@Top[ 0 ];
 			
@@ -166,7 +200,7 @@ package net.vdombox.ide.common.model._vo
 			{
 				for each ( parameterXML in parametersXMLList )
 				{
-					actionParameterVO = new ActionParameterVO();
+					actionParameterVO = new ActionParameterVO( _typeID );
 					actionParameterVO.properties = parameterXML ;
 					
 					_parameters.push( actionParameterVO );
@@ -176,7 +210,7 @@ package net.vdombox.ide.common.model._vo
 		
 		public function copy() : ClientActionVO
 		{
-			var copy : ClientActionVO = new ClientActionVO();
+			var copy : ClientActionVO = new ClientActionVO( _typeID );
 			
 			//TODO: Создавать новый ID или просто копировать старый, если он есть?
 			copy.setID( UIDUtil.createUID() );
@@ -192,7 +226,7 @@ package net.vdombox.ide.common.model._vo
 		
 		public function clone() : ClientActionVO
 		{
-			var copy : ClientActionVO = new ClientActionVO();
+			var copy : ClientActionVO = new ClientActionVO( _typeID );
 			
 			copy.setID( _id );
 			copy.setName( _name );
@@ -240,26 +274,5 @@ package net.vdombox.ide.common.model._vo
 			
 			return result;
 		}
-		
-//		private function getValue( value : String ) : String
-//		{
-//			var result : String = value ? value : "";
-//			
-//			var matchResult : Array = result.match( LANG_RE );
-//			
-//			var matchItem : String;
-//			var phraseID : String;
-//			
-//			if ( matchResult && matchResult.length > 0 )
-//			{
-//				for each ( matchItem in matchResult )
-//				{
-//					phraseID = matchItem.substring( 6, matchItem.length - 1 );
-//					result = value.replace( matchItem, resourceManager.getString( _typeID, phraseID ) );
-//				}
-//			}
-//			
-//			return result;
-//		}
 	}
 }

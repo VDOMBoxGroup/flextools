@@ -134,6 +134,7 @@ package net.vdombox.editors.parsers.base
 					
 				default:
 				{
+					menuDispose();
 					break;
 				}
 			}

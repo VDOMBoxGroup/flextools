@@ -373,5 +373,10 @@ package net.vdombox.editors
 		{
 			area.renameByArray( words, oldName, newName );
 		}
+		
+		public function set selectKeyByAutoComplte( value : String ) : void
+		{
+			area.selectKeyByAutoComplte = value;
+		}
 	}
 }

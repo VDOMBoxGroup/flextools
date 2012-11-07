@@ -14,6 +14,8 @@ package net.vdombox.ide.common.model
 		public static const SELECTED_COLOR_SCHEME_CHANGE : String = "selectedColorSchemeChange";
 		public static const SELECTED_FONT_SIZE_CHANGE : String = "selectedFontSizeChange";
 		public static const AUTO_SHOW_AUTOCOMPLETE_CHANGE : String = "autoShowAutoCompleteChange";
+		public static const SELECT_KEY_BY_AUTOCOMPLETE_CHANGE : String = "selectKeyByAutoCompleteChange";
+		
 		
 		public function PreferencesProxy()
 		{
@@ -52,6 +54,17 @@ package net.vdombox.ide.common.model
 		public function get autoShowAutoComplete() : Boolean
 		{
 			return shObjData.data["autoShowAutoComplete"];
+		}
+		
+		public function set selectKeyByAutoComplte( value : String ) : void
+		{
+			shObjData.data["selectKeyByAutoComplte"] = value;
+			sendNotification( SELECT_KEY_BY_AUTOCOMPLETE_CHANGE );
+		}
+		
+		public function get selectKeyByAutoComplte() : String
+		{
+			return shObjData.data["selectKeyByAutoComplte"];
 		}
 		
 		public function get colorSchemes() : Array

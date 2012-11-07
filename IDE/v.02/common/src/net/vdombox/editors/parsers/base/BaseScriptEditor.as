@@ -51,5 +51,10 @@ package net.vdombox.editors.parsers.base
 		{
 			assistMenu.autoShowAutoComplete = value;
 		}
+		
+		public function set selectKeyByAutoComplte( value : String ) : void
+		{
+			scriptAreaComponent.selectKeyByAutoComplte = value;
+		}
 	}
 }

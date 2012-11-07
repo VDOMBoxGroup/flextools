@@ -58,6 +58,8 @@ package ro.victordramba.scriptarea
 		
 		private var t : Timer;
 		private var blocked : Boolean = false;
+		
+		private var _selectKeyByAutoComplte : uint = Keyboard.ENTER;
 
 		public function ScriptAreaEvents()
 		{
@@ -580,18 +582,22 @@ package ro.victordramba.scriptarea
 
 		private function onKeyDown( e : KeyboardEvent ) : void
 		{	
-			if ( assistMenuOpened && ( e.keyCode == Keyboard.ENTER || e.keyCode == Keyboard.UP  || e.keyCode == Keyboard.DOWN ) )
+			if ( assistMenuOpened && ( e.keyCode == _selectKeyByAutoComplte || e.keyCode == Keyboard.UP  || e.keyCode == Keyboard.DOWN  || e.keyCode == Keyboard.ENTER ) )
 			{
-				if ( e.keyCode == Keyboard.ENTER )
+				if ( e.keyCode == _selectKeyByAutoComplte )
 					eventPressNavigetionKey.detail = "Enter";
 				else if ( e.keyCode == Keyboard.UP )
 					eventPressNavigetionKey.detail = "Up";
 				else if ( e.keyCode == Keyboard.DOWN )
 					eventPressNavigetionKey.detail = "Down";
+				else
+					eventPressNavigetionKey.detail = "Close";
 				
 				dispatchEvent( eventPressNavigetionKey );
 				
-				e.stopImmediatePropagation();
+				if ( eventPressNavigetionKey.detail != "Close" )
+					e.stopImmediatePropagation();
+				
 				return;
 			}		
 			
@@ -1122,6 +1128,14 @@ package ro.victordramba.scriptarea
 			
 			dipatchChange();
 			dipatchChangeText();
+		}
+		
+		public function set selectKeyByAutoComplte( value : String ) : void
+		{
+			if ( value == "tab" )
+				_selectKeyByAutoComplte = Keyboard.TAB;
+			else
+				_selectKeyByAutoComplte = Keyboard.ENTER;
 		}
 	}
 }

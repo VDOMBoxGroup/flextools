@@ -11,7 +11,7 @@ package net.vdombox.ide.common.model._vo
 	 */		 
 	public class ActionParameterVO
 	{
-		private const LANG_RE : RegExp = /#Lang\((\w+)\)/g;
+		private var propertyRE : RegExp = /#Lang\((\w+)\)/g;
 		
 		[Bindable]
 		public var value : String;
@@ -26,6 +26,11 @@ package net.vdombox.ide.common.model._vo
 		private var _help : String;
 		private var _regularExpressionValidation : String;
 		private var _properties : XML;
+		
+		public function ActionParameterVO( typeID : String )
+		{
+			_typeID = typeID;
+		}
 		
 		public function get properties():XML
 		{
@@ -48,24 +53,36 @@ package net.vdombox.ide.common.model._vo
 			return _name;
 		}
 		
-//		public function get displayName() : String
-//		{
-//			return getValue( _displayName );
-//		}
-		
 		public function get defaultValue() : String
 		{
 			return _defaultValue;
 		}
 		
-//		public function get help() : String
-//		{
-//			return getValue( _help );
-//		}
+		
 		
 		public function get regularExpressionValidation() : String
 		{
 			return _regularExpressionValidation;
+		}
+		
+		public function get help():String
+		{				
+			var matchResult : Array = String( _help ).match( propertyRE );
+			var matchItem : String;
+			var phraseID : String;
+			
+			var value : String = _help;
+			
+			if ( matchResult && matchResult.length > 0 )
+			{
+				for each ( matchItem in matchResult )
+				{
+					phraseID = matchItem.substring( 6, matchItem.length - 1 );
+					value = value.replace( matchItem, resourceManager.getString( _typeID, phraseID ) );
+				}
+			}
+			
+			return value;
 		}
 		
 		private function setProperties(  ) : void
@@ -77,6 +94,8 @@ package net.vdombox.ide.common.model._vo
 			_name = _properties.@ScriptName[ 0 ];
 			
 			defaultValue = _properties.@DefaultValue[ 0 ];
+			
+			_help = _properties.@Help[ 0 ];
 			
 			if( defaultValue === null )
 				defaultValue = _properties[ 0 ];
@@ -109,31 +128,10 @@ package net.vdombox.ide.common.model._vo
 		
 		public function copy() : ActionParameterVO
 		{
-			var copy : ActionParameterVO = new ActionParameterVO();
+			var copy : ActionParameterVO = new ActionParameterVO( _typeID );
 			copy.properties = _properties;
 			copy.value = value;
 			return copy;
 		}
-		
-//		private function getValue( value : String ) : String
-//		{
-//			var result : String = value ? value : "";
-//			
-//			var matchResult : Array = result.match( LANG_RE );
-//			
-//			var matchItem : String;
-//			var phraseID : String;
-//			
-//			if ( matchResult && matchResult.length > 0 )
-//			{
-//				for each ( matchItem in matchResult )
-//				{
-//					phraseID = matchItem.substring( 6, matchItem.length - 1 );
-//					result = value.replace( matchItem, resourceManager.getString( _typeID, phraseID ) );
-//				}
-//			}
-//			
-//			return result;
-//		}
 	}
 }

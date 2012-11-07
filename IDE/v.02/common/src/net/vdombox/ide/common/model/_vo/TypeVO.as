@@ -116,7 +116,7 @@ package net.vdombox.ide.common.model._vo
 					
 					for each ( child in actionsXMLList )
 					{
-						clientActionVO = new ClientActionVO();
+						clientActionVO = new ClientActionVO( _typeID );
 						clientActionVO.setProperties( child );
 						
 						_actions.push( clientActionVO );
@@ -144,7 +144,7 @@ package net.vdombox.ide.common.model._vo
 					
 					for each ( child in eventsXMLList )
 					{
-						eventVO = new EventVO();
+						eventVO = new EventVO( _typeID );
 						eventVO.setProperties( child );
 						
 						_events.push( eventVO );

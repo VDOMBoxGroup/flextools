@@ -1,5 +1,8 @@
 package net.vdombox.ide.common.model._vo
 {
+	import mx.resources.IResourceManager;
+	import mx.resources.ResourceManager;
+	
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 
 	/**
@@ -8,6 +11,8 @@ package net.vdombox.ide.common.model._vo
 	 */		
 	public class EventVO  implements IEventBaseVO
 	{
+		private var _typeID : String;
+		
 		private var _top : int;
 		
 		private var _left : int;
@@ -15,6 +20,7 @@ package net.vdombox.ide.common.model._vo
 		private var _state : Boolean = true;
 		
 		private var _name : String;
+		private var _help : String;
 		
 		private var _objectID : String;
 		private var _objectName : String;
@@ -25,6 +31,35 @@ package net.vdombox.ide.common.model._vo
 		
 		[Bindable]
 		public var used : Boolean = false;
+		
+		private var propertyRE : RegExp = /#Lang\((\w+)\)/g;
+		
+		private var resourceManager : IResourceManager = ResourceManager.getInstance();
+		
+		public function EventVO( typeID : String )
+		{
+			_typeID = typeID;
+		}
+
+		public function get help():String
+		{				
+			var matchResult : Array = String( _help ).match( propertyRE );
+			var matchItem : String;
+			var phraseID : String;
+			
+			var value : String = _help;
+			
+			if ( matchResult && matchResult.length > 0 )
+			{
+				for each ( matchItem in matchResult )
+				{
+					phraseID = matchItem.substring( 6, matchItem.length - 1 );
+					value = value.replace( matchItem, resourceManager.getString( _typeID, phraseID ) );
+				}
+			}
+			
+			return value;
+		}
 
 		public function get id() : String
 		{
@@ -122,6 +157,11 @@ package net.vdombox.ide.common.model._vo
 			
 			if( testValue !== null )
 				_name = testValue;
+			
+			testValue = propertiesXML.@Help[ 0 ];
+			
+			if( testValue !== null )
+				_help = testValue;
 
 			testValue = propertiesXML.@Top[ 0 ];
 			
@@ -161,7 +201,7 @@ package net.vdombox.ide.common.model._vo
 			{
 				for each ( parameterXML in parametersXML.* )
 				{
-					eventParameterVO = new EventParameterVO();
+					eventParameterVO = new EventParameterVO( _typeID );
 					eventParameterVO.setProperties( parameterXML );
 					_parameters.push( eventParameterVO );
 				}
@@ -170,7 +210,7 @@ package net.vdombox.ide.common.model._vo
 		
 		public function copy() : EventVO
 		{
-			var copy : EventVO = new EventVO();
+			var copy : EventVO = new EventVO( _typeID );
 			
 			copy.setName( _name );
 			
@@ -185,7 +225,7 @@ package net.vdombox.ide.common.model._vo
 		
 		public function clone() : EventVO
 		{
-			var copy : EventVO = new EventVO();
+			var copy : EventVO = new EventVO( _typeID );
 			
 			copy.setName( _name );
 			
