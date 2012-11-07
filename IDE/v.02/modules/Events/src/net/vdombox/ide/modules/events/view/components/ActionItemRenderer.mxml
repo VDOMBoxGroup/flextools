@@ -9,6 +9,7 @@
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.model._vo.ClientActionVO;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			
 			[Embed(source='assets/action.png')]
@@ -25,7 +26,11 @@
 				if( value is ServerActionVO )
 					currentIcon = value[ "language" ] == "python" ? PythonIcon : VbscriptIcon;
 				else
+				{
+					if ( value is ClientActionVO )
+						toolTip = ClientActionVO( value ).help;
 					currentIcon = ActionIcon;
+				}
 				
 				super.data = value;
 			}

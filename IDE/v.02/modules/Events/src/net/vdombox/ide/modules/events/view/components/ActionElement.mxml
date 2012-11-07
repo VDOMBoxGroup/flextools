@@ -58,6 +58,7 @@
 						parameterRenderer = parameterRendererFactory.newInstance();
 
 						parameterRenderer.data = parameter;
+						parameterRenderer.toolTip = parameter.help;
 
 						parametersContainer.addElement( parameterRenderer );
 					}

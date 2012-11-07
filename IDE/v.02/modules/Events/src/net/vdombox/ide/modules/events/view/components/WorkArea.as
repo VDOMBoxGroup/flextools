@@ -776,7 +776,7 @@ package net.vdombox.ide.modules.events.view.components
 			shadowActionElement = new ActionElement();
 			shadowActionElement.width = 0;
 
-			shadowActionVO = new ClientActionVO();
+			shadowActionVO = new ClientActionVO( "" );
 			shadowActionVO.left = eventElement.x;
 			shadowActionVO.top = eventElement.y;
 

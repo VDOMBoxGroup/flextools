@@ -8,6 +8,7 @@
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.model._vo.EventVO;
 			
 			
 			[Embed(source='assets/events.png')]
@@ -18,6 +19,9 @@
 				currentIcon = EventsIcon;
 				
 				super.data = value;
+				
+				if ( value is EventVO )
+					toolTip = EventVO( value ).help;
 			}
 			
 			override public function get data() : Object
