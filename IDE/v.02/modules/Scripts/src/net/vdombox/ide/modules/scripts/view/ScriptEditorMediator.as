@@ -62,6 +62,7 @@ package net.vdombox.ide.modules.scripts.view
 			updateColorScheme(false);
 			updateFontSize(false);
 			updateAutoShowAutoComplete();
+			updateSelectKeyByAutoComplte();
 			
 			addHandlers();
 		}
@@ -80,6 +81,7 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( PreferencesProxy.SELECTED_COLOR_SCHEME_CHANGE );
 			interests.push( PreferencesProxy.SELECTED_FONT_SIZE_CHANGE );
 			interests.push( PreferencesProxy.AUTO_SHOW_AUTOCOMPLETE_CHANGE );
+			interests.push( PreferencesProxy.SELECT_KEY_BY_AUTOCOMPLETE_CHANGE );
 			interests.push( Notifications.RENAME_IN_ACTION );
 			
 			return interests;
@@ -109,6 +111,13 @@ package net.vdombox.ide.modules.scripts.view
 				case PreferencesProxy.AUTO_SHOW_AUTOCOMPLETE_CHANGE:
 				{
 					updateAutoShowAutoComplete();
+					
+					break;
+				}
+					
+				case PreferencesProxy.SELECT_KEY_BY_AUTOCOMPLETE_CHANGE:
+				{
+					updateSelectKeyByAutoComplte();
 					
 					break;
 				}
@@ -171,6 +180,11 @@ package net.vdombox.ide.modules.scripts.view
 		private function updateAutoShowAutoComplete() : void
 		{
 			scriptEditor.scriptEditor.autoShowAutoComplete = colorSchemeProxy.autoShowAutoComplete;
+		}
+		
+		private function updateSelectKeyByAutoComplte() : void
+		{
+			scriptEditor.scriptEditor.selectKeyByAutoComplte = colorSchemeProxy.selectKeyByAutoComplte;
 		}
 		
 		private function compliteSourceCode( event : FlexEvent = null ):void
@@ -246,6 +260,7 @@ package net.vdombox.ide.modules.scripts.view
 			preferencesWindow.selectedColorSheme = colorSchemeProxy.selectedColorScheme;
 			preferencesWindow.selectedFontSize = colorSchemeProxy.selectedFontSize;
 			preferencesWindow.autoShowAutocomplete = !colorSchemeProxy.autoShowAutoComplete;
+			preferencesWindow.selectKeyByAutoComplte = colorSchemeProxy.selectKeyByAutoComplte;
 			preferencesWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			preferencesWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 			
@@ -256,6 +271,7 @@ package net.vdombox.ide.modules.scripts.view
 				colorSchemeProxy.selectedColorScheme = event.detail.colorScheme as ColorSchemeVO;
 				colorSchemeProxy.selectedFontSize = event.detail.fontSize as uint;
 				colorSchemeProxy.autoShowAutoComplete = !event.detail.autoShowAutoComplete;
+				colorSchemeProxy.selectKeyByAutoComplte = event.detail.selectKeyByAutoComplte;
 				WindowManager.getInstance().removeWindow( preferencesWindow );
 			}
 			

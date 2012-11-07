@@ -37,6 +37,9 @@ package net.vdombox.ide.modules.scripts.view.components
 		[Bindable]
 		public var autoShowAutocomplete : Boolean;
 		
+		[Bindable]
+		public var selectKeyByAutoComplte : String;
+		
 		public var selectedColorSheme: ColorSchemeVO;
 		
 		public var selectedFontSize: int;
@@ -55,10 +58,10 @@ package net.vdombox.ide.modules.scripts.view.components
 			transparent = true;
 			
 			width = 350;
-			height = 170;
+			height = 250;
 			
 			minWidth = 350;
-			minHeight = 170;
+			minHeight = 250;
 			
 			this.setFocus();
 			
@@ -72,12 +75,21 @@ package net.vdombox.ide.modules.scripts.view.components
 			this.setStyle( "skinClass", PreferencesWindowSkin );
 		}
 		
+		public function setEnterKey() : void
+		{
+			selectKeyByAutoComplte = "enter";
+		}
+		
+		public function setTabKey() : void
+		{
+			selectKeyByAutoComplte = "tab";
+		}
+		
 		public function cancel_close_window( event: KeyboardEvent ) : void
 		{
 			if ( event.charCode == Keyboard.ESCAPE )
 				close();
 		}
-
 		
 		public function closeHandler(event:Event) : void
 		{
@@ -85,10 +97,11 @@ package net.vdombox.ide.modules.scripts.view.components
 			
 			WindowManager.getInstance().removeWindow(this);
 		}
+		
 		public function ok_close_window(event: KeyboardEvent = null ) : void
 		{
 			dispatchEvent( new PopUpWindowEvent( PopUpWindowEvent.APPLY, null, "", { colorScheme : colorSchemes.selectedItem, fontSize : int( fontSize.selectedItem.toString() ),
-																					autoShowAutoComplete : autocompleteAutoShow.selected } ) );
+																					autoShowAutoComplete : autocompleteAutoShow.selected, selectKeyByAutoComplte : selectKeyByAutoComplte } ) );
 		}
 		
 		public function no_close_window(event: KeyboardEvent = null ) : void

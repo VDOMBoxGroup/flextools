@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:mx="library://ns.adobe.com/flex/mx">
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		creationComplete="sparkskin1_creationCompleteHandler(event)">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.scripts.view.components.PreferencesWindow")]
@@ -12,9 +13,14 @@
 			
 			import net.vdombox.ide.common.model._vo.ColorSchemeVO;
 			
-			protected function colorShemes_creationCompleteHandler(event:FlexEvent):void
+			protected function autocompleteAutoShow_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
+				autocompleteAutoShow.selected = hostComponent.autoShowAutocomplete
+			}
+			
+			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// Set colorScheme
 				var selectedItemName : String = hostComponent.selectedColorSheme.name;
 				
 				for each ( var colorShaeme : ColorSchemeVO in colorSchemes.dataProvider )
@@ -25,10 +31,9 @@
 						break;
 					}
 				}
-			}
-			
-			protected function fontSize_creationCompleteHandler(event:FlexEvent):void
-			{
+				
+				//Set FontSize
+				
 				var selectedFontSize : int = hostComponent.selectedFontSize;
 				
 				for each ( var size : int in fontSize.dataProvider )
@@ -39,11 +44,13 @@
 						break;
 					}
 				}
-			}
-			
-			protected function autocompleteAutoShow_creationCompleteHandler(event:FlexEvent):void
-			{
-				autocompleteAutoShow.selected = hostComponent.autoShowAutocomplete
+				
+				// Set selectKeyByAutoComplte
+				
+				if ( hostComponent.selectKeyByAutoComplte == "tab" )
+					rbtnTab.selected = true;
+				else
+					rbtnEnter.selected = true;
 			}
 			
 		]]>
@@ -81,8 +88,7 @@
 			<mx:Spacer width="100%"/>
 			
 			<s:DropDownList id="fontSize" skinClass="spark.skins.spark.DropDownListSkin"
-							dataProvider="{ hostComponent.fontSizeList }"
-							creationComplete="fontSize_creationCompleteHandler(event)"/>
+							dataProvider="{ hostComponent.fontSizeList }"/>
 			
 		</s:HGroup>
 		
@@ -93,8 +99,7 @@
 			<mx:Spacer width="100%"/>
 			
 			<s:DropDownList id="colorSchemes" skinClass="spark.skins.spark.DropDownListSkin"
-							labelField="name" dataProvider="{ hostComponent.colorShemesList }" 
-							creationComplete="colorShemes_creationCompleteHandler(event)"/>
+							labelField="name" dataProvider="{ hostComponent.colorShemesList }"/>
 			
 		</s:HGroup>
 		
@@ -107,6 +112,20 @@
 						creationComplete="autocompleteAutoShow_creationCompleteHandler(event)"/>
 			
 		</s:HGroup>
+		
+		<s:VGroup width="100%" verticalAlign="middle" paddingTop="15">
+			
+			<s:Label text="Use for select autocomplete:" color="#FFFFFF" paddingLeft="10"/>
+			
+			<s:VGroup width="100%" paddingLeft="10" paddingRight="10" verticalAlign="middle">
+				
+				<s:RadioButton id="rbtnEnter" label="Enter" color="#FFFFFF" change="{ hostComponent.setEnterKey() }"/>
+				
+				<s:RadioButton id="rbtnTab" label="Tab" color="#FFFFFF" change="{ hostComponent.setTabKey() }"/>
+				
+			</s:VGroup>
+			
+		</s:VGroup>
 		
 		
 		<mx:Spacer height="100%"/>
