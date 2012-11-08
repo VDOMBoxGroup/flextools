@@ -7,6 +7,7 @@
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.editors.parsers.AutoCompleteItemVO;
+			import net.vdombox.ide.common.events.ItemRendererEvent;
 			
 			private var _data : AutoCompleteItemVO;
 			
@@ -22,6 +23,17 @@
 					icon.source = _data.icon;
 				else
 					icon.source = null;
+				
+				toolTip = _data.transcription;
+			}
+			
+			override protected function stateChanged( oldState : String, newState : String, recursive : Boolean ) : void
+			{
+				if ( newState == "selected" )
+				{
+					dispatchEvent( new ItemRendererEvent( ItemRendererEvent.SELECTED ) );
+				}
+				
 			}
 		]]>
 	</fx:Script>

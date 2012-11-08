@@ -9,10 +9,14 @@ package net.vdombox.editors.parsers.base
 	import flash.utils.setTimeout;
 	
 	import mx.core.UIComponent;
+	import mx.events.ListEvent;
 	
+	import net.vdombox.editors.AutoCompleteItemRenderer;
+	import net.vdombox.editors.PopUpHelpAutocomplete;
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
+	import net.vdombox.ide.common.events.ItemRendererEvent;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 
 	public class AssistMenu
@@ -26,6 +30,8 @@ package net.vdombox.editors.parsers.base
 		{
 			return _menu;
 		}
+		
+		protected var helpWindow : PopUpHelpAutocomplete;
 
 		protected var onComplete : Function;
 		protected var stage : Stage;
@@ -43,12 +49,14 @@ package net.vdombox.editors.parsers.base
 			this.stage = stage;
 			
 			_menu = new net.vdombox.editors.PopUpMenu();
+			helpWindow = new PopUpHelpAutocomplete();
 			//restore the focus to the textfield, delayed			
 			_menu.addEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
 			//menu in action
 			//_menu.addEventListener( KeyboardEvent.KEY_DOWN, onMenuKey );
 			
 			_menu.addEventListener( MouseEvent.DOUBLE_CLICK, doubleClickMouseHandler );
+			_menu.addEventListener( ItemRendererEvent.SELECTED, selectedAutocompleteItemVOHandler, true, 0 , true );
 			/*menu.addEventListener(MouseEvent.DOUBLE_CLICK, function(e:Event):void {
 			var c:int = fld.caretIndex;
 			fldReplaceText(c-menuStr.length, c, menu.getSelectedValue());
@@ -158,11 +166,19 @@ package net.vdombox.editors.parsers.base
 			menuDispose();
 		}
 		
+		private function selectedAutocompleteItemVOHandler( event : ItemRendererEvent ) : void
+		{
+			var autoCompleteItemVO : AutoCompleteItemVO = AutoCompleteItemRenderer( event.target ).data as AutoCompleteItemVO;
+			helpWindow.setData( autoCompleteItemVO.transcription, "" );
+			helpWindow.show( fld, menu.x + menu.width, menu.y );
+		}
+		
 		protected function menuDispose() : void
 		{
 			fld.assistMenuOpened = false;
 			
 			_menu.dispose();
+			helpWindow.dispose();
 		}
 		
 		protected var menuRefY : int;

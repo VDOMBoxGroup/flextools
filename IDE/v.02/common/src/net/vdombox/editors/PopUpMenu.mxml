@@ -39,11 +39,6 @@
 				}
 			}
 
-			public function setSelectedIndex( index : int ) : void
-			{
-				menu.selectedIndex = index;
-			}
-
 			public function getSelectedValue() : String
 			{
 				return menu.selectedItem.hasOwnProperty( "value" )? menu.selectedItem.value : menu.selectedItem;
@@ -74,6 +69,11 @@
 			public function get selectedIndex() : int
 			{
 				return menu.selectedIndex;
+			}
+			
+			public function get selectedItem() : AutoCompleteItemVO
+			{
+				return menu.selectedItem as AutoCompleteItemVO;
 			}
 			
 			public function get length() : int

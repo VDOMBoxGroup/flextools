@@ -4,7 +4,8 @@ package net.vdombox.ide.common.events
 	
 	public class ItemRendererEvent extends Event
 	{
-		public static var CREATED : String = "created";
+		public static var SELECTED : String = "itemRendererSelected";
+		public static var CREATED : String = "itemRendererCreated";
 		public static var DOUBLE_CLICK : String = "itemRendererDoubleClick";
 		
 		public function ItemRendererEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )

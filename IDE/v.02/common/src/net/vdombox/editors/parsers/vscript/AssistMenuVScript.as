@@ -38,7 +38,7 @@ package net.vdombox.editors.parsers.vscript
 			if ( a.length == 0 )
 				return false;
 			menu.setListData( a );
-			menu.setSelectedIndex( 0 );
+			menu.selectedIndex = 0;
 			
 			rePositionMenu();
 			return true;
@@ -106,7 +106,7 @@ package net.vdombox.editors.parsers.vscript
 			}
 			
 			menu.setListData( vectorToArray( menuDataStr ) );
-			menu.setSelectedIndex( 0 );
+			menu.selectedIndex = 0;
 			
 			var showingMenu : Boolean = true;
 			if ( menuStr.length )

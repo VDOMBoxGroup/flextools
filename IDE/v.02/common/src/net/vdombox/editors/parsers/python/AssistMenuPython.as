@@ -38,8 +38,8 @@ package net.vdombox.editors.parsers.python
 				return false;
 			
 			menu.setListData( a );
-			menu.setSelectedIndex( 0 );
-
+			menu.selectedIndex = 0;
+			
 			rePositionMenu();
 			return true;
 		}
@@ -101,7 +101,7 @@ package net.vdombox.editors.parsers.python
 			}
 			
 			menu.setListData( vectorToArray( menuDataStr ) );
-			menu.setSelectedIndex( 0 );
+			menu.selectedIndex = 0;
 
 			var showingMenu : Boolean = true;
 			if ( menuStr.length )

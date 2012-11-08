@@ -34,7 +34,7 @@ package net.vdombox.editors.parsers.vdomxml
 			if ( a.length == 0 )
 				return false;
 			menu.setListData( a );
-			menu.setSelectedIndex( 0 );
+			menu.selectedIndex = 0;
 
 			rePositionMenu();
 			return true;
@@ -118,7 +118,7 @@ package net.vdombox.editors.parsers.vdomxml
 			
 			var p : Point;
 			menu.setListData( vectorToArray( menuData ) );
-			menu.setSelectedIndex( 0 );
+			menu.selectedIndex = 0;
 
 			p = fld.getPointForIndex( index );
 			p.x += fld.scrollH;

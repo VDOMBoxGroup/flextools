@@ -1,6 +1,7 @@
 package net.vdombox.editors.parsers
 {
 	import net.vdombox.editors.parsers.base.Field;
+	import net.vdombox.editors.parsers.python.PythonWordsStorage;
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	
 	import ro.victordramba.util.HashMap;
@@ -18,15 +19,64 @@ package net.vdombox.editors.parsers
 		private static var _vscriptWords : Vector.<AutoCompleteItemVO>;
 		private static var _vscriptTypeWords : Vector.<AutoCompleteItemVO>;
 		
-		private static var _pythonWordsString : Vector.<String> = new <String>["abs", "and", "application", "apply", "ArithmeticError", "array", "assert", "AssertionError", "AST", "atexit", "AttributeError", "BaseHTTPServer", "Bastion", "break", "callable", "CGIHTTPServer", "chr", "class", "cmd", "cmp", "codecs", "coerce", "commands", "compile", "compileall", "Complex", "complex", "continue", "copy", "dbhash", "def", "del", "delattr", "dir", "dircmp", "dis", "divmod", "dospath", "dumbdbm", "elif", "else", "emacs", "EOFError", "eval", "except", "Exception", "exec", "execfile", "filter", "finally", "find", "float", "FloatingPointError", "fmt", "fnmatch", "for", "from", "ftplib", "getattr", "getopt", "glob", "global", "globals", "gopherlib", "grep", "group", "hasattr", "hash", "hex", "htmllib", "httplib", "id", "if", "ihooks", "imghdr", "import", "ImportError","imputil", "in", "IndentationError", "IndexError", "input", "int", "intern", "IOError", "is", "isinstance", "issubclass", "joinfields", "KeyError", "KeyboardInterrupt", "lambda", "len", "linecache", "list", "local", "lockfile", "long", "LookupError", "macpath", "macurl2path", "mailbox", "mailcap", "map", "match", "math", "max", "MemoryError", "mimetools", "Mimewriter", "mimify", "min", "mutex", "NameError", "newdir", "ni", "nntplib", "None", "not", "ntpath", "nturl2path", "oct", "open", "or", "ord", "os", "ospath", "OverflowError", "Para", "pass", "pdb", "pickle", "pipes", "poly", "popen2", "posixfile", "posixpath", "pow", "print", "profile", "pstats", "pyclbr", "pyexpat", "Queue", "quopri", "raise", "rand", "random", "range", "raw_input", "reduce", "response", "request", "regex", "regsub", "reload", "repr", "return", "rfc822", "round", "RuntimeError", "sched", "search", "self", "server", "session", "setattr", "setdefault", "sgmllib", "shelve", "SimpleHTTPServer", "site", "slice", "sndhdr", "snmp", "SocketServer", "splitfields", "StandardError", "str", "string", "StringIO", "struct", "SyntaxError", "sys", "SystemError", "SystemExit", "TabError", "tb", "tempfile", "Tkinter", "toaiff", "token", "tokenize", "traceback", "try", "tty", "tuple", "type", "TypeError", "types", "tzparse", "unichr", "unicode", "unicodedata", "urllib", "urlparse", "UserDict", "UserList", "util", "uu", "ValueError", "vars", "wave", "webbrowser", "whatsound", "whichdb", "while", "whrandom", "xdrlib", "xml", "xmlpackage", "xrange", "ZeroDivisionError",  "zip", "zmod"];
 		private static var _pythonWords : Vector.<AutoCompleteItemVO>;
 		
 		private static var _standardVScriptObjects : HashMap;
 		private static var _standardPythonObjects : HashMap;
 		
+		public static function getTranscriptionByField( f : Field ) : String
+		{
+			var transcription : String;
+			
+			switch(f.fieldType)
+			{
+				case "var":
+				{
+					transcription = f.name;
+					
+					break;
+				}
+					
+				case "def":
+				{
+					transcription = f.name + "(";
+					var params : Array = f.params.toArray();
+					
+					if ( params.length > 0 )
+					{
+						for each ( var f2 : Field in params )
+						{
+							transcription += f2.defaultValue != "" ? ( f2.name + " = " + f2.defaultValue + ", " ) : ( f2.name + ", " );
+						}
+						transcription = transcription.slice( 0, transcription.length - 2);
+					}
+					
+					
+					transcription += ")";
+					
+					break;
+				}
+					
+				case "class":
+				{
+					transcription = f.name;
+					
+					break;
+				}
+					
+				default:
+				{
+					transcription = f.name;
+				}
+			}
+			
+			return transcription;
+		}
+		
 		public static function getAutoCompleteItemVOByField( f : Field, imports : Boolean = false ) : AutoCompleteItemVO
 		{
 			var icon : Class;
+			var transcription : String = getTranscriptionByField( f );
 			
 			switch(f.fieldType)
 			{
@@ -57,7 +107,7 @@ package net.vdombox.editors.parsers
 				}
 			}
 			
-			return new AutoCompleteItemVO( icon, f.name );
+			return new AutoCompleteItemVO( icon, f.name, transcription );
 			
 		}
 		
@@ -88,14 +138,7 @@ package net.vdombox.editors.parsers
 		
 		public static function get pythonWords() : Vector.<AutoCompleteItemVO>
 		{
-			_pythonWords = new Vector.<AutoCompleteItemVO>();
-			
-			for each( var item : String in _pythonWordsString )
-			{
-				_pythonWords.push( new AutoCompleteItemVO( VDOMImage.Standard, item ) );
-			}
-			
-			return _pythonWords;
+			return PythonWordsStorage.pythonWords;
 		}
 		
 		public static function get standardVScriptObjects() : HashMap

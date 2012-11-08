@@ -118,6 +118,7 @@ package net.vdombox.ide.common.controller
 		public static const CREATE_OBJECT : String = "createObject";
 		public static const OBJECT_CREATED : String = "objectCreated";
 		
+		public static const DELETE_OBJECT_REQUEST : String = "deleteObjectRequest";
 		public static const DELETE_OBJECT : String = "deleteObject";
 		public static const OBJECT_DELETED : String = "objectDeleted";
 		
