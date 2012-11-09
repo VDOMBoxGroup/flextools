@@ -9,8 +9,11 @@ import mx.controls.Alert;
 import mx.core.Application;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
+import mx.rpc.soap.SOAPFault;
 import mx.utils.StringUtil;
 
+import net.vdombox.powerpack.lib.player.connection.protect.MD5;
+import net.vdombox.powerpack.lib.player.events.SOAPErrorEvent;
 import net.vdombox.powerpack.lib.player.gen.parse.ListParser;
 
 public class SOAPBaseLevel extends EventDispatcher
@@ -83,14 +86,15 @@ public class SOAPBaseLevel extends EventDispatcher
 	public function soapError( event : FaultEvent ) : void
 	{
 		deleteListeners( event.target);
+		
+		var fault : Object = event.fault;
+		var faultstring : String = ( "faultstring" in fault ) 	? fault["faultstring"] 	: fault.faultString
+		var details 	: String = ( "details"     in fault) 	? fault["details"] 		: "" ;
 
-		if ( "faultstring" in event.fault )
-			_result = "['Error' '" + event.fault["faultstring"] + "']";
-		else
-			_result = "['Error' '" + event.fault.faultString + "']";
-
+		
+		 _result = "['Error' '" + faultstring + " - " + details+ "']"; 
+		
         _resultType = ERROR;
-//		Alert.show(_result.toString())
 
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
 	}
@@ -335,8 +339,8 @@ public class SOAPBaseLevel extends EventDispatcher
 		var virtualHostName : String = params[0];
 		var applicationXML : String = params[1];
 
-		soap.install_application.addEventListener( ResultEvent.RESULT, resultHandler );
-		soap.install_application.addEventListener( FaultEvent.FAULT, soapError );
+		soap.install_application.addEventListener( ResultEvent.RESULT, resultHandler , false, 0, true );
+		soap.install_application.addEventListener( FaultEvent.FAULT, soapError, false, 0, true  );
 		soap.addEventListener( FaultEvent.FAULT, soapError);
 
 		soap.install_application( virtualHostName, applicationXML );
@@ -346,27 +350,33 @@ public class SOAPBaseLevel extends EventDispatcher
 
 	public function soapLogin( params : Array ) : void
 	{
+		if ( soap.ready )
+			soap.disconnect();
+		
 		var server : String = params[0];
-		var login : String = params[1];
-		var pass : String = params[2];
+		var login : String =  params[1] ;
+		var pass : String = MD5.encrypt( params[2] );
 		
 		var wsdl : String = "http://" + server + "/vdom.wsdl";
 
-		soap.addEventListener( "loadWsdlComplete", soap_initCompleteHandler );
+		soap.addEventListener( SOAPEvent.CONNECTION_OK , soap_initCompleteHandler );
 		soap.addEventListener( FaultEvent.FAULT, soapError );
-		soap.init( wsdl );
+		
+		soap.connect( wsdl );
 		
 		function soap_initCompleteHandler( event : Event ) : void
 		{
-			soap.removeEventListener( "loadWsdlComplete", soap_initCompleteHandler );
-			soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
+			soap.removeEventListener( SOAPEvent.CONNECTION_OK, soap_initCompleteHandler );
+			soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler, false, 0, true  );
+			soap.addEventListener( SOAPErrorEvent.LOGIN_ERROR, loginError, false, 0, true );
 
-			soap.login( login, pass );
+			soap.logon( login, pass );
 		}
                                               
 		function soap_loginOKHandler( event : SOAPEvent ) : void
 		{
 			soap.removeEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
+			soap.removeEventListener( SOAPErrorEvent.LOGIN_ERROR, loginError);
 
 			
 			var result : XML =  event.result as XML;
@@ -379,6 +389,17 @@ public class SOAPBaseLevel extends EventDispatcher
 
 			dispatchEvent( new Event( RESULT_RECEIVED ) );
 		}
+		
+		function loginError( event : SOAPErrorEvent ) : void
+		{
+			var resultArray : Array = ["Error", event.faultString ]
+			
+			_result = ListParser.array2List(resultArray);
+			
+			_resultType = ERROR;
+			
+			dispatchEvent( new Event( RESULT_RECEIVED ) );
+		}
 	}
 
 
@@ -386,7 +407,7 @@ public class SOAPBaseLevel extends EventDispatcher
 	{
 		var applicationXML : String = params[0];
 
-		soap.update_application.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.update_application.addEventListener( ResultEvent.RESULT, resultHandler, false, 0, true  );
 		soap.update_application.addEventListener( FaultEvent.FAULT, soapError );
 
 		soap.update_application( applicationXML );
