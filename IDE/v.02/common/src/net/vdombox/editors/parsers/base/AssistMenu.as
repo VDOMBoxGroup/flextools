@@ -16,6 +16,7 @@ package net.vdombox.editors.parsers.base
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
+	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.ide.common.events.ItemRendererEvent;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 
@@ -169,7 +170,13 @@ package net.vdombox.editors.parsers.base
 		private function selectedAutocompleteItemVOHandler( event : ItemRendererEvent ) : void
 		{
 			var autoCompleteItemVO : AutoCompleteItemVO = AutoCompleteItemRenderer( event.target ).data as AutoCompleteItemVO;
-			helpWindow.setData( autoCompleteItemVO.transcription, "" );
+			if ( autoCompleteItemVO.transcription == "" && autoCompleteItemVO.description == "" )
+				autoCompleteItemVO = StandardWordsProxy.getAutocompleteItemVOByName( autoCompleteItemVO.value );
+				
+			if ( !autoCompleteItemVO )
+				return;
+			
+			helpWindow.setData( autoCompleteItemVO.transcription, autoCompleteItemVO.description );
 			helpWindow.show( fld, menu.x + menu.width, menu.y );
 		}
 		

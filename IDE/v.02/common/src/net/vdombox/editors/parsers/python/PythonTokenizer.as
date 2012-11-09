@@ -137,9 +137,13 @@ package net.vdombox.editors.parsers.python
 				return new PythonToken( string.substring( start, pos ), Token.COMMENT, pos );
 			}
 			
-			if ( c == "'" && string.substr( pos, 3 ) == "'''" )
+			if ( c == "'" && string.substr( pos, 3 ) == "'''" || c == '"' && string.substr( pos, 3 ) == '"""')
 			{
-				skipUntil( "'''" );
+				if ( string.substr( pos, 3 ) == "'''" )
+					skipUntil( "'''" );
+				else
+					skipUntil( '"""' );
+				
 				return new PythonToken( string.substring( start, pos ), Token.COMMENT, pos );
 			}
 
@@ -367,6 +371,8 @@ package net.vdombox.editors.parsers.python
 		private var isStatic : Boolean = false;
 		private var isClassMethod : Boolean = false;
 		private var access : String;
+		private var descriptionZone : Boolean = false;
+		private var endDescriptionZone : Boolean = false;
 
 		internal var topScope : Field;
 		
@@ -451,7 +457,17 @@ package net.vdombox.editors.parsers.python
 			t.parent = currentBlock;
 			currentBlock.children.push( t );
 			
-			
+			if ( !descriptionZone && endDescriptionZone )
+			{
+				endDescriptionZone = false;
+				if ( t.type == Token.COMMENT )
+				{
+					if ( t.string.substr( 0, 1 ) != "#" )
+					{
+						scope.description = t.string.substring( 3, t.string.length - 3 );
+					}
+				}
+			}
 			
 			t.scope = scope;
 
@@ -594,6 +610,8 @@ package net.vdombox.editors.parsers.python
 						field.access = "public";
 					//this is so members will have the parent set to the scope
 					field.parent = scope;
+					
+					descriptionZone = true;
 				}
 				if ( _scope && ( tp.string == "class" ) )
 				{
@@ -610,13 +628,6 @@ package net.vdombox.editors.parsers.python
 				//add current package to imports
 				if ( tp.string == "package" )
 					imports.setValue( t.string + ".*", t.string + ".*" );
-			}
-
-			if ( t.string == ";" )
-			{
-				field = null;
-				_scope = null;
-				isStatic = false;
 			}
 
 			//parse function params
@@ -706,6 +717,9 @@ package net.vdombox.editors.parsers.python
 			if ( (( tp && tp.string == ":" && t.type == Token.ENDLINE )
 					|| ( tp2 && tp2.string == ":" && tp.type == Token.COMMENT && t.type == Token.ENDLINE )) && _scope )
 			{	
+				descriptionZone = false;
+				endDescriptionZone = true;
+				
 				currentBlock = t;
 				t.children = [];	
 				position = pos;

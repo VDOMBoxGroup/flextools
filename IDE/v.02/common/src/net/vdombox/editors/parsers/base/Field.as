@@ -86,6 +86,7 @@ package net.vdombox.editors.parsers.base
 		public var defaultValue:String = '';
 		
 		public var className : String;
+		public var description : String;
 		
 		public function addMember(field:Field, isStatic:Boolean):void
 		{

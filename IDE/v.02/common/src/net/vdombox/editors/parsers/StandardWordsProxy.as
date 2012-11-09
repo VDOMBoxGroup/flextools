@@ -77,6 +77,7 @@ package net.vdombox.editors.parsers
 		{
 			var icon : Class;
 			var transcription : String = getTranscriptionByField( f );
+			var description : String = f.description;
 			
 			switch(f.fieldType)
 			{
@@ -107,7 +108,7 @@ package net.vdombox.editors.parsers
 				}
 			}
 			
-			return new AutoCompleteItemVO( icon, f.name, transcription );
+			return new AutoCompleteItemVO( icon, f.name, transcription, description );
 			
 		}
 		
@@ -138,7 +139,12 @@ package net.vdombox.editors.parsers
 		
 		public static function get pythonWords() : Vector.<AutoCompleteItemVO>
 		{
-			return PythonWordsStorage.pythonWords;
+			return PythonWordsStorage.pythonWordsAutocomplete;
+		}
+		
+		public static function getAutocompleteItemVOByName( name : String ) : AutoCompleteItemVO
+		{
+			return PythonWordsStorage.getAutocompleteItemVOByName( name );
 		}
 		
 		public static function get standardVScriptObjects() : HashMap
