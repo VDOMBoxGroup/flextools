@@ -4,7 +4,7 @@
 		xmlns:customize="net.vdombox.powerpack.customize.*"
 		width="739" height="388" verticalAlign="middle" horizontalAlign="center" layout="absolute"
 		showStatusBar="false" showGripper="false" showTitleBar="false"
-		applicationComplete="show()"
+		applicationComplete="applicationCompleteHandler(event)"
 
 		xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
 		creationComplete="creationCompleteHandler(event)" horizontalScrollPolicy="off"
@@ -25,6 +25,7 @@
 		import net.vdombox.powerpack.lib.player.managers.ContextManager;
 		import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 		import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+		import net.vdombox.powerpack.lib.player.utils.RuntimeUtils;
 		import net.vdombox.powerpack.managers.BuilderContextManager;
 		import net.vdombox.powerpack.managers.ProgressManager;
 		//import net.vdombox.powerpack.menu.MenuGeneral;
@@ -143,6 +144,39 @@
 			nativeWindow.startMove();
 		}
 		
+		
+		protected function applicationCompleteHandler(event:FlexEvent):void
+		{
+			addGlobalErrorListener();
+			
+			show();
+		}
+		
+		private function addGlobalErrorListener () : void
+		{
+			loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, uncaughtErrorHandler);
+		}
+		
+		private function uncaughtErrorHandler(event:UncaughtErrorEvent):void
+		{
+			var errorMsg : String = "";
+			
+			if (event.error is Error)
+			{
+				var error:Error = event.error as Error;
+				errorMsg = error.message.toString(); 
+			}
+			else if (event.error is ErrorEvent)
+			{
+				var errorEvent:ErrorEvent = event.error as ErrorEvent;
+				errorMsg = RuntimeUtils.getRuntimeErrorMessageByID(errorEvent.errorID);
+			}
+			
+			if (!errorMsg && event.error) 
+				errorMsg = event.error.toString();
+			
+			AlertPopup.show(errorMsg, "Error:");
+		}
 		
 	]]></mx:Script>
 	

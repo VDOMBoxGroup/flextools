@@ -6,7 +6,7 @@
 		statusBarFactory="net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar"
 		preinitialize="preinit()"
 		initialize="init()"
-		applicationComplete="show()"
+		applicationComplete="applicationCompleteHandler(event)"
 		creationComplete="creationCompleteHandler(event)"
 		xmlns:mx="http://www.adobe.com/2006/mxml"
 		xmlns:graph="net.vdombox.powerpack.graph.*"
@@ -133,6 +133,7 @@
 			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 			import net.vdombox.powerpack.lib.player.template.Template;
 			import net.vdombox.powerpack.lib.player.template.TemplateProject;
+			import net.vdombox.powerpack.lib.player.utils.RuntimeUtils;
 			import net.vdombox.powerpack.managers.BuilderContextManager;
 			import net.vdombox.powerpack.managers.CashManager;
 			import net.vdombox.powerpack.managers.ProgressManager;
@@ -1447,9 +1448,44 @@
 				
 				ProgressManager.complete();
 				
-				AlertPopup.show("Error:", event.text);
+				AlertPopup.show(event.text, "Error:");
 			}
 			
+		}
+		
+		protected function applicationCompleteHandler(event:FlexEvent):void
+		{
+			addGlobalErrorListener();
+			
+			show();
+		}
+		
+		private function addGlobalErrorListener () : void
+		{
+			loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, uncaughtErrorHandler);
+		}
+		
+		private function uncaughtErrorHandler(event:UncaughtErrorEvent):void
+		{
+			event.preventDefault();
+			
+			var errorMsg : String = "";
+			
+			if (event.error is Error)
+			{
+				var error:Error = event.error as Error;
+				errorMsg = error.message.toString(); 
+			}
+			else if (event.error is ErrorEvent)
+			{
+				var errorEvent:ErrorEvent = event.error as ErrorEvent;
+				errorMsg = RuntimeUtils.getRuntimeErrorMessageByID(errorEvent.errorID);
+			}
+			
+			if (!errorMsg && event.error) 
+				errorMsg = event.error.toString();
+			
+			AlertPopup.show(errorMsg, "Error:");
 		}
 		
 		]]>
