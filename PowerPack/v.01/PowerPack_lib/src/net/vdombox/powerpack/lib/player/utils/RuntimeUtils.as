@@ -473,5 +473,15 @@ package net.vdombox.powerpack.lib.player.utils
 			return msg + ": " + RUN_TIME_ERRORS[errorCode];
 		}
 		
+		public static function getRuntimeErrorMessageByID (errorId : int) : String
+		{
+			var errorMsg : String = RUN_TIME_ERRORS[errorId];
+			
+			if (!errorMsg)
+				errorMsg = errorId.toString();
+			
+			return "Error: " + errorMsg;
+		}
+		
 	}
 }
