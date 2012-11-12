@@ -1,6 +1,12 @@
 package net.vdombox.powerpack.lib.player.utils
 {
+	import flash.display.LoaderInfo;
+	import flash.events.ErrorEvent;
+	import flash.events.Event;
+	import flash.events.IEventDispatcher;
+	
 	import net.vdombox.powerpack.lib.player.gen.errorClasses.RunTimeError;
+	import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 
 	public class RuntimeUtils
 	{
@@ -481,6 +487,44 @@ package net.vdombox.powerpack.lib.player.utils
 				errorMsg = errorId.toString();
 			
 			return "Error: " + errorMsg;
+		}
+		
+		public static function addGlobalErrorListener (loaderInfo:LoaderInfo) : void
+		{
+			if (loaderInfo.hasOwnProperty("uncaughtErrorEvents"))
+			{
+				IEventDispatcher(loaderInfo["uncaughtErrorEvents"]).addEventListener("uncaughtError", uncaughtErrorHandler);
+			}
+		}
+		
+		private static function uncaughtErrorHandler(event:Event):void 
+		{
+			event.preventDefault();
+			
+			var errorMsg : String = "Error occured.";
+			
+			if (!event.hasOwnProperty("error"))
+			{
+				AlertPopup.show(errorMsg, "Error:");
+				return;
+			}
+			
+			if (event["error"] is Error)
+			{
+				var error:Error = event["error"] as Error;
+				errorMsg = error.message.toString(); 
+			}
+			else if (event["error"] is ErrorEvent)
+			{
+				var errorEvent:ErrorEvent = event["error"] as ErrorEvent;
+				errorMsg = RuntimeUtils.getRuntimeErrorMessageByID(errorEvent.errorID);
+			}
+			
+			if (!errorMsg && event["error"]) 
+				errorMsg = event["error"].toString();
+
+			
+			AlertPopup.show(errorMsg, "Error:");
 		}
 		
 	}
