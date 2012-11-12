@@ -1462,30 +1462,7 @@
 		
 		private function addGlobalErrorListener () : void
 		{
-			loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, uncaughtErrorHandler);
-		}
-		
-		private function uncaughtErrorHandler(event:UncaughtErrorEvent):void
-		{
-			event.preventDefault();
-			
-			var errorMsg : String = "";
-			
-			if (event.error is Error)
-			{
-				var error:Error = event.error as Error;
-				errorMsg = error.message.toString(); 
-			}
-			else if (event.error is ErrorEvent)
-			{
-				var errorEvent:ErrorEvent = event.error as ErrorEvent;
-				errorMsg = RuntimeUtils.getRuntimeErrorMessageByID(errorEvent.errorID);
-			}
-			
-			if (!errorMsg && event.error) 
-				errorMsg = event.error.toString();
-			
-			AlertPopup.show(errorMsg, "Error:");
+			RuntimeUtils.addGlobalErrorListener(loaderInfo);
 		}
 		
 		]]>
