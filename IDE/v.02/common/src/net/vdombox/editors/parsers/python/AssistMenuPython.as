@@ -1,6 +1,7 @@
 package net.vdombox.editors.parsers.python
 {
 	import flash.display.Stage;
+	import flash.geom.Point;
 	
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
@@ -35,12 +36,13 @@ package net.vdombox.editors.parsers.python
 			}
 
 			if ( a.length == 0 )
+			{
+				helpWindow.dispose(); 
 				return false;
+			}
 			
 			menu.setListData( a );
 			menu.selectedIndex = 0;
-			
-			rePositionMenu();
 			return true;
 		}
 
@@ -54,6 +56,8 @@ package net.vdombox.editors.parsers.python
 			menuStr = m ? m[ 1 ] : "";
 			
 			var trigger:String = m ? m[2] : "";
+			if (vdomToolTip.showed && trigger=='(') 
+				trigger = '';
 			
 			if (m) menuStr = m[1];
 			else
@@ -63,7 +67,7 @@ package net.vdombox.editors.parsers.python
 			}
 
 			menuStr = menuStr.split( "" ).reverse().join( "" );
-			pos -= menuStr.length + 1;
+			pos -= menuStr.length;
 			
 			/*if ( !forced )
 				pos++;*/
@@ -79,20 +83,19 @@ package net.vdombox.editors.parsers.python
 			{
 				menuDataStr = ctrl.getAllOptions(pos);
 			}
-			/*else if (trigger == '(')
+			else if (trigger == '(')
 			{
-				var fd:String = ctrl.getFunctionDetails(pos);
+				var fd:String = ctrl.getFunctionDetails(pos - 1);
 				if (fd)
 				{
-					tooltip.setTipText(fd);
+					vdomToolTip.text = fd;
 					var p:Point = fld.getPointForIndex(fld.caretIndex-1);
 					p = fld.localToGlobal(p);
-					tooltip.showToolTip();
-					tooltip.moveLocationRelatedTo(new IntPoint(p.x, p.y));
+					vdomToolTip.show( fld, p.x, p.y - 18 );
 					tooltipCaret = fld.caretIndex;
 					return;
 				}
-			}*/
+			}
 
 			if ( !menuDataStr || menuDataStr.length == 0 )
 			{
@@ -113,7 +116,7 @@ package net.vdombox.editors.parsers.python
 			}
 			
 			if ( showingMenu )
-				showMenu( pos + 1 );
+				showMenu( pos );
 			else
 				menuDispose();
 		}

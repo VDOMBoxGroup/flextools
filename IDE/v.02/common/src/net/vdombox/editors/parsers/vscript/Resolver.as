@@ -49,7 +49,7 @@ package net.vdombox.editors.parsers.vscript
 			var scope : Field;
 			var f : Field;
 			for ( scope = t.scope; scope &&
-				scope.fieldType == 'function' || scope.fieldType == 'get' || scope.fieldType == 'set'; scope = scope.parent )
+				scope.fieldType == 'def' || scope.fieldType == 'get' || scope.fieldType == 'set'; scope = scope.parent )
 			{
 				if ( scope.members.hasKey( name ) || scope.params.hasKey( name ) )
 					return true;

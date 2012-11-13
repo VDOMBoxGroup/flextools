@@ -378,5 +378,10 @@ package net.vdombox.editors
 		{
 			area.selectKeyByAutoComplte = value;
 		}
+		
+		public function get letterBoxHeight():int
+		{
+			return area.letterBoxHeight;
+		}
 	}
 }

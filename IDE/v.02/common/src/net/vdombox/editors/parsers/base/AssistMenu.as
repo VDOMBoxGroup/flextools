@@ -1,5 +1,6 @@
 package net.vdombox.editors.parsers.base
 {
+	import flash.display.Screen;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
@@ -15,6 +16,7 @@ package net.vdombox.editors.parsers.base
 	import net.vdombox.editors.PopUpHelpAutocomplete;
 	import net.vdombox.editors.PopUpMenu;
 	import net.vdombox.editors.ScriptAreaComponent;
+	import net.vdombox.editors.VDOMToolTip;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.ide.common.events.ItemRendererEvent;
@@ -42,6 +44,16 @@ package net.vdombox.editors.parsers.base
 		
 		public var autoShowAutoComplete : Boolean = true;
 		
+		private var screenHeight : int = Screen.mainScreen.bounds.height;
+		private var screenWidth : int = Screen.mainScreen.bounds.width;
+		
+		private const menuHeight : int = 300;
+		private const menuWidth : int = 400;
+		
+		protected var vdomToolTip : VDOMToolTip;
+		
+		
+		
 		public function AssistMenu( field : ScriptAreaComponent, ctrl : Controller, stage : Stage, onComplete : Function )
 		{
 			fld = field;
@@ -50,6 +62,8 @@ package net.vdombox.editors.parsers.base
 			this.stage = stage;
 			
 			_menu = new net.vdombox.editors.PopUpMenu();
+			vdomToolTip = new VDOMToolTip();
+			
 			helpWindow = new PopUpHelpAutocomplete();
 			//restore the focus to the textfield, delayed			
 			_menu.addEventListener( Event.REMOVED_FROM_STAGE, onMenuRemoved );
@@ -84,6 +98,13 @@ package net.vdombox.editors.parsers.base
 		
 		private function onKeyDown( e : KeyboardEvent ) : void
 		{
+			if (vdomToolTip.showed)
+			{
+				if (e.keyCode == Keyboard.ESCAPE || e.keyCode == Keyboard.UP || e.keyCode == Keyboard.DOWN || 
+					String.fromCharCode(e.charCode) == ')' || fld.caretIndex < tooltipCaret)
+					vdomToolTip.dispose();
+			}
+			
 			if ( e.keyCode == Keyboard.SPACE && e.ctrlKey )
 				triggerAssist(true);
 			else if ( e.keyCode == Keyboard.BACKSPACE || e.keyCode == Keyboard.DELETE || e.keyCode == Keyboard.LEFT || e.keyCode == Keyboard.RIGHT )
@@ -154,8 +175,8 @@ package net.vdombox.editors.parsers.base
 			var currentPosition : int = menu.selectedIndex * 20;
 			if ( currentPosition < menu.scroller.viewport.verticalScrollPosition )
 				menu.scroller.viewport.verticalScrollPosition = currentPosition;
-			else if ( currentPosition > menu.scroller.viewport.verticalScrollPosition + menu.measuredHeight - 20)
-				menu.scroller.viewport.verticalScrollPosition = currentPosition - menu.measuredHeight + 20;
+			else if ( currentPosition > menu.scroller.viewport.verticalScrollPosition + menu.measuredHeight - 30)
+				menu.scroller.viewport.verticalScrollPosition = currentPosition - menu.measuredHeight + 30;
 			
 		}
 		
@@ -169,15 +190,23 @@ package net.vdombox.editors.parsers.base
 		
 		private function selectedAutocompleteItemVOHandler( event : ItemRendererEvent ) : void
 		{
-			var autoCompleteItemVO : AutoCompleteItemVO = AutoCompleteItemRenderer( event.target ).data as AutoCompleteItemVO;
+			if ( !menu.showed )
+				return;
+			
+			var autoCompleteItemVO : AutoCompleteItemVO =menu.selectedItem;
 			if ( autoCompleteItemVO.transcription == "" && autoCompleteItemVO.description == "" )
-				autoCompleteItemVO = StandardWordsProxy.getAutocompleteItemVOByName( autoCompleteItemVO.value );
+				autoCompleteItemVO = StandardWordsProxy.getAutocompleteItemVOByName( autoCompleteItemVO.value );                                                     
 				
 			if ( !autoCompleteItemVO )
 				return;
 			
 			helpWindow.setData( autoCompleteItemVO.transcription, autoCompleteItemVO.description );
-			helpWindow.show( fld, menu.x + menu.width, menu.y );
+			
+			var xHelp : int = menu.x + menu.width;
+			if ( xHelp + menuWidth + 1 > screenWidth )
+				xHelp = menu.x - menuWidth - 1;
+			
+			helpWindow.show( fld, xHelp, menu.y );
 		}
 		
 		protected function menuDispose() : void
@@ -188,52 +217,53 @@ package net.vdombox.editors.parsers.base
 			helpWindow.dispose();
 		}
 		
-		protected var menuRefY : int;
-		
+
 		protected function showMenu( index : int ) : void
 		{
 			fld.assistMenuOpened = true;
-			var p : Point = fld.getPointForIndex( index );
-			p.x += fld.scrollH;
+			var p : Point = fld.getPointForIndex( index ); 
 			
 			p = fld.localToGlobal( p );
-			menuRefY = p.y;
-			menu.show( fld, p.x, 0 );
+			p.x -= fld.scrollH;
+			p.y += fld.letterBoxHeight;
+			
+			menu.show( fld, p.x, p.y );
 			
 			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
 			
-			rePositionMenu();
+			//rePositionMenu();
 		}
 		
-		protected function rePositionMenu() : void
+		/*protected function rePositionMenu() : void
 		{
 			var menuH : int = 8 //Math.min( 8, menu.getModel().getSize() ) * 17;
 			if ( menuRefY + 15 + menuH > fld.height )
 				menu.y = menuRefY - menuH - 2;
 			else
 				menu.y = menuRefY + 15;
-		}
+		}*/
 		
 		protected function stage_mouseDownHandler( event : MouseEvent ) : void
 		{
-			var parent : UIComponent = event.target as UIComponent;
+			var parent : Object = event.target ;
 			var isMenu : Boolean;
 			
 			while ( parent )
 			{
-				if ( parent == menu )
+				if ( parent == menu || parent == helpWindow )
 				{
 					isMenu = true;
 					break;
 				}
 				
-				parent = parent.parent as UIComponent;
+				parent = parent.parent;
 			}
 			
 			if ( !isMenu )
 			{
 				stage.removeEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler );
 				menuDispose();
+				vdomToolTip.dispose();
 			}
 		}
 		

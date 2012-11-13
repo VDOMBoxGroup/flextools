@@ -300,9 +300,11 @@ package net.vdombox.editors
 			return null;
 		}
 		
-		public static function getPositionToken( importFrom : String, importToken : String, bp : BackwardsParser, lang : String ) : Object
+		public static function getPositionToken( importFrom : String, importToken : String, bp : BackwardsParser, lang : String, _prevImport : Object = null ) : Object
 		{
 			var len : int = bp.names.length;
+			
+			var prevImport : Object = ObjectUtil.copy( _prevImport );
 			
 			bp.names[0] = lang == "vscript" ? importToken.toLowerCase() : importToken;
 			
@@ -314,13 +316,22 @@ package net.vdombox.editors
 			if ( !hashLibraries.hasOwnProperty( path[0] ) )
 				return null;
 			
+			if ( prevImport && prevImport.hasOwnProperty( path[0] ) )
+				return null;
+			
 			var libraryVO : LibraryVO = hashLibraries[ path[0] ].libraryVO;
 			
 			var string : String = libraryVO.script;
 			
 			var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( lang, string );
-			
 			tokenizer.actionVO = hashLibraries[ path[0] ].libraryVO;
+			
+			if ( !prevImport )
+				prevImport = {};
+			
+			prevImport[ importFrom ] = importFrom;
+			
+			tokenizer.prevImport = prevImport;
 			
 			while ( tokenizer.runSlice() )
 			{
@@ -357,10 +368,24 @@ package net.vdombox.editors
 					}
 				}
 				
+				if ( !flag )
+				{
+					var importItemVO : ImportItemVO;
+					for each ( importItemVO in scope.imports.toArray() )
+					{
+						var obj : Object = getPositionToken( importItemVO.source, importItemVO.systemName, bp, lang, prevImport );
+						if ( obj )
+						{
+							return obj;
+						}
+					}
+				}
+				
 				if ( flag )
 				{
 					return { libraryVO : libraryVO, position : scope.pos, length : scope.name.length };
 				}
+				
 			}
 			
 			return null;

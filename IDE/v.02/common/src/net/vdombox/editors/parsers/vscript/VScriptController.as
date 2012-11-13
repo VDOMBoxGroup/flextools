@@ -71,7 +71,7 @@ package net.vdombox.editors.parsers.vscript
 			return VScriptParser( parser ).newResolver().getMemberList( fld.text, index , _actionVO );
 		}
 		
-		public function getFunctionDetails( index : int ) : String
+		public override function getFunctionDetails( index : int ) : String
 		{
 			return VScriptParser( parser ).newResolver().getFunctionDetails( fld.text, index );
 		}

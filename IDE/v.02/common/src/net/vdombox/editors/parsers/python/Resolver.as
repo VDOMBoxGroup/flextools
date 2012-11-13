@@ -211,23 +211,22 @@ package net.vdombox.editors.parsers.python
 			if ( !field || field.fieldType != 'def' )
 				return null;
 
-
-			var a : Vector.<String> = new Vector.<String>;
+			var str : String = "";
 			var par : Field;
 			for each ( par in field.params.toArray() )
 			{
-				var str : String = par.name;
+				var str2 : String = par.name;
 				if ( par.type )
-					str += ':' + par.type.type;
+					str2 += ' : ' + par.type.type;
 				if ( par.defaultValue )
-					str += '=' + par.defaultValue;
-				a.push( { label: str, value: str });
+					str2 += ' = ' + par.defaultValue;
+				str += str2 + ",";
 			}
 			//rest
-			if ( field.hasRestParams )
-				a[ a.length - 1 ] = '...' + par.name;
+			/*if ( field.hasRestParams )
+				a[ a.length - 1 ] = '...' + par.name;*/
 
-			return 'def ' + field.name + '(' + a.join( ', ' ) + ')' + ( field.type ? ':' + field.type.type : '' );
+			return 'def ' + field.name + '(' + str.substring(0, str.length - 1) + ')';
 		}
 
 		/**
@@ -500,10 +499,10 @@ package net.vdombox.editors.parsers.python
 				{
 					resolved = typeDB.resolveName( resolved.type );
 				}
-				else*/ if ( resolved.fieldType == 'def' && itemType != BackwardsParser.FUNCTION )
+				else if ( resolved.fieldType == 'def' && itemType != BackwardsParser.FUNCTION )
 				{
-					resolved = classDB.resolveName( new Multiname( 'Def' ) );
-				}
+					resolved = classDB.resolveName( new Multiname( 'def' ) );
+				}*/
 			}
 			
 			return false;

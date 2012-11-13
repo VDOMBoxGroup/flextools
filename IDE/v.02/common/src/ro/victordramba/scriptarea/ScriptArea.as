@@ -56,7 +56,7 @@ package ro.victordramba.scriptarea
 
 
 			tf.text = " ";
-			letterBoxHeight = tf.getLineMetrics( 0 ).height;
+			_letterBoxHeight = tf.getLineMetrics( 0 ).height;
 			letterBoxWidth = tf.getLineMetrics( 0 ).width;
 			tf.text = "";
 
@@ -85,7 +85,7 @@ package ro.victordramba.scriptarea
 
 		private var tf : TextField;
 
-		private var letterBoxHeight : int;
+		private var _letterBoxHeight : int;
 		private var letterBoxWidth : int;
 
 		private var _scrollH : int = 0;
@@ -126,6 +126,11 @@ package ro.victordramba.scriptarea
 		
 		private var defaultColor : uint = 0xFFFFFF;
 		
+		public function get letterBoxHeight():int
+		{
+			return _letterBoxHeight;
+		}
+
 		public function set colorScheme( value : ColorSchemeVO ) : void
 		{
 			backgroundShapeColor = value.backGroundColor;
@@ -146,7 +151,7 @@ package ro.victordramba.scriptarea
 				
 			tf.text = " ";
 			
-			letterBoxHeight = tf.getLineMetrics( 0 ).height;
+			_letterBoxHeight = tf.getLineMetrics( 0 ).height;
 			letterBoxWidth = tf.getLineMetrics( 0 ).width;
 			
 			tf.text = tmp;
@@ -652,6 +657,7 @@ package ro.victordramba.scriptarea
 				if ( _text.charAt( i ) == "\t" )
 					tabs++;
 			}
+			text.charAt(378)
 
 			//simple tabs, just 4 spaces, no align
 			return new Point( ( index - lastNL + tabs * 3 ) * letterBoxWidth + 1, ( lines - _scrollV ) * letterBoxHeight + 2 );

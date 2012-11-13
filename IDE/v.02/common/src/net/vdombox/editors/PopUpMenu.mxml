@@ -2,6 +2,8 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:s="library://ns.adobe.com/flex/spark"
+		maxHeight="310"
+		maxWidth="310"
 		>
 
 	<fx:Script>
@@ -14,6 +16,12 @@
 			import spark.components.Scroller;
 			
 			private var _showed : Boolean = false;
+			
+			private var screenHeight : int = Screen.mainScreen.bounds.height;
+			private var screenWidth : int = Screen.mainScreen.bounds.width;
+			
+			private const menuHeight : int = 310;
+			private const menuWidth : int = 310;
 
 			public function get showed():Boolean
 			{
@@ -49,11 +57,18 @@
 				if ( showed )
 					dispose();
 				
+				if ( y + menuHeight + 15 > screenHeight )
+					y = y - menuHeight - 1;
+				if ( x + menuWidth + 15 > screenWidth )
+					x = screenWidth - menuWidth - 15;
+				
 				this.x = x;
 				this.y = y;
 				_showed = true;
 				PopUpManager.addPopUp( this, owner.parent );
 			}
+			
+			
 
 			public function dispose() : void
 			{

@@ -631,7 +631,7 @@ package net.vdombox.editors.parsers.python
 			}
 
 			//parse function params
-			else if ( _scope && ( _scope.fieldType == "def" ) )
+			else if ( _scope && ( _scope.fieldType == "def" || _scope.fieldType == "class" ) )
 			{
 				if ( tp && tp.string == "(" && t.string != ")" )
 					paramsBlock = true;

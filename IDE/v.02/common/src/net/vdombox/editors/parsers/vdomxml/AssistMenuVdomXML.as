@@ -36,7 +36,6 @@ package net.vdombox.editors.parsers.vdomxml
 			menu.setListData( a );
 			menu.selectedIndex = 0;
 
-			rePositionMenu();
 			return true;
 		}
 
@@ -124,7 +123,6 @@ package net.vdombox.editors.parsers.vdomxml
 			p.x += fld.scrollH;
 
 			p = fld.localToGlobal( p );
-			menuRefY = p.y;
 
 			//menu.show(stage, p.x, p.y + 15);
 			menu.show( fld, p.x, 0 );
@@ -133,8 +131,6 @@ package net.vdombox.editors.parsers.vdomxml
 
 			//stage.focus = menu;
 //			FocusManager.getManager( stage ).setFocusOwner( menu );
-
-			rePositionMenu();
 		}
 
 	}

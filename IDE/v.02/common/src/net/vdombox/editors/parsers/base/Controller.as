@@ -61,6 +61,12 @@ package net.vdombox.editors.parsers.base
 			return null;
 		}
 		
+		public function getFunctionDetails( index : int ) : String
+		{
+			return null;
+		}
+
+		
 		public function get commentString() : String
 		{
 			return null;

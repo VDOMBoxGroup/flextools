@@ -37,29 +37,27 @@ package net.vdombox.editors.parsers
 					break;
 				}
 					
+				case "class":
+				{
+				}
+					
 				case "def":
 				{
-					transcription = f.name + "(";
+					transcription = f.name;
+					
 					var params : Array = f.params.toArray();
 					
 					if ( params.length > 0 )
 					{
+						transcription += "(";
 						for each ( var f2 : Field in params )
 						{
 							transcription += f2.defaultValue != "" ? ( f2.name + " = " + f2.defaultValue + ", " ) : ( f2.name + ", " );
 						}
 						transcription = transcription.slice( 0, transcription.length - 2);
+						
+						transcription += ")";
 					}
-					
-					
-					transcription += ")";
-					
-					break;
-				}
-					
-				case "class":
-				{
-					transcription = f.name;
 					
 					break;
 				}

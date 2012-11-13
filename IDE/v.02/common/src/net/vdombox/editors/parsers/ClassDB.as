@@ -158,14 +158,14 @@ package net.vdombox.editors.parsers
 				imports.setValue('.*', '.*');*/
 			
 
-				var packMap:HashMap = data.getValue('top');
-				if (packMap && packMap.hasKey(type.type))
+				var packMap:Field = data.getValue('top');
+				/*if (packMap && packMap.hasKey(type.type))
 				{
 					//debug(type.type + ' resolved in ' + pack + ' DB:'+dbName);
 					var res:Field = packMap.getValue(type.type);
 					res.sourcePath = dbName;
 					return res;
-				}
+				}*/
 			
 			if (parentDB) 
 				return parentDB.resolveName(type);

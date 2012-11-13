@@ -74,7 +74,7 @@ package net.vdombox.editors.parsers.python
 			return PythonParser( parser ).newResolver().getMemberList( fld.text, index , _actionVO );
 		}
 
-		public function getFunctionDetails( index : int ) : String
+		public override function getFunctionDetails( index : int ) : String
 		{
 			return PythonParser( parser ).newResolver().getFunctionDetails( fld.text, index );
 		}

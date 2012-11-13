@@ -40,7 +40,6 @@ package net.vdombox.editors.parsers.vscript
 			menu.setListData( a );
 			menu.selectedIndex = 0;
 			
-			rePositionMenu();
 			return true;
 		}
 		
