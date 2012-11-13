@@ -140,24 +140,12 @@ package net.vdombox.powerpack.lib.player.connection
 
 		private function faultHandler( event : FaultEvent ) : void
 		{
-			if ( isLoadWSDLProcess )
-			{
-				isLoadWSDLProcess = false;
-
-				var see : SOAPErrorEvent = new SOAPErrorEvent( SOAPErrorEvent.CONNECTION_ERROR );
-
-				see.faultCode = event.fault.faultCode;
-				see.faultString = event.fault.faultString;
-				see.faultDetail = event.fault.faultDetail;
-
-				dispatchEvent( see );
-			}
-			else
-			{
+			
+			
 				//не зашли в редактирование
 				var faultEvent : FaultEvent = FaultEvent.createEvent( event.fault, null, event.message );
 				dispatchEvent( faultEvent );
-			}
+			
 		}
 
 		private function logonCompleteHandler( event : ResultEvent ) : void
