@@ -95,7 +95,13 @@ public class SOAPBaseLevel extends EventDispatcher
 		 _result = "['Error' '" + faultstring + " - " + details+ "']"; 
 		
         _resultType = ERROR;
-
+		
+		Application.application.addEventListener( Event.ENTER_FRAME, callLater);
+	}
+	
+	private function callLater( event : Event):void
+	{
+		Application.application.removeEventListener( Event.ENTER_FRAME, callLater);
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
 	}
 

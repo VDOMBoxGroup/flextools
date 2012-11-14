@@ -120,6 +120,12 @@ package net.vdombox.powerpack.lib.player.connection
 
 			token = operation.send.apply( null, args );
 			token.key = key;
+			
+			if ( !ready )
+			{
+				var fault : Fault = new Fault( "No server connection", "Login to server" ) ;
+				operation.dispatchEvent( FaultEvent.createEvent( fault, token ) );
+			}
 
 			return token;
 		}
@@ -227,6 +233,7 @@ package net.vdombox.powerpack.lib.player.connection
 
 		private function operationFaultHandler( event : FaultEvent ) : void
 		{
+			trace("SOAP.operationFaultHandler(...) " + event.type);
 //			faultHandler( event );
 		}
 
@@ -245,7 +252,7 @@ package net.vdombox.powerpack.lib.player.connection
 		 */
 		public function dispatchEvent( event : Event ) : Boolean
 		{
-			
+			trace("SOAP.dispathEvent(...) " + event.type)
 			return dispatcher.dispatchEvent( event );
 		}
 
