@@ -17,7 +17,7 @@ package net.vdombox.editors.parsers.python
 		}
 		
 		
-		private static var _pythonWordsString : Vector.<String> = new <String>["abs", "and", "application", "apply", "ArithmeticError", "array", "assert", "AssertionError", "AST", "atexit", "AttributeError", "BaseHTTPServer", "Bastion", "break", "callable", "CGIHTTPServer", "chr", "class", "cmd", "cmp", "codecs", "coerce", "commands", "compile", "compileall", "Complex", "complex", "continue", "copy", "dbhash", "def", "del", "delattr", "dir", "dircmp", "dis", "divmod", "dospath", "dumbdbm", "elif", "else", "emacs", "EOFError", "eval", "except", "Exception", "exec", "execfile", "filter", "finally", "find", "float", "FloatingPointError", "fmt", "fnmatch", "for", "from", "ftplib", "getattr", "getopt", "glob", "global", "globals", "gopherlib", "grep", "group", "hasattr", "hash", "hex", "htmllib", "httplib", "id", "if", "ihooks", "imghdr", "import", "ImportError","imputil", "in", "IndentationError", "IndexError", "input", "int", "intern", "IOError", "is", "isinstance", "issubclass", "joinfields", "KeyError", "KeyboardInterrupt", "lambda", "len", "linecache", "list", "local", "lockfile", "long", "LookupError", "macpath", "macurl2path", "mailbox", "mailcap", "map", "match", "math", "max", "MemoryError", "mimetools", "Mimewriter", "mimify", "min", "mutex", "NameError", "newdir", "ni", "nntplib", "None", "not", "ntpath", "nturl2path", "oct", "open", "or", "ord", "os", "ospath", "OverflowError", "Para", "pass", "pdb", "pickle", "pipes", "poly", "popen2", "posixfile", "posixpath", "pow", "print", "profile", "pstats", "pyclbr", "pyexpat", "Queue", "quopri", "raise", "rand", "random", "range", "raw_input", "reduce", "response", "request", "regex", "regsub", "reload", "repr", "return", "rfc822", "round", "RuntimeError", "sched", "search", "self", "server", "session", "setattr", "setdefault", "sgmllib", "shelve", "SimpleHTTPServer", "site", "slice", "sndhdr", "snmp", "SocketServer", "splitfields", "StandardError", "str", "string", "StringIO", "struct", "SyntaxError", "sys", "SystemError", "SystemExit", "TabError", "tb", "tempfile", "Tkinter", "toaiff", "token", "tokenize", "traceback", "try", "tty", "tuple", "type", "TypeError", "types", "tzparse", "unichr", "unicode", "unicodedata", "urllib", "urlparse", "UserDict", "UserList", "util", "uu", "ValueError", "vars", "wave", "webbrowser", "whatsound", "whichdb", "while", "whrandom", "xdrlib", "xml", "xmlpackage", "xrange", "ZeroDivisionError",  "zip", "zmod"];
+		private static var _pythonWordsString : Vector.<String> = new <String>["abs", "and", "application", "apply", "ArithmeticError", "array", "assert", "AssertionError", "AST", "atexit", "AttributeError", "BaseHTTPServer", "Bastion", "break", "callable", "CGIHTTPServer", "chr", "class", "classmethod", "cmd", "cmp", "codecs", "coerce", "commands", "compile", "compileall", "Complex", "complex", "continue", "copy", "dbhash", "def", "del", "delattr", "dir", "dircmp", "dis", "divmod", "dospath", "dumbdbm", "elif", "else", "emacs", "EOFError", "eval", "except", "Exception", "exec", "execfile", "filter", "finally", "find", "float", "FloatingPointError", "fmt", "fnmatch", "for", "from", "ftplib", "getattr", "getopt", "glob", "global", "globals", "gopherlib", "grep", "group", "hasattr", "hash", "hex", "htmllib", "httplib", "id", "if", "ihooks", "imghdr", "import", "ImportError","imputil", "in", "IndentationError", "IndexError", "input", "int", "intern", "IOError", "is", "isinstance", "issubclass", "joinfields", "KeyError", "KeyboardInterrupt", "lambda", "len", "linecache", "list", "local", "lockfile", "long", "LookupError", "macpath", "macurl2path", "mailbox", "mailcap", "map", "match", "math", "max", "MemoryError", "mimetools", "Mimewriter", "mimify", "min", "mutex", "NameError", "newdir", "ni", "nntplib", "None", "not", "ntpath", "nturl2path", "oct", "open", "or", "ord", "os", "ospath", "OverflowError", "Para", "pass", "pdb", "pickle", "pipes", "poly", "popen2", "posixfile", "posixpath", "pow", "print", "profile", "pstats", "pyclbr", "pyexpat", "Queue", "quopri", "raise", "rand", "random", "range", "raw_input", "reduce", "response", "request", "regex", "regsub", "reload", "repr", "return", "rfc822", "round", "RuntimeError", "sched", "search", "self", "server", "session", "setattr", "setdefault", "sgmllib", "shelve", "SimpleHTTPServer", "site", "slice", "sndhdr", "snmp", "SocketServer", "splitfields", "StandardError", "staticmethod", "str", "string", "StringIO", "struct", "SyntaxError", "sys", "SystemError", "SystemExit", "TabError", "tb", "tempfile", "Tkinter", "toaiff", "token", "tokenize", "traceback", "try", "tty", "tuple", "type", "TypeError", "types", "tzparse", "unichr", "unicode", "unicodedata", "urllib", "urlparse", "UserDict", "UserList", "util", "uu", "ValueError", "vars", "wave", "webbrowser", "whatsound", "whichdb", "while", "whrandom", "xdrlib", "xml", "xmlpackage", "xrange", "ZeroDivisionError",  "zip", "zmod"];
 		
 		private static var _pythonWordsAutocomplete : Vector.<AutoCompleteItemVO>;
 		private static var _pythonWords : HashList;
@@ -43,11 +43,21 @@ package net.vdombox.editors.parsers.python
 			return _pythonWords.getValue( name );
 			
 		}
+		
+		public static function getFieldByName( name : String ) : Field
+		{
+			if ( !_pythonFields )
+				init();
+			
+			return _pythonFields.getValue( name );
+			
+		}
 
 		private static function init() : void
 		{
 
 			_pythonWords = new HashList();
+			
 			
 			_pythonWords.setValue( "abs", 					new AutoCompleteItemVO( VDOMImage.Standard, "abs", "abs(x)", "Return the absolute value of a number. The argument may be a plain or long integer or a floating point number. If the argument is a complex number, its magnitude is returned." ) );
 			_pythonWords.setValue( "and", 					new AutoCompleteItemVO( VDOMImage.Standard, "and", "", "The expression x and y first evaluates x; if x is false, its value is returned; otherwise, y is evaluated and the resulting value is returned." ) );
@@ -77,11 +87,12 @@ package net.vdombox.editors.parsers.python
 			_pythonWords.setValue( "CGIHTTPServer", 		new AutoCompleteItemVO( VDOMImage.Standard, "CGIHTTPServer", "", "" ) );
 			_pythonWords.setValue( "chr", 					new AutoCompleteItemVO( VDOMImage.Standard, "chr", "chr(i)", "Return a string of one character whose ASCII code is the integer i. For example, chr(97) returns the string 'a'. This is the inverse of ord(). The argument must be in the range [0..255], inclusive; ValueError will be raised if i is outside that range. See also unichr()." ) );
 			_pythonWords.setValue( "class", 				new AutoCompleteItemVO( VDOMImage.Standard, "class", "", "A template for creating user-defined objects. Class definitions normally contain method definitions which operate on instances of the class. " ) );
+			_pythonWords.setValue( "classmethod", 			new AutoCompleteItemVO( VDOMImage.Standard, "classmethod", "", "" ) );
 			_pythonWords.setValue( "cmd", 					new AutoCompleteItemVO( VDOMImage.Standard, "cmd", "", "" ) );
 			_pythonWords.setValue( "cmp", 					new AutoCompleteItemVO( VDOMImage.Standard, "cmp", "cmp(x, y)", "Compare the two objects x and y and return an integer according to the outcome. The return value is negative if x < y, zero if x == y and strictly positive if x > y." ) );
 			_pythonWords.setValue( "codecs", 				new AutoCompleteItemVO( VDOMImage.Standard, "codecs", "", "This module defines base classes for standard Python codecs (encoders and decoders) and provides access to the internal Python codec registry which manages the codec and error handling lookup process." ) );
 			_pythonWords.setValue( "coerce", 				new AutoCompleteItemVO( VDOMImage.Standard, "coerce", "coerce(x, y)", "Return a tuple consisting of the two numeric arguments converted to a common type, using the same rules as used by arithmetic operations. If coercion is not possible, raise TypeError." ) );
-			_pythonWords.setValue( "compile", 				new AutoCompleteItemVO( VDOMImage.Standard, "compile", "compile(source, filename, mode[, flags[, dont_inherit]]) ", "Compile the source into a code or AST object. Code objects can be executed by an exec statement or evaluated by a call to eval(). source can either be a string or an AST object. Refer to the ast module documentation for information on how to work with AST objects.\n\n"+
+			_pythonWords.setValue( "compile", 				new AutoCompleteItemVO( VDOMImage.Standard, "compile", "compile(source, filename, mode[, flags[, dont_inherit]])", "Compile the source into a code or AST object. Code objects can be executed by an exec statement or evaluated by a call to eval(). source can either be a string or an AST object. Refer to the ast module documentation for information on how to work with AST objects.\n\n"+
 
 				"The filename argument should give the file from which the code was read; pass some recognizable value if it wasn’t read from a file ('<string>' is commonly used).\n\n"+
 
@@ -96,12 +107,12 @@ package net.vdombox.editors.parsers.python
 			_pythonWords.setValue( "compileall", 			new AutoCompleteItemVO( VDOMImage.Standard, "compileall", "", "" ) );
 			_pythonWords.setValue( "Complex", 				new AutoCompleteItemVO( VDOMImage.Standard, "Complex", "", "Subclasses of this type describe complex numbers and include the operations that work on the built-in complex type. These are: conversions to complex and bool, real, imag, +, -, *, /, abs(), conjugate(), ==, and !=. All except - and != are abstract.\n\n" +
 
-"<b>real</b>\n " +
-"<t>Abstract. Retrieves the real component of this number.\n\n" +
-"<b>imag</b>\n " + 
-"<t>Abstract. Retrieves the imaginary component of this number.\n\n" + 
-"<b>conjugate()</b>\n" + 
-"<t>Abstract. Returns the complex conjugate. For example, (1+3j).conjugate() == (1-3j)." ) );
+				"<b>real</b>\n " +
+				"<t>Abstract. Retrieves the real component of this number.\n\n" +
+				"<b>imag</b>\n " + 
+				"<t>Abstract. Retrieves the imaginary component of this number.\n\n" + 
+				"<b>conjugate()</b>\n" + 
+				"<t>Abstract. Returns the complex conjugate. For example, (1+3j).conjugate() == (1-3j)." ) );
 			
 			_pythonWords.setValue( "complex", 				new AutoCompleteItemVO( VDOMImage.Standard, "complex", "complex(re,im)", "a complex number with real part re, imaginary part im. im defaults to zero." ) );
 			_pythonWords.setValue( "continue", 				new AutoCompleteItemVO( VDOMImage.Standard, "continue", "", "" ) );
@@ -109,7 +120,7 @@ package net.vdombox.editors.parsers.python
 			_pythonWords.setValue( "dbhash", 				new AutoCompleteItemVO( VDOMImage.Standard, "dbhash", "", "The dbhash module provides a function to open databases using the BSD db library. This module mirrors the interface of the other Python database modules that provide access to DBM-style databases. The bsddb module is required to use dbhash." ) );
 			_pythonWords.setValue( "def", 					new AutoCompleteItemVO( VDOMImage.Standard, "def", "", "" ) );
 			_pythonWords.setValue( "del", 					new AutoCompleteItemVO( VDOMImage.Standard, "del", "", "" ) );
-			_pythonWords.setValue( "delattr", 				new AutoCompleteItemVO( VDOMImage.Standard, "delattr", "delattr(object, name) ", "This is a relative of setattr(). The arguments are an object and a string. The string must be the name of one of the object’s attributes. The function deletes the named attribute, provided the object allows it. For example, delattr(x, 'foobar') is equivalent to del x.foobar." ) );
+			_pythonWords.setValue( "delattr", 				new AutoCompleteItemVO( VDOMImage.Standard, "delattr", "delattr(object, name)", "This is a relative of setattr(). The arguments are an object and a string. The string must be the name of one of the object’s attributes. The function deletes the named attribute, provided the object allows it. For example, delattr(x, 'foobar') is equivalent to del x.foobar." ) );
 			_pythonWords.setValue( "dir",	 				new AutoCompleteItemVO( VDOMImage.Standard, "dir", "", "Without arguments, return the list of names in the current local scope. With an argument, attempt to return a list of valid attributes for that object." ) );
 			_pythonWords.setValue( "dircmp", 				new AutoCompleteItemVO( VDOMImage.Standard, "dircmp", "", "" ) );
 			_pythonWords.setValue( "dis", 					new AutoCompleteItemVO( VDOMImage.Standard, "dis", "", "" ) );
@@ -120,11 +131,11 @@ package net.vdombox.editors.parsers.python
 			_pythonWords.setValue( "eval", 					new AutoCompleteItemVO( VDOMImage.Standard, "eval", "eval(expression[, globals[, locals]])", "" ) );
 			_pythonWords.setValue( "except", 				new AutoCompleteItemVO( VDOMImage.Standard, "except", "", "" ) );
 			_pythonWords.setValue( "exec", 					new AutoCompleteItemVO( VDOMImage.Standard, "exec", "", "" ) );
-			_pythonWords.setValue( "execfile", 				new AutoCompleteItemVO( VDOMImage.Standard, "execfile", "execfile(filename[, globals[, locals]]) ", "This function is similar to the <i>exec</i> statement, but parses a file instead of a string. It is different from the import statement in that it does not use the module administration — it reads the file unconditionally and does not create a new module.\n" + 
+			_pythonWords.setValue( "execfile", 				new AutoCompleteItemVO( VDOMImage.Standard, "execfile", "execfile(filename[, globals[, locals]])", "This function is similar to the <i>exec</i> statement, but parses a file instead of a string. It is different from the import statement in that it does not use the module administration — it reads the file unconditionally and does not create a new module.\n" + 
 									"The arguments are a file name and two optional dictionaries. The file is parsed and evaluated as a sequence of Python statements (similarly to a module) using the globals and locals dictionaries as global and local namespace. If provided, locals can be any mapping object.\n" + 
 									"If the locals dictionary is omitted it defaults to the globals dictionary. If both dictionaries are omitted, the expression is executed in the environment where execfile() is called. The return value is None." ) );
 			
-			_pythonWords.setValue( "filter", 				new AutoCompleteItemVO( VDOMImage.Standard, "filter", "filter(function, iterable) ", "Construct a list from those elements of iterable for which function returns true. iterable may be either a sequence, a container which supports iteration, or an iterator. If iterable is a string or a tuple, the result also has that type; otherwise it is always a list. If function is None, the identity function is assumed, that is, all elements of iterable that are false are removed.\n" +
+			_pythonWords.setValue( "filter", 				new AutoCompleteItemVO( VDOMImage.Standard, "filter", "filter(function, iterable)", "Construct a list from those elements of iterable for which function returns true. iterable may be either a sequence, a container which supports iteration, or an iterator. If iterable is a string or a tuple, the result also has that type; otherwise it is always a list. If function is None, the identity function is assumed, that is, all elements of iterable that are false are removed.\n" +
 									"Note that filter(function, iterable) is equivalent to [item for item in iterable if function(item)] if function is not None and [item for item in iterable if item] if function is None.\n" + 
 									"See itertools.ifilter() and itertools.ifilterfalse() for iterator versions of this function, including a variation that filters for elements where the function returns false.") );
 			
@@ -266,6 +277,7 @@ package net.vdombox.editors.parsers.python
 			_pythonWords.setValue( "SocketServer", 			new AutoCompleteItemVO( VDOMImage.Standard, "SocketServer", "", "" ) );
 			_pythonWords.setValue( "splitfields", 			new AutoCompleteItemVO( VDOMImage.Standard, "splitfields", "", "" ) );
 			_pythonWords.setValue( "StandardError", 		new AutoCompleteItemVO( VDOMImage.Standard, "StandardError", "", "" ) );
+			_pythonWords.setValue( "staticmethod", 			new AutoCompleteItemVO( VDOMImage.Standard, "staticmethod", "", "" ) );
 			_pythonWords.setValue( "str", 					new AutoCompleteItemVO( VDOMImage.Standard, "str", "", "" ) );
 			_pythonWords.setValue( "string", 				new AutoCompleteItemVO( VDOMImage.Standard, "string", "", "" ) );
 			_pythonWords.setValue( "StringIO", 				new AutoCompleteItemVO( VDOMImage.Standard, "StringIO", "", "" ) );
@@ -321,24 +333,68 @@ package net.vdombox.editors.parsers.python
 			{
 				_pythonFields = new HashList();
 				
-				//abs
-				f = new Field( "def", 0, "abs" );
-				param = new Field ( "var", 0 , "x" );
-				f.params.setValue( param.name, param );
+				//abs(x)
+				setField("abs", new Array("x") );
 				
-				_pythonFields.setValue( f.name, f );
+				//apply(function, args[, keywords])
+				setField("apply", new Array("function", "args[, keywords]") );
 				
-				//apply
-				f = new Field( "def", 0, "apply" );
-				param = new Field ( "var", 0 , "function" );
-				f.params.setValue( param.name, param );
-				param = new Field ( "var", 0 , "args[, keywords]" );
-				f.params.setValue( param.name, param );
+				//chr(i)
+				setField("chr", new Array("i") );
 				
-				_pythonFields.setValue( f.name, f );
+				//cmp(x, y)
+				setField("cmp", new Array("x", "y") );
+				
+				//coerce(x, y)
+				setField("coerce", new Array("x", "y") );
+				
+				//compile(source, filename, mode[, flags[, dont_inherit]])
+				setField("compile", new Array("source", "filename", "mode[", "flags[", "dont_inherit]]") );
+				
+				//complex(re,im)
+				setField("complex", new Array("re", "im") );
+				
+				//delattr(object, name)
+				setField("delattr", new Array("object", "name") );
+				
+				//divmod(a, b)
+				setField("divmod", new Array("a", "b") );
+				
+				//eval(expression[, globals[, locals]])
+				setField("eval", new Array("expression[", "globals[", "locals]]") );
+				
+				//execfile(filename[, globals[, locals]])
+				setField("execfile", new Array("filename[", "globals[", "locals]]") );
+				
+				//filter(function, iterable)
+				setField("filter", new Array("function", "iterable") );
+				
+				//find(obj[, name][, module][, globs][, extraglobs])
+				setField("find", new Array("obj[", "name][", "module][", "globs][", "extraglobs]") );
+				
+				//hasattr(object, name)
+				setField("hasattr", new Array("object", "name") );
+				
+				//hash(object)
+				setField("hash", new Array("object") );
+				
+				//hex(x)
+				setField("hex", new Array("x") );
 			}
 			
-			
+			function setField( name : String, params : Array ) : void
+			{
+				f = new Field( "def", 0 , name );
+				var paramName : String;
+				
+				for each( paramName in params )
+				{
+					param = new Field("var", 0 , paramName );
+					f.params.setValue( paramName, param );
+				}
+				
+				_pythonFields.setValue( name, f );
+			}
 		}
 	}
 }

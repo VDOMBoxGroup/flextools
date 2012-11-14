@@ -25,6 +25,7 @@ package net.vdombox.editors.parsers.python
 		private var tokenScopeClass : Field;
 		
 		private var a : Vector.<AutoCompleteItemVO>;
+		private var bp : BackwardsParser;
 
 		public function Resolver( tokenizer : PythonTokenizer )
 		{
@@ -205,10 +206,11 @@ package net.vdombox.editors.parsers.python
 			resolve( text, pos );
 			var field : Field = resolvedRef;
 
-			//debug(field);
+			if ( !field && bp )
+				field = StandardWordsProxy.getFieldByName( bp.names[ bp.names.length - 1 ] );
 
 			//we didn't find it
-			if ( !field || field.fieldType != 'def' )
+			if ( !field || ( field.fieldType != 'def' && field.fieldType != 'class' ) )
 				return null;
 
 			var str : String = "";
@@ -226,7 +228,7 @@ package net.vdombox.editors.parsers.python
 			/*if ( field.hasRestParams )
 				a[ a.length - 1 ] = '...' + par.name;*/
 
-			return 'def ' + field.name + '(' + str.substring(0, str.length - 1) + ')';
+			return field.name + '(' + str.substring(0, str.length - 1) + ')';
 		}
 
 		/**
@@ -357,7 +359,7 @@ package net.vdombox.editors.parsers.python
 			if ( t0.type == Token.COMMENT || t0.type == Token.STRING )
 				return false;
 
-			var bp : BackwardsParser = new BackwardsParser;
+			bp = new BackwardsParser;
 			if ( !bp.parse( text, pos ) )
 				return false;
 
@@ -400,6 +402,7 @@ package net.vdombox.editors.parsers.python
 					{
 						var impotrElement : Object = t.parent.scope.imports.getValue( name );
 						a = HashLibraryArray.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp, "python" );
+						resolvedRef = HashLibraryArray.getTokenToLibratyClass(impotrElement.source, impotrElement.systemName, bp, "python" );
 						return true;
 						//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );
 					}

@@ -145,6 +145,11 @@ package net.vdombox.editors.parsers
 			return PythonWordsStorage.getAutocompleteItemVOByName( name );
 		}
 		
+		public static function getFieldByName( name : String ) : Field
+		{
+			return PythonWordsStorage.getFieldByName( name );
+		}
+		
 		public static function get standardVScriptObjects() : HashMap
 		{
 			if ( _standardVScriptObjects )

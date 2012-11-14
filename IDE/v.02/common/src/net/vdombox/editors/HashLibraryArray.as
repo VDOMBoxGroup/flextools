@@ -141,6 +141,105 @@ package net.vdombox.editors
 			}
 		}
 		
+		public static function getTokenToLibratyClass( importFrom : String, importToken : String, bp : BackwardsParser, lang : String, _prevImport : Object = null) : Field
+		{
+			var len : int = bp.names.length;
+			
+			bp.names[0] = importToken;
+			
+			if ( len == 1 && importFrom == importToken || len > 1 && importFrom == bp.names[len - 1] )
+				return null;
+			
+			
+			var path : Array = importFrom.split( "." );
+			var path0 : String = path[0];
+			
+			if ( !hashLibraries.hasOwnProperty( path0 ) )
+				return null;
+			
+			var prevImport : Object = ObjectUtil.copy( _prevImport );
+			
+			if ( prevImport && prevImport.hasOwnProperty( path0 ) )
+				return null;
+			
+			if ( !prevImport )
+				prevImport = {};
+			
+			prevImport[ importFrom ] = importFrom;
+			
+			var t : Token;
+			
+			if ( fieldToLibraries.hasKey( path0 ) )
+			{
+				t = fieldToLibraries.getValue( path0 ) as Token;;
+			}
+			else
+			{
+				var string : String = hashLibraries[ path0 ].libraryVO.script;
+				
+				var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( lang, string );
+				tokenizer.actionVO = hashLibraries[ path[0] ].libraryVO;
+				tokenizer.prevImport = prevImport;
+				
+				if ( tokenizer.hasPrevImport( path[0] ) )
+					return null;
+				
+				while ( tokenizer.runSlice() )
+				{
+					
+				}
+				
+				t = tokenizer.tokenByPos(1);
+				fieldToLibraries.setValue( path0, t );
+			}
+			
+			
+			var scope : Field = t.scope;
+			
+			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
+			
+			if ( t && t.scope && t.scope.members )
+			{	
+				var f : Field;
+				var flag : Boolean = true;
+				for ( var i : int = 0; i < len; i++ )
+				{
+					flag = false;
+					for each ( f in scope.members.toArray() )
+					{
+						if ( f.name == bp.names[i] )
+						{
+							scope = f;
+							flag = true;
+							break;
+						}
+					}
+				}
+				
+				if ( !flag )
+				{
+					var importItemVO : ImportItemVO;
+					for each ( importItemVO in scope.imports.toArray() )
+					{
+						f = getTokenToLibratyClass( importItemVO.source, importToken, bp, lang );
+						if ( f )
+						{
+							scope = f;
+							flag = true;
+							break;
+						}
+					}
+				}
+				
+				if ( flag )
+				{
+					return scope;
+				}
+			}
+			
+			return null;
+		}
+		
 		public static function getTokensToLibratyClass( importFrom : String, importToken : String, bp : BackwardsParser, lang : String, all : Boolean = false ) : Vector.<AutoCompleteItemVO>
 		{
 			var len : int = bp.names.length;
@@ -373,7 +472,7 @@ package net.vdombox.editors
 					var importItemVO : ImportItemVO;
 					for each ( importItemVO in scope.imports.toArray() )
 					{
-						var obj : Object = getPositionToken( importItemVO.source, importItemVO.systemName, bp, lang, prevImport );
+						var obj : Object = getPositionToken( importItemVO.source, importToken, bp, lang, prevImport );
 						if ( obj )
 						{
 							return obj;

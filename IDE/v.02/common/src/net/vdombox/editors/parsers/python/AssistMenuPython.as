@@ -67,7 +67,7 @@ package net.vdombox.editors.parsers.python
 			}
 
 			menuStr = menuStr.split( "" ).reverse().join( "" );
-			pos -= menuStr.length;
+			pos -= menuStr.length + 1;
 			
 			/*if ( !forced )
 				pos++;*/
@@ -85,7 +85,7 @@ package net.vdombox.editors.parsers.python
 			}
 			else if (trigger == '(')
 			{
-				var fd:String = ctrl.getFunctionDetails(pos - 1);
+				var fd:String = ctrl.getFunctionDetails(pos);
 				if (fd)
 				{
 					vdomToolTip.text = fd;
@@ -116,7 +116,7 @@ package net.vdombox.editors.parsers.python
 			}
 			
 			if ( showingMenu )
-				showMenu( pos );
+				showMenu( pos + 1 );
 			else
 				menuDispose();
 		}
