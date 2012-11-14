@@ -621,7 +621,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				d += String.fromCharCode( c );
 			}
 
-			hexrgb.text = colorValue = d;
+			//hexrgb.text = colorValue = d;
 			color = uint( d == '' ? 0 : '0x' + d );
 			
 			hsb = ColorHSB.rgb_to_hsb( color );
