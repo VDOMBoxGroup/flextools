@@ -348,10 +348,18 @@
 			var description:String = event.result["description"] as String;
 
 			progressBar.setProgress ( value, 100 );
-			progressBar.label = description as String;
+			progressBar.label = value + "% - " + description as String;
 
 			if ( value == 100 )
 				resultMessage.text = description;
+			
+			progressBar.validateDisplayList();
+			progressBar.validateNow();
+			validateDisplayList();
+			validateNow();
+			trace(progressBar.label)
+			
+		
 		}
 
 		private function debugErrorHandler( event:Event ):void
@@ -396,7 +404,7 @@
 			{
 				if ( event.detail == AlertPopup.YES )
 				{
-					processStep ( cGeneral );
+					processStep ( cFinal );
 				}
 				else if ( !appGenerated && ContextManager.templateStruct )
 				{

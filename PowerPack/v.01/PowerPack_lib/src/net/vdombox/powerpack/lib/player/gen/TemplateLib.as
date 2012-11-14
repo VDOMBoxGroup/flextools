@@ -504,10 +504,23 @@ public dynamic class TemplateLib extends EventDispatcher
 		}
 	}
 	
-	public function progress( value : Number, description : String ) : void
+	public function progress( value : Number, description : String ) : Function
 	{
+		
+		Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
+		
 		dispatchEvent( new TemplateLibEvent( TemplateLibEvent.PROGRESS, 
 			{value : value, description : description} ) );
+		
+		return enterFrameHandler
+		
+		function enterFrameHandler( event : Event):void
+		{
+			
+			Application.application.removeEventListener( Event.ENTER_FRAME, enterFrameHandler);
+			setReturnValue(value);
+			
+		}
 	}
 	
 	public function qSwitch( question : String, ...args ) : Function
