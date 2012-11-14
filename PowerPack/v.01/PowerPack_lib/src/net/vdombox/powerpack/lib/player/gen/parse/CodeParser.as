@@ -1,12 +1,12 @@
 package net.vdombox.powerpack.lib.player.gen.parse
 {
 
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.lib.player.gen.*;
 import net.vdombox.powerpack.lib.player.gen.errorClasses.ValidationError;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.LexemStruct;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.ParsedBlock;
-import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 
 public class CodeParser
 {

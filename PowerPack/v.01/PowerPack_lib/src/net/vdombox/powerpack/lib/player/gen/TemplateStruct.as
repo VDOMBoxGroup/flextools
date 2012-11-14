@@ -3,7 +3,6 @@ package net.vdombox.powerpack.lib.player.gen
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.utils.ByteArray;
 
 import mx.utils.UIDUtil;
 
@@ -20,8 +19,6 @@ import net.vdombox.powerpack.lib.player.graph.NodeCategory;
 import net.vdombox.powerpack.lib.player.graph.NodeType;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;
 import net.vdombox.powerpack.lib.player.template.Template;
-
-import r1.deval.D;
 
 public class TemplateStruct extends EventDispatcher
 {

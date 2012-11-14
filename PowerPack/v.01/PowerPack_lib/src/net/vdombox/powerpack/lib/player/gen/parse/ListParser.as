@@ -18,15 +18,15 @@ import flash.text.TextFormat;
 import mx.collections.ArrayCollection;
 import mx.utils.StringUtil;
 
+import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import net.vdombox.powerpack.lib.graphicapi.drawing.BrushPatternStyle;
+import net.vdombox.powerpack.lib.graphicapi.drawing.PStroke;
+import net.vdombox.powerpack.lib.graphicapi.drawing.StrokePatternStyle;
 import net.vdombox.powerpack.lib.player.gen.errorClasses.RunTimeError;
 import net.vdombox.powerpack.lib.player.gen.parse.listClasses.ElmType;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.LexemStruct;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.ParsedBlock;
-import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-import net.vdombox.powerpack.lib.graphicapi.drawing.BrushPatternStyle;
-import net.vdombox.powerpack.lib.graphicapi.drawing.PStroke;
-import net.vdombox.powerpack.lib.graphicapi.drawing.StrokePatternStyle;
 
 public class ListParser
 {

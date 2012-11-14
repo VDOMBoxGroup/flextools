@@ -7,11 +7,8 @@ package net.vdombox.powerpack.lib.player.gen.functions
 	import flash.net.FileReference;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	import flash.net.URLRequestMethod;
-	import flash.net.URLVariables;
 	import flash.utils.ByteArray;
 	
-	import mx.controls.Alert;
 	import mx.utils.Base64Decoder;
 	
 	import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;

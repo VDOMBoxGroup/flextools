@@ -6,8 +6,6 @@ import flash.display.BitmapData;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
-import flash.errors.IOError;
-import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
@@ -24,7 +22,6 @@ import flash.net.FileReference;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
 import flash.net.URLRequestMethod;
-import flash.net.URLVariables;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
@@ -35,11 +32,9 @@ import memorphic.xpath.XPathQuery;
 
 import mx.controls.Alert;
 import mx.core.Application;
-import mx.events.CloseEvent;
 import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
 import mx.managers.PopUpManager;
-import mx.utils.Base64Decoder;
 import mx.utils.Base64Encoder;
 import mx.utils.UIDUtil;
 
@@ -63,13 +58,6 @@ import net.vdombox.powerpack.lib.player.popup.Question;
 
 public dynamic class TemplateLib extends EventDispatcher
 {
-//	include "include/GeneralFunctions.as";
-//	include "include/ListManipulationFunctions.as";
-//	include "include/GraphicFunctions.as";
-//	include "include/ImageProcessingFunctions.as";
-//	include "include/ApplicationFunctions.as";
-//    include "include/XMLFunctions.as";
-
 
 	public var tplStruct : TemplateStruct;
 
