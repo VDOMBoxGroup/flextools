@@ -119,6 +119,7 @@
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 			import net.vdombox.powerpack.lib.player.BasicError;
 			import net.vdombox.powerpack.lib.player.Player;
+			import net.vdombox.powerpack.lib.player.events.CodeParserEvent;
 			import net.vdombox.powerpack.lib.player.gen.Dynamic;
 			import net.vdombox.powerpack.lib.player.gen.GraphContext;
 			import net.vdombox.powerpack.lib.player.gen.NodeContext;
@@ -145,6 +146,7 @@
 			import net.vdombox.powerpack.template.BuilderTemplateProject;
 			import net.vdombox.powerpack.updater.BuilderUpdater;
 			import net.vdombox.powerpack.utils.LibLoader;
+			import net.vdombox.powerpack.utils.Log;
 
 		//--------------------------------------------------------------------------
 		//
@@ -719,12 +721,15 @@
 					break;
 
 				case "run":
+					Log.getInstance().clear();
 					runTemplate();
 					break;
 				
 				case "debug":
 				case "step_by_step":
 					{
+						Log.getInstance().clear();
+					
 						if ( ContextManager.templateStruct )
 							ContextManager.templateStruct.terminated = true;
 	
@@ -1331,7 +1336,17 @@
 		{
 			addEventListener("closeWithoutSave", closeWithoutSaveHandler);
 			
+			addEventListener(CodeParserEvent.EXECUTE_CODE_FRAGMENT, executeCodeFragmentHandler);
+			
 			checkUpdate();
+		}
+		
+		private function executeCodeFragmentHandler (event : CodeParserEvent) : void
+		{
+			if (!event || !event.fragmentValue)
+				return;
+			
+			Log.getInstance().addNote(event.fragmentValue);
 		}
 		
 		private function templateChangeHandler (object:Object) : void 

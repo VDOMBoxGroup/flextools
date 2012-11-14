@@ -22,12 +22,14 @@
 		import net.vdombox.powerpack.lib.player.customize.skins.CloseButtonSkin;
 		import net.vdombox.powerpack.lib.player.customize.skins.MaximizeButtonSkin;
 		import net.vdombox.powerpack.lib.player.customize.skins.MinimizeButtonSkin;
+		import net.vdombox.powerpack.lib.player.events.CodeParserEvent;
 		import net.vdombox.powerpack.lib.player.managers.ContextManager;
 		import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 		import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 		import net.vdombox.powerpack.lib.player.utils.RuntimeUtils;
 		import net.vdombox.powerpack.managers.BuilderContextManager;
 		import net.vdombox.powerpack.managers.ProgressManager;
+		import net.vdombox.powerpack.utils.Log;
 		//import net.vdombox.powerpack.menu.MenuGeneral;
 
 		private function show():void
@@ -89,8 +91,19 @@
 			var screen:Screen = Screen.getScreensForRectangle ( nativeWindow.bounds )[ 0 ];
 
 			window.move ( Math.max ( screen.bounds.width / 2 - window.width / 2, 0 ), Math.max ( screen.bounds.height / 2.5 - window.height / 2, 0 ) );
+			
+			Log.getInstance().clear();
+			addEventListener(CodeParserEvent.EXECUTE_CODE_FRAGMENT, executeCodeFragmentHandler);
 		}
 
+		private function executeCodeFragmentHandler (event : CodeParserEvent) : void
+		{
+			if (!event || !event.fragmentValue)
+				return;
+			
+			Log.getInstance().addNote(event.fragmentValue);
+		}
+		
 		private function openTemplateFile( file:File, handler:Function, fileFilters:Array = null ):*
 		{
 			var _file:File = File.applicationDirectory.resolvePath ( "assets/template.xml" );
