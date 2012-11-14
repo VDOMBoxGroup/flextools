@@ -1,12 +1,16 @@
 package net.vdombox.powerpack.lib.player.gen.parse
 {
 
+import mx.core.Application;
+
+import net.vdombox.powerpack.lib.player.events.CodeParserEvent;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 import net.vdombox.powerpack.lib.player.gen.*;
 import net.vdombox.powerpack.lib.player.gen.errorClasses.ValidationError;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.LexemStruct;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.ParsedBlock;
+
 
 public class CodeParser
 {
@@ -63,7 +67,10 @@ public class CodeParser
 			return;
 
 		// execute subfragments
-
+		var codeParserEvent : CodeParserEvent = new CodeParserEvent(CodeParserEvent.EXECUTE_CODE_FRAGMENT);
+		codeParserEvent.fragmentValue = fragment.origValue;
+		Application.application.dispatchEvent(codeParserEvent);
+		
 		var subfragment : Object;
 		for ( var i : int = fragment.current; i < fragment.fragments.length; i++ )
 		{
