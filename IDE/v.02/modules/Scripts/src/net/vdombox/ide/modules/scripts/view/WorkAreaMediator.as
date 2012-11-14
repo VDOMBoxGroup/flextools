@@ -143,7 +143,6 @@ package net.vdombox.ide.modules.scripts.view
 					globalActionVO = body as GlobalActionVO;
 					OpenAndFindEditor( globalActionVO );
 					
-					
 					break;
 				}
 					
