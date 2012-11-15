@@ -2,6 +2,7 @@ package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
 	
+	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	
@@ -32,7 +33,7 @@ package net.vdombox.ide.core.view
 		
 		public var selectedHost : HostVO;
 		
-		public var selectedHostIndex : int;
+		//public var selectedHostIndex : int;
 
 		public function get username() : String
 		{
@@ -200,7 +201,7 @@ package net.vdombox.ide.core.view
 				
 				loginView.selectedLanguage = localeProxy.currentLocale;
 				
-				selectedHostIndex = loginView.host.selectedIndex;
+				//selectedHostIndex = loginView.host.selectedIndex;
 				
 				if ( selectedHost.password == "" )
 					loginView.saveButton.currentState = "notsave";
@@ -212,7 +213,7 @@ package net.vdombox.ide.core.view
 		private function delSelectedHost( event : Event ) : void
 		{
 			selectedHost = null;
-			selectedHostIndex = -1;
+			//selectedHostIndex = -1;
 		}
 
 		private function addedToStageHandler( event : Event ) : void
@@ -225,7 +226,7 @@ package net.vdombox.ide.core.view
 			
 			loginView.host.dataProvider = sharedObjectProxy.hosts;
 			selectedHost = null;
-			selectedHostIndex = -1;
+			//selectedHostIndex = -1;
 			
 			if ( sharedObjectProxy.lastHost && sharedObjectProxy.lastHost.host != ""  )
 			{
@@ -249,11 +250,19 @@ package net.vdombox.ide.core.view
 					loginView.host.selectedItem = selectedHost;
 				}
 			}
-			else if ( sharedObjectProxy.selectedHost != -1 )
+			else if ( sharedObjectProxy.selectedHost != "" )
 			{
-				loginView.host.selectedIndex = sharedObjectProxy.selectedHost;
+				var data : ArrayCollection = loginView.host.dataProvider as ArrayCollection;
+				
+				for each ( var host : HostVO in data )
+				{
+					if ( host.host == sharedObjectProxy.selectedHost )
+						loginView.host.selectedItem = host;
+				}
+				
+				//loginView.host.selectedIndex = sharedObjectProxy.selectedHost;
 				selectedHost = loginView.host.selectedItem as HostVO;
-				selectedHostIndex = sharedObjectProxy.selectedHost;
+				//selectedHostIndex = sharedObjectProxy.selectedHost;
 			}
 			
 			if ( selectedHost )
@@ -313,7 +322,7 @@ package net.vdombox.ide.core.view
 			|| loginView.password != selectedHost.password )  )
 			{
 				selectedHost = null;
-				selectedHostIndex = -1;
+				//selectedHostIndex = -1;
 			}
 			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNUP );
 		}

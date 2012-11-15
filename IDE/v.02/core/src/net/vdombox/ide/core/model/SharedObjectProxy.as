@@ -40,14 +40,14 @@ package net.vdombox.ide.core.model
 			shObjData = SharedObject.getLocal( "userData" );
 		}
 		
-		public function get selectedHost() : int
+		public function get selectedHost() : String
 		{
-			return shObjData.data.selectHost ? int (shObjData.data.selectHost as String) : -1;
+			return shObjData.data.selectHost ? shObjData.data.selectHost as String : "";
 		}
 		
-		public function set selectedHost( value : int ) : void
+		public function set selectedHost( value : String ) : void
 		{
-			shObjData.data.selectHost = value.toString();
+			shObjData.data.selectHost = value;
 		}
 		
 		private function buildHost() : HostVO
@@ -62,16 +62,19 @@ package net.vdombox.ide.core.model
 
 		public function get hosts() : ArrayCollection
 		{
-			var hostList : ArrayCollection = new ArrayCollection();
+			var hostList : Array = new Array();
 			i = 0;
 			while ( shObjData.data["host" + i.toString()] )
 			{
 				hostVO = buildHost();
-				hostList.addItem( hostVO );
+				hostList.push( hostVO );
 				
 				i++;
 			}
-			return hostList;
+			
+			hostList.sortOn("host");
+			
+			return new ArrayCollection( hostList );
 		}
 		
 		public function equalHost( hostValue : HostVO ) : HostVO
@@ -99,10 +102,21 @@ package net.vdombox.ide.core.model
 			return hostVO;
 		}
 		
-		public function setLocal( index : Number, localVO : LocaleVO ) : void
+		public function setLocal( hostVO : HostVO, localVO : LocaleVO ) : void
 		{
-			shObjData.data["localcode" + index.toString()] = localVO.code
-			shObjData.data["localdescription" + index.toString()] = localVO.description;
+			i = 0;
+			while ( shObjData.data["host" + strI] )
+			{
+				if ( shObjData.data["host" + strI] == hostVO.host )
+				{
+					shObjData.data["localcode" + strI] = localVO.code
+					shObjData.data["localdescription" + strI] = localVO.description;
+					return;
+				}
+				i++;
+			}
+			
+			
 		}
 
 		public function setHost( value : HostVO ) : void
@@ -130,7 +144,7 @@ package net.vdombox.ide.core.model
 					shObjData.data["localcode" + strI] = value.local.code;
 					shObjData.data["localdescription" + strI] = value.local.description;
 				}
-				shObjData.data.selectHost = strI;
+				shObjData.data.selectHost = value.host;
 			}
 		}
 		
@@ -154,8 +168,8 @@ package net.vdombox.ide.core.model
 				{
 					removeValue();
 					
-					if ( shObjData.data.selectHost == strI )
-						shObjData.data.selectHost = -1;
+					if ( shObjData.data.selectHost == name )
+						shObjData.data.selectHost = "";
 					decNeed = true;
 				}
 				i++;

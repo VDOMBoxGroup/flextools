@@ -550,6 +550,7 @@ package net.vdombox.ide.core.model
 						serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
 						
 						serverActionVO.setProperties( serverActionXML )
+						serverActionVO.containerVO = objectVO;
 						
 						if ( serverActionVO.name != "onload" )	
 							serverActions.push( serverActionVO );
@@ -569,6 +570,7 @@ package net.vdombox.ide.core.model
 					serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
 					serverActionVO.setProperties( serverActionXML )
 					serverActionVO.script = serverActionXML.children();
+					serverActionVO.containerVO = objectVO;
 					
 					
 					var check : Boolean = token.requestFunctionName == GET_CHECK ? true : false;
@@ -597,6 +599,7 @@ package net.vdombox.ide.core.model
 						serverActionVO.setProperties( serverActionXML )
 						
 						serverActionVO.script = serverActionXML.children();
+						serverActionVO.containerVO = objectVO;
 						
 						serverActions.push( serverActionVO );
 					}

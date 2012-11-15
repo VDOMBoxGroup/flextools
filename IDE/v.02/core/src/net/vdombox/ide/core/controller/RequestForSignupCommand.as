@@ -21,7 +21,7 @@ package net.vdombox.ide.core.controller
 			{
 				if ( loginViewMediator.selectedLanguage && loginViewMediator.selectedHost.local.code != loginViewMediator.selectedLanguage.code )
 				{
-					sharedObjectProxy.setLocal( loginViewMediator.selectedHostIndex, loginViewMediator.selectedLanguage );
+					sharedObjectProxy.setLocal( loginViewMediator.selectedHost, loginViewMediator.selectedLanguage );
 					loginViewMediator.selectedHost = new HostVO( loginViewMediator.selectedHost.host, loginViewMediator.selectedHost.user, loginViewMediator.selectedHost.password, loginViewMediator.selectedLanguage );
 				}
 				hostVO = sharedObjectProxy.equalHost( loginViewMediator.selectedHost );
@@ -35,7 +35,7 @@ package net.vdombox.ide.core.controller
 				
 			if ( hostVO )
 			{
-				sharedObjectProxy.selectedHost = loginViewMediator.selectedHostIndex;
+				sharedObjectProxy.selectedHost = loginViewMediator.selectedHost.host;
 			}
 			else
 			{

@@ -740,6 +740,7 @@ package net.vdombox.ide.core.model
 						serverActionVO = new ServerActionVO();
 
 						serverActionVO.setContainerID( pageVO.id );
+						serverActionVO.containerVO = pageVO;
 						serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
 
 						serverActionVO.setProperties( serverActionXML );
@@ -768,6 +769,7 @@ package net.vdombox.ide.core.model
 								serverActionVO = new ServerActionVO();
 								
 								serverActionVO.setContainerID( containerXML.@ID[ 0 ] );
+								serverActionVO.containerVO = pageVO;
 								serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
 								
 								serverActionVO.setProperties( serverActionXML )
@@ -794,6 +796,7 @@ package net.vdombox.ide.core.model
 							serverActionVO = new ServerActionVO();
 							
 							serverActionVO.setContainerID( pageVO.id );
+							serverActionVO.containerVO = pageVO;
 							serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
 							
 							serverActionVO.setProperties( serverActionXML )
@@ -815,6 +818,7 @@ package net.vdombox.ide.core.model
 					
 					serverActionVO = new ServerActionVO();
 					serverActionVO.setContainerID( pageVO.id );
+					serverActionVO.containerVO = pageVO;
 					serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
 					serverActionVO.setProperties( serverActionXML )
 					serverActionVO.script = serverActionXML.children();
