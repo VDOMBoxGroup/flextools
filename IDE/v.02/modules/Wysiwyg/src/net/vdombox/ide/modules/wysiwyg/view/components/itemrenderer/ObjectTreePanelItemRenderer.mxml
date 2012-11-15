@@ -220,6 +220,7 @@
 			{
 				var deleteEvent : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.DELETE );
 				deleteEvent.objectID = _data.@id;
+				deleteEvent.name = _data.@name;
 				var xmlListCollection : XMLListCollection = (owner as Tree).dataProvider as XMLListCollection;
 				var xml : XML;
 				for each ( xml in xmlListCollection )

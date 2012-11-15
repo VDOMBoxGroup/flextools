@@ -24,22 +24,22 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static var PASTE : String        = "otpe_paste";
 		
 		public static const CREATE_NEW_CLICK : String = 'createNewClick';
+		
+		public var objectID : String;
+		public var pageID : String;
+		public var name : String;
 
 		public function ObjectsTreePanelEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, pageID : String = null,
-											   objectID : String = null )
+											   objectID : String = null, name : String = null )
 		{
 			super( type, bubbles, cancelable );
 			this.pageID = pageID;
 			this.objectID = objectID;
+			this.name = name;
 		}
-		
-		public var objectID : String;
-
-		public var pageID : String;
-
 		override public function clone() : Event
 		{
-			return new ObjectsTreePanelEvent( type, bubbles, cancelable, pageID, objectID );
+			return new ObjectsTreePanelEvent( type, bubbles, cancelable, pageID, objectID, name );
 		}
 	}
 }

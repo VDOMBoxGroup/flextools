@@ -584,6 +584,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 				textAlert += " " + objectsTreePanel.selectedItems.length.toString()+ " " + ResourceManager.getInstance().getString( 'Wysiwyg_General', 'elements' );
 				titleAlert = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Objects' );
 			}
+			else
+			{
+				textAlert += " " + event.name;
+			}
 			
 			Alert.Show( titleAlert, textAlert + " ?",AlertButton.OK_No, objectsTreePanel.parentApplication, closeHandler);
 					
