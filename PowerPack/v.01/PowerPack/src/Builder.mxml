@@ -90,13 +90,9 @@
 			import mx.collections.XMLListCollection;
 			import mx.controls.Tree;
 			import mx.core.Application;
-			import mx.core.IFlexDisplayObject;
-			import mx.events.ChildExistenceChangedEvent;
 			import mx.events.CloseEvent;
-			import mx.events.DropdownEvent;
 			import mx.events.FlexEvent;
 			import mx.events.FlexNativeMenuEvent;
-			import mx.events.IndexChangedEvent;
 			import mx.managers.PopUpManager;
 			import mx.utils.StringUtil;
 			
@@ -104,7 +100,6 @@
 			import net.vdombox.powerpack.control.controlbar.ControlBarEvent;
 			import net.vdombox.powerpack.dialog.AboutProgramDialog;
 			import net.vdombox.powerpack.dialog.AirBuildProperties;
-			import net.vdombox.powerpack.dialog.EditCaption;
 			import net.vdombox.powerpack.dialog.ImportFromTpl;
 			import net.vdombox.powerpack.dialog.ModalDialog;
 			import net.vdombox.powerpack.dialog.ProjectsSettingsDialog;
@@ -116,7 +111,6 @@
 			import net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
 			import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
 			import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
-			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 			import net.vdombox.powerpack.lib.player.BasicError;
 			import net.vdombox.powerpack.lib.player.Player;
 			import net.vdombox.powerpack.lib.player.events.CodeParserEvent;
@@ -132,8 +126,6 @@
 			import net.vdombox.powerpack.lib.player.managers.ContextManager;
 			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
-			import net.vdombox.powerpack.lib.player.template.Template;
-			import net.vdombox.powerpack.lib.player.template.TemplateProject;
 			import net.vdombox.powerpack.lib.player.utils.RuntimeUtils;
 			import net.vdombox.powerpack.managers.BuilderContextManager;
 			import net.vdombox.powerpack.managers.CashManager;
