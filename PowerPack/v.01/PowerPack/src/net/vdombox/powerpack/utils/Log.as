@@ -39,7 +39,11 @@ package net.vdombox.powerpack.utils
 		
 		public function addNote(value : String) : void
 		{
-			value = value.replace("\r", " ").replace("\n", " ");
+			if (!value)
+				return;
+			
+			value = value.replace(/\r/g, " ");
+			value = value.replace(/\n/g, " ");
 			
 			startTime = TimeUtils.currentTime;
 			var deltaTime : String = prevTime == 0 ? "" : TimeUtils.formatToSecondsString(startTime - prevTime); 
