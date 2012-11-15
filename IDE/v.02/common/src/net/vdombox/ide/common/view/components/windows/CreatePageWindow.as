@@ -21,7 +21,9 @@ package net.vdombox.ide.common.view.components.windows
 		
 		public function set pagesDataProvider( value : Array ) : void
 		{
+			value.sortOn( "name", Array.CASEINSENSITIVE );
 			_pagesDataProvider = new ArrayList( value );
+			
 		}
 		
 		
