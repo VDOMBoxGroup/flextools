@@ -121,11 +121,6 @@ package net.vdombox.ide.modules.scripts.view
 				{
 					serverActionVO = body as ServerActionVO;
 					
-					if ( statesProxy.selectedObject )
-						serverActionVO.containerVO = statesProxy.selectedObject;
-					else if ( statesProxy.selectedPage )
-						serverActionVO.containerVO = statesProxy.selectedPage;	
-					
 					OpenAndFindEditor( serverActionVO );
 					break;
 				}
