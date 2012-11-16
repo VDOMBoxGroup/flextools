@@ -241,7 +241,9 @@ public class Parser
 							err = new CompilerError( null, 9006 );
 
 						break;
-
+					
+					case '_': // private  variable
+						
 					case '$': // variable
 						parseVar();
 						break;
@@ -409,13 +411,18 @@ public class Parser
 				}
 				else
 				{
-					lexems.push( new LexemStruct( sourceText.substring( fix, i + 1 ), type, fix, err ) );
+					var lexem : LexemStruct = new LexemStruct( sourceText.substring( fix, i + 1 ), type, fix, err )
+					lexems.push( lexem );
 
 					if ( type == 'n' )
 					{
-						lastLexem = LexemStruct( lexems[lexems.length - 1] );
+						lastLexem = lexem;
 						lastLexem.value = Utils.quotes( String( lastLexem.origValue ) );
 						lastLexem.code = lastLexem.value;
+					}
+					else if (type == 'v')
+					{
+						
 					}
 				}
 
@@ -449,6 +456,10 @@ public class Parser
 		function parseVar() : void
 		{
 			i++;
+			var isPrivateVar : Boolean = ( sourceText.charAt(i) == '$' );
+			
+			if ( isPrivateVar )
+				i++;
 			// check '$' is not last  symbol
 			if ( i >= sourceText.length )
 			{
@@ -485,6 +496,7 @@ public class Parser
 				i++;
 			} while ( i < sourceText.length && sourceText.charAt( i ).search( /[_a-z0-9]/i ) >= 0 );
 
+			
 			i--;
 			type = 'v'; // variable
 		}

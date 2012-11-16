@@ -3,13 +3,14 @@ package net.vdombox.powerpack.lib.player.gen.parse
 
 import mx.core.Application;
 
-import net.vdombox.powerpack.lib.player.events.CodeParserEvent;
 import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+import net.vdombox.powerpack.lib.player.events.CodeParserEvent;
 import net.vdombox.powerpack.lib.player.gen.*;
 import net.vdombox.powerpack.lib.player.gen.errorClasses.ValidationError;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.LexemStruct;
 import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.ParsedBlock;
+import net.vdombox.powerpack.lib.player.managers.ContextManager;
 
 
 public class CodeParser
@@ -21,10 +22,15 @@ public class CodeParser
 
 	public static function evaluateLexem( lexem : LexemStruct, contexts : Array ) : void
 	{
+		var origValue : String =  String( lexem.origValue );
+		
 		switch ( LexemStruct( lexem ).type )
 		{
 			case 'v':
-				lexem.code = String( lexem.origValue ).substring( 1 );
+				
+				var prefixLenght : int = lexem.isPrivateVar ? 2 : 1; 
+				
+				lexem.code =  origValue.substring(prefixLenght );
 				lexem.value = Parser.eval( lexem.code, contexts );
 				break;
 
@@ -66,11 +72,12 @@ public class CodeParser
 		if ( fragment.executed )
 			return;
 
-		// execute subfragments
+		
 		var codeParserEvent : CodeParserEvent = new CodeParserEvent(CodeParserEvent.EXECUTE_CODE_FRAGMENT);
 		codeParserEvent.fragmentValue = fragment.origValue;
 		Application.application.dispatchEvent(codeParserEvent);
 		
+		// execute subfragments
 		var subfragment : Object;
 		for ( var i : int = fragment.current; i < fragment.fragments.length; i++ )
 		{
@@ -204,7 +211,19 @@ public class CodeParser
 
 						// add prefix
 						tmpValue = fragment.varPrefix + tmpValue.toString();
-						fragment.varNames.push( tmpValue );
+						
+						
+						/*  add vars into private values */
+						var lexem : LexemStruct = subfragment as LexemStruct;
+						if ( lexem.isPrivateVar )
+						{
+							var curGraphContext : GraphContext = ContextManager.templateStruct.curGraphContext;
+							curGraphContext.context[tmpValue] = lexem.value;
+						}
+						else
+						{
+							fragment.varNames.push( tmpValue );
+						}
 
 						code += tmpValue + '=';
 					}

@@ -6,6 +6,8 @@ public class LexemStruct
 	public var type : String; // lexem type
 	public var code : String; // as3 execution code
 	public var relative : LexemStruct; // for brakes pairs
+	
+	private var _isPrivateVar : Boolean = false; 
 
 	// USED IN FUNCTIONS FOR ARGUMENTS SEPARATING
 	public var operationGroup : int = 0; // operation expression group number (0 - not grouped)
@@ -23,6 +25,12 @@ public class LexemStruct
 	//  tailSpaces
 	//----------------------------------
 	private var _tailSpaces : String = '';
+
+	public function get isPrivateVar():Boolean
+	{
+		return _isPrivateVar;
+	}
+
 	public function get tailSpaces() : String
 	{
 		return _tailSpaces;
@@ -127,6 +135,9 @@ public class LexemStruct
 		this.type = type;
 		this.position = position;
 		this.error = error;
+		
+		
+		_isPrivateVar = type == 'v' && value.charAt(0) == '_' 
 	}
 }
 }
