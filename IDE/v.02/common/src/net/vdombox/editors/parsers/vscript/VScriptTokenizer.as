@@ -20,7 +20,7 @@ package net.vdombox.editors.parsers.vscript
 		private var newLogicBlock : Boolean = false;
 		
 		private static const keywordsA : Array = [
-			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "catch", "class", "clng", "const", "csng", "cstr", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "finally", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "try", "until", "use", "wend", "while", "with", "xor"
+			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "catch", "class", "clng", "const", "csng", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "finally", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "try", "until", "use", "wend", "while", "with", "xor"
 		];
 		
 		private static const keywords2A : Array = [
@@ -776,17 +776,17 @@ package net.vdombox.editors.parsers.vscript
 				var curStr : String = curToken.string.toLowerCase()
 				field = new Field( "var", curToken.pos, curToken.string );
 				
-				if ( !scope.members.hasKey( curStr ) )
-				{
-					scope.members.setValue( curStr, field );
-					_members.setValue( curStr, field );
-				}
-				
 				access = "public";
 				
 				field.access = access;
 				
 				field.parent = scope;
+				
+				if ( !scope.members.hasKey( curStr ) && field.name != scope.name )
+				{
+					scope.members.setValue( curStr, field );
+					_members.setValue( curStr, field );
+				}
 				
 				currentPos -= 2;
 				
