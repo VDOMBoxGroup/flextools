@@ -1028,8 +1028,7 @@
 						else
 							value = fullValue = "null"
 					
-						subArr.push( {	 Name : "_$" + obj,
-							Value : value, FullValue : fullValue } );
+						subArr.push( {	 Name : "$" + obj, 	Value : value, FullValue : fullValue } );
 					}	
 				}
 
