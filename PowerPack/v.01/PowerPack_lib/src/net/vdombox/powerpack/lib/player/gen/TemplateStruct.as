@@ -583,18 +583,11 @@ public class TemplateStruct extends EventDispatcher
 	
 								case NodeCategory.RESOURCE:
 	
-	//								var resData : ByteArray = CashManager.getObject( ID, curGraphContext.curNode.text ).data;
-	//
-	//								curNodeContext.block = new ParsedBlock();
-	//								curNodeContext.block.print = true;
-	//								curNodeContext.block.retValue = resData.readUTFBytes( resData.length );
-	//								curNodeContext.block.executed = true;
 									break;
 	
 								case NodeCategory.SUBGRAPH:
 	
-									curNodeContext.block = CodeParser.ParseSubgraphNode(
-											curGraphContext.curNode.text );
+									curNodeContext.block = CodeParser.ParseSubgraphNode( curGraphContext.curNode.text );
 	
 									if ( curNodeContext.block.error )
 									{
@@ -603,13 +596,15 @@ public class TemplateStruct extends EventDispatcher
 									}
 									else
 									{
-										curNodeContext.block = CodeParser.ParseCode(
-												'[sub ' + curGraphContext.curNode.text + ']' );
+										curNodeContext.block = CodeParser.ParseCode( '[sub ' + curGraphContext.curNode.text + ']' );
 									}
+									
 									break;
 	
 								case NodeCategory.COMMAND:
+									
 									curNodeContext.block = CodeParser.ParseCode( curGraphContext.curNode.text );
+									
 									break;
 	
 							}

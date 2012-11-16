@@ -137,7 +137,7 @@ public class LexemStruct
 		this.error = error;
 		
 		
-		_isPrivateVar = type == 'v' && value.charAt(0) == '_' 
+		_isPrivateVar = type == 'v' &&  value.length > 3 &&value.substr(1,2) == '__' 
 	}
 }
 }

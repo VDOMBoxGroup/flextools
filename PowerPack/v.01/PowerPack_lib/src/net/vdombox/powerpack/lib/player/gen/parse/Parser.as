@@ -242,7 +242,6 @@ public class Parser
 
 						break;
 					
-					case '_': // private  variable
 						
 					case '$': // variable
 						parseVar();
@@ -456,10 +455,7 @@ public class Parser
 		function parseVar() : void
 		{
 			i++;
-			var isPrivateVar : Boolean = ( sourceText.charAt(i) == '$' );
 			
-			if ( isPrivateVar )
-				i++;
 			// check '$' is not last  symbol
 			if ( i >= sourceText.length )
 			{
@@ -972,8 +968,11 @@ public class Parser
 	public static function eval( prog : String, contexts : Array ) : *
 	{
 		var _res : String = "_result_" + UIDUtil.createUID().replace( /-/g, "_" );
+		
 		var _contexts : Array = [null, null];
 		var _prog : String = _res + "=" + prog;
+		
+				
 		var ret : *;
 
 		if ( contexts && contexts.length > 0 )

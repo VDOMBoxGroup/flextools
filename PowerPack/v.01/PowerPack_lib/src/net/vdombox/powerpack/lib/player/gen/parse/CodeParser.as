@@ -27,11 +27,10 @@ public class CodeParser
 		switch ( LexemStruct( lexem ).type )
 		{
 			case 'v':
-				
-				var prefixLenght : int = lexem.isPrivateVar ? 2 : 1; 
-				
-				lexem.code =  origValue.substring(prefixLenght );
+
+				lexem.code =  origValue.substring(1 );
 				lexem.value = Parser.eval( lexem.code, contexts );
+				
 				break;
 
 			case 't':
