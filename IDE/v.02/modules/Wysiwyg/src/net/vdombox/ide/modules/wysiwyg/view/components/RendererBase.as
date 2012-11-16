@@ -1481,7 +1481,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				event.stopImmediatePropagation();
 				event.preventDefault();
 				
-				stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
+				stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0, true );
 				
 				return;
 			}
@@ -1494,7 +1494,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				if ( movable && !isScroller )
 				{
 					stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
-					stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, false, 0, true );
+					stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0, true );
 
 					mDeltaX = int(mouseX);
 					mDeltaY = int(mouseY);
@@ -1547,6 +1547,19 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			if ( !event.buttonDown )
 				return;
+			
+			var target : Object = event.target;
+			
+			while ( target )
+			{
+				if ( target is TransformMarker )
+					return;
+				
+				if ( target.hasOwnProperty("parent") )
+					target = target.parent;
+				else
+					return;
+			}
 			
 			var dx : int = int( mouseX - mDeltaX );
 			var dy : int = int( mouseY - mDeltaY );
@@ -1687,7 +1700,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 			
 			stage.removeEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
-			stage.removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler );
+			stage.removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
 
 			if ( x != beforeX || y != beforeY )
 			{

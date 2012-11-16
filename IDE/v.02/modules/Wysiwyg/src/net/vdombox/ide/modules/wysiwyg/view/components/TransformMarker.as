@@ -442,7 +442,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		}
 
 		private function mouseDownHandler( event : MouseEvent ) : void
-		{
+		{			
 			beforeTransform = { x: _selectedItem.x, y: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
 			
 			(_selectedItem as RendererBase).beforeLeft = _selectedItem.x;
@@ -621,7 +621,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
 		{
-			//trace ("-- mouseMoveHandler");
 			if ( itemChanged )
 				return;
 
@@ -637,7 +636,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var allow : Boolean = true;
 
 			if ( moving && event.buttonDown )
-			{
+			{				
 				var mx : Number = mouseX;
 				var my : Number = mouseY;
 
@@ -776,7 +775,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					allow = false;
 
 				if ( rect )
-				{
+				{					
 					if ( rect.width > maxWidth )
 						rect.width = maxWidth;
 
