@@ -349,7 +349,6 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 				dropTarget = newTarget;
 				while ( dropTarget )
 				{
-					trace( dropTarget );
 					if ( dropTarget != this )
 					{
 						dispatchDragEvent( DragEvent.DRAG_ENTER, event, dropTarget );

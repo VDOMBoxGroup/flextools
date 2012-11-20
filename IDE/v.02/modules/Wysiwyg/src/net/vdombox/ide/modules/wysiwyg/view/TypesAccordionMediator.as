@@ -112,7 +112,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function addHandlers() : void
 		{
 			
-			typesAccordion.addEventListener( FlexEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
+			typesAccordion.addEventListener( TypeItemRendererEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
 			typesAccordion.addEventListener( TypeItemRendererEvent.ADD_IN_USER_CATIGORY, addInUserCategory, true );
 			typesAccordion.addEventListener( TypeItemRendererEvent.DELET_IN_USER_CATIGORY, delFromUserCategory, true );
 			typesAccordion.addEventListener( TypeItemRendererEvent.DOUBLE_CLICK, createNewObjectHandler, true, 0 , true );
@@ -120,13 +120,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function removeHandlers() : void
 		{
-			typesAccordion.removeEventListener( FlexEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
+			typesAccordion.removeEventListener( TypeItemRendererEvent.DATA_CHANGE, typeRendererCreatedHandler, true);
 			typesAccordion.removeEventListener( TypeItemRendererEvent.ADD_IN_USER_CATIGORY, addInUserCategory, true );
 			typesAccordion.removeEventListener( TypeItemRendererEvent.DELET_IN_USER_CATIGORY, delFromUserCategory, true );
 			typesAccordion.removeEventListener( TypeItemRendererEvent.DOUBLE_CLICK, createNewObjectHandler, true );
 		}
 
-		private function typeRendererCreatedHandler( event : FlexEvent ) : void
+		private function typeRendererCreatedHandler( event : TypeItemRendererEvent ) : void
 		{
 			var typeItemRenderer : TypeItemRenderer = event.target as TypeItemRenderer;
 

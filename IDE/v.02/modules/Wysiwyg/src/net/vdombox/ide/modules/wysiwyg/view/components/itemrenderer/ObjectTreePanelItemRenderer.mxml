@@ -59,8 +59,6 @@
 				
 				if ( _data )
 					createContextMenu();
-				else
-					trace("null");
 			}
 			
 			

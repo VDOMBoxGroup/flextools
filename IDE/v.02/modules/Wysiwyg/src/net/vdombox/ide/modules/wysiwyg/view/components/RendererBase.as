@@ -918,7 +918,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					
 				default:
 				{
-					trace( "-ERROR------RenderBase - refresh() - default value!!!--------:" + contetntPart.name().toString() + ":\n")
+					//trace( "-ERROR------RenderBase - refresh() - default value!!!--------:" + contetntPart.name().toString() + ":\n")
 					caseContainer( contetntPart, parentContainer );
 				}
 			}
@@ -1550,17 +1550,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			var target : Object = event.target;
 			
-			while ( target )
-			{
-				if ( target is TransformMarker )
-					return;
-				
-				if ( target.hasOwnProperty("parent") )
-					target = target.parent;
-				else
-					return;
-			}
-			
 			var dx : int = int( mouseX - mDeltaX );
 			var dy : int = int( mouseY - mDeltaY );
 			
@@ -1859,7 +1848,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( event.target == this )
 			{
 				//TODO: check who is lissener
-				trace("Remove - " + name);
 				removeHandlers();
 			}
 		}

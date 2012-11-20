@@ -111,7 +111,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 			if ( !rawRenderData )
 			{
-				trace( "\n*************ERROR****************** \n generateRenderVO() - RenderProxy" );
+				//trace( "\n*************ERROR****************** \n generateRenderVO() - RenderProxy" );
 				return renderVO;
 			}
 
@@ -186,10 +186,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 			var renderVO : RenderVO = renderer.renderVO;
 
 			if ( renderVO && renderVO.vdomObjectVO && renderersIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
-			{
 				delete renderersIndex[ renderVO.vdomObjectVO.id ]
-				trace("Delete");
-			}
 
 			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGED, renderer_renderchangedHandler );
 			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGING, renderer_renderchangingHandler );
@@ -262,9 +259,6 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 		private function createChildren( renderVO : RenderVO, rawRenderData /*is Wysiwyg*/ : XML ) : void
 		{
-			
-			if ( renderVO.vdomObjectVO.id == "1e0680bc-e2b1-404c-adb9-14481f171cbc" )
-				trace("createChildren" );
 			var pageVO : PageVO = renderVO.vdomObjectVO is PageVO ? renderVO.vdomObjectVO as PageVO : ObjectVO( renderVO.vdomObjectVO ).pageVO;
 			var objectVO : ObjectVO;
 

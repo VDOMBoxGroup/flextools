@@ -322,7 +322,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			if ( !render.renderVO )
 			{
-				trace("\nERROR: render has not renderVO !")
+				//trace("\nERROR: render has not renderVO !")
 				return true;
 			}
 			
@@ -1238,8 +1238,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 				return;
 			
 			var sourceID : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
-			
-			trace( rend.vdomObjectVO.name );
 			
 			multiObjectsManipulationProxy.pasteObjects( sourceID.split( "^" ), rend );
 			
