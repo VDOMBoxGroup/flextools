@@ -542,7 +542,7 @@
 						
 						if ( dataGridProviderOld[item["GUID"]] )
 						{
-							if ( dataGridProviderOld[item["GUID"]][tt] && item[tt] != dataGridProviderOld[item["GUID"]][tt] )
+							if ( item[tt] != dataGridProviderOld[item["GUID"]][tt] )
 							{
 								if ( tt == "id" )
 									requestXMLParam.row.@id = dataGridProviderOld[item["GUID"]][tt];
