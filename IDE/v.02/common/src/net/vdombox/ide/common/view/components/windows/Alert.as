@@ -123,12 +123,10 @@ package net.vdombox.ide.common.view.components.windows
 				{
 					super();
 					
-					width = 400;
-					height = 150;
 					minWidth = 400;
-					minHeight = 150;
+					minHeight = 160;
+					maxHeight = 160;
 					maxWidth = 400;
-					maxHeight = 150;
 					systemChrome = NativeWindowSystemChrome.NONE;
 					transparent = true;
 					

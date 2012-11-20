@@ -77,7 +77,7 @@ package net.vdombox.editors
 				
 				var path : Array = importFrom.split( "." );
 				
-				if ( !hashLibraries.hasOwnProperty( path[0] ) )
+				if ( hashLibraries && !hashLibraries.hasOwnProperty( path[0] ) )
 					return null;
 				
 				var string : String = hashLibraries[ path[0] ].libraryVO.script;

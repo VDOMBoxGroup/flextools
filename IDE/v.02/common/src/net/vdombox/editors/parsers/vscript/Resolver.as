@@ -3,6 +3,7 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
+	import net.vdombox.editors.parsers.LanguageVO;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.StructureDB;
 	import net.vdombox.editors.parsers.TypeDB;
@@ -24,6 +25,8 @@ package net.vdombox.editors.parsers.vscript
 		private var tokenScopeClass : Field;
 		
 		private var a : Vector.<AutoCompleteItemVO>;
+		
+		private var bp : BackwardsParser;
 		
 		public function Resolver( tokenizer : VScriptTokenizer )
 		{
@@ -198,30 +201,28 @@ package net.vdombox.editors.parsers.vscript
 		{
 			resolve( text, pos );
 			var field : Field = resolvedRef;
-			
-			//debug(field);
+						
+			if ( !field && bp && bp.names.length > 0 )
+				field = StandardWordsProxy.getFieldByName( bp.names[ bp.names.length - 1 ], LanguageVO.vscript );
 			
 			//we didn't find it
-			if ( !field || field.fieldType != 'def' )
+			if ( !field || ( field.fieldType != 'def' && field.fieldType != 'class' ) )
 				return null;
 			
-			
-			var a : Vector.<String> = new Vector.<String>;
+			var str : String = "";
 			var par : Field;
 			for each ( par in field.params.toArray() )
 			{
-				var str : String = par.name;
+				var str2 : String = par.name;
 				if ( par.type )
-					str += ':' + par.type.type;
+					str2 += ' : ' + par.type.type;
 				if ( par.defaultValue )
-					str += '=' + par.defaultValue;
-				a.push( { label: str, value: str });
+					str2 += ' = ' + par.defaultValue;
+				str += str2 + ",";
 			}
 			//rest
-			if ( field.hasRestParams )
-				a[ a.length - 1 ] = '...' + par.name;
 			
-			return 'def ' + field.name + '(' + a.join( ', ' ) + ')' + ( field.type ? ':' + field.type.type : '' );
+			return field.name + '(' + str.substring(0, str.length - 1) + ')';
 		}
 		
 		/**
@@ -341,10 +342,10 @@ package net.vdombox.editors.parsers.vscript
 			resolvedIsClass = false;
 			
 			var t0 : Token = tokenizer.tokenByPos( pos );
-			if ( t0.type == Token.COMMENT || t0.type == Token.STRING )
+			if ( t0 && t0.type == Token.COMMENT || t0.type == Token.STRING )
 				return false;
 			
-			var bp : BackwardsParser = new BackwardsParser;
+			bp = new BackwardsParser;
 			if ( !bp.parse( text, pos ) )
 				return false;
 			

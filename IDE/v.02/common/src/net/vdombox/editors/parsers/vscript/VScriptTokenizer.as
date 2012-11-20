@@ -1107,7 +1107,7 @@ package net.vdombox.editors.parsers.vscript
 			if ( !tokens || tokens.length < 3 )
 				return null;
 			//TODO: binary search
-			for ( var i : int = tokens.length - 1; i >= 0; i-- )
+			for ( var i : int = tokens.length - 1; i >= 2; i-- )
 				if ( tokens[ i ] && pos >= tokens[ i ].pos )
 				{
 					if ( tokens[ i ] && pos == tokens[ i ].pos )

@@ -1,6 +1,7 @@
 package net.vdombox.editors.parsers.vscript
 {
 	import flash.display.Stage;
+	import flash.geom.Point;
 	
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
@@ -83,20 +84,19 @@ package net.vdombox.editors.parsers.vscript
 				menuDataStr = ctrl.getMemberList(pos);
 			else if (trigger == '')
 				menuDataStr = ctrl.getAllOptions(pos);
-			/*else if (trigger == '(')
+			else if (trigger == '(')
 			{
-			var fd:String = ctrl.getFunctionDetails(pos);
-			if (fd)
-			{
-			tooltip.setTipText(fd);
-			var p:Point = fld.getPointForIndex(fld.caretIndex-1);
-			p = fld.localToGlobal(p);
-			tooltip.showToolTip();
-			tooltip.moveLocationRelatedTo(new IntPoint(p.x, p.y));
-			tooltipCaret = fld.caretIndex;
-			return;
+				var fd:String = ctrl.getFunctionDetails(pos);
+				if (fd)
+				{
+					vdomToolTip.text = fd;
+					var p:Point = fld.getPointForIndex(fld.caretIndex-1);
+					p = fld.localToGlobal(p);
+					vdomToolTip.show( fld, p.x, p.y - 18 );
+					tooltipCaret = fld.caretIndex;
+					return;
+				}
 			}
-			}*/
 			
 			if ( !menuDataStr || menuDataStr.length == 0 )
 			{

@@ -154,6 +154,11 @@ package net.vdombox.editors
 			update();
 		}
 		
+		public function getScriptLang() : String
+		{
+			return area.scriptLang;
+		}
+		
 		public function set scriptLang( value : String ) : void
 		{
 			area.scriptLang = value;

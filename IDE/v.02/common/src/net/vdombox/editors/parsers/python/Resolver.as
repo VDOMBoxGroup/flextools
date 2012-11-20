@@ -3,6 +3,7 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
+	import net.vdombox.editors.parsers.LanguageVO;
 	import net.vdombox.editors.parsers.StandardWordsProxy;
 	import net.vdombox.editors.parsers.StructureDB;
 	import net.vdombox.editors.parsers.TypeDB;
@@ -207,7 +208,7 @@ package net.vdombox.editors.parsers.python
 			var field : Field = resolvedRef;
 
 			if ( !field && bp )
-				field = StandardWordsProxy.getFieldByName( bp.names[ bp.names.length - 1 ] );
+				field = StandardWordsProxy.getFieldByName( bp.names[ bp.names.length - 1 ], LanguageVO.python );
 
 			//we didn't find it
 			if ( !field || ( field.fieldType != 'def' && field.fieldType != 'class' ) )

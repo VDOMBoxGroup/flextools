@@ -133,14 +133,47 @@ package net.vdombox.editors.parsers
 			return PythonWordsStorage.pythonWordsAutocomplete;
 		}
 		
-		public static function getAutocompleteItemVOByName( name : String ) : AutoCompleteItemVO
+		public static function getAutocompleteItemVOByName( name : String, lang : String ) : AutoCompleteItemVO
 		{
-			return PythonWordsStorage.getAutocompleteItemVOByName( name );
+			switch(lang)
+			{
+				case LanguageVO.python:
+				{
+					return PythonWordsStorage.getAutocompleteItemVOByName( name );
+				}
+					
+				case LanguageVO.vscript:
+				{
+					return VScriptWordsStorage.getAutocompleteItemVOByName( name );
+				}
+					
+				default:
+				{
+					return PythonWordsStorage.getAutocompleteItemVOByName( name );
+				}
+			}
+			
 		}
 		
-		public static function getFieldByName( name : String ) : Field
+		public static function getFieldByName( name : String, lang : String ) : Field
 		{
-			return PythonWordsStorage.getFieldByName( name );
+			switch(lang)
+			{
+				case LanguageVO.python:
+				{
+					return PythonWordsStorage.getFieldByName( name );
+				}
+					
+				case LanguageVO.vscript:
+				{
+					return VScriptWordsStorage.getFieldByName( name );
+				}
+					
+				default:
+				{
+					return PythonWordsStorage.getFieldByName( name );
+				}
+			}
 		}
 		
 		public static function get standardVScriptObjects() : HashMap

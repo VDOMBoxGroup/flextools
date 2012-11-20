@@ -195,7 +195,7 @@ package net.vdombox.editors.parsers.base
 			
 			var autoCompleteItemVO : AutoCompleteItemVO =menu.selectedItem;
 			if ( autoCompleteItemVO.transcription == "" && autoCompleteItemVO.description == "" )
-				autoCompleteItemVO = StandardWordsProxy.getAutocompleteItemVOByName( autoCompleteItemVO.value );                                                     
+				autoCompleteItemVO = StandardWordsProxy.getAutocompleteItemVOByName( autoCompleteItemVO.value, fld.getScriptLang() );                                                     
 				
 			if ( !autoCompleteItemVO )
 				return;
