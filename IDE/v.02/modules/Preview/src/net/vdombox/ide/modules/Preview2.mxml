@@ -25,19 +25,16 @@
 			override public function tearDown() : void
 			{
 				dispatchEvent( new Event( TEAR_DOWN ) );
-				trace("tearDown");
 			}
 
 			override public function get moduleID() : String
 			{
 				return MODULE_ID;
-				trace("moduleID");
 			}
 
 			override public function get moduleName() : String
 			{
 				return MODULE_NAME;
-				trace("moduleName");
 			}
 
 			override public function get version() : String
@@ -64,13 +61,11 @@
 			{
 				facade = ApplicationFacade.getInstance( MODULE_ID );
 				ApplicationFacade( facade ).startup( this );
-				trace("startup");
 			}
 
 			override public function getToolset() : void
 			{
 				facade.sendNotification( Notifications.CREATE_TOOLSET );
-				trace("getToolset");
 			}
 
 			override public function getSettingsScreen() : void
