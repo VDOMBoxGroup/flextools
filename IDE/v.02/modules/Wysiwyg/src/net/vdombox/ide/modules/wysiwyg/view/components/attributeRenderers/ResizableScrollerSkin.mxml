@@ -96,13 +96,15 @@ viewport property to link them together.
 	when there is too much data to fit vertically in a display area.
 	The Scroller determines whether the vertical ScrollBar is visible. -->
 	<resize:ResizableVScrollBar id="verticalScrollBar"
-								visible="false"/>
+								visible="false"
+								skinClass="spark.skins.spark.VScrollBarSkin"/>
 	
 	<!---  A horizontal scrollbar that lets you control the portion of data that is displayed
 	when there is too much data to fit horizontally in a display area.
 	The Scroller determines whether the horizontal ScrollBar is visible. -->
 	<resize:ResizableHScrollBar id="horizontalScrollBar"
-								visible="false"/>
+								visible="false"
+								skinClass="spark.skins.spark.HScrollBarSkin"/>
 	
 	<resize:ResizeHandleLines id="resizeHandle"
 							  enabled="{resizeManager.enabled}"
