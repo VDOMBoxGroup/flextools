@@ -9,6 +9,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.LoginViewEvent;
 	import net.vdombox.ide.core.model.LocalesProxy;
+	import net.vdombox.ide.core.model.LogProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	import net.vdombox.ide.core.model.vo.HostVO;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
@@ -57,7 +58,7 @@ package net.vdombox.ide.core.view
 		
 		override public function onRegister() : void
 		{
-			
+			LogProxy.addLog( "LoginViewMediator onRegister");
 			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
 			localeProxy = facade.retrieveProxy( LocalesProxy.NAME ) as LocalesProxy;
 
@@ -105,9 +106,7 @@ package net.vdombox.ide.core.view
 		}
 
 		private function addHandlers() : void
-		{
-			loginView.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true);
-			
+		{						
 			loginView.addEventListener( FlexEvent.SHOW, showHandler, false, 0, true);
 			
 			loginView.addEventListener( LoginViewEvent.SUBMIT, submitHandler, false, 0, true );
@@ -119,14 +118,10 @@ package net.vdombox.ide.core.view
 			loginView.user.addEventListener( Event.CHANGE, usernameChangeHandler , false, 0, true);
 			
 			loginView.host.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHostHandler , false, 0, true);
-			
 		}
 
 		private function removeHandlers() : void
-		{
-		
-			loginView.removeEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
-			
+		{			
 			loginView.removeEventListener( FlexEvent.SHOW, showHandler);
 			
 			loginView.removeEventListener( LoginViewEvent.SUBMIT, submitHandler );
@@ -144,13 +139,13 @@ package net.vdombox.ide.core.view
 		
 		private function createCompleteHostHandler( event : FlexEvent ) : void
 		{
-			
 			loginView.host.textInput.addEventListener( Event.CHANGE, hostnameChangeHandler, false, 0, true );
 			
 		}
 		
 		private function showHandler( event : FlexEvent ): void
 		{
+			LogProxy.addLog( "show" );
 			validateProperties();
 		}
 			
@@ -215,24 +210,24 @@ package net.vdombox.ide.core.view
 			selectedHost = null;
 			//selectedHostIndex = -1;
 		}
-
-		private function addedToStageHandler( event : Event ) : void
-		{
-			validateProperties();
-		}
+		
 		private function validateProperties( ) : void
 		{
+			LogProxy.addLog("validateProperties");
+			
 			var hostVO :  HostVO;
 			
 			loginView.host.dataProvider = sharedObjectProxy.hosts;
 			selectedHost = null;
-			//selectedHostIndex = -1;
 			
+			var data : ArrayCollection = loginView.host.dataProvider as ArrayCollection;	
+			
+			//selectedHostIndex = -1;
 			if ( sharedObjectProxy.lastHost && sharedObjectProxy.lastHost.host != ""  )
 			{
 				var flag : Boolean = false;
 				
-				for each ( var h : HostVO in loginView.host.dataProvider )
+				for each ( var h : HostVO in data )
 				{
 					if ( h.host ==  sharedObjectProxy.lastHost.host )
 					{
@@ -252,21 +247,23 @@ package net.vdombox.ide.core.view
 			}
 			else if ( sharedObjectProxy.selectedHost != "" )
 			{
-				var data : ArrayCollection = loginView.host.dataProvider as ArrayCollection;
 				
 				for each ( var host : HostVO in data )
 				{
 					if ( host.host == sharedObjectProxy.selectedHost )
+					{
 						loginView.host.selectedItem = host;
+					}
 				}
 				
 				//loginView.host.selectedIndex = sharedObjectProxy.selectedHost;
 				selectedHost = loginView.host.selectedItem as HostVO;
+				
 				//selectedHostIndex = sharedObjectProxy.selectedHost;
 			}
 			
 			if ( selectedHost )
-			{
+			{				
 				loginView.username = selectedHost.user;
 
 				loginView.hostname = selectedHost.host;

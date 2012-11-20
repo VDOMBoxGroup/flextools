@@ -212,7 +212,9 @@ package net.vdombox.ide.core.model
 				return new HostVO( host, user, password, local);
 			}
 			else
+			{
 				return null;
+			}
 			
 		}
 		
