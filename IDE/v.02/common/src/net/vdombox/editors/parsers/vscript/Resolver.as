@@ -140,7 +140,7 @@ package net.vdombox.editors.parsers.vscript
 			function addKeys( map : HashMap ) : void
 			{
 				for each ( var name : String in map.getKeys() )
-				a.push( new AutoCompleteItemVO( VDOMImage.Parameter, name ) );
+					a.push( new AutoCompleteItemVO( VDOMImage.Parameter, name ) );
 			}
 			
 			//find items in function scope chain
@@ -171,8 +171,8 @@ package net.vdombox.editors.parsers.vscript
 					if ( ff.source != ff.systemName )
 					{
 						var field : Field  = HashLibraryArray.getTokenToLibraty( ff.source, ff.systemName, "vscript" );
-						
-						a.push( StandardWordsProxy.getAutoCompleteItemVOByField( field, true ) );
+						if ( field )
+							a.push( StandardWordsProxy.getAutoCompleteItemVOByField( field, true ) );
 					}
 					else
 						a.push( new AutoCompleteItemVO( VDOMImage.Library, ff.name ) );
@@ -412,7 +412,8 @@ package net.vdombox.editors.parsers.vscript
 					if ( t.parent.scope.imports.hasKey( name ) )
 					{
 						var impotrElement : Object = t.parent.scope.imports.getValue( name );
-						a = HashLibraryArray.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp, "vscript" );
+						a = HashLibraryArray.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp, LanguageVO.vscript );
+						resolvedRef = HashLibraryArray.getTokenToLibratyClass(impotrElement.source, impotrElement.systemName, bp, LanguageVO.vscript );
 						return true;
 						//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );
 					}

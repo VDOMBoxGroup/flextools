@@ -234,6 +234,18 @@ package net.vdombox.editors.parsers.base
 			//rePositionMenu();
 		}
 		
+		protected function showToolTip() : void
+		{
+			var p:Point = fld.getPointForIndex(fld.caretIndex-1);
+			p = fld.localToGlobal(p);
+			vdomToolTip.show( fld, p.x, p.y - 18 );
+			tooltipCaret = fld.caretIndex;
+			
+			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
+		}
+		
+		
+		
 		/*protected function rePositionMenu() : void
 		{
 			var menuH : int = 8 //Math.min( 8, menu.getModel().getSize() ) * 17;

@@ -89,10 +89,7 @@ package net.vdombox.editors.parsers.python
 				if (fd)
 				{
 					vdomToolTip.text = fd;
-					var p:Point = fld.getPointForIndex(fld.caretIndex-1);
-					p = fld.localToGlobal(p);
-					vdomToolTip.show( fld, p.x, p.y - 18 );
-					tooltipCaret = fld.caretIndex;
+					showToolTip();
 					return;
 				}
 			}

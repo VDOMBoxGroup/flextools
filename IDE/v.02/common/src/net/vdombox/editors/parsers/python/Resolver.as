@@ -118,7 +118,7 @@ package net.vdombox.editors.parsers.python
 			var f : Field;
 			
 			//all package level items
-			var t : PythonToken = PythonToken( tokenizer.tokenByPos( pos ) );
+			var t : PythonToken = tokenizer.tokenByPos( pos ) as PythonToken;
 			
 			if (  t && ( t.type == Token.COMMENT || t.type == Token.STRING ) )
 				return null;
@@ -131,10 +131,6 @@ package net.vdombox.editors.parsers.python
 			// default keywords
 			a = StandardWordsProxy.pythonWords;
 			
-			/*for each ( f in classDB.listAll() )
-			{
-				a.push( f.name );
-			}*/
 			//find the scope
 			if ( !t )
 				return a;
@@ -402,8 +398,8 @@ package net.vdombox.editors.parsers.python
 					if ( t.parent.scope.imports.hasKey( name ) )
 					{
 						var impotrElement : Object = t.parent.scope.imports.getValue( name );
-						a = HashLibraryArray.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp, "python" );
-						resolvedRef = HashLibraryArray.getTokenToLibratyClass(impotrElement.source, impotrElement.systemName, bp, "python" );
+						a = HashLibraryArray.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp, LanguageVO.python );
+						resolvedRef = HashLibraryArray.getTokenToLibratyClass(impotrElement.source, impotrElement.systemName, bp, LanguageVO.python );
 						return true;
 						//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );
 					}

@@ -54,6 +54,8 @@ package net.vdombox.editors.parsers.vscript
 			menuStr = m ? m[ 1 ] : "";
 			
 			var trigger:String = m ? m[2] : "";
+			if (vdomToolTip.showed && trigger=='(') 
+				trigger = '';
 			
 			if (m) menuStr = m[1];
 			else
@@ -90,10 +92,7 @@ package net.vdombox.editors.parsers.vscript
 				if (fd)
 				{
 					vdomToolTip.text = fd;
-					var p:Point = fld.getPointForIndex(fld.caretIndex-1);
-					p = fld.localToGlobal(p);
-					vdomToolTip.show( fld, p.x, p.y - 18 );
-					tooltipCaret = fld.caretIndex;
+					showToolTip();
 					return;
 				}
 			}
