@@ -12,7 +12,7 @@ package net.vdombox.editors.parsers.vscript
 		{
 		}
 		
-		private static var _vscriptWordsString : Vector.<String> = new <String>["Abs", "And", "AndAlso", "application", "Array", "As", "AsJSON", "Atn", "Binary", "Boolean", "ByVal", "ByRef", "Case", "Catch", "Chr", "Class", "Connection", "Const", "Cos", "cstr", "Date", "Dictionary", "Dim", "Do", "Double", "Each", "Else", "ElseIf", "Empty", "End", "Eqv", "Erase", "Error", "Exit", "Exp", "False", "Finally", "Fix", "For", "Function", "Generic", "Get", "Hex", "If", "In", "inherits", "Int", "Integer", "Imp", "Is", "IsFalse", "IsNot", "IsTrue", "Let", "Like", "Log", "Loop", "Match", "Matches", "Mid", "Mismatch", "Mod", "New", "Next", "Not", "Nothing", "Null", "Oct", "Or", "OrElse", "Preserve", "Print", "Proxy", "Randomize", "ReDim", "RegExp", "request", "Rem", "replace", "response", "Rnd", "Select", "server", "Session", "Set", "Sgn", "Sin", "Sqr", "Step", "String", "Sub", "Tan", "Then", "this", "To", "ToJSON", "True", "Try", "UBound", "Until", "Use", "VdomDbConnection", "VDOMDBRecordSet", "VDOMDBRow", "VDOMImaging", "Wend", "While", "WHOLEConnection", "WHOLEError", "WHOLEConnectionError", "WHOLENoConnectionError", "WHOLERemoteCallError", "WHOLEIncorrectResponse", "WHOLENoAPIError", "WHOLENoApplication", "With", "XMLAttribute", "XMLDocument", "XMLDomstirngSizeError", "XMLElement", "XMLError", "XMLHierarchyRequestError", "XMLIndexSizeError", "XMLInuseAttributeError", "XMLInvalidAccessError", "XMLInvalidCharacterError", "XMLInvalidModificationError", "XMLInvalidStateError", "XMLNamespaceError", "XMLNoDataAllowedError", "XMLNotFoundError", "XMLNotSupportedError", "XMLNode", "XMLSyntaxError", "XMLWrongDocumentError", "Xor"  ];
+		private static var _vscriptWordsString : Vector.<String> = new <String>["Abs", "And", "AndAlso", "application", "Array", "As", "AsJSON", "Atn", "Binary", "Boolean", "ByVal", "ByRef", "Case", "Catch", "CBool", "CByte", "CDate", "CDbl", "Chr", "CInt", "Class", "CLng", "Connection", "Const", "Cos", "CSng", "CStr", "Date", "DateAdd", "Dictionary", "Dim", "Do", "Double", "Each", "Else", "ElseIf", "Empty", "End", "Eqv", "Erase", "Error", "Exit", "Exp", "False", "Finally", "Fix", "For", "Function", "Generic", "Get", "Hex", "If", "In", "inherits", "Int", "Integer", "Imp", "Is", "IsDate", "IsFalse", "IsNot", "IsTrue", "Let", "Like", "Log", "Loop", "Match", "Matches", "Mid", "Mismatch", "Mod", "New", "Next", "Not", "Nothing", "Now", "Null", "Oct", "Or", "OrElse", "Preserve", "Print", "Proxy", "Randomize", "ReDim", "RegExp", "request", "Rem", "replace", "response", "Rnd", "Select", "server", "Session", "Set", "Sgn", "Sin", "Sqr", "Step", "String", "Sub", "Tan", "Then", "this", "Time", "Timer", "To", "ToJSON", "True", "Try", "UBound", "Until", "Use", "VdomDbConnection", "VDOMDBRecordSet", "VDOMDBRow", "VDOMImaging", "Wend", "While", "WHOLEConnection", "WHOLEError", "WHOLEConnectionError", "WHOLENoConnectionError", "WHOLERemoteCallError", "WHOLEIncorrectResponse", "WHOLENoAPIError", "WHOLENoApplication", "With", "XMLAttribute", "XMLDocument", "XMLDomstirngSizeError", "XMLElement", "XMLError", "XMLHierarchyRequestError", "XMLIndexSizeError", "XMLInuseAttributeError", "XMLInvalidAccessError", "XMLInvalidCharacterError", "XMLInvalidModificationError", "XMLInvalidStateError", "XMLNamespaceError", "XMLNoDataAllowedError", "XMLNotFoundError", "XMLNotSupportedError", "XMLNode", "XMLSyntaxError", "XMLWrongDocumentError", "Xor"  ];
 		
 		private static var _vscriptWordsAutocomplete : Vector.<AutoCompleteItemVO>;
 		private static var _vscriptWords : HashList;
@@ -67,13 +67,64 @@ package net.vdombox.editors.parsers.vscript
 			_vscriptWords.setValue( "ByRef", 				new AutoCompleteItemVO( VDOMImage.Standard, "ByRef", "", "" ) );
 			_vscriptWords.setValue( "Case", 				new AutoCompleteItemVO( VDOMImage.Standard, "Case", "", "" ) );
 			_vscriptWords.setValue( "Catch", 				new AutoCompleteItemVO( VDOMImage.Standard, "Catch", "", "" ) );
+			_vscriptWords.setValue( "CBool", 				new AutoCompleteItemVO( VDOMImage.Standard, "CBool", "CBool(expression)", "Converts an expression to a variant of subtype Boolean" ) );
+			
+			_vscriptWords.setValue( "CByte", 				new AutoCompleteItemVO( VDOMImage.Standard, "CByte", "CByte(expression) ", "Converts an expression to a variant of subtype Byte\n"+
+										"The expression must be a number between 0 and 255") );
+			
+			_vscriptWords.setValue( "CDate", 				new AutoCompleteItemVO( VDOMImage.Standard, "CDate", "CDate(date)", "Converts a valid date and time expression to the variant of subtype Date" ) );
+			
+			_vscriptWords.setValue( "CDbl", 				new AutoCompleteItemVO( VDOMImage.Standard, "CDbl", "CDbl(expression) ", "Converts an expression to a variant of subtype Double\n"+
+										"The expression must be a numeric value.") );
+			
 			_vscriptWords.setValue( "Chr", 					new AutoCompleteItemVO( VDOMImage.Standard, "Chr", "Chr(charcode)", "Converts the specified ANSI code to a character" ) );
+			_vscriptWords.setValue( "CInt", 				new AutoCompleteItemVO( VDOMImage.Standard, "CInt", "CInt(expression) ", "Converts an expression to a variant of subtype Integer\n+" +
+										"<b>Note</b> The value must be a number between -32768 and 32767.") );
+			
 			_vscriptWords.setValue( "Class", 				new AutoCompleteItemVO( VDOMImage.Standard, "Class", "", "" ) );
+			_vscriptWords.setValue( "CLng", 				new AutoCompleteItemVO( VDOMImage.Standard, "CLng", "CLng(expression) ", " Converts an expression to a variant of subtype Long\n+" +
+				"<b>Note</b> The value must be a number between -2147483648 and 2147483647.") );
+			
 			_vscriptWords.setValue( "Connection", 			new AutoCompleteItemVO( VDOMImage.Standard, "Connection", "", "" ) );
 			_vscriptWords.setValue( "Const", 				new AutoCompleteItemVO( VDOMImage.Standard, "Const", "", "" ) );
 			_vscriptWords.setValue( "Cos", 					new AutoCompleteItemVO( VDOMImage.Standard, "Cos", "Cos(number)", "Returns the cosine of a specified number (angle)" ) );
-			_vscriptWords.setValue( "cstr", 				new AutoCompleteItemVO( VDOMImage.Standard, "cstr", "", "" ) );
-			_vscriptWords.setValue( "Date", 				new AutoCompleteItemVO( VDOMImage.Standard, "Date", "", "" ) );
+			_vscriptWords.setValue( "CSng", 				new AutoCompleteItemVO( VDOMImage.Standard, "CSng", "CSng(expression) ", "Converts an expression to a variant of subtype Single\n+" +
+				"The expression must be a numeric value.") );
+						
+			_vscriptWords.setValue( "CStr", 				new AutoCompleteItemVO( VDOMImage.Standard, "CStr", "CStr(expression) ", "Converts an expression to a variant of subtype String\n" + 
+				"If <b>expression</b> is::\n" + 
+				"<ul>" +
+					"<li> Boolean - then the CStr function will return a string containing true or false.</li>"+
+					"<li> Date - then the CStr function will return a string that contains a date in the short-date format.</li>" + 
+					"<li> Null - then a run-time error will occur.</li>" + 
+					'<li> Empty - then the CStr function will return an empty string ("").</li>' + 
+					'<li> Error - then the CStr function will return a string that contains the word "Error" followed by an error number.</li>' + 
+					"<li> Other numeric - then the CStr function will return a string that contains the number.</li>" +  
+				"</ul>\n" ));
+				
+			_vscriptWords.setValue( "Date", 				new AutoCompleteItemVO( VDOMImage.Standard, "Date", "Date", "Returns the current system date" ) );
+			_vscriptWords.setValue( "DateAdd", 				new AutoCompleteItemVO( VDOMImage.Standard, "DateAdd", "DateAdd(interval,number,date)", "Returns a date to which a specified time interval has been added\n" + 
+									"<b>interval</b>\n" + 
+									"Required. The interval you want to add\n" + 
+									"Can take the following values:\n" + 
+									"<ul>" +
+										"<li> yyyy - Year</li>"+
+										"<li> q - Quarter</li>" + 
+										"<li> m - Month</li>" + 
+										"<li> y - Day of year</li>" + 
+										"<li> d - Day</li>" + 
+										"<li> w - Weekday</li>" + 
+										"<li> ww - Week of year</li>" + 
+										"<li> h - Hour</li>" + 
+										"<li> n - Minute</li>" + 
+										"<li> s - Second </li>" + 
+									"</ul>\n" +  
+									"<b>number</b>\n\n" + 
+									"Required. The number of interval you want to add. Can either be positive, for dates in the future, or negative, for dates in the past\n" + 
+									"<b>date</b>\n\n" + 
+									"Required. Variant or literal representing the date to which interval is added" ) );
+			
+					
 			_vscriptWords.setValue( "Dictionary", 			new AutoCompleteItemVO( VDOMImage.Standard, "Dictionary", "", "" ) );
 			_vscriptWords.setValue( "Dim", 					new AutoCompleteItemVO( VDOMImage.Standard, "Dim", "", "" ) );
 			_vscriptWords.setValue( "Do", 					new AutoCompleteItemVO( VDOMImage.Standard, "Do", "", "" ) );
@@ -103,6 +154,7 @@ package net.vdombox.editors.parsers.vscript
 			_vscriptWords.setValue( "Integer", 				new AutoCompleteItemVO( VDOMImage.Standard, "Integer", "", "" ) );
 			_vscriptWords.setValue( "Imp", 					new AutoCompleteItemVO( VDOMImage.Standard, "Imp", "", "" ) );
 			_vscriptWords.setValue( "Is", 					new AutoCompleteItemVO( VDOMImage.Standard, "Is", "", "" ) );
+			_vscriptWords.setValue( "IsDate", 				new AutoCompleteItemVO( VDOMImage.Standard, "IsDate", "IsDate(expression)", "Returns a Boolean value that indicates if the evaluated expression can be converted to a date" ) );
 			_vscriptWords.setValue( "IsFalse", 				new AutoCompleteItemVO( VDOMImage.Standard, "IsFalse", "", "" ) );
 			_vscriptWords.setValue( "IsNot", 				new AutoCompleteItemVO( VDOMImage.Standard, "IsNot", "", "" ) );
 			_vscriptWords.setValue( "IsTrue", 				new AutoCompleteItemVO( VDOMImage.Standard, "IsTrue", "", "" ) );
@@ -119,6 +171,7 @@ package net.vdombox.editors.parsers.vscript
 			_vscriptWords.setValue( "Next", 				new AutoCompleteItemVO( VDOMImage.Standard, "Next", "", "" ) );
 			_vscriptWords.setValue( "Not", 					new AutoCompleteItemVO( VDOMImage.Standard, "Not", "", "" ) );
 			_vscriptWords.setValue( "Nothing", 				new AutoCompleteItemVO( VDOMImage.Standard, "Nothing", "", "" ) );
+			_vscriptWords.setValue( "Now", 					new AutoCompleteItemVO( VDOMImage.Standard, "Now", "Now", "Returns the current system date and time" ) );
 			_vscriptWords.setValue( "Null", 				new AutoCompleteItemVO( VDOMImage.Standard, "Null", "", "" ) );
 			_vscriptWords.setValue( "Oct", 					new AutoCompleteItemVO( VDOMImage.Standard, "Oct", "Oct(number)", "Returns the octal value of a specified number" ) );
 			_vscriptWords.setValue( "Or", 					new AutoCompleteItemVO( VDOMImage.Standard, "Or", "", "" ) );
@@ -149,12 +202,12 @@ package net.vdombox.editors.parsers.vscript
 			_vscriptWords.setValue( "Set", 					new AutoCompleteItemVO( VDOMImage.Standard, "Set", "", "" ) );
 			
 			_vscriptWords.setValue( "Sgn", 					new AutoCompleteItemVO( VDOMImage.Standard, "Sgn", "Sgn(number)", "Returns an integer that indicates the sign of a specified number\n" + 
-				"If number is:\n" + 
-				"<ul>" +
-				"<li> &gt;0 - Sgn returns 1</li>" + 
-				"<li> =0 - Sgn returns 0</li>" + 
-				"<li> &lt;0 - Sgn returns -1</li>"+
-				"</ul>" ) );
+									"If number is:\n" + 
+									"<ul>" +
+										"<li> &gt;0 - Sgn returns 1</li>" + 
+										"<li> =0 - Sgn returns 0</li>" + 
+										"<li> &lt;0 - Sgn returns -1</li>"+
+									"</ul>" ) );
 			
 			_vscriptWords.setValue( "Sin", 					new AutoCompleteItemVO( VDOMImage.Standard, "Sin", "Sin(number) ", "Returns the sine of a specified number (angle)" ) );
 			_vscriptWords.setValue( "Sqr", 					new AutoCompleteItemVO( VDOMImage.Standard, "Sqr", "Sqr(number) ", "Returns the square root of a specified number" ) );
@@ -164,6 +217,8 @@ package net.vdombox.editors.parsers.vscript
 			_vscriptWords.setValue( "Tan", 					new AutoCompleteItemVO( VDOMImage.Standard, "Tan", "Tan(number)", "Returns the tangent of a specified number (angle)" ) );
 			_vscriptWords.setValue( "Then", 				new AutoCompleteItemVO( VDOMImage.Standard, "Then", "", "" ) );
 			_vscriptWords.setValue( "this", 				new AutoCompleteItemVO( VDOMImage.Standard, "this", "", "" ) );
+			_vscriptWords.setValue( "Time", 				new AutoCompleteItemVO( VDOMImage.Standard, "Time", "Time", "Returns the current system time" ) );
+			_vscriptWords.setValue( "Timer", 				new AutoCompleteItemVO( VDOMImage.Standard, "Timer", "Timer", "Returns the number of seconds since 12:00 AM" ) );
 			_vscriptWords.setValue( "To", 					new AutoCompleteItemVO( VDOMImage.Standard, "To", "", "" ) );
 			_vscriptWords.setValue( "ToJSON", 				new AutoCompleteItemVO( VDOMImage.Standard, "ToJSON", "", "" ) );
 			_vscriptWords.setValue( "True", 				new AutoCompleteItemVO( VDOMImage.Standard, "True", "", "" ) );
@@ -215,49 +270,79 @@ package net.vdombox.editors.parsers.vscript
 				_vscriptFields = new HashList();
 				
 				//Abs(number)
-				setField("Abs", new Array("number") );
+				setField("abs", new Array("number") );
 				
 				//Atn(number)
-				setField("Atn", new Array("number") );
+				setField("atn", new Array("number") );
+				
+				//CBool(expression)
+				setField("cbool", new Array("expression") );
+				
+				//CByte(expression)
+				setField("cbyte", new Array("expression") );
+				
+				//CDate(date)
+				setField("cdate", new Array("date") );
+				
+				//CDbl(expression)
+				setField("cdbl", new Array("expression") );
 				
 				//Chr(charcode)
-				setField("Chr", new Array("charcode") );
+				setField("chr", new Array("charcode") );
+				
+				//CInt(expression)
+				setField("cint", new Array("expression") );
+				
+				//CLng(expression)
+				setField("clng", new Array("expression") );
 				
 				//Cos(number)
-				setField("Cos", new Array("number") );
+				setField("cos", new Array("number") );
+								
+				//CSng(expression)
+				setField("csng", new Array("expression") );
+				
+				//CStr(expression)
+				setField("cstr", new Array("expression") );
+				
+				//DateAdd(number)
+				setField("dateadd", new Array("interval", "number", "date") );
 				
 				//Exp(number)
-				setField("Exp", new Array("number") );
+				setField("exp", new Array("number") );
 				
 				//Hex(number)
-				setField("Hex", new Array("number") );
+				setField("hex", new Array("number") );
 				
 				//Int(number)
-				setField("Int", new Array("number") );
+				setField("int", new Array("number") );
+				
+				//IsDate(expression)
+				setField("IsDate", new Array("expression") );
 				
 				//Fix(number)
-				setField("Fix", new Array("number") );
+				setField("fix", new Array("number") );
 				
 				//Log(number)
-				setField("Log", new Array("number") );
+				setField("log", new Array("number") );
 				
 				//Oct(number)
-				setField("Oct", new Array("number") );
+				setField("oct", new Array("number") );
 				
 				//Rnd(number)
-				setField("Rnd", new Array("number") );
+				setField("rnd", new Array("number") );
 				
 				//Sgn(number)
-				setField("Sgn", new Array("number") );
+				setField("sgn", new Array("number") );
 				
 				//Sin(number)
-				setField("Sin", new Array("number") );
+				setField("sin", new Array("number") );
 				
 				//Sqr(number)
-				setField("Sqr", new Array("number") );
+				setField("sqr", new Array("number") );
 				
 				//Tan(number)
-				setField("Tan", new Array("number") );
+				setField("tan", new Array("number") );
 			}
 			
 			function setField( name : String, params : Array ) : void

@@ -20,7 +20,7 @@ package net.vdombox.editors.parsers.vscript
 		private var newLogicBlock : Boolean = false;
 		
 		private static const keywordsA : Array = [
-			"and", "as", "byref", "byval", "call", "case", "cbool", "cbyte", "cdate", "cdbl", "cint", "catch", "class", "clng", "const", "csng", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "finally", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "try", "until", "use", "wend", "while", "with", "xor"
+			"and", "as", "byref", "byval", "call", "case", "cdbl", "catch", "class", "clng", "const", "csng", "date", "dim", "do", "each", "else", "elseif", "end", "erase", "error", "exit", "false", "finally", "for", "function", "get", "goto", "if", "in", "is", "let", "loop", "mod", "next", "new", "not", "nothing", "on", "option", "or", "private", "property", "set", "sub", "public", "default", "readonly", "redim",  "select", "set", "string", "sub", "then", "to", "true", "try", "until", "use", "wend", "while", "with", "xor"
 		];
 		
 		private static const keywords2A : Array = [

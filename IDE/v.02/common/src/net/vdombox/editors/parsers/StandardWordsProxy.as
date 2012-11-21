@@ -166,7 +166,7 @@ package net.vdombox.editors.parsers
 					
 				case LanguageVO.vscript:
 				{
-					return VScriptWordsStorage.getFieldByName( name );
+					return VScriptWordsStorage.getFieldByName( name.toLowerCase() );
 				}
 					
 				default:
