@@ -8,7 +8,7 @@
 	backgroundAlpha="1" borderAlpha="1" cornerRadius="0" 
 	
 	creationComplete="creationCompleteHandler();"
-	close="closeHandler();" >
+	close="closeHandler();" xmlns:s="library://ns.adobe.com/flex/spark" >
 	
 <mx:Style>
 	.titleStyle {
@@ -143,37 +143,46 @@
 		}
 	]]>
 </mx:Script>
-
-<mx:Form width="100%" paddingLeft="5" paddingRight="5">
-
-	<mx:HBox width="100%"  label="Link URL" horizontalGap="0" verticalAlign="middle">
-		<mx:RadioButton label="Link URL" groupName="rGroup" selected="true" width="100%"
-			click="{
-				linkURL.enabled = true;
-				linkURL.setFocus();
-				pageURL.enabled = false;
-			}"/>
-		<mx:Label  text="http://" fontWeight="bold"/>
-		<mx:TextInput id="linkURL" text="{hostName}" width="200" fontWeight="bold" enabled="true"/>
-	</mx:HBox>
 	
-	<mx:HBox width="100%" label="Link URL:">
-		<mx:RadioButton label="Pages List" groupName="rGroup" width="100%"
-			click="{
-				linkURL.enabled = false;
-				pageURL.enabled = true;
-			}"/>
-		<mx:ComboBox id="pageURL"
-			labelField="@label"
-			cornerRadius="0" width="200" textAlign="left" enabled="false"/>
-	</mx:HBox>
-	
-	<mx:FormItem horizontalAlign="right" direction="horizontal" width="100%">
-		<mx:Button label="Insert" cornerRadius="0" 
-			click="closeWithSave();"/>
-		<mx:Button label="Cancel" cornerRadius="0" 
-			click="closeHandler();"/>
-	</mx:FormItem>
-</mx:Form>
+	<s:Group width="100%" height="100%">
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="0xdedede"/>
+			</s:fill>
+		</s:Rect>
+		
+		<s:VGroup width="100%" paddingLeft="5" paddingRight="5" top="40" gap="7">
+		
+			<mx:HBox width="100%"  label="Link URL" horizontalGap="0" verticalAlign="middle">
+				<mx:RadioButton label="Link URL" groupName="rGroup" selected="true" width="100%"
+								click="{
+								linkURL.enabled = true;
+								linkURL.setFocus();
+								pageURL.enabled = false;
+								}"/>
+				<s:Label  text="http://" fontWeight="bold"/>
+				<s:TextInput id="linkURL" text="{hostName}" width="200" fontWeight="bold" enabled="true"/>
+			</mx:HBox>
+			
+			<mx:HBox width="100%" label="Link URL:">
+				<mx:RadioButton label="Pages List" groupName="rGroup" width="100%"
+								click="{
+								linkURL.enabled = false;
+								pageURL.enabled = true;
+								}"/>
+				<mx:ComboBox id="pageURL"
+							 labelField="@label"
+							 cornerRadius="0" width="200" textAlign="left" enabled="false"/>
+			</mx:HBox>
+			
+			<s:HGroup horizontalAlign="right" width="100%">
+				<s:Button label="Insert" cornerRadius="0" 
+						   click="closeWithSave();"/>
+				<s:Button label="Cancel" cornerRadius="0" 
+						   click="closeHandler();"/>
+			</s:HGroup>
+		</s:VGroup>
+		
+	</s:Group>
 	
 </mx:TitleWindow>
