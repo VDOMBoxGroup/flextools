@@ -74,13 +74,13 @@
 					return;
 				}
 					
-				if( username == "" )
+				if( user.text == "" )
 				{
 					user.setFocus();
 					return;
 				}
 					
-				if( password == "" )
+				if( pass.text == "" )
 				{
 					pass.setFocus();
 					return;

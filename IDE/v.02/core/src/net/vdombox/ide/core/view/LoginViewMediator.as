@@ -38,12 +38,12 @@ package net.vdombox.ide.core.view
 
 		public function get username() : String
 		{
-			return loginView.username;
+			return loginView.user.text;
 		}
 		
 		public function get password() : String
 		{
-			return loginView.password;
+			return loginView.pass.text;
 		}
 		
 		public function get hostname() : String
@@ -327,6 +327,7 @@ package net.vdombox.ide.core.view
 		private function deleteHostHandler( event : LoginViewEvent ): void
 		{
 			sharedObjectProxy.removeHost( loginView.host.textInput.text );
+			sharedObjectProxy.lastHost = null;
 			validateProperties();
 		}
 	}

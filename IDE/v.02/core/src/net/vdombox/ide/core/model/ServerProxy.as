@@ -277,8 +277,6 @@ package net.vdombox.ide.core.model
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_SUCCESSFUL );
 			sendNotification( ApplicationFacade.SERVER_LOGIN_START );
 			
-			//sendNotification( ApplicationFacade.WRITE_ERROR, "" );
-
 			soap.logon( hostVO.user, hostVO.password );
 		}
 

@@ -16,30 +16,39 @@ package net.vdombox.ide.core.controller
 			var loginViewMediator : LoginViewMediator = facade.retrieveMediator( LoginViewMediator.NAME ) as LoginViewMediator;
 			var sharedObjectProxy : SharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			
 			var hostVO : HostVO;
-			if ( loginViewMediator.selectedHost )
+			var tempVO : HostVO = loginViewMediator.selectedHost;
+			var password : String;
+			
+			if ( tempVO )
 			{
 				if ( loginViewMediator.selectedLanguage && loginViewMediator.selectedHost.local.code != loginViewMediator.selectedLanguage.code )
 				{
 					sharedObjectProxy.setLocal( loginViewMediator.selectedHost, loginViewMediator.selectedLanguage );
-					loginViewMediator.selectedHost = new HostVO( loginViewMediator.selectedHost.host, loginViewMediator.selectedHost.user, loginViewMediator.selectedHost.password, loginViewMediator.selectedLanguage );
 				}
-				hostVO = sharedObjectProxy.equalHost( loginViewMediator.selectedHost );
+				
+				if ( tempVO.password != loginViewMediator.password )
+					password = MD5Utils.encrypt( loginViewMediator.password );
+				else
+					password = tempVO.password;
 			}
 			else
 			{
-				hostVO = new HostVO( loginViewMediator.hostname, loginViewMediator.username, MD5Utils.encrypt( loginViewMediator.password ), loginViewMediator.selectedLanguage );
-				hostVO = sharedObjectProxy.equalHost( hostVO );
+				password = MD5Utils.encrypt( loginViewMediator.password );
 			}
-				
+			
+			hostVO = new HostVO( loginViewMediator.hostname, loginViewMediator.username,password , loginViewMediator.selectedLanguage );
+			hostVO = sharedObjectProxy.equalHost( hostVO );
+			
 				
 			if ( hostVO )
 			{
-				sharedObjectProxy.selectedHost = loginViewMediator.selectedHost.host;
+				sharedObjectProxy.selectedHost = tempVO.host;
 			}
 			else
 			{
-				hostVO = new HostVO( loginViewMediator.hostname, loginViewMediator.username, MD5Utils.encrypt( loginViewMediator.password ), loginViewMediator.selectedLanguage );
+				hostVO = new HostVO( loginViewMediator.hostname, loginViewMediator.username, password, loginViewMediator.selectedLanguage );
 
 			}
 			

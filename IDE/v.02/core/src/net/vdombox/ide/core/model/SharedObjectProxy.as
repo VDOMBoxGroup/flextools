@@ -193,6 +193,12 @@ package net.vdombox.ide.core.model
 		
 		public function set lastHost( value : HostVO ) : void
 		{
+			if ( !value )
+			{
+				delete shObjData.data["lasthost"];
+				return;
+			}
+			
 			shObjData.data["lasthost"] = value.host;
 			shObjData.data["lastuser"] = value.user;
 			shObjData.data["lastpassword"] = value.password;
