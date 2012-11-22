@@ -21,7 +21,7 @@ package net.vdombox.ide.core.controller
 
 			var appUpdater : ApplicationUpdaterUI = new ApplicationUpdaterUI();
 
-			appUpdater.updateURL = "http://ehb.tomsk.ru/maks/update.xml"; // Server-side XML file describing update
+			appUpdater.updateURL = "http://ehb.tomsk.ru/maks/update45SDK.xml"; // Server-side XML file describing update
 			appUpdater.isCheckForUpdateVisible = false; // We won't ask permission to check for an update
 			
 			appUpdater.addEventListener( UpdateEvent.INITIALIZED, onUpdate ); // Once initialized, run onUpdate

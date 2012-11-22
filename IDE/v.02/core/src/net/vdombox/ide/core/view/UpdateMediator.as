@@ -46,7 +46,7 @@ package net.vdombox.ide.core.view
 		
 		private function initialize():void
 		{		
-			var url : String = "http://update.vdombox.ru/ide/update.xml"
+			var url : String = "http://update.vdombox.ru/ide/update45SDK.xml"
 			var loader:URLLoader = new URLLoader ();
 			var request:URLRequest = new URLRequest ( url );
 			
@@ -93,7 +93,7 @@ package net.vdombox.ide.core.view
 			if (! applicationUpdater )
 				applicationUpdater = new ApplicationUpdaterUI();
 			
-			applicationUpdater.updateURL = "http://update.vdombox.ru/ide/update.xml"
+			applicationUpdater.updateURL = "http://update.vdombox.ru/ide/update45SDK.xml"
 			
 			applicationUpdater.isCheckForUpdateVisible = false; // We won't ask permission to check for an update
 			
