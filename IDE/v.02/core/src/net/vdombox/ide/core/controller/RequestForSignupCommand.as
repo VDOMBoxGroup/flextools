@@ -21,6 +21,12 @@ package net.vdombox.ide.core.controller
 			var tempVO : HostVO = loginViewMediator.selectedHost;
 			var password : String;
 			
+			var hostname : String = loginViewMediator.hostname;
+			if ( hostname.substr( 0, 7) == "http://" )
+				hostname = hostname.substring( 7, hostname.length );
+			
+			
+			
 			if ( tempVO )
 			{
 				if ( loginViewMediator.selectedLanguage && loginViewMediator.selectedHost.local.code != loginViewMediator.selectedLanguage.code )
@@ -38,7 +44,7 @@ package net.vdombox.ide.core.controller
 				password = MD5Utils.encrypt( loginViewMediator.password );
 			}
 			
-			hostVO = new HostVO( loginViewMediator.hostname, loginViewMediator.username,password , loginViewMediator.selectedLanguage );
+			hostVO = new HostVO( hostname, loginViewMediator.username,password , loginViewMediator.selectedLanguage );
 			hostVO = sharedObjectProxy.equalHost( hostVO );
 			
 				
@@ -48,7 +54,7 @@ package net.vdombox.ide.core.controller
 			}
 			else
 			{
-				hostVO = new HostVO( loginViewMediator.hostname, loginViewMediator.username, password, loginViewMediator.selectedLanguage );
+				hostVO = new HostVO( hostname, loginViewMediator.username, password, loginViewMediator.selectedLanguage );
 
 			}
 			
