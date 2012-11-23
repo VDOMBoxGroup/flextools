@@ -377,8 +377,8 @@ package net.vdombox.ide.core.model
 			error.string = event.fault.faultString;
 			error.detail = event.fault.faultDetail;
 			
-			//TODO: creat alert
-//			sendNotification( ApplicationFacade.SERVER_ERROR, error );
+			//sendNotification( ApplicationFacade.SERVER_ERROR, error );
+			sendNotification( ApplicationFacade.WRITE_ERROR, { text: error.string, detail : error.detail } );
 			
 		}
 		
