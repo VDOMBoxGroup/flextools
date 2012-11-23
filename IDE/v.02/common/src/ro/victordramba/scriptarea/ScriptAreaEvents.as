@@ -125,7 +125,7 @@ package ro.victordramba.scriptarea
 			
 			addEventListener( MouseEvent.CONTEXT_MENU, contextMenuHandler, false, 0 , true );
 			
-			t = new Timer( 1200, 1 );
+			t = new Timer( 700, 1 );
 			
 			t.addEventListener( TimerEvent.TIMER, timerHandler, false, 0, true );
 		}

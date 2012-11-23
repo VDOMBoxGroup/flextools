@@ -12,7 +12,7 @@ package net.vdombox.editors.parsers.vscript
 		{
 		}
 		
-		private static var _vscriptWordsString : Vector.<String> = new <String>["Abs", "And", "AndAlso", "application", "Array", "As", "AsJSON", "Atn", "Binary", "Boolean", "ByVal", "ByRef", "Case", "Catch", "CBool", "CByte", "CDate", "CDbl", "Chr", "CInt", "Class", "CLng", "Connection", "Const", "Cos", "CSng", "CStr", "Date", "DateAdd", "Dictionary", "Dim", "Do", "Double", "Each", "Else", "ElseIf", "Empty", "End", "Eqv", "Erase", "Error", "Exit", "Exp", "False", "Finally", "Fix", "For", "Function", "Generic", "Get", "Hex", "If", "In", "inherits", "Int", "Integer", "Imp", "Is", "IsDate", "IsFalse", "IsNot", "IsTrue", "Let", "Like", "Log", "Loop", "Match", "Matches", "Mid", "Mismatch", "Mod", "New", "Next", "Not", "Nothing", "Now", "Null", "Oct", "Or", "OrElse", "Preserve", "Print", "Proxy", "Randomize", "ReDim", "RegExp", "request", "Rem", "replace", "response", "Rnd", "Select", "server", "Session", "Set", "Sgn", "Sin", "Sqr", "Step", "String", "Sub", "Tan", "Then", "this", "Time", "Timer", "To", "ToJSON", "True", "Try", "UBound", "Until", "Use", "VdomDbConnection", "VDOMDBRecordSet", "VDOMDBRow", "VDOMImaging", "Wend", "While", "WHOLEConnection", "WHOLEError", "WHOLEConnectionError", "WHOLENoConnectionError", "WHOLERemoteCallError", "WHOLEIncorrectResponse", "WHOLENoAPIError", "WHOLENoApplication", "With", "XMLAttribute", "XMLDocument", "XMLDomstirngSizeError", "XMLElement", "XMLError", "XMLHierarchyRequestError", "XMLIndexSizeError", "XMLInuseAttributeError", "XMLInvalidAccessError", "XMLInvalidCharacterError", "XMLInvalidModificationError", "XMLInvalidStateError", "XMLNamespaceError", "XMLNoDataAllowedError", "XMLNotFoundError", "XMLNotSupportedError", "XMLNode", "XMLSyntaxError", "XMLWrongDocumentError", "Xor"  ];
+		private static var _vscriptWordsString : Vector.<String> = new <String>["Abs", "And", "AndAlso", "application", "Array", "As", "AsJSON", "Atn", "Binary", "Boolean", "ByVal", "ByRef", "Case", "Catch", "CBool", "CByte", "CDate", "CDbl", "Chr", "CInt", "Class", "CLng", "Connection", "Const", "Cos", "CSng", "CStr", "Date", "DateAdd", "Dictionary", "Dim", "Do", "Double", "Each", "Else", "ElseIf", "Empty", "End", "Eqv", "Erase", "Error", "Exit", "Exp", "False", "Finally", "Fix", "For", "Function", "Generic", "Get", "Hex", "If", "In", "inherits", "Int", "Integer", "Imp", "Is", "IsDate", "IsFalse", "IsNot", "IsTrue", "Len", "Let", "Like", "Log", "Loop", "Match", "Matches", "Mid", "Mismatch", "Mod", "New", "Next", "Not", "Nothing", "Now", "Null", "Oct", "Or", "OrElse", "Preserve", "Print", "Proxy", "Randomize", "ReDim", "RegExp", "request", "Rem", "Replace", "response", "Rnd", "Select", "server", "Session", "Set", "Sgn", "Sin", "Sqr", "Step", "String", "Sub", "Tan", "Then", "this", "Time", "Timer", "To", "ToJSON", "True", "Try", "UBound", "Until", "Use", "VdomDbConnection", "VDOMDBRecordSet", "VDOMDBRow", "VDOMImaging", "Wend", "While", "WHOLEConnection", "WHOLEError", "WHOLEConnectionError", "WHOLENoConnectionError", "WHOLERemoteCallError", "WHOLEIncorrectResponse", "WHOLENoAPIError", "WHOLENoApplication", "With", "XMLAttribute", "XMLDocument", "XMLDomstirngSizeError", "XMLElement", "XMLError", "XMLHierarchyRequestError", "XMLIndexSizeError", "XMLInuseAttributeError", "XMLInvalidAccessError", "XMLInvalidCharacterError", "XMLInvalidModificationError", "XMLInvalidStateError", "XMLNamespaceError", "XMLNoDataAllowedError", "XMLNotFoundError", "XMLNotSupportedError", "XMLNode", "XMLSyntaxError", "XMLWrongDocumentError", "Xor"  ];
 		
 		private static var _vscriptWordsAutocomplete : Vector.<AutoCompleteItemVO>;
 		private static var _vscriptWords : HashList;
@@ -57,7 +57,7 @@ package net.vdombox.editors.parsers.vscript
 			_vscriptWords.setValue( "And", 					new AutoCompleteItemVO( VDOMImage.Standard, "And", "", "" ) );
 			_vscriptWords.setValue( "AndAlso", 				new AutoCompleteItemVO( VDOMImage.Standard, "AndAlso", "", "" ) );
 			_vscriptWords.setValue( "application", 			new AutoCompleteItemVO( VDOMImage.Standard, "application", "", "" ) );
-			_vscriptWords.setValue( "Array", 				new AutoCompleteItemVO( VDOMImage.Standard, "Array", "", "" ) );
+			_vscriptWords.setValue( "Array", 				new AutoCompleteItemVO( VDOMImage.Standard, "Array", "Array(arglist)", "Returns a variant containing an array" ) );
 			_vscriptWords.setValue( "As", 					new AutoCompleteItemVO( VDOMImage.Standard, "As", "", "" ) );
 			_vscriptWords.setValue( "AsJSON", 				new AutoCompleteItemVO( VDOMImage.Standard, "AsJSON", "", "" ) );
 			_vscriptWords.setValue( "Atn", 					new AutoCompleteItemVO( VDOMImage.Standard, "Atn", "Atn(number)", "Returns the arctangent of a specified number" ) );
@@ -158,13 +158,14 @@ package net.vdombox.editors.parsers.vscript
 			_vscriptWords.setValue( "IsFalse", 				new AutoCompleteItemVO( VDOMImage.Standard, "IsFalse", "", "" ) );
 			_vscriptWords.setValue( "IsNot", 				new AutoCompleteItemVO( VDOMImage.Standard, "IsNot", "", "" ) );
 			_vscriptWords.setValue( "IsTrue", 				new AutoCompleteItemVO( VDOMImage.Standard, "IsTrue", "", "" ) );
+			_vscriptWords.setValue( "Len", 					new AutoCompleteItemVO( VDOMImage.Standard, "Len", "Len(string)", "Returns the number of characters in a string" ) );
 			_vscriptWords.setValue( "Let", 					new AutoCompleteItemVO( VDOMImage.Standard, "Let", "", "" ) );
 			_vscriptWords.setValue( "Like", 				new AutoCompleteItemVO( VDOMImage.Standard, "Like", "", "" ) );
 			_vscriptWords.setValue( "Log", 					new AutoCompleteItemVO( VDOMImage.Standard, "Log", "Log(number)", "The Log function returns the natural logarithm of a specified number. The natural logarithm is the logarithm to the base e." ) );
 			_vscriptWords.setValue( "Loop", 				new AutoCompleteItemVO( VDOMImage.Standard, "Loop", "", "" ) );
 			_vscriptWords.setValue( "Match", 				new AutoCompleteItemVO( VDOMImage.Standard, "Match", "", "" ) );
 			_vscriptWords.setValue( "Matches", 				new AutoCompleteItemVO( VDOMImage.Standard, "Matches", "", "" ) );
-			_vscriptWords.setValue( "Mid", 					new AutoCompleteItemVO( VDOMImage.Standard, "Mid", "", "" ) );
+			_vscriptWords.setValue( "Mid", 					new AutoCompleteItemVO( VDOMImage.Standard, "Mid", "Mid(string,start[,length])", "Returns a specified number of characters from a string" ) );
 			_vscriptWords.setValue( "Mismatch", 			new AutoCompleteItemVO( VDOMImage.Standard, "Mismatch", "", "" ) );
 			_vscriptWords.setValue( "Mod", 					new AutoCompleteItemVO( VDOMImage.Standard, "Mod", "", "" ) );
 			_vscriptWords.setValue( "New", 					new AutoCompleteItemVO( VDOMImage.Standard, "New", "", "" ) );
@@ -184,7 +185,25 @@ package net.vdombox.editors.parsers.vscript
 			_vscriptWords.setValue( "RegExp", 				new AutoCompleteItemVO( VDOMImage.Standard, "RegExp", "", "" ) );
 			_vscriptWords.setValue( "request", 				new AutoCompleteItemVO( VDOMImage.Standard, "request", "", "" ) );
 			_vscriptWords.setValue( "Rem", 					new AutoCompleteItemVO( VDOMImage.Standard, "Rem", "", "" ) );
-			_vscriptWords.setValue( "replace", 				new AutoCompleteItemVO( VDOMImage.Standard, "replace", "", "" ) );
+			_vscriptWords.setValue( "Replace", 				new AutoCompleteItemVO( VDOMImage.Standard, "Replace", "Replace(string,find,replacewith[,start[,count[,compare]]])", "Replaces a specified part of a string with another string a specified number of times\n" +
+									"<b>string</b>\n" +
+									"<t>Required. The string to be searched\n" + 
+									"<b>find</b>\n" +
+									"Required. The part of the string that will be replaced\n" + 
+									"<b>replacewith</b>\n" +
+									"Required. The replacement substring\n" + 
+									"<b>start</b>\n" +
+									"Optional. Specifies the start position. Default is 1. All characters before the start position will be removed.\n" + 
+									"<b>count</b>\n" +
+									"Optional. Specifies the number of substitutions to perform. Default value is -1, which means make all possible substitutions\n" + 
+									"<b>compare</b>\n" +
+									"Optional. Specifies the string comparison to use. Default is 0\n" + 
+									"Can have one of the following values:\n" + 
+									"<ul>" +
+									"<li> 0 = vbBinaryCompare - Perform a binary comparison</li>"+
+									"<li> 1 = vbTextCompare - Perform a textual comparison</li>" + 
+									"</ul>"
+									) );
 			_vscriptWords.setValue( "response", 			new AutoCompleteItemVO( VDOMImage.Standard, "response", "", "" ) );
 			
 			_vscriptWords.setValue( "Rnd", 					new AutoCompleteItemVO( VDOMImage.Standard, "Rnd", "Rnd[(number)]", "Returns a random number less than 1 but greater or equal to 0\n" + 
@@ -272,6 +291,9 @@ package net.vdombox.editors.parsers.vscript
 				//Abs(number)
 				setField("abs", new Array("number") );
 				
+				//Array(arglist) 
+				setField("array", new Array("arglist") );
+				
 				//Atn(number)
 				setField("atn", new Array("number") );
 				
@@ -323,11 +345,20 @@ package net.vdombox.editors.parsers.vscript
 				//Fix(number)
 				setField("fix", new Array("number") );
 				
+				//Len(string) 
+				setField("len", new Array("string") );
+				
 				//Log(number)
 				setField("log", new Array("number") );
 				
+				//Mid(string,start[,length]) 
+				setField("mid", new Array("number", "start[", "length]") );
+				
 				//Oct(number)
 				setField("oct", new Array("number") );
+				
+				//Replace(string,find,replacewith[,start[,count[,compare]]])
+				setField("replace", new Array("string", "find", "replacewith[", "start[", "count[", "compare]]]") );
 				
 				//Rnd(number)
 				setField("rnd", new Array("number") );
