@@ -1883,7 +1883,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function showToolTip( text : String) : void
 		{
 			addEventListener( MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler );
+			stage.addEventListener( KeyboardEvent.KEY_DOWN, closeToolTipHandler, true, 0 , true );
 			tip.text = text;
+		}
+		
+		private function closeToolTipHandler( event : * ) : void
+		{
+			if ( stage )
+				stage.removeEventListener( KeyboardEvent.KEY_DOWN, closeToolTipHandler, true );
+			
+			hideToolTip()
 		}
 	
 		private function hideToolTip() : void
