@@ -548,6 +548,7 @@ package net.vdombox.ide.core.model
 			
 			for each ( actionXML in clientActionsXMLList )
 			{
+				// TODO: new ClientActionVO("")?!? - you need do this: ClientActionVO( typeID : String = "")
 				clientActionVO = new ClientActionVO("");
 				clientActionVO.setProperties( actionXML );
 				
