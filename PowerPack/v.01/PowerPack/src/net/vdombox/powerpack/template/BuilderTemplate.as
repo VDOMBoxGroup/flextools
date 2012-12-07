@@ -318,6 +318,7 @@ package net.vdombox.powerpack.template
 			return true;
 		}
 	
+		private const singleQuotePattern : RegExp = /'/g;
 		private function cashStructure() : void
 		{
 			CashManager.setStringObject( fullID,
@@ -325,7 +326,7 @@ package net.vdombox.powerpack.template
 					"<resource " +
 					"category='template' " +
 					"ID='template' " +
-					"name='" + selectedProject.name + "' " +
+					"name='" + selectedProject.name.replace(singleQuotePattern, "&#039;") + "' " +
 					"type='" + TYPE_APPLICATION + "' />" ),
 				_xml.toXMLString() );
 			
@@ -334,7 +335,7 @@ package net.vdombox.powerpack.template
 					"<resource " +
 					"category='template' " +
 					"ID='structure' " +
-					"name='" + selectedProject.name + "' " +
+					"name='" + selectedProject.name.replace(singleQuotePattern, "&#039;") + "' " +
 					"type='" + TYPE_APPLICATION + "' />" ),
 				xmlStructure.toXMLString() );
 		}
