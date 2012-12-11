@@ -37,10 +37,7 @@ public class ParsedBlock
 
 	public function set lastExecutedFragment(value:CodeFragment):void
 	{
-		if (value)
-			trace("value: "+value.evalValue);
-		else
-			trace("null")
+		
 			
 		_lastExecutedFragment = value;
 		
