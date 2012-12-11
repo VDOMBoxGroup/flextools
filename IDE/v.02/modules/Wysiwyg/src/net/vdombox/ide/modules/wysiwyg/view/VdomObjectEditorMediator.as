@@ -136,6 +136,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( Notifications.BODY_STOP );
 
 			interests.push( Notifications.XML_PRESENTATION_GETTED );
+			
+			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 
 			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
 			
@@ -171,6 +173,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 					clearData();
 
 					break;
+				}
+					
+				case StatesProxy.SELECTED_PAGE_CHANGED:
+				{
+					
 				}
 
 				case StatesProxy.SELECTED_OBJECT_CHANGED:

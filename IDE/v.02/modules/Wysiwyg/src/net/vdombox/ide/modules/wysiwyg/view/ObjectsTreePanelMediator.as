@@ -208,11 +208,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 						
 						var sourceXMLList : XMLList = pageXMLTree.*;
 						
-						pageXML.setChildren( new XMLList() ); //TODO: strange construction
-						pageXML.appendChild( sourceXMLList );
-						
-						if ( sourceXMLList.length() == 0 )
-							objectsTreePanel.pages = objectsTreePanel.pages.copy();
+						if ( sourceXMLList.length() != 0 )
+						{
+							pageXML.setChildren( new XMLList() ); //TODO: strange construction
+							pageXML.appendChild( sourceXMLList );
+							
+							if ( sourceXMLList.length() == 0 )
+								objectsTreePanel.pages = objectsTreePanel.pages.copy();
+						}
 					}
 
 					selectCurrentPage( false );
@@ -238,7 +241,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
-					selectCurrentPage();
+					sendNotification( Notifications.GET_PAGE_SRUCTURE, statesProxy.selectedPage );
+					//selectCurrentPage();
 
 					break;
 				}
