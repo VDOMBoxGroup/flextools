@@ -1017,6 +1017,7 @@
 
 				// get local vars            	   
 				var subArr : Array = [];
+				
 				var value : Object ;
 				var fullValue : Object
 				for ( var obj : String in curGraphContext.context )
@@ -1032,9 +1033,11 @@
 						subArr.push( {	 Name : "$" + obj, 	Value : value, FullValue : fullValue } );
 					}	
 				}
+				subArr.sortOn("Name", Array.CASEINSENSITIVE);
 
 				// get global vars
 				var arr : Array = [];
+				var subArr2 : Array = [];
 				var context : Dynamic = ContextManager.templateStruct.context
 				for ( obj in context )
 				{
@@ -1045,11 +1048,17 @@
 							fullValue  = context[obj];
 							value = (  context[obj] is XML ) ? "[Object XML]" :  fullValue;
 							
-							arr.push( { Name : "$" + obj, Value : value, FullValue : fullValue } );
+							if ( obj.charAt(0) == "_" )
+								subArr2.push( { Name : "$" + obj, Value : value, FullValue : fullValue } ); 		
+							else	
+								arr.push( { Name : "$" + obj, Value : value, FullValue : fullValue } );
 						}
 					}
 				}
+				subArr2.sortOn("Name", Array.CASEINSENSITIVE);
+				
 				arr.push( { Name : "this", Value : curGraphContext.curGraph.name, children : subArr } );
+				arr.push( { Name : "special", Value : "_", children : subArr2 } );
 
 				pnl_variables.grid.dataProvider = new HierarchicalData( arr.sortOn("Name", Array.CASEINSENSITIVE) );
 				pnl_variables.grid.invalidateList();

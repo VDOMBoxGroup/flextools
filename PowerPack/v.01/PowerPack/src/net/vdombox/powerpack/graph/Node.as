@@ -1964,7 +1964,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 						var txt : String;
 					
 						txt = nodeTextArea.text.substring(0, nodeTextArea.selectionBeginIndex);
-						txt += "\n";
+						txt += "\r";
 						txt += nodeTextArea.text.substr(nodeTextArea.selectionEndIndex);
 						
 						var newCaretPos : int = nodeTextArea.selectionBeginIndex + 1;
