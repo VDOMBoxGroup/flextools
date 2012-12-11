@@ -40,17 +40,20 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 		
 		private function get comboData () : ArrayCollection
 		{
-			var variants : Array = dataProvider.slice(2);
+//			var variants : Array = dataProvider.slice(2);
+//			
+//			if (variants.length == 1)
+//				variants = String(variants[0]).split(",");
 			
-			if (variants.length == 1)
-				variants = String(variants[0]).split(",");
-			
-			return new ArrayCollection(variants);
+			return new ArrayCollection(answerVariants);
 		}
 		
 		override public function get value () : String
 		{
-			return comboBox.selectedItem.toString();
+			if (comboBox.selectedItem )
+				return comboBox.selectedItem.value.toString();
+			
+			return "";
 		}
 		
 		

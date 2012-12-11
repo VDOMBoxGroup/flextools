@@ -11,7 +11,7 @@ public dynamic class NodeStruct
 	public var type : String;
 	public var breakpoint : Boolean;
 	public var enabled : Boolean;
-	public var text : String;
+	private var _text : String;
 
 	public var passCount : int = 0;
 	public var graph : GraphStruct;
@@ -33,5 +33,17 @@ public dynamic class NodeStruct
 
 		graph = _graph;
 	}
+
+	public function get text():String
+	{
+		return _text;
+	}
+
+	public function set text(value:String):void
+	{
+		_text = value.replace(/\r/g, "");
+		 
+	}
+
 }
 }

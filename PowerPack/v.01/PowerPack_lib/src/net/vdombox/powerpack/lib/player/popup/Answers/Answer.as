@@ -3,6 +3,7 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 	import mx.containers.VBox;
 	import mx.controls.Text;
 	
+	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 	import net.vdombox.powerpack.lib.player.gen.parse.ListParser;
 	import net.vdombox.powerpack.lib.player.gen.parse.listClasses.ElmType;
 	import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
@@ -70,26 +71,37 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 					var multyValue : Array = ListParser.list2Array( variantsStr );
 					
 					// data like  [ ['app1' 'guid1'] ['app2' 'guid2']  ['app3' 'guid3']]
-					if ( multyValue[0] is CodeFragment )
-					{
+					
 						var dataBt : String; 
-						
+						var _value : Object;
 						for (var j:int = 0; j < multyValue.length; j++) 
 						{
-							dataBt  = ListParser.getElm( variantsStr, j+1 );
-							
 							variant = new AnswerVariant();
-							
-							variant.label = ListParser.getElmValue( dataBt, 1, context ).toString();
-							variant.value = ListParser.getElmValue( dataBt, 2, context ).toString();
+							_value = multyValue[j];
+
+							if( _value is CodeFragment)
+							{
+								dataBt  = ListParser.getElm( variantsStr, j+1 );
+								
+								variant.label = ListParser.getElmValue( dataBt, 1, context ).toString();
+								variant.value = ListParser.getElmValue( dataBt, 2, context ).toString();
+							}
+							else if( _value is LexemStruct)
+							{
+								dataBt = Utils.replaceQuotes( LexemStruct( _value ).value.toString() );
+								variant.label = variant.value = dataBt;
+							} 
+							else
+							{
+								variant.label = variant.value = _value["value"] as String;
+							}
 							
 							outputVariants.push(variant);
 						}
 						
 						return outputVariants;
-					}
-					else
-						return [];
+					
+					
 				}
 				else
 					sourceVariants = variantsStr.split(",");

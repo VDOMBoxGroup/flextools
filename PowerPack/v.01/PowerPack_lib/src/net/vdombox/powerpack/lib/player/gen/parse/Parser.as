@@ -48,14 +48,18 @@ public class Parser
 		"random" : { pattern : /^\[n[viVNA]\]$/, argNum : 1 },
 		"imageToBase64" : { pattern : /^\[n[v][vscVSA]\]$/, argNum : 2 },
 
-		"alert" : { pattern : /^\[n[vscVSA]*\]$/, argNum : 1 },
+		"alert" : { pattern : /^\[n[vscVSA]*\]$/,   argNum : -1 },
+		"alertOC" : { pattern : /^\[n[vscVSA]*\]$/, argNum : -1, trans : ['OK', 'CANCEL'] },
+		"alertYN" : { pattern : /^\[n[vscVSA]*\]$/, argNum : -1, trans : ['YES', 'NO'] },
+		
 		"wholeMethod" : { pattern : /^\[n[vscVSA][vscVSA]*\]$/, argNum : -1, trans : ['Success', 'Error']  },
-
+		"wholeMethod2" : { pattern : /^\[n[vscVSA][vscVSA]*\]$/, argNum : -1, trans : ['SUCCESS', 'ERROR']  },
+		
         "setXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]*\]$/, argNum : 3 },
 		"getXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
 		
 		'dialog' : { pattern : /^\[n[vscVSA][nvscVSA]*\]$/, argNum : -1 },
-		'cancelableDialog' : { pattern : /^\[n[vscVSA][nvscVSA]*\]$/, argNum : -1 , trans : ['ok', 'cancel']},
+		'cancelableDialog' : { pattern : /^\[n[vscVSA][nvscVSA]*\]$/, argNum : -1 , trans : ['OK', 'CANCEL']},
 		
 		"progress" : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2 },
 		
@@ -417,7 +421,7 @@ public class Parser
 					{
 						lastLexem = lexem;
 						lastLexem.value = Utils.quotes( String( lastLexem.origValue ) );
-						lastLexem.code = lastLexem.value;
+						lastLexem.code = lastLexem.value.toString();
 					}
 					else if (type == 'v')
 					{
@@ -707,7 +711,7 @@ public class Parser
 			}
 			else if ( subfragment is LexemStruct )
 			{
-				tmpValue = Utils.replaceQuotes( LexemStruct( subfragment ).value );
+				tmpValue = Utils.replaceQuotes( LexemStruct( subfragment ).value.toString() );
 			}
 
 			if ( prevGrp != -1 && prevGrp != subfragment.operationGroup )

@@ -32,6 +32,7 @@ import memorphic.xpath.XPathQuery;
 
 import mx.controls.Alert;
 import mx.core.Application;
+import mx.events.CloseEvent;
 import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
 import mx.managers.PopUpManager;
@@ -53,6 +54,7 @@ import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
 import net.vdombox.powerpack.lib.player.gen.structs.GraphStruct;
 import net.vdombox.powerpack.lib.player.gen.structs.NodeStruct;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 import net.vdombox.powerpack.lib.player.popup.Answers.AnswerCreator;
 import net.vdombox.powerpack.lib.player.popup.Question;
 
@@ -375,7 +377,16 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	public function setXMLValue( xml : XML, path : String, value : Object ) : XML
 	{
-		var queryResult : XMLList = getQueryResult(xml, path) ;
+		try
+		{
+			var _xml : XML = new XML(xml);	
+		} 
+		catch(error:Error) 
+		{
+			return null;
+		} 
+		
+		var queryResult : XMLList = getQueryResult(_xml, path) ;
 		
 		for each ( var xmlNode : XML in queryResult )
 		{
@@ -388,6 +399,16 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	public function addXMLValue( xml : XML, queryStr : String, value : Object ) : XML
 	{
+		try
+		{
+			var _xml : XML = new XML(xml);	
+		} 
+		catch(error:Error) 
+		{
+			return null;
+		}
+		
+		
 		var queryResult : XMLList = getQueryResult(xml, queryStr) ;
 		
 		for each ( var xmlNode : XML in queryResult )
@@ -402,6 +423,7 @@ public dynamic class TemplateLib extends EventDispatcher
 	private function getQueryResult(xml : XML, path:String):XMLList
 	{
 		path = path ? path : "/";
+		
 		
 		var xPathQuery:XPathQuery =  new XPathQuery( path );
 		
@@ -494,7 +516,8 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	public function progress( value : Number, description : String ) : Function
 	{
-		
+		var i : int = 0;
+		var frameWait : int = 5;
 		Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
 		
 		dispatchEvent( new TemplateLibEvent( TemplateLibEvent.PROGRESS, 
@@ -504,9 +527,12 @@ public dynamic class TemplateLib extends EventDispatcher
 		
 		function enterFrameHandler( event : Event):void
 		{
-			
-			Application.application.removeEventListener( Event.ENTER_FRAME, enterFrameHandler);
-			setReturnValue(value);
+			i++;
+			if ( i > frameWait )
+			{
+				Application.application.removeEventListener( Event.ENTER_FRAME, enterFrameHandler);
+				setReturnValue(value);
+			}
 			
 		}
 	}
@@ -776,10 +802,48 @@ public dynamic class TemplateLib extends EventDispatcher
 		return rnd.toString();
 	}
 	
-	public function alert( strr : Object ) : void
+	public function alert( strr : Object, title : String = "" ) : Function
 	{
-		Alert.show(strr.toString())
+		AlertPopup.show( strr.toString(), title, 0x4, null, closeHandler);
+		
+		function closeHandler( event : CloseEvent ) : void
+		{
+			setReturnValue("OK");
+		}
+		
+		return new Function;		
 	}
+	
+	public function alertOC( strr : Object, title : String = "" ) : Function
+	{
+		AlertPopup.show( strr.toString(), title,  Alert.OK    | Alert.CANCEL, null, closeHandler);
+		
+		function closeHandler( event : CloseEvent ) : void
+		{
+			if (event.detail == Alert.CANCEL )
+				setReturnValue("CANCEL");
+			else
+				setReturnValue("OK");
+		}
+		
+		return new Function;		
+	}
+	
+	public function alertYN( strr : Object, title : String = "" ) : Function
+	{
+		AlertPopup.show( strr.toString(), title,  Alert.YES | Alert.NO, null, closeHandler);
+		
+		function closeHandler( event : CloseEvent ) : void
+		{
+			if (event.detail == Alert.NO )
+				setReturnValue("NO");
+			else
+				setReturnValue("YES");
+		}
+		
+		return new Function;		
+	}
+	
 	
 	public function wholeMethod( funct : String, ...args ) : Function
 	{
@@ -819,7 +883,7 @@ public dynamic class TemplateLib extends EventDispatcher
 		
 		function dialogCloseHandler( event : TemplateLibEvent ) : void
 		{
-			setTransition ( event.transition );
+			setTransition ( event.transition.toLocaleUpperCase() );
 			
 			setReturnValue ( event.result );
 		}
@@ -1277,39 +1341,32 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	public function getValue(position:Object, list:String):Object
 	{
-		var contexts:Array = getContexts();
-		var elmValue:Object = ListParser.getElmValue(list, position, contexts);	
-		return elmValue;
+		return ListParser.getElmValue(list, position,  getContexts());	
 	}
 	
 	public function getType( position : Object, list : String ): int
 	{
-		var type:int = ListParser.getType(list, position);
-		return type;
+		return ListParser.getType(list, position);
 	}
 	
 	public function exist(type:Object, value:Object, list:String):int
 	{
-		var position:int = ListParser.exists(list, type, value.toString());
-		return position;
+		return ListParser.exists(list, type, value.toString());
 	}
 	
 	public function remove(position:Object, list:String):String
 	{
-		var newList:String = ListParser.remove(list, position);
-		return newList;
+		return ListParser.remove(list, position);
 	}
 	
 	public function put(type:Object, position:Object, value:Object, list:String):String
 	{
-		var newList:String = ListParser.put(list, position, type, value.toString());
-		return newList;
+		return ListParser.put(list, position, type, value.toString());
 	}
 	
 	public function update(type:Object, position:Object, value:Object, list:String):String
 	{
-		var newList:String = ListParser.update(list, position, type, value.toString());
-		return newList;
+		return ListParser.update(list, position, type, value.toString());
 	}
 	
 	public function evaluate(list:String):String
@@ -1324,20 +1381,17 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	public function addStructure(src:String, tgt:String, level:int, listStruct:String):String 
 	{
-		var newStruct:String = processStructure(src, tgt, level, listStruct, 'add');
-		return newStruct;
+		return processStructure(src, tgt, level, listStruct, 'add');
 	}
 	
 	public function updateStructure(src:String, tgt:String, level:int, listStruct:String):String 
 	{
-		var newStruct:String = processStructure(src, tgt, level, listStruct, 'update');
-		return newStruct;
+		return  processStructure(src, tgt, level, listStruct, 'update');
 	}
 	
 	public function deleteStructure(src:String, tgt:String, level:int, listStruct:String):String
 	{
-		var newStruct:String = processStructure(src, tgt, level, listStruct, 'delete');
-		return newStruct;
+		return processStructure(src, tgt, level, listStruct, 'delete');
 	}
 	
 	private function processStructure(src:String, tgt:String, level:int, listStruct:String, action:String='add'):String

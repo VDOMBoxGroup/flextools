@@ -701,7 +701,7 @@ public class ListParser
 		var pos : int;
 		var ret : int;
 		var _type : int = processElmType( type );
-		var _value : String;
+		var _value : Object;
 
 		if ( list is String )
 			arr = list2Array( String( list ) );
@@ -727,10 +727,11 @@ public class ListParser
 				_value = Utils.quotes( value );
 				break;
 			case ElmType.LIST:
-				_value = StringUtil.trim( value );
+//				_value = StringUtil.trim( value );
+				_value = list2Array( value );
 				break;
 			case ElmType.VARIABLE:
-				_value = "$" + StringUtil.trim( _value );
+				_value = "$" + StringUtil.trim( _value.toString() );
 				break;
 		}
 

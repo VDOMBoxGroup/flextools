@@ -23,6 +23,8 @@ public class SOAPBaseLevel extends EventDispatcher
     public static var ERROR  : String = "Error";
 
 	private var _result : Object;
+	
+	private var _result2 : Object;
 
     private var _resultType : String = ERROR;
 
@@ -36,6 +38,11 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap = SOAP.getInstance();
 	}
 
+	public function get result2():Object
+	{
+		return _result2;
+	}
+
 	public function get result() : Object
 	{
 		return _result;
@@ -45,6 +52,13 @@ public class SOAPBaseLevel extends EventDispatcher
     {
         return _resultType;
     }
+	
+	public function get resultType2() : String
+	{
+		return _resultType.toLocaleUpperCase();
+	}
+	
+	
 
 	private function resultHandler( event : * ) : void
 	{
@@ -52,7 +66,8 @@ public class SOAPBaseLevel extends EventDispatcher
 
 		var result : XMLList = new XMLList( event.result );
 		
-		_result = result[0];
+		_result = _result2 = result[0];
+		
 		
 		_resultType = getResultType( result );
 
@@ -87,12 +102,15 @@ public class SOAPBaseLevel extends EventDispatcher
 		
 		var fault : Object = event.fault;
 		var faultstring : String = ( "faultstring" in fault ) 	? fault["faultstring"] 	: fault.faultString
-		var details 	: String = ( "details"     in fault) 	? fault["details"] 		: "" ;
+		var details 	: String = ( "detail"     in fault) 	? fault["detail"] 		: "" ;
 
-		
-		 _result = "['Error' '" + faultstring + " - " + details+ "']"; 
-		
-        _resultType = ERROR;
+		if ( details != ""  )
+			faultstring += ": " + details
+			
+		 _result = "['Error' '" + faultstring  +"']"; 
+		 _result2 = faultstring;
+        
+		 _resultType = ERROR;
 		
 		Application.application.addEventListener( Event.ENTER_FRAME, callLater);
 	}
@@ -213,7 +231,8 @@ public class SOAPBaseLevel extends EventDispatcher
 			
 			default:
 			{
-				_result = "['Error' 'function: " + functionName +" - does not exist ']";
+				_result2 =  "function: "+functionName +" - does not exist"; 
+				_result = "['Error' '" + _result2 +"']";
 				
 				_resultType = ERROR;
 				
@@ -239,8 +258,6 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.set_application_events.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.set_application_events.addEventListener( FaultEvent.FAULT, soapError );
 		soap.set_application_events( appId, objId, events );
-
-
 	}
 
 	// get_application_events //
@@ -387,7 +404,8 @@ public class SOAPBaseLevel extends EventDispatcher
 
 			var resultArray : Array = ["Success", result.Hostname, result.Username, result.ServerVersion]
 
-            _result = ListParser.array2List(resultArray);
+            _result = _result2 = ListParser.array2List(resultArray);
+			
 
             _resultType = SUCCESS;
 
@@ -398,7 +416,8 @@ public class SOAPBaseLevel extends EventDispatcher
 		{
 			var resultArray : Array = ["Error", event.faultString ]
 			
-			_result = ListParser.array2List(resultArray);
+			_result = _result2 = ListParser.array2List(resultArray);
+			
 			
 			_resultType = ERROR;
 			
@@ -431,7 +450,8 @@ public class SOAPBaseLevel extends EventDispatcher
 	{
 		soap.close_session();
 
-        _result = "Ok";
+        _result = _result2 = "Ok";
+		 
         _resultType = SUCCESS;
 
 		dispatchEvent( new Event( RESULT_RECEIVED ) );
@@ -479,7 +499,7 @@ public class SOAPBaseLevel extends EventDispatcher
 				applicationsArr.push( [application.Information.Name[0],  application.@ID])
 			}
 			
-			_result = ListParser.array2List( applicationsArr );
+			_result = _result2 = ListParser.array2List( applicationsArr );
 			
 			_resultType = SUCCESS;
 			
@@ -548,7 +568,7 @@ public class SOAPBaseLevel extends EventDispatcher
 				backupDrivers.push( [driver.Name[0],  driver.ID[0], driver.Description[0] ] );
 			}
 			
-			_result = ListParser.array2List( backupDrivers );
+			_result = _result2 = ListParser.array2List( backupDrivers );
 			
 			_resultType = SUCCESS;
 			

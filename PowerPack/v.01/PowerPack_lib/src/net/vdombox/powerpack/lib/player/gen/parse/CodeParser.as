@@ -39,7 +39,7 @@ public class CodeParser
 				lexem.value = Utils.replaceEscapeSequences( lexem.value.toString(), "\\t" );
 				lexem.value = Utils.replaceEscapeSequences( lexem.value.toString(), "\\$" );
 				lexem.value = Utils.replaceEscapeSequences( lexem.value.toString(), "\\\\" );
-				lexem.code = lexem.value;
+				lexem.code = lexem.value.toString();
 				break;
 
 			case '[':
@@ -48,7 +48,7 @@ public class CodeParser
 			case '}':
 			case ';':
 				lexem.value = '';
-				lexem.code = lexem.value;
+				lexem.code = lexem.value.toString();
 				break;
 		}
 	}
@@ -218,6 +218,7 @@ public class CodeParser
 						{
 							var curGraphContext : GraphContext = ContextManager.templateStruct.curGraphContext;
 							curGraphContext.context[tmpValue] = lexem.value;
+//							fragment.varNames.push( tmpValue );
 						}
 						else
 						{

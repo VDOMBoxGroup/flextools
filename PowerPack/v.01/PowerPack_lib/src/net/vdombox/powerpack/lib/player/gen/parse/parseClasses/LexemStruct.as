@@ -64,13 +64,13 @@ public class LexemStruct
 	//----------------------------------
 	//  value
 	//----------------------------------
-	private var _value : String; // evaluate value
-	public function get value() : String
+	private var _value : Object; // evaluate value
+	public function get value() : Object
 	{
 		return _value;
 	}
 
-	public function set value( val : String ) : void
+	public function set value( val : Object ) : void
 	{
 		if ( _value != val )
 		{
