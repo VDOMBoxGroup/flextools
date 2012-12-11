@@ -265,14 +265,20 @@
 				return compilerParamsChecker.isValidInstallerId(selectedTemplateProject.installerId);
 			}
 			
+			private function get validProjectName() : Boolean
+			{
+				return compilerParamsChecker.isValidProjectName(selectedTemplateProject.name);
+			}
+			
 			private function get buildAvailable (): Boolean
 			{
 				return validAppPath && 
 					validFlexSDKPath && 
 					validAirSDKPath && 
 					validOutputInstallerFolderPath &&
-					validInstallerFileName
-					&& validInstallerId;
+					validInstallerFileName &&
+					validInstallerId &&
+					validProjectName;
 			}
 			
 			private function get useLinuxSDK () : Boolean

@@ -404,11 +404,93 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		protected function onProcessExit (exitCode : Number):void
 		{
-			var exitMessage : String = exitCode == 0 ? "Building process has been completed successfully." : "Building process has been completed with errors.";
+			var exitMessage : String = exitCode == 0 ? "Building process has been completed successfully." : getErrorMessageByExitCode(exitCode);
 			
 			sendEvent(SDKCompilerEvent.BUILD_COMPETE, exitMessage);
 		}
-
+		
+		private function getErrorMessageByExitCode (exitCode:Number) : String
+		{
+			var exitErrorMsg : String = "Building process has been completed with errors.";
+			
+			switch(exitCode)
+			{
+				case 2:
+				{
+					exitErrorMsg = "Usage error:\nCheck the command-line arguments for errors";
+					break;
+				}
+				case 5:
+				{
+					exitErrorMsg = "Unknown error:\nThis error indicates a situation that cannot be explained by common error conditions. Possible root causes include incompatibility between ADT and the Java Runtime Environment, corrupt ADT or JRE installations, and programming errors within ADT.";
+					break;
+				}
+				case 6:
+				{
+					exitErrorMsg = "Could not write to output directory:\nMake sure that the specified (or implied) output directory is accessible and that the containing drive is has sufficient disk space.";
+					break;
+				}
+				case 7:
+				{
+					exitErrorMsg = "wCould not access certificate:\nMake sure that the path to the keystore is specified correctly.\nCheck that the certificate within the keystore can be accessed. The Java 1.6 Keytool utility can be used to help troubleshoot certificate access issues.";
+					break;
+				}
+				case 8:
+				{
+					exitErrorMsg = "Invalid certificate:\nThe certificate file is malformed, modified, expired, or revoked.";
+					break;
+				}
+				case 9:
+				{
+					exitErrorMsg = "Could not sign AIR file:\nVerify the signing options passed to ADT.";
+					break;
+				}
+				case 10:
+				{
+					exitErrorMsg = "Could not create time stamp:\nADT could not establish a connection to the timestamp server. If you connect to the internet through a proxy server, you may need to configure the JRE proxy settings.";
+					break;
+				}
+				case 11:
+				{
+					exitErrorMsg = "Certificate creation error:\nVerify the command-line arguments used for creating signatures.";
+					break;
+				}
+				case 12:
+				{
+					exitErrorMsg = "Invalid input:\nVerify file paths and other arguments passed to ADT on the command line.";
+					break;
+				}
+				case 13:
+				{
+					exitErrorMsg = "Missing device SDK:\nVerify the device SDK configuration. ADT cannot locate the device SDK required to execute the specified command.";
+					break;
+				}
+				case 14:
+				{
+					exitErrorMsg = "Device error:\nADT cannot execute the command because of a device restriction or problem. For example, this exit code is emitted when attempting to uninstall an app that is not actually installed.";
+					break;
+				}
+				case 15:
+				{
+					exitErrorMsg = "No devices:\nVerify that a device is attached and turned on or that an emulator is running.";
+					break;
+				}
+				case 16:
+				{
+					exitErrorMsg = "Missing GPL components:\nThe current AIR SDK does not include all the components required to perform the request operation.";
+					break;
+				}
+				case 17:
+				{
+					exitErrorMsg = "Device packaging tool failed:\nThe package could not be created because expected operating system components are missing.";
+					break;
+				}
+				
+			}
+			
+			return exitErrorMsg;
+		}
+		
 		private function addProcessListeners() : void
 		{
 			process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    onProcessProgressEvent);

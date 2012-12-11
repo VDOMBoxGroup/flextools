@@ -193,9 +193,6 @@
 			{
 				embededApplicationBrowseBox.path = project.embededAppPath;
 				
-//				if (!validAppPath)
-//					embededApplicationBrowseBox.path = "";
-				
 				validateAppPath();
 			}
 			
@@ -247,12 +244,30 @@
 				return compilerParamsChecker.isValidInstallerId(txtInstallerId.text);
 			}
 			
+			private function initProjectName():void
+			{
+				txtName.text = project.name;
+				
+				validateProjectName();
+			}
+			
+			private function validateProjectName():void
+			{
+				txtName.errorString = validProjectName ? null : "Possible symbols:\n* a-z\n* A-Z\n* 0-9\n* -\n* .\n* '\n* _ \n* space \n* ( \n* )";
+			}
+			
+			private function get validProjectName () : Boolean
+			{
+				return compilerParamsChecker.isValidProjectName(txtName.text);
+			}
+			
 			private function get buildAvailable (): Boolean
 			{
 				return validAppPath && 
 					validOutputInstallerFolderPath &&
 					validInstallerFileName &&
-					validInstallerId;
+					validInstallerId &&
+					validProjectName;
 			}
 			
 			private function get curTemplateOutputInstallerFolder() : String
@@ -270,10 +285,10 @@
 				if (!project)
 					return;
 				
-				txtName.text = project.name;
 				txtDesc.text = project.description;
 				txtKey.text = project.key;
 				
+				initProjectName();
 				initInstallerID();
 				initInstallerFileName();
 				initOutputFolderPath();
@@ -357,6 +372,7 @@
 				txtName.setSelection(0, txtName.text.length);
 			}
 			
+			
 		]]>
 	</mx:Script>
 	
@@ -367,7 +383,10 @@
 				<mx:Label text="{LanguageManager.sentences.template_name}:" />
 			</mx:GridItem>
 			<mx:GridItem width="100%" height="100%">
-				<mx:TextInput width="300" id="txtName" focusIn="txtName_focusInHandler(event)"/>
+				<mx:TextInput width="300" id="txtName"
+							  restrict="a-zA-Z0-9\-.'_ ()"
+							  change="validateProjectName()"
+							  focusIn="txtName_focusInHandler(event)"/>
 			</mx:GridItem>
 		</mx:GridRow>
 		
