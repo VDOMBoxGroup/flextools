@@ -54,7 +54,7 @@ package net.vdombox.ide.common.view.components.tabnavigator
 			
 			updateHistory()
 			
-			dispatchEvent( new Event( "selectedTabChanged" ) );
+			//dispatchEvent( new Event( "selectedTabChanged" ) );
 		}
 		
 		public function addTab( tab : Tab ) : Tab
