@@ -81,9 +81,18 @@ public class SOAPBaseLevel extends EventDispatcher
 		if (xml.name())
 		{
 			if (xml.name().hasOwnProperty("localName")) 
-				return xml.name().localName == "Error" ? ERROR : SUCCESS;
-			else
-				return xml.name() == "Error" ? ERROR : SUCCESS;
+			{
+				if (xml.name().localName == "Error")
+				{
+					_result = '["Error" "' + xml  +'"]';
+					return  ERROR;  
+				}
+			}
+			else if ( xml.name() == "Error" ) 
+			{
+				_result = '["Error" "' + xml  +'"]';
+				return  ERROR;
+			}
 		}
 		
 		return SUCCESS;
@@ -525,7 +534,7 @@ public class SOAPBaseLevel extends EventDispatcher
 			
 			var result : XMLList = new XMLList( event.result );
 			
-			_resultType = getResultType( result );;
+			_resultType = getResultType( result );
 			_result = _resultType == SUCCESS ? result[0].Revision : result[0];
 				
 			
