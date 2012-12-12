@@ -471,3 +471,10 @@ SuperTextArea
 {
 	fontSize : 13;
 }
+
+.statusTxtStyle {
+	color: #000000;
+	fontFamily: "Arial";
+	fontSize: 12;
+	fontWeight: bold;
+}

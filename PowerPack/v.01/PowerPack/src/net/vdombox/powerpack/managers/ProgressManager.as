@@ -12,6 +12,7 @@ import flash.events.MouseEvent;
 import flash.events.OutputProgressEvent;
 import flash.events.ProgressEvent;
 import flash.filesystem.FileStream;
+import flash.text.TextFieldAutoSize;
 
 import mx.containers.Box;
 import mx.containers.ControlBar;
@@ -20,7 +21,6 @@ import mx.containers.TitleWindow;
 import mx.containers.VBox;
 import mx.controls.Button;
 import mx.controls.Label;
-import mx.controls.ProgressBar;
 import mx.controls.ProgressBarMode;
 import mx.controls.Text;
 import mx.controls.TextArea;
@@ -28,15 +28,20 @@ import mx.core.Application;
 import mx.core.Container;
 import mx.core.EdgeMetrics;
 import mx.core.Window;
+import mx.core.mx_internal;
+import mx.events.ChildExistenceChangedEvent;
 import mx.events.MoveEvent;
 import mx.events.ResizeEvent;
 import mx.managers.PopUpManager;
 import mx.managers.SystemManager;
 import mx.skins.halo.ProgressBarSkin;
 
+import net.vdombox.powerpack.control.ProgressBar;
 import net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar;
 import net.vdombox.powerpack.lib.extendedapi.containers.SuperWindow;
 import net.vdombox.powerpack.lib.extendedapi.controls.HDivider;
+import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
+import net.vdombox.powerpack.lib.player.gen.TemplateStruct;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 import net.vdombox.powerpack.menu.MenuManager;
 
@@ -49,7 +54,6 @@ public class ProgressManager extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------
 
-	public static const STATUS_MODE : String = "status";
 	public static const WINDOW_MODE : String = "window";
 	public static const PANEL_MODE : String = "panel";
 	public static const DIALOG_MODE : String = "dialog";
@@ -139,7 +143,9 @@ public class ProgressManager extends EventDispatcher
 	private var _isShown : Boolean;
 	private var _showProgress : Boolean;
 	private var positioned : Boolean;
-
+	
+	
+	use namespace mx_internal
 	//--------------------------------------------------------------------------
 	//
 	//  Properties
@@ -178,14 +184,21 @@ public class ProgressManager extends EventDispatcher
 				{
 					var stream : FileStream = event.target as FileStream;
 
+					var progressValue : Number;
+					var progressTotal : Number;
 					if ( event is OutputProgressEvent )
 					{
-						instance._bar.setProgress( OutputProgressEvent( event ).bytesTotal, OutputProgressEvent( event ).bytesPending + OutputProgressEvent( event ).bytesTotal );
+						progressValue = OutputProgressEvent( event ).bytesTotal;
+						progressTotal = OutputProgressEvent( event ).bytesPending + OutputProgressEvent( event ).bytesTotal;
 					}
 					else
 					{
-						instance._bar.setProgress( ProgressEvent( event ).bytesLoaded, ProgressEvent( event ).bytesTotal );
+						progressValue = ProgressEvent( event ).bytesLoaded;
+						progressTotal = ProgressEvent( event ).bytesTotal;
 					}
+					
+					instance._bar.setProgress(progressValue, progressTotal);
+					instance.rememberProgress(0, 100);
 
 					if ( instance._bar.parent )
 						instance._bar.validateNow();
@@ -205,6 +218,28 @@ public class ProgressManager extends EventDispatcher
 					stream.removeEventListener( Event.COMPLETE, onFileStreamClose );
 
 					instance._bar.dispatchEvent( new Event( Event.COMPLETE ) );
+				}
+			}
+			else if (value is TemplateStruct)
+			{
+				mode = ProgressBarMode.MANUAL;
+				
+				var tplStruct : TemplateStruct = value as TemplateStruct;
+				if (!tplStruct.hasEventListener(TemplateLibEvent.PROGRESS))
+					tplStruct.addEventListener( TemplateLibEvent.PROGRESS, progressHandler);
+				
+				function progressHandler (event : TemplateLibEvent) : void
+				{
+					var progrValue : Number = event.result.value as Number;
+					var progrDescription : String = event.result["description"] as String;
+					var progrLabel : String = progrValue + "% - " + progrDescription;
+					
+					instance._bar.setProgress(progrValue, 100)
+					instance._bar.label = progrLabel;
+					
+					instance.rememberProgress(progrValue, 100, progrLabel);
+					
+					instance._bar.validateDisplayList();
 				}
 			}
 			else if ( value is EventDispatcher )
@@ -267,20 +302,36 @@ public class ProgressManager extends EventDispatcher
 	//  Methods
 	//
 	//--------------------------------------------------------------------------
-
+	
+	private var rememberedProgress : Object = {}; 
+	private function rememberProgress(value:Number, total:Number, label:String="") : void
+	{
+		if (!instance || !instance.rememberedProgress)
+			return;
+		
+		instance.rememberedProgress["value"] = value;
+		instance.rememberedProgress["total"] = total;
+		instance.rememberedProgress["label"] = label;
+	}
+	
+	private function restoreProgress() : void
+	{
+		if (!instance || !instance.rememberedProgress || !instance._bar)
+			return;
+		
+		instance._bar.setProgress(instance.rememberedProgress["value"], instance.rememberedProgress["total"])
+		instance._bar.label = instance.rememberedProgress["label"];
+	}
+	
 	public static function start( viewMode : String = null, showProgress : Boolean = true ) : void
 	{
 		instance._bar.setProgress( 0, 100 );
+		instance.rememberProgress(0, 100);
+		
 		show( viewMode, showProgress );
 	}
 
-	public static function step( value : uint, total : uint = 0 ) : void
-	{
-		instance._bar.setProgress( instance._bar.value + value, total > 0 ? total : instance._bar.maximum );
-		instance._bar.validateNow();
-	}
-
-	public static function show( viewMode : String = null, showProgress : Boolean = true ) : void
+	public static function show( viewMode : String = null, showProgress : Boolean = true, restoreLastProgress : Boolean = false ) : void
 	{
 		if ( !viewMode )
 			viewMode = instance._viewMode;
@@ -303,37 +354,32 @@ public class ProgressManager extends EventDispatcher
 				instance._bar.labelPlacement = "top";
 				instance._bar.setStyle( "barSkin", ProgressBarSkin );
 				if ( showProgress )
+				{
 					instance._panel.addChild( instance._bar );
+					if (restoreLastProgress)
+						instance.restoreProgress();
+				}
 				/* TODO: restore position or set default position */
 				instance._panel.validateNow();
-				break;
-
-			case STATUS_MODE:
-				if ( !instance._win.statusBar || !(instance._win.statusBar is SuperStatusBar) )
-					break;
-				instance._bar.label = LanguageManager.sentences['progress_label'];
-				instance._bar.direction = "right";
-				instance._bar.labelPlacement = "center";
-				instance._bar.setStyle( "fontSize", 9 );
-				instance._bar.width = 50;
-				instance._bar.setStyle( "barSkin", ProgressBarSkin );
-				if ( showProgress )
-					instance._statusBar.addChild( instance._bar );
-
-				SuperStatusBar( instance._win.statusBar ).statusHBox.addChildAt( instance._statusBar, 0 );
-				SuperStatusBar( instance._win.statusBar ).validateNow();
 				break;
 
 			case WINDOW_MODE:
 				MenuManager.getInstance().disable();
 
-				instance._bar.label = LanguageManager.sentences['progress_full_label'];
 				instance._bar.percentWidth = 100;
 				instance._bar.direction = "right";
 				instance._bar.labelPlacement = "top";
 				instance._bar.setStyle( "barSkin", ProgressBarSkin );
+				instance._bar.setStyle( "color", 0x000000 );
+				instance._bar.setStyle("labelWidth", instance._bar.width);
+				instance._bar.label = LanguageManager.sentences['progress_full_label'];
+				
 				if ( showProgress )
+				{
 					instance._winBox.addChildAt( instance._bar, 1 );
+					if (restoreLastProgress)
+						instance.restoreProgress();
+				}
 
 				instance._window.addChild( instance._winBox );
 
@@ -356,7 +402,11 @@ public class ProgressManager extends EventDispatcher
 				instance._bar.labelPlacement = "top";
 				instance._bar.setStyle( "barSkin", ProgressBarSkin );
 				if ( showProgress )
+				{
 					instance._winBox.addChildAt( instance._bar, 1 );
+					if (restoreLastProgress)
+						instance.restoreProgress();
+				}
 
 				instance._dialog = new SuperWindow( NativeApplication.nativeApplication.activeWindow );
 				instance._dialog.type = NativeWindowType.LIGHTWEIGHT;
@@ -400,7 +450,7 @@ public class ProgressManager extends EventDispatcher
 		instance._showProgress = showProgress;
 		instance.dispatchEvent( new Event( "modeChange" ) );
 	}
-
+	
 	public static function hide() : void
 	{
 		if ( !instance._isShown )
@@ -454,13 +504,6 @@ public class ProgressManager extends EventDispatcher
 				}
 				break;
 
-			case STATUS_MODE:
-				if ( instance._statusBar.parent )
-				{
-					instance._statusBar.parent.removeChild( instance._statusBar )
-					instance._statusBar.validateNow();
-				}
-				break;
 		}
 
 		instance._isShown = false;
@@ -507,7 +550,6 @@ public class ProgressManager extends EventDispatcher
 			var box : VBox = new VBox();
 			_winBox = box;
 			_winBox.addEventListener( ResizeEvent.RESIZE, resizeHandler );
-			//box.percentHeight = box.percentWidth = 100;
 			_winBox.minWidth = 120;
 			box.setStyle( "paddingLeft", 10 );
 			box.setStyle( "paddingRight", 10 );
@@ -539,15 +581,6 @@ public class ProgressManager extends EventDispatcher
 			var controlBar : ControlBar = new ControlBar();
 			controlBar.setStyle( "horizontalAlign", "right" );
 
-			var btnHide : Button = new Button();
-			LanguageManager.bindSentence( 'run_in_background', btnHide )
-			btnHide.addEventListener( MouseEvent.CLICK, onBtnHideClick );
-
-			function onBtnHideClick( event : MouseEvent ) : void
-			{
-				ProgressManager.viewMode = STATUS_MODE;
-			}
-
 			var btnCancel : Button = new Button();
 			LanguageManager.bindSentence( 'cancel', btnCancel );
 			btnCancel.addEventListener( MouseEvent.CLICK, onBtnCancelClick );
@@ -566,7 +599,6 @@ public class ProgressManager extends EventDispatcher
 				details.includeInLayout = !details.includeInLayout;
 			}
 
-			//controlBar.addChild(btnHide);
 			//controlBar.addChild(btnCancel);
 			//controlBar.addChild(btnDetails);
 

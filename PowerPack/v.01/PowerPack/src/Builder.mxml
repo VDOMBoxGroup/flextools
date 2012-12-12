@@ -3,7 +3,6 @@
 		title="{LanguageManager.sentences.app_title}{ContextManager.templates.length &amp;&amp; currentTemplate.file ? ' - '+ currentTemplate.file.nativePath : ''} - {ContextManager.templates.length &amp;&amp; currentTemplate.selectedProject &amp;&amp; currentTemplate.selectedProject.name ? currentTemplate.selectedProject.name : LanguageManager.sentences.noname} (init graph: {ContextManager.templates.length &amp;&amp; currentTemplate.selectedProject ? ContextManager.templates.getItemAt(0).selectedProject.initialGraphName : ''}){ContextManager.templates.length &amp;&amp; currentTemplate.modified ? '*' : ''}"
 		titleIcon="@Embed(source='assets/icons/icon_16.png')"
 		layout="absolute"
-		statusBarFactory="net.vdombox.powerpack.customize.core.windowClasses.SuperStatusBar"
 		preinitialize="preinit()"
 		initialize="init()"
 		applicationComplete="applicationCompleteHandler(event)"
@@ -16,7 +15,9 @@
 		xmlns:customize="net.vdombox.powerpack.customize.*"
 		xmlns:containers="net.vdombox.powerpack.lib.extendedapi.containers.*"
 		closing="closingApplicationHandler(event)"
-		styleName="builderWindowStyle" 
+		styleName="builderWindowStyle"
+		showStatusBar="true"
+		statusTextStyleName="statusTxtStyle"
 		xmlns:customize1="net.vdombox.powerpack.lib.player.customize.*" xmlns:control="net.vdombox.powerpack.control.*" xmlns:tabnavigator="net.vdombox.powerpack.lib.extendedapi.containers.tabnavigator.*" xmlns:controlbar="net.vdombox.powerpack.control.controlbar.*">
 
 	<mx:Style source="assets/style/style.css" />
@@ -91,6 +92,7 @@
 			import mx.collections.XMLListCollection;
 			import mx.controls.Tree;
 			import mx.core.Application;
+			import mx.core.windowClasses.StatusBar;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.events.FlexNativeMenuEvent;
@@ -115,6 +117,7 @@
 			import net.vdombox.powerpack.lib.player.BasicError;
 			import net.vdombox.powerpack.lib.player.Player;
 			import net.vdombox.powerpack.lib.player.events.CodeParserEvent;
+			import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
 			import net.vdombox.powerpack.lib.player.gen.Dynamic;
 			import net.vdombox.powerpack.lib.player.gen.GraphContext;
 			import net.vdombox.powerpack.lib.player.gen.NodeContext;
@@ -644,6 +647,26 @@
 			tpl.open();
 		}
 
+		private function addDebugListeners(runMode : Boolean = false) : void
+		{
+			ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+			ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
+			ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
+			
+			if (!runMode)
+				ContextManager.templateStruct.addEventListener( TemplateLibEvent.PROGRESS, progressHandler);
+		}
+			
+		private function removeDebugListeners() : void
+		{
+			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
+			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
+			
+			if (ContextManager.templateStruct.hasEventListener(TemplateLibEvent.PROGRESS))
+				ContextManager.templateStruct.removeEventListener( TemplateLibEvent.PROGRESS, progressHandler);
+		}
+			
 		// Event handler for the MenuBar control's itemClick event.
 		private function menuHandler( event : FlexNativeMenuEvent , itemName : String = "") : void
 		{
@@ -727,7 +750,7 @@
 							ContextManager.templateStruct.terminated = true;
 	
 						ContextManager.templateStruct = new TemplateStruct( pnl_graphs.toXML() );
-	
+						
 						switch ( menuItemName )
 						{
 							case 'debug':
@@ -756,12 +779,12 @@
 						else
 						{
 							switchDebug( true );
-	
-							ProgressManager.start( ProgressManager.WINDOW_MODE, false );
-	
-							ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
-							ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
-							ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
+						
+							ProgressManager.source = ContextManager.templateStruct;
+							ProgressManager.show(ProgressManager.WINDOW_MODE);
+							
+							addDebugListeners();
+							
 							ContextManager.templateStruct.generate();
 						}
 					}
@@ -779,32 +802,35 @@
 					switch ( menuItemName )
 					{
 						case 'resume':
-							ProgressManager.start( ProgressManager.WINDOW_MODE, false );
+							ProgressManager.source = ContextManager.templateStruct;
+							ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
 							ContextManager.templateStruct.isStepDebug = false;
 							ContextManager.templateStruct.generate( true );
 							break;
 						case 'step_into':
-							ProgressManager.start( ProgressManager.WINDOW_MODE, false );
+							ProgressManager.source = ContextManager.templateStruct;
+							ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
 							ContextManager.templateStruct.isStepDebug = true;
 							ContextManager.templateStruct.generate( true );
 							break;
 						case 'step_over':
-							ProgressManager.start( ProgressManager.WINDOW_MODE, false );
+							ProgressManager.source = ContextManager.templateStruct;
+							ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
 							ContextManager.templateStruct.isStepDebug = true;
 							ContextManager.templateStruct.generate( true, true );
 							break;
 						case 'step_return':
-							ProgressManager.start( ProgressManager.WINDOW_MODE, false );
+							ProgressManager.source = ContextManager.templateStruct;
+							ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
 							ContextManager.templateStruct.isStepDebug = true;
 							ContextManager.templateStruct.generate( true, true, true );
 							break;
 						case 'break':
 							ProgressManager.complete();
 
-							ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
-							ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
-							ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
-
+							removeDebugListeners();
+							updateStatusMsg();
+							
 							ContextManager.templateStruct.terminated = true;
 							ContextManager.templateStruct = null;
 							switchDebug( false );
@@ -828,6 +854,19 @@
 				fileStream.openAsync( file, FileMode.READ );
 			}
 
+		}
+			
+		private function progressHandler (event:TemplateLibEvent) : void
+		{
+			var value:Number = event.result.value as Number;
+			var description:String = event.result["description"] as String;
+			
+			updateStatusMsg ("\t" + value + "% - " + description);
+		}
+		
+		private function updateStatusMsg(msg:String = "") : void
+		{
+			status = msg;
 		}
 	
 		private function runTemplate () : void
@@ -957,9 +996,7 @@
 
 					ProgressManager.start( ProgressManager.WINDOW_MODE, false );
 
-					ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
-					ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
-					ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
+					addDebugListeners(true);
 					ContextManager.templateStruct.generate();
 				}
 			}
@@ -1298,9 +1335,8 @@
 						ContextManager.templateStruct.buffer ), "Result" );
 			}
 
-			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
-			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
-			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
+			removeDebugListeners();
+			updateStatusMsg();
 
 			ContextManager.templateStruct = null;
 		}
@@ -1319,9 +1355,8 @@
 		{
 			switchDebug( false );
 
-			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
-			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
-			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
+			removeDebugListeners();
+			updateStatusMsg();
 
 			ContextManager.templateStruct = null;
 		}
