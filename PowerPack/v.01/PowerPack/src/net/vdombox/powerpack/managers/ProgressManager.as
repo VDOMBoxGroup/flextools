@@ -376,6 +376,7 @@ public class ProgressManager extends EventDispatcher
 				
 				if ( showProgress )
 				{
+					instance._winBox.addEventListener(ChildExistenceChangedEvent.CHILD_ADD, instance.winboxChildAdd);
 					instance._winBox.addChildAt( instance._bar, 1 );
 					if (restoreLastProgress)
 						instance.restoreProgress();
@@ -451,6 +452,11 @@ public class ProgressManager extends EventDispatcher
 		instance.dispatchEvent( new Event( "modeChange" ) );
 	}
 	
+	private function winboxChildAdd(event : ChildExistenceChangedEvent) : void
+	{
+		instance._winBox.validateSize();
+	}
+
 	public static function hide() : void
 	{
 		if ( !instance._isShown )
@@ -551,6 +557,8 @@ public class ProgressManager extends EventDispatcher
 			_winBox = box;
 			_winBox.addEventListener( ResizeEvent.RESIZE, resizeHandler );
 			_winBox.minWidth = 120;
+			_winBox.percentHeight = 100;
+			_winBox.percentWidth = 100;
 			box.setStyle( "paddingLeft", 10 );
 			box.setStyle( "paddingRight", 10 );
 			box.setStyle( "paddingTop", 10 );
