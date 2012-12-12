@@ -56,5 +56,19 @@ package net.vdombox.powerpack.utils
 			fileStream.close();
 		}
 		
+		public function get content() : String
+		{
+			var val : String = "";
+			
+			try {
+				fileStream.open(logFile, FileMode.READ)
+				val = fileStream.readUTFBytes(fileStream.bytesAvailable);
+				fileStream.close();
+			} catch (e : Error)
+			{}
+				
+			return val;
+		}
+		
 	}
 }

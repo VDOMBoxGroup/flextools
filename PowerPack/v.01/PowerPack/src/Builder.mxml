@@ -1099,6 +1099,9 @@
 
 				pnl_variables.grid.dataProvider = new HierarchicalData( arr.sortOn("Name", Array.CASEINSENSITIVE) );
 				pnl_variables.grid.invalidateList();
+				
+				pnl_log.grid.dataProvider = new HierarchicalData( logArr );
+				pnl_log.grid.invalidateList();
 
 				// --------------------------
 				// fill current buffer output
@@ -1184,6 +1187,31 @@
 			{
 			}
 		}
+		
+		private function get logArr() : Array
+		{
+			var logObjectsArray : Array = [];
+			var logContent : String = Log.getInstance().content;
+			
+			var logNotes : Array = logContent.split("\n");
+			if (!logNotes)
+				return [];
+			
+			var noteValues:Array;
+			for each (var note:String in logNotes)
+			{
+				noteValues = note.split("\t");
+				if (!noteValues || noteValues.length != 3)
+					continue;
+				
+				if (noteValues[0].indexOf(":") == -1)
+					continue;
+				
+				logObjectsArray.push({"Time":noteValues[0], "Command":noteValues[1], "Delta":noteValues[2]});
+			}
+			
+			return logObjectsArray;
+		}
 
 		public function switchDebug( enable : Boolean = true ) : void
 		{
@@ -1192,6 +1220,8 @@
 			//if(!enable)
 			{
 				pnl_variables.grid.dataProvider = null;
+				pnl_log.grid.dataProvider = null;
+				
 				pnl_node_value.array = [];
 				pnl_output.text = "";
 
@@ -1586,6 +1616,7 @@
 																  closePolicy="{SuperTab.CLOSE_NEVER}">
 	
 										<panel:NodeValue id="pnl_node_value" />
+										<panel:LogPanel id="pnl_log" />
 	
 									</containers:SuperTabNavigator>
 	
