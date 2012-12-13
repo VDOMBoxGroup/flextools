@@ -37,9 +37,10 @@ package net.vdombox.powerpack.powerpackscript
 										  "<b>Syntax:</b>\n" +
 										  "[qSwitch VARIANT_1 ... VARIANT_N]",
 				
-				"_switch"				: "<b>Syntax:</b>\n" +
+				"_switch"				: "<b>Alias:</b> 'switch'\n" +
+										  "<b>Syntax:</b>\n" +
 										  "[_switch VALUE ARG_1 ... ARG_N]",
-				
+										  
 				'convert'				: "<b>Description:</b>\n" +
 										  "Converts the VALUE type to the type\n" +
 										  "defined by the TYPE parameter.\n\n" +
@@ -163,7 +164,8 @@ package net.vdombox.powerpack.powerpackscript
 										  "<b>Syntax:</b>\n" +
 										  "[length [LIST]]",
 										  
-				"getValue"			 	: "<b>Description:</b>\n" +
+				"getValue"			 	: "<b>Alias:</b> 'get'\n" +
+										  "<b>Description:</b>\n" +
 										  "Returns the element value of the LIST at the position given by POSITION parameter.\n" +
 										  "<b>Syntax:</b>\n" +
 										  "[getValue POSITION [LIST]]",
