@@ -10,6 +10,7 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
 import flash.events.SecurityErrorEvent;
+import flash.events.TimerEvent;
 import flash.filters.BitmapFilter;
 import flash.filters.BlurFilter;
 import flash.filters.ColorMatrixFilter;
@@ -26,6 +27,8 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 import flash.utils.ByteArray;
+import flash.utils.Timer;
+import flash.utils.setInterval;
 import flash.utils.setTimeout;
 
 import memorphic.xpath.XPathQuery;
@@ -535,6 +538,21 @@ public dynamic class TemplateLib extends EventDispatcher
 			}
 			
 		}
+	}
+	
+	public function delay( value : Number ) : Function
+	{
+		var timer:Timer = new Timer(value, 1);
+		timer.addEventListener(TimerEvent.TIMER_COMPLETE, delayCompleteHandler);
+		
+		timer.start();
+		
+		function delayCompleteHandler ( event : TimerEvent ): void
+		{
+			timer.stop();
+			setReturnValue( value );
+		}
+		return delayCompleteHandler;
 	}
 	
 	public function qSwitch( question : String, ...args ) : Function

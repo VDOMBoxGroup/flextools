@@ -52,8 +52,9 @@ public class Parser
 		"alertOC" : { pattern : /^\[n[vscVSA]*\]$/, argNum : -1, trans : ['OK', 'CANCEL'] },
 		"alertYN" : { pattern : /^\[n[vscVSA]*\]$/, argNum : -1, trans : ['YES', 'NO'] },
 		
+		"delay" : { pattern : /^\[n[iN]*\]$/,   argNum : 1 },
+		
 		"wholeMethod" : { pattern : /^\[n[vscVSA][vscVSA]*\]$/, argNum : -1, trans : ['Success', 'Error']  },
-		"wholeMethod2" : { pattern : /^\[n[vscVSA][vscVSA]*\]$/, argNum : -1, trans : ['SUCCESS', 'ERROR']  },
 		
         "setXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]*\]$/, argNum : 3 },
 		"getXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
