@@ -107,6 +107,23 @@ package net.vdombox.powerpack.powerpackscript
 										  "<b>Syntax:</b>\n" +
 										  "[alert TEXT]",
 										  
+				"alertOC"				: "<b>Description:</b>\n" +
+										  "Shows alert with specified TEXT and 2 buttons: 'OK', 'Cancel'.\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[alert TEXT]",
+										  
+				"alertYN"				: "<b>Description:</b>\n" +
+										  "Shows alert with specified TEXT and 2 buttons: 'Yes', 'No'.\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[alert TEXT]",
+										  
+			    "delay"					: "<b>Description:</b>\n" +
+										  "Use this function to delay execution for certain time (in milliseconds).\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[delay TIME_IN_MILLISEC]\n" +
+										  "<b>Note:</b>\n" +
+										  "It's not recommended to use delay less than 20 milliseconds.",
+										  
 				"wholeMethod"			: "<b>Description:</b>\n" +
 										  "Used to call SOAP methods of VDOM Box Server.\n" +
 										  "<b>Syntax:</b>\n" +
