@@ -41,7 +41,7 @@ package net.vdombox.powerpack.lib.player.gen.functions
 		public function loadFile( file : FileReference ):void
 		{
 			if (!file)
-				dispathError();
+				dispathError("Wrong file");
 			
 			path = file.name;
 				
@@ -74,7 +74,7 @@ package net.vdombox.powerpack.lib.player.gen.functions
 				file.removeEventListener(IOErrorEvent.IO_ERROR, loadFileErrorHandler); 
 				file.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, loadFileErrorHandler);
 				
-				dispathError();
+				dispathError(event.type);
 			}
 		}
 		
@@ -166,9 +166,9 @@ package net.vdombox.powerpack.lib.player.gen.functions
 			return new XML(decodedData);
 		}
 		
-		private  function dispathError():void
+		private  function dispathError(message : String):void
 		{
-			dispatchEvent( new  TemplateLibEvent( TemplateLibEvent.COMPLETE, "false",  "false"));
+			dispatchEvent( new  TemplateLibEvent( TemplateLibEvent.COMPLETE, message,  "false"));
 		}
 		
 		private function errorHandler( event : IOErrorEvent): void
@@ -181,7 +181,7 @@ package net.vdombox.powerpack.lib.player.gen.functions
 			{
 				removeHandlers();
 				
-				dispathError();
+				dispathError(event.text);
 			}
 		}
 		

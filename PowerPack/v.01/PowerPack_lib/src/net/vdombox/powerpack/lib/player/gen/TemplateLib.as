@@ -378,10 +378,13 @@ public dynamic class TemplateLib extends EventDispatcher
 	}
 	
 	
-	public function setXMLValue( xml : XML, path : String, value : Object ) : XML
+	public function setXMLValue( xml : *, path : String, value : Object ) : XML
 	{
 		try
 		{
+			if ( xml is XMLList && xml[0])
+				xml = xml[0];
+				
 			var _xml : XML = new XML(xml);	
 		} 
 		catch(error:Error) 
@@ -396,7 +399,8 @@ public dynamic class TemplateLib extends EventDispatcher
 			xmlNode.setChildren( value) ;
 		}
 		
-		return xml;
+		
+		return _xml;
 	}
 	
 	
