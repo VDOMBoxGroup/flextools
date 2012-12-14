@@ -341,6 +341,12 @@
 				processStep ( cGeneral );
 			}
 		}
+			
+		public function terminateTemplate() : void
+		{
+			if (ContextManager.templateStruct)
+				ContextManager.templateStruct.terminated = true;
+		}
 
 		private function setProgressHandler( event:TemplateLibEvent ):void
 		{
@@ -394,7 +400,9 @@
 
 		public function alertInterrupt():void
 		{
-
+			if (ContextManager.templateStruct)
+				ContextManager.templateStruct.runPaused = true;
+			
 			AlertPopup.show (
 					LanguageManager.sentences['msg_proceed_interrupt_app_installing'],
 					LanguageManager.sentences['question'],
@@ -404,6 +412,7 @@
 			{
 				if ( event.detail == AlertPopup.YES )
 				{
+					terminateTemplate();
 					processStep ( cFinal );
 				}
 				else if ( !appGenerated && ContextManager.templateStruct )

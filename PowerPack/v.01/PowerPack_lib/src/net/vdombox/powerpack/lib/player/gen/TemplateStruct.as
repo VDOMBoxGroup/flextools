@@ -66,6 +66,7 @@ public class TemplateStruct extends EventDispatcher
 	public var isStepDebug : Boolean;
 	public var forced : int;
 	public var terminated : Boolean;
+	public var runPaused : Boolean;
 
 	public function TemplateStruct( tplStruct : XML )
 	{
@@ -494,7 +495,14 @@ public class TemplateStruct extends EventDispatcher
 		isDebug = false;
 		isStepDebug = false;
 	}
-
+	
+	public function pauseExecution() : void
+	{
+		dispatchEvent( new Event( EVENT_STEP_COMPLETE ) );
+		isRunning = false;
+		forced = -1;
+	}
+	
 	public function generate( force : Boolean = false, over : Boolean = false, ret : Boolean = false ) : String
 	{
 		try 
@@ -550,17 +558,14 @@ public class TemplateStruct extends EventDispatcher
 	
 						if ( isStepDebug && !force )
 						{
-							dispatchEvent( new Event( EVENT_STEP_COMPLETE ) );
-							isRunning = false;
-							forced = -1;
+							pauseExecution();
 							return null;
 						}
 	
-						if ( isDebug && !force && curGraphContext.curNode.breakpoint )
+						if ( isDebug && !force && curGraphContext.curNode.breakpoint || (!isDebug && runPaused))
 						{
-							dispatchEvent( new Event( EVENT_STEP_COMPLETE ) );
-							isRunning = false;
-							forced = -1;
+							pauseExecution();
+							runPaused = false;
 							return null;
 						}
 	
