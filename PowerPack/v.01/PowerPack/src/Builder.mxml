@@ -937,6 +937,8 @@
 			{
 				playerObj.removeEventListener(Event.CLOSE, playerCloseHandler)
 				
+				playerObj.terminateTemplate();
+					
 				PopUpManager.removePopUp(playerObj);
 				
 				playerObj = null;
