@@ -36,12 +36,15 @@ public dynamic class NodeStruct
 
 	public function get text():String
 	{
-		return _text;
+		if ( category == NodeCategory.NORMAL)
+			return _text;
+		
+		return _text.replace(/\r/g, "");
 	}
 
 	public function set text(value:String):void
 	{
-		_text = value.replace(/\r/g, "");
+		_text = value;
 		 
 	}
 
