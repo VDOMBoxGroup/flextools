@@ -772,15 +772,18 @@ public class Node extends Canvas implements IFocusManagerComponent
 		if ( _typeChanged || _needRefreshStyles )
 		{
 			clearStyle( "borderColor" );
+			clearStyle( "borderThickness" );
 
 			switch ( type )
 			{
 				case NodeType.INITIAL:
 					setStyle( "borderColor", 0x00ff00 );
+					setStyle( "borderThickness", 2.5 );
 					break;
 
 				case NodeType.TERMINAL:
-					setStyle( "borderColor", 0x0000ff );
+					setStyle( "borderColor", 0x5355de );
+					setStyle( "borderThickness", 2.5 );
 					break;
 
 				case NodeType.NORMAL:

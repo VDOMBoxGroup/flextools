@@ -470,6 +470,7 @@ GraphThumb
 SuperTextArea
 {
 	fontSize : 13;
+	borderThickness : 2;
 }
 
 .statusTxtStyle {
