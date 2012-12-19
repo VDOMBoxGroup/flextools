@@ -40,6 +40,8 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		protected var useTimestamp : Boolean = true;
 		
+		protected var project : BuilderTemplateProject;
+		
 		private var installerTplXml : XML = 
 			<application xmlns="http://ns.adobe.com/air/application/2.0">
 			 <initialWindow>
@@ -66,6 +68,7 @@ package net.vdombox.powerpack.sdkcompiler
 		// ---------- BUILD ---------------------
 		public function buildInstallerPackage(flexSdkPath : String,
 											  airSdkForLinuxPath : String,
+											  projectToBuild : BuilderTemplateProject,
 											  packageType : String = PACKAGE_TYPE_AIR,
 											  timeStamp : Boolean = true) : void
 		{
@@ -78,9 +81,12 @@ package net.vdombox.powerpack.sdkcompiler
 			flex_sdk4_1Path = flexSdkPath;
 			airSDKForLinuxPath = airSdkForLinuxPath;
 			
+			project = projectToBuild;
+			
 			this.useTimestamp = timeStamp;
 			
 			this.packageTypeNative = packageType == PACKAGE_TYPE_NATIVE;
+			
 			
 			var prepareComplete : Boolean = prepareForBuild();
 			
@@ -96,11 +102,28 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		private function prepareTemplateXMLFile() : Boolean
 		{
+			var tplFile : File = File.applicationStorageDirectory.resolvePath("assets/template.xml");
+			var fileStream : FileStream = new FileStream();
+			var tplXmlData : String;
+			var tplXml : XML;
+			
 			try
 			{
-				var targetTemplateFile : File = File.applicationStorageDirectory.resolvePath("assets/template.xml");
+				currentTemplate.file.copyTo(tplFile, true);
 				
-				currentTemplate.file.copyTo(targetTemplateFile, true);
+				tplXml = currentTemplate.xml.copy();
+				
+				
+				fileStream.open( tplFile, FileMode.READ );
+				tplXmlData = fileStream.readUTFBytes( fileStream.bytesAvailable );
+				fileStream.close();
+				
+				tplXml = XML( tplXmlData );
+				tplXml.selectedProjectID = project.id;
+				
+				fileStream.open( tplFile, FileMode.WRITE );
+				fileStream.writeUTFBytes( tplXml.toXMLString() );
+				fileStream.close();
 			}
 			catch (e:Error)
 			{
@@ -124,9 +147,9 @@ package net.vdombox.powerpack.sdkcompiler
 			{
 				installerXML = installerTplXml;
 				
-				installerXML.id = "net.vdom." + selectedTemplateProject.installerId;
-				installerXML.name = selectedTemplateProject.name;
-				installerXML.filename = selectedTemplateProject.name;
+				installerXML.id = "net.vdom." + project.installerId;
+				installerXML.name = project.name;
+				installerXML.filename = project.name;
 				installerXML.version = Utils.getApplicationVersion();
 				
 				installerXML.normalize();
@@ -148,7 +171,7 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		private function prepareInstallerApp() : Boolean
 		{
-			var embededAppPath : String = selectedTemplateProject.embededAppPath;
+			var embededAppPath : String = project.embededAppPath;
 			
 			if (!embededAppPath)
 				return true;
@@ -193,7 +216,7 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		private function compressEmbeddedApplication () : String
 		{
-			var sourceAppFile : File = new File(selectedTemplateProject.embededAppPath);
+			var sourceAppFile : File = new File(project.embededAppPath);
 			
 			if (!sourceAppFile || !sourceAppFile.exists)
 			{
@@ -294,9 +317,9 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		protected function get outputPackagePath () : String
 		{
-			var outputFileName : String = selectedTemplateProject.outputFileName + outputPackageType;
+			var outputFileName : String = project.outputFileName + outputPackageType;
 			
-			return new File(selectedTemplateProject.outputFolderPath).resolvePath(outputFileName).nativePath; 
+			return new File(project.outputFolderPath).resolvePath(outputFileName).nativePath; 
 		}
 		
 		protected function get outputPackageType () : String
@@ -404,9 +427,14 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		protected function onProcessExit (exitCode : Number):void
 		{
-			var exitMessage : String = exitCode == 0 ? "Building process has been completed successfully." : getErrorMessageByExitCode(exitCode);
+			var exitMessage : String = exitCode == 0 ? successExitMessage : getErrorMessageByExitCode(exitCode);
 			
 			sendEvent(SDKCompilerEvent.BUILD_COMPETE, exitMessage);
+		}
+		
+		private function get successExitMessage () : String
+		{
+			return "Project packaged to:\n " + outputPackagePath;			
 		}
 		
 		private function getErrorMessageByExitCode (exitCode:Number) : String
@@ -526,11 +554,6 @@ package net.vdombox.powerpack.sdkcompiler
 			return BuilderContextManager.currentTemplate;
 		}
 		
-		private function get selectedTemplateProject () : BuilderTemplateProject
-		{
-			return currentTemplate.selectedProject as BuilderTemplateProject
-		}
-
 	}
 }
 

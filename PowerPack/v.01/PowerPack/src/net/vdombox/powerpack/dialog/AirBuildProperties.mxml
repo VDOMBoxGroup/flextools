@@ -138,6 +138,7 @@
 				
 				sdkCompiler.buildInstallerPackage ( flexSDK_4_1_BrowseBox.path,
 													airSDKLinuxBrowseBox.path,
+													project, 
 													radioBtnGroupBuildType.selectedValue.toString(),
 													timeStampCheckBox.selected);
 				
@@ -236,21 +237,21 @@
 			
 			private function get validAppPath () : Boolean
 			{
-				var embededAppPath : String = selectedTemplateProject.embededAppPath;
+				var embededAppPath : String = project.embededAppPath;
 				
 				return compilerParamsChecker.isValidAppPath(embededAppPath);
 			}
 			
 			private function get validOutputInstallerFolderPath () : Boolean
 			{
-				var outputFolderPath : String = selectedTemplateProject.outputFolderPath;
+				var outputFolderPath : String = project.outputFolderPath;
 				
 				return compilerParamsChecker.isValidInstallerOutputFolderPath(outputFolderPath);
 			}
 			
 			private function get validInstallerFileName () : Boolean
 			{
-				var outputFileName : String = selectedTemplateProject.outputFileName;
+				var outputFileName : String = project.outputFileName;
 				
 				return compilerParamsChecker.isValidInstallerFileName(outputFileName);
 			}
@@ -262,12 +263,12 @@
 			
 			private function get validInstallerId () : Boolean
 			{
-				return compilerParamsChecker.isValidInstallerId(selectedTemplateProject.installerId);
+				return compilerParamsChecker.isValidInstallerId(project.installerId);
 			}
 			
 			private function get validProjectName() : Boolean
 			{
-				return compilerParamsChecker.isValidProjectName(selectedTemplateProject.name);
+				return compilerParamsChecker.isValidProjectName(project.name);
 			}
 			
 			private function get buildAvailable (): Boolean
@@ -307,9 +308,9 @@
 				return BuilderContextManager.currentTemplate;
 			}
 			
-			private function get selectedTemplateProject () : BuilderTemplateProject
+			private function get project () : BuilderTemplateProject
 			{
-				return currentTemplate.selectedProject as BuilderTemplateProject
+				return projectsComboBox.selectedItem as BuilderTemplateProject;
 			}
 			
 		]]>
@@ -358,6 +359,14 @@
 			</mx:VBox>
 		</mx:HBox>
 		
+		<mx:HBox>
+			<mx:Label text="Project to export: " />
+			<mx:ComboBox id="projectsComboBox" 
+						 width="200" height="20"
+						 dataProvider="{ContextManager.templates.getItemAt( 0 ).projects}" 
+						 labelField="name"
+						 selectedIndex="{ContextManager.templates.getItemAt( 0 ).selectedProjectIndex}"/>
+		</mx:HBox>
 		<mx:VBox verticalGap="10"
 				 top="10" bottom="10" left="10" right="10"
 				 visible="true">
