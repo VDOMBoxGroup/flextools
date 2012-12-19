@@ -9,7 +9,9 @@
 	xmlns:customize="net.vdombox.powerpack.customize.*"
 	resizable="false"
 	verticalScrollPolicy="off"
-	horizontalScrollPolicy="off" xmlns:sdkcompiler="net.vdombox.powerpack.sdkcompiler.*">
+	horizontalScrollPolicy="off" 
+	xmlns:sdkcompiler="net.vdombox.powerpack.sdkcompiler.*"
+	labelOK="Close">
 	
 	<customize:TemplateDefaultLogo id="defaultLogo" />
 	
@@ -42,10 +44,9 @@
 			
 			private static var _dialog	: AirBuildProperties;
 			
-			
 			private function get windowHeight () : Number
 			{
-				return useLinuxSDK ? 555 : 475;
+				return useLinuxSDK ? 427 : 405;
 			}
 			
 			private  function onShow():void
@@ -77,7 +78,7 @@
 					_dialog = new AirBuildProperties();
 					
 					_dialog.open();
-					_dialog.show( OK | CANCEL, closeHandler, null, OK );
+					_dialog.show( OK, closeHandler, null, OK );
 				}
 				else
 				{
@@ -99,12 +100,6 @@
 							
 							saveSDKPath();
 							
-						break;
-					}
-					case BUTTON_NAME_CANCEL:
-					{
-						_dialog.closeDetail = ModalDialog.CANCEL;
-						_dialog.close();
 						break;
 					}
 					default:
@@ -293,14 +288,14 @@
 				
 				if (buildBtn.enabled)
 				{
-					buildLabel.text = "";
+					buildLabel.htmlText = "";
 					return;
 				}
 				
 				var msgErrorAppParams	: String = "Builder not available. Check template properties.";
 				var msgErrorSDKPath		: String = "Builder not available. Check SDK folder path.";
 				
-				buildLabel.text = validFlexSDKPath && validAirSDKPath ? msgErrorAppParams : msgErrorSDKPath;
+				buildLabel.htmlText = validFlexSDKPath && validAirSDKPath ? msgErrorAppParams : msgErrorSDKPath;
 			}
 			
 			private function get currentTemplate() : BuilderTemplate
@@ -365,7 +360,8 @@
 						 width="200" height="20"
 						 dataProvider="{ContextManager.templates.getItemAt( 0 ).projects}" 
 						 labelField="name"
-						 selectedIndex="{ContextManager.templates.getItemAt( 0 ).selectedProjectIndex}"/>
+						 selectedIndex="{ContextManager.templates.getItemAt( 0 ).selectedProjectIndex}"
+						 change="updateBuildEnableState()"/>
 		</mx:HBox>
 		<mx:VBox verticalGap="10"
 				 top="10" bottom="10" left="10" right="10"
@@ -403,24 +399,23 @@
 					
 			</mx:VBox>
 			
-			<mx:HBox horizontalAlign="center" verticalAlign="middle">
-				
-				<mx:Button id="buildBtn" label="Build" click="btnBuildClickHandler(event)" />
-				
-				<mx:Label id="buildLabel" 
-						  text=""
-						  visible="{!buildBtn.enabled}"
-						  color="red"
-						  paddingTop="3"/>
-				
-			</mx:HBox>
+			<mx:Label id="buildLabel" 
+					  text=""
+					  htmlText=""
+					  visible="{!buildBtn.enabled}"
+					  color="red"
+					  paddingTop="3"/>
+			
+			<mx:HRule width="450" />
 			
 		</mx:VBox>
 		
 	</mx:VBox>
 	
 	<mx:ControlBar width="100%" height="100%" styleName="dlgFooter"
-				   visible="true"/>
+				   visible="true" verticalAlign="middle">
+		<mx:Button id="buildBtn" label="Build" click="btnBuildClickHandler(event)" />
+	</mx:ControlBar>
 	
 	
 </ModalDialog>

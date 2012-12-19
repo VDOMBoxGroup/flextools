@@ -35,6 +35,11 @@
 
 		private var closeEvent : CloseEvent = new CloseEvent( CloseEvent.CLOSE );
 		private var _closeHandler : Function;
+			
+		public var labelYES : String = yesLabel;
+		public var labelNO : String = noLabel;
+		public var labelOK : String = okLabel;
+		public var labelCANCEL : String = cancelLabel;
 
 		public function show( flags : uint = 0x4 /* Alert.OK */, closeHandler : Function = null, iconClass : Class = null, defaultButtonFlag : uint = 0x4 /* Alert.OK */ ) : void
 		{
@@ -56,7 +61,7 @@
 
 			if ( buttonFlags & OK )
 			{
-				button = createButton( okLabel, BUTTON_NAME_OK, btnContainer as Container );
+				button = createButton( labelOK, BUTTON_NAME_OK, btnContainer as Container );
 
 				button.visible = true;
 				button.includeInLayout = true;
@@ -67,7 +72,7 @@
 
 			if ( buttonFlags & YES )
 			{
-				button = createButton( yesLabel, BUTTON_NAME_YES, btnContainer as Container );
+				button = createButton( labelYES, BUTTON_NAME_YES, btnContainer as Container );
 
 				button.visible = true;
 				button.includeInLayout = true;
@@ -78,7 +83,7 @@
 
 			if ( buttonFlags & NO )
 			{
-				button = createButton( noLabel, BUTTON_NAME_NO, btnContainer as Container );
+				button = createButton( labelNO, BUTTON_NAME_NO, btnContainer as Container );
 
 				button.visible = true;
 				button.includeInLayout = true;
@@ -89,7 +94,7 @@
 
 			if ( buttonFlags & CANCEL )
 			{
-				button = createButton( cancelLabel, BUTTON_NAME_CANCEL, btnContainer as Container );
+				button = createButton( labelCANCEL, BUTTON_NAME_CANCEL, btnContainer as Container );
 
 				button.visible = true;
 				button.includeInLayout = true;
