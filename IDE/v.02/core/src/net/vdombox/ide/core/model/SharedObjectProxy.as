@@ -62,10 +62,12 @@ package net.vdombox.ide.core.model
 
 		public function get hosts() : ArrayCollection
 		{
+			LogProxy.addLog( "hosts");
 			var hostList : Array = new Array();
 			i = 0;
 			while ( shObjData.data["host" + i.toString()] )
 			{
+				LogProxy.addLog( "host" + i.toString() );
 				hostVO = buildHost();
 				hostList.push( hostVO );
 				

@@ -217,8 +217,13 @@ package net.vdombox.ide.core.view
 			
 			var hostVO :  HostVO;
 			
+			if (!sharedObjectProxy.hosts)
+				var tt : int = 0;
+			
 			loginView.host.dataProvider = sharedObjectProxy.hosts;
 			selectedHost = null;
+			
+			LogProxy.addLog("validateProperties2");
 			
 			var data : ArrayCollection = loginView.host.dataProvider as ArrayCollection;	
 			
