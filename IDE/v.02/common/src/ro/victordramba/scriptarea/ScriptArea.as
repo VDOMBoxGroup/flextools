@@ -2,11 +2,14 @@ package ro.victordramba.scriptarea
 {
 	import flash.display.*;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.text.Font;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
+	import flash.utils.Timer;
 	
+	import net.vdombox.editors.parsers.base.BlockPosition;
 	import net.vdombox.editors.parsers.base.Controller;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
@@ -31,6 +34,9 @@ package ro.victordramba.scriptarea
 			
 			selectionShape = new Shape;
 			addChild( selectionShape );
+			
+			indentLinesShape = new Shape;
+			addChild( indentLinesShape );
 			
 			linesShape = new Shape;
 			addChild( linesShape );
@@ -104,7 +110,10 @@ package ro.victordramba.scriptarea
 		private var selectionShapeColor : uint = 0x3399FF;
 		
 		private var selectionShapeRects : Shape;
-		private var selectionShapeRectsColor : uint = 0xD4D4D4
+		private var selectionShapeRectsColor : uint = 0xD4D4D4;
+		
+		private var indentLinesShape : Shape;
+		private var indentLinesShapeColor : uint = 0x000000;
 			
 		private var selectionSkobkiColor : uint = 0xc0c0c0;
 		
@@ -126,6 +135,50 @@ package ro.victordramba.scriptarea
 		
 		private var defaultColor : uint = 0xFFFFFF;
 		
+		private var _indentLines : Array;
+		
+		public function set indentLines(value:Array):void
+		{
+			_indentLines = value;
+			updateIndentLines();
+		}
+		
+		private function updateIndentLines() : void
+		{
+			var g : Graphics = indentLinesShape.graphics;
+			
+			g.clear();
+			
+			g.beginFill( indentLinesShapeColor, 1 );
+			
+			var point1 : Point;
+			var point2 : Point;
+			var step : int = 3;
+			var px : int = 0;
+			var py : int = 0;
+			
+			for each ( var blockPosition : BlockPosition in _indentLines )
+			{				
+				if ( text.charAt( blockPosition.start - 1 ) == '\r' ||  text.charAt( blockPosition.start - 1 ) == '\n' || blockPosition.start == 0)
+					continue;
+				
+				point1 = getPointForIndex( blockPosition.start );
+				point2 = getPointForIndex( blockPosition.end );
+				
+				px = point1.x;
+				
+				py = point1.y + _letterBoxHeight + 3;
+				point2.y += _letterBoxHeight;
+				
+				while ( py < point2.y )
+				{
+					g.drawCircle( point1.x - indentLinesShape.x, py - indentLinesShape.y, 0.5 );
+					
+					py += step;
+				}
+			}
+		}
+
 		public function get letterBoxHeight():int
 		{
 			return _letterBoxHeight;
@@ -137,6 +190,7 @@ package ro.victordramba.scriptarea
 			defaultColor = value.defaul_t;
 			selectionShapeColor = value.selectionColor;
 			selectionShapeRectsColor = value.selectionRectsColor;
+			indentLinesShapeColor = value.indentLinesShapeColor;
 			needChangeColorSelected = value.needChangeColorSelected;
 			cursor.color= value.cursorColor;
 		}
@@ -178,7 +232,7 @@ package ro.victordramba.scriptarea
 			if ( -tf.x == value )
 				return;
 
-			tf.x = selectionShape.x = selectionShapeRects.x = linesShape.x = -value;
+			tf.x = selectionShape.x = selectionShapeRects.x = linesShape.x = indentLinesShape.x = -value;
 
 			updateCaret();
 			dispatchEvent( new Event( Event.SCROLL, true ) );
@@ -196,13 +250,21 @@ package ro.victordramba.scriptarea
 
 			_scrollV = Math.min( Math.max( 0, value ), _maxScrollV );
 
+			indentLinesShape.y = -_scrollV * _letterBoxHeight;
+			
 			updateScrollProps();
 
 			updateCaret();
+			
+			/*if ( !blocked )
+			{
+				t.start();
+				blocked = true;
+			}*/
 
 			_setSelection( _selStart, _selEnd );
 			
-			ClearLineGoToToken();
+			ClearLines();
 
 			dispatchEvent( new Event( Event.SCROLL, true ) );
 		}
@@ -690,6 +752,11 @@ package ro.victordramba.scriptarea
 		{
 			_replaceText( 0, 0, "" );
 		}
+		
+		public function addIndentLines( indentLines : Array ) : void
+		{
+			this.indentLines = indentLines;
+		}
 
 		protected function undo() : void
 		{		
@@ -855,7 +922,7 @@ package ro.victordramba.scriptarea
 				if ( newX < 0 )
 					newX = 0;
 				tf.x = -newX;
-				selectionShape.x = selectionShapeRects.x = linesShape.x = -newX;
+				selectionShape.x = selectionShapeRects.x = linesShape.x = indentLinesShape.x = -newX;
 			} 
 			else if ( cursor.getX() < 0 )
 			{
@@ -871,6 +938,7 @@ package ro.victordramba.scriptarea
 					selectionShape.x -= getX;
 					selectionShapeRects.x -= getX;
 					linesShape.x -= getX;
+					indentLinesShape.x -= getX;
 				}
 			}
 
@@ -1103,7 +1171,7 @@ package ro.victordramba.scriptarea
 			g.drawRect( p0.x, p0.y + letterBoxHeight, p1.x - p0.x, 1 );
 		}
 		
-		protected function ClearLineGoToToken():void
+		protected function ClearLines():void
 		{
 			var g : Graphics = linesShape.graphics;
 			g.clear();

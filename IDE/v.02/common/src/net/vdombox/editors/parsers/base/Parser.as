@@ -66,6 +66,7 @@ package net.vdombox.editors.parsers.base
 					//textField.setTextFormat(formats.getValue(Token.KEYWORD), t.pos, t.pos+4);
 				}
 			}
+			textField.addIndentLines( tokenizer.blocks );
 			
 			textField.applyFormatRuns();
 		}

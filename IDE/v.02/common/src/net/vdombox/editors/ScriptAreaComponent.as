@@ -191,6 +191,11 @@ package net.vdombox.editors
 		{
 			area.applyFormatRuns();
 		}
+		
+		public function addIndentLines( indentLines : Array ) : void
+		{
+			area.indentLines = indentLines;
+		}
 
 		public function getPointForIndex( index : int ) : Point
 		{

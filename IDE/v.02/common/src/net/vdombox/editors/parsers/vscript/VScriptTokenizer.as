@@ -385,7 +385,7 @@ package net.vdombox.editors.parsers.vscript
 			var tp2String : String = tp2 ? tp2.string.toLowerCase() : "";
 			
 			
-			if ( ( tpString == "end" || tString == "next" || tString == "wend" || tString == "loop" ) && tp.type != Token.COMMENT )
+			if ( tpString == "end" || tString == "next" || tString == "wend" || tString == "loop" )
 			{
 				closeBlock( tString );
 			}

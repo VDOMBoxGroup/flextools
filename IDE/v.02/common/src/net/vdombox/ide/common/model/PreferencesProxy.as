@@ -195,6 +195,7 @@ package net.vdombox.ide.common.model
 			colorSchemeVO.backGroundColor 		= 0xFFFFFF;
 			colorSchemeVO.selectionColor 		= 0x3399FF;
 			colorSchemeVO.selectionRectsColor	= 0xD4D4D4;
+			colorSchemeVO.indentLinesShapeColor	= 0x000000;
 			colorSchemeVO.cursorColor			= 0;
 			colorSchemeVO.skobkiColor			= 0xc0c0c0;
 			
@@ -224,6 +225,7 @@ package net.vdombox.ide.common.model
 			colorSchemeVO.backGroundColor 		= 0x293134;
 			colorSchemeVO.selectionColor 		= 0x506064;
 			colorSchemeVO.selectionRectsColor	= 0x404E51;
+			colorSchemeVO.indentLinesShapeColor	= 0xFFFF00;
 			colorSchemeVO.cursorColor			= 0xFFFFFF;
 			colorSchemeVO.skobkiColor			= 0xc0c0c0;
 			
@@ -253,6 +255,7 @@ package net.vdombox.ide.common.model
 			colorSchemeVO.backGroundColor 		= 0x272822;
 			colorSchemeVO.selectionColor 		= 0x9d550f;
 			colorSchemeVO.selectionRectsColor	= 0x404E51;
+			colorSchemeVO.indentLinesShapeColor	= 0xFFFFFF;
 			colorSchemeVO.cursorColor			= 0xFFFFFF;
 			colorSchemeVO.skobkiColor			= 0xc0c0c0;
 			
@@ -282,6 +285,7 @@ package net.vdombox.ide.common.model
 			colorSchemeVO.backGroundColor 		= 0x211e1e;
 			colorSchemeVO.selectionColor 		= 0x4a3b4e;
 			colorSchemeVO.selectionRectsColor	= 0x404E51;
+			colorSchemeVO.indentLinesShapeColor	= 0xFFFFFF;
 			colorSchemeVO.cursorColor			= 0xDDDDDD;
 			colorSchemeVO.skobkiColor			= 0xc0c0c0;
 			

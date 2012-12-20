@@ -5,6 +5,7 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.ImportItemVO;
+	import net.vdombox.editors.parsers.base.BlockPosition;
 	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.base.Multiname;
 	import net.vdombox.editors.parsers.base.Token;
@@ -38,6 +39,7 @@ package net.vdombox.editors.parsers.python
 		private static const keywords3 : HashMap = new HashMap();
 		private static const symbols : HashMap = new HashMap();
 		private static const symbolsLengths : Array = [];
+		private var blockPosition : BlockPosition;
 
 		//static class init
 		private static var init : Boolean = ( function() : Boolean
@@ -411,8 +413,20 @@ package net.vdombox.editors.parsers.python
 
 			var t : PythonToken = nextToken();
 			if ( !t )
+			{
+				for each ( var block : BlockPosition in stackBlocks )
+				{
+					block.end = tokens[ tokens.length - 1].pos;
+					if ( !blocks )
+						blocks = new Array();
+					
+					blocks.push( block );
+				}
+				
 				return false;
+			}
 			
+			var tString : String = t.string;
 			tokens.push( t );
 			
 			tabOtstyp = 0;
@@ -440,15 +454,36 @@ package net.vdombox.editors.parsers.python
 					}
 					while ( string.charAt( position ) == '\r' || string.charAt( position ) == '\n' );
 						
-					if ( ( currentBlock.otstyp.tabs > tabOtstyp || currentBlock.otstyp.spaces > spaceOtstyp ) && string.charAt( position ) != '#'
+					if ( ( currentBlock.otstyp.tabs > tabOtstyp || currentBlock.otstyp.spaces > spaceOtstyp ||
+						( stackBlocks && stackBlocks.length > 0 && (stackBlocks[stackBlocks.length-1].otstyp.tabs > tabOtstyp || stackBlocks[stackBlocks.length-1].otstyp.spaces > spaceOtstyp))) && string.charAt( position ) != '#'
 					&& string.substr( position, 3 ) != "'''" )
 					{
-						while ( currentBlock.otstyp.tabs > tabOtstyp || currentBlock.otstyp.spaces > spaceOtstyp )
-						{						
-							scope = scope.parent;
+						var index : int;
+						
+						while ( currentBlock.otstyp.tabs > tabOtstyp || currentBlock.otstyp.spaces > spaceOtstyp ||
+							stackBlocks.length > 0 && (stackBlocks[stackBlocks.length - 1].otstyp.tabs > tabOtstyp || stackBlocks[stackBlocks.length - 1].otstyp.spaces > spaceOtstyp))
+						{			
+							if ( currentBlock.otstyp.tabs > tabOtstyp || currentBlock.otstyp.spaces > spaceOtstyp )
+							{
+								scope = scope.parent;
+								currentBlock = currentBlock.parent as PythonToken;
+								imports.pop();
+							}
 							
-							currentBlock = currentBlock.parent as PythonToken;
-							imports.pop();
+							index = tokens.length - 1;
+							
+							while( tokens[index].type == Token.ENDLINE || tokens[index].type == Token.COMMENT )
+								index--;
+							
+							if ( stackBlocks.length > 0 )
+							{
+								stackBlocks[stackBlocks.length - 1].end = tokens[index].pos;
+								
+								if ( !blocks )
+									blocks = new Array();
+								
+								blocks.push( stackBlocks.pop() );
+							}
 						}
 					}
 				}
@@ -462,9 +497,9 @@ package net.vdombox.editors.parsers.python
 				endDescriptionZone = false;
 				if ( t.type == Token.COMMENT )
 				{
-					if ( t.string.substr( 0, 1 ) != "#" )
+					if ( tString.substr( 0, 1 ) != "#" )
 					{
-						scope.description = t.string.substring( 3, t.string.length - 3 );
+						scope.description = tString.substring( 3, tString.length - 3 );
 					}
 				}
 			}
@@ -472,33 +507,39 @@ package net.vdombox.editors.parsers.python
 			t.scope = scope;
 
 			var tokensLength : uint = tokens.length - 1;
+			
 			var tp : PythonToken = tokens[ tokensLength - 1 ];
+			var tpString : String = tp ? tp.string : "";
+			
 			var tp2 : PythonToken = tokens[ tokensLength - 2 ];
+			var tp2String : String = tp3 ? tp2.string : "";
+			
 			var tp3 : PythonToken = tokens[ tokensLength - 3 ];
+			var tp3String : String = tp3 ? tp3.string : "";
 
 			if ( importZone )
 			{
 				t.importZone = true;
 				
 				if ( !importFrom || importFrom == "" )
-					importFrom = t.string;
+					importFrom = tString;
 				
 				t.importFrom = importFrom;
 				
 				var systemName : String = t.string;
 				
-				if ( tp.string == "as" )
+				if ( tpString == "as" )
 				{
-					imports[ imports.length - 1 ].removeValue( tp.string );
-					imports[ imports.length - 1 ].removeValue( tp2.string );
-					systemName = tp2.string;
+					imports[ imports.length - 1 ].removeValue( tpString );
+					imports[ imports.length - 1 ].removeValue( tp2String );
+					systemName = tp2String;
 				}
 				
 				if ( t.type != Token.SYMBOL )
 				{
-					imports[ imports.length - 1 ].setValue( t.string, new ImportItemVO( t.string, systemName, importFrom ) );
+					imports[ imports.length - 1 ].setValue( tString, new ImportItemVO( tString, systemName, importFrom ) );
 					
-					position = t.pos + t.string.length;
+					position = t.pos + tString.length;
 					while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
 						position++;
 					
@@ -508,7 +549,7 @@ package net.vdombox.editors.parsers.python
 						importFrom = "";
 					}
 				}
-				else if ( t.string == "*" )
+				else if ( tString == "*" )
 				{
 					if ( actionVO is LibraryVO )
 						addPrevImport( actionVO.name );
@@ -518,7 +559,7 @@ package net.vdombox.editors.parsers.python
 						imports[ imports.length - 1 ].setValue( name.value, new ImportItemVO( name.value, name.value, importFrom ) );
 					}
 					
-					position = t.pos + t.string.length;
+					position = t.pos + tString.length;
 					while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
 						position++;
 					
@@ -530,13 +571,13 @@ package net.vdombox.editors.parsers.python
 				}
 					
 			}
-			else if ( t && t.string == "from" )
+			else if ( tString == "from" )
 			{
 				fromZone = true;
 				t.fromZone = true;
 				importFrom = "";
 			}
-			else if ( t && t.string == "import" )
+			else if ( tString == "import" )
 			{
 				fromZone = false;
 				importZone = true;
@@ -546,39 +587,37 @@ package net.vdombox.editors.parsers.python
 			else if ( fromZone )
 			{
 				t.fromZone = true;
-				importFrom += t.string;
+				importFrom += tString;
 			}
-			else if ( t.string == "@staticmethod" )
+			else if ( tString == "@staticmethod" )
 			{
 				isStatic = true;
 			}
-			else if ( t.string == "@classmethod" )
+			else if ( tString == "@classmethod" )
 			{
 				isClassMethod = true;
 			}
-			else if ( t.string == "get" || t.string == "set" )
+			else if ( tString == "get" || tString == "set" )
 			{
 				//do nothing
 			}
 			
-			else if ( tp && ( tp.string == "class" ||
-				tp.string == "def" ||
-				 tp.string == "const" ) )
+			else if ( tpString == "class" || tpString == "def" || tpString == "const" )
 			{
 				//for package, merge classes in the existing omonimus package
-				if ( tp.string == "package" && scope.members.hasKey( t.string ) )
-					_scope = scope.members.getValue( t.string );
+				if ( tpString == "package" && scope.members.hasKey( tString ) )
+					_scope = scope.members.getValue( tString );
 				else
 				{
 					//debug("field-"+tp.string);
 					//TODO if is "set" make it "*set"
-					field = new Field( tp.string, t.pos, t.string );
-					if ( t.string != "(" ) //anonimus functions are not members
+					field = new Field( tpString, t.pos, tString );
+					if ( tString != "(" ) //anonimus functions are not members
 					{
-						if ( !scope.members.hasKey( t.string ) )
+						if ( !scope.members.hasKey( tString ) )
 						{
-							scope.members.setValue( t.string, field );
-							_members.setValue( t.string, field );
+							scope.members.setValue( tString, field );
+							_members.setValue( tString, field );
 						}
 					}
 					
@@ -596,9 +635,9 @@ package net.vdombox.editors.parsers.python
 						isClassMethod = false;
 					}
 					
-					if ( t.string.slice(0, 2) == "__" )
+					if ( tString.slice(0, 2) == "__" )
 						access = "private";
-					else if ( t.string.slice(0, 1) == "_" )
+					else if ( tString.slice(0, 1) == "_" )
 						access = "protected";
 					else
 						access = "public";
@@ -613,7 +652,7 @@ package net.vdombox.editors.parsers.python
 					
 					descriptionZone = true;
 				}
-				if ( _scope && ( tp.string == "class" ) )
+				if ( _scope && ( tpString == "class" ) )
 				{
 					_scope.type = new Multiname( "Class" );
 					try
@@ -626,21 +665,21 @@ package net.vdombox.editors.parsers.python
 					}
 				}
 				//add current package to imports
-				if ( tp.string == "package" )
-					imports.setValue( t.string + ".*", t.string + ".*" );
+				if ( tpString == "package" )
+					imports.setValue( tString + ".*", tString + ".*" );
 			}
 
 			//parse function params
 			else if ( _scope && ( _scope.fieldType == "def" || _scope.fieldType == "class" ) )
 			{
-				if ( tp && tp.string == "(" && t.string != ")" )
+				if ( tpString == "(" && tString != ")" )
 					paramsBlock = true;
 
 				if ( paramsBlock )
 				{
-					if ( !param && t.string != "..." )
+					if ( !param && tString != "..." )
 					{
-						param = new Field( "var", t.pos, t.string );
+						param = new Field( "var", t.pos, tString );
 						t.scope = _scope;
 						_scope.params.setValue( param.name, param );
 						if ( tp.string == "..." )
@@ -649,22 +688,22 @@ package net.vdombox.editors.parsers.python
 							param.type = new Multiname( "Array" );
 						}
 					}
-					else if ( tp.string == ":" )
+					else if ( tpString == ":" )
 					{
 						if ( _scope.fieldType == "set" )
 						{
-							_scope.type = new Multiname( t.string, imports[ imports.length - 1 ] );
+							_scope.type = new Multiname( tString, imports[ imports.length - 1 ] );
 						}
 						else
-							param.type = new Multiname( t.string, imports[ imports.length - 1 ] );
+							param.type = new Multiname( tString, imports[ imports.length - 1 ] );
 					}
 
-					else if ( t.string == "=" )
+					else if ( tString == "=" )
 						defParamValue = "";
 
-					else if ( t.string == "," || t.string == ")" )
+					else if ( tString == "," || tString == ")" )
 					{
-						if ( t.string == ")" )
+						if ( tString == ")" )
 						{
 							paramsBlock = false;
 						}
@@ -679,14 +718,14 @@ package net.vdombox.editors.parsers.python
 						defParamValue += t.string;
 				}
 			}
-			if ( tp && tp.string == "for" && t.type == Token.STRING_LITERAL  )
+			if ( tpString == "for" && t.type == Token.STRING_LITERAL  )
 			{
-				field = new Field( "var", t.pos, t.string );
+				field = new Field( "var", t.pos, tString );
 				
-				if ( !scope.members.hasKey( t.string ) )
+				if ( !scope.members.hasKey( tString ) )
 				{
-					scope.members.setValue( t.string, field );
-					_members.setValue( t.string, field );
+					scope.members.setValue( tString, field );
+					_members.setValue( tString, field );
 				}
 				
 				access = "private";
@@ -694,77 +733,104 @@ package net.vdombox.editors.parsers.python
 				
 				field.parent = scope;
 			}
-			else if ( t.string == "=" && tp.type == Token.STRING_LITERAL && !paramsBlock )
+			else if ( tString == "=" && tp.type == Token.STRING_LITERAL && !paramsBlock )
 			{
 				parsingVariables( tp, tp2, tokens.length - 2 )
 			}
 
 			
 
-			if ( field && tp3 && tp.string == ":" )
+			if ( field && tp3 && tpString == ":" )
 			{
-				if ( tp3.string == "var" || tp3.string == "const" || tp2.string == ")" )
+				if ( tp3String == "var" || tp3String == "const" || tp2String == ")" )
 				{
 					if ( field.fieldType != "set" )
 					{
-						field.type = new Multiname( t.string, imports[ imports.length - 1 ] );
+						field.type = new Multiname( tString, imports[ imports.length - 1 ] );
 					}
 					field = null;
 				}
 			}
+			
+			if ( tString == "def" || tString == "class" || tString == "if" || tString == "else" || tString == "for" || tString == "elif" ||
+				tString == "try" || tString == "except" || tString == "while")
+				blockPosition = new BlockPosition( t.pos );
 
-
-			if ( (( tp && tp.string == ":" && t.type == Token.ENDLINE )
-					|| ( tp2 && tp2.string == ":" && tp.type == Token.COMMENT && t.type == Token.ENDLINE )) && _scope )
+			if ( (( tpString == ":" && t.type == Token.ENDLINE )
+					|| ( tp2String == ":" && tp.type == Token.COMMENT && t.type == Token.ENDLINE )) )
 			{	
-				descriptionZone = false;
-				endDescriptionZone = true;
-				
-				currentBlock = t;
-				t.children = [];	
-				position = pos;
-				do
+				if ( blockPosition )
 				{
-					countSpaceToCurrentBlock = 0;
-					countTabToCurrentBlock = 0;
+					getCurrentOtstyp();
 					
-					while( string.charAt( position ) == '\n' || string.charAt( position ) == '\r' )
-						position++;
+					blockPosition.otstyp = { tabs : countTabToCurrentBlock, spaces : countSpaceToCurrentBlock };
 					
-					while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
-					{
-						if ( string.charAt( position ) == '\t' )
-							countTabToCurrentBlock++;
-						else
-							countSpaceToCurrentBlock++;
-						position++;
-					}
+					if ( !stackBlocks )
+						stackBlocks = new Array();
+					
+					stackBlocks.push( blockPosition );
 				}
-				while ( string.charAt( position ) == '\n' || string.charAt( position ) == '\r'  )
 				
-				currentBlock.otstyp = { tabs : countTabToCurrentBlock, spaces : countSpaceToCurrentBlock };
-				
-				imports.push( imports[ imports.length - 1 ].clone() );
-				
-				scope.imports = imports[ imports.length - 1 ];
-				currentBlock.scope = scope;
-				
-				/*if ( !_scope )
-					_scope = new Field( scope.fieldType, t.pos, "none" );*/
-				
-				_scope.imports = imports[ imports.length - 1 ];
-				_scope.parent = scope;
-				_scope.children = [];
-				scope.children.push( _scope );
-				
-				scope = _scope;
-				t.scope = scope;
-				
-				//info += pos + ")" + scope.parent.name + "->" + scope.name+"\n";
-				_scope = null;
+				if ( _scope )
+				{
+					descriptionZone = false;
+					endDescriptionZone = true;
+					
+					currentBlock = t;
+					t.children = [];	
+					
+					getCurrentOtstyp();
+					
+					currentBlock.otstyp = { tabs : countTabToCurrentBlock, spaces : countSpaceToCurrentBlock };
+					
+					imports.push( imports[ imports.length - 1 ].clone() );
+					
+					scope.imports = imports[ imports.length - 1 ];
+					currentBlock.scope = scope;
+					
+					/*if ( !_scope )
+						_scope = new Field( scope.fieldType, t.pos, "none" );*/
+					
+					_scope.imports = imports[ imports.length - 1 ];
+					_scope.parent = scope;
+					_scope.children = [];
+					scope.children.push( _scope );
+					
+					scope = _scope;
+					t.scope = scope;
+					
+					//info += pos + ")" + scope.parent.name + "->" + scope.name+"\n";
+					_scope = null;
+				}
 			}
 			
+			if ( t.type == Token.ENDLINE )
+				blockPosition = null;
+			
 			return true;
+		}
+		
+		private function getCurrentOtstyp() : void
+		{
+			var position : int = pos;
+			do
+			{
+				countSpaceToCurrentBlock = 0;
+				countTabToCurrentBlock = 0;
+				
+				while( string.charAt( position ) == '\n' || string.charAt( position ) == '\r' )
+					position++;
+				
+				while( string.charAt( position ) == '\t' || string.charAt( position ) == ' ' )
+				{
+					if ( string.charAt( position ) == '\t' )
+						countTabToCurrentBlock++;
+					else
+						countSpaceToCurrentBlock++;
+					position++;
+				}
+			}
+			while ( string.charAt( position ) == '\n' || string.charAt( position ) == '\r'  )
 		}
 		
 		private function parsingVariables( tp : PythonToken, tp2 : PythonToken, currentPos : int ) : void

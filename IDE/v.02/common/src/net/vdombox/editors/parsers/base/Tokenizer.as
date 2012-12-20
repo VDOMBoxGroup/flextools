@@ -17,6 +17,9 @@ package net.vdombox.editors.parsers.base
 		public var actionVO : Object;
 		
 		public var tokens : Array;
+		protected var stackBlocks : Array;
+		public var blocks : Array;
+		
 		protected var _classDB : ClassDB;
 		protected var _typeDB : TypeDB;
 		

@@ -125,7 +125,7 @@ package ro.victordramba.scriptarea
 			
 			addEventListener( MouseEvent.CONTEXT_MENU, contextMenuHandler, false, 0 , true );
 			
-			t = new Timer( 700, 1 );
+			t = new Timer( 300, 1 );
 			
 			t.addEventListener( TimerEvent.TIMER, timerHandler, false, 0, true );
 		}
@@ -283,7 +283,7 @@ package ro.victordramba.scriptarea
 				_setSelection( dragStart, dragStart, true );
 			}
 			
-			ClearLineGoToToken();
+			ClearLines();
 			selectedSkobki( dragStart );
 
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
@@ -434,7 +434,7 @@ package ro.victordramba.scriptarea
 			if ( e.ctrlKey )
 			{
 				CheckGoTo( true );
-				ClearLineGoToToken();
+				ClearLines();
 			}
 		}
 		
@@ -443,13 +443,13 @@ package ro.victordramba.scriptarea
 			if ( e.ctrlKey )
 			{
 				if ( !CheckGoTo( false ) )
-					ClearLineGoToToken();
+					ClearLines();
 			}
 		}
 		
 		private function onKeyUp( event : KeyboardEvent ):void
 		{
-			ClearLineGoToToken();
+			ClearLines();
 		}
 		
 		private function CheckGoTo( needGo : Boolean ):Boolean

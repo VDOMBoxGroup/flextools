@@ -21,6 +21,8 @@ package net.vdombox.ide.common.model._vo
 		private var _backGroundColor : uint;
 		private var _selectionColor : uint;
 		private var _selectionRectsColor : uint;
+		private var _indentLinesShapeColor : uint;
+		
 		
 		private var _cursorColor : uint;
 		private var _lineNumberColor : uint;
@@ -33,7 +35,6 @@ package net.vdombox.ide.common.model._vo
 		{
 			this.name = name;
 		}
-
 		public function get skobkiColor():uint
 		{
 			return _skobkiColor;
@@ -222,6 +223,16 @@ package net.vdombox.ide.common.model._vo
 		public function set selectionRectsColor(value:uint):void
 		{
 			_selectionRectsColor = value;
+		}
+		
+		public function get indentLinesShapeColor():uint
+		{
+			return _indentLinesShapeColor;
+		}
+		
+		public function set indentLinesShapeColor(value:uint):void
+		{
+			_indentLinesShapeColor = value;
 		}
 
 		public function get needChangeColorSelected():Boolean
