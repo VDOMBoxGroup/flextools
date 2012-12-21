@@ -125,11 +125,24 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			selectedEditor = editor;
 			return editor;
 		}
+		
+		public function removeEditor( vdomObjectVO : IVDOMObjectVO ) : IEditor
+		{			
+			var result : IEditor = getEditorByVO( vdomObjectVO );
+			
+			if ( result )			
+				delete editors[ result ];
+			
+			return result;
+		}
 
-		public function closeEditor( vdomObjectVO : IVDOMObjectVO ) : IEditor
+		public function closeEditor( vdomObjectVO : IVDOMObjectVO, forcibly : Boolean = true ) : IEditor
 		{
 			var result : IEditor = getEditorByVO( vdomObjectVO );
-
+			
+			if ( !forcibly && tabBar.dataProvider.length <= 1 )
+				return result;
+			
 			if ( result )
 			{
 				var tab : Tab = editors[ result ];

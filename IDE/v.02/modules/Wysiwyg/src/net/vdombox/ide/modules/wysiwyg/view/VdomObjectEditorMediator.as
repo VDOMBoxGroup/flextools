@@ -596,7 +596,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var editor : IEventDispatcher = editor as IEventDispatcher;
 
-			if ( !editor )
+			if ( !editor )  
 				return;
 			editor.addEventListener( FlexEvent.HIDE, hideRendererHandler, true );
 			
@@ -1393,6 +1393,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					component.showLinking = !component.showLinking;
 					readLinkage();
+				}
+				else if ( event.keyCode == Keyboard.W )
+				{
+					sendNotification( Notifications.CLOSE_EDITOR, { pageVO : editorVO.vdomObjectVO } );
 				}
 				else if ( event.keyCode == Keyboard.Z )
 					sendNotification( Notifications.UNDO, component.editorVO.vdomObjectVO );

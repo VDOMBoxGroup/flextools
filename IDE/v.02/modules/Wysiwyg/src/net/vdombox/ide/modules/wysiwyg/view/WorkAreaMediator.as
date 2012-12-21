@@ -59,6 +59,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( Notifications.PAGE_NAME_SETTED);
 			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED);
 			
+			interests.push( Notifications.CLOSE_EDITOR);
 			interests.push( Notifications.PAGE_DELETED);
 			interests.push( Notifications.PAGE_CREATED);
 			
@@ -160,6 +161,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break
 				}
 					
+				case Notifications.CLOSE_EDITOR:
+				{
+					workArea.closeEditor( body.pageVO as PageVO, false );;
+					
+					break
+				}
+					
 				case Notifications.PAGE_DELETED:
 				{
 					workArea.closeEditor( body.pageVO as PageVO );;
@@ -230,7 +238,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function renderer_removedHandler( event : RendererEvent ) : void
 		{
-			sendNotification( Notifications.RENDERER_REMOVED, event.target as IRenderer );
+			sendNotification( Notifications.RENDERER_REMOVED, event.target );
+			workArea.removeEditor( (event.target as IRenderer).vdomObjectVO );
 		}
 
 		private function changeHandler( event : WorkAreaEvent ) : void
