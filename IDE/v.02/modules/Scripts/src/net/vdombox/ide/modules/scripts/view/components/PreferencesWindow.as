@@ -28,6 +28,9 @@ package net.vdombox.ide.modules.scripts.view.components
 		[SkinPart( required = "true" )]
 		public var autocompleteAutoShow : CheckBox;
 		
+		[SkinPart( required = "true" )]
+		public var showIndentLinesBox : CheckBox;
+		
 		[Bindable]
 		public var colorShemesList : ArrayCollection;
 		
@@ -36,6 +39,9 @@ package net.vdombox.ide.modules.scripts.view.components
 		
 		[Bindable]
 		public var autoShowAutocomplete : Boolean;
+		
+		[Bindable]
+		public var showIndentLines : Boolean;
 		
 		[Bindable]
 		public var selectKeyByAutoComplte : String;
@@ -101,7 +107,8 @@ package net.vdombox.ide.modules.scripts.view.components
 		public function ok_close_window(event: KeyboardEvent = null ) : void
 		{
 			dispatchEvent( new PopUpWindowEvent( PopUpWindowEvent.APPLY, null, "", { colorScheme : colorSchemes.selectedItem, fontSize : int( fontSize.selectedItem.toString() ),
-																					autoShowAutoComplete : autocompleteAutoShow.selected, selectKeyByAutoComplte : selectKeyByAutoComplte } ) );
+																					autoShowAutoComplete : autocompleteAutoShow.selected, selectKeyByAutoComplte : selectKeyByAutoComplte,
+																					showIndentLines : showIndentLinesBox.selected } ) );
 		}
 		
 		public function no_close_window(event: KeyboardEvent = null ) : void

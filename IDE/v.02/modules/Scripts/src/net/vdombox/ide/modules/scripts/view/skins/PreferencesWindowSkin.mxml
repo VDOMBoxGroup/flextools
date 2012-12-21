@@ -103,7 +103,7 @@
 			
 		</s:HGroup>
 		
-		<s:HGroup width="100%" paddingLeft="10" paddingRight="10" verticalAlign="middle">
+		<s:VGroup width="100%" paddingLeft="10" paddingRight="10" verticalAlign="middle">
 			
 			<s:CheckBox id="autocompleteAutoShow" 
 						label="Shows an autocomplete only by pressing Ctrl+Space" color="#EEEEEE"
@@ -111,7 +111,12 @@
 						selected="{ hostComponent.autoShowAutocomplete }"
 						creationComplete="autocompleteAutoShow_creationCompleteHandler(event)"/>
 			
-		</s:HGroup>
+			<s:CheckBox id="showIndentLinesBox" 
+						label="Shows an indent lines" color="#EEEEEE"
+						skinClass="spark.skins.spark.CheckBoxSkin"
+						selected="{ hostComponent.showIndentLines }"/>
+			
+		</s:VGroup>
 		
 		<s:VGroup width="100%" verticalAlign="middle" paddingTop="15">
 			

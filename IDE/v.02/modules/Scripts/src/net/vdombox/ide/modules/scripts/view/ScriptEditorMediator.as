@@ -60,6 +60,7 @@ package net.vdombox.ide.modules.scripts.view
 			scriptEditor.setActionVO();
 			
 			updateColorScheme(false);
+			updateIndentLines(false);
 			updateFontSize(false);
 			updateAutoShowAutoComplete();
 			updateSelectKeyByAutoComplte();
@@ -82,6 +83,7 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( PreferencesProxy.SELECTED_FONT_SIZE_CHANGE );
 			interests.push( PreferencesProxy.AUTO_SHOW_AUTOCOMPLETE_CHANGE );
 			interests.push( PreferencesProxy.SELECT_KEY_BY_AUTOCOMPLETE_CHANGE );
+			interests.push( PreferencesProxy.SHOW_INDENT_LINES_CHANGE );
 			interests.push( Notifications.RENAME_IN_ACTION );
 			
 			return interests;
@@ -122,6 +124,13 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 					
+				case PreferencesProxy.SHOW_INDENT_LINES_CHANGE:
+				{
+					updateIndentLines();
+					
+					break;
+				}
+					
 				case Notifications.RENAME_IN_ACTION:
 				{
 					if ( scriptEditor.actionVO != body.actionVO )
@@ -158,6 +167,14 @@ package net.vdombox.ide.modules.scripts.view
 			
 			scriptEditor.removeEventListener( ScriptAreaComponenrEvent.GO_TO_DEFENITION, goToDefenitionHandler );
 			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_PREFERENCES, openPreferences);
+		}
+		
+		private function updateIndentLines( sendUpdate : Boolean = true ) : void
+		{
+			scriptEditor.scriptEditor.scriptAreaComponent.showIndentLines = colorSchemeProxy.showIndentLines;
+			
+			if ( sendUpdate )
+				scriptEditor.scriptEditor.scriptAreaComponent.sendUpdate();
 		}
 		
 		private function updateColorScheme( sendUpdate : Boolean = true ) : void
@@ -260,6 +277,7 @@ package net.vdombox.ide.modules.scripts.view
 			preferencesWindow.selectedColorSheme = colorSchemeProxy.selectedColorScheme;
 			preferencesWindow.selectedFontSize = colorSchemeProxy.selectedFontSize;
 			preferencesWindow.autoShowAutocomplete = !colorSchemeProxy.autoShowAutoComplete;
+			preferencesWindow.showIndentLines = colorSchemeProxy.showIndentLines;
 			preferencesWindow.selectKeyByAutoComplte = colorSchemeProxy.selectKeyByAutoComplte;
 			preferencesWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			preferencesWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
@@ -271,6 +289,7 @@ package net.vdombox.ide.modules.scripts.view
 				colorSchemeProxy.selectedColorScheme = event.detail.colorScheme as ColorSchemeVO;
 				colorSchemeProxy.selectedFontSize = event.detail.fontSize as uint;
 				colorSchemeProxy.autoShowAutoComplete = !event.detail.autoShowAutoComplete;
+				colorSchemeProxy.showIndentLines = event.detail.showIndentLines;
 				colorSchemeProxy.selectKeyByAutoComplte = event.detail.selectKeyByAutoComplte;
 				WindowManager.getInstance().removeWindow( preferencesWindow );
 			}
