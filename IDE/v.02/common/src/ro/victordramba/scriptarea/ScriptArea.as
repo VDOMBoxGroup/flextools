@@ -137,10 +137,23 @@ package ro.victordramba.scriptarea
 		
 		private var _indentLines : Array;
 		
+		public var showIndentLines : Boolean = false;
+		
 		public function set indentLines(value:Array):void
 		{
 			_indentLines = value;
-			updateIndentLines();
+			
+			if ( showIndentLines )
+				updateIndentLines();
+			else
+				clearIndentLines();
+		}
+		
+		private function clearIndentLines() : void
+		{
+			var g : Graphics = indentLinesShape.graphics;
+			
+			g.clear();
 		}
 		
 		private function updateIndentLines() : void

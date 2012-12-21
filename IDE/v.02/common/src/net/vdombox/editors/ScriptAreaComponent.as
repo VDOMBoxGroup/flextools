@@ -369,6 +369,11 @@ package net.vdombox.editors
 			area.colorScheme = value;
 		}
 		
+		public function set showIndentLines( value : Boolean ) : void
+		{
+			area.showIndentLines = value;
+		}
+		
 		public function set fontSize( value : uint ) : void
 		{
 			area.fontSize = value;

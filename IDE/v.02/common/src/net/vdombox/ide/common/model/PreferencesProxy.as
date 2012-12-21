@@ -15,6 +15,7 @@ package net.vdombox.ide.common.model
 		public static const SELECTED_FONT_SIZE_CHANGE : String = "selectedFontSizeChange";
 		public static const AUTO_SHOW_AUTOCOMPLETE_CHANGE : String = "autoShowAutoCompleteChange";
 		public static const SELECT_KEY_BY_AUTOCOMPLETE_CHANGE : String = "selectKeyByAutoCompleteChange";
+		public static const SHOW_INDENT_LINES_CHANGE : String = "showIndentLinesChange";
 		
 		
 		public function PreferencesProxy()
@@ -65,6 +66,17 @@ package net.vdombox.ide.common.model
 		public function get selectKeyByAutoComplte() : String
 		{
 			return shObjData.data["selectKeyByAutoComplte"];
+		}
+		
+		public function set showIndentLines( value : Boolean ) : void
+		{
+			shObjData.data["showIndentLines"] = value;
+			sendNotification( SHOW_INDENT_LINES_CHANGE );
+		}
+		
+		public function get showIndentLines() : Boolean
+		{
+			return shObjData.data["showIndentLines"];
 		}
 		
 		public function get colorSchemes() : Array
