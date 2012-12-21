@@ -97,6 +97,7 @@ package net.vdombox.ide.common.controller
 		//		editors
 		public static const EDITOR_CREATED : String = "editorCreated";
 		public static const EDITOR_REMOVED : String = "editorRemoved";
+		public static const CLOSE_EDITOR : String = "closeEditor";
 		
 		//		other
 		public static const SET_OBJECT_NAME : String = "setObjectName";

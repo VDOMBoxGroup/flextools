@@ -512,7 +512,7 @@ package net.vdombox.editors.parsers.python
 			var tpString : String = tp ? tp.string : "";
 			
 			var tp2 : PythonToken = tokens[ tokensLength - 2 ];
-			var tp2String : String = tp3 ? tp2.string : "";
+			var tp2String : String = tp2 ? tp2.string : "";
 			
 			var tp3 : PythonToken = tokens[ tokensLength - 3 ];
 			var tp3String : String = tp3 ? tp3.string : "";
@@ -756,8 +756,8 @@ package net.vdombox.editors.parsers.python
 				tString == "try" || tString == "except" || tString == "while")
 				blockPosition = new BlockPosition( t.pos );
 
-			if ( (( tpString == ":" && t.type == Token.ENDLINE )
-					|| ( tp2String == ":" && tp.type == Token.COMMENT && t.type == Token.ENDLINE )) )
+			if ( ( tpString == ":" && t.type == Token.ENDLINE )
+					|| ( tp2String == ":" && tp.type == Token.COMMENT && t.type == Token.ENDLINE ) )
 			{	
 				if ( blockPosition )
 				{
