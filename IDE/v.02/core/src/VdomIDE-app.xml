@@ -47,7 +47,7 @@
 		<content>[Это значение будет перезаписано программой Flash Builder в выходном файле app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
-		<title>Vdom IDE.v.2.5.5.8682</title> 
+		<title>Vdom IDE.v.2.5.5.8703</title> 
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
 		<!-- <systemChrome></systemChrome> -->
