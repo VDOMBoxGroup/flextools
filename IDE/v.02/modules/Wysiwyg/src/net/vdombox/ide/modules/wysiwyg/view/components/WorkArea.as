@@ -149,6 +149,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				removeTab( tab );
 
 				delete editors[ result ];
+				
+				dispatchEvent( new Event( "selectedTabChanged" ) );
 			}
 
 			return result;
