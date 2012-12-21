@@ -76,6 +76,7 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.GLOBAL_ACTION_GETTED );
 			
 			interests.push( Notifications.SCRIPT_CHECKED );
+			interests.push( Notifications.CLOSE_EDITOR );
 			
 			interests.push( StatesProxy.SELECTED_APPLICATION_CHANGED );
 			
@@ -92,8 +93,6 @@ package net.vdombox.ide.modules.scripts.view
 			
 			if ( !isActive && name != Notifications.BODY_START )
 				return;
-			
-			
 			
 			switch ( name )
 			{
@@ -166,7 +165,7 @@ package net.vdombox.ide.modules.scripts.view
 						if ( closedScript )
 						{
 							closedScript = false;
-							workArea.closeTabByAction( actionVO );
+							workArea.closeEditor( actionVO );
 							sendNotification( Notifications.DELETE_TAB_BY_ACTIONVO, actionVO );
 						}
 					/*}
@@ -175,6 +174,36 @@ package net.vdombox.ide.modules.scripts.view
 						Alert.setPatametrs( "Save", "Load" );
 						Alert.Show(	"Server action 'Maks' has been modified on the server and is in the conflict with your changes.\nDo you want to load from server or save your modification?", AlertButton.OK_No_Cancel, workArea.parentApplication, saveActionRequest );
 					}*/
+					
+					break;
+				}
+					
+				case Notifications.CLOSE_EDITOR:
+				{
+					if ( body && !body.saved )
+					{
+						Alert.Show( "Save", "Script has been modified. Save changes?", AlertButton.OK_No_Cancel, workArea.parentApplication, chackActionRequest );
+						
+						function chackActionRequest( event : PopUpWindowEvent ) : void 
+						{
+							if ( event.detail == Alert.YES )
+							{
+								closedScript = true;
+								sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : body, check : true } );
+							}
+							
+							if ( event.detail == Alert.NO )
+							{
+								workArea.closeEditor( body );
+							}
+						}
+					}
+					else
+					{
+						workArea.closeEditor( body );
+					}
+					
+					
 					
 					break;
 				}
@@ -297,7 +326,7 @@ package net.vdombox.ide.modules.scripts.view
 			if ( editor is ScriptEditor )
 			{
 				facade.removeMediator( ScriptEditorMediator.NAME + editor.editorID  );
-				workArea.closeEditor( editor.actionVO );
+				workArea.removeEditor( editor.actionVO );
 			}
 		}
 		

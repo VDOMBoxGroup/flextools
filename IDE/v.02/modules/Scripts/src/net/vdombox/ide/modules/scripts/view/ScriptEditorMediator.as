@@ -148,6 +148,7 @@ package net.vdombox.ide.modules.scripts.view
 			scriptEditor.addEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler, false, 0, true );
 			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_FIND, scriptEditor_openFindHandler, false, 0, true );
 			scriptEditor.addEventListener( ScriptEditorEvent.OPEN_FIND_GLOBAL, scriptEditor_openFindGlobalHandler, false, 0, true );
+			scriptEditor.addEventListener( ScriptEditorEvent.CLOSE_SCRIPT_EDITOR, scriptEditor_closeScriptEditorHandler, false, 0, true );
 			scriptEditor.addEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode, false, 0, true );
 			scriptEditor.addEventListener( ScriptAreaComponenrEvent.RENAME, renameHandler, true, 0, true );
 			scriptEditor.addEventListener( ScriptAreaComponenrEvent.GLOBAL_RENAME, globalRenameHandler, true, 0, true );
@@ -161,6 +162,7 @@ package net.vdombox.ide.modules.scripts.view
 			scriptEditor.removeEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler );
 			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_FIND, scriptEditor_openFindHandler );
 			scriptEditor.removeEventListener( ScriptEditorEvent.OPEN_FIND_GLOBAL, scriptEditor_openFindGlobalHandler );
+			scriptEditor.removeEventListener( ScriptEditorEvent.CLOSE_SCRIPT_EDITOR, scriptEditor_closeScriptEditorHandler );
 			scriptEditor.removeEventListener( FlexEvent.CREATION_COMPLETE, compliteSourceCode );
 			scriptEditor.removeEventListener( ScriptAreaComponenrEvent.RENAME, renameHandler, true );
 			scriptEditor.removeEventListener( ScriptAreaComponenrEvent.GLOBAL_RENAME, globalRenameHandler, true);
@@ -243,6 +245,11 @@ package net.vdombox.ide.modules.scripts.view
 		private function scriptEditor_openFindGlobalHandler( event : ScriptEditorEvent ) : void
 		{			
 			sendNotification( Notifications.OPEN_FIND_GLOBAL_SCRIPT, scriptEditor.scriptEditor.scriptAreaComponent.selectionText );
+		}
+		
+		private function scriptEditor_closeScriptEditorHandler( event : ScriptEditorEvent ) : void
+		{			
+			sendNotification( Notifications.CLOSE_EDITOR, scriptEditor.actionVO );
 		}
 		
 		private function renameHandler( event : ScriptAreaComponenrEvent ) : void

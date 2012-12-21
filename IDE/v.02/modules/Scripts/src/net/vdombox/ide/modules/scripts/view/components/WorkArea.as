@@ -103,7 +103,10 @@ package net.vdombox.ide.modules.scripts.view.components
 		
 		public function openEditor( objectVO : Object, actionVO : Object ) : ScriptEditor
 		{
-			var editor : ScriptEditor = new ScriptEditor();
+			var editor : ScriptEditor = getEditorByVO( objectVO );
+			if ( editor )
+				return editor;
+			editor = new ScriptEditor();
 			editor.percentHeight = 100;
 			editor.percentWidth = 100;
 			editor.actionVO = actionVO;
@@ -129,36 +132,27 @@ package net.vdombox.ide.modules.scripts.view.components
 			return editor;
 		}
 		
-		public function closeEditor( objectVO : Object ) : ScriptEditor
-		{
-			var result : ScriptEditor;
-			var tab : Tab;
+		
+		public function removeEditor( objectVO : Object ) : ScriptEditor
+		{			
+			var result : ScriptEditor = getEditorByVO( objectVO );
 			
-			result = getEditorByVO( objectVO );
-			
-			if ( result )
-			{				
+			if ( result )			
 				delete _editors[ result ];
-			}
 			
 			return result;
 		}
 		
-		public function closeTabByAction( objectVO : Object ) : ScriptEditor
-		{
-			var result : ScriptEditor;
-			var tab : Tab;
-			
-			result = getEditorByVO( objectVO );
-			
-			var index : int = getElementIndex( result );
+		public function closeEditor( objectVO : Object ) : ScriptEditor
+		{			
+			var result : ScriptEditor = getEditorByVO( objectVO );
 			
 			if ( result )
-			{								
-				tab = _editors[ result ];
+			{			
+				var tab : Tab = _editors[ result ];
 				removeTab( tab );
-		
-				showTabElements( selectedTab );
+				
+				delete _editors[ result ];
 			}
 			
 			return result;

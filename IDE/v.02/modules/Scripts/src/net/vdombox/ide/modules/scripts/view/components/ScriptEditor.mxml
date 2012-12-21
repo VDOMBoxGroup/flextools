@@ -141,12 +141,17 @@
 			
 			private function onCtrlSDown( e : KeyboardEvent ) : void
 			{
-				if ( e.ctrlKey && e.keyCode == Keyboard.S )
+				if ( !e.ctrlKey )
+					return;
+				
+				if ( e.keyCode == Keyboard.S )
 					scriptEditor_saveHandler();
-				else if ( e.ctrlKey && e.keyCode == Keyboard.F )
+				else if ( e.keyCode == Keyboard.F )
 					dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.OPEN_FIND ) );
-				else if ( e.ctrlKey && e.keyCode == Keyboard.H )
+				else if ( e.keyCode == Keyboard.H )
 					dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.OPEN_FIND_GLOBAL ) );
+				else if ( e.keyCode == Keyboard.W )
+					dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.CLOSE_SCRIPT_EDITOR ) );
 			}
 			
 			protected function navigatorcontent2_removeHandler(event:FlexEvent):void

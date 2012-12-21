@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.scripts.events
 		public static var NOT_SAVED : String = "actionNotSaved";
 		
 		public static var SCRIPT_EDITOR_ADDED : String = "scriptEditorAdded";
+		public static var CLOSE_SCRIPT_EDITOR : String = "closeScriptEditor";
 		
 		public static var OPEN_PREFERENCES : String = "openPreferences";
 		
