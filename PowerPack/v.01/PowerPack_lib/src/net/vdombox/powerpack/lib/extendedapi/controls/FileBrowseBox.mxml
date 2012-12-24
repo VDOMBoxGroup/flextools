@@ -4,7 +4,6 @@
 	horizontalGap="4" 
 	horizontalAlign="right" 
 	disabledOverlayAlpha="0.0"
-	preinitialize="onPreinitialize(event)"
 	childAdd="onChildAdd(event)"
 	creationPolicy="all">
 
@@ -31,19 +30,43 @@
 			
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
 			
-			public static const PATH_CHANGED	: String = "pathChanged";
-			
 			public static const MODE_OPEN	: String = "open";
 			public static const MODE_SAVE	: String = "save";
 			public static const MODE_DIR	: String = "dir";
 			public static const MODE_MULTI	: String = "multi";
 			
-			public static var memPath:String = ""; //File.documentsDirectory.nativePath;
-
 			public var defaultPath : String = File.documentsDirectory.nativePath;
 			
 			public var files : Array = [];
 			public var filterArray : Array = [];
+			
+			private var _textEditable : Boolean = true;
+			
+			public function get textEditable () : Boolean
+			{
+				return _textEditable;
+			}
+			
+			public function set textEditable (value:Boolean) : void
+			{
+				if (value == _textEditable)
+					return;
+				
+				_textEditable = value;
+				
+				invalidateProperties();
+			}
+			
+			override protected function commitProperties():void
+			{
+				super.commitProperties();
+				
+				txtPathInput.editable = _textEditable;
+				
+				txtPathInput.clearStyle("backgroundColor");
+				txtPathInput.setStyle("backgroundColor", txtPathInput.editable ? 0xffffff : 0xbbbbbb);
+				txtPathInput.invalidateDisplayList();
+			}
 			
 			public override function set errorString (value : String) : void
 			{
@@ -97,11 +120,6 @@
 		    //  Event handlers
 		    //
 		    //--------------------------------------------------------------------------
-			
-			private function onPreinitialize(event:Event):void
-			{
-				path = memPath;
-			}
 			
 			private function onChildAdd(event:ChildExistenceChangedEvent):void
 			{
@@ -171,13 +189,12 @@
             {
             	var file:File = event.target as File;
            		
-           		//memPath = file.nativePath;
 				path = file.nativePath;
 				
 				files = [];
 				files.push(file);
 				
-				dispatchEvent(new Event(PATH_CHANGED));
+				dispatchEvent(new Event(Event.CHANGE));
 				
 				dispatchEvent(new Event(Event.SELECT));
             }
@@ -188,11 +205,9 @@
             	
             	if (files && files.length)
             	{
-	           		//memPath = File(files[0]).parent.nativePath;
 					path = File(files[0]).parent.nativePath;
 	
-					dispatchEvent(new Event(PATH_CHANGED));
-					
+					dispatchEvent(new Event(Event.CHANGE));
             	}
             	
             	dispatchEvent(new FileListEvent(FileListEvent.SELECT_MULTIPLE));

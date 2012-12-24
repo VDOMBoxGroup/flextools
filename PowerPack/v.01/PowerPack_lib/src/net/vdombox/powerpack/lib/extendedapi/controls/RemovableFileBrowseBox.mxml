@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+		 xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
+		 verticalAlign="middle"
+		 paddingRight="10">
+	<mx:Script>
+		<![CDATA[
+			import net.vdombox.powerpack.lib.player.managers.ContextManager;
+			
+			public static const EVENT_REMOVE_BOX : String = "removeBox";
+			
+			public var validPath : Boolean = true;
+			
+			[Bindable]
+			public var filterArray : Array;
+			
+			[Bindable]
+			public var removable : Boolean = true;
+			
+			public function get filePath () : String
+			{
+				return fileBrowseBox.path;
+			}
+			
+			public function set filePath (path : String) : void
+			{
+				fileBrowseBox.path = path;
+			}
+			
+			override public function set errorString(value:String) : void
+			{
+				fileBrowseBox.errorString = value;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Image source="{ContextManager.deleteClass}" 
+			  visible="{removable}" 
+			  click="{dispatchEvent(new Event(EVENT_REMOVE_BOX));}"/>
+	
+	<controls:FileBrowseBox width="100%"
+							id="fileBrowseBox"
+							mode="{FileBrowseBox.MODE_OPEN}"
+							filterArray="{filterArray}"
+							textEditable="false"
+							change="{dispatchEvent(event)}"/>
+							
+</mx:HBox>
