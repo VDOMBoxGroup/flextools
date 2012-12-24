@@ -43,9 +43,38 @@ package net.vdombox.powerpack.utils
 		
 		private static function get isMac () : Boolean
 		{
-			return FileUtils.OS == FileUtils.OS_MAC;;
+			return FileUtils.OS == FileUtils.OS_MAC;
 		}
 		
+		public static function equalArrays (array1:Array, array2:Array) : Boolean
+		{
+			if (!array1 && !array2)
+				return true;
+			
+			if ((array1 && !array2) || (array2 && !array1))
+				return false;
+			
+			if (array1.length != array2.length)
+				return false;
+			
+			if (array1 == array2)
+				return true;
+			
+			for each(var i:Object in array1) 
+			{
+				if (array2.indexOf(i) == -1)
+					return false;
+			}
+			
+			for each(i in array2) 
+			{
+				if (array1.indexOf(i) == -1)
+					return false;
+			}
+			
+			return true;
+				
+		}
 		
 	}
 }

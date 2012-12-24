@@ -103,10 +103,25 @@ package net.vdombox.powerpack.sdkcompiler
 			if ( appPath == "")
 				return true;
 			
-			return FileUtils.filePathExists(appPath, false) && selectedApplicationValid(appPath);
+			return FileUtils.filePathExists(appPath, false) && isValidAppFile(appPath);
 		}
 		
-		private function selectedApplicationValid(appPath : String) : Boolean
+		public function uniqueAppsNames (appsPath : Array) : Boolean
+		{
+			if (!appsPath)
+				return true;
+			
+			var appsFileNames : Array = [];
+			for each (var path:String in appsPath)
+				appsFileNames.push(FileUtils.getFileName(path))
+			
+			if (appsFileNames.length <=1)
+				return true;
+			
+			return appsFileNames.sort(Array.UNIQUESORT) != 0;
+		}
+		
+		private function isValidAppFile(appPath : String) : Boolean
 		{
 			var file : File = FileUtils.getFileByPath(appPath);
 			

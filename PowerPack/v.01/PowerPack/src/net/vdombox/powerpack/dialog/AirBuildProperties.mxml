@@ -230,11 +230,20 @@
 				updateBuildEnableState();
 			}
 			
-			private function get validAppPath () : Boolean
+			private function get validEmbeddedApps () : Boolean
 			{
-				var embededAppPath : String = project.embededAppPath;
+				var embededApps : Array = project.embededApps;
 				
-				return compilerParamsChecker.isValidAppPath(embededAppPath);
+				if (!compilerParamsChecker.uniqueAppsNames(embededApps))
+					return false;
+				
+				for each (var appPath : String in embededApps)
+				{
+					if (!compilerParamsChecker.isValidAppPath(appPath))
+						return false;
+				}
+				
+				return true;
 			}
 			
 			private function get validOutputInstallerFolderPath () : Boolean
@@ -268,7 +277,7 @@
 			
 			private function get buildAvailable (): Boolean
 			{
-				return validAppPath && 
+				return validEmbeddedApps && 
 					validFlexSDKPath && 
 					validAirSDKPath && 
 					validOutputInstallerFolderPath &&

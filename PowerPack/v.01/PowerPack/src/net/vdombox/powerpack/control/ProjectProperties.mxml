@@ -13,10 +13,13 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
 			import mx.utils.StringUtil;
 			
+			import net.vdombox.powerpack.dialog.BrowseApplicationsDialog;
+			import net.vdombox.powerpack.dialog.ModalDialog;
 			import net.vdombox.powerpack.graph.GraphCanvas;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
@@ -34,6 +37,8 @@
 			public var graphs : ArrayCollection;
 			
 			public var project  : BuilderTemplateProject;
+			
+			public var embeddedApplications : Array;
 			
 			public function get templateB64Picture() : String
 			{
@@ -189,11 +194,11 @@
 				validateInstallerFileName();
 			}
 			
-			private function initAppPath():void
+			private function initEmbeddedApps():void
 			{
-				embededApplicationBrowseBox.path = project.embededAppPath;
+				embeddedApplications = project.embededApps;
 				
-				validateAppPath();
+				validateAppsPaths();
 			}
 			
 			private function validateOutputInstallerFolderPath():void
@@ -217,14 +222,43 @@
 				return compilerParamsChecker.isValidInstallerFileName(installerFileName.text);
 			}
 			
-			private function validateAppPath():void
+			private function validateAppsPaths():void
 			{
-				embededApplicationBrowseBox.errorString = validAppPath ? null : "Error";
-			}
-			
-			private function get validAppPath () : Boolean
-			{
-				return compilerParamsChecker.isValidAppPath(embededApplicationBrowseBox.path);
+				if (!embeddedApplications)
+				{
+					appsTextArea.htmlText = "";
+					return;
+				}
+						
+				var valid_apps_path : Boolean = true;
+				var apps : String = "<div>";
+				var text_color : String = "";
+				var appPath : String;
+				for (var i:int=0; i<embeddedApplications.length; i++)
+				{
+					if (i > 0)
+						apps += "<br>";
+					
+					appPath = embeddedApplications[i];
+					text_color = "#000000";
+					if (!compilerParamsChecker.isValidAppPath(appPath))
+					{
+						text_color = "#ff0000";
+						valid_apps_path = false;
+					}
+						
+					apps += "<font color='"+text_color+"'>" + FileUtils.getFileName(appPath) + "; <font>";
+				}
+				
+				apps += "</div>";
+				
+				appsTextArea.htmlText = apps;
+				
+				appsTextArea.errorString = null;
+				if (!compilerParamsChecker.uniqueAppsNames(embeddedApplications))
+					appsTextArea.errorString = "File names must be unique.";
+				else if (!valid_apps_path)
+					appsTextArea.errorString = "Some of selected applications are incorrect.";
 			}
 			
 			private function initInstallerID():void
@@ -261,15 +295,6 @@
 				return compilerParamsChecker.isValidProjectName(txtName.text);
 			}
 			
-			private function get buildAvailable (): Boolean
-			{
-				return validAppPath && 
-					validOutputInstallerFolderPath &&
-					validInstallerFileName &&
-					validInstallerId &&
-					validProjectName;
-			}
-			
 			private function get curTemplateOutputInstallerFolder() : String
 			{
 				var outputFolderPath : String = outputFolderPath;
@@ -292,7 +317,7 @@
 				initInstallerID();
 				initInstallerFileName();
 				initOutputFolderPath();
-				initAppPath();
+				initEmbeddedApps();
 				
 				usePictureCheckBox.selected = project.picture ? true : false;
 				onUsePictureSelectionChanged(null);
@@ -306,7 +331,7 @@
 				
 				project.outputFileName = installerFileName.text;
 				project.outputFolderPath = StringUtil.trim(outputInstallerFolderBrowseBox.path);
-				project.embededAppPath = StringUtil.trim(embededApplicationBrowseBox.path);
+				project.embededApps = embeddedApplications;
 				
 				if (templateB64Picture)
 				{ 
@@ -370,6 +395,17 @@
 			{
 				txtName.setFocus();
 				txtName.setSelection(0, txtName.text.length);
+			}
+			
+			private function browseAppsDialogCloseHandler (event : Event) : void
+			{
+				if ( event is CloseEvent && CloseEvent( event ).detail == ModalDialog.OK )
+				{
+					var appsDialog : BrowseApplicationsDialog = event.target as BrowseApplicationsDialog;
+					embeddedApplications = appsDialog.selectedAppsPath;
+					
+					validateAppsPaths();
+				}
 			}
 			
 			
@@ -477,26 +513,23 @@
 				
 		</mx:GridRow>
 		
-		<mx:GridRow width="100%" height="22">
+		<mx:GridRow width="100%" height="50">
 			<mx:GridItem width="120" height="100%"
 						 horizontalScrollPolicy="off">
 				
-				<mx:Label text="Embedded application: " 
+				<mx:Label text="Embedded applications: " 
 						  width="120"/>
 				
 			</mx:GridItem>
 			
 			<mx:GridItem width="100%" height="100%">
-				<controls:FileBrowseBox id="embededApplicationBrowseBox"
-									toolTip="Embedded VDOM application (*.xml)"
-									mode="{FileBrowseBox.MODE_OPEN}"
-									defaultPath="{File.desktopDirectory.nativePath}"
-									change="validateAppPath()"
-									select="validateAppPath()"
-									width="100%"
-									filterArray="{[new FileFilter('Application XML', '*.xml')]}"/>
+				<mx:HBox width="100%" height="100%">
+					<mx:TextArea id="appsTextArea" editable="false" width="100%" height="100%"/>
+					<mx:Button label="Edit" 
+							   click="{BrowseApplicationsDialog.show(embeddedApplications, browseAppsDialogCloseHandler)}"/>
+				</mx:HBox>
 			</mx:GridItem>
-			
+				
 		</mx:GridRow>
 		
 		<mx:GridRow width="100%" height="22">

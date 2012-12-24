@@ -88,11 +88,11 @@ package net.vdombox.powerpack.sdkcompiler
 			argVector.push(FileUtils.convertPathForCMD(powerPackProjectStoragePath));
 			argVector.push("assets/template.xml");
 			
-			if (embeddedAppFileName)
+			for each (var appFileName:String in embeddedAppsFileNames)
 			{
 				argVector.push("-C");
 				argVector.push(FileUtils.convertPathForCMD(powerPackProjectStoragePath));
-				argVector.push(embeddedAppFileName);
+				argVector.push(appFileName);
 			}
 			
 			return argVector.join(" ");

@@ -6,12 +6,12 @@ package net.vdombox.powerpack.template
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 	import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
 	import net.vdombox.powerpack.lib.player.template.TemplateProject;
+	import net.vdombox.powerpack.utils.GeneralUtils;
 	
 	public class BuilderTemplateProject extends TemplateProject
 	{
 		public static const DEFAULT_OUTPUT_FOLDER_PATH	: String = File.desktopDirectory.nativePath;
 		public static const DEFAULT_OUTPUT_FILE_NAME	: String = "newProject";
-		//public static const DEFAULT_EMBEDED_APP_PATH	: String = "";
 		
 		public function BuilderTemplateProject()
 		{
@@ -21,25 +21,21 @@ package net.vdombox.powerpack.template
 		//
 		//	embededAppPath
 		//
-		private var _embededAppPath : String;
+		private var _embededApps : Array;
 		
-		public function set embededAppPath( value : String ) : void
+		public function set embededApps( value : Array ) : void
 		{
-//			if (!value)
-//				value = DEFAULT_EMBEDED_APP_PATH;
-			
-			if ( _embededAppPath != value )
+			if ( !GeneralUtils.equalArrays(embededApps, value) )
 			{
 				modified = true;
-				_embededAppPath = value;
+				_embededApps = value;
 			}
 		}
 		
 		[Bindable]
-		public function get embededAppPath() : String
+		public function get embededApps() : Array
 		{
-			//return Utils.getStringOrDefault( _embededAppPath, DEFAULT_EMBEDED_APP_PATH );
-			return _embededAppPath;
+			return _embededApps;
 		}
 		
 		
@@ -101,7 +97,12 @@ package net.vdombox.powerpack.template
 			
 			projectXML.appendChild(<outputFolderPath>{outputFolderPath}</outputFolderPath>);
 			projectXML.appendChild(<outputFileName>{outputFileName}</outputFileName>);
-			projectXML.appendChild(<embededAppPath>{embededAppPath}</embededAppPath>);
+			
+			var embededAppsXml : XML = new XML("<embededApps/>");
+			for each (var appPath:String in embededApps)
+				embededAppsXml.appendChild(<embededAppPath>{appPath}</embededAppPath>);
+			
+			projectXML.appendChild(embededAppsXml);
 			
 			return projectXML;
 		}
@@ -112,7 +113,27 @@ package net.vdombox.powerpack.template
 			
 			outputFolderPath	= projectXML.outputFolderPath;
 			outputFileName		= projectXML.outputFileName;
-			embededAppPath		= projectXML.embededAppPath;
+			
+			var appPath : String;
+			embededApps=[];
+			if (projectXML.embededApps.length() == 0)
+			{
+				appPath = projectXML.embededAppPath;
+				if (appPath && appPath.length > 0)
+					embededApps	= [appPath];
+			}
+			else
+			{
+				for each (var appPathXML : XML in projectXML.embededApps.embededAppPath)
+				{	
+					appPath = appPathXML.toString();
+					if (!appPath)
+						continue;
+					
+					embededApps.push(appPath);
+				}
+			}
+			
 			
 		}
 		
@@ -122,7 +143,11 @@ package net.vdombox.powerpack.template
 			
 			outputFolderPath	= xml.outputFolder;
 			outputFileName		= xml.outputFileName;
-			embededAppPath		= xml.appPath;
+			
+			embededApps			= [];
+			var appPath : String = xml.appPath;
+			if (appPath && appPath.length > 0)
+				embededApps			= [appPath];
 		}
 		
 		

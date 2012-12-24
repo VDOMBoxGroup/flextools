@@ -33,7 +33,7 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		protected var process : NativeProcess;
 
-		protected var embeddedAppFileName : String;
+		protected var embeddedAppsFileNames : Array;
 		
 		protected var flex_sdk4_1Path : String;
 		protected var airSDKForLinuxPath : String;
@@ -97,7 +97,7 @@ package net.vdombox.powerpack.sdkcompiler
 		// ---------- PREPARE FOR BUILD ... ---------------------
 		private function prepareForBuild () : Boolean
 		{
-			return prepareInstallerApp() && prepareTemplateXMLFile() && prepareInstallerPropertiesXml();
+			return prepareEmbeddedApplications() && prepareTemplateXMLFile() && prepareInstallerPropertiesXml();
 		}
 		
 		private function prepareTemplateXMLFile() : Boolean
@@ -169,25 +169,34 @@ package net.vdombox.powerpack.sdkcompiler
 			return true;
 		}
 		
-		private function prepareInstallerApp() : Boolean
+		private function prepareEmbeddedApplications () : Boolean
 		{
-			var embededAppPath : String = project.embededAppPath;
+			embeddedAppsFileNames = [];
+			for each (var appPath:String in project.embededApps)
+			{
+				if (!prepareEmbeddedApp(appPath))
+					return false;
+			}
 			
-			if (!embededAppPath)
+			return true;
+		}
+		
+		private function prepareEmbeddedApp(appPath:String) : Boolean
+		{
+			if (!appPath)
 				return true;
 			
-			embeddedAppFileName = FileUtils.getFileName(embededAppPath);
+			var appFileName:String = FileUtils.getFileName(appPath);
 			
-			var compressedEmbeddedApp : String = compressEmbeddedApplication();
+			var compressedEmbeddedApp : String = compressEmbeddedApplication(appPath);
 			if (!compressedEmbeddedApp)
 			{
-				embeddedAppFileName = "";
 				return false;
 			}
 			
 			try
 			{
-				var targetAppFile : File = File.applicationStorageDirectory.resolvePath(embeddedAppFileName);
+				var targetAppFile : File = File.applicationStorageDirectory.resolvePath(appFileName);
 				
 				var fileStream : FileStream = new FileStream();
 				fileStream.open(targetAppFile, FileMode.WRITE);
@@ -201,22 +210,21 @@ package net.vdombox.powerpack.sdkcompiler
 			{
 				fileStream.close();
 				
-				embeddedAppFileName = "";
-				
-				//sendEvent(SDKCompilerEvent.BUILD_ERROR, "Error when trying to copy embedded application xml");
-				var msg:String = "Compressing embedded application:\n\n" + e.message.toString();
+				var msg:String = "Compressing application '"+appFileName+"':\n\n" + e.message.toString();
 				
 				sendEvent(SDKCompilerEvent.BUILD_ERROR, msg);
+				
 				return false;
 			}
 			
+			embeddedAppsFileNames.push(appFileName);
 			return true;
 			
 		}
 		
-		private function compressEmbeddedApplication () : String
+		private function compressEmbeddedApplication (appPath:String) : String
 		{
-			var sourceAppFile : File = new File(project.embededAppPath);
+			var sourceAppFile : File = new File(appPath);
 			
 			if (!sourceAppFile || !sourceAppFile.exists)
 			{
@@ -240,7 +248,7 @@ package net.vdombox.powerpack.sdkcompiler
 			{
 				fileStream.close();
 				
-				msg = "Compressing embedded application:\n\n" + error.message.toString();
+				msg = "Compressing application '"+sourceAppFile.name+"':\n\n" + error.message.toString();
 				sendEvent(SDKCompilerEvent.BUILD_ERROR, msg);
 				
 				return "";
@@ -372,11 +380,11 @@ package net.vdombox.powerpack.sdkcompiler
 			argVector.push(powerPackProjectStoragePath);
 			argVector.push("assets/template.xml");
 			
-			if (embeddedAppFileName)
+			for each (var appFileName:String in embeddedAppsFileNames)
 			{
 				argVector.push("-C");
 				argVector.push(powerPackProjectStoragePath);
-				argVector.push(embeddedAppFileName);
+				argVector.push(appFileName);
 			}
 			
 			return argVector;

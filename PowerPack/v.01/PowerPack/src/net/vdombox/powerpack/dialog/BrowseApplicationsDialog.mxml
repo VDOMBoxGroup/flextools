@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dialog:ModalDialog xmlns:mx="http://www.adobe.com/2006/mxml" 
+					xmlns:dialog="net.vdombox.powerpack.dialog.*" 
+					xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
+					layout="absolute"
+					verticalScrollPolicy="off"
+					horizontalScrollPolicy="off" 
+					width="300" height="300"
+					title="Embedded applications"
+					creationComplete="creationCompleteHandler(event)">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.powerpack.lib.extendedapi.controls.FileBrowseBox;
+			import net.vdombox.powerpack.lib.extendedapi.controls.RemovableFileBrowseBox;
+			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
+			import net.vdombox.powerpack.sdkcompiler.SDKCompilerParamsChecker;
+			
+			private static var _dialog	: BrowseApplicationsDialog;
+			
+			private const filterArray : Array = [new FileFilter('Application XML', '*.xml')];
+			
+			private var compilerParamsChecker	: SDKCompilerParamsChecker = SDKCompilerParamsChecker.getInstance();
+			
+			public var selectedAppsPath : Array = [];
+			
+			static public function show(files:Array, closeHandler:Function = null) : BrowseApplicationsDialog
+			{
+				if ( !_dialog || _dialog.closed )
+				{
+					_dialog = new BrowseApplicationsDialog();
+					_dialog.selectedAppsPath = files;
+					
+					_dialog.open();
+					_dialog.show( OK|CANCEL, closeHandler );
+				}
+				else
+				{
+					_dialog.activate();
+				}
+				
+				return _dialog;
+			}
+			
+			protected override function removeDialog( buttonPressed : String ) : void
+			{
+				switch ( buttonPressed )
+				{
+					case BUTTON_NAME_OK:
+					{
+						saveSelectedApplications ();
+						
+						_dialog.closeDetail = ModalDialog.OK;
+						_dialog.close();
+						
+						break;
+					}
+					default:
+					{
+						_dialog.closeDetail = ModalDialog.CANCEL;
+						_dialog.close();
+						break;
+					}
+				}
+			}
+			
+			private function saveSelectedApplications() : void
+			{
+				selectedAppsPath = [];
+				for each (var fileBox : RemovableFileBrowseBox in browseAppsBox.getChildren())
+				{
+					selectedAppsPath.push(fileBox.filePath);
+				}
+			}
+			
+			protected function addAppBox(appPath : String = ""):void
+			{
+				var fileBox : RemovableFileBrowseBox = new RemovableFileBrowseBox();
+				fileBox.percentWidth=100;
+				
+				fileBox.addEventListener(FlexEvent.CREATION_COMPLETE, fileBoxCreationCompleteHandler);
+				fileBox.addEventListener(RemovableFileBrowseBox.EVENT_REMOVE_BOX, removeAppBox);
+				fileBox.addEventListener(Event.CHANGE, appPathChangeHandler);
+				
+				browseAppsBox.addChild(fileBox);
+				
+				if (browseAppsBox.numChildren == 1)
+					fileBox.removable = false;
+				else if (browseAppsBox.numChildren > 1)
+				{
+					var firstFileBox : RemovableFileBrowseBox = browseAppsBox.getChildAt(0) as RemovableFileBrowseBox;
+					firstFileBox.removable = true;
+				}
+				
+				
+				function fileBoxCreationCompleteHandler (event:FlexEvent) : void
+				{
+					fileBox.removeEventListener(FlexEvent.CREATION_COMPLETE, fileBoxCreationCompleteHandler);
+					
+					fileBox.filterArray = filterArray;
+					fileBox.filePath = appPath;
+					
+					validateAppPath(fileBox);
+					
+				}
+					
+			}
+			
+			private function appPathChangeHandler (event : Event) : void
+			{
+				var fileBox : RemovableFileBrowseBox;
+				
+				fileBox = event.target as RemovableFileBrowseBox;
+				
+				validateAppPath(fileBox);
+			}
+			
+			private function validateAppPath (curFileBox:RemovableFileBrowseBox) : void
+			{
+				var errorString : String;
+				
+				curFileBox.validPath = compilerParamsChecker.isValidAppPath(curFileBox.filePath);
+				errorString = curFileBox.validPath ? null : "Incorrect application path.";
+				
+				var curAppFileName : String = FileUtils.getFileName(curFileBox.filePath);
+				var boxFileName : String;
+				for each (var fileBox : RemovableFileBrowseBox in browseAppsBox.getChildren())
+				{
+					if (fileBox == curFileBox)
+						continue;
+					
+					boxFileName = FileUtils.getFileName(fileBox.filePath);
+					if (boxFileName == curAppFileName)
+					{
+						curFileBox.validPath = false;
+						errorString = "Application with the same file name already exists.";
+						break;
+					}
+				}
+				
+				curFileBox.errorString = errorString;
+			}
+			
+			protected function removeAppBox(event : Event):void
+			{
+				if (browseAppsBox.numChildren == 1)
+					return;
+				
+				var fileBox : RemovableFileBrowseBox;
+				fileBox = event.target as RemovableFileBrowseBox;
+				
+				fileBox.removeEventListener(RemovableFileBrowseBox.EVENT_REMOVE_BOX, removeAppBox);
+				fileBox.removeEventListener(Event.CHANGE, appPathChangeHandler);
+				browseAppsBox.removeChild(fileBox);
+				
+				// todo remove
+				if (browseAppsBox.numChildren == 1)
+				{
+					fileBox = browseAppsBox.getChildAt(0) as RemovableFileBrowseBox; 
+					fileBox.removable = false;
+				}
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				if (!selectedAppsPath || selectedAppsPath.length == 0)
+				{
+					addAppBox();
+					return;
+				}
+				
+				for each (var appPath : String in selectedAppsPath)
+					addAppBox(appPath);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10"
+			 verticalGap="10">
+		
+		<mx:Label text="File names must be unique." fontWeight="bold"/>
+		<mx:HRule width="100%"/>
+		<mx:VBox id="browseAppsBox"
+				 horizontalAlign="center"
+				 horizontalScrollPolicy="off"
+				 maxHeight="210"
+				 width="280"/>
+		
+		<mx:Label text="Add another file"
+				  click="{addAppBox()}"
+				  color="blue" fontSize="13" fontWeight="bold" />
+	</mx:VBox>
+	
+	<mx:ControlBar width="100%" height="100%" styleName="dlgFooter">
+	</mx:ControlBar>
+	
+</dialog:ModalDialog>
