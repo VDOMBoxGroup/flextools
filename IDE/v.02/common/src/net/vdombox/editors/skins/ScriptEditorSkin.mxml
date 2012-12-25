@@ -25,7 +25,7 @@
 				vsb.maximum = scriptAreaComponent.maxScrollV;
 				vsb.value = scriptAreaComponent.scrollV;
 
-				hsb.maximum = scriptAreaComponent.maxScrollH / 8.0;
+				hsb.maximum = scriptAreaComponent.maxScrollH / 8.0 + 1;
 				hsb.value = scriptAreaComponent.scrollH / 8.0;
 			}
 

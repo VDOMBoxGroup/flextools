@@ -203,7 +203,7 @@ package net.vdombox.editors.parsers.python
 			resolve( text, pos );
 			var field : Field = resolvedRef;
 
-			if ( !field && bp )
+			if ( !field && bp && bp.names.length > 0 )
 				field = StandardWordsProxy.getFieldByName( bp.names[ bp.names.length - 1 ], LanguageVO.python );
 
 			//we didn't find it

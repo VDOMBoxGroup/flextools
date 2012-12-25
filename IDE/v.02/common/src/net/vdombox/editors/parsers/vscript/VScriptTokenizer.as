@@ -116,7 +116,7 @@ package net.vdombox.editors.parsers.vscript
 				return new VScriptToken( str, Token.NUMBER, pos );
 			}
 			
-			if ( c == "'" || string.substr( pos, 3 ).toLowerCase() == "rem" )
+			if ( c == "'" || string.substr( pos, 3 ).toLowerCase() == "rem" && isWhitespace( string.substr( pos + 3, 1 ) ) )
 			{
 				skipUntilEnd();
 				return new VScriptToken( string.substring( start, pos ), Token.COMMENT, pos );

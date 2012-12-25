@@ -263,7 +263,7 @@ package ro.victordramba.scriptarea
 
 			_scrollV = Math.min( Math.max( 0, value ), _maxScrollV );
 
-			indentLinesShape.y = -_scrollV * _letterBoxHeight;
+			//tf.y = selectionShape.y = selectionShapeRects.y = linesShape.y = indentLinesShape.y = -_scrollV * _letterBoxHeight;
 			
 			updateScrollProps();
 
@@ -1087,6 +1087,9 @@ package ro.victordramba.scriptarea
 
 			tf.htmlText = visibleText;
 			
+			if ( tf.width < tf.textWidth )
+				tf.width = tf.textWidth + 10;
+			
 			setBackgroundSize();
 			
 			function setColorForSpecialText() : String
@@ -1105,16 +1108,17 @@ package ro.victordramba.scriptarea
 				}
 				else if ( o.begin <= _selStart && o.end >= _selStart  && needChangeColorSelected )
 				{
+					var tt : int = o.end < lastPos ? o.end : lastPos;
 					if ( o.end <= _selEnd )
 					{
-						str = "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selStart ) ) + "</font>";
-						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( _selStart, o.end ) ) + "</font>";
+						str = "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( o.begin, firstPos ), Math.max( _selStart, firstPos ) ) ) + "</font>";
+						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( _selStart, firstPos ), tt ) ) + "</font>";
 					}
 					else
 					{
-						str = "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( o.begin, firstPos ), _selStart ) ) + "</font>";
-						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( _selStart, _selEnd ) ) + "</font>";
-						str += "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( _selEnd, o.end ) ) + "</font>";
+						str = "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( o.begin, firstPos ), Math.max( _selStart, firstPos ) ) ) + "</font>";
+						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( _selStart, firstPos ), Math.max( _selEnd, firstPos ) ) ) + "</font>";
+						str += "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( _selEnd, firstPos ),  tt ) ) + "</font>";
 					}
 				}
 				else
