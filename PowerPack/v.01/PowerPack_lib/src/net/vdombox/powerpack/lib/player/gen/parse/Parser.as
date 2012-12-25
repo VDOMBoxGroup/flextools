@@ -39,8 +39,11 @@ public class Parser
 		'convert' : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2 },
 		'loadDataFrom' : { pattern : /^\[n[vscVSA]\]$/, argNum : 1, trans : ['true', 'false'] },
 		'loadData' : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2, trans : ['true', 'false'] },
+		
+		'writeVar' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2, trans : ['SUCCESS', 'ERROR'] },
 		'writeTo' : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
 		'writeVarTo' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2 },
+		
 		'GUID' : { pattern : /^\[n\]$/, argNum : 0 },
 		"mid" : { pattern : /^\[n[viVNA][viVNA][vscVSA]\]$/, argNum : 3 },
 		"replace" : { pattern : /^\[n[vscVSA][vscVSA][vscVSA][vscVSA]\]$/, argNum : 4 },
@@ -52,7 +55,7 @@ public class Parser
 		"alertOC" : { pattern : /^\[n[vscVSA]*\]$/, argNum : -1, trans : ['OK', 'CANCEL'] },
 		"alertYN" : { pattern : /^\[n[vscVSA]*\]$/, argNum : -1, trans : ['YES', 'NO'] },
 		
-		"delay" : { pattern : /^\[n[iN]*\]$/,   argNum : 1 },
+		"delay" : { pattern : /^\[n[viVN]*\]$/,   argNum : 1 },
 		
 		"wholeMethod" : { pattern : /^\[n[vscVSA][vscVSA]*\]$/, argNum : -1, trans : ['Success', 'Error']  },
 		
@@ -68,11 +71,14 @@ public class Parser
 		
 		'httpPost' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2, trans : ['Success', 'Error'] },
 		
+		"strToUpperCase" : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
+		"strToLowerCase" : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
 		
+		//TODO: create descriptions
+		"jsonGetValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
+		"jsonToList" : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
+		 
 		
-		
-		
-
 
 		//*********************
 		// List manipulation

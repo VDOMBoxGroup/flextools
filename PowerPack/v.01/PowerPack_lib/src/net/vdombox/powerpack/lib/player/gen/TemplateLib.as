@@ -1,6 +1,9 @@
 package net.vdombox.powerpack.lib.player.gen
 {
 
+import com.adobe.serialization.json.JSON;
+
+import flash.desktop.JSClipboard;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Graphics;
@@ -60,6 +63,8 @@ import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 import net.vdombox.powerpack.lib.player.popup.Answers.AnswerCreator;
 import net.vdombox.powerpack.lib.player.popup.Question;
+
+import org.hamcrest.object.nullValue;
 
 public dynamic class TemplateLib extends EventDispatcher
 {
@@ -437,6 +442,35 @@ public dynamic class TemplateLib extends EventDispatcher
 		return  xPathQuery.exec( xml );
 	}
 	
+	
+	
+	public function strToUpperCase (value : String) : String
+	{
+		return value.toUpperCase();
+	}
+	
+	public function strToLowerCase (value : String) : String
+	{
+		return  value.toLowerCase();
+	}
+	
+	public function jsonGetValue(value: Object, json : String ) : String
+	{
+		var obj : Object = JSON.decode( json, true );
+		var result : Object = obj[ value ] ? obj[ value ] : null
+			
+		return JSON.encode( result );  
+		
+	}
+	
+	public function jsonToList ( json : String ) : String
+	{
+		var obj : * = JSON.decode( json , true) ;
+		
+		return ListParser.array2List( obj );  
+		
+	}
+		
 
 	public function sub( graph : String, ...args ) : *
 	{
@@ -521,7 +555,7 @@ public dynamic class TemplateLib extends EventDispatcher
 		}
 	}
 	
-	public function progress( value : Number, description : String ) : Function
+	public function progress( value : int, description : String ) : Function
 	{
 		var i : int = 0;
 		var frameWait : int = 5;
@@ -673,6 +707,38 @@ public dynamic class TemplateLib extends EventDispatcher
 		writeVarTo( filePath, data );
 	}
 	
+	public function writeVar( data : *, fileName : String  ) : Function
+	{
+		var fr : FileReference = new FileReference();
+		
+		fr.addEventListener( Event.COMPLETE, comleteHandler );
+		fr.addEventListener( Event.CANCEL, cancelHandler );
+		fr.addEventListener( IOErrorEvent.IO_ERROR, errorHandler);
+		fr.save( data, fileName );
+		
+		function comleteHandler ( event : Event ) : void
+		{
+			setTransition( "SUCCESS" );
+			setReturnValue( "Success" );
+		}
+		
+		function cancelHandler ( event : Event ) : void
+		{
+			setTransition( "ERROR" );
+			setReturnValue( "Canseled" );
+		}
+		
+		function errorHandler ( event : IOErrorEvent ) : void
+		{
+			setTransition( "ERROR" );
+			setReturnValue( event.text );
+		}
+		
+		
+
+		return new Function();	
+	}
+	
 	public function writeVarTo( filePath : String, value : Object ) : void
 	{
 		// TODO: return operation result  ['error' 'description'] ['ok']
@@ -692,7 +758,12 @@ public dynamic class TemplateLib extends EventDispatcher
 		//	fileStream.writeBytes( data );
 		//	fileStream.close();
 		
+		//create the FileReference instance
+		
+		
 	}
+	
+	
 	private function objectToByteArray( value : Object, extension : String  ) : ByteArray
 	{
 		var data : ByteArray = new ByteArray();
