@@ -9,24 +9,25 @@
 
 	<mx:Script>
 		<![CDATA[
+			import mx.collections.HierarchicalData;
 			import mx.events.ListEvent;
 			
 			import net.vdombox.powerpack.lib.player.managers.ContextManager;
 			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 
-		static private var defaultCaptions : Object = {
-			variables_title : "Variables",
-			name : "Name",
-			value : "Value"
-		}
-
-		static private var _classConstructed : Boolean = classConstruct();
-
-		static private function classConstruct() : Boolean
-		{
-			LanguageManager.setSentences( defaultCaptions );
-			return true
-		}
+			static private var defaultCaptions : Object = {
+				variables_title : "Variables",
+				name : "Name",
+				value : "Value"
+			}
+	
+			static private var _classConstructed : Boolean = classConstruct();
+	
+			static private function classConstruct() : Boolean
+			{
+				LanguageManager.setSentences( defaultCaptions );
+				return true
+			}
 			
 			protected function grid_clickHandler(event:MouseEvent):void
 			{
@@ -50,33 +51,52 @@
 					txt.text = selValue.toString();
 			}
 			
+			public function set dataProvider (value : HierarchicalData) : void
+			{
+				grid.dataProvider = value;
+				grid.invalidateList();
+			}
+			
+			public function get dataProvider () : HierarchicalData
+			{
+				return grid.dataProvider as HierarchicalData;
+			}
+			
 		]]>
 	</mx:Script>
-
-	<controls:SuperDataGrid id="grid" designViewDataType="tree"
-							width="100%" height="100%"
-							defaultLeafIcon="{null}"
-							folderOpenIcon="{null}"
-							folderClosedIcon="{null}"
-							change="grid_changeHandler(event)"
-							
-							>
-		<controls:columns>
-			<mx:AdvancedDataGridColumn
+	
+	
+	<mx:VBox width="100%" height="100%">
+		
+		<mx:HBox horizontalAlign="right" width="100%">
+			<mx:Button label="Clear" click="{dataProvider = null;}"/>
+		</mx:HBox>
+		
+		<controls:SuperDataGrid id="grid" designViewDataType="tree"
+								width="100%" height="100%"
+								defaultLeafIcon="{null}"
+								folderOpenIcon="{null}"
+								folderClosedIcon="{null}"
+								change="grid_changeHandler(event)"
+								
+								>
+			<controls:columns>
+				<mx:AdvancedDataGridColumn
 					headerText="{LanguageManager.sentences.name}"
 					dataField="Name"
 					dataTipField="Name"
 					showDataTips="true" />
-			<mx:AdvancedDataGridColumn
+				<mx:AdvancedDataGridColumn
 					headerText="{LanguageManager.sentences.value}"
 					dataField="Value"
 					dataTipField="Value"
 					showDataTips="true" 
 					/>
-			
-		</controls:columns>
-	</controls:SuperDataGrid>
-
+				
+			</controls:columns>
+		</controls:SuperDataGrid>
+	</mx:VBox>
+	
 	<mx:TextArea id="txt" width="100%" editable="false"  />
 
 	<mx:ControlBar visible="false" includeInLayout="false"></mx:ControlBar>

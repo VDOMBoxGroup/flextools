@@ -1103,8 +1103,7 @@
 				arr.push( { Name : "this", Value : curGraphContext.curGraph.name, children : subArr } );
 				arr.push( { Name : "special", Value : "_", children : subArr2 } );
 
-				pnl_variables.grid.dataProvider = new HierarchicalData( arr.sortOn("Name", Array.CASEINSENSITIVE) );
-				pnl_variables.grid.invalidateList();
+				pnl_variables.dataProvider = new HierarchicalData( arr.sortOn("Name", Array.CASEINSENSITIVE) );
 				
 				pnl_log.showLog();
 
@@ -1198,10 +1197,11 @@
 			trace ("switchDebug: " + enable);
 			MenuManager.getInstance().switchDebug(enable);
 			
-			pnl_variables.grid.dataProvider = null;
-			
 			if (enable)
+			{
 				pnl_log.clearLog();
+				pnl_variables.dataProvider = null;
+			}
 			else
 				pnl_log.showLog();
 			
