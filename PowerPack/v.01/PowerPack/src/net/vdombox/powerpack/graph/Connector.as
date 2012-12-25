@@ -1129,6 +1129,10 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		var ls2 : LineSegment = new LineSegment( _connectorPoly[2], _connectorPoly[3] );
 
 		var crossP : Point = ls1.intersection( ls2, false );
+		
+		if (!crossP) 
+			return;
+		
 		var midP : Point = Point.interpolate( crossP, _connectorPoly[1], 0.6 );
 
 		if ( focusColor >= 0 && _enabled )

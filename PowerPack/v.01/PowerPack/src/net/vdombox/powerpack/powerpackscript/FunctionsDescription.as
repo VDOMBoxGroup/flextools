@@ -57,6 +57,13 @@ package net.vdombox.powerpack.powerpackscript
 										  "<b>Syntax:</b>\n" +
 										  "[loadData $DialogLabel $FileFilter]\n\n" +
 										  "* $FileFilter example: '*.xml; *.txt',\n",
+				
+				'writeVar' 				: "<b>Description:</b>\n" +
+										  "Write the VARIABLE parameter into a file\n" +
+										  "specified by FileName.\n" +
+										  "Will showed save dialog\n\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[writeVarTo  'VARIABLE' 'FileName']",
 
 				'writeTo'				: "<b>Description:</b>\n" +
 										  "Writes the result of the current state of the graph\n" +
@@ -171,7 +178,17 @@ package net.vdombox.powerpack.powerpackscript
 										  "'var1=value1&var2=value2&...&varN=valueN'\n" +
 										  "<b>Syntax:</b>\n" +
 										  "[httpPost URL REQUEST]",
+										  
+				'strToUpperCase'				: "<b>Description:</b>\n" +
+										  "Returns a copy of this string, with all lowercase characters converted \n" +
+										  "to uppercase. The original string is unmodified." +
+										  "[ strToUpperCase STRING ]",
 				
+				'strToLowerCase'				: "<b>Description:</b>\n" +
+										  "Returns a copy of this string, with all lowercase characters converted \n" +
+										  "to lowercase. The original string is unmodified." +
+										  "[ strToLowerCase STRING ]",
+										  
 				//*********************
 				// List manipulation
 				//*********************
