@@ -190,6 +190,7 @@
 		
 		<mx:Label text="Add another file"
 				  click="{addAppBox()}"
+				  textDecoration="underline"
 				  color="blue" fontSize="13" fontWeight="bold" />
 	</mx:VBox>
 	
