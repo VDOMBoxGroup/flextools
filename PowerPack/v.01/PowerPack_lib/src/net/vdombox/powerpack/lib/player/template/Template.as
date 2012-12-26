@@ -190,6 +190,7 @@ package net.vdombox.powerpack.lib.player.template
 		{
 			_xml = value;
 			
+			version = _xml.version;
 			convertXMLToProjects(_xml);
 			
 			clearOldProjectVariant();
@@ -215,6 +216,40 @@ package net.vdombox.powerpack.lib.player.template
 			delete xml.id;
 			delete xml.description;
 			delete xml.picture;
+		}
+		
+		public static const VERSION_FORMAT : RegExp = /^(\d{1,3}\.){2}\d+$/;
+		public static const MIN_VERSION : String = "1.3.1";
+		private var _version : String = "";
+		
+		public function set version (value : String) : void
+		{
+			if (!VERSION_FORMAT.test(value))
+				return;
+			
+			if (_version != value)
+			{
+				modified = true;
+				
+				_version = value;
+				xml.version = version;
+			}
+		}
+		
+		public function get version () : String
+		{
+			if (!VERSION_FORMAT.test(_version))
+				return MIN_VERSION;
+			
+			return Utils.getStringOrDefault( _version, MIN_VERSION )
+		}
+		
+		public function increaseVersion () : void
+		{
+			var versionNumbers : Array = version.split(".");
+			var versionNewLastNumber : int = int(versionNumbers[2]) + 1;
+			
+			version = versionNumbers[0] + "." + versionNumbers[1] + "." + versionNewLastNumber;
 		}
 		
 		//----------------------------------
