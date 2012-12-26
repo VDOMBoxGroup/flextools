@@ -121,6 +121,8 @@ package net.vdombox.powerpack.template
 				// update tpl UID
 				_xml.@ID = UIDUtil.createUID();
 				
+				increaseVersion();	
+				
 				fillProjects();
 				
 				// cash template structure

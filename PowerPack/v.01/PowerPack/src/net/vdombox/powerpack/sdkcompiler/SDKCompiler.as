@@ -150,7 +150,7 @@ package net.vdombox.powerpack.sdkcompiler
 				installerXML.id = "net.vdom." + project.installerId;
 				installerXML.name = project.name;
 				installerXML.filename = project.name;
-				installerXML.version = Utils.getApplicationVersion();
+				installerXML.version = currentTemplate.version;
 				
 				installerXML.normalize();
 				

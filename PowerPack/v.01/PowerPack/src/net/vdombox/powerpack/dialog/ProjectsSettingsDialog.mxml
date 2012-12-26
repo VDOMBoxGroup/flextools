@@ -23,7 +23,7 @@
 			import mx.events.ListEvent;
 			import mx.utils.StringUtil;
 			
-			import net.vdombox.powerpack.control.ProjectProperties;
+			import net.vdombox.powerpack.control.ProjectPropertiesBox;
 			import net.vdombox.powerpack.graph.GraphCanvas;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileUtils;
@@ -173,7 +173,7 @@
 				vsProperties.selectedChild.setFocus();
 			}
 			
-			private function saveSettings (project : ProjectProperties = null) : void
+			private function saveSettings (project : ProjectPropertiesBox = null) : void
 			{
 				if (project)
 				{
@@ -181,7 +181,7 @@
 					return;
 				}
 					
-				for each (var projectProperties : ProjectProperties in vsProperties.getChildren())
+				for each (var projectProperties : ProjectPropertiesBox in vsProperties.getChildren())
 				{
 					projectProperties.saveSettings();
 				}
@@ -199,13 +199,13 @@
 			
 			private function addNewProjectProperties (project : BuilderTemplateProject) : void
 			{
-				var projectPropertiesControl : ProjectProperties;
+				var projectPropertiesControl : ProjectPropertiesBox;
 				
-				projectPropertiesControl = new ProjectProperties();
+				projectPropertiesControl = new ProjectPropertiesBox();
 				projectPropertiesControl.project = project;
 				projectPropertiesControl.graphs = graphs;
 				
-				projectPropertiesControl.addEventListener(ProjectProperties.EVENT_INITIAL_GRAPH_CHANGED, projectInitialGraphChangedHandler);
+				projectPropertiesControl.addEventListener(ProjectPropertiesBox.EVENT_INITIAL_GRAPH_CHANGED, projectInitialGraphChangedHandler);
 				
 				vsProperties.addChild(projectPropertiesControl);
 				
@@ -228,7 +228,7 @@
 			
 			private function projectPropertiesCreationCompleteHandler (event : FlexEvent) : void
 			{
-				var projectPropertiesControl : ProjectProperties = event.target as ProjectProperties;
+				var projectPropertiesControl : ProjectPropertiesBox = event.target as ProjectPropertiesBox;
 				
 				projectPropertiesControl.removeEventListener(FlexEvent.CREATION_COMPLETE, projectPropertiesCreationCompleteHandler);
 				
@@ -245,7 +245,7 @@
 			
 			protected function buttonApply_clickHandler(event:MouseEvent):void
 			{
-				saveSettings(vsProperties.selectedChild as ProjectProperties);
+				saveSettings(vsProperties.selectedChild as ProjectPropertiesBox);
 			}
 			
 		]]>

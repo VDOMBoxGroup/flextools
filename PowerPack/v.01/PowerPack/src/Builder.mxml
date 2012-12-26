@@ -102,7 +102,7 @@
 			import net.vdombox.powerpack.*;
 			import net.vdombox.powerpack.control.controlbar.ControlBarEvent;
 			import net.vdombox.powerpack.dialog.AboutProgramDialog;
-			import net.vdombox.powerpack.dialog.AirBuildProperties;
+			import net.vdombox.powerpack.dialog.AirBuildDialog;
 			import net.vdombox.powerpack.dialog.ImportFromTpl;
 			import net.vdombox.powerpack.dialog.ModalDialog;
 			import net.vdombox.powerpack.dialog.ProjectsSettingsDialog;
@@ -470,7 +470,7 @@
 			} 
 			else
 			{
-				AirBuildProperties.show();
+				AirBuildDialog.show();
 			}
 				
 			
@@ -489,7 +489,7 @@
 				
 				processSavedTpl();
 				
-				AirBuildProperties.show();
+				AirBuildDialog.show();
 			}
 			
 		}
