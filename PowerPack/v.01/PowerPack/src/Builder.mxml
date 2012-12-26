@@ -1194,7 +1194,6 @@
 		
 		public function switchDebug( enable : Boolean = true ) : void
 		{
-			trace ("switchDebug: " + enable);
 			MenuManager.getInstance().switchDebug(enable);
 			
 			if (enable)

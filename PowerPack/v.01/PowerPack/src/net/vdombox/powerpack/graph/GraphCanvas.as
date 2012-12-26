@@ -817,7 +817,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		}
 		else if ( clipboard.hasFormat( ClipboardFormats.BITMAP_FORMAT ) )
 		{
-			trace ("3");
 			CursorManager.setBusyCursor();
 
 			ProgressManager.show( ProgressManager.DIALOG_MODE, false );
@@ -849,7 +848,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		}
 		else if ( clipboard.hasFormat( ClipboardFormats.FILE_LIST_FORMAT ) )
 		{
-			trace ("4");
 			return;
 		}
 	}

@@ -179,15 +179,25 @@ package net.vdombox.powerpack.powerpackscript
 										  "<b>Syntax:</b>\n" +
 										  "[httpPost URL REQUEST]",
 										  
-				'strToUpperCase'				: "<b>Description:</b>\n" +
+				'strToUpperCase'		: "<b>Description:</b>\n" +
 										  "Returns a copy of this string, with all lowercase characters converted \n" +
 										  "to uppercase. The original string is unmodified." +
 										  "[ strToUpperCase STRING ]",
 				
-				'strToLowerCase'				: "<b>Description:</b>\n" +
+				'strToLowerCase'		: "<b>Description:</b>\n" +
 										  "Returns a copy of this string, with all lowercase characters converted \n" +
-										  "to lowercase. The original string is unmodified." +
+										  "to lowercase. The original string is unmodified.\n" +
+										  "<b>Syntax:</b>\n" +
 										  "[ strToLowerCase STRING ]",
+										  
+				'compareVersions'		: "<b>Description:</b>\n" + 
+										  "Compares 2 version's string. Returns empty string.\n" +
+										  "Possible 4 variants of transition: \n" +
+										  "'Less', 'Larger', 'Equal', 'Error'.\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[ compareVersions   Version_1   Version_2 ]\n" +
+										  "<b>Version format:</b> &lt;Number&gt;(.&lt;Number&gt;)* \n" +
+										  "<b>Example:</b> [compareVersions '1.1.4589' '1.2.1542']",
 										  
 				//*********************
 				// List manipulation

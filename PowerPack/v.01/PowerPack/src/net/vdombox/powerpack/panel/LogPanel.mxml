@@ -14,14 +14,12 @@
 			
 			public function clearLog() : void
 			{
-				trace ("clearLog");
 				grid.dataProvider = null;
 				grid.invalidateList();
 			}
 			
 			public function showLog() : void
 			{
-				trace ("showLog");
 				grid.dataProvider = new HierarchicalData( logArr );
 				grid.invalidateList();
 			}
