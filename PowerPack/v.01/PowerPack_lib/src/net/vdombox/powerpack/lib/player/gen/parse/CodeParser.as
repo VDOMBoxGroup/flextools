@@ -278,6 +278,8 @@ public class CodeParser
 		}
 
 		// execute generated code
+		
+		fragment.lastExecutedFragment = fragment;
 		fragment.retValue = Parser.eval( code, contexts );
 		contexts[0][fragment.retVarName] = fragment.retValue;
 
@@ -291,7 +293,7 @@ public class CodeParser
 		}
 
 		fragment.executed = true;
-		fragment.lastExecutedFragment = fragment;
+		
 	}
 
 	public static function executeBlock( block : ParsedBlock, contexts : Array, stepReturn : Boolean = false ) : void

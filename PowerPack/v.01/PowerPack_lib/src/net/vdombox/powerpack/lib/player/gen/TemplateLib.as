@@ -36,6 +36,7 @@ import flash.utils.setTimeout;
 
 import memorphic.xpath.XPathQuery;
 
+import mx.binding.utils.BindingUtils;
 import mx.controls.Alert;
 import mx.core.Application;
 import mx.events.CloseEvent;
@@ -572,7 +573,7 @@ public dynamic class TemplateLib extends EventDispatcher
 			if ( i > frameWait )
 			{
 				Application.application.removeEventListener( Event.ENTER_FRAME, enterFrameHandler);
-				setReturnValue(value);
+				setReturnValue("");
 			}
 			
 		}
@@ -987,6 +988,63 @@ public dynamic class TemplateLib extends EventDispatcher
 		var vars : Object = Application.application.parameters;
 		
 		return vars.hasOwnProperty( varName ) ? vars [varName] : defaultValue;
+	}
+	
+	public function compareVersions (version1:String, version2:String) : void
+	{
+		var versionPattern : RegExp = /^(\d+)(\.(\d+))*$/;
+		
+		if (!versionPattern.test(version1) || !versionPattern.test(version2))
+		{
+			completeComparing("Error");
+			return;
+		}
+		
+		if (version1 == version2)
+		{
+			completeComparing("Equal");
+			return;
+		}
+		
+		var version1NumberParts : Array = version1.split(".");
+		var version2NumberParts : Array = version2.split(".");
+		
+		var len : Number = Math.min(version1NumberParts.length, version2NumberParts.length);
+		
+		for (var i:int=0; i<len; i++)
+		{
+			if (version1NumberParts[i] == version2NumberParts[i])
+				continue;
+			
+			if (version1NumberParts[i] < version2NumberParts[i])
+			{
+				completeComparing("Less");
+				return;
+			}
+			
+			if (version1NumberParts[i] > version2NumberParts[i])
+			{
+				completeComparing("Larger");
+				return;
+			}
+		}
+		
+		if (version1NumberParts.length == version2NumberParts.length)
+			completeComparing("Equal");
+		else
+		{
+			if (version1NumberParts.length > version2NumberParts.length)
+				completeComparing("Larger");
+			else
+				completeComparing("Less");
+		}
+		
+		function completeComparing (transition:String) : void
+		{
+			setTransition(transition);
+			setReturnValue("");
+		}
+		
 	}
 	
 	private function processFillList( list : String, g : Graphics, rect : Rectangle ) : *

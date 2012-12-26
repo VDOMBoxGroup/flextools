@@ -661,8 +661,6 @@ public class SuperNativeMenuItem extends NativeMenuItem
     
 	private function keyDown(event:KeyboardEvent):void
 	{
-		trace ("[SuperNativeMenuItem] keyDown");
-		
 		var isWin:Boolean = FileUtils.OS == FileUtils.OS_WINDOWS;
 		var isMac:Boolean = FileUtils.OS == FileUtils.OS_MAC;		
 			
@@ -683,7 +681,6 @@ public class SuperNativeMenuItem extends NativeMenuItem
 			event.stopPropagation();
 			event.preventDefault();
 		
-			trace ("[SuperNativeMenuItem] keyDown: SELECT");
 			dispatchEvent(new Event(Event.SELECT));
 		}
 	}

@@ -74,10 +74,11 @@ public class Parser
 		"strToUpperCase" : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
 		"strToLowerCase" : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
 		
+		'compareVersions' : { pattern : /^\[n[vscVS][vscVS]\]$/, argNum : 2, trans : ['Less', 'Larger', 'Equal', 'Error'] },
+		
 		//TODO: create descriptions
 		"jsonGetValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
 		"jsonToList" : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
-		 
 		
 
 		//*********************

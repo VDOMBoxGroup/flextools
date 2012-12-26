@@ -595,7 +595,6 @@ package net.vdombox.powerpack.lib.player.template
 				index ++;
 			}
 			
-			trace ("getProjectIndex: -1");
 			return -1;
 		}
 		

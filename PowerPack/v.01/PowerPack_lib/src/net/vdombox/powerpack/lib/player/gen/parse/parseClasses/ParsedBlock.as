@@ -37,10 +37,7 @@ public class ParsedBlock
 
 	public function set lastExecutedFragment(value:CodeFragment):void
 	{
-		
-			
 		_lastExecutedFragment = value;
-		
 	}
 
 	public function get varPrefix() : String

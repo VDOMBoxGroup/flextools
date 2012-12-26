@@ -529,33 +529,28 @@ public class SuperFlexNativeMenu extends FlexNativeMenu
     	if(SuperNativeMenu(nativeMenu).isProcessing)
     		return;
     	
-        //trace("[FlexNativeMenu] caught Model changed");
         if (ce.kind == CollectionEventKind.ADD)
         {
             dataProviderChanged = true;
             invalidateProperties();
             // should handle elegantly with better performance
-            //trace("[FlexNativeMenu] add event");
         }
         else if (ce.kind == CollectionEventKind.REMOVE)
         {
             dataProviderChanged = true;
             invalidateProperties();
             // should handle elegantly with better performance
-            //trace("[FlexNativeMenu] remove event at:", ce.location);
         }
         else if (ce.kind == CollectionEventKind.REFRESH)
         {
             dataProviderChanged = true;
             dataProvider = dataProvider; //start over
             invalidateProperties();
-            //trace("[FlexNativeMenu] refresh event");
         }
         else if (ce.kind == CollectionEventKind.RESET)
         {
             dataProviderChanged = true;
             invalidateProperties();
-            //trace("[FlexNativeMenu] reset event");
         }
         else if (ce.kind == CollectionEventKind.UPDATE)
         {
@@ -563,7 +558,6 @@ public class SuperFlexNativeMenu extends FlexNativeMenu
             invalidateProperties();
             // should handle elegantly with better performance
             // but can't right now
-            //trace("[FlexNativeMenu] update event");
         }
     }
 }
