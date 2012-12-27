@@ -190,7 +190,9 @@ package net.vdombox.powerpack.lib.player.template
 		{
 			_xml = value;
 			
-			version = _xml.version;
+			if (_xml != null)
+				version = _xml.version;
+			
 			convertXMLToProjects(_xml);
 			
 			clearOldProjectVariant();
