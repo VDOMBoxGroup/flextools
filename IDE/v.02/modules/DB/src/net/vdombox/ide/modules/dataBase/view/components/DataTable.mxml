@@ -148,7 +148,7 @@
 				<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_records' ) }" fontSize="9" />
 				<s:TextInput id="amount" borderColor="#999999" fontWeight="bold" height="20" fontSize="9" width="45" />
 				<button:WorkAreaButton height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_apply' ) }" 
-									   icon="@Embed('assets/commit.png')" click="button1_clickHandler(event)"/>
+									   icon="{ VDOMImage.Commit }" click="button1_clickHandler(event)"/>
 				
 			</s:HGroup>
 		</s:HGroup>

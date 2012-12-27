@@ -843,7 +843,7 @@
 										   icon="{ VDOMImage.DeleteBlack }" click="deleteRow_clickHandler(event)"/>
 					
 					<button:WorkAreaButton id="commit" height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_commit' ) }" 
-										   icon="@Embed('assets/commit.png')" click="commit_clickHandler(event)"/>
+										   icon="{ VDOMImage.Commit }" click="commit_clickHandler(event)"/>
 					
 					<button:WorkAreaButton id="discard" height="20"  label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_discard' ) }" 
 										   icon="@Embed('assets/discard.png')" click="discard_clickHandler(event)"/>
