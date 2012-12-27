@@ -233,21 +233,26 @@
 				var valid_apps_path : Boolean = true;
 				var apps : String = "<div>";
 				var text_color : String = "";
-				var appPath : String;
-				for (var i:int=0; i<embeddedApplications.length; i++)
+				var appFileName : String;
+				var i:int=0;
+				for each (var appPath:String in embeddedApplications)
 				{
 					if (i > 0)
 						apps += "<br>";
 					
-					appPath = embeddedApplications[i];
+					appFileName = !appPath ? "" : FileUtils.getFileName(appPath);
+					if (!appFileName)
+						continue;
+					
 					text_color = "#000000";
 					if (!compilerParamsChecker.isValidAppPath(appPath))
 					{
 						text_color = "#ff0000";
 						valid_apps_path = false;
 					}
-						
-					apps += "<font color='"+text_color+"'>" + FileUtils.getFileName(appPath) + "; <font>";
+					
+					apps += "<font color='"+text_color+"'>" + appFileName + "; <font>";
+					i++;
 				}
 				
 				apps += "</div>";

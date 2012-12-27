@@ -85,15 +85,6 @@
 				
 				browseAppsBox.addChild(fileBox);
 				
-				if (browseAppsBox.numChildren == 1)
-					fileBox.removable = false;
-				else if (browseAppsBox.numChildren > 1)
-				{
-					var firstFileBox : RemovableFileBrowseBox = browseAppsBox.getChildAt(0) as RemovableFileBrowseBox;
-					firstFileBox.removable = true;
-				}
-				
-				
 				function fileBoxCreationCompleteHandler (event:FlexEvent) : void
 				{
 					fileBox.removeEventListener(FlexEvent.CREATION_COMPLETE, fileBoxCreationCompleteHandler);
@@ -103,6 +94,13 @@
 					
 					validateAppPath(fileBox);
 					
+					if (browseAppsBox.numChildren == 1)
+						fileBox.removable = fileBox.filePath != "";
+					else if (browseAppsBox.numChildren > 1)
+					{
+						var firstFileBox : RemovableFileBrowseBox = browseAppsBox.getChildAt(0) as RemovableFileBrowseBox;
+						firstFileBox.removable = true;
+					}
 				}
 					
 			}
@@ -123,12 +121,18 @@
 				curFileBox.validPath = compilerParamsChecker.isValidAppPath(curFileBox.filePath);
 				errorString = curFileBox.validPath ? null : "Incorrect application path.";
 				
+				if (!curFileBox.filePath)
+					return;
+				
 				var curAppFileName : String = FileUtils.getFileName(curFileBox.filePath);
 				var boxFileName : String;
 				for each (var fileBox : RemovableFileBrowseBox in browseAppsBox.getChildren())
 				{
 					if (fileBox == curFileBox)
 						continue;
+					
+					if (!fileBox.filePath)
+						return;
 					
 					boxFileName = FileUtils.getFileName(fileBox.filePath);
 					if (boxFileName == curAppFileName)
@@ -144,9 +148,6 @@
 			
 			protected function removeAppBox(event : Event):void
 			{
-				if (browseAppsBox.numChildren == 1)
-					return;
-				
 				var fileBox : RemovableFileBrowseBox;
 				fileBox = event.target as RemovableFileBrowseBox;
 				
@@ -154,12 +155,16 @@
 				fileBox.removeEventListener(Event.CHANGE, appPathChangeHandler);
 				browseAppsBox.removeChild(fileBox);
 				
-				// todo remove
 				if (browseAppsBox.numChildren == 1)
 				{
 					fileBox = browseAppsBox.getChildAt(0) as RemovableFileBrowseBox; 
-					fileBox.removable = false;
+					fileBox.removable = fileBox.filePath != "";
+					return;
 				}
+				
+				if (browseAppsBox.numChildren == 0)
+					addAppBox();
+				
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void

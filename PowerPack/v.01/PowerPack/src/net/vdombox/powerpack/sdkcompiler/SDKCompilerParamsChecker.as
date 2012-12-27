@@ -113,7 +113,12 @@ package net.vdombox.powerpack.sdkcompiler
 			
 			var appsFileNames : Array = [];
 			for each (var path:String in appsPath)
+			{
+				if (path == "")
+					continue;
+				
 				appsFileNames.push(FileUtils.getFileName(path))
+			}
 			
 			if (appsFileNames.length <=1)
 				return true;
