@@ -5,6 +5,7 @@
 		 click="group1_clickHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
 			private var _showed : Boolean = false;
@@ -31,6 +32,9 @@
 				this.x = x;
 				this.y = y;
 				_showed = true;
+				
+				validateNow();
+				
 				PopUpManager.addPopUp( this, owner.parent );
 			}
 			
@@ -47,26 +51,32 @@
 				event.stopImmediatePropagation();
 			}
 			
+			protected function description_updateCompleteHandler(event:FlexEvent):void
+			{
+				this.height = this.description.textHeight < 360 ? this.description.textHeight + 40 : 400;
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:Rect width="100%" height="100%">
+	<s:Rect width="100%" height="100%"
+			radiusX="5" radiusY="5">
 		<s:fill>
-			<s:SolidColor color="#ffffe1"/>
+			<s:SolidColor color="#555555"/>
 		</s:fill>
 	</s:Rect>
 	
 	<s:VGroup width="100%" height="100%" paddingLeft="10" paddingTop="10" paddingRight="10" paddingBottom="10">
 		
-		<s:Label id="transcription" width="100%" />
+		<s:Label id="transcription" width="100%" color="0xFFFFFF" />
 		
 		<mx:TextArea id="description"
 					width="100%" height="100%"
 					borderVisible="false" contentBackgroundAlpha="0"
-					editable="false" />
+					editable="false" color="0xFFFFFF" updateComplete="description_updateCompleteHandler(event)"/>
 		
 	</s:VGroup>
 	

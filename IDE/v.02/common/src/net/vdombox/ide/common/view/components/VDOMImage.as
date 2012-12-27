@@ -170,5 +170,9 @@ package net.vdombox.ide.common.view.components
 		[Embed( source="assets/vdomimage/clear.png" )]
 		public static var Clear : Class;
 		
+		[Bindable]
+		[Embed( source="assets/vdomimage/commit.png" )]
+		public static var Commit : Class;
+		
 	}
 }
