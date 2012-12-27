@@ -1,6 +1,8 @@
 package net.vdombox.ide.modules.wysiwyg.view.components.windows
 {
 	import flash.display.DisplayObject;
+	import flash.display.NativeWindowSystemChrome;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.filters.ColorMatrixFilter;
@@ -9,22 +11,25 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
 	
-	import mx.controls.NumericStepper;
 	import mx.controls.SWFLoader;
 	import mx.core.UIComponent;
 	import mx.events.CloseEvent;
+	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ColorHSB;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ColorPickerCanvas;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ColorPickerWindowSkin;
+	import net.vdombox.utils.WindowManager;
 	
+	import spark.components.NumericStepper;
 	import spark.components.RadioButton;
 	import spark.components.TextInput;
-	import spark.components.TitleWindow;
+	import spark.components.VGroup;
+	import spark.components.Window;
 
-	public class ColorPickerWindow extends TitleWindow
+	public class ColorPickerWindow extends Window
 	{
 
 
@@ -59,8 +64,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[Embed( source = 'assets/colorPicker/assets.swf', symbol = 'MarkerRight' )]
 		public var cc_r_marker : Class;
 
-
-
+		
 		[SkinPart( required = "true" )]
 		public var rb_r : RadioButton;
 
@@ -96,46 +100,65 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 		/*[SkinPart( required="true" )]
 		public var osi_view:SWFLoader;*/
+		
+		[SkinPart( required = "true" )]
+		public var HSBGroup : VGroup;
+		
+		[SkinPart( required = "true" )]
+		public var RGBGroup : VGroup;
 
 		[SkinPart( required = "true" )]
 		public var hexrgb : TextInput;
 
 		[SkinPart( required = "true" )]
-		public var tx_r : mx.controls.NumericStepper;
+		public var tx_r : NumericStepper;
 
 		[SkinPart( required = "true" )]
-		public var tx_g : mx.controls.NumericStepper;
+		public var tx_g : NumericStepper;
 
 		[SkinPart( required = "true" )]
-		public var tx_b : mx.controls.NumericStepper;
+		public var tx_b : NumericStepper;
 
 		[SkinPart( required = "true" )]
-		public var tx_H : mx.controls.NumericStepper;
+		public var tx_H : NumericStepper;
 
 		[SkinPart( required = "true" )]
-		public var tx_S : mx.controls.NumericStepper;
+		public var tx_S : NumericStepper;
 
 		[SkinPart( required = "true" )]
-		public var tx_B : mx.controls.NumericStepper;
+		public var tx_B : NumericStepper;
 
 		private static var wnd : ColorPickerWindow = null;
-
-		private var m_parent : DisplayObject       = null;
 
 		private var position : Object              = { x: 0, y: 0, p: 0 };
 
 		public function ColorPickerWindow()
 		{
 			super();
+			
+			systemChrome = NativeWindowSystemChrome.NONE;
+			transparent = true;
+			
+			width = 460;
+			height = 380;
+			
+			minWidth = 460;
+			minHeight = 380;
+			
+			this.setFocus();
+			
+			addEventListener( Event.CLOSE, closeHandler, false, 0, true );
+			
 			on_initialize();
-			//start_init();
+			
+			addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
 		}
 
 		public function on_initialize() : void
 		{
 			var i : uint = 0; //uint(App.get_so_prop("color_picker_window_mode", ""));	
 
-			mode = ( i >> 8 ) & 1;
+			mode = 1;//( i >> 8 ) & 1;
 
 			var sel : uint = i & 0xFF;
 
@@ -153,6 +176,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			super.stylesInitialized();
 			this.setStyle( "skinClass", ColorPickerWindowSkin );
 		}
+		
+		
+		private function creationCompleteHandler( event : FlexEvent ) : void
+		{
+			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+			start_init();
+		}
+		
 
 		public function start_init() : void
 		{
@@ -657,6 +688,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			position = rgb_to_position( color, sel_rgb );
 			update_hex_rgb();
 			redraw_bars();
+			
+			HSBGroup.alpha = 0.25;
+			RGBGroup.alpha = 1;
 		}
 
 
@@ -686,6 +720,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			position = hsb_to_position( hsb, sel_hsb );
 			update_hex_rgb();
 			redraw_bars();
+			
+			HSBGroup.alpha = 1;
+			RGBGroup.alpha = 0.25;
 		}
 
 
@@ -746,31 +783,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 		private var f_apply_flag : Boolean         = false;
 
-		public static function show_window( parent : DisplayObject, colorValue : String, modal : Boolean ) : void
-		{
-			if ( wnd == null )
-			{
-				wnd = new ColorPickerWindow();
-				wnd.addEventListener( mx.events.CloseEvent.CLOSE, on_close_event );
-			}
-
-			wnd.m_parent = parent;
-			wnd.colorValue = wnd.oldColorValue = colorValue;
-			
-			var colorInNumber : uint = uint( ( colorValue == "" ) ? "0" : "0x" + colorValue );
-			wnd._color = wnd.old_color = colorInNumber;
-
-			if ( !wnd.isPopUp )
-			{
-				PopUpManager.addPopUp( wnd, DisplayObject( UIComponent( parent ).parentApplication ), modal );
-				PopUpManager.centerPopUp( wnd );
-			}
-			else
-			{
-				PopUpManager.bringToFront( wnd );
-				wnd.start_init();
-			}
-		}
 		
 		public function ok_close_window() : void
 		{
@@ -788,18 +800,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			dispatchEvent( new CloseEvent( mx.events.CloseEvent.CLOSE ) );
 		}
 
-		public static function hide_window() : void
+		public function hide_window() : void
 		{
-			if ( wnd != null )
-				wnd.close_window();
+			close_window();
 		}
 
 		private function with_last_preved() : void
 		{
 			if ( f_apply_flag )
 			{
-				if ( m_parent != null )
-					m_parent.dispatchEvent( new ColorPickerEvent( ColorPickerEvent.APPLY, _color, hexrgb.text ) );
+				dispatchEvent( new ColorPickerEvent( ColorPickerEvent.APPLY, _color, hexrgb.text ) );
 				return;
 			}
 
@@ -810,19 +820,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				colorValue = oldColorValue;
 			}
 
-			if ( m_parent != null )
-				m_parent.dispatchEvent( new ColorPickerEvent( "cancel", _color, hexrgb.text ) );
-		}
-
-		private static function on_close_event( event : CloseEvent ) : void
-		{
-			if ( wnd == null )
-				return;
-
-			wnd.with_last_preved();
 			
-			PopUpManager.removePopUp( wnd );
-			wnd = null;
+			dispatchEvent( new ColorPickerEvent( "cancel", _color, hexrgb.text ) );
 		}
 
 		public function on_ccc_mouse_down( event : MouseEvent ) : void
@@ -1020,6 +1019,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			}
 
 			return s;
+		}
+		
+		public function closeHandler(event:Event) : void
+		{
+			removeEventListener( Event.CLOSE, closeHandler );
+			
+			with_last_preved();
+			
+			WindowManager.getInstance().removeWindow(this);
 		}
 	}
 }

@@ -15,8 +15,11 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.core.UIComponent;
+			
 			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.windows.ColorPickerWindow;
+			import net.vdombox.utils.WindowManager;
 			[Bindable]
 			private var _color : String = "0";
 			
@@ -24,13 +27,11 @@
 			private var _colorInNumber : uint = 0;
 			private var colorPicker:ColorPicker;
 			
+			public var colorPickerWindow : ColorPickerWindow;
+			
 			public function ColorPickerInit():void
 			{
 				buttonMode = true;
-				
-				addEventListener( MouseEvent.CLICK, mouseClickandler );
-				
-				addEventListener( ColorPickerEvent.APPLY, applyHandler );
 			}
 			
 			[Bindable( event="valueCommit" )]
@@ -53,7 +54,18 @@
 			
 			public function mouseClickandler( event : MouseEvent ) : void
 			{
-				ColorPickerWindow.show_window( this, _color, true );
+				colorPickerWindow = new ColorPickerWindow();
+				
+				colorPickerWindow.colorValue = colorPickerWindow.oldColorValue = _color;
+				
+				var colorInNumber : uint = uint( ( _color == "" ) ? "0" : "0x" + _color );
+				colorPickerWindow._color = colorPickerWindow.old_color = colorInNumber;
+				
+				colorPickerWindow.title = resourceManager.getString( 'Wysiwyg_General', 'color_picker_window_title' );		
+				
+				colorPickerWindow.addEventListener( ColorPickerEvent.APPLY, applyHandler, false, 0, true );
+				
+				WindowManager.getInstance().addWindow(colorPickerWindow, UIComponent( UIComponent(parent).parentApplication ), true);
 			}
 			
 			private function change(event:ColorPickerEvent):void 
@@ -65,6 +77,8 @@
 			{
 					value = event.hexcolor;
 					dispatchEvent(new ColorPickerEvent(ColorPickerEvent.CHANGE, event.color, value));
+					
+					UIComponent( event.currentTarget ).removeEventListener( ColorPickerEvent.APPLY, applyHandler, false );		
 			}
 			
 		]]>
@@ -85,7 +99,6 @@
 	</s:Group>
 	
 		
-	<s:Button skinClass="net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.ColorPickerButtonSkin"
-			  click="mouseClickandler(event)"/>
+	<s:Button skinClass="net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.ColorPickerButtonSkin"/>
 
 </s:HGroup>

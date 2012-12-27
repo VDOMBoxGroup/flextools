@@ -87,7 +87,6 @@
 
 				multilineWindow.addEventListener( MultilineWindowEvent.APPLY, applyMultiLinaWindow, false, 0, true );
 
-
 				WindowManager.getInstance().addWindow(multilineWindow, UIComponent( UIComponent(parent).parentApplication ), true);
 			}
 			

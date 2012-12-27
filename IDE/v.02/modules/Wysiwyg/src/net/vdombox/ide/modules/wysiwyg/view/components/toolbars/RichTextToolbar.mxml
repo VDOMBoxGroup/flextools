@@ -21,9 +21,10 @@
 			import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
-			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditor;
+			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditorWindow;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.LinkSelection;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.FlatButtonSkin;
+			import net.vdombox.utils.WindowManager;
 			
 			public var attributesObject : Object;
 			
@@ -272,11 +273,11 @@
 			{
 				var linkSelection : LinkSelection = new LinkSelection();
 				linkSelection.hostName = selection.getNode().hostname;
+				linkSelection.title = resourceManager.getString( 'Wysiwyg_General', 'insert_link_window_title' );
 				
 				linkSelection.addEventListener( LinkSelection.EVENT_LINK_SELECTED, linkSelection_linkSelectedHandler );
-				
-				PopUpManager.addPopUp( linkSelection, DisplayObject( this.parentApplication ), true );
-				PopUpManager.centerPopUp( linkSelection );
+								
+				WindowManager.getInstance().addWindow(linkSelection, UIComponent( UIComponent(parent).parentApplication ), true);
 			}
 			
 			private function linkSelection_linkSelectedHandler( event : Event ) : void
@@ -353,18 +354,20 @@
 			
 			private function openCodeEditor() : void
 			{
-				var codeEditor : CodeEditor = new CodeEditor();
+				var codeEditor : CodeEditorWindow = new CodeEditorWindow();
 				
 				codeEditor.code = activeEditor.getContent();
-				codeEditor.addEventListener( CodeEditor.EVENT_CODE_CHANGED, updateCodeHandler );
+				codeEditor.title = resourceManager.getString( 'Wysiwyg_General', 'html_source_editor_title' );
 				
-				PopUpManager.addPopUp( codeEditor, DisplayObject( parentApplication ), true );
-				PopUpManager.centerPopUp( codeEditor );
+				codeEditor.addEventListener( CodeEditorWindow.EVENT_CODE_CHANGED, updateCodeHandler );
+				
+				WindowManager.getInstance().addWindow(codeEditor, UIComponent( UIComponent(parent).parentApplication ), true);
+				
 			}
 			
 			private function updateCodeHandler( event : Event ) : void
 			{
-				event.currentTarget.removeEventListener( CodeEditor.EVENT_CODE_CHANGED, updateCodeHandler );
+				event.currentTarget.removeEventListener( CodeEditorWindow.EVENT_CODE_CHANGED, updateCodeHandler );
 				
 				activeEditor.setContent( event.currentTarget.code );
 			}
