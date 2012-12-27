@@ -90,7 +90,8 @@
 					{
 						if (answers.length == 1)
 						{
-							qResult = answers[0] is BrowseFileAnswer ? BrowseFileAnswer(answers[0]).selectedFile : answers[0].value;
+//							qResult = answers[0] is BrowseFileAnswer ? BrowseFileAnswer(answers[0]).selectedFile : answers[0].value;
+							qResult =  answers[0].value 
 						}
 						else
 							qResult = answersList;

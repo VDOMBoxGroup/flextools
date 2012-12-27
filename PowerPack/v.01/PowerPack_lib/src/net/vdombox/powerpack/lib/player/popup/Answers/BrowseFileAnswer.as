@@ -6,6 +6,7 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 	import flash.events.SecurityErrorEvent;
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
+	import flash.utils.ByteArray;
 	
 	import mx.containers.Canvas;
 	import mx.controls.Button;
@@ -90,12 +91,14 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 		
 		private function browseClickHandler( event : MouseEvent ) : void
 		{
+			//FIXME: need refactor 
 			var filter : FileFilter = new FileFilter(
 				StringUtil.substitute( LanguageManager.sentences.file + " ({0})", browseFilter ? browseFilter : '*.*' ),
 				browseFilter ? browseFilter : '*.*' );
 			
 			var file : FileReference = new FileReference();
 			
+			file.addEventListener(Event.COMPLETE, fileSelectHandler); 
 			file.addEventListener( Event.SELECT, fileSelectHandler );
 			file.addEventListener(IOErrorEvent.IO_ERROR, fileSelectHandler); 
 			file.addEventListener(SecurityErrorEvent.SECURITY_ERROR, fileSelectHandler);
@@ -104,26 +107,44 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 				file.browse([filter]);
 			else
 				file.browse();
+			
+			function fileSelectHandler( event : Event ) : void
+			{
+				
+				switch(event.type)
+				{
+					case Event.SELECT :
+						filePathTextInput.text = filePathTextInput.toolTip = file.name;
+						file.addEventListener(Event.COMPLETE, fileSelectHandler); 
+						file.load(); 
+						return;
+						
+				
+					case Event.COMPLETE :
+						var fileData : ByteArray = file.data;
+						result  =  fileData ?  fileData.readUTFBytes(fileData.length) : "";
+						break;
+						
+					default:
+					{
+						filePathTextInput.text = filePathTextInput.toolTip = "";
+					}
+						
+						file.removeEventListener(Event.COMPLETE, fileSelectHandler); 
+						file.removeEventListener( Event.SELECT, fileSelectHandler );
+						file.removeEventListener(IOErrorEvent.IO_ERROR, fileSelectHandler); 
+						file.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, fileSelectHandler);
+				}
+				
+			}
 		}
 		
-		private function fileSelectHandler( event : Event ) : void
-		{
-			selectedFile = event.target as FileReference;
-			
-			selectedFile.removeEventListener( Event.SELECT, fileSelectHandler );
-			selectedFile.removeEventListener(IOErrorEvent.IO_ERROR, fileSelectHandler); 
-			selectedFile.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, fileSelectHandler);
-			
-			if (event.type == IOErrorEvent.IO_ERROR || event.type == SecurityErrorEvent.SECURITY_ERROR)
-				filePathTextInput.text = filePathTextInput.toolTip = "";
-			else
-				filePathTextInput.text = filePathTextInput.toolTip = selectedFile.name;
-		}
+		private var result :String;
 		
 		
 		override public function get value () : String
 		{
-			return StringUtil.trim( filePathTextInput.text );
+			return result;
 		}
 		
 	}
