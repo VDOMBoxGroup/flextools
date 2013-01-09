@@ -17,6 +17,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.core.Application;
 			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
 			import mx.utils.StringUtil;
@@ -128,10 +129,6 @@
 				if (!sdkCompiler.hasEventListener(SDKCompilerEvent.BUILD_ERROR))
 					sdkCompiler.addEventListener(SDKCompilerEvent.BUILD_ERROR, sdkCompilerEventHandler);
 				
-				ProgressManager.complete();
-				ProgressManager.source = null;
-				ProgressManager.start( ProgressManager.WINDOW_MODE, false );
-				
 				sdkCompiler.buildInstallerPackage ( flexSDK_4_1_BrowseBox.path,
 													airSDKLinuxBrowseBox.path,
 													project, 
@@ -159,7 +156,16 @@
 				
 				currentTemplate.version = versionTextField.text;
 				
-				buildInstaller();
+				ProgressManager.complete();
+				ProgressManager.start( ProgressManager.WINDOW_MODE, false );
+				
+				Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
+				
+				function enterFrameHandler () : void
+				{
+					Application.application.removeEventListener( Event.ENTER_FRAME, enterFrameHandler);
+					buildInstaller();
+				}
 			}
 			
 			public function sdkLinkHandler (event:TextEvent) : void 

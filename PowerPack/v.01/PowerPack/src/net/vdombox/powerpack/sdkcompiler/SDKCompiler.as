@@ -14,6 +14,8 @@ package net.vdombox.powerpack.sdkcompiler
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
 	
+	import mx.core.Application;
+	import mx.events.FlexEvent;
 	import mx.utils.Base64Encoder;
 	import mx.utils.StringUtil;
 	
@@ -61,6 +63,19 @@ package net.vdombox.powerpack.sdkcompiler
 			 </icon>
 			</application>;
 		
+		
+		private static const STATE_PREPARE_FOR_BUILD			: String = "statePrepareForBuild";
+		private static const STATE_PREPARE_TEMPLATE_XML			: String = "statePrepareTemplateXML";
+		private static const STATE_PREPARE_INSTALLER_PROPERTIES	: String = "statePrepareInstallerProperties";
+		private static const STATE_PREPARE_EMBEDDED_APPS		: String = "statePrepareEmbeddedApps"; 
+		private static const STATE_PREPARE_EMBEDDED_APP			: String = "statePrepareEmbeddedApp";
+		private static const STATE_PACKAGE_INSTALLER_START		: String = "statePackageInstallerStart";
+		private static const STATE_PACKAGE_INSTALLER_PROGRESS	: String = "statePackageInstallerProgress";
+		private static const STATE_PACKAGE_INSTALLER_COMPLETE	: String = "statePackageInstallerComplete";
+		private static const STATE_COMPLETE						: String = "stateComplete";
+
+		private var currentState : String = "";
+		
 		public function SDKCompiler()
 		{
 		}
@@ -87,19 +102,89 @@ package net.vdombox.powerpack.sdkcompiler
 			
 			this.packageTypeNative = packageType == PACKAGE_TYPE_NATIVE;
 			
-			
-			var prepareComplete : Boolean = prepareForBuild();
-			
-			if (prepareComplete)
-				packageInstaller();
+			currentState = STATE_PREPARE_FOR_BUILD;
+			Application.application.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
+		}
+		
+		private var curAppIndex : int = 0;
+		private function enterFrameHandler (event : Event) : void
+		{
+			switch(currentState)
+			{
+				case STATE_PREPARE_FOR_BUILD:
+				{
+					currentState = STATE_PREPARE_TEMPLATE_XML;
+					break;
+				}
+				
+				case STATE_PREPARE_TEMPLATE_XML:
+				{
+					currentState = prepareTemplateXMLFile() ? STATE_PREPARE_INSTALLER_PROPERTIES : STATE_COMPLETE;
+					break;
+				}
+					
+				case STATE_PREPARE_INSTALLER_PROPERTIES:
+				{
+					currentState = prepareInstallerPropertiesXml() ? STATE_PREPARE_EMBEDDED_APPS : STATE_COMPLETE;
+					break;
+				}
+					
+				case STATE_PREPARE_EMBEDDED_APPS:
+				{
+					if (!project.embededApps || project.embededApps.length == 0)
+						currentState = STATE_PACKAGE_INSTALLER_START;
+					else
+					{
+						embeddedAppsFileNames = [];
+						curAppIndex = 0;
+						currentState = STATE_PREPARE_EMBEDDED_APP;
+					}
+					
+					break;
+				}
+					
+				case STATE_PREPARE_EMBEDDED_APP:
+				{
+					if (!project.embededApps || curAppIndex >= project.embededApps.length)
+					{
+						currentState = STATE_PACKAGE_INSTALLER_START;
+						break;
+					}
+					
+					var appPath:String = project.embededApps[curAppIndex];
+					currentState = prepareEmbeddedApp(appPath) ? STATE_PREPARE_EMBEDDED_APP : STATE_COMPLETE;
+					curAppIndex ++;
+					break;
+				}
+				
+				case STATE_PACKAGE_INSTALLER_START:
+				{
+					currentState = STATE_PACKAGE_INSTALLER_PROGRESS;
+					packageInstaller();
+					break;
+				}
+					
+				case STATE_PACKAGE_INSTALLER_PROGRESS:
+				{
+					break;
+				}
+					
+				case STATE_PACKAGE_INSTALLER_COMPLETE:
+				{
+					currentState = STATE_COMPLETE;
+					break;
+				}
+					
+				case STATE_COMPLETE:
+				{
+					Application.application.removeEventListener(Event.ENTER_FRAME, enterFrameHandler);
+					break;
+				}
+					
+			}
 		}
 		
 		// ---------- PREPARE FOR BUILD ... ---------------------
-		private function prepareForBuild () : Boolean
-		{
-			return prepareEmbeddedApplications() && prepareTemplateXMLFile() && prepareInstallerPropertiesXml();
-		}
-		
 		private function prepareTemplateXMLFile() : Boolean
 		{
 			var tplFile : File = File.applicationStorageDirectory.resolvePath("assets/template.xml");
@@ -164,18 +249,6 @@ package net.vdombox.powerpack.sdkcompiler
 				
 				sendEvent(SDKCompilerEvent.BUILD_ERROR, "Can't prepare installer properties xml");
 				return false;
-			}
-			
-			return true;
-		}
-		
-		private function prepareEmbeddedApplications () : Boolean
-		{
-			embeddedAppsFileNames = [];
-			for each (var appPath:String in project.embededApps)
-			{
-				if (!prepareEmbeddedApp(appPath))
-					return false;
 			}
 			
 			return true;
@@ -412,11 +485,13 @@ package net.vdombox.powerpack.sdkcompiler
 			{
 				sendEvent(SDKCompilerEvent.BUILD_ERROR, errorMsg);
 				
-				removeProcessListeners()
+				removeProcessListeners();
 
 				process.exit(true);
 
 				process = null;
+				
+				currentState = STATE_PACKAGE_INSTALLER_COMPLETE;
 			}
 		}
 
@@ -430,6 +505,8 @@ package net.vdombox.powerpack.sdkcompiler
 				process = null;
 				
 				onProcessExit(evt.exitCode);
+				
+				currentState = STATE_PACKAGE_INSTALLER_COMPLETE;
 			}
 		}
 		
