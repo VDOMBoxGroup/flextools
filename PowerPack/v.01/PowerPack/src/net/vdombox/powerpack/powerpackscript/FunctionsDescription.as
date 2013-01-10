@@ -199,6 +199,23 @@ package net.vdombox.powerpack.powerpackscript
 										  "<b>Version format:</b> &lt;Number&gt;(.&lt;Number&gt;)* \n" +
 										  "<b>Example:</b> [compareVersions '1.1.4589' '1.2.1542']",
 										  
+				'jsonGetValue'			: "<b>Description:</b>\n" + 
+										  "Returns a value from JSON string.\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[ jsonGetValue   $Key   $JSON_string ]\n" +
+										  "<b>Example:</b>\n" +
+										  "$a = '[1, {\"a\": 10}]'\n" +
+										  "$b = [ jsonGetValue 1 $a ]\n" +
+										  "$c = [ jsonGetValue \"a\" $b ]\n",
+										  
+				'jsonToList'			: "<b>Description:</b>\n" + 
+										  "Decodes a JSON string into a Power Pack list.\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[ jsonToList  $JSON_string ]\n" +
+										  "<b>Example:</b>\n" +
+										  "[ jsonToList  '[1, 2, 3]' ]",
+										  
+										  
 				//*********************
 				// List manipulation
 				//*********************
@@ -514,7 +531,13 @@ package net.vdombox.powerpack.powerpackscript
 															"<b>Syntax:</b>\n" +
 															"$variants=[[Value1 $DefaultValue] [Value2 $DefaultValue] ... [ValueN $DefaultValue]]\n" +
 															"['checkBox' $Label $variants]\n\n" +
-															"* $DefaultValue - 'true'|'false'."
+															"* $DefaultValue - 'true'|'false'.",
+															
+				"browseFile"							: "<b>Description:</b>\n" +
+															"Browse file and load it's data.\n" +
+															"<b>Syntax:</b>\n" +
+															"$file_data=['browseFile' $Label $FileFilter]\n" +
+															"<b>* $FileFilter example:</b> '*.xml;*.txt'"
 
 															
 			};
