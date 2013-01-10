@@ -57,7 +57,15 @@
 				
 				for each (var value : * in _dataProvider) 
 				{
-					answer = AnswerCreator.create( value);
+					try
+					{
+						answer = AnswerCreator.create( value);
+					}
+					catch (e:Error)
+					{
+						trace ("error");
+						continue;
+					}
 					answerBox.addChild( answer );
 				}
 			}

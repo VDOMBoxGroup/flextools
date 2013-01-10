@@ -57,6 +57,9 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 		
 		private function selectFirstRadioButton():void
 		{
+			if (vBox.numChildren == 0)
+				return;
+			
 			var radBtn : RadioButton;
 			radBtn = vBox.getChildAt(0) as RadioButton;
 			
