@@ -23,7 +23,8 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 													AnswerCreator.ANSWER_TYPE_TEXT_PASSWORD, 
 													AnswerCreator.ANSWER_TYPE_RADIO_BUTTONS, 
 													AnswerCreator.ANSWER_TYPE_COMBO_BOX, 
-													AnswerCreator.ANSWER_TYPE_CHECK_BOX];
+													AnswerCreator.ANSWER_TYPE_CHECK_BOX,
+													AnswerCreator.ANSWER_TYPE_BROWSE_FILE];
 		
 		public static function create( data : *) : Answer
 		{
