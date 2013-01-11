@@ -715,6 +715,13 @@ public dynamic class TemplateLib extends EventDispatcher
 		fr.addEventListener( Event.COMPLETE, comleteHandler );
 		fr.addEventListener( Event.CANCEL, cancelHandler );
 		fr.addEventListener( IOErrorEvent.IO_ERROR, errorHandler);
+		
+		if (data is Bitmap)
+		{
+			var bitmap : Bitmap = data as Bitmap;
+			data = convertBitmapToByteArray(bitmap);
+		}
+			
 		fr.save( data, fileName );
 		
 		function comleteHandler ( event : Event ) : void
@@ -726,7 +733,7 @@ public dynamic class TemplateLib extends EventDispatcher
 		function cancelHandler ( event : Event ) : void
 		{
 			setTransition( "ERROR" );
-			setReturnValue( "Canseled" );
+			setReturnValue( "Canceled" );
 		}
 		
 		function errorHandler ( event : IOErrorEvent ) : void
@@ -738,6 +745,17 @@ public dynamic class TemplateLib extends EventDispatcher
 		
 
 		return new Function();	
+	}
+	
+	private function convertBitmapToByteArray (bitmap : Bitmap) : ByteArray
+	{
+		var byteArray : ByteArray;
+		
+		var pngEncoder : PNGEncoder = new PNGEncoder();
+		byteArray = pngEncoder.encode( bitmap.bitmapData );
+		byteArray.position = 0;
+		
+		return byteArray;
 	}
 	
 	public function writeVarTo( filePath : String, value : Object ) : void

@@ -41,8 +41,8 @@ public class Parser
 		'loadData' : { pattern : /^\[n[vscVSA][vsciVNSA]\]$/, argNum : 2, trans : ['true', 'false'] },
 		
 		'writeVar' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2, trans : ['SUCCESS', 'ERROR'] },
-		'writeTo' : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
-		'writeVarTo' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2 },
+		//'writeTo' : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
+		//'writeVarTo' : { pattern : /^\[n[vscVSA][vscifVNSA]\]$/, argNum : 2 },
 		
 		'GUID' : { pattern : /^\[n\]$/, argNum : 0 },
 		"mid" : { pattern : /^\[n[viVNA][viVNA][vscVSA]\]$/, argNum : 3 },
