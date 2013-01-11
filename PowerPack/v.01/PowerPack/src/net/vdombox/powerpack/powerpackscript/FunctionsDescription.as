@@ -61,9 +61,9 @@ package net.vdombox.powerpack.powerpackscript
 				'writeVar' 				: "<b>Description:</b>\n" +
 										  "Write the VARIABLE parameter into a file\n" +
 										  "specified by FileName.\n" +
-										  "Will showed save dialog\n\n" +
+										  "Save dialog will be showed. \n" +
 										  "<b>Syntax:</b>\n" +
-										  "[writeVarTo  'VARIABLE' 'FileName']",
+										  "[writeVar'VARIABLE' 'FileName']",
 
 				'writeTo'				: "<b>Description:</b>\n" +
 										  "Writes the result of the current state of the graph\n" +
