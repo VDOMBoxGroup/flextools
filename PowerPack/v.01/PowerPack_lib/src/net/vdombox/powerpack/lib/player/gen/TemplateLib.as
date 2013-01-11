@@ -1258,7 +1258,20 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	public function mergeImages( pic1 : Bitmap, pic2 : Bitmap, percent : uint ) : Object
 	{
-		return _addImage( pic1, pic2, 0, 0, percent, -1 );
+		//return _addImage( pic1, pic2, 0, 0, percent, -1 );
+		
+		var bd1 : BitmapData = new BitmapData( pic1.width, pic1.height, true, 0x00ffffff );
+		var bd2 : BitmapData = new BitmapData( pic2.width, pic2.height, true, 0x00ffffff );
+		
+		bd1.draw( pic1 );	
+		bd2.draw( pic2 );
+		
+		var pt:Point = new Point(0, 0);
+		var mult:uint =  percent / 100 * 255  ; // 50% 
+		var col : uint = 0x100;
+		bd1.merge(bd2,  bd2.rect, pt, col, col, col, mult);
+		
+		return new Bitmap( bd1 );
 	}
 	
 	public function brightness( pic : Bitmap, value : int ) : Object
