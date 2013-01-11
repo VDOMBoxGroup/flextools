@@ -17,6 +17,7 @@ package net.vdombox.powerpack.lib.player.managers
 	import flash.utils.Dictionary;
 	import flash.utils.setTimeout;
 	
+	import mx.core.Application;
 	import mx.utils.Base64Decoder;
 
 	public class ResourceManager extends EventDispatcher
@@ -93,10 +94,12 @@ package net.vdombox.powerpack.lib.player.managers
 				var errorEvent : ErrorEvent = new ErrorEvent(ErrorEvent.ERROR);
 				errorEvent.text = "Resource '"+id+"' is not found.";
 				
-				setTimeout(sendError, 100);
+				Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
 				
-				function sendError () : void
+				function enterFrameHandler (event : Event) : void
 				{
+					Application.application.removeEventListener( Event.ENTER_FRAME, enterFrameHandler);
+					
 					dispatchEvent( errorEvent );
 				}
 			}
@@ -113,10 +116,12 @@ package net.vdombox.powerpack.lib.player.managers
 				var errorEvent : ErrorEvent = new ErrorEvent(ErrorEvent.ERROR);
 				errorEvent.text = "Resource '"+name+"' is not found.";
 				
-				setTimeout(sendError, 100);
+				Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
 				
-				function sendError () : void
+				function enterFrameHandler (event : Event) : void
 				{
+					Application.application.removeEventListener( Event.ENTER_FRAME, enterFrameHandler);
+					
 					dispatchEvent( errorEvent );
 				}
 			}
