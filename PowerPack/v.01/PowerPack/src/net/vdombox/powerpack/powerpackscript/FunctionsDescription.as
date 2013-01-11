@@ -63,7 +63,7 @@ package net.vdombox.powerpack.powerpackscript
 										  "specified by FileName.\n" +
 										  "Save dialog will be showed. \n" +
 										  "<b>Syntax:</b>\n" +
-										  "[writeVar'VARIABLE' 'FileName']",
+										  "[writeVar 'VARIABLE' 'FileName']",
 
 				'writeTo'				: "<b>Description:</b>\n" +
 										  "Writes the result of the current state of the graph\n" +
@@ -292,6 +292,11 @@ package net.vdombox.powerpack.powerpackscript
 				
 				"loadImage"				: "<b>Syntax:</b>\n" +
 										  "[loadImage PATH]",
+				
+				"getResourceBitmap"		: "<b>Description:</b>\n" +
+										  "Return Bitmap of resource by name.\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[ getResourceBitmap $ResourceName ]",
 				
 				"createImage"			: "<b>Syntax:</b>\n" +
 										  "[createImage w h bgcolor]",
