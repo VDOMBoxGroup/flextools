@@ -1,9 +1,25 @@
 package net.vdombox.powerpack.lib.player.managers
 {
+	import com.hurlant.util.Base64;
+	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.Loader;
+	import flash.display.LoaderInfo;
+	import flash.display.PixelSnapping;
+	import flash.events.ErrorEvent;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
+	import flash.geom.Rectangle;
+	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
+	import flash.utils.setTimeout;
+	
+	import mx.utils.Base64Decoder;
 
-	public class ResourceManager
+	public class ResourceManager extends EventDispatcher
 	{
 
 		private static var instance:ResourceManager;
@@ -11,6 +27,8 @@ package net.vdombox.powerpack.lib.player.managers
 		private var resources : Dictionary;
 		private var nameToID : Dictionary;
 
+		public var bitmap : Bitmap;
+		
 		public static function getInstance():ResourceManager
 		{
 			if (!instance)
@@ -52,28 +70,110 @@ package net.vdombox.powerpack.lib.player.managers
 			
 		}
 
-		public function getBase64ByID( value:String ) : String
+		public function getBase64ByID ( id:String ) : String
 		{
-			return (value in resources) ? resources [ value ] : null ;
+			return (id in resources) ? resources [ id ] : null ;
 		}
 
-		public function getBase64ByName( value:String ) : String
+		public function getBase64ByName ( name:String ) : String
 		{
-			var ID : String = (value in  nameToID) ? nameToID[ value ] : null;
+			var ID : String = (name in  nameToID) ? nameToID[ name ] : null;
 			
 			return ( ID in resources ) ? resources [ ID ] : null ;  
 		}
 
-		public function getBitmapByID( value:String ) : Bitmap
+		public function getBitmapByID( id:String ) : void
 		{
-			return null;
+			var resourceBase64 : String = getBase64ByID(id);
+			
+			if (resourceBase64)
+				decodeBase64(resourceBase64);
+			else
+			{
+				var errorEvent : ErrorEvent = new ErrorEvent(ErrorEvent.ERROR);
+				errorEvent.text = "Resource '"+id+"' is not found.";
+				
+				setTimeout(sendError, 100);
+				
+				function sendError () : void
+				{
+					dispatchEvent( errorEvent );
+				}
+			}
 		}
 
-		public function getBitmapByName( value:String ) : Bitmap
+		public function getBitmapByName( name:String ) : void
 		{
-			return null;
+			var resourceBase64 : String = getBase64ByName(name);
+			
+			if (resourceBase64)
+				decodeBase64(resourceBase64);
+			else
+			{
+				var errorEvent : ErrorEvent = new ErrorEvent(ErrorEvent.ERROR);
+				errorEvent.text = "Resource '"+name+"' is not found.";
+				
+				setTimeout(sendError, 100);
+				
+				function sendError () : void
+				{
+					dispatchEvent( errorEvent );
+				}
+			}
 		}
 		
+		private function decodeBase64 (data:String) : void
+		{               
+			var decoder : Base64Decoder = new Base64Decoder();
+			decoder.decode( data );
+			
+			decodeByteArray(decoder.toByteArray());   
+		}          
 		
+		private function decodeByteArray (bytes:ByteArray) : void
+		{   
+			var ldr:Loader = new Loader(); 
+			addLoaderListeners();
+			
+			ldr.loadBytes(bytes); 
+			
+			function bytesLoadComplete (event : Event) : void
+			{
+				ldr.contentLoaderInfo.removeEventListener(Event.COMPLETE, bytesLoadComplete);
+				ldr.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, bytesLoadError);
+				ldr.contentLoaderInfo.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, bytesLoadError);
+				
+				bitmap = ldr.content as Bitmap;
+				
+				dispatchEvent( new Event(Event.COMPLETE) );
+			}
+			
+			function bytesLoadError (event : Event) : void
+			{
+				removeLoaderListeners(); 
+				
+				bitmap = null;
+				
+				var errorEvent : ErrorEvent = new ErrorEvent(ErrorEvent.ERROR);
+				errorEvent.text = event["text"];
+				
+				dispatchEvent( errorEvent );
+			}
+			
+			function addLoaderListeners () : void
+			{
+				ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, bytesLoadComplete);
+				ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, bytesLoadError);
+				ldr.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, bytesLoadError);
+			}
+			
+			function removeLoaderListeners () : void
+			{
+				ldr.contentLoaderInfo.removeEventListener(Event.COMPLETE, bytesLoadComplete);
+				ldr.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, bytesLoadError);
+				ldr.contentLoaderInfo.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, bytesLoadError);
+			}
+			
+		}
 	}
 }

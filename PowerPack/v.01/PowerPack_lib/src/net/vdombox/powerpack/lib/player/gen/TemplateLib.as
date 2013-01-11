@@ -9,6 +9,7 @@ import flash.display.BitmapData;
 import flash.display.Graphics;
 import flash.display.Shape;
 import flash.display.Sprite;
+import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
@@ -722,6 +723,9 @@ public dynamic class TemplateLib extends EventDispatcher
 			var bitmap : Bitmap = data as Bitmap;
 			data = convertBitmapToByteArray(bitmap);
 		}
+		
+		if (!data)
+			data = "";
 			
 		fr.save( data, fileName );
 		
@@ -1141,9 +1145,32 @@ public dynamic class TemplateLib extends EventDispatcher
 	 
 	private var resourceManadger : ResourceManager = ResourceManager.getInstance();
 	
-	public function getResourceBitmap( resName ) : Bitmap
+	public function getResourceBitmap( resName ) : Function
 	{
-		return resourceManadger.getBitmapByName( resName );
+		resourceManadger.addEventListener(Event.COMPLETE, bitmapCompleteHandler);
+		resourceManadger.addEventListener(ErrorEvent.ERROR, bitmapErrorHandler);
+		
+		resourceManadger.getBitmapByName( resName );
+		
+		function bitmapCompleteHandler (event : Event) : void
+		{
+			resourceManadger.removeEventListener(Event.COMPLETE, bitmapCompleteHandler);
+			resourceManadger.removeEventListener(ErrorEvent.ERROR, bitmapErrorHandler);
+			
+			setTransition ("SUCCESS");
+			setReturnValue (resourceManadger.bitmap);
+		}
+		
+		function bitmapErrorHandler (event : ErrorEvent) : void
+		{
+			resourceManadger.removeEventListener(Event.COMPLETE, bitmapCompleteHandler);
+			resourceManadger.removeEventListener(ErrorEvent.ERROR, bitmapErrorHandler);
+			
+			setTransition ("ERROR");
+			setReturnValue (event.text);
+		}
+		
+		return new Function;
 	}
 	
 	public function createImage( width : int, height : int, bgColor : int ) : Object
