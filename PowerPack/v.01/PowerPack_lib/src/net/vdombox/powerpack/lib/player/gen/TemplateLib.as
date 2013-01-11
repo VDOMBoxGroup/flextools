@@ -61,6 +61,7 @@ import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
 import net.vdombox.powerpack.lib.player.gen.structs.GraphStruct;
 import net.vdombox.powerpack.lib.player.gen.structs.NodeStruct;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+import net.vdombox.powerpack.lib.player.managers.ResourceManager;
 import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 import net.vdombox.powerpack.lib.player.popup.Answers.AnswerCreator;
 import net.vdombox.powerpack.lib.player.popup.Question;
@@ -1137,7 +1138,13 @@ public dynamic class TemplateLib extends EventDispatcher
 		//	}
 		return null;
 	}
+	 
+	private var resourceManadger : ResourceManager = ResourceManager.getInstance();
 	
+	public function getResourceBitmap( resName ) : Bitmap
+	{
+		return resourceManadger.getBitmapByName( resName );
+	}
 	
 	public function createImage( width : int, height : int, bgColor : int ) : Object
 	{

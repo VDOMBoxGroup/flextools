@@ -103,6 +103,8 @@ public class Parser
 		//*********************
 
 		"loadImage" : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
+		
+		"getResourceBitmap" : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
 		"createImage" : { pattern : /^\[n[viVNA][viVNA][viVNA]\]$/, argNum : 3 },
 		"getWidth" : { pattern : /^\[n[vA]\]$/, argNum : 1 },
 		"getHeight" : { pattern : /^\[n[vA]\]$/, argNum : 1 },
