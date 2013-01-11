@@ -379,7 +379,6 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	public function getXMLValue( xml : XML, queryStr : String ) : XMLList
 	{
-		
 		return  getQueryResult(xml, queryStr);
 	}
 	
@@ -393,6 +392,7 @@ public dynamic class TemplateLib extends EventDispatcher
 				
 			var _xml : XML = new XML(xml);	
 		} 
+		
 		catch(error:Error) 
 		{
 			return null;
@@ -413,11 +413,11 @@ public dynamic class TemplateLib extends EventDispatcher
 	public function addXMLValue( xml : XML, queryStr : String, value : Object ) : XML
 	{
 		try
-		{
+		{   
 			var _xml : XML = new XML(xml);	
 		} 
 		catch(error:Error) 
-		{
+		{ 
 			return null;
 		}
 		
@@ -742,7 +742,7 @@ public dynamic class TemplateLib extends EventDispatcher
 			setReturnValue( event.text );
 		}
 		
-		
+		TemplateStruct
 
 		return new Function();	
 	}

@@ -114,7 +114,8 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 				switch(event.type)
 				{
 					case Event.SELECT :
-						filePathTextInput.text = filePathTextInput.toolTip = file.name;
+						result  = "loading...";
+						filePathTextInput.text = filePathTextInput.toolTip = "loading...";
 						file.addEventListener(Event.COMPLETE, fileSelectHandler); 
 						file.load(); 
 						return;
@@ -123,23 +124,25 @@ package net.vdombox.powerpack.lib.player.popup.Answers
 					case Event.COMPLETE :
 						var fileData : ByteArray = file.data;
 						result  =  fileData ?  fileData.readUTFBytes(fileData.length) : "";
+						filePathTextInput.text = filePathTextInput.toolTip = file.name;
 						break;
 						
+					//TODO: Create cases for  IO_ERROR & SECURITY_ERROR and show error messages :
 					default:
 					{
 						filePathTextInput.text = filePathTextInput.toolTip = "";
 					}
 						
-						file.removeEventListener(Event.COMPLETE, fileSelectHandler); 
-						file.removeEventListener( Event.SELECT, fileSelectHandler );
-						file.removeEventListener(IOErrorEvent.IO_ERROR, fileSelectHandler); 
-						file.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, fileSelectHandler);
 				}
+				file.removeEventListener(Event.COMPLETE, fileSelectHandler); 
+				file.removeEventListener( Event.SELECT, fileSelectHandler );
+				file.removeEventListener(IOErrorEvent.IO_ERROR, fileSelectHandler); 
+				file.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, fileSelectHandler);
 				
 			}
 		}
 		
-		private var result :String;
+		private var result :String = "";
 		
 		
 		override public function get value () : String

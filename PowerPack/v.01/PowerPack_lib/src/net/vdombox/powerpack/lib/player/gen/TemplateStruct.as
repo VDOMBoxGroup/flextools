@@ -3,6 +3,7 @@ package net.vdombox.powerpack.lib.player.gen
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.utils.ByteArray;
 
 import mx.utils.UIDUtil;
 
@@ -18,6 +19,7 @@ import net.vdombox.powerpack.lib.player.gen.structs.*;
 import net.vdombox.powerpack.lib.player.graph.NodeCategory;
 import net.vdombox.powerpack.lib.player.graph.NodeType;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;
+import net.vdombox.powerpack.lib.player.managers.ResourceManager;
 import net.vdombox.powerpack.lib.player.template.Template;
 
 public class TemplateStruct extends EventDispatcher
@@ -67,6 +69,8 @@ public class TemplateStruct extends EventDispatcher
 	public var forced : int;
 	public var terminated : Boolean;
 	public var runPaused : Boolean;
+	
+	private var resourceManager : ResourceManager = ResourceManager.getInstance();
 
 	public function TemplateStruct( tplStruct : XML )
 	{
@@ -148,6 +152,8 @@ public class TemplateStruct extends EventDispatcher
 		graphs = _graphs;
 		nodes = _nodes;
 		arrows = _arrows;
+		
+		resourceManager.createResources( tplStructXML );
 
 		init();
 	}
@@ -587,7 +593,17 @@ public class TemplateStruct extends EventDispatcher
 									break;
 	
 								case NodeCategory.RESOURCE:
-	
+									
+									
+//									var resData : ByteArray = CashManage.getObject( ID, curGraphContext.curNode.text ).data;
+//	
+									var res_id : String =  curGraphContext.curNode.text;
+									
+									curNodeContext.block = new ParsedBlock();
+									curNodeContext.block.print = true;
+									curNodeContext.block.retValue = resourceManager.getBase64ByID( res_id );
+									curNodeContext.block.executed = true;
+									
 									break;
 	
 								case NodeCategory.SUBGRAPH:
