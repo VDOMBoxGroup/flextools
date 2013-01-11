@@ -744,48 +744,58 @@
 				case "debug":
 				case "step_by_step":
 					{
-						Log.getInstance().clear();
-					
-						if ( ContextManager.templateStruct )
-							ContextManager.templateStruct.terminated = true;
-	
-						ContextManager.templateStruct = new TemplateStruct( pnl_graphs.toXML() );
+						saveTpl(templateSaveAndDebugHandler);
 						
-						switch ( menuItemName )
+						function templateSaveAndDebugHandler (event : Event) : void
 						{
-							case 'debug':
-								ContextManager.templateStruct.isDebug = true;
-								ContextManager.templateStruct.isStepDebug = false;
-								break;
-							case 'step_by_step':
-								ContextManager.templateStruct.isDebug = true;
-								ContextManager.templateStruct.isStepDebug = true;
-								break;
-						}
-						// проверка графа на ошибки
-						var validateArr : Array = ContextManager.templateStruct.validate().array;
-	
-						pnl_problems.array = validateArr;
-	
-						function isError( element : *, index : int, arr : Array ) : Boolean
-						{
-							return (element.error.severity == BasicError.FATAL);
-						}
-	
-						if ( validateArr && validateArr.filter( isError ).length > 0 )
-						{
-							alertProceedRun();
-						}
-						else
-						{
-							switchDebug( true );
+							var tpl : BuilderTemplate = event.target as BuilderTemplate;
+							tpl.removeEventListener( Event.COMPLETE, templateSaveAndDebugHandler );
+							
+							processSavedTpl();
+							
+							Log.getInstance().clear();
 						
-							ProgressManager.source = ContextManager.templateStruct;
-							ProgressManager.show(ProgressManager.WINDOW_MODE);
+							if ( ContextManager.templateStruct )
+								ContextManager.templateStruct.terminated = true;
+		
+							ContextManager.templateStruct = new TemplateStruct( currentTemplate.xmlStructure );
 							
-							addDebugListeners();
+							switch ( menuItemName )
+							{
+								case 'debug':
+									ContextManager.templateStruct.isDebug = true;
+									ContextManager.templateStruct.isStepDebug = false;
+									break;
+								case 'step_by_step':
+									ContextManager.templateStruct.isDebug = true;
+									ContextManager.templateStruct.isStepDebug = true;
+									break;
+							}
+							// проверка графа на ошибки
+							var validateArr : Array = ContextManager.templateStruct.validate().array;
+		
+							pnl_problems.array = validateArr;
+		
+							function isError( element : *, index : int, arr : Array ) : Boolean
+							{
+								return (element.error.severity == BasicError.FATAL);
+							}
+		
+							if ( validateArr && validateArr.filter( isError ).length > 0 )
+							{
+								alertProceedRun();
+							}
+							else
+							{
+								switchDebug( true );
 							
-							ContextManager.templateStruct.generate();
+								ProgressManager.source = ContextManager.templateStruct;
+								ProgressManager.show(ProgressManager.WINDOW_MODE);
+								
+								addDebugListeners();
+								
+								ContextManager.templateStruct.generate();
+							}
 						}
 					}
 					

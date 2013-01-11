@@ -313,7 +313,7 @@ package net.vdombox.powerpack.template
 					res );
 			}
 			
-			delete xmlStructure.resources;
+//			delete xmlStructure.resources;
 			
 			cashStructure();
 			
