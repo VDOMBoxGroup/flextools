@@ -1,21 +1,15 @@
 package net.vdombox.powerpack.lib.player.managers
 {
-	import com.hurlant.util.Base64;
-	
 	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
-	import flash.display.PixelSnapping;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
-	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
-	import flash.utils.setTimeout;
 	
 	import mx.core.Application;
 	import mx.utils.Base64Decoder;
@@ -90,19 +84,8 @@ package net.vdombox.powerpack.lib.player.managers
 			if (resourceBase64)
 				decodeBase64(resourceBase64);
 			else
-			{
-				var errorEvent : ErrorEvent = new ErrorEvent(ErrorEvent.ERROR);
-				errorEvent.text = "Resource '"+id+"' is not found.";
+				dispathError( "Resource '" + id + "' is not found." );
 				
-				Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
-				
-				function enterFrameHandler (event : Event) : void
-				{
-					Application.application.removeEventListener( Event.ENTER_FRAME, enterFrameHandler);
-					
-					dispatchEvent( errorEvent );
-				}
-			}
 		}
 
 		public function getBitmapByName( name:String ) : void
@@ -112,19 +95,7 @@ package net.vdombox.powerpack.lib.player.managers
 			if (resourceBase64)
 				decodeBase64(resourceBase64);
 			else
-			{
-				var errorEvent : ErrorEvent = new ErrorEvent(ErrorEvent.ERROR);
-				errorEvent.text = "Resource '"+name+"' is not found.";
-				
-				Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
-				
-				function enterFrameHandler (event : Event) : void
-				{
-					Application.application.removeEventListener( Event.ENTER_FRAME, enterFrameHandler);
-					
-					dispatchEvent( errorEvent );
-				}
-			}
+				dispathError( "Resource '"+name+"' is not found." );
 		}
 		
 		private function decodeBase64 (data:String) : void
@@ -137,48 +108,53 @@ package net.vdombox.powerpack.lib.player.managers
 		
 		private function decodeByteArray (bytes:ByteArray) : void
 		{   
-			var ldr:Loader = new Loader(); 
-			addLoaderListeners();
+			var loader : Loader = new Loader(); 
+			addLoaderListeners( loader.contentLoaderInfo );
 			
-			ldr.loadBytes(bytes); 
+			loader.loadBytes(bytes); 
 			
 			function bytesLoadComplete (event : Event) : void
 			{
-				ldr.contentLoaderInfo.removeEventListener(Event.COMPLETE, bytesLoadComplete);
-				ldr.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, bytesLoadError);
-				ldr.contentLoaderInfo.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, bytesLoadError);
-				
-				bitmap = ldr.content as Bitmap;
+				removeLoaderListeners(  loader.contentLoaderInfo ); 
+
+				bitmap = loader.content as Bitmap;
 				
 				dispatchEvent( new Event(Event.COMPLETE) );
 			}
 			
 			function bytesLoadError (event : Event) : void
 			{
-				removeLoaderListeners(); 
+				removeLoaderListeners(  loader.contentLoaderInfo ); 
 				
 				bitmap = null;
 				
-				var errorEvent : ErrorEvent = new ErrorEvent(ErrorEvent.ERROR);
-				errorEvent.text = event["text"];
+				dispathError( event["text"] );
+			}
+			
+			function addLoaderListeners ( contentLoaderInfo : LoaderInfo ) : void
+			{
+				contentLoaderInfo.addEventListener(Event.COMPLETE, bytesLoadComplete);
+				contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, bytesLoadError);
+				contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, bytesLoadError);
+			}
+			
+			function removeLoaderListeners (contentLoaderInfo : LoaderInfo ) : void
+			{
+				contentLoaderInfo.removeEventListener(Event.COMPLETE, bytesLoadComplete);
+				contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, bytesLoadError);
+				contentLoaderInfo.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, bytesLoadError);
+			}
+			
+		}
+		
+		private function dispathError( text : String ) : void
+		{
+			//?
+			var errorEvent : ErrorEvent ;
+			errorEvent = new ErrorEvent(ErrorEvent.ERROR, false, text); 			
+			
+			dispatchEvent( errorEvent );
 				
-				dispatchEvent( errorEvent );
-			}
-			
-			function addLoaderListeners () : void
-			{
-				ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, bytesLoadComplete);
-				ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, bytesLoadError);
-				ldr.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, bytesLoadError);
-			}
-			
-			function removeLoaderListeners () : void
-			{
-				ldr.contentLoaderInfo.removeEventListener(Event.COMPLETE, bytesLoadComplete);
-				ldr.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, bytesLoadError);
-				ldr.contentLoaderInfo.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, bytesLoadError);
-			}
-			
 		}
 	}
 }

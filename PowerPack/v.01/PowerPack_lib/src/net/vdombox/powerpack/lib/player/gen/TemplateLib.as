@@ -82,8 +82,18 @@ public dynamic class TemplateLib extends EventDispatcher
 
 		lastFrag.retValue = value;
 		tplStruct.context[lastFrag.retVarName] = value;
+		
+		// need wait 1 frame
+		Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
+		
+		function enterFrameHandler (event : Event) : void
+		{
+			Application.application.removeEventListener( Event.ENTER_FRAME, enterFrameHandler);
+			
+			tplStruct.generate();
+		}
 
-		tplStruct.generate();
+
 	}
 
 	private function setTransition( value : String ) : void
@@ -1145,17 +1155,28 @@ public dynamic class TemplateLib extends EventDispatcher
 	 
 	private var resourceManadger : ResourceManager = ResourceManager.getInstance();
 	
-	public function getResourceBitmap( resName ) : Function
+	public function getResourceBitmap( resName : String ) : Function
 	{
-		resourceManadger.addEventListener(Event.COMPLETE, bitmapCompleteHandler);
-		resourceManadger.addEventListener(ErrorEvent.ERROR, bitmapErrorHandler);
+		addHendlers(); 
 		
 		resourceManadger.getBitmapByName( resName );
 		
-		function bitmapCompleteHandler (event : Event) : void
+		return new Function;
+		
+		function addHendlers () : void
+		{
+			resourceManadger.addEventListener(Event.COMPLETE, bitmapCompleteHandler);
+			resourceManadger.addEventListener(ErrorEvent.ERROR, bitmapErrorHandler);
+		}
+		function removeHendlers () : void
 		{
 			resourceManadger.removeEventListener(Event.COMPLETE, bitmapCompleteHandler);
 			resourceManadger.removeEventListener(ErrorEvent.ERROR, bitmapErrorHandler);
+		}
+		
+		function bitmapCompleteHandler (event : Event) : void
+		{
+			removeHendlers ();
 			
 			setTransition ("SUCCESS");
 			setReturnValue (resourceManadger.bitmap);
@@ -1163,14 +1184,15 @@ public dynamic class TemplateLib extends EventDispatcher
 		
 		function bitmapErrorHandler (event : ErrorEvent) : void
 		{
-			resourceManadger.removeEventListener(Event.COMPLETE, bitmapCompleteHandler);
-			resourceManadger.removeEventListener(ErrorEvent.ERROR, bitmapErrorHandler);
+			removeHendlers ()
 			
 			setTransition ("ERROR");
 			setReturnValue (event.text);
 		}
 		
-		return new Function;
+		
+		
+		
 	}
 	
 	public function createImage( width : int, height : int, bgColor : int ) : Object
