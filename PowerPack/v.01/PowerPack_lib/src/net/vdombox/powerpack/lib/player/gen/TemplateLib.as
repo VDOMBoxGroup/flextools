@@ -77,11 +77,6 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	private function setReturnValue( value : * ) : void
 	{
-
-		var lastFrag : CodeFragment = tplStruct.curNodeContext.block.lastExecutedFragment;
-
-		lastFrag.retValue = value;
-		tplStruct.context[lastFrag.retVarName] = value;
 		
 		// need wait 1 frame
 		Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
@@ -90,10 +85,13 @@ public dynamic class TemplateLib extends EventDispatcher
 		{
 			Application.application.removeEventListener( Event.ENTER_FRAME, enterFrameHandler);
 			
+			var lastFrag : CodeFragment = tplStruct.curNodeContext.block.lastExecutedFragment;
+			
+			lastFrag.retValue = value;
+			tplStruct.context[lastFrag.retVarName] = value;
+			
 			tplStruct.generate();
 		}
-
-
 	}
 
 	private function setTransition( value : String ) : void
