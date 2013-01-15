@@ -292,7 +292,8 @@ package net.vdombox.powerpack.powerpackscript
 				
 				"loadImage"				: "<b>Syntax:</b>\n" +
 										  "[loadImage PATH]",
-				
+										  
+										  
 				"getResourceBitmap"		: "<b>Description:</b>\n" +
 										  "Return Bitmap of resource by name.\n" +
 										  "<b>Syntax:</b>\n" +
@@ -324,8 +325,15 @@ package net.vdombox.powerpack.powerpackscript
 				"addImage"				: "<b>Syntax:</b>\n" +
 										  "[addImage $img1 $img2 x y alpha alphaColor]",
 				
-				"mergeImages"			: "<b>Syntax:</b>\n" +
-										  "[mergeImages $img1 $img2 percent]",
+				"mergeImages"			: "<b>Description:</b>\n" +
+											"Performs per-channel blending from a source image to a destination image.\n" +
+										   "<b>Syntax:</b>\n" +
+										  "[mergeImages $imgBitmap1 $imgBitmap2  x(int) y(int)  redPercent(0-100) greenPercent(0-100) bluePercent(0-100) alphaPercent(0-100)]",
+										  
+				"maskImage"				: "<b>Description:</b>\n" +
+										  "Sets the mask image for an image.\n" +
+										  "<b>Syntax:</b>\n" +
+										  "$resBitmap = [ maskImage $imageBitmap $maskBitmap  $xInt  $yInt ]",						  
 				
 				"drawLine"				: "<b>Syntax:</b>\n" +
 										  "[drawLine $img x1 y1 x2 y2 PEN alpha]",
