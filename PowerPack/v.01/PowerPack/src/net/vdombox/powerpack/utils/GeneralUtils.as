@@ -76,5 +76,22 @@ package net.vdombox.powerpack.utils
 				
 		}
 		
+		public static function addPostfixToString (str:String, delimeter:String, postfix:String, replaceOldPrefix:Boolean = true) : String
+		{
+			if (!replaceOldPrefix)
+				return str + delimeter + postfix;
+			
+			var lastDelIndex : int = str.lastIndexOf(delimeter);
+			if ( lastDelIndex >= 0 && lastDelIndex < str.length-1)
+			{
+				var prevPostfix : String = str.substring(lastDelIndex+1);
+				str = str.substr(0, lastDelIndex) + delimeter + postfix;
+			}
+			else
+				str += delimeter + postfix;
+			
+			return str;
+		}
+		
 	}
 }

@@ -40,6 +40,7 @@ import net.vdombox.powerpack.lib.geomlib._2D.LineSegment;
 import net.vdombox.powerpack.lib.player.managers.ContextManager;
 import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+import net.vdombox.powerpack.lib.player.template.Template;
 import net.vdombox.powerpack.utils.GeneralUtils;
 
 //--------------------------------------
@@ -180,6 +181,8 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	{
 		super();
 
+		name = uniqueName;
+		
 		doubleClickEnabled = true;
 		focusEnabled = true;
 		mouseFocusEnabled = true;
@@ -187,8 +190,42 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		tabChildren = false;
 		styleName = this.className;
 		cacheAsBitmap = true;
-
+		
 		connectors[this] = this;
+	}
+	
+	private function get uniqueName () : String
+	{
+		if (!connectors)
+			return name;
+		
+		var isUnique : Boolean = true;
+		var index : int = 1;
+		do 
+		{
+			isUnique = true;
+			
+			for (var prop:Node in connectors) 
+			{
+				if (prop.name == name)
+				{
+					isUnique = false;
+					name = GeneralUtils.addPostfixToString( name, "_", index.toString());
+					break;
+				}
+			}
+			
+			if (isUnique && Template.XML_ARROWS_NAMES.indexOf(name) >= 0)
+			{
+				isUnique = false;
+				name = GeneralUtils.addPostfixToString( name, "_", index.toString());
+			}
+			
+			
+			index ++;
+		} while (!isUnique)
+		
+		return name;
 	}
 
 	//--------------------------------------------------------------------------

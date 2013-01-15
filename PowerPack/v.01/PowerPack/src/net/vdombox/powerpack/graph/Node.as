@@ -182,6 +182,8 @@ public class Node extends Canvas implements IFocusManagerComponent
 	{
 		super();
 
+		name = uniqueName;
+		
 		this.category = category;
 		this.type = type;
 
@@ -203,6 +205,40 @@ public class Node extends Canvas implements IFocusManagerComponent
 		
 		undoTextFields = new UndoTextFields();
 		undoTextFields.target = this;
+	}
+	
+	private function get uniqueName () : String
+	{
+		if (!nodes)
+			return name;
+		
+		var isUnique : Boolean = true;
+		var index : int = 1;
+		do 
+		{
+			isUnique = true;
+			
+			for (var prop:Node in nodes) 
+			{
+				if (prop.name == name)
+				{
+					isUnique = false;
+					name = GeneralUtils.addPostfixToString( name, "_", index.toString());
+					break;
+				}
+			}
+			
+			if (isUnique && Template.XML_NODES_NAMES.indexOf(name) >= 0)
+			{
+				isUnique = false;
+				name = GeneralUtils.addPostfixToString( name, "_", index.toString());
+			}
+				
+			
+			index ++;
+		} while (!isUnique)
+			
+		return name;
 	}
 	
 	private function get defaultNodeText () : String
@@ -1137,10 +1173,15 @@ public class Node extends Canvas implements IFocusManagerComponent
 	//
 	//--------------------------------------------------------------------------		
 
-	public static function fromXML( xml : XML ) : Node
+	public static function fromXML( xml : XML, copyName:Boolean = true ) : Node
 	{
 		var newNode : Node = new Node( xml.@category, xml.@type, xml.text );
-		newNode.name = Utils.getStringOrDefault( xml.@name, NameUtil.createUniqueName( newNode ) );
+		if (copyName)
+		{
+			var xmlNodeName : String = xml.@name;
+			if (xmlNodeName && xmlNodeName != "")
+				newNode.name = xmlNodeName;
+		}
 		newNode.enabled = Utils.getBooleanOrDefault( xml.@enabled, true );
 		newNode.breakpoint = Utils.getBooleanOrDefault( xml.@breakpoint );
 		newNode.x = Number( xml.@x );

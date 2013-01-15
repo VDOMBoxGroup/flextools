@@ -709,7 +709,9 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		for each ( var nodeXML : XML in graphXML.states.elements( "state" ) )
 		{
 			var newNode : Node = new Node( nodeXML.@category, nodeXML.@type, nodeXML.text );
-			newNode.name = Utils.getStringOrDefault( nodeXML.@name, NameUtil.createUniqueName( newNode ) );
+			var xmlNodeName : String = nodeXML.@name;
+			if (xmlNodeName && xmlNodeName != "")
+				newNode.name = xmlNodeName;
 			newNode.enabled = Utils.getBooleanOrDefault( nodeXML.@enabled );
 			newNode.breakpoint = Utils.getBooleanOrDefault( nodeXML.@breakpoint );
 			newNode.x = Number( nodeXML.@x );
@@ -783,9 +785,8 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 			for each( var xmlNode : XML in dataXML.state )
 			{
-				var newNode : Node = Node.fromXML( xmlNode );
-				namesMap[newNode.name] = NameUtil.createUniqueName( newNode );
-				newNode.name = namesMap[newNode.name];
+				var newNode : Node = Node.fromXML( xmlNode, false );
+				namesMap[newNode.name] = newNode.name;
 				newNode.selected = true;
 				addChild( newNode );
 			}
