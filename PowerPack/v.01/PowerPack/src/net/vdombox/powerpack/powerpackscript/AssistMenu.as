@@ -92,12 +92,10 @@ package net.vdombox.powerpack.powerpackscript
 		private function onMenuKey(e:KeyboardEvent):void
 		{
 			//menu in action
-			
 			if (e.charCode != 0)
 			{
 				if (e.ctrlKey)
 				{
-					
 				}
 				else if (e.keyCode == Keyboard.ESCAPE)
 				{
@@ -275,7 +273,7 @@ package net.vdombox.powerpack.powerpackscript
 				
 			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
 			
-			menu.addEventListener(KeyboardEvent.KEY_DOWN, onMenuKey);
+			menu.addEventListener(KeyboardEvent.KEY_DOWN, onMenuKey, true);
 			menu.addEventListener(Event.REMOVED_FROM_STAGE, menuRemovedFromStageHandler);
 			menu.list.addEventListener(MouseEvent.DOUBLE_CLICK, onMenuDoubleClick);
 			
@@ -318,7 +316,7 @@ package net.vdombox.powerpack.powerpackscript
 		{
 			stage.removeEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false );
 			
-			menu.removeEventListener(KeyboardEvent.KEY_DOWN, onMenuKey);
+			menu.removeEventListener(KeyboardEvent.KEY_DOWN, onMenuKey, true);
 			menu.removeEventListener(Event.REMOVED_FROM_STAGE, menuRemovedFromStageHandler);
 			menu.list.removeEventListener(MouseEvent.DOUBLE_CLICK, onMenuDoubleClick);
 			
