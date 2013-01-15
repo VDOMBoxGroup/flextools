@@ -192,6 +192,9 @@ package net.vdombox.powerpack.lib.player.template
 			
 			if (_xml != null)
 				version = _xml.version;
+
+			storeAllNodes();
+			storeAllArrows();
 			
 			convertXMLToProjects(_xml);
 			
@@ -203,6 +206,32 @@ package net.vdombox.powerpack.lib.player.template
 		public function get xml() : XML
 		{
 			return _xml;
+		}
+		
+		public static var XML_NODES_NAMES	: Array = [];
+		public static var XML_ARROWS_NAMES	: Array = [];
+		
+		private function storeAllNodes () : void
+		{
+			XML_NODES_NAMES = [];
+			
+			if (!xml)
+				return;
+			
+			for each (var stateNode : XML in xml..state)
+				XML_NODES_NAMES.push( Utils.getStringOrDefault( stateNode.@name, "" ) );
+			
+		}
+		
+		private function storeAllArrows () : void
+		{
+			XML_ARROWS_NAMES = [];
+			
+			if (!xml)
+				return;
+			
+			for each (var arrow : XML in xml..transition)
+				XML_ARROWS_NAMES.push( Utils.getStringOrDefault( arrow.@name, "" ) );
 		}
 		
 		private function selectedProjectChangeHandler (object:Object) : void 
