@@ -1276,22 +1276,30 @@ public dynamic class TemplateLib extends EventDispatcher
 		return new Bitmap( bd1 );
 	}
 	
-	public function mergeImages( pic1 : Bitmap, pic2 : Bitmap, percent : uint ) : Object
+//	(sourceBitmapData:BitmapData, sourceRect:Rectangle, destPoint:Point, redMultiplier:uint, greenMultiplier:uint, blueMultiplier:uint, alphaMultiplier:uint)
+	public function mergeImages( pic1 : Bitmap, pic2 : Bitmap,  x : int, y : int,  redPercent:int, greenPercent:int, bluePercent:int, alphaPercent:int ) : Bitmap
 	{
-		//return _addImage( pic1, pic2, 0, 0, percent, -1 );
-		
 		var bd1 : BitmapData = new BitmapData( pic1.width, pic1.height, true, 0x00ffffff );
 		var bd2 : BitmapData = new BitmapData( pic2.width, pic2.height, true, 0x00ffffff );
 		
 		bd1.draw( pic1 );	
 		bd2.draw( pic2 );
 		
-		var pt:Point = new Point(0, 0);
-		var mult:uint =  percent / 100 * 255  ; // 50% 
-		var col : uint = 0x100;
-		bd1.merge(bd2,  bd2.rect, pt, col, col, col, mult);
+		var pt:Point = new Point(x, y);
+		
+		var redMultiplier 	: uint =  redPercent 	/ 100 * 255  ; // % to uint
+		var greenMultiplier : uint =  greenPercent 	/ 100 * 255  ; // % to uint
+		var blueMultiplier 	: uint =  bluePercent 	/ 100 * 255  ; // % to uint
+		var alphaMultiplier : uint =  alphaPercent 	/ 100 * 255  ; // % to uint
+
+		bd1.merge(bd2,  bd2.rect, pt, redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier);
 		
 		return new Bitmap( bd1 );
+	}
+	
+	public function maskImage( picture : Bitmap, mask : Bitmap,  x : int, y : int ) : Bitmap
+	{
+		return mergeImages( mask, picture,  x, y, 100, 100, 100, 0 ); 
 	}
 	
 	public function brightness( pic : Bitmap, value : int ) : Object

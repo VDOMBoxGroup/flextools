@@ -114,7 +114,10 @@ public class Parser
 		"getImage" : { pattern : /^\[n[viVNA][vscVSA]\]$/, argNum : 2 }, // ???
 
 		"addImage" : { pattern : /^\[n[vA]{1,2}[viVNA][viVNA][viVNA][viVNA]\]$/, argNum : -5 },
-		"mergeImages" : { pattern : /^\[n[vA][vA][viVNA]\]$/, argNum : 3 },
+		"mergeImages" : { pattern : /^\[n[vA][vA][viVNA][viVNA][viVNA][viVNA][viVNA][viVNA]\]$/, argNum : 8 },
+		
+		"maskImage" : { pattern : /^\[n[viVNA][viVNA][viVNA][viVNA]\]$/, argNum : 4 },
+		
 
 		"drawLine" : { pattern : /^\[n[vA][viVNA][viVNA][viVNA][viVNA][vscVSA][viVNA]\]$/, argNum : 7 },
 		"drawPolygon" : { pattern : /^\[n[vA][vscVSA][vscVSA][vscVSA][viVNA]\]$/, argNum : 5 },
