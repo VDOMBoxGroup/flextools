@@ -663,15 +663,6 @@ public dynamic class TemplateLib extends EventDispatcher
 			
 			
 			result = base64Data.toString();
-			//		var fileToBase64 : FileToBase64 = new FileToBase64( value.toString() );
-			//		fileToBase64.addEventListener( "dataConverted", completeConvertHandler );
-			//		fileToBase64.loadAndConvert();
-//			return completeConvertHandler;
-			
-			function completeConvertHandler( event : Event ) : void
-			{
-				setReturnValue( event.target.data );
-			}
 		}
 		
 		Application.application.callLater( convertComplete, [result] );
@@ -697,18 +688,22 @@ public dynamic class TemplateLib extends EventDispatcher
 		{
 			data = BMPEncoder.encode( pic.bitmapData );
 		}
-		else
+		else 
 		{
 			var pngEncoder : PNGEncoder = new PNGEncoder();
 			data = pngEncoder.encode( pic.bitmapData );
 		}
+
+		data.position = 0;
 		
 		var encoder : Base64Encoder = new Base64Encoder();
+//		data.compress(); 
+		
 		
 		encoder.encodeBytes( data );
-		var strData : String = encoder.flush();
+		encoder.insertNewLines = false;
 		
-		return strData;
+		return encoder.flush();
 	}
 	
 	public function writeTo( filePath : String ) : void
@@ -1152,6 +1147,16 @@ public dynamic class TemplateLib extends EventDispatcher
 	}
 	 
 	private var resourceManadger : ResourceManager = ResourceManager.getInstance();
+	public function getResourceBase64( resName : String ) : String
+	{
+		return resourceManadger.getBase64ByName( resName );
+	}
+	
+	public function getResourceBase64ZIP( resName : String ) : String
+	{
+		return resourceManadger.getBase64ZIPByName( resName );
+	}
+	
 	
 	public function getResourceBitmap( resName : String ) : Function
 	{
@@ -1187,10 +1192,6 @@ public dynamic class TemplateLib extends EventDispatcher
 			setTransition ("ERROR");
 			setReturnValue (event.text);
 		}
-		
-		
-		
-		
 	}
 	
 	public function createImage( width : int, height : int, bgColor : int ) : Object
@@ -1299,7 +1300,7 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	public function maskImage( picture : Bitmap, mask : Bitmap,  x : int, y : int ) : Bitmap
 	{
-		return mergeImages( mask, picture,  x, y, 100, 100, 100, 0 ); 
+		return mergeImages(  picture, mask,  x, y, 0, 0, 0, 100 ); 
 	}
 	
 	public function brightness( pic : Bitmap, value : int ) : Object

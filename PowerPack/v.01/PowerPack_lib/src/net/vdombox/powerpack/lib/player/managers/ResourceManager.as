@@ -13,6 +13,7 @@ package net.vdombox.powerpack.lib.player.managers
 	
 	import mx.core.Application;
 	import mx.utils.Base64Decoder;
+	import mx.utils.Base64Encoder;
 
 	public class ResourceManager extends EventDispatcher
 	{
@@ -76,6 +77,27 @@ package net.vdombox.powerpack.lib.player.managers
 			
 			return ( ID in resources ) ? resources [ ID ] : null ;  
 		}
+		
+		public function getBase64ZIPByName ( name:String ) : String
+		{
+			var ID : String = (name in  nameToID) ? nameToID[ name ] : null;
+			
+			var base64 : String =  ( ID in resources ) ? resources [ ID ] : null ; 
+			
+			var decoder : Base64Decoder = new Base64Decoder();
+			decoder.decode( base64 );
+			
+			var byteArray : ByteArray = decoder.flush();
+			byteArray.position = 0;
+			byteArray.compress(); 
+
+			var encoder : Base64Encoder = new Base64Encoder();
+			encoder.insertNewLines = false;
+			encoder.encodeBytes( byteArray );
+			
+			return encoder.flush();
+		}
+		
 
 		public function getBitmapByID( id:String ) : void
 		{
