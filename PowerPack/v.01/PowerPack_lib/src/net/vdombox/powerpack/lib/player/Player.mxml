@@ -241,6 +241,17 @@
 					vsProcess.selectedChild = cGeneral;
 					btnRun.setFocus ();
 					break;
+				
+				case cLicense:
+					var projectLicense : String = ContextManager.templates.getItemAt( 0 ).selectedProject.license;
+					if (!projectLicense)
+						runingTemplate();
+					else
+					{
+						vsProcess.selectedChild = cLicense;
+						btnLicenseContinue.setFocus ();
+					}
+					break;
 
 				case cProcess:
 					vsProcess.selectedChild = cProcess;
@@ -269,6 +280,14 @@
 			}
 		}
 
+		private function licenseAccepting () : void
+		{
+			if (licenseCheckBox.selected)
+				runingTemplate();
+			else
+				completeWithError("License agreement is not accepted.");
+		}
+			
 		private function runingTemplate():void
 		{
 			vsProcess.selectedChild = cProcess;
@@ -298,7 +317,7 @@
 				processStep ( cGeneral );
 			}
 		}
-
+		
 		public function alertProceedRun():void
 		{
 			AlertPopup.show (
@@ -379,11 +398,14 @@
 			}
 		}
 
-		private function completeWithError() : void
+		private function completeWithError(errorText : String = "") : void
 		{
+			if (!errorText)
+				errorText = "Error during execution. Impossible to complete the process."
+					
 			clearTemplateDebug ();
 			
-			resultMessage.text = "Error during execution. Impossible to complete the process.";
+			resultMessage.text = errorText;
 			processStep ( cFinal );
 		}
 
@@ -542,7 +564,6 @@
 					   width="100%"
 					   showEffect="{canvasShow}" hideEffect="{canvasHide}">
 
-
 				<mx:TextArea
 						width="100%" height="150"
 						text="{ContextManager.templates.getItemAt( 0 ).selectedProject.description}"
@@ -555,7 +576,32 @@
 						 horizontalAlign="right" verticalAlign="middle">
 					<control:RoundButton id="btnRun"
 										 label="{LanguageManager.sentences.run}"
-										 click="runingTemplate();"/>
+										 click="{processStep ( cLicense );}"/>
+				</mx:HBox>
+			</mx:Canvas>
+			
+			<mx:Canvas id="cLicense"
+					   width="100%"
+					   showEffect="{canvasShow}" hideEffect="{canvasHide}">
+				
+				<mx:Label text="License agreement:" color="white" fontWeight="bold" fontSize="13"/>
+				<mx:TextArea y="20"
+					width="100%" height="130"
+					text="{ContextManager.templates.getItemAt( 0 ).selectedProject.license}"
+					styleName="infoTextStyle"
+					editable="false" selectable="false" focusEnabled="false"
+					borderStyle="none"/>
+				
+				<mx:HBox y="162" width="100%"
+						 horizontalAlign="right" verticalAlign="middle">
+					
+					<mx:CheckBox id="licenseCheckBox" 
+								 label="I accept the license agreement"/>
+					<mx:Spacer width="100%"/>
+					<control:RoundButton id="btnLicenseContinue"
+										 label="Next"
+										 enabled="{licenseCheckBox.selected}"
+										 click="licenseAccepting();"/>
 				</mx:HBox>
 			</mx:Canvas>
 
