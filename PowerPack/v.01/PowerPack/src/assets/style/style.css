@@ -480,7 +480,7 @@ SuperTextArea
 	fontWeight: bold;
 }
 
-CheckBox {
+.liscenseCheckBoxStyle {
 	color: #ffffff;
 	disabledColor:  #ffffff;
 	textRollOverColor: #ffffff;
