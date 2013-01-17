@@ -596,7 +596,8 @@
 						 horizontalAlign="right" verticalAlign="middle">
 					
 					<mx:CheckBox id="licenseCheckBox" 
-								 label="I accept the license agreement"/>
+								 label="I accept the license agreement"
+								 styleName="liscenseCheckBoxStyle"/>
 					<mx:Spacer width="100%"/>
 					<control:RoundButton id="btnLicenseContinue"
 										 label="Next"

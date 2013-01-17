@@ -422,7 +422,7 @@ ScrollBar {
 	thumbSkin : ClassReference("net.vdombox.powerpack.lib.player.customize.skins.ScrollThumbSkin")
 }
 
-CheckBox {
+.liscenseCheckBoxStyle {
 	color: #ffffff;
 	disabledColor:  #ffffff;
 	textRollOverColor: #ffffff;
