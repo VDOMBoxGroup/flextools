@@ -29,7 +29,8 @@
 			import net.vdombox.powerpack.sdkcompiler.SDKCompilerParamsChecker;
 			import net.vdombox.powerpack.template.BuilderTemplateProject;
 			
-			public static const EVENT_INITIAL_GRAPH_CHANGED : String = "initialGraphChanged";
+			public static const EVENT_INITIAL_GRAPH_CHANGED		: String = "initialGraphChanged";
+			public static const EVENT_PROJECT_SETTINGS_CHANGED	: String = "projectSettingsSaved";
 			
 			private var compilerParamsChecker	: SDKCompilerParamsChecker = SDKCompilerParamsChecker.getInstance();
 			
@@ -349,6 +350,8 @@
 				}
 				
 				project.key = txtKey.text;
+				
+				dispatchEvent(new Event(EVENT_PROJECT_SETTINGS_CHANGED));
 			}
 			
 			private var _initialGraphIndex : int;

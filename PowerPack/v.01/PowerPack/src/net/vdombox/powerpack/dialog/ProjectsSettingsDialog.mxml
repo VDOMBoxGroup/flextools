@@ -206,6 +206,7 @@
 				projectPropertiesControl.graphs = graphs;
 				
 				projectPropertiesControl.addEventListener(ProjectPropertiesBox.EVENT_INITIAL_GRAPH_CHANGED, projectInitialGraphChangedHandler);
+				projectPropertiesControl.addEventListener(ProjectPropertiesBox.EVENT_PROJECT_SETTINGS_CHANGED, projectSettingsSavesHandler);
 				
 				vsProperties.addChild(projectPropertiesControl);
 				
@@ -226,6 +227,16 @@
 				}
 			}
 			
+			private function projectSettingsSavesHandler (event : Event) : void
+			{
+				var target : ProjectPropertiesBox = event.target as ProjectPropertiesBox;
+				var targetProject : BuilderTemplateProject = target.project;
+				
+				if (targetProject.modified)
+					currentTemplate.modified = true;
+				
+			}
+			
 			private function projectPropertiesCreationCompleteHandler (event : FlexEvent) : void
 			{
 				var projectPropertiesControl : ProjectPropertiesBox = event.target as ProjectPropertiesBox;
@@ -240,6 +251,11 @@
 			
 			private function removeProjectPropertiesAt (index : int) : void
 			{
+				var projectProperties : ProjectPropertiesBox = vsProperties.getChildAt(index) as ProjectPropertiesBox;
+				
+				projectProperties.removeEventListener(ProjectPropertiesBox.EVENT_INITIAL_GRAPH_CHANGED, projectInitialGraphChangedHandler);
+				projectProperties.removeEventListener(ProjectPropertiesBox.EVENT_PROJECT_SETTINGS_CHANGED, projectSettingsSavesHandler);
+				
 				vsProperties.removeChildAt(index);
 			}
 			
