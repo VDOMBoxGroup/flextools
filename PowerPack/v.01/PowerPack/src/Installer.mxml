@@ -15,6 +15,8 @@
 	<mx:Style source="assets/style/style.css"/>
 
 	<mx:Script><![CDATA[
+		import mx.controls.scrollClasses.ScrollBar;
+		import mx.controls.scrollClasses.ScrollThumb;
 		import mx.core.Application;
 		import mx.core.FlexLoader;
 		import mx.events.FlexEvent;
@@ -154,6 +156,9 @@
 		
 		protected function player_mouseDownHandler(event:MouseEvent):void
 		{
+			if (event.target is ScrollBar || event.target is ScrollThumb)
+				return;
+			
 			nativeWindow.startMove();
 		}
 		

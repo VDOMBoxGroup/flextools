@@ -333,6 +333,8 @@
 				project.name = txtName.text;
 				project.installerId = txtInstallerId.text;
 				project.description = txtDesc.text;
+				if (txtLisenceEn)
+					project.license = txtLisenceEn.text;
 				
 				project.outputFileName = installerFileName.text;
 				project.outputFolderPath = StringUtil.trim(outputInstallerFolderBrowseBox.path);
@@ -398,6 +400,9 @@
 			
 			override public function setFocus () : void
 			{
+				if (!txtName)
+					return;
+				
 				txtName.setFocus();
 				txtName.setSelection(0, txtName.text.length);
 			}
@@ -417,172 +422,182 @@
 		]]>
 	</mx:Script>
 	
-	<mx:Grid width="100%">
+	<mx:TabNavigator width="100%" height="100%" 
+					 paddingLeft="10" paddingRight="10"
+					 backgroundColor="#eeeeee">
 		
-		<mx:GridRow width="100%" height="22">
-			<mx:GridItem width="120" height="100%">
-				<mx:Label text="{LanguageManager.sentences.template_name}:" />
-			</mx:GridItem>
-			<mx:GridItem width="100%" height="100%">
-				<mx:TextInput width="300" id="txtName"
-							  restrict="a-zA-Z0-9\-.'_ ()"
-							  change="validateProjectName()"
-							  focusIn="txtName_focusInHandler(event)"/>
-			</mx:GridItem>
-		</mx:GridRow>
-		
-		<mx:GridRow width="100%" height="22">
-			<mx:GridItem width="120" height="100%">
-				<mx:Label text="{LanguageManager.sentences.template_id}:" />
-			</mx:GridItem>
-			<mx:GridItem width="100%" height="100%">
-				<mx:TextInput width="300" id="txtInstallerId" 
-							  toolTip="{LanguageManager.sentences.template_ID_tooltip}"
-							  restrict="a-zA-Z0-9\-."
-							  maxChars="212"
-							  change="validateInstallerId()"/>
-			</mx:GridItem>
-		</mx:GridRow>
-		
-		<mx:GridRow width="100%" height="90">
-			<mx:GridItem width="120" height="100%">
-				<mx:Label text="{LanguageManager.sentences.template_description}:" />
-			</mx:GridItem>
-			<mx:GridItem width="100%" height="100%">
-				<mx:TextArea width="300" height="90" id="txtDesc" />
-			</mx:GridItem>
-		</mx:GridRow>
-		
-		<mx:GridRow width="100%" height="10">
-			<mx:GridItem width="100%" height="100%" colSpan="2">
-				<mx:HRule width="100%" />
-			</mx:GridItem>
-		</mx:GridRow>
-		
-		<mx:GridRow width="100%" height="22">
-			<mx:GridItem width="120" height="100%"
-						 horizontalScrollPolicy="off">
-				<mx:Label text="Initial Graph: " width="120"/>
-			</mx:GridItem>
+		<mx:Grid width="100%" label="General">
 			
-			<mx:GridItem width="100%" height="100%">
-				<mx:ComboBox id="graphsComboBox"
-							 dataProvider="{graphs}"
-							 labelField="name"
-							 width="200" height="20"
-							 selectedIndex="{initialGraphIndex}"
-							 change="graphsComboBox_changeHandler(event)"/>
-			</mx:GridItem>
-		</mx:GridRow>
-		
-		<mx:GridRow width="100%" height="10">
-			<mx:GridItem width="100%" height="100%" colSpan="2">
-				<mx:HRule width="100%" />
-			</mx:GridItem>
-		</mx:GridRow>
-		
-		<mx:GridRow width="100%" height="22">
-			<mx:GridItem width="120" height="100%"
-						 horizontalScrollPolicy="off">
-				<mx:Label text="Output folder: " width="120"/>
-			</mx:GridItem>
-				
-			<mx:GridItem width="100%" height="100%">
-				<controls:FileBrowseBox id="outputInstallerFolderBrowseBox"
-									mode="{FileBrowseBox.MODE_DIR}"
-									browseTitle="Select output folder"
-									defaultPath="{File.desktopDirectory.nativePath}"
-									change="validateOutputInstallerFolderPath()"
-									select="validateOutputInstallerFolderPath()"
-									width="100%"/>
-			</mx:GridItem>
-		</mx:GridRow>
-		
-		<mx:GridRow width="100%" height="22">
-			<mx:GridItem width="120" height="100%"
-						 horizontalScrollPolicy="off">
-				<mx:Label text="Output file name: " width="120"/>	
-			</mx:GridItem>
+			<mx:GridRow width="100%" height="22">
+				<mx:GridItem width="120" height="100%">
+					<mx:Label text="{LanguageManager.sentences.template_name}:" />
+				</mx:GridItem>
+				<mx:GridItem width="100%" height="100%">
+					<mx:TextInput width="280" id="txtName"
+								  restrict="a-zA-Z0-9\-.'_ ()"
+								  change="validateProjectName()"
+								  focusIn="txtName_focusInHandler(event)"/>
+				</mx:GridItem>
+			</mx:GridRow>
 			
-			<mx:GridItem width="100%" height="100%">
-				<mx:TextInput id="installerFileName" 
-						  width="100%" 
-						  restrict="a-zA-z0-9 \-_.()" 
-						  toolTip="{installerFileName.text}"
-						  change="validateInstallerFileName()"/>
-			</mx:GridItem>
+			<mx:GridRow width="100%" height="22">
+				<mx:GridItem width="120" height="100%">
+					<mx:Label text="{LanguageManager.sentences.template_id}:" />
+				</mx:GridItem>
+				<mx:GridItem width="100%" height="100%">
+					<mx:TextInput width="280" id="txtInstallerId" 
+								  toolTip="{LanguageManager.sentences.template_ID_tooltip}"
+								  restrict="a-zA-Z0-9\-."
+								  maxChars="212"
+								  change="validateInstallerId()"/>
+				</mx:GridItem>
+			</mx:GridRow>
 			
-			<mx:GridItem width="100%" height="100%">
-				<mx:Spacer width="70"/>
-			</mx:GridItem>
-				
-		</mx:GridRow>
-		
-		<mx:GridRow width="100%" height="50">
-			<mx:GridItem width="120" height="100%"
-						 horizontalScrollPolicy="off">
-				
-				<mx:Label text="Embedded applications: " 
-						  width="120"/>
-				
-			</mx:GridItem>
+			<mx:GridRow width="100%" height="90">
+				<mx:GridItem width="120" height="100%">
+					<mx:Label text="{LanguageManager.sentences.template_description}:" />
+				</mx:GridItem>
+				<mx:GridItem width="100%" height="100%">
+					<mx:TextArea width="280" height="90" id="txtDesc" />
+				</mx:GridItem>
+			</mx:GridRow>
 			
-			<mx:GridItem width="100%" height="100%">
-				<mx:HBox width="100%" height="100%">
-					<mx:TextArea id="appsTextArea" editable="false" width="100%" height="100%"/>
-					<mx:Button label="Edit" 
-							   click="{BrowseApplicationsDialog.show(embeddedApplications, browseAppsDialogCloseHandler)}"/>
-				</mx:HBox>
-			</mx:GridItem>
-				
-		</mx:GridRow>
-		
-		<mx:GridRow width="100%" height="22">
-			<mx:GridItem width="120" height="100%">
-				<mx:Label text="{LanguageManager.sentences.template_key}:" />
-			</mx:GridItem>
-			<mx:GridItem width="100%" height="100%">
-				<mx:TextInput id="txtKey" width="300" />
-			</mx:GridItem>
-		</mx:GridRow>
-		
-		<mx:GridRow width="100%" height="15">
-			<mx:GridItem width="100%" height="100%" colSpan="2">
-				<controls:HDivider label="{LanguageManager.sentences.template_picture}" />
-			</mx:GridItem>
-		</mx:GridRow>
-		
-		<mx:GridRow width="100%" height="22">
-			<mx:GridItem width="100%" height="100%">
-				<mx:CheckBox id="usePictureCheckBox" 
-							 label="{LanguageManager.sentences.template_use_picture}"
-							 change="onUsePictureSelectionChanged(event)"
-							 selected="true"/>
-			</mx:GridItem>
-		</mx:GridRow>
-		
-		<mx:GridRow id="pictureGridRow" 
-					width="100%" height="120" 
-					verticalAlign="middle">
-			<mx:GridItem id="pictureGridColumn" 
-						 width="120" height="120"
-						 verticalAlign="middle" horizontalAlign="center">
-				
-				<controls:Base64Image id="b64Img"
-									  width="100%" height="100%"
-									  scaleContent="true" maintainAspectRatio="true"
-									  autoLoad="true"
-									  verticalAlign="middle" horizontalAlign="center"/>
-			</mx:GridItem>
+			<mx:GridRow width="100%" height="10">
+				<mx:GridItem width="100%" height="100%" colSpan="2">
+					<mx:HRule width="100%" />
+				</mx:GridItem>
+			</mx:GridRow>
 			
-			<mx:GridItem width="100%" height="120" verticalAlign="middle">
-				<mx:Button id="btnBrowsePic"
-						   label="{LanguageManager.sentences.browse}..."		
-						   click="onPicBrowseClick(event)"/>
+			<mx:GridRow width="100%" height="22">
+				<mx:GridItem width="120" height="100%"
+							 horizontalScrollPolicy="off">
+					<mx:Label text="Initial Graph: " width="120"/>
+				</mx:GridItem>
 				
-			</mx:GridItem>
-		</mx:GridRow>
+				<mx:GridItem width="100%" height="100%">
+					<mx:ComboBox id="graphsComboBox"
+								 dataProvider="{graphs}"
+								 labelField="name"
+								 width="200" height="20"
+								 selectedIndex="{initialGraphIndex}"
+								 change="graphsComboBox_changeHandler(event)"/>
+				</mx:GridItem>
+			</mx:GridRow>
+			
+			<mx:GridRow width="100%" height="10">
+				<mx:GridItem width="100%" height="100%" colSpan="2">
+					<mx:HRule width="100%" />
+				</mx:GridItem>
+			</mx:GridRow>
+			
+			<mx:GridRow width="100%" height="22">
+				<mx:GridItem width="120" height="100%"
+							 horizontalScrollPolicy="off">
+					<mx:Label text="Output folder: " width="120"/>
+				</mx:GridItem>
+					
+				<mx:GridItem width="100%" height="100%">
+					<controls:FileBrowseBox id="outputInstallerFolderBrowseBox"
+										mode="{FileBrowseBox.MODE_DIR}"
+										browseTitle="Select output folder"
+										defaultPath="{File.desktopDirectory.nativePath}"
+										change="validateOutputInstallerFolderPath()"
+										select="validateOutputInstallerFolderPath()"
+										width="100%"/>
+				</mx:GridItem>
+			</mx:GridRow>
+			
+			<mx:GridRow width="100%" height="22">
+				<mx:GridItem width="120" height="100%"
+							 horizontalScrollPolicy="off">
+					<mx:Label text="Output file name: " width="120"/>	
+				</mx:GridItem>
+				
+				<mx:GridItem width="100%" height="100%">
+					<mx:TextInput id="installerFileName" 
+							  width="100%" 
+							  restrict="a-zA-z0-9 \-_.()" 
+							  toolTip="{installerFileName.text}"
+							  change="validateInstallerFileName()"/>
+				</mx:GridItem>
+				
+				<mx:GridItem width="100%" height="100%">
+					<mx:Spacer width="70"/>
+				</mx:GridItem>
+					
+			</mx:GridRow>
+			
+			<mx:GridRow width="100%" height="50">
+				<mx:GridItem width="120" height="100%"
+							 horizontalScrollPolicy="off">
+					
+					<mx:Label text="Embedded applications: " 
+							  width="120"/>
+					
+				</mx:GridItem>
+				
+				<mx:GridItem width="100%" height="100%">
+					<mx:HBox width="100%" height="100%">
+						<mx:TextArea id="appsTextArea" editable="false" width="100%" height="100%"/>
+						<mx:Button label="Edit" 
+								   click="{BrowseApplicationsDialog.show(embeddedApplications, browseAppsDialogCloseHandler)}"/>
+					</mx:HBox>
+				</mx:GridItem>
+					
+			</mx:GridRow>
+			
+			<mx:GridRow width="100%" height="22">
+				<mx:GridItem width="120" height="100%">
+					<mx:Label text="{LanguageManager.sentences.template_key}:" />
+				</mx:GridItem>
+				<mx:GridItem width="100%" height="100%">
+					<mx:TextInput id="txtKey" width="280" />
+				</mx:GridItem>
+			</mx:GridRow>
+			
+			<mx:GridRow width="100%" height="15">
+				<mx:GridItem width="100%" height="100%" colSpan="2">
+					<controls:HDivider label="{LanguageManager.sentences.template_picture}" />
+				</mx:GridItem>
+			</mx:GridRow>
+			
+			<mx:GridRow width="100%" height="22">
+				<mx:GridItem width="100%" height="100%">
+					<mx:CheckBox id="usePictureCheckBox" 
+								 label="{LanguageManager.sentences.template_use_picture}"
+								 change="onUsePictureSelectionChanged(event)"
+								 selected="true"/>
+				</mx:GridItem>
+			</mx:GridRow>
+			
+			<mx:GridRow id="pictureGridRow" 
+						width="100%" height="120" 
+						verticalAlign="middle">
+				<mx:GridItem id="pictureGridColumn" 
+							 width="120" height="120"
+							 verticalAlign="middle" horizontalAlign="center">
+					
+					<controls:Base64Image id="b64Img"
+										  width="100%" height="100%"
+										  scaleContent="true" maintainAspectRatio="true"
+										  autoLoad="true"
+										  verticalAlign="middle" horizontalAlign="center"/>
+				</mx:GridItem>
+				
+				<mx:GridItem width="100%" height="120" verticalAlign="middle">
+					<mx:Button id="btnBrowsePic"
+							   label="{LanguageManager.sentences.browse}..."		
+							   click="onPicBrowseClick(event)"/>
+					
+				</mx:GridItem>
+			</mx:GridRow>
+			
+		</mx:Grid>
 		
-	</mx:Grid>
-	
+		<mx:VBox label="License" width="100%" height="100%">
+			<mx:Label text="Input license text here:" fontWeight="bold" />
+			<mx:TextArea id="txtLisenceEn" width="400" height="440" text="{project.license}"/>
+		</mx:VBox>
+	</mx:TabNavigator>
+		
 </mx:VBox>

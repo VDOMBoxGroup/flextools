@@ -91,6 +91,8 @@
 			import mx.collections.HierarchicalData;
 			import mx.collections.XMLListCollection;
 			import mx.controls.Tree;
+			import mx.controls.scrollClasses.ScrollBar;
+			import mx.controls.scrollClasses.ScrollThumb;
 			import mx.core.Application;
 			import mx.core.windowClasses.StatusBar;
 			import mx.events.CloseEvent;
@@ -959,6 +961,9 @@
 			
 			function playerMouseDownHandler (event : MouseEvent) : void
 			{
+				if (event.target is ScrollBar || event.target is ScrollThumb)
+					return;
+				
 				playerObj.startDrag();
 			}
 			

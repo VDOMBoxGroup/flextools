@@ -479,3 +479,12 @@ SuperTextArea
 	fontSize: 12;
 	fontWeight: bold;
 }
+
+CheckBox {
+	color: #ffffff;
+	disabledColor:  #ffffff;
+	textRollOverColor: #ffffff;
+	textSelectedColor: #ffffff;
+	
+	fontStyle: italic;
+}
