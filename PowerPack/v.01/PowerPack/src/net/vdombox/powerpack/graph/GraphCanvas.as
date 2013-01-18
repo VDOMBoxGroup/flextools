@@ -786,7 +786,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 			for each( var xmlNode : XML in dataXML.state )
 			{
 				var newNode : Node = Node.fromXML( xmlNode, false );
-				namesMap[newNode.name] = newNode.name;
+				namesMap[xmlNode.@name] = newNode.name;
 				newNode.selected = true;
 				addChild( newNode );
 			}
