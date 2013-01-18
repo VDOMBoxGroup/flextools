@@ -575,7 +575,7 @@
 				<mx:HBox y="162" width="100%"
 						 horizontalAlign="right" verticalAlign="middle">
 					<control:RoundButton id="btnRun"
-										 label="{LanguageManager.sentences.run}"
+										 label="{LanguageManager.sentences.next}"
 										 click="{processStep ( cLicense );}"/>
 				</mx:HBox>
 			</mx:Canvas>
