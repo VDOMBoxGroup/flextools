@@ -833,9 +833,10 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 				pngData.position = 0;
 
 				var encoder : Base64Encoder = new Base64Encoder();
+				encoder.insertNewLines = false;
 				encoder.encodeBytes( pngData );
+				
 				var b64Data : String = encoder.flush();
-
 				var data : ByteArray = new ByteArray();
 				data.writeUTFBytes( b64Data );
 				
@@ -928,6 +929,7 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 			resourceData.position = 0;
 			
 			var encoder : Base64Encoder = new Base64Encoder();
+			encoder.insertNewLines = false;
 			encoder.encodeBytes( resourceData );
 			var b64Data : String = encoder.flush();
 			

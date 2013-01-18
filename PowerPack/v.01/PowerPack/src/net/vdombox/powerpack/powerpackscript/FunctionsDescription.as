@@ -107,7 +107,7 @@ package net.vdombox.powerpack.powerpackscript
 				"imageToBase64"			: "<b>Description:</b>\n" +
 										  "Converts bitmap to Base64.\n" +
 										  "<b>Syntax:</b>\n" +
-										  "[imageToBase64 BITMAP IMAGE_FORMAT]",
+										  "[imageToBase64 $imgBitmap \"png\"]",
 				
 				"alert"					: "<b>Description:</b>\n" +
 									      "Shows alert with specified TEXT.\n" +
@@ -298,6 +298,11 @@ package net.vdombox.powerpack.powerpackscript
 										  "Return Bitmap of resource by name.\n" +
 										  "<b>Syntax:</b>\n" +
 										  "[ getResourceBitmap $ResourceName ]",
+										  
+				"getResourceBase64"		: "<b>Description:</b>\n" +
+										  "Return Base64 of resource by name.\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[ getResourceBase64 $ResourceName ]",
 				
 				"createImage"			: "<b>Syntax:</b>\n" +
 										  "[createImage w h bgcolor]",

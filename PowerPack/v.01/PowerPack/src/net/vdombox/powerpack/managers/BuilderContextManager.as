@@ -243,6 +243,7 @@ package net.vdombox.powerpack.managers
 				var bytes : ByteArray = CryptUtils.encrypt( ContextManager.instance.pass );
 				bytes.position = 0;
 				var base64Enc : Base64Encoder = new Base64Encoder();
+				base64Enc.insertNewLines = false;
 				base64Enc.encodeBytes( bytes, 0, bytes.length );
 				ContextManager.instance.settingsXML.pass = base64Enc.flush();
 			}
