@@ -659,6 +659,7 @@ public dynamic class TemplateLib extends EventDispatcher
 		{
 			var base64Data : Base64Encoder = new Base64Encoder();
 			base64Data.insertNewLines = false;
+			
 			base64Data.encodeUTFBytes( value.toString() );
 			
 			
@@ -700,8 +701,8 @@ public dynamic class TemplateLib extends EventDispatcher
 //		data.compress(); 
 		
 		
-		encoder.encodeBytes( data );
 		encoder.insertNewLines = false;
+		encoder.encodeBytes( data );
 		
 		return encoder.flush();
 	}
