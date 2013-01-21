@@ -790,15 +790,23 @@
 							else
 							{
 								switchDebug( true );
-							
-								ProgressManager.source = ContextManager.templateStruct;
-								ProgressManager.show(ProgressManager.WINDOW_MODE);
 								
-								addDebugListeners();
-								
-								ContextManager.templateStruct.generate();
+								Application.application.addEventListener( Event.ENTER_FRAME, startDebugProcess);
 							}
 						}
+						
+						function startDebugProcess (event : Event) : void
+						{
+							Application.application.removeEventListener( Event.ENTER_FRAME, startDebugProcess);
+							
+							ProgressManager.source = ContextManager.templateStruct;
+							ProgressManager.show(ProgressManager.WINDOW_MODE);
+							
+							addDebugListeners();
+							
+							ContextManager.templateStruct.generate();
+						}
+						
 					}
 					
 					break;
