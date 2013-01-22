@@ -18,7 +18,7 @@
     <id>net.vdom.powerpack.builder</id>
 
     <!-- Used as the filename for the application. Required. -->
-    <filename>PowerPack Builder</filename>
+    <filename>PowerPack Builder v.1.3.0.8763</filename>
 
     <!-- The name that is displayed in the AIR application installer. Optional. -->
     <name>PowerPack Builder 1.3.0 (8763)</name>
