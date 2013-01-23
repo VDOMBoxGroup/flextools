@@ -386,6 +386,48 @@ public dynamic class TemplateLib extends EventDispatcher
 		return new Bitmap( bd1 );
 	}
 	
+	public function strToXMLCDATA( str : String ) : XML
+	{
+		str = "<![CDATA[" + str + "]" + "]>";
+		
+		return strToXML( str );
+	}
+	
+	public function strToXML( str : String ) : XML
+	{
+		var xml : XML;
+		
+		str= unescape( str );
+		
+		try
+		{
+			xml = new XML( str );
+		} 
+		catch(error:Error) 
+		{
+			trace( error )
+		}
+		
+		return xml;
+	}
+	
+	public function strToXMLList( str : String ) : XMLList
+	{
+		var xmlList : XMLList;
+		
+		str= unescape( str );
+		
+		try
+		{
+			xmlList = new XMLList( str );
+		} 
+		catch(error:Error) 
+		{
+			trace( error )
+		}
+		
+		return xmlList;
+	}
 	
 	public function getXMLValue( xml : XML, queryStr : String ) : XMLList
 	{
@@ -446,7 +488,6 @@ public dynamic class TemplateLib extends EventDispatcher
 	private function getQueryResult(xml : XML, path:String):XMLList
 	{
 		path = path ? path : "/";
-		
 		
 		var xPathQuery:XPathQuery =  new XPathQuery( path );
 		
@@ -903,12 +944,14 @@ public dynamic class TemplateLib extends EventDispatcher
 		return substr;
 	}
 	
-	public function replace( string : String, tgt : String, flags : String, src : String ) : String
+	public function replace( string : Object, tgt : String, flags : String, src : String ) : String
 	{
 		var regExp : RegExp = new RegExp( tgt, flags );
-		var str : String = string.replace( regExp, src );
-		return str;
+
+		return  string.replace( regExp, src );
 	}
+	
+	
 	
 	public function split( delimiter : String, string : String ) : String
 	{

@@ -62,6 +62,11 @@ public class Parser
         "setXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]*\]$/, argNum : 3 },
 		"getXMLValue" : { pattern : /^\[n[nviscVNSA][vscVSA]\]$/, argNum : 2 },
 		
+		"strToXML" : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
+		"strToXMLCDATA" : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
+		"strToXMLList" : { pattern : /^\[n[vscVSA]\]$/, argNum : 1 },
+		
+		
 		'dialog' : { pattern : /^\[n[vscVSA][nvscVSA]*\]$/, argNum : -1 },
 		'cancelableDialog' : { pattern : /^\[n[vscVSA][nvscVSA]*\]$/, argNum : -1 , trans : ['OK', 'CANCEL']},
 		
