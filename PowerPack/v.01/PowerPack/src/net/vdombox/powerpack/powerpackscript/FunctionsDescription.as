@@ -135,11 +135,23 @@ package net.vdombox.powerpack.powerpackscript
 										  "Used to call SOAP methods of VDOM Box Server.\n" +
 										  "<b>Syntax:</b>\n" +
 										  "[wholeMethod 'function_name' Param1 ... ParamN]",
-				
-				"setXMLValue"			: "<b>Description:</b>\n" +
-										  "Sets the value to XML by specified XPATH.\n" +
+
+										  
+  				"strToXMLCDATA"			: "<b>Description:</b>\n" +
+										   "Convert a string to XML wriped by CDATA.\n" +
 										  "<b>Syntax:</b>\n" +
-										  "[setXMLValue $xml $XPATH $value]",
+										  "[ strToXMLCDATA $str ]",
+						  
+										  
+				"strToXML"				: "<b>Description:</b>\n" +
+										  "Convert a string to XML.\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[ strToXML $str ]",
+
+				"strToXMLList"			: "<b>Description:</b>\n" +
+										  "Convert a string to XMLList.\n" +
+										  "<b>Syntax:</b>\n" +
+										  "[ strToXMLList $str ]",
 										  
 				"getXMLValue"			: "<b>Description:</b>\n" +
 										  "Returns the value from XML using query string.\n" +
