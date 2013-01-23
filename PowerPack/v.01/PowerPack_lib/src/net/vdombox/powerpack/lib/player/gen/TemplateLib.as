@@ -948,7 +948,8 @@ public dynamic class TemplateLib extends EventDispatcher
 	{
 		var regExp : RegExp = new RegExp( tgt, flags );
 
-		return  string.replace( regExp, src );
+		  var str : String = string.toString().replace( regExp, src );
+		  return str;
 	}
 	
 	
