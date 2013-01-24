@@ -32,7 +32,7 @@ package net.vdombox.utils
 		
 		public static function fromHtmlEnc( str : String ) : String
 		{
-			var str2 : String = str.replace( /&lt;/g, "<" ).replace( /&gt;/g, ">" ).replace( /&apos;/g, '"' ).replace( /&quot;/g, '"' ).replace( /&amp;/g, "&" );
+			var str2 : String = str.replace( /&lt;/g, "<" ).replace( /&gt;/g, ">" ).replace( /&apos;/g, "'" ).replace( /&quot;/g, '"' ).replace( /&amp;/g, "&" );
 			return str2;
 		}
 		
