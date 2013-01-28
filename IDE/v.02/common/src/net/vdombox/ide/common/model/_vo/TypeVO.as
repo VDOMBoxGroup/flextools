@@ -393,6 +393,46 @@ package net.vdombox.ide.common.model._vo
 
 				resourceManager.addResourceBundle( resourceBundle );
 			}
+			
 		}
+		
+		public function getPhraseById (phraseId : String) : String
+		{
+			var typeId : String = id || _typeID;
+			
+			var phrase : String = resourceManager.getString(typeId, phraseId);
+			
+			if (!phrase || phrase == "null")
+				phrase = extractPhrase(phraseId);
+			
+			return phrase;
+		}
+		
+		private function extractPhrase (phraseId : String) : String
+		{
+			var typeId : String = id || _typeID;
+			
+			var locale : String;
+			var sents : XMLList;
+			
+			sents = languages.Sentence.( @ID == phraseId )
+			
+			for each ( var sent : XML in sents )
+			{
+				locale = sent.parent().@Code;
+				
+				var resourceBundle : IResourceBundle = resourceManager.getResourceBundle( locale, typeId );
+				
+				if ( !resourceBundle )
+					resourceBundle = new ResourceBundle( locale, typeId );
+				
+				resourceBundle.content[ sent.@ID.toString() ] = sent[ 0 ].toString();
+			}
+			resourceManager.addResourceBundle( resourceBundle );
+			
+			return resourceManager.getString(typeId, phraseId);
+		}
+		
+		
 	}
 }
