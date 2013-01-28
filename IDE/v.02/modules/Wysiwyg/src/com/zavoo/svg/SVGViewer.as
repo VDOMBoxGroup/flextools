@@ -3,6 +3,7 @@ package com.zavoo.svg
 	
 	import com.zavoo.svg.nodes.SVGImageNode;
 	import com.zavoo.svg.nodes.SVGRoot;
+	import com.zavoo.svg.nodes.SVGTextNode;
 	
 	import flash.events.Event;
 	import flash.geom.Transform;
@@ -152,6 +153,14 @@ package com.zavoo.svg
 		{
 			var renderEvent : RendererEvent = new RendererEvent( RendererEvent.GET_RESOURCE );
 			renderEvent.object = svgImageNode;
+			
+			dispatchEvent( renderEvent );
+		}
+		
+		public function getTextTranslation (svgTextNode : SVGTextNode) : void
+		{
+			var renderEvent : RendererEvent = new RendererEvent( RendererEvent.TRANSLATE_SVG_TEXT );
+			renderEvent.object = svgTextNode;
 			
 			dispatchEvent( renderEvent );
 		}

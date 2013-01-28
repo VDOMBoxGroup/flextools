@@ -1,5 +1,6 @@
 package com.zavoo.svg.nodes
 {
+	import com.zavoo.svg.SVGViewer;
 	import com.zavoo.svg.data.SVGColors;
 	
 	import flash.display.Bitmap;
@@ -9,6 +10,8 @@ package com.zavoo.svg.nodes
 	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
 	
+	import mx.events.FlexEvent;
+	
 	/** SVG Text element node **/
 	public class SVGTextNode extends SVGNode
 	{	
@@ -16,7 +19,7 @@ package com.zavoo.svg.nodes
 		/**
 		 * Hold node's text
 		 **/
-		private var _text:String = '';
+		public var rawText : String = '';
 		
 		/**
 		 * Hold text path node if text follows a path
@@ -43,21 +46,36 @@ package com.zavoo.svg.nodes
 		 * Call SVGNode.parse()
 		 **/
 		override protected function parse():void {
-			this._text = '';
+			this.rawText = '';
+			this.text = "";
 			
-			for each(var childXML:XML in this._xml.children()) {
-				if (childXML.nodeKind() == 'text') {
-					this._text += childXML.toString();
-				}
+			for each ( var childXML:XML in this._xml.children() ) 
+			{
+				if (childXML.nodeKind() == 'text') 
+					this.rawText += childXML.toString();
 			}
 			
-			if (this._text != '') {
-				this._textField = new TextField();
-				
-				setAttributes();
-			}
+			svgRoot.parent.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler )
 			
 			super.parse();
+		}
+		
+		private var _text : String = "";
+		public function set text (value : String) : void
+		{
+			_text = value;
+			
+			if (_text != '' || rawText != '') 
+			{
+				this._textField = new TextField();
+				setAttributes();
+				draw();
+			}
+		}
+		
+		public function get text () : String
+		{
+			return _text || rawText;
 		}
 		
 		/**
@@ -65,8 +83,8 @@ package com.zavoo.svg.nodes
 		 * If this node contains text load text format (font, font-size, color, etc...)
 		 * Render text to a bitmap and add bitmap to node
 		 **/
-		override protected function setAttributes():void {
-			
+		override protected function setAttributes() : void 
+		{
 			super.setAttributes();
 			
 			if (this._textField != null) 
@@ -110,7 +128,7 @@ package com.zavoo.svg.nodes
 				}
 				
 				this._textField.defaultTextFormat = textFormat;
-				this._textField.text = this._text;
+				this._textField.text = this.text;
 				
 				var bitmapData:BitmapData = new BitmapData(this._textField.width, this._textField.height, true, 0x000000);
 				
@@ -135,11 +153,24 @@ package com.zavoo.svg.nodes
 		/**
 		 * Add _textBitmap to node
 		 **/
-		override protected function draw():void {
+		override protected function draw() : void 
+		{
 			super.draw();
-			if (this._textBitmap != null) {
+			
+			if (this._textBitmap != null) 
 				this.addChild(this._textBitmap);			
-			}			
 		} 			
+		
+		private function creationCompleteHandler (event : FlexEvent) : void
+		{
+			svgRoot.parent.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler )
+				
+			if (!rawText)
+				return;
+			
+			var svgViewer : SVGViewer = svgRoot.parent as SVGViewer;
+			if ( svgViewer != null)
+				svgViewer.getTextTranslation(this);
+		}
 	}
 }

@@ -9,6 +9,7 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
+	import com.zavoo.svg.nodes.SVGTextNode;
 	
 	import flash.display.Bitmap;
 	import flash.display.DisplayObjectContainer;
@@ -771,6 +772,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( editableAttributes.length > 0 )
 				_editableComponent = editableAttributes[ 0 ].sourceObject;
 			svg.addEventListener( RendererEvent.GET_RESOURCE, svgGetResourseHendler, false, 0, true );
+			svg.addEventListener( RendererEvent.TRANSLATE_SVG_TEXT, svgTranslateTextHandler, false, 0, true );
 
 			parentContainer.addElement( svg );
 		}
@@ -1865,6 +1867,36 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			dispatchEvent( renderEvent );
 		}
+		
+		private function svgTranslateTextHandler (event : RendererEvent) : void
+		{
+			var svgTextNode : SVGTextNode = event.object as SVGTextNode;
+			
+			svgTextNode.text = getTextTranslation (svgTextNode.rawText);
+			
+		}
+		
+		private function getTextTranslation (source : String) : String
+		{
+			var textLocalizationRE : RegExp = /#Lang\(\w+\)/;
+			
+			var translatedText : String = source;
+			
+			var matchResult : Array = source.match( textLocalizationRE );
+			if (!matchResult)
+				return source;
+			
+			for (var i:int=0; i<matchResult.length; i++)
+			{
+				var matchItem : String = matchResult[i];
+				var phraseID : String = matchItem.substring( 6, matchItem.length - 1 );
+				var phrase : String = typeVO.getPhraseById(phraseID);
+				translatedText = translatedText.replace(matchItem, phrase);
+			}
+			
+			return translatedText;
+		}
+		
 		
 		private var tip : ToolTip;
 		
