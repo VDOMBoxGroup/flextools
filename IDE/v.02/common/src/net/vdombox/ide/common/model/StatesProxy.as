@@ -101,6 +101,9 @@ package net.vdombox.ide.common.model
 		
 		public function set selectedPage( value : PageVO ) : void
 		{
+			if ( value && value.typeVO.id == "753ea72c-475d-4a29-96be-71c522ca2097" )
+				return;
+			
 			if ( data[ SELECTED_PAGE ] == value )
 				return;
 			
@@ -122,6 +125,9 @@ package net.vdombox.ide.common.model
 		
 		public function set selectedObject( value : ObjectVO ) : void
 		{
+			if ( value && value.pageVO.typeVO.id == "753ea72c-475d-4a29-96be-71c522ca2097" )
+				return;
+			
 			if ( data[ SELECTED_OBJECT ] == value )
 				return;
 			

@@ -7,8 +7,6 @@ package net.vdombox.ide.common.model._vo
 		{
 			_name = name;
 			_value = _defaultValue = value;
-			if ( name == "left" )
-				var tt : int = 0;
 		}
 		
 		private var _name : String;

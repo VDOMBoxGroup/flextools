@@ -143,6 +143,7 @@ package net.vdombox.ide.common.model
 		public function cleanup() : void
 		{
 			_types = null;
+			TypeDB.removeDB( "vdom" );
 		}
 	}
 }

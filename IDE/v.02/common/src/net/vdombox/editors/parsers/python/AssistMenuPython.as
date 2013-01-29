@@ -1,7 +1,6 @@
 package net.vdombox.editors.parsers.python
 {
 	import flash.display.Stage;
-	import flash.geom.Point;
 	
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
