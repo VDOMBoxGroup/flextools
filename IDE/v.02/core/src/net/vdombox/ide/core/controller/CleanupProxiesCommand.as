@@ -26,17 +26,7 @@ package net.vdombox.ide.core.controller
 			
 			var instanceName : String;
 			
-			serverProxy.logout();
-			
-			modulesProxy.unloadAllModules();
-			
-			pipesProxy.cleanup();
-			typesProxy.unloadTypes();
-			statesProxy.cleanup();
-			resourcesProxy.cleanup();
-			
-			
-			for ( instanceName in ApplicationProxy.instances )
+			for ( instanceName in ObjectProxy.instances )
 			{
 				facade.removeProxy( instanceName );
 			}
@@ -46,10 +36,19 @@ package net.vdombox.ide.core.controller
 				facade.removeProxy( instanceName );
 			}
 			
-			for ( instanceName in ObjectProxy.instances )
+			for ( instanceName in ApplicationProxy.instances )
 			{
 				facade.removeProxy( instanceName );
 			}
+			
+			serverProxy.logout();
+			
+			modulesProxy.unloadAllModules();
+			
+			pipesProxy.cleanup();
+			typesProxy.unloadTypes();
+			statesProxy.cleanup();
+			resourcesProxy.cleanup();
 		}
 	}
 }
