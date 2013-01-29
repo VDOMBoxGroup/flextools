@@ -210,9 +210,12 @@ package net.vdombox.ide.modules.scripts.view
 			
 			for ( var i : int = 0; i < pages.length; i++ )
 			{
-				_pages[ pages[ i ].id ] = pages[ i ];
-				
-				pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} iconID={pages[ i ].typeVO.structureIconID} />;
+				if ( pages[ i ].typeVO.id != "753ea72c-475d-4a29-96be-71c522ca2097" )
+				{
+					_pages[ pages[ i ].id ] = pages[ i ];
+					
+					pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} iconID={pages[ i ].typeVO.structureIconID} />;
+				}
 				
 			}
 			
