@@ -445,8 +445,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{			
 			beforeTransform = { x: _selectedItem.x, y: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
 			
-			(_selectedItem as RendererBase).beforeLeft = _selectedItem.x;
-			(_selectedItem as RendererBase).beforeTop = _selectedItem.y;
+			(_selectedItem as RendererBase).beforeX = _selectedItem.x;
+			(_selectedItem as RendererBase).beforeY = _selectedItem.y;
 
 			moving = null;
 			mousePosition = new Point( mouseX, mouseY );

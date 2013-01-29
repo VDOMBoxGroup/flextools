@@ -1284,14 +1284,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 					attributeValue = event.attributes[ attributeName ];
 					attributeName = "left";
 					
-					attributeVO = new AttributeVO( attributeName, renderer.beforeLeft.toString() );
+					attributeVO = new AttributeVO( attributeName, renderer.beforeX.toString() );
 				}
 				else if ( attributeName == "y" )
 				{
 					attributeValue = event.attributes[ attributeName ];
 					attributeName = "top";
 					
-					attributeVO = new AttributeVO( attributeName, renderer.beforeTop.toString() );
+					attributeVO = new AttributeVO( attributeName, renderer.beforeY.toString() );
 				}
 				else
 				{

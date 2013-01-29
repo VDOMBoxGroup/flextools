@@ -73,7 +73,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 			{
 				var visible : Boolean = visibleRendererProxy.getVisible(  renderer.vdomObjectVO.id );
 				
-				IUIComponent(renderer).visible = visible;
+				RendererBase(renderer).visibleByEye = visible;
 			}
 			
 			var renderVO : RenderVO = renderer.renderVO;
@@ -161,7 +161,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 			var _renderer : RendererBase = getRendererByID( rendererID );
 			
 			if ( _renderer )
-				_renderer.visible = flag;
+				_renderer.visibleByEye = flag;
 		}
 		
 

@@ -251,10 +251,11 @@
 
 			private function renderer_moveHandler( event : RendererEvent ) : void
 			{
+				var object : Object = event.object;
+				
 				var ee : EditorEvent = new EditorEvent( EditorEvent.RENDERER_TRANSFORMED );
-
 				ee.renderer = event.target as IRenderer;
-				ee.attributes = { x: int( UIComponent( ee.renderer ).x ), y: int (UIComponent( ee.renderer ).y) };
+				ee.attributes = { x: object.x, y: object.y };
 
 				dispatchEvent( ee );
 			}

@@ -187,7 +187,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					if ( pageXMLTree )
 					{
-						setVisibleForElements( pageXMLTree );
+						if ( pageXMLTree.@typeID != "753ea72c-475d-4a29-96be-71c522ca2097" )
+							setVisibleForElements( pageXMLTree );
 						
 					}
 					else
@@ -679,9 +680,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			for ( var i : int = 0; i < pages.length; i++ )
 			{
-				_pages[ pages[ i ].id ] = pages[ i ];
-
-				pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}  iconID={pages[ i ].typeVO.structureIconID}  />;
+				if ( pages[ i ].typeVO.id != "753ea72c-475d-4a29-96be-71c522ca2097" )
+				{
+					_pages[ pages[ i ].id ] = pages[ i ];
+	
+					pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}  iconID={pages[ i ].typeVO.structureIconID}  />;
+				}
 			}
 
 			objectsTreePanel.pages = pagesXMLList;

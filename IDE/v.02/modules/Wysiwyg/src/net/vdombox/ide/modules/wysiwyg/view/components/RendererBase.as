@@ -125,9 +125,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		// TODO: delete 
 		private var backgroundRefreshNeedFlag : Boolean = false;
 
-		private var beforeX : uint;
+		public var beforeX : uint;
 
-		private var beforeY : uint;
+		public var beforeY : uint;
 
 		/**
 		 * Display image bitmap once bytes have loaded
@@ -160,6 +160,19 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var beforeCreationComplete : Boolean = true;
 		
 		private var _move : Boolean = false;
+		
+		private var _visibleByEye : Boolean;
+		
+		public function get visibleByEye():Boolean
+		{
+			return _visibleByEye;
+		}
+		
+		public function set visibleByEye(value:Boolean):void
+		{
+			_visibleByEye = value;
+			visible = value;
+		}
 			
 		public function get data() : Object
 		{
@@ -1476,6 +1489,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{	
 			_move = false;
 			
+			beforeX = x;
+			beforeY = y;
+			
 			if ( event.shiftKey )
 			{
 				setFocus();
@@ -1503,9 +1519,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	
 					beforeX = x;
 					beforeY = y;
-					
-					beforeLeft = x;
-					beforeTop = y;
 				}
 			}
 			
@@ -1666,18 +1679,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 		}
 		
-		public var beforeLeft : Number;
-		public var beforeTop : Number;
-		
 		public function savePosition() : void
 		{
 			if ( x != beforeX || y != beforeY )
 			{
+				var rendEvent : RendererEvent = new RendererEvent( RendererEvent.MOVE );
+				rendEvent.object = { x : x, y : y };
+				dispatchEvent( rendEvent );
+				
 				beforeX = x;
 				beforeY = y;
-				
-				dispatchEvent( new RendererEvent( RendererEvent.MOVE ) );
-				
 				//stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
 			}
 		}
@@ -1694,11 +1705,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			stage.removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
 
 			if ( x != beforeX || y != beforeY )
-			{
+			{				
+				var rendEvent : RendererEvent = new RendererEvent( RendererEvent.MOVE );
+				rendEvent.object = { x : x, y : y };
+				dispatchEvent( rendEvent );
+				
 				beforeX = x;
 				beforeY = y;
-
-				dispatchEvent( new RendererEvent( RendererEvent.MOVE ) );
 
 				//stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
 			}
@@ -2064,6 +2077,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			skin.width = skinWidth;
 			skin.height = skinHeight;
 		}
+
+		
+
 		
 	}
 }
