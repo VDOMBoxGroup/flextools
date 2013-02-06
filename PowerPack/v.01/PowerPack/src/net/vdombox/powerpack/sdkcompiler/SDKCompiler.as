@@ -43,6 +43,7 @@ package net.vdombox.powerpack.sdkcompiler
 		protected var useTimestamp : Boolean = true;
 		
 		protected var project : BuilderTemplateProject;
+		protected var outputFileName : String;
 		
 		private var installerTplXml : XML = 
 			<application xmlns="http://ns.adobe.com/air/application/2.0">
@@ -84,6 +85,7 @@ package net.vdombox.powerpack.sdkcompiler
 		public function buildInstallerPackage(flexSdkPath : String,
 											  airSdkForLinuxPath : String,
 											  projectToBuild : BuilderTemplateProject,
+											  installerFileName : String,
 											  packageType : String = PACKAGE_TYPE_AIR,
 											  timeStamp : Boolean = true) : void
 		{
@@ -97,6 +99,7 @@ package net.vdombox.powerpack.sdkcompiler
 			airSDKForLinuxPath = airSdkForLinuxPath;
 			
 			project = projectToBuild;
+			outputFileName = installerFileName;
 			
 			this.useTimestamp = timeStamp;
 			
@@ -398,9 +401,9 @@ package net.vdombox.powerpack.sdkcompiler
 		
 		protected function get outputPackagePath () : String
 		{
-			var outputFileName : String = project.outputFileName + outputPackageType;
+			var outputFileFullName : String = outputFileName + outputPackageType;
 			
-			return new File(project.outputFolderPath).resolvePath(outputFileName).nativePath; 
+			return new File(project.outputFolderPath).resolvePath(outputFileFullName).nativePath; 
 		}
 		
 		protected function get outputPackageType () : String

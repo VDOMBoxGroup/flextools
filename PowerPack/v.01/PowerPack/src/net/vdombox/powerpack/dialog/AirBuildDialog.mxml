@@ -20,6 +20,7 @@
 			import mx.core.Application;
 			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
+			import mx.events.ListEvent;
 			import mx.utils.StringUtil;
 			
 			import net.vdombox.powerpack.lib.extendedapi.controls.LinkObject;
@@ -47,7 +48,7 @@
 			
 			private function get windowHeight () : Number
 			{
-				return useLinuxSDK ? 447 : 425;
+				return useLinuxSDK ? 470 : 450;
 			}
 			
 			private  function onShow():void
@@ -55,6 +56,7 @@
 				initFlexSDK_4_1_Path();
 				initAirSDKLinuxPath();
 				initVersion();
+				initInstallerFileName();
 			}
 			
 			private function initFlexSDK_4_1_Path():void
@@ -132,6 +134,7 @@
 				sdkCompiler.buildInstallerPackage ( flexSDK_4_1_BrowseBox.path,
 													airSDKLinuxBrowseBox.path,
 													project, 
+													installerFileName,
 													radioBtnGroupBuildType.selectedValue.toString(),
 													timeStampCheckBox.selected);
 				
@@ -262,11 +265,30 @@
 				return compilerParamsChecker.isValidInstallerOutputFolderPath(outputFolderPath);
 			}
 			
+			private function initInstallerFileName () : void
+			{
+				installerFileNameTF.text = project.outputFileName + ".v." + versionTextField.text;
+				
+				validateInstallerFileName();
+			}
+				
+			private function validateInstallerFileName () : void
+			{
+				installerFileNameTF.errorString = validInstallerFileName ? null : "Error file name format.\nUse symbols: \n a-z\n A-z\n 0-9\n <space>\n -\n _\n .\n (\n )";
+				
+				updateBuildEnableState();
+			}
+			
 			private function get validInstallerFileName () : Boolean
 			{
-				var outputFileName : String = project.outputFileName;
+				var outputFileName : String = installerFileNameTF.text;
 				
 				return compilerParamsChecker.isValidInstallerFileName(outputFileName);
+			}
+			
+			private function get installerFileName () : String
+			{
+				return installerFileNameTF.text;
 			}
 			
 			private function get validFlexSDKPath () : Boolean
@@ -346,6 +368,11 @@
 				return Template.VERSION_FORMAT.test(versionTextField.text);
 			}
 			
+			protected function projectsComboBox_changeHandler( event:ListEvent ) : void
+			{
+				initInstallerFileName();
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -400,13 +427,21 @@
 		</mx:HBox>
 		
 		<mx:HBox width="450" horizontalGap="3">
+			<mx:Label text="File name: " width="115"/>
+			<mx:TextInput id="installerFileNameTF" 
+						  restrict="a-zA-z0-9 \-_.()"
+						  width="100%"
+						  change="{validateInstallerFileName()}"/>
+		</mx:HBox>
+		
+		<mx:HBox width="450" horizontalGap="3">
 			<mx:Label text="Project to export: " width="115"/>
 			<mx:ComboBox id="projectsComboBox" 
 						 width="200" height="20"
 						 dataProvider="{ContextManager.templates.getItemAt( 0 ).projects}" 
 						 labelField="name"
 						 selectedIndex="{ContextManager.templates.getItemAt( 0 ).selectedProjectIndex}"
-						 change="updateBuildEnableState()"/>
+						 change="projectsComboBox_changeHandler(event)"/>
 		</mx:HBox>
 		
 		<mx:VBox verticalGap="10"
