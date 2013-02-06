@@ -174,7 +174,7 @@ package net.vdombox.powerpack.lib.player.template
 			projectXML.appendChild(<name>{name}</name>);
 			projectXML.appendChild(<installerId>{installerId}</installerId>);
 			projectXML.appendChild(<description>{description}</description>);
-			projectXML.appendChild(<license><en_US>{license}</en_US></license>);
+			projectXML.appendChild(<license><language code="en_US">{license}</language></license>);
 			projectXML.appendChild(<picture>{picture}</picture>);
 			projectXML.appendChild(<initialGraph name={initialGraphName}/>);
 			
@@ -187,7 +187,7 @@ package net.vdombox.powerpack.lib.player.template
 			name				= projectXML.name;
 			installerId			= projectXML.installerId;
 			description			= projectXML.description;
-			license				= projectXML.license.en_US;
+			license				= projectXML.license.language.(@code=="en_US");
 			picture				= projectXML.picture;
 			initialGraphName	= projectXML.initialGraph.@name;
 			
