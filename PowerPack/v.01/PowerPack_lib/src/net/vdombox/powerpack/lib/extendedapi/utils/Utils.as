@@ -420,5 +420,56 @@ package net.vdombox.powerpack.lib.extendedapi.utils
 			return resultArray;
 		}
 		
+		public static function compareVersions(  version1 : String, version2 : String ) : String
+		{
+			var versionPattern : RegExp = /^(\d+)(\.(\d+))*$/;
+			
+			if (!versionPattern.test(version1) || !versionPattern.test(version2))
+			{
+				return "Error";
+				
+			} 
+			
+			if (version1 == version2)
+			{
+				return "Equal";
+			}else
+			{
+				
+				var version1NumberParts : Array = version1.split(".");
+				var version2NumberParts : Array = version2.split(".");
+				
+				var len : Number = Math.min(version1NumberParts.length, version2NumberParts.length);
+				
+				for (var i:int=0; i<len; i++)
+				{
+					if (version1NumberParts[i] == version2NumberParts[i])
+						continue;
+					
+					if (version1NumberParts[i] < version2NumberParts[i])
+					{
+						return "Less";
+						
+					} 
+					else if (version1NumberParts[i] > version2NumberParts[i])
+					{
+						return "Larger";
+					}
+				}
+				
+				if (version1NumberParts.length == version2NumberParts.length)
+				{
+					return "Equal";
+				}
+				else
+				{
+					if ( version1NumberParts.length > version2NumberParts.length )
+						return "Larger";
+					else
+						return "Less";
+				}
+			}	
+		}
+		
 	}
 }

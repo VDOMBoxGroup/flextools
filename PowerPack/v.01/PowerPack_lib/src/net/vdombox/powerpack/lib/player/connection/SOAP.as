@@ -61,6 +61,7 @@ package net.vdombox.powerpack.lib.player.connection
 
 			webService.wsdl = wsdl;
 			webService.useProxy = false;
+			webService.requestTimeout = 59;
 
 			webService.addEventListener( LoadEvent.LOAD, loadHandler );
 			webService.addEventListener( FaultEvent.FAULT, faultHandler );

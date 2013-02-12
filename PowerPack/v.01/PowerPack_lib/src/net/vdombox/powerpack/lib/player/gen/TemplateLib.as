@@ -79,7 +79,7 @@ public dynamic class TemplateLib extends EventDispatcher
 	{
 		
 		// need wait 1 frame
-		Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
+		Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler, false, 0, true  );
 		
 		function enterFrameHandler (event : Event) : void
 		{
@@ -609,9 +609,10 @@ public dynamic class TemplateLib extends EventDispatcher
 	
 	public function progress( value : int, description : String ) : Function
 	{
+		
 		var i : int = 0;
 		var frameWait : int = 5;
-		Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
+		Application.application.addEventListener( Event.ENTER_FRAME, enterFrameHandler, false, 0, true );
 		
 		dispatchEvent( new TemplateLibEvent( TemplateLibEvent.PROGRESS, 
 			{value : value, description : description} ) );
@@ -630,9 +631,9 @@ public dynamic class TemplateLib extends EventDispatcher
 		}
 	}
 	
-	public function delay( value : Number ) : Function
+	public function delay( time : Number ) : Function
 	{
-		var timer:Timer = new Timer(value, 1);
+		var timer:Timer = new Timer( time, 1);
 		timer.addEventListener(TimerEvent.TIMER_COMPLETE, delayCompleteHandler);
 		
 		timer.start();
@@ -640,7 +641,7 @@ public dynamic class TemplateLib extends EventDispatcher
 		function delayCompleteHandler ( event : TimerEvent ): void
 		{
 			timer.stop();
-			setReturnValue( value );
+			setReturnValue( "delay " );
 		}
 		return delayCompleteHandler;
 	}
@@ -1061,61 +1062,16 @@ public dynamic class TemplateLib extends EventDispatcher
 		return vars.hasOwnProperty( varName ) ? vars [varName] : defaultValue;
 	}
 	
-	public function compareVersions (version1:String, version2:String) : void
+	public function compareVersions ( version1 : String, version2 : String ) : Function
 	{
-		var versionPattern : RegExp = /^(\d+)(\.(\d+))*$/;
 		
-		if (!versionPattern.test(version1) || !versionPattern.test(version2))
-		{
-			completeComparing("Error");
-			return;
-		}
+		var res : String = Utils.compareVersions( version1, version2 );
 		
-		if (version1 == version2)
-		{
-			completeComparing("Equal");
-			return;
-		}
+			setTransition( res );
+			setReturnValue( res );
 		
-		var version1NumberParts : Array = version1.split(".");
-		var version2NumberParts : Array = version2.split(".");
 		
-		var len : Number = Math.min(version1NumberParts.length, version2NumberParts.length);
-		
-		for (var i:int=0; i<len; i++)
-		{
-			if (version1NumberParts[i] == version2NumberParts[i])
-				continue;
-			
-			if (version1NumberParts[i] < version2NumberParts[i])
-			{
-				completeComparing("Less");
-				return;
-			}
-			
-			if (version1NumberParts[i] > version2NumberParts[i])
-			{
-				completeComparing("Larger");
-				return;
-			}
-		}
-		
-		if (version1NumberParts.length == version2NumberParts.length)
-			completeComparing("Equal");
-		else
-		{
-			if (version1NumberParts.length > version2NumberParts.length)
-				completeComparing("Larger");
-			else
-				completeComparing("Less");
-		}
-		
-		function completeComparing (transition:String) : void
-		{
-			setTransition(transition);
-			setReturnValue("");
-		}
-		
+		return new Function;
 	}
 	
 	private function processFillList( list : String, g : Graphics, rect : Rectangle ) : *
