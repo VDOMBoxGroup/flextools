@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				width="100%" height="25">
+	<fx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			
+			import net.vdombox.components.xmldialogeditor.events.AttributesItemRendererEvent;
+			import net.vdombox.components.xmldialogeditor.model.vo.attributes.AttributeBaseVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.attributes.AttributeBoolVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.attributes.AttributeEnumVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.attributes.AttributeIntVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.attributes.AttributeStringVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.properties.PropertyComposit;
+			import net.vdombox.components.xmldialogeditor.view.itemrenderers.propertiesitemrenderers.BoolAttribute;
+			import net.vdombox.components.xmldialogeditor.view.itemrenderers.propertiesitemrenderers.CompositeAttribute;
+			import net.vdombox.components.xmldialogeditor.view.itemrenderers.propertiesitemrenderers.EnumAttribute;
+			import net.vdombox.components.xmldialogeditor.view.itemrenderers.propertiesitemrenderers.IntAttribute;
+			import net.vdombox.components.xmldialogeditor.view.itemrenderers.propertiesitemrenderers.StringAttribute;
+			
+			[Bindable]
+			private var attributeVO : AttributeBaseVO;
+			
+			private var valueField : Object;
+			
+			override public function set data( value : Object ) : void
+			{
+				attributeVO = value as AttributeBaseVO;
+				
+				if ( attributeVO is AttributeStringVO )
+					valueField = new StringAttribute();
+				else if ( attributeVO is AttributeBoolVO )
+					valueField = new BoolAttribute();
+				else if ( attributeVO is AttributeEnumVO )
+					valueField = new EnumAttribute();
+				else if ( attributeVO is AttributeIntVO )
+					valueField = new IntAttribute();
+				else if ( attributeVO is PropertyComposit )
+					valueField = new CompositeAttribute();
+				else
+					return;
+				
+				valueField.attributeVO = attributeVO;
+				
+				itemGroup.removeAllElements();
+				
+				itemGroup.addElement( labelAttribute );
+				itemGroup.addElement( valueField as UIComponent );
+				
+				labelAttribute.percentWidth = 50;
+				valueField.percentWidth = 50;
+				
+				valueField.addEventListener( AttributesItemRendererEvent.UPDATED, tt );
+			}
+			
+			private function tt( event : AttributesItemRendererEvent ) : void
+			{
+				dispatchEvent( new AttributesItemRendererEvent( AttributesItemRendererEvent.UPDATED ) );
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor color="0x00F000"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup id="itemGroup" width="100%" height="100%" verticalAlign="middle">
+		<s:Label id="labelAttribute" width="100%" text="{ attributeVO.name }" paddingLeft="10"/>	
+	</s:HGroup>
+	
+	
+	
+</s:ItemRenderer>

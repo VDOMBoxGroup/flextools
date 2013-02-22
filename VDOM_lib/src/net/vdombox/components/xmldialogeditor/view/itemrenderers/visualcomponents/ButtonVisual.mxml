@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ButtonVO;
+			
+			private var _buttonVO : ButtonVO;
+			
+			[Bindable]
+			public function get buttonVO():ButtonVO
+			{
+				return _buttonVO;
+			}
+			
+			public function set buttonVO(value:ButtonVO):void
+			{
+				_buttonVO = value;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Button id="txtValue" width="100%" enabled="false"
+				 label="{ buttonVO.text.value }"/>
+</s:Group>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:visualcomponents="net.vdombox.components.xmldialogeditor.view.itemrenderers.visualcomponents.*"
+		 width="100%" height="100%" gap="5">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.components.xmldialogeditor.events.VisualItemRendererEvent;
+			import net.vdombox.components.xmldialogeditor.model.vo.FormVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.base.ComponentBase;
+			
+			private var _formVO : FormVO;
+			
+			[Bindable]
+			public function get formVO():FormVO
+			{
+				return _formVO;
+			}
+
+			public function set formVO(value:FormVO):void
+			{
+				_formVO = value;
+				
+				containerVisual.containerVO = formVO.container;
+			}
+
+			
+			protected function group1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				dispatchEvent( new VisualItemRendererEvent( VisualItemRendererEvent.CLICK, formVO ) );
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Group width="100%" height="20" click="group1_clickHandler(event)">
+		<s:Rect width="100%" height="100%" radiusX="5" radiusY="5">
+			<s:fill>
+				<s:SolidColor color="0x000000"/>
+			</s:fill>
+		</s:Rect>
+		
+		<s:HGroup width="100%" height="100%" verticalAlign="middle"
+				  paddingLeft="5">
+			<s:Label id="title" color="0xFFFFFF" text="{ formVO.title.value }" />
+		</s:HGroup>
+	</s:Group>
+	
+	<visualcomponents:ContainerVisual id="containerVisual" width="100%" height="100%"/>
+	
+</s:VGroup>

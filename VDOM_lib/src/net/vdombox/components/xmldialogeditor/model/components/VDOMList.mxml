@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:List xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		dragOver="list1_dragOverHandler(event)"
+		dragDrop="list1_dragDropHandler(event)"
+		rendererAdd="list1_rendererAddHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.DragEvent;
+			
+			import net.vdombox.components.xmldialogeditor.model.DropState;
+			import net.vdombox.components.xmldialogeditor.model.vo.attributes.AttributeIntVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.EmptyVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ItemVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.base.ComponentBase;
+			
+			import spark.events.RendererExistenceEvent;
+			import spark.layouts.TileLayout;
+			
+			private var rowCount : int = 0;
+			private var columnCount : int = 0;
+			
+			private var rowHeigth : int = 0;
+			private var columnWidht : int = 0;
+			
+			private var _gridLayout : Boolean = false;
+			private var tileLayout : TileLayout;
+			
+			
+			public function get gridLayout():Boolean
+			{
+				return _gridLayout;
+			}
+
+			public function set gridLayout(value:Boolean):void
+			{
+				_gridLayout = value;
+				
+				
+				if ( gridLayout )
+				{
+					tileLayout = layout as TileLayout;
+					
+					if ( !dataProvider )
+						return;
+					
+					if ( dataProvider.length == 0 )
+					{
+						var item : ItemVO = new ItemVO();
+						item.component = new EmptyVO();
+						dataProvider.addItem( item );
+					}
+				}
+				else
+				{
+					if ( !dataProvider )
+						return;
+					
+					for( var i : int = dataProvider.length - 1; i >= 0; i-- )
+					{
+						var itemVO : ItemVO = dataProvider.getItemAt( i ) as ItemVO;
+						if ( itemVO.component is EmptyVO )
+							dataProvider.removeItemAt( i );
+					}
+				}
+			}
+			
+			private function hasEmptyColumn() : Boolean
+			{
+				if ( dataProvider.length == 0 )
+					return false;
+				
+				for( var i : int = 1; i <= rowCount; i++ )
+				{
+					var item : ItemVO = dataProvider.getItemAt( i * columnCount - 1 ) as ItemVO;
+					
+					if ( !( item.component is EmptyVO ) )
+						return false;
+				}
+				
+				return true;
+			}
+			
+			private function hasEmptyRow() : Boolean
+			{
+				if ( dataProvider.length == 0 )
+					return false;
+				
+				for( var i : int = 1; i <= columnCount; i++ )
+				{
+					var item : ItemVO = dataProvider.getItemAt( ( rowCount - 1 ) * columnCount - 1 + i ) as ItemVO;
+					
+					if ( !( item.component is EmptyVO ) )
+						return false;
+				}
+				
+				return true;
+			}
+			
+			private function removeEmptyColumn() : void
+			{
+				if ( !hasEmptyColumn() || columnCount <= 1 )
+					return;
+				
+				for( var i : int = rowCount; i >= 1; i-- )
+				{
+					dataProvider.removeItemAt( i * columnCount - 1 );
+				}
+				
+				columnCount--;
+				updateElementSize();
+			}
+			
+			private function removeEmptyRow() : void
+			{
+				if ( !hasEmptyRow() || rowCount <= 1 )
+					return;
+				
+				for( var i : int = columnCount; i >= 1 ; i-- )
+				{
+					dataProvider.removeItemAt( ( rowCount - 1 ) * columnCount - 1 + i );
+				}
+				
+				rowCount--;
+				updateElementSize();
+			}
+
+			protected function list1_dragOverHandler(event:DragEvent):void
+			{
+				/*if ( !gridLayout )
+					return;
+				
+				var localX : int = event.localX;
+				var localY : int = event.localY;
+				
+				var i : int;
+				var item : ItemVO;
+				
+				if ( localX > width - 20 && !hasEmptyColumn() )
+				{
+					columnCount++;
+					updateElementSize();
+					
+					for( i = 1; i <= rowCount; i++ )
+					{
+						item = new ItemVO();
+						item.row = new AttributeIntVO( 'row', i );
+						item.column = new AttributeIntVO( 'column', columnCount );
+						item.component = new EmptyVO();
+						
+						dataProvider.addItemAt( item, i * columnCount - 1 );
+					}
+				}
+				else if ( localY > height - 20 && !hasEmptyRow() )
+				{
+					rowCount++;
+					updateElementSize();
+					
+					for( i = 1; i <= columnCount; i++ )
+					{
+						item = new ItemVO();
+						item.row = new AttributeIntVO( 'row', rowCount );
+						item.column = new AttributeIntVO( 'column', i );
+						item.component = new EmptyVO();
+						
+						dataProvider.addItemAt( item, (rowCount - 1) * columnCount - 1 + i );
+					}
+				}
+				
+				if ( localX < width - 20 )
+					removeEmptyColumn();
+				
+				if ( localY < height - 20 )
+					removeEmptyRow();*/
+			}
+			
+			private function get actualWidth() : Number
+			{				
+				var w : Number = ( width - 5 ) - tileLayout.horizontalGap * ( columnCount - 1 );
+				
+				return w;
+			}
+			
+			private function get actualHeight() : Number
+			{
+				var h : Number = ( height - 5 ) - tileLayout.verticalGap * ( rowCount - 1 );
+				
+				return h;
+			}
+			
+			public function update() : void
+			{
+				if ( columnCount == 0 )
+					columnCount = dataProvider ?  dataProvider.length : 1;
+				
+				if ( rowCount == 0 )
+					rowCount = 1;
+				
+				updateElementSize();
+			}
+			
+			private function updateElementSize() : void
+			{
+				tileLayout.columnWidth = actualWidth / columnCount;
+				tileLayout.requestedColumnCount = columnCount;
+				
+				tileLayout.rowHeight = actualHeight / rowCount;
+				tileLayout.requestedRowCount = rowCount;
+			}
+			
+			private function getNewEmptyItem( row : int, column : int ) : ItemVO
+			{
+				var itemVO : ItemVO = new ItemVO();
+				itemVO.row = new AttributeIntVO( 'row', row );
+				itemVO.column = new AttributeIntVO ( 'column', column );
+				itemVO.component = new EmptyVO();
+				
+				return itemVO;
+			}
+			
+			private function addNewRow( row : int ) : void
+			{
+				var indexFistComponent : int = getIndexElement( row, 1 ); // получим индекс первого элемента в строке
+				
+				rowCount++;
+				updateElementSize();
+				
+				for ( var i : int = columnCount; i >= 1; i-- )
+				{
+					var itemVO : ItemVO = getNewEmptyItem( row, i );
+					dataProvider.addItemAt( itemVO, indexFistComponent );
+				}
+			}
+			
+			private function addNewColumn( column : int ) : void
+			{			
+				columnCount++;
+				updateElementSize();
+				
+				for ( var i : int = 1; i <= rowCount; i++ )
+				{
+					var itemVO : ItemVO = getNewEmptyItem( i, column );
+					var indexItem : int = getIndexElement( i, column );
+					
+					dataProvider.addItemAt( itemVO, indexItem );
+				}
+			}
+			
+			private var dropState : String;
+			
+			protected function list1_dragDropHandler(event:DragEvent):void
+			{
+				if ( !gridLayout )
+					return;
+			
+				drop = true;
+				var dropX : Number = event.localX;
+				var dropY : Number = event.localY;
+				
+				var object : Object = event.dragSource.dataForFormat( 'itemsByIndex' );
+				
+				var movedComponent : ItemVO = object[0] as ItemVO;
+				if ( movedComponent.row && movedComponent.column )
+				{
+					dragRow = movedComponent.row.value;
+					dragColumn = movedComponent.column.value;
+				}
+				
+				// get row and column drop component
+				
+				var w : Number = 0;
+				var i : int;
+				
+				for ( i = 1; w < dropX; i++ )
+				{
+					w += tileLayout.columnWidth + tileLayout.horizontalGap;
+				}
+				
+				var column : int = i - 1 <= columnCount ? i - 1 : columnCount;
+				
+				var h : Number = 0;
+				
+				for ( i = 1; h < dropY; i++ )
+				{
+					h += tileLayout.rowHeight + tileLayout.verticalGap;
+				}
+				
+				var row : int = i - 1 <= rowCount ? i - 1 : rowCount;
+				
+				// get drop component
+				var itemVO : ItemVO = dataProvider.getItemAt( getIndexElement( row, column ) ) as ItemVO;
+				
+				dropState = itemVO.dropState;
+				
+				if ( dropState == DropState.TOP )
+				{
+					addNewRow( row );
+					dragRow++;
+				}
+				else if ( dropState == DropState.BOTTOM )
+				{
+					addNewRow( ++row );
+				}
+				else if ( dropState == DropState.LEFT )
+				{
+					addNewColumn( column );
+					dragColumn++;
+				}
+				else if ( dropState == DropState.RIGHT )
+				{
+					addNewColumn( ++column );
+				}
+				
+				dropRow = row;
+				dropColumn = column;
+				dropRemove = true;
+				
+				
+				
+				/*dropRemove = false;
+				
+				if ( itemVO.component is EmptyVO )
+				{
+					if ( movedComponent.row && movedComponent.column )
+					{
+						var indexMovedComponent : int = getIndexElement( movedComponent.row.value, movedComponent.column.value );
+						var indexDropComponent : int = getIndexElement( row, column );
+						
+						dropLarge = indexMovedComponent > indexDropComponent ? true : false;
+					}
+					else
+					{
+						dataProvider.removeItemAt( getIndexElement( row, column ) );
+					}
+					
+					//if ( !dropLarge )
+					//dataProvider.removeItemAt( getIndexElement( row, column ) );
+					
+					removeRow = row;
+					removeColumn = column;
+					
+					dropRemove = true;
+				}
+				else
+				{
+					for ( i = column + 1; i <= columnCount; i++ )
+					{
+						itemVO = dataProvider.getItemAt( getIndexElement( row, i ) ) as ItemVO;
+						if ( itemVO.component is EmptyVO )
+						{
+							dataProvider.removeItemAt( getIndexElement( row, i ) );
+							dropRemove = true;
+							return;
+						}
+					}
+					
+					columnCount++;
+					updateElementSize();
+					
+					for( i = 1; i <= rowCount; i++ )
+					{						
+						itemVO = new ItemVO();
+						itemVO.row = new AttributeIntVO( 'row', i );
+						itemVO.column = new AttributeIntVO( 'column', columnCount );
+						itemVO.component = new EmptyVO();
+						
+						dataProvider.addItemAt( itemVO, i * columnCount - 1 );
+					}
+					
+					dataProvider.removeItemAt( getIndexElement( row, columnCount ) );
+				}*/
+			}
+			
+			private function getIndexElement( row : int, column : int ) : int
+			{
+				var index : int = ( row - 1 ) * columnCount + column - 1;
+				
+				return index
+			}
+			
+			private function hasIndexElement( row : int, column : int ) : Boolean
+			{
+				var index : int = ( row - 1 ) * columnCount + column - 1;
+				
+				return index < dataProvider.length ? true : false;
+			}
+			
+			private var drop : Boolean = false;
+			private var dropLarge : Boolean = false;
+			private var dropRemove : Boolean = false;
+			private var dropRow : int;
+			private var dropColumn : int;
+			private var dragRow : int;
+			private var dragColumn : int;
+			
+			protected function list1_rendererAddHandler(event:RendererExistenceEvent):void
+			{
+				if ( !gridLayout )
+					return;
+				
+				var itemVO : ItemVO = event.data as ItemVO;
+				var item : ItemVO;
+				var index : int;
+				
+				if ( dropRemove )
+				{
+					dropRemove = false;
+					
+					
+					var itemIndex : int = getIndexElement( dropRow, dropColumn );
+					index = dataProvider.getItemIndex( itemVO );
+					
+					if ( !itemVO.row || !itemVO.column )
+					{
+						if ( index != itemIndex )
+							dataProvider.removeItemAt( itemIndex );
+						else						
+							dataProvider.removeItemAt( itemIndex + 1 );
+					}
+					
+					if ( itemVO.row && itemVO.column )
+					{
+						var indexDragElement : int = getIndexElement( dragRow, dragColumn );
+						var indexDropElenent : int = getIndexElement( dropRow, dropColumn );
+						
+						if ( indexDragElement > indexDropElenent )
+						{
+							if ( index != itemIndex )
+								dataProvider.removeItemAt( itemIndex );
+							else						
+								dataProvider.removeItemAt( itemIndex + 1 );
+							
+							index = getIndexElement( dragRow, dragColumn );
+							
+							item = new ItemVO();
+							item.component = new EmptyVO();
+							dataProvider.addItemAt( item, index );
+						}
+						else
+						{
+							index = getIndexElement( dragRow, dragColumn );
+							
+							item = new ItemVO();
+							item.component = new EmptyVO();
+							dataProvider.addItemAt( item, index );
+							
+							index = dataProvider.getItemIndex( itemVO );
+							
+							if ( index != itemIndex )
+								dataProvider.removeItemAt( itemIndex );
+							else						
+								dataProvider.removeItemAt( itemIndex + 1 );
+						}
+						
+						
+					}
+					
+					
+					
+					/*if ( itemVO.row && itemVO.column )
+					{
+						index = dataProvider.getItemIndex( itemVO );
+						var itemIndex : int = getIndexElement( removeRow, removeColumn );
+						
+						if ( dropLarge )
+						{
+							if ( index != itemIndex )
+								dataProvider.removeItemAt( itemIndex );
+							else						
+								dataProvider.removeItemAt( itemIndex + 1 );
+							
+							dropLarge = false;
+						}
+						else
+						{
+							if ( index != itemIndex )
+								dataProvider.removeItemAt( itemIndex );
+							else						
+								dataProvider.removeItemAt( itemIndex - 1 );
+						}
+						
+						
+					}*/
+				}
+				
+				var column : int;
+				var row : int;
+				
+				if ( !itemVO.row || !itemVO.column )
+				{
+					//columnCount++;
+					
+					if ( rowCount == 0 )
+						rowCount = 1;
+					
+					if ( columnCount == 0 )
+						columnCount = 1;
+					
+					updateElementSize();
+					
+					index = dataProvider.getItemIndex( itemVO );
+					
+					column = getColumnByIndex( index );
+					row = getRowByIndex( index );
+					
+					itemVO.column = new AttributeIntVO( 'column', column );
+					itemVO.row = new AttributeIntVO( 'row', row );
+				}
+				else
+				{
+					if ( itemVO.column.value > columnCount )
+					{
+						columnCount = itemVO.column.value;
+					}
+					
+					if ( itemVO.row.value > rowCount )
+					{
+						rowCount = itemVO.row.value;
+					}
+					
+					updateElementSize();
+					
+					if ( !( itemVO.component is EmptyVO ) )
+					{
+						if( drop )
+						{
+							drop = false;
+							
+							for ( var i : int = 0; i < dataProvider.length; i++ )
+							{
+								item = dataProvider.getItemAt( i ) as ItemVO;
+								
+								column = getColumnByIndex( i );
+								row = getRowByIndex( i );
+								
+								item.column = new AttributeIntVO( 'column', column );
+								item.row = new AttributeIntVO( 'row', row );
+							}
+						}
+						
+						addEmptyElements();
+						removeEmptyRow();
+						removeEmptyColumn();
+						
+					}
+				}
+				
+			}
+			
+			private function getRowByIndex( index : int ) : int
+			{
+				var row : int = Math.floor( index / columnCount ) + 1;
+				
+				return row <= rowCount ? row : rowCount;
+			}
+			
+			private function getColumnByIndex( index : int ) : int
+			{
+				var column : int = index + 1 -  Math.floor( index / columnCount) * columnCount;
+				
+				return column <= columnCount ? column : columnCount;
+			}
+			
+			private function addEmptyElements() : void
+			{
+				var count : int = columnCount * rowCount;
+				
+				for ( var i : int = dataProvider.length; i < count; i++ )
+				{
+					var itemVO : ItemVO = new ItemVO();
+					itemVO.component = new EmptyVO();
+					itemVO.row = new AttributeIntVO( 'row', getRowByIndex( i ) );
+					itemVO.column = new AttributeIntVO( 'rcolumnow', getColumnByIndex( i ) );
+					dataProvider.addItemAt( itemVO, i );
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+</s:List>

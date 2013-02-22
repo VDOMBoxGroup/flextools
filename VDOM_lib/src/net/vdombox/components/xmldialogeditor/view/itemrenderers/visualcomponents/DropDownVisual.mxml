@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			import net.vdombox.components.xmldialogeditor.model.vo.OptionVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.DropDownVO;
+			
+			private var _dropDown : DropDownVO;
+			
+			[Bindable]
+			public function get dropDown():DropDownVO
+			{
+				return _dropDown;
+			}
+
+			public function set dropDown(value:DropDownVO):void
+			{
+				_dropDown = value;
+				
+				update();
+			}
+			
+			public function update() : void
+			{
+				var sourceList : ArrayCollection = dropDown.options.value;
+				
+				for ( var i : int = 0; i < sourceList.length; i++ )
+				{
+					var optionVO : OptionVO = sourceList[i];
+					if ( optionVO.selected.value )
+					{
+						dropListValue.selectedIndex = i;
+						break;
+					}
+				}
+				
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:DropDownList id="dropListValue" width="100%" enabled="false"
+					labelField="valueString"
+					dataProvider="{ dropDown.options.value }"/>
+	
+</s:Group>

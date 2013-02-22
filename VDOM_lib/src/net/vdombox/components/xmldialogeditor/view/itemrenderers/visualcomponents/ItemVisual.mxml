@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" height="100%">
+	<fx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ButtonVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.CheckBoxGroupVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.CheckBoxVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ContainerVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.DropDownVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.HypertextVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ItemVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.LabelVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ListBoxVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.PasswordVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.RadioButtonGroupVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.RadioButtonVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.TextAreaVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.TextBoxVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.base.ComponentBase;
+			
+			private var _itemVO : ItemVO;
+			
+			private var _componentVisual : Object;
+			
+			public function get componentVisual():Object
+			{
+				return _componentVisual;
+			}
+
+			public function set componentVisual(value:Object):void
+			{
+				_componentVisual = value;
+			}
+
+			public function get itemVO():ItemVO
+			{
+				return _itemVO;
+			}
+
+			public function set itemVO(value:ItemVO):void
+			{
+				_itemVO = value;
+								
+				var componentVO : ComponentBase = itemVO.component as ComponentBase;
+				
+				if ( componentVO is ContainerVO )
+				{
+					componentVisual = new ContainerVisual();
+					ContainerVisual( componentVisual).containerVO = componentVO as ContainerVO;
+				}
+				else if ( componentVO is LabelVO )
+				{
+					componentVisual = new LabelVisual();
+					LabelVisual( componentVisual ).labelVO = componentVO as LabelVO;
+				}
+				else if ( componentVO is TextBoxVO )
+				{
+					componentVisual = new TextBoxVisual();
+					TextBoxVisual( componentVisual ).textBox = componentVO as TextBoxVO;
+				}
+				else if ( componentVO is PasswordVO )
+				{
+					componentVisual = new PasswordVisual();
+					PasswordVisual( componentVisual ).password = componentVO as PasswordVO;
+				}
+				else if ( componentVO is TextAreaVO )
+				{
+					componentVisual = new TextAreaVisual();
+					TextAreaVisual( componentVisual ).textArea = componentVO as TextAreaVO;
+				}
+				else if ( componentVO is DropDownVO )
+				{
+					componentVisual = new DropDownVisual();
+					DropDownVisual( componentVisual ).dropDown = componentVO as DropDownVO;
+				}
+				else if ( componentVO is ListBoxVO )
+				{
+					componentVisual = new ListVisual();
+					ListVisual( componentVisual ).listBox = componentVO as ListBoxVO;
+				}
+				else if ( componentVO is RadioButtonVO )
+				{
+					componentVisual = new RadioButtonVisual();
+					RadioButtonVisual( componentVisual ).radioButton = componentVO as RadioButtonVO;
+				}
+				else if ( componentVO is CheckBoxVO )
+				{
+					componentVisual = new CheckBoxVisual();
+					CheckBoxVisual( componentVisual ).checkBox = componentVO as CheckBoxVO;
+				}
+				else if ( componentVO is RadioButtonGroupVO )
+				{
+					componentVisual = new RadioButtonGroupVisual();
+					RadioButtonGroupVisual( componentVisual ).radioButtonGroup = componentVO as RadioButtonGroupVO;
+				}
+				else if ( componentVO is CheckBoxGroupVO )
+				{
+					componentVisual = new CheckBoxGroupVisual();
+					CheckBoxGroupVisual( componentVisual ).checkBoxGroup = componentVO as CheckBoxGroupVO;
+				}
+				else if ( componentVO is ButtonVO )
+				{
+					componentVisual = new ButtonVisual();
+					ButtonVisual( componentVisual ).buttonVO = componentVO as ButtonVO;
+				}
+				else if ( componentVO is HypertextVO )
+				{
+					componentVisual = new HyperTextVisual();
+					HyperTextVisual( componentVisual ).hyperText = componentVO as HypertextVO;
+				}
+				else
+				{
+					return;
+				}
+				
+				removeAllElements();
+				addElement( componentVisual as UIComponent );
+				
+				componentVisual.percentHeight = 100;
+				componentVisual.percentWidth = 100;
+				
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+</s:HGroup>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				width="100%" height="100%"
+				dragging="true"
+				click="itemrenderer1_clickHandler(event)"
+				dragOver="itemrenderer1_dragOverHandler(event)"
+				dragExit="itemrenderer1_dragExitHandler(event)"
+				creationComplete="itemrenderer1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.core.DragSource;
+			import mx.core.UIComponent;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.DragManager;
+			
+			import net.vdombox.components.xmldialogeditor.events.VisualItemRendererEvent;
+			import net.vdombox.components.xmldialogeditor.model.DropState;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ContainerVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.EmptyVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ItemVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.base.ComponentBase;
+			import net.vdombox.components.xmldialogeditor.view.itemrenderers.visualcomponents.ContainerVisual;
+			import net.vdombox.components.xmldialogeditor.view.itemrenderers.visualcomponents.EmptyVisual;
+			import net.vdombox.components.xmldialogeditor.view.itemrenderers.visualcomponents.ItemVisual;
+			
+			private var _itemVO : ItemVO;
+			private var _componentVisual : Object;
+			
+			private var empty : Boolean = false;
+			
+			private var gapWidth : Number;
+			private var gapHeight : Number;
+			private var g : Graphics;
+			private var dropExit : Boolean = false;
+			
+			private var normalColor : uint = 0xFFFFFF;
+			private var selectedColor : uint = 0x0000FF;
+			
+			public function get itemVO():ItemVO
+			{
+				return _itemVO;
+			}
+
+			public function set itemVO(value:ItemVO):void
+			{
+				_itemVO = value;
+			}
+
+			public function get componentVisual():Object
+			{
+				return _componentVisual;
+			}
+
+			public function set componentVisual(value:Object):void
+			{
+				_componentVisual = value;
+			}
+
+			override public function set data( value : Object ) : void
+			{
+				itemVO = value as ItemVO;
+				
+				if ( itemVO )
+				{
+					componentVisual = new ItemVisual();
+					ItemVisual( componentVisual).itemVO = itemVO as ItemVO;
+					
+					if ( ( itemVO as ItemVO ).component is EmptyVO )
+					{
+						componentVisual = new EmptyVisual();
+						empty = true;
+						dragging = false;
+					}
+				}
+				/*else if ( itemVO is ContainerVO )
+				{
+					componentVisual = new ContainerVisual();
+					ContainerVisual( componentVisual).containerVO = itemVO as ContainerVO;
+				}*/
+				else
+				{
+					return;
+				}
+				
+				groupVisual.removeAllElements();
+				groupVisual.addElement( componentVisual as UIComponent );
+				
+				componentVisual.percentHeight = 100;
+				componentVisual.percentWidth = 100;
+			}
+			
+			protected function itemrenderer1_clickHandler(event:MouseEvent):void
+			{
+				event.stopImmediatePropagation();
+				dispatchEvent( new VisualItemRendererEvent( VisualItemRendererEvent.CLICK, itemVO ) );
+			}
+			
+			public function set setSelected( value : Boolean ) : void
+			{
+				if ( empty )
+					return;
+				
+				rectColor.color = value ? selectedColor : normalColor;
+			}
+			
+			protected function itemrenderer1_dragOverHandler(event:DragEvent):void
+			{
+				var localX : int = event.localX;
+				var localY : int = event.localY;
+				
+				
+				if ( localX < gapWidth )
+				{
+					if ( !dropExit && itemVO.dropState == DropState.LEFT )
+						return;
+					
+					g.clear();
+					g.lineStyle( 2, 0x0000FF );
+					g.moveTo( 0, 0 );
+					g.lineTo( 0, height );
+					itemVO.dropState = DropState.LEFT;
+				}	
+				else if ( localX > width - gapWidth )
+				{
+					if ( !dropExit && itemVO.dropState == DropState.RIGHT )
+						return;
+					
+					g.clear();
+					g.lineStyle( 2, 0x0000FF );
+					g.moveTo( width, 0 );
+					g.lineTo( width, height );
+					itemVO.dropState = DropState.RIGHT;
+				}
+				else 
+				{
+					gapHeight = itemVO.component is EmptyVO ? height / 4 : height / 2;
+					
+					if ( !dropExit && localY < gapHeight )
+					{
+						if ( itemVO.dropState == DropState.TOP )
+							return;
+						
+						g.clear();
+						g.lineStyle( 2, 0x0000FF );
+						g.moveTo( 0, 0 );
+						g.lineTo( width, 0 );
+						itemVO.dropState = DropState.TOP;
+					}
+					else if ( !( itemVO.component is EmptyVO ) || localY > height - gapHeight )
+					{
+						if ( !dropExit && itemVO.dropState == DropState.BOTTOM )
+							return;
+						
+						g.clear();
+						g.lineStyle( 2, 0x0000FF );
+						g.moveTo( 0, height );
+						g.lineTo( width, height );
+						itemVO.dropState = DropState.BOTTOM;
+					}
+					else 
+					{
+						if ( !dropExit && itemVO.dropState == DropState.FULL )
+							return;
+						
+						g.clear();
+						g.lineStyle( 2, 0x0000FF );
+						g.drawRect( 0, 0, width, height );
+						itemVO.dropState = DropState.FULL;
+					}
+				}
+				
+				dropExit = false;
+			}
+			
+			protected function itemrenderer1_creationCompleteHandler(event:FlexEvent):void
+			{
+				gapWidth = width / 5;
+				gapHeight = height / 4;
+				
+				g = paintGroup.graphics;
+				g.clear();
+				
+			}
+			
+			protected function itemrenderer1_dragExitHandler(event:DragEvent):void
+			{
+				g.clear();
+				dropExit = true;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor id="rectColor" color="0xFFFFFF"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup id="groupVisual" width="100%" height="100%"/>
+	
+	<s:Group id="paintGroup" width="100%" height="100%"/>
+	
+</s:ItemRenderer>

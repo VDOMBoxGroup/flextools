@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" 
+		 xmlns:view="net.vdombox.components.xmldialogeditor.view.*"
+		 creationComplete="group1_creationCompleteHandler(event)"
+		 remove="group1_removedHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.components.xmldialogeditor.events.AttributesItemRendererEvent;
+			import net.vdombox.components.xmldialogeditor.events.VisualItemRendererEvent;
+			import net.vdombox.components.xmldialogeditor.events.WindowsEvent;
+			import net.vdombox.components.xmldialogeditor.model.ComponentsFactory;
+			import net.vdombox.components.xmldialogeditor.model.vo.FormVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ContainerVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ItemVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.base.ComponentBase;
+			import net.vdombox.components.xmldialogeditor.view.itemrenderers.VisualComponentItemRenderer;
+			import net.vdombox.components.xmldialogeditor.view.itemrenderers.visualcomponents.ContainerVisual;
+			import net.vdombox.components.xmldialogeditor.view.itemrenderers.visualcomponents.ItemVisual;
+			
+			private var formVO : FormVO;
+			private var selectedVisualComponent : VisualComponentItemRenderer;
+				
+			public function get dataProvider () : XML
+			{
+				return formVO.toXML();
+			}
+			
+			public function set dataProvider ( value : XML ) : void
+			{
+				if ( value.Container[0] )
+				{
+					formVO = new FormVO( value );
+					formVO.container = ComponentsFactory.getComponentByXML( value.Container[0] ) as ContainerVO;
+				}
+				else
+				{
+					formVO = new FormVO();
+				}
+				
+				visualPanel.formVO = formVO;
+				
+				
+			}
+			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				addHandlers();
+			}
+			
+			protected function group1_removedHandler(event:Event):void
+			{
+				removeHandlers();
+			}
+			
+			private function addHandlers() : void
+			{
+				visualPanel.addEventListener( VisualItemRendererEvent.CLICK, itemRendererSelectedHandler, true, 0, true );
+				visualPanel.addEventListener( VisualItemRendererEvent.CLICK, itemRendererSelectedHandler, false, 0, true );
+				visualPanel.addEventListener( DragEvent.DRAG_DROP, dragCompleteHandler, true, 0, true );
+				visualPanel.addEventListener( KeyboardEvent.KEY_DOWN, removeItemHandler, true, 0, true );
+				propertiesPanel.addEventListener( AttributesItemRendererEvent.UPDATED, attributeUpdatedHandler, true, 0 , true);
+				propertiesPanel.toXMLBtn.addEventListener( MouseEvent.CLICK, toXMLClickHandler, false, 0 , true);
+			}
+			
+			private function removeHandlers() : void
+			{
+				visualPanel.removeEventListener( VisualItemRendererEvent.CLICK, itemRendererSelectedHandler, true );
+				visualPanel.removeEventListener( VisualItemRendererEvent.CLICK, itemRendererSelectedHandler, false );
+				visualPanel.removeEventListener( DragEvent.DRAG_DROP, dragCompleteHandler, true );
+				visualPanel.removeEventListener( KeyboardEvent.KEY_DOWN, removeItemHandler, true );
+				propertiesPanel.removeEventListener( AttributesItemRendererEvent.UPDATED, attributeUpdatedHandler, true );
+				propertiesPanel.toXMLBtn.addEventListener( MouseEvent.CLICK, toXMLClickHandler, false, 0 , true);
+			}
+			
+			private function itemRendererSelectedHandler( event : VisualItemRendererEvent ) : void
+			{
+				if ( selectedVisualComponent )
+					selectedVisualComponent.setSelected = false;
+				
+				selectedVisualComponent = event.target as VisualComponentItemRenderer;
+				if ( selectedVisualComponent )
+					selectedVisualComponent.setSelected = true;
+				
+				propertiesPanel.selectedComponent = event.componentBase;
+			}
+			
+			private var componentBase : ComponentBase;
+			protected function dragCompleteHandler(event:DragEvent):void
+			{
+				var dragSource : DragSource = event.dragSource;
+				componentBase = dragSource.dataForFormat( "ComponentBase" ) as ComponentBase;
+				
+				visualPanel.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteItemRendererHandler, true, 0, true);
+					
+			}
+			
+			private function creationCompleteItemRendererHandler( event : FlexEvent ) : void
+			{
+				visualPanel.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteItemRendererHandler, true );
+								
+				if ( componentBase )
+					toolBox.reBuildComponent( componentBase );
+			}
+			
+			private function attributeUpdatedHandler( event : AttributesItemRendererEvent ) : void
+			{
+				var componentVisual : Object;
+				if ( propertiesPanel.selectedComponent is FormVO )
+				{
+					visualPanel.containerVisual.update();
+				}
+				else if ( selectedVisualComponent.componentVisual is ItemVisual )
+				{
+					componentVisual = ItemVisual( selectedVisualComponent.componentVisual ).componentVisual;
+					
+					if ( componentVisual.hasOwnProperty("update") )
+						componentVisual.update();
+				
+				}
+			}
+			
+			private function toXMLClickHandler( event : MouseEvent ) : void
+			{
+				dispatchEvent( new WindowsEvent( WindowsEvent.APPLY ) );
+			}
+			
+			private function removeItemHandler( event : KeyboardEvent ) : void
+			{
+				if ( !selectedVisualComponent )
+					return;
+				
+				var componentBase : ComponentBase = selectedVisualComponent.itemVO;
+				
+				deleteComponent( componentBase, formVO.container );
+				
+			}
+			
+			private function deleteComponent( componentBase : ComponentBase, containetVO : ContainerVO ) : Boolean
+			{
+				var components : ArrayCollection = containetVO.items
+				var componentsLength : int =  components.length;
+				var flag : Boolean = false;
+				
+				for( var i : int = 0; i < componentsLength; i++ )
+				{
+					if ( components[i] == componentBase )
+					{
+						components.removeItemAt( i );
+						flag = true;
+						break;
+					}
+					else
+					{
+						var container : ContainerVO = ItemVO( components[i] ).component as ContainerVO
+						if ( container )
+							flag = deleteComponent( componentBase, container );
+						
+						if ( flag )
+							break;
+					}
+						
+				}
+				
+				return flag;
+			}
+
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:HGroup width="100%" height="100%" gap="0">
+		
+		<view:ToolBox id="toolBox" width="120" height="100%"/>
+		
+		<view:VisualPanel id="visualPanel" width="100%" height="100%"/>
+		
+		<view:PropertiesPanel id="propertiesPanel" width="200" height="100%"/>
+		
+	</s:HGroup>
+	
+</s:Group>

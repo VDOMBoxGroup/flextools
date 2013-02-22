@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 width="100%" height="100%" paddingTop="5"
+		 >
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ItemVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.base.ComponentBase;
+			
+			private var _selectedComponent : ComponentBase;
+			
+			
+			public function get selectedComponent():ComponentBase
+			{
+				return _selectedComponent;
+			}
+
+			public function set selectedComponent(value:ComponentBase):void
+			{
+				_selectedComponent = value is ItemVO ? ItemVO( value ).component : value;
+				
+				title.text = selectedComponent.name;
+				attributesList.dataProvider =  selectedComponent.attributes;
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Label id="title" paddingLeft="5"/>
+	
+	<s:List id="attributesList" height="100%" width="100%"  borderVisible="false"
+			useVirtualLayout="false" 
+			itemRenderer="net.vdombox.components.xmldialogeditor.view.itemrenderers.BaseItemRenderer"
+			hasFocusableChildren="true">
+		
+		<s:layout>
+			<s:VerticalLayout gap="0"
+							  variableRowHeight="true"/>
+		</s:layout>	
+	</s:List>
+	
+	<s:Button id="toXMLBtn" label="To XML"/>
+	
+</s:VGroup>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			
+			import net.vdombox.components.xmldialogeditor.model.vo.OptionVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.CheckBoxVO;
+			
+			private var _checkBox : CheckBoxVO;
+			
+			[Bindable]
+			public function get checkBox():CheckBoxVO
+			{
+				return _checkBox;
+			}
+			
+			public function set checkBox(value:CheckBoxVO):void
+			{
+				_checkBox = value;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:HGroup width="100%" height="100%" verticalAlign="middle">
+		<s:CheckBox label="{ checkBox.text.value }" selected="{ checkBox.checked.value }"
+					  enabled="false"/>
+	</s:HGroup>
+</s:Group>

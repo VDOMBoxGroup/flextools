@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			import mx.managers.FocusManager;
+			import mx.managers.PopUpManager;
+			
+			import net.vdombox.components.xmldialogeditor.events.WindowsEvent;
+			import net.vdombox.components.xmldialogeditor.model.vo.OptionGroupVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.OptionVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.properties.PropertyComposit;
+			
+			import spark.events.IndexChangeEvent;
+			
+			private var _attributeVO : PropertyComposit;
+			private var _oldOption : ArrayCollection;
+			
+			[Bindable]
+			public function get attributeVO():PropertyComposit
+			{
+				return _attributeVO;
+			}
+
+			public function set attributeVO(value:PropertyComposit):void
+			{
+				_attributeVO = value;
+				_oldOption = new ArrayCollection( attributeVO.value.source );
+			}
+
+			protected function addNew_clickHandler(event:MouseEvent):void
+			{				
+				if ( attributeVO.type == 0 )
+					attributeVO.value.addItem( new OptionVO );
+				else
+					attributeVO.value.addItem( new OptionGroupVO );
+			}
+			
+			protected function okBtn_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new WindowsEvent( WindowsEvent.APPLY ) );
+				
+				PopUpManager.removePopUp( this );
+			}
+			
+			protected function closeBtn_clickHandler(event:MouseEvent):void
+			{
+				attributeVO.value = _oldOption;
+				
+				PopUpManager.removePopUp( this );
+			}
+			
+			protected function optionsList_changeHandler(event:IndexChangeEvent):void
+			{
+				var selectedOption : OptionVO = optionsList.selectedItem as OptionVO;
+				
+				propertiesList.dataProvider = selectedOption.attributes;
+			}
+			
+			protected function propertiesList_creationCompleteHandler(event:FlexEvent):void
+			{
+				propertiesList.scroller.focusManager = new FocusManager( propertiesList, true );
+			}
+			
+			protected function removeOption_clickHandler(event:MouseEvent):void
+			{
+				if( optionsList.selectedIndex != -1 )
+					attributeVO.value.removeItemAt( optionsList.selectedIndex );
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
+		<s:fill>
+			<s:SolidColor color="0xFF0000"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:VGroup left="5" top="5" right="5" bottom="5" gap="0">
+		
+		<s:HGroup width="100%" height="100%">
+			
+			<s:List id="optionsList" width="100%" height="100%" borderVisible="false"
+					labelField="value" dataProvider="{ attributeVO.value }"
+					dragEnabled="true" dropEnabled="true" dragMoveEnabled="true"
+					itemRenderer="net.vdombox.components.xmldialogeditor.view.itemrenderers.OptionItemRenderer"
+					change="optionsList_changeHandler(event)"/>
+			
+			<s:VGroup width="150" height="100%">
+				
+				<s:List id="propertiesList" width="100%" height="100%" borderVisible="false"
+						hasFocusableChildren="false" useVirtualLayout="false"
+						creationComplete="propertiesList_creationCompleteHandler(event)"
+						itemRenderer="net.vdombox.components.xmldialogeditor.view.itemrenderers.BaseItemRenderer">
+					<s:layout>
+						<s:VerticalLayout gap="0"
+										  variableRowHeight="true"/>
+					</s:layout>
+				</s:List>
+				
+				<s:Button id="addNew" label="Add" click="addNew_clickHandler(event)"/>
+				
+				<s:Button id="removeOption" label="Remove" click="removeOption_clickHandler(event)"/>
+				
+			</s:VGroup>
+			
+		</s:HGroup>
+		
+		<s:HGroup width="100%" height="30" horizontalAlign="right" gap="10" paddingRight="10">
+			
+			<s:Button id="okBtn" label="OK" click="okBtn_clickHandler(event)"/>
+			
+			<s:Button id="closeBtn" label="Close" click="closeBtn_clickHandler(event)"/>
+			
+		</s:HGroup>
+		
+	</s:VGroup>
+	
+</s:Group>

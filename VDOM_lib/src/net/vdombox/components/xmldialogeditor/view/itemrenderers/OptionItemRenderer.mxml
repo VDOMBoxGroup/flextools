@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				width="100%" height="20" dragging="true">
+	
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.components.xmldialogeditor.model.vo.OptionVO;
+						
+			[Bindable]
+			private var _optionVO : OptionVO;
+			
+			override public function set data( value : Object ) : void
+			{
+				_optionVO = value as OptionVO;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:HGroup width="100%" height="100%" verticalAlign="middle">
+	
+		<s:Label text="{_optionVO.value.value}"
+				 paddingLeft="10" fontSize="14"/>
+		
+	</s:HGroup>
+	
+</s:ItemRenderer>

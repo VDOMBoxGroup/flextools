@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.components.xmldialogeditor.model.vo.attributes.AttributeIntVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.attributes.AttributeStringVO;
+			
+			import spark.events.TextOperationEvent;
+			
+			private var _attributeVO : AttributeIntVO;
+			
+			[Bindable]
+			public function get attributeVO():AttributeIntVO
+			{
+				return _attributeVO;
+			}
+			
+			public function set attributeVO(value:AttributeIntVO):void
+			{
+				_attributeVO = value;
+			}
+			
+			protected function textInput_changeHandler(event:TextOperationEvent):void
+			{
+				attributeVO.value = int( textInput.text );
+			}
+			
+		]]>
+	</fx:Script>
+
+	<s:TextInput id="textInput" width="100%" text="{ attributeVO.value }" 
+				 change="textInput_changeHandler(event)"/>
+	
+</s:Group>

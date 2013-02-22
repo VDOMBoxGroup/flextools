@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			
+			import net.vdombox.components.xmldialogeditor.model.vo.components.CheckBoxGroupVO;
+			import net.vdombox.components.xmldialogeditor.utils.SortUtil;
+			
+			import spark.layouts.HorizontalLayout;
+			import spark.layouts.VerticalLayout;
+			
+			[Bindable]
+			private var sourceList : ArrayCollection;
+			
+			private var _checkBoxGroup : CheckBoxGroupVO
+			
+			[Bindable]
+			public function get checkBoxGroup():CheckBoxGroupVO
+			{
+				return _checkBoxGroup;
+			}
+			
+			public function set checkBoxGroup(value:CheckBoxGroupVO):void
+			{
+				_checkBoxGroup = value;
+				
+				update();
+				
+				//lblLabel.text = radioButton.label;
+				//var selectIndex : int = radioButton.selected.length > 0 ? radioButton.selected[0] : -1;
+				
+			}
+			
+			public function update() : void
+			{
+				sourceList = new ArrayCollection()
+				sourceList.addAll( checkBoxGroup.options.value );
+				
+				if ( checkBoxGroup.sort.value == "sortById" )
+					SortUtil.sortByID( sourceList );
+				else if ( checkBoxGroup.sort.value == "sortByText" )
+					SortUtil.sortByText( sourceList );
+				
+				switch( checkBoxGroup.layout.value )
+				{
+					case "vertical":
+					{
+						var verticalLayout : VerticalLayout = new VerticalLayout();
+						verticalLayout.gap = 0;
+						
+						checkList.layout = verticalLayout;
+						break;
+					}
+						
+					case "horizontal":
+					{
+						var horizontalLayout : HorizontalLayout = new HorizontalLayout();
+						horizontalLayout.gap = 0;
+						
+						checkList.layout = horizontalLayout;
+						break;
+					}
+						
+					default:
+					{
+						break;
+					}
+				}
+			}
+			
+			protected function title_updateCompleteHandler(event:FlexEvent):void
+			{
+				if ( checkBoxGroup.title.value == "" )
+				{
+					title.visible = false;
+					title.includeInLayout = false;
+				}
+				else if ( !title.visible )
+				{
+					title.visible = true;
+					title.includeInLayout = true;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%">
+		<s:Label id="title" text="{ checkBoxGroup.title.value }" updateComplete="title_updateCompleteHandler(event)"/>
+		
+		<s:List id="checkList" width="100%" height="100%" minHeight="20"
+				contentBackgroundAlpha="0"
+				dataProvider="{ sourceList }"
+				itemRenderer="net.vdombox.components.xmldialogeditor.view.itemrenderers.CheckBoxGroupVisual"/>
+		
+	</s:VGroup>
+</s:Group>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" height="100%" xmlns:components="net.vdombox.components.xmldialogeditor.model.components.*">
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ContainerVO;
+			
+			import spark.layouts.HorizontalLayout;
+			import spark.layouts.TileLayout;
+			import spark.layouts.VerticalLayout;
+			
+			private var _containerVO : ContainerVO;
+			
+			[Bindable]
+			public function get containerVO():ContainerVO
+			{
+				return _containerVO;
+			}
+			
+			public function set containerVO(value:ContainerVO):void
+			{
+				_containerVO = value;
+				
+				validateNow();
+				
+				update();
+				
+				//title.text = formVO.label;
+				//visualList.dataProvider = containerVO.items;
+			}
+			
+			public function update() : void
+			{
+				switch(containerVO.layout.value)
+				{
+					case "vertical":
+					{
+						visualList.gridLayout = false;
+						
+						var verticalLayout : VerticalLayout = new VerticalLayout();
+						verticalLayout.gap = 0;
+						
+						visualList.layout = verticalLayout;
+						
+						visualList.gridLayout = false;
+						break;
+					}
+						
+					case "horizontal":
+					{
+						visualList.gridLayout = false;
+						
+						var horizontalLayout : HorizontalLayout = new HorizontalLayout();
+						
+						horizontalLayout.gap = 0;
+						
+						visualList.layout = horizontalLayout;
+						
+						visualList.gridLayout = false;
+						break;
+					}
+						
+					case "grid":
+					{
+						var tileLayout : TileLayout = new TileLayout();
+						tileLayout.horizontalGap = containerVO.horizontalSpasing.value;
+						tileLayout.verticalGap = containerVO.verticalSpasing.value;;
+						
+						visualList.layout = tileLayout;
+						
+						visualList.gridLayout = true;
+						visualList.update();
+						
+						break;
+					}
+						
+					default:
+					{
+						break;
+					}
+				}
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+
+	<components:VDOMList id="visualList" height="100%" width="100%" minHeight="20" borderVisible="false"
+			useVirtualLayout="false" dataProvider="{ containerVO.items }"
+			contentBackgroundAlpha="0"
+			hasFocusableChildren="true" 
+			dragEnabled="true" dropEnabled="true" dragMoveEnabled="true"
+			itemRenderer="net.vdombox.components.xmldialogeditor.view.itemrenderers.VisualComponentItemRenderer"
+			skinClass="net.vdombox.components.xmldialogeditor.view.VDOMListSkin">
+	</components:VDOMList>
+	
+</s:Group>

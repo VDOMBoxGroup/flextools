@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			
+			import net.vdombox.components.xmldialogeditor.model.vo.components.RadioButtonGroupVO;
+			import net.vdombox.components.xmldialogeditor.utils.SortUtil;
+			
+			import spark.layouts.HorizontalLayout;
+			import spark.layouts.VerticalLayout;
+			
+			[Bindable]
+			private var sourceList : ArrayCollection;
+			
+			private var _radioButtonGroup : RadioButtonGroupVO
+			
+			[Bindable]
+			public function get radioButtonGroup():RadioButtonGroupVO
+			{
+				return _radioButtonGroup;
+			}
+			
+			public function set radioButtonGroup(value:RadioButtonGroupVO):void
+			{
+				_radioButtonGroup = value;
+				
+				update();				
+			}
+			
+			public function update() : void
+			{
+				sourceList = new ArrayCollection()
+				sourceList.addAll( radioButtonGroup.options.value );
+				
+				if ( radioButtonGroup.sort.value == "sortById" )
+					SortUtil.sortByID( sourceList );
+				else if ( radioButtonGroup.sort.value == "sortByText" )
+					SortUtil.sortByText( sourceList );
+				
+				switch( radioButtonGroup.layout.value )
+				{
+					case "vertical":
+					{
+						var verticalLayout : VerticalLayout = new VerticalLayout();
+						verticalLayout.gap = 0;
+						
+						radioList.layout = verticalLayout;
+						break;
+					}
+						
+					case "horizontal":
+					{
+						var horizontalLayout : HorizontalLayout = new HorizontalLayout();
+						horizontalLayout.gap = 0;
+						
+						radioList.layout = horizontalLayout;
+						break;
+					}
+						
+					default:
+					{
+						break;
+					}
+				}
+			}
+			
+			protected function title_updateCompleteHandler(event:FlexEvent):void
+			{
+				if ( radioButtonGroup.title.value == "" )
+				{
+					title.visible = false;
+					title.includeInLayout = false;
+				}
+				else if ( !title.visible )
+				{
+					title.visible = true;
+					title.includeInLayout = true;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%">
+		<s:Label id="title" text="{ radioButtonGroup.title.value }" updateComplete="title_updateCompleteHandler(event)"/>
+					  
+		<s:List id="radioList" width="100%" height="100%" minHeight="20"
+				contentBackgroundAlpha="0"
+				dataProvider="{ sourceList }"
+				itemRenderer="net.vdombox.components.xmldialogeditor.view.itemrenderers.RadioButtonGroupItemRenderer"/>
+		
+	</s:VGroup>
+	
+</s:Group>
+ 

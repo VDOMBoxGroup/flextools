@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			import net.vdombox.components.xmldialogeditor.events.AttributesItemRendererEvent;
+			import net.vdombox.components.xmldialogeditor.events.WindowsEvent;
+			import net.vdombox.components.xmldialogeditor.model.vo.attributes.AttributeBaseVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.properties.PropertyComposit;
+			import net.vdombox.components.xmldialogeditor.view.windows.ItemsEditWindow;
+			
+			private var _attributeVO : PropertyComposit;
+			
+			public function get attributeVO():PropertyComposit
+			{
+				return _attributeVO;
+			}
+
+			public function set attributeVO(value:PropertyComposit):void
+			{
+				_attributeVO = value;
+			}
+
+			protected function openItemEditWindowBtn_clickHandler(event:MouseEvent):void
+			{
+				var itemsEditWindow : ItemsEditWindow = new ItemsEditWindow();
+				
+				itemsEditWindow.attributeVO = attributeVO;
+				itemsEditWindow.x = 200;
+				itemsEditWindow.y = 100;
+				
+				itemsEditWindow.addEventListener( WindowsEvent.APPLY, applyHandler, false, 0 , true);
+				
+				PopUpManager.addPopUp( itemsEditWindow, this, true );
+			}
+			
+			private function applyHandler( event : WindowsEvent ) : void
+			{
+				var itemsEditWindow : ItemsEditWindow = event.target as ItemsEditWindow;
+				
+				itemsEditWindow.removeEventListener( WindowsEvent.APPLY, applyHandler );
+				
+				dispatchEvent( new AttributesItemRendererEvent ( AttributesItemRendererEvent.UPDATED ) );
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:HGroup width="100%" gap="2">
+		<s:TextInput width="100%" editable="false" selectable="false" text="Items"/>
+		
+		<s:Button id="openItemEditWindowBtn" label="..." width="20"
+				  click="openItemEditWindowBtn_clickHandler(event)"/>
+	</s:HGroup>
+	
+</s:Group>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			
+			import net.vdombox.components.xmldialogeditor.model.vo.components.RadioButtonVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.OptionVO;
+			
+			import spark.components.RadioButton;
+			
+			private var _radioButton : net.vdombox.components.xmldialogeditor.model.vo.components.RadioButtonVO;
+			
+			[Bindable]
+			public function get radioButton():net.vdombox.components.xmldialogeditor.model.vo.components.RadioButtonVO
+			{
+				return _radioButton;
+			}
+
+			public function set radioButton(value:net.vdombox.components.xmldialogeditor.model.vo.components.RadioButtonVO):void
+			{
+				_radioButton = value;
+				
+				//lblLabel.text = radioButton.label;
+				//var selectIndex : int = radioButton.selected.length > 0 ? radioButton.selected[0] : -1;
+				/*var i : int = 0;
+				
+				radioButtonGroup.removeAllElements();
+				
+				for each ( var option : OptionVO in radioButton.options )
+				{
+					var rndButton : spark.components.RadioButton = new spark.components.RadioButton();
+					rndButton.label = option.value;
+					/*if ( i++ == selectIndex )
+						rndButton.selected = true;*/
+					/*rndButton.enabled = false;
+					
+					radioButtonGroup.addElement( rndButton as UIComponent );
+				}*/
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:HGroup width="100%" height="100%" verticalAlign="middle">
+		<s:RadioButton label="{ radioButton.text.value }" selected="{ radioButton.checked.value }"
+					   enabled="false"/>
+	</s:HGroup>
+</s:Group>

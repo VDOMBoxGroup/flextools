@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			import net.vdombox.components.xmldialogeditor.model.vo.attributes.AttributeBoolVO;
+			
+			import spark.events.IndexChangeEvent;
+			
+			private var _attributeVO : AttributeBoolVO;
+			
+			[Bindable]
+			private var sourceList : ArrayCollection = new ArrayCollection([ true, false ] );
+			
+			[Bindable]
+			public function get attributeVO():AttributeBoolVO
+			{
+				return _attributeVO;
+			}
+			
+			public function set attributeVO(value:AttributeBoolVO):void
+			{
+				_attributeVO = value;
+			}
+			
+			protected function dropDown_changeHandler(event:IndexChangeEvent):void
+			{
+				attributeVO.value = dropDown.selectedItem as Boolean;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:DropDownList id="dropDown" width="100%" selectedItem="{ attributeVO.value }" 
+					dataProvider="{ sourceList }"
+					change="dropDown_changeHandler(event)"/>
+
+</s:Group>

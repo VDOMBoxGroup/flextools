@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+		 creationComplete="group1_creationCompleteHandler(event)">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.components.xmldialogeditor.events.VisualItemRendererEvent;
+			import net.vdombox.components.xmldialogeditor.model.vo.OptionVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.DropDownVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.ListBoxVO;
+			import net.vdombox.components.xmldialogeditor.model.vo.components.base.ComponentBase;
+			import net.vdombox.components.xmldialogeditor.utils.SortUtil;
+			
+			private var _listBox : ListBoxVO;
+			
+			[Bindable]
+			private var sourceList : ArrayCollection;
+			
+			[Bindable]
+			public function get listBox():ListBoxVO
+			{
+				return _listBox;
+			}
+			
+			public function set listBox(value:ListBoxVO):void
+			{
+				_listBox = value;
+				
+				update();
+			}
+			
+			public function update() : void
+			{
+				sourceList = new ArrayCollection()
+				sourceList.addAll( listBox.options.value );
+				
+				if ( listBox.sort.value == "sortById" )
+					SortUtil.sortByID( sourceList );
+				else if ( listBox.sort.value == "sortByText" )
+					SortUtil.sortByText( sourceList );
+					
+				var selectedIndices : Vector.<int> = new Vector.<int>();
+				
+				for ( var i : int = 0; i < sourceList.length; i++ )
+				{
+					var optionVO : OptionVO = sourceList[i];
+					if ( optionVO.selected.value )
+						selectedIndices.push( i )
+				}
+				
+				lstValue.selectedIndices = selectedIndices;
+				
+				
+			}
+			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				update();
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:List id="lstValue" width="100%" enabled="false"
+			allowMultipleSelection="true"
+			dataProvider="{ sourceList }"
+			itemRenderer="net.vdombox.components.xmldialogeditor.view.itemrenderers.OptionItemRenderer" verticalScrollPolicy="auto"/>
+		
+</s:Group>
