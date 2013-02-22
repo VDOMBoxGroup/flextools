@@ -6,10 +6,12 @@ import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
 import mx.core.Application;
+import mx.rpc.AsyncToken;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 import mx.utils.StringUtil;
 
+import net.vdombox.editors.parsers.base.Token;
 import net.vdombox.powerpack.lib.player.connection.protect.MD5;
 import net.vdombox.powerpack.lib.player.events.SOAPErrorEvent;
 import net.vdombox.powerpack.lib.player.gen.parse.ListParser;
@@ -29,6 +31,8 @@ public class SOAPBaseLevel extends EventDispatcher
     private var _resultType : String = ERROR;
 
 	private var soap : SOAP;
+	
+	private var lastToken : AsyncToken;
 
 
 	public function SOAPBaseLevel( target : IEventDispatcher = null )
@@ -112,11 +116,17 @@ public class SOAPBaseLevel extends EventDispatcher
 		var fault : Object = event.fault;
 		var faultstring : String = ( "faultstring" in fault ) 	? fault["faultstring"] 	: fault.faultString
 		var details 	: String = ( "detail"     in fault) 	? fault["detail"] 		: "" ;
+		var key : String = "";
+		
+		if( lastToken )
+			key = " '" + lastToken.key + "' "
 
 		if ( details != ""  )
 			faultstring += ": " + details
 			
-		 _result = "['Error' '" + faultstring  +"']"; 
+				
+		 _result = "['Error' '" + faultstring  +  "' " + key +
+			 "]"; 
 		 _result2 = faultstring;
         
 		 _resultType = ERROR;
@@ -150,7 +160,8 @@ public class SOAPBaseLevel extends EventDispatcher
 			"list_backup_drivers",
 			"restore_application",
 			"backup_application",
-			"set_type"
+			"set_type",
+			"get_task_status"
 		];
 	
 	public function execute( functionName : String, args : Array ) : void
@@ -266,7 +277,7 @@ public class SOAPBaseLevel extends EventDispatcher
 
 		soap.set_application_events.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.set_application_events.addEventListener( FaultEvent.FAULT, soapError );
-		soap.set_application_events( appId, objId, events );
+		lastToken = soap.set_application_events( appId, objId, events );
 	}
 
 	// get_application_events //
@@ -279,7 +290,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.get_application_events.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.get_application_events.addEventListener( FaultEvent.FAULT, soapError );
 
-		soap.get_application_events( appId, objId );
+		lastToken = soap.get_application_events( appId, objId );
 	}
 
 	// set_server_actions //
@@ -293,7 +304,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.set_server_actions.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.set_server_actions.addEventListener( FaultEvent.FAULT, soapError );
 
-		soap.set_server_actions( appId, objId, actions );
+		lastToken = soap.set_server_actions( appId, objId, actions );
 	}
 
 	// get_server_actions //
@@ -306,7 +317,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.get_server_actions.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.get_server_actions.addEventListener( FaultEvent.FAULT, soapError );
 
-		soap.get_server_actions( appId, objId );
+		lastToken = soap.get_server_actions( appId, objId );
 	}
 
 	// create_object //
@@ -323,7 +334,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.create_object.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.create_object.addEventListener( FaultEvent.FAULT, soapError );
 
-		soap.create_object( appId, parentId, typeId, name, attr );
+		lastToken = soap.create_object( appId, parentId, typeId, name, attr );
 	}
 
 	// submit_object_script_presentation //
@@ -337,7 +348,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.submit_object_script_presentation.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.submit_object_script_presentation.addEventListener( FaultEvent.FAULT, soapError );
 
-		soap.submit_object_script_presentation( appId, objId, pres );
+		lastToken = soap.submit_object_script_presentation( appId, objId, pres );
 	}
 
 	// get_object_script_presentation //
@@ -349,7 +360,7 @@ public class SOAPBaseLevel extends EventDispatcher
 
 		soap.get_object_script_presentation.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.get_object_script_presentation.addEventListener( FaultEvent.FAULT, soapError );
-		soap.get_object_script_presentation( appId, objId );
+		lastToken = soap.get_object_script_presentation( appId, objId );
 	}
 
 //	export_application       //
@@ -360,7 +371,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.export_application.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.export_application.addEventListener( FaultEvent.FAULT, soapError );
 
-		soap.export_application( appId );
+		lastToken = soap.export_application( appId );
 	}
 
 //	installApplication
@@ -373,7 +384,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.install_application.addEventListener( FaultEvent.FAULT, soapError, false, 0, true  );
 		soap.addEventListener( FaultEvent.FAULT, soapError);
 
-		soap.install_application( virtualHostName, applicationXML );
+		lastToken = soap.install_application( virtualHostName, applicationXML );
 	}
 
 	// login //
@@ -400,7 +411,7 @@ public class SOAPBaseLevel extends EventDispatcher
 			soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler, false, 0, true  );
 			soap.addEventListener( SOAPErrorEvent.LOGIN_ERROR, loginError, false, 0, true );
 
-			soap.logon( login, pass );
+			lastToken = soap.logon( login, pass );
 		}
                                               
 		function soap_loginOKHandler( event : SOAPEvent ) : void
@@ -442,7 +453,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.update_application.addEventListener( ResultEvent.RESULT, resultHandler, false, 0, true  );
 		soap.update_application.addEventListener( FaultEvent.FAULT, soapError );
 
-		soap.update_application( applicationXML );
+		lastToken = soap.update_application( applicationXML );
 	}
 
 	private function getApplicationInfo( params : Array ) : void
@@ -452,7 +463,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.get_application_info.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.get_application_info.addEventListener( FaultEvent.FAULT, soapError );
 
-		soap.get_application_info(  applicationID );
+		lastToken = soap.get_application_info(  applicationID );
 	}
 
 	public function closeSession() : void
@@ -473,7 +484,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.check_application_exists.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.check_application_exists.addEventListener( FaultEvent.FAULT, soapError );
 
-		soap.check_application_exists(  applicationID );
+		lastToken = soap.check_application_exists(  applicationID );
 	}
 	
 	
@@ -484,7 +495,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.remote_call.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.remote_call.addEventListener( FaultEvent.FAULT, soapError );
 		
-		soap.remote_call(   params[0], params[1], params[2], params[3],  params[4]  );
+		lastToken = soap.remote_call(   params[0], params[1], params[2], params[3],  params[4]  );
 	}
 	
 	private function listApplications( params  : Array ) : void
@@ -492,7 +503,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.list_applications.addEventListener( ResultEvent.RESULT, listAppResultHandler );
 		soap.list_applications.addEventListener( FaultEvent.FAULT, soapError );
 		
-		soap.list_applications();
+		lastToken = soap.list_applications();
 		
 		function listAppResultHandler( event : ResultEvent ) : void
 		{
@@ -526,7 +537,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.backup_application.addEventListener( ResultEvent.RESULT, backup_applicationResultHandler );
 		soap.backup_application.addEventListener( FaultEvent.FAULT, soapError );
 		
-		soap.backup_application(  applicationID, driverID );
+		lastToken = soap.backup_application(  applicationID, driverID );
 		
 		function backup_applicationResultHandler(event : ResultEvent) : void
 		{
@@ -552,7 +563,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.restore_application.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.restore_application.addEventListener( FaultEvent.FAULT, soapError );
 		
-		soap.restore_application(  applicationID, driverID,  revision );
+		lastToken = soap.restore_application(  applicationID, driverID,  revision );
 	}
 	
 	private function  listBackupDrivers(  ) : void
@@ -560,7 +571,7 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.list_backup_drivers.addEventListener( ResultEvent.RESULT, listBackupDriversHandler );
 		soap.list_backup_drivers.addEventListener( FaultEvent.FAULT, soapError );
 		
-		soap.list_backup_drivers(    );
+		lastToken = soap.list_backup_drivers(    );
 		
 		
 		function listBackupDriversHandler( event : ResultEvent ) : void
@@ -595,10 +606,19 @@ public class SOAPBaseLevel extends EventDispatcher
 		soap.set_type.addEventListener( ResultEvent.RESULT, resultHandler );
 		soap.set_type.addEventListener( FaultEvent.FAULT, soapError );
 		
-		soap.set_type( typeXML );
+		lastToken = soap.set_type( typeXML );
 	}
 
 	
+	private function getTaskStatus( params : Array ) : void
+	{
+		var id : String = params[0];
+		
+		soap.get_task_status.addEventListener( ResultEvent.RESULT, resultHandler );
+		soap.get_task_status.addEventListener( FaultEvent.FAULT, soapError );
+		
+		lastToken = soap.get_task_status( id );
+	}
 	
 	
 	private function dispathRusult():void
