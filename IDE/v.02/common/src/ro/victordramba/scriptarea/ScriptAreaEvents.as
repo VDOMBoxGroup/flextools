@@ -1076,7 +1076,7 @@ package ro.victordramba.scriptarea
 				stage.focus = this;
 			dipatchChange(e.text);
 			dipatchChangeText();
-			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_INPUT ) );
+			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_INPUT, false, false, e.text ) );
 		}
 
 		private function saveLastCol() : void

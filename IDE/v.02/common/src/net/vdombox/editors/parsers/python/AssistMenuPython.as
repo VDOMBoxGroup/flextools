@@ -45,7 +45,7 @@ package net.vdombox.editors.parsers.python
 			return true;
 		}
 
-		public override function triggerAssist( forced : Boolean = false ) : void
+		public override function triggerAssist( forced : Boolean = false, text : String = '' ) : void
 		{
 			var pos : int = fld.caretIndex;
 
@@ -74,14 +74,15 @@ package net.vdombox.editors.parsers.python
 			menuDataStr = null;
 			
 			var rt:String = trigger.split('').reverse().join('');
+			
+			if ( text == " " && ( tmp.substr( 1, 4 ) == "morf" || tmp.substr( 1, 6 ) == "tropmi" ) )
+				forced = true;
 			/*if (rt == 'new' || rt == 'as' || rt == 'is' || rt == ':' || rt == 'extends' || rt == 'implements')
 				menuDataStr = ctrl.getTypeOptions();*/
 			if (trigger == '.')
 				menuDataStr = ctrl.getMemberList(pos);
 			else if (trigger == '')
-			{
 				menuDataStr = ctrl.getAllOptions(pos);
-			}
 			else if (trigger == '(')
 			{
 				var fd:String = ctrl.getFunctionDetails(pos);

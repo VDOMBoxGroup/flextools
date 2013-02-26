@@ -837,6 +837,7 @@ package net.vdombox.editors.parsers.python
 		{
 			var prevToken : PythonToken = tp2;
 			var curToken : PythonToken = tp;
+			var nextPos : int = currentPos - 2;
 			
 			if ( !tp2 || ( tp2 && tp2.string != "." ) && tp.string != "self" )
 			{
@@ -872,6 +873,8 @@ package net.vdombox.editors.parsers.python
 					prevToken = tokens[currentPos - 1];
 				}
 				curToken = tokens[currentPos];
+				
+				nextPos = currentPos - 2;
 				
 				var field : Field;
 				
@@ -938,10 +941,10 @@ package net.vdombox.editors.parsers.python
 					tField = tField2;
 				}
 				
-				currentPos -= 2;
+				//currentPos -= 2;
 				
 				if ( prevToken && prevToken.string == "," )
-					parsingVariables( tokens[ currentPos ], tokens[ currentPos - 1 ], currentPos );
+					parsingVariables( tokens[ nextPos ], tokens[ nextPos - 1 ], nextPos );
 			}
 		}
 		

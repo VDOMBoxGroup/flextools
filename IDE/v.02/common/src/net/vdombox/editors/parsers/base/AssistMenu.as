@@ -117,7 +117,8 @@ package net.vdombox.editors.parsers.base
 		protected function onTextInput( e : ScriptAreaComponenrEvent ) : void
 		{			
 			if ( autoShowAutoComplete )
-				triggerAssist(false);
+				triggerAssist(false, e.detail as String );
+				
 		}	
 		
 		private function onPressNavigationKeyHandler( e : ScriptAreaComponenrEvent ) : void
@@ -354,7 +355,7 @@ package net.vdombox.editors.parsers.base
 			fld.removeEventListener( ScriptAreaComponenrEvent.PRESS_NAVIGATION_KEY, onPressNavigationKeyHandler, true );
 		}
 		
-		public function triggerAssist( forced : Boolean = false ) : void
+		public function triggerAssist( forced : Boolean = false, text : String = '' ) : void
 		{
 		}
 	}

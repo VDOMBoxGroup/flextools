@@ -50,7 +50,7 @@ package net.vdombox.editors.parsers.vdomxml
 			//triggerAssist();
 		}
 
-		public override function triggerAssist( forced : Boolean = false ) : void
+		public override function triggerAssist( forced : Boolean = false, text : String = '' ) : void
 		{
 			var pos : int = fld.caretIndex;
 

@@ -342,7 +342,7 @@ package net.vdombox.editors
 		
 		private function area_textInputHandler( event : ScriptAreaComponenrEvent ) : void
 		{
-			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_INPUT ) );
+			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_INPUT, false, false, event.detail ) );
 		}
 
 		private function updateScrollBars() : void

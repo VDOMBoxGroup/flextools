@@ -123,6 +123,14 @@ package net.vdombox.editors.parsers.python
 			if (  t && ( t.type == Token.COMMENT || t.type == Token.STRING ) )
 				return null;
 			
+			if ( t.type == Token.ENDLINE )
+			{
+				var tt : PythonToken = tokenizer.tokenByPos( pos - 1 ) as PythonToken;
+				if ( tt.string == "from" || tt.string == "import" )
+					t = tt;
+			}
+				
+			
 			if ( t && ( t.string == "from" || t.importZone && !t.importFrom ) )
 				return HashLibraryArray.getLibrariesName();
 			else if ( t && t.importZone )

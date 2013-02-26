@@ -2,7 +2,29 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 width="228" height="13">
+		 minWidth="120" height="13" 
+		 creationComplete="group1_creationCompleteHandler(event)"
+		 >
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				width = parent.width;
+				
+				parent.addEventListener( Event.RESIZE, parentResizeHandler, false, 0 , true );
+			}
+			
+			private function parentResizeHandler( event : Event ) : void
+			{
+				if ( parent )
+					width = parent.width;
+				
+			}
+			
+		]]>
+	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
