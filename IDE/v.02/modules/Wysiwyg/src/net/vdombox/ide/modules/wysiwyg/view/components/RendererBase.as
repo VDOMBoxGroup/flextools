@@ -812,7 +812,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			else
 			{
 				richText = new Text();
-				richText.maxHeight = 22;
+				//richText.maxHeight = 22;
 			}
 			
 			richText.x = contetntPart.@left;
