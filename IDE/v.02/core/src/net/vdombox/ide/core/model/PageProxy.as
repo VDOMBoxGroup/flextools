@@ -18,7 +18,6 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.vo.ErrorVO;
-	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
 	import net.vdombox.utils.XMLUtils;
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -658,7 +657,6 @@ package net.vdombox.ide.core.model
 				return;
 
 			var operationName : String = operation.name;
-			var notification : ProxyNotification;
 
 			var vdomObjectAttributesVO : VdomObjectAttributesVO;
 			var objectVO : ObjectVO;
@@ -702,11 +700,9 @@ package net.vdombox.ide.core.model
 							 XMLUtils.sortElementsInXML( structure,  [ new SortField( "@name" ) ] );
 						
 						if ( token.requestFunctionName == GET_STRUCTURE )
-							notification = new ProxyNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, structure );
+							sendNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, structure );
 						else
-							notification = new ProxyNotification( ApplicationFacade.PAGE_STRUCTURE_FOR_FIND_GETTED, structure );
-							
-						notification.token = token;
+							sendNotification( ApplicationFacade.PAGE_STRUCTURE_FOR_FIND_GETTED, structure );
 					}
 
 					break;
@@ -715,8 +711,7 @@ package net.vdombox.ide.core.model
 				case "set_name":
 				{
 					pageVO.name = result.Object[ 0 ].@Name;
-					notification = new ProxyNotification( ApplicationFacade.PAGE_NAME_SETTED, pageVO );
-					notification.token = token;
+					sendNotification( ApplicationFacade.PAGE_NAME_SETTED, pageVO );
 					
 					break;
 				}
@@ -724,8 +719,7 @@ package net.vdombox.ide.core.model
 				case "get_child_objects":
 				{
 					createObjectsList( result.Objects[ 0 ] );
-					notification = new ProxyNotification( ApplicationFacade.PAGE_OBJECTS_GETTED, { pageVO : pageVO, objects : _objects } );
-					notification.token = token;
+					sendNotification( ApplicationFacade.PAGE_OBJECTS_GETTED, { pageVO : pageVO, objects : _objects } );
 
 					break;
 				}
@@ -889,19 +883,15 @@ package net.vdombox.ide.core.model
 						objectVO.setID( objectXML.@ID );
 
 						objectVO.setXMLDescription( objectXML );
-
-						notification = new ProxyNotification( ApplicationFacade.PAGE_OBJECT_GETTED, { pageVO: pageVO, objectVO: objectVO } );
-						notification.token = token;
+						
+						sendNotification( ApplicationFacade.PAGE_OBJECT_GETTED, { pageVO: pageVO, objectVO: objectVO } );
 					}
 					else if ( token.requestFunctionName == GET_ATTRIBUTES )
 					{
 						vdomObjectAttributesVO = new VdomObjectAttributesVO( pageVO );
 						vdomObjectAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
-
-						notification =
-							new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED,
-							{ pageVO: pageVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
-						notification.token = token;
+						
+						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, { pageVO: pageVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
 					}
 
 					break;
@@ -911,11 +901,8 @@ package net.vdombox.ide.core.model
 				{
 					vdomObjectAttributesVO = new VdomObjectAttributesVO( pageVO );
 					vdomObjectAttributesVO.setXMLDescription( result.Object[ 0 ] );
-
-					notification =
-						new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED,
-						{ pageVO: pageVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
-					notification.token = token;
+					
+					sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED, { pageVO: pageVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
 
 					break;
 				}
@@ -941,9 +928,8 @@ package net.vdombox.ide.core.model
 						if ( typeID != "" )
 							tempElement.@typeID = typeID;
 					}
-
-					notification = new ProxyNotification( ApplicationFacade.PAGE_WYSIWYG_GETTED, { pageVO: pageVO, wysiwyg: wysiwyg } );
-					notification.token = token;
+					
+					sendNotification( ApplicationFacade.PAGE_WYSIWYG_GETTED, { pageVO: pageVO, wysiwyg: wysiwyg } );
 
 					break;
 				}
@@ -1020,8 +1006,7 @@ package net.vdombox.ide.core.model
 					
 					objectVO.setXMLDescription( objectXML );
 					
-					notification = new ProxyNotification( ApplicationFacade.PAGE_COPY_CREATED, { pageVO: pageVO, objectVO: objectVO } );
-					notification.token = token;
+					sendNotification( ApplicationFacade.PAGE_COPY_CREATED, { pageVO: pageVO, objectVO: objectVO } );
 					
 					break;
 				}
@@ -1035,9 +1020,6 @@ package net.vdombox.ide.core.model
 					
 					
 			}
-
-			if ( notification )
-				facade.notifyObservers( notification );
 		}
 
 		private function soap_faultHandler( event : FaultEvent ) : void
@@ -1056,7 +1038,6 @@ package net.vdombox.ide.core.model
 
 			var operationName : String = operation.name;
 			var errorVO : ErrorVO;
-			var notification : ProxyNotification;
 
 			var faultString : String = fault.faultString;
 			
@@ -1087,8 +1068,7 @@ package net.vdombox.ide.core.model
 					if (pageVO.id != detailXML.ObjectID)
 						break;
 					pageVO.name = detailXML.Name;
-					notification = new ProxyNotification( ApplicationFacade.PAGE_NAME_SETTED, pageVO );
-					notification.token = token;
+					sendNotification( ApplicationFacade.PAGE_NAME_SETTED, pageVO );
 					
 					break;
 				}
@@ -1109,15 +1089,15 @@ package net.vdombox.ide.core.model
 					
 				case "copy_object":
 				{
-					notification = new ProxyNotification( ApplicationFacade.ERROR_TO_PASTE, pageVO.applicationVO );
+					sendNotification( ApplicationFacade.ERROR_TO_PASTE, pageVO.applicationVO );
 					
 					break;
 				}
 
 			}
+			
 			sendNotification( ApplicationFacade.WRITE_ERROR, { text: faultString, detail : fault.detail } );
-			if ( notification )
-				facade.notifyObservers( notification );
+			
 		}
 	}
 }

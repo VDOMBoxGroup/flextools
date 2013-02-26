@@ -21,9 +21,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
-	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
-	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 	
@@ -228,11 +226,6 @@ package net.vdombox.ide.core.model
 			}
 			
 			return pageProxy;
-		}
-		
-		public function getPageProxyAt( pageID : String ) : IPageProxy
-		{
-			return null;
 		}
 		
 		public function getPages() : AsyncToken
@@ -969,11 +962,7 @@ package net.vdombox.ide.core.model
 						
 						pageVO.setXMLDescription( objectXML );
 						
-						var notification : ProxyNotification;
-						notification = new ProxyNotification( ApplicationFacade.APPLICATION_PAGE_GETTED, pageVO );
-						notification.token = token;
-						
-						facade.notifyObservers( notification );
+						sendNotification( ApplicationFacade.APPLICATION_PAGE_GETTED, pageVO );
 					}
 					
 					break;
@@ -1178,11 +1167,8 @@ package net.vdombox.ide.core.model
 				}
 					
 				case "copy_object":
-				{
-					notification = new ProxyNotification( ApplicationFacade.APPLICATION_COPY_CREATED, applicationVO );
-					notification.token = token;
-					
-					facade.notifyObservers( notification );
+				{					
+					sendNotification( ApplicationFacade.APPLICATION_COPY_CREATED, applicationVO );
 					
 					break;
 				}

@@ -14,7 +14,6 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
-	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 	
@@ -113,9 +112,8 @@ package net.vdombox.ide.core.model
 			var attributes : Array = vdomObjectAttributesVO.getChangedAttributes();
 			
 			if ( attributes.length == 0 )
-			{
-				facade.notifyObservers( new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_SETTED,
-					{ objectVO: vdomObjectAttributesVO.vdomObjectVO, vdomObjectAttributesVO: vdomObjectAttributesVO } ) );
+			{				
+				sendNotification( ApplicationFacade.OBJECT_ATTRIBUTES_SETTED, { objectVO: vdomObjectAttributesVO.vdomObjectVO, vdomObjectAttributesVO: vdomObjectAttributesVO }  );
 				
 				return token;
 			}
@@ -510,7 +508,6 @@ package net.vdombox.ide.core.model
 				return;
 			
 			var operationName : String = operation.name;
-			var notification : ProxyNotification;
 			
 			var vdomObjectAttributesVO : VdomObjectAttributesVO;
 			
@@ -647,10 +644,7 @@ package net.vdombox.ide.core.model
 					vdomObjectAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
 					objectVO.name = result.Objects.Object[ 0 ].@Name;
 					
-					notification = new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED,
-						{ objectVO: objectVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
-					
-					notification.token = token;
+					sendNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED, { objectVO: objectVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
 					
 					break;
 				}
@@ -660,10 +654,7 @@ package net.vdombox.ide.core.model
 					vdomObjectAttributesVO = new VdomObjectAttributesVO( objectVO );
 					vdomObjectAttributesVO.setXMLDescription( result.Object[ 0 ] );
 					
-					
-					notification = new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_SETTED,
-						{ objectVO: objectVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
-					notification.token = token;
+					sendNotification( ApplicationFacade.OBJECT_ATTRIBUTES_SETTED, { objectVO: objectVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
 					
 					break;
 				}
@@ -671,8 +662,8 @@ package net.vdombox.ide.core.model
 				case "set_name":
 				{
 					objectVO.name = result.Object[ 0 ].@Name;
-					notification = new ProxyNotification( ApplicationFacade.OBJECT_NAME_SETTED, objectVO );
-					notification.token = token;
+					
+					sendNotification( ApplicationFacade.OBJECT_NAME_SETTED, objectVO );
 					
 					break;
 				}
@@ -719,8 +710,7 @@ package net.vdombox.ide.core.model
 							tempElement.@typeID = typeID;
 					}
 					
-					notification = new ProxyNotification( ApplicationFacade.OBJECT_WYSIWYG_GETTED, { objectVO: objectVO, wysiwyg: wysiwyg } );
-					notification.token = token;
+					sendNotification( ApplicationFacade.OBJECT_WYSIWYG_GETTED, { objectVO: objectVO, wysiwyg: wysiwyg } );
 					
 					break;
 				}
@@ -762,8 +752,7 @@ package net.vdombox.ide.core.model
 					
 					objVO.setXMLDescription( objectXML );
 					
-					notification = new ProxyNotification( ApplicationFacade.OBJECT_COPY_CREATED, { targetObject : objectVO, newObject : objVO } );
-					notification.token = token;
+					sendNotification( ApplicationFacade.OBJECT_COPY_CREATED, { targetObject : objectVO, newObject : objVO } );
 					
 					break;
 				}
@@ -797,9 +786,6 @@ package net.vdombox.ide.core.model
 					break;
 				}
 			}
-			
-			if ( notification )
-				facade.notifyObservers( notification );
 		}
 		
 		private function soap_faultHandler( event : FaultEvent ) : void
@@ -816,7 +802,6 @@ package net.vdombox.ide.core.model
 				return;
 			
 			var operationName : String = operation.name;
-			var notification : ProxyNotification;
 			
 			sendNotification( ApplicationFacade.WRITE_ERROR, { text: fault.faultString, detail : fault.detail } );
 			
@@ -826,8 +811,8 @@ package net.vdombox.ide.core.model
 				{
 					var detailXML : XML = new XML(fault.detail);
 					objectVO.name = detailXML.Name;
-					notification = new ProxyNotification( ApplicationFacade.OBJECT_NAME_SETTED, objectVO );
-					notification.token = token;
+					
+					sendNotification( ApplicationFacade.OBJECT_NAME_SETTED, objectVO );
 					
 					break;
 				}
@@ -841,14 +826,11 @@ package net.vdombox.ide.core.model
 					
 				case "copy_object":
 				{
-					notification = new ProxyNotification( ApplicationFacade.ERROR_TO_PASTE, objectVO.pageVO.applicationVO );
+					sendNotification( ApplicationFacade.ERROR_TO_PASTE, objectVO.pageVO.applicationVO );
 					
 					break;
 				}
 			}
-			
-			if ( notification )
-				facade.notifyObservers( notification );
 		}
 	}
 }

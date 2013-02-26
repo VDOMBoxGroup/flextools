@@ -101,7 +101,7 @@ package net.vdombox.ide.core.controller.requests
 
 				case PPMApplicationTargetNames.LIBRARIES:
 				{
-					var isFind : Boolean = body.hasOwnProperty( "isFind" ) ? body.isFind : false;
+					isFind = body.hasOwnProperty( "isFind" ) ? body.isFind : false;
 					applicationProxy.getLibraries( isFind );
 
 					break;

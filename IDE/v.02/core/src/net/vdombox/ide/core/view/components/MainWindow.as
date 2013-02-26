@@ -75,7 +75,9 @@ package net.vdombox.ide.core.view.components
 				
 				s.writeUTFBytes(xml.toXMLString());
 			}
-			catch(e:Error){}
+			catch(e:Error)
+			{
+			}
 			finally
 			{
 				s.close();
