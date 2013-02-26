@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/halo"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  xmlns:components="net.vdombox.ide.modules.events.view.components.*"
@@ -7,18 +7,23 @@
 		  height="100%" width="100%"
 		  xmlns:mx1="library://ns.adobe.com/flex/mx">
 
-	<components:WorkArea id="workArea"
-						 height="100%" width="100%" minWidth="400" />
-
+	<mx1:HDividedBox width="100%" height="100%">
+		
+		<components:WorkArea id="workArea"
+							 height="100%" width="100%" minWidth="400" />
+		
+		
+		
+		<mx1:VDividedBox height="100%" width="228" minWidth="228" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
+			
+			<components:ObjectsTreePanel id="objectsTreePanel"
+										 width="100%" height="40%"
+										 title="{ resourceManager.getString( 'Events_General', 'objects_tree_panel_title' ) }" />
+			
+			<components:EventsPanel id="eventsPanel"
+									width="100%" height="60%"/>
+		</mx1:VDividedBox>
+		
+	</mx1:HDividedBox>
 	
-	
-	<mx1:VDividedBox height="100%" width="228" minWidth="228" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
-
-		<components:ObjectsTreePanel id="objectsTreePanel"
-									 width="100%" height="40%"
-									 title="{ resourceManager.getString( 'Events_General', 'objects_tree_panel_title' ) }" />
-
-		<components:EventsPanel id="eventsPanel"
-								width="100%" height="60%"/>
-	</mx1:VDividedBox>
-</s:HGroup>
+</s:Group>
