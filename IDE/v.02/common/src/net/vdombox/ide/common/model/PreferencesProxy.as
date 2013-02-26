@@ -54,7 +54,10 @@ package net.vdombox.ide.common.model
 		
 		public function get autoShowAutoComplete() : Boolean
 		{
-			return shObjData.data["autoShowAutoComplete"];
+			if ( shObjData.data.hasOwnProperty( "autoShowAutoComplete" ) )
+				return shObjData.data["autoShowAutoComplete"];
+			else
+				return true;
 		}
 		
 		public function set selectKeyByAutoComplte( value : String ) : void

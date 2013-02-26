@@ -278,6 +278,8 @@ package ro.victordramba.scriptarea
 			_setSelection( _selStart, _selEnd );
 			
 			ClearLines();
+			
+			updateIndentLines();
 
 			dispatchEvent( new Event( Event.SCROLL, true ) );
 		}
