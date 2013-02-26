@@ -117,6 +117,17 @@ package net.vdombox.ide.core.view
 
 					applicationList.dataProvider = new ArrayList( applications );
 
+					if ( applications.length == 0 )
+					{
+						applicationsView.changeApplication.enabled = false;
+						applicationsView.setSelectApplication.enabled = false;
+					}
+					else
+					{
+						applicationsView.changeApplication.enabled = true;
+						applicationsView.setSelectApplication.enabled = true;
+					}
+					
 					selectApplication();
 
 					break;
