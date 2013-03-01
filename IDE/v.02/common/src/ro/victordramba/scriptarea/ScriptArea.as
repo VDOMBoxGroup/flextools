@@ -435,8 +435,11 @@ package ro.victordramba.scriptarea
 			clearRect();
 			
 			if ( findText == "" )
+			{
+				_setSelection( 0, 0 );
 				return false;
-			
+			}
+				
 			var index : int;
 			var string : String = caseSensitive ? text.toLocaleLowerCase() : text;
 			
@@ -480,7 +483,10 @@ package ro.victordramba.scriptarea
 			}
 			
 			if ( index == -1 )
+			{
+				_setSelection( 0, 0 );
 				return false;
+			}
 			
 			goToPos( index, findText.length );
 			
