@@ -38,6 +38,8 @@
 			[Bindable]
 			public var dataGridColumns:Array;
 			
+			public var defaultGridColumns:Object;
+			
 			
 			private var dataGridColumnsProps:Array = [];
 			private var currentPage:int;
@@ -233,6 +235,7 @@
 				if ( !dataGridColumns )
 				{	
 					dataGridColumns = [];
+					defaultGridColumns = [];
 					
 					for each (var xmlHeader:XML in tableStructureXML.column) 
 					{
@@ -245,6 +248,9 @@
 						
 						if ( xmlHeader.@type == "INTEGER" || xmlHeader.@type == "REAL" )
 							_header.sortCompareFunction = fieldSortNumber( xmlHeader.@name );
+						
+						if ( xmlHeader.@['default'][0] )
+							defaultGridColumns[ _header.headerText ] = xmlHeader.@['default'];
 				
 						dataGridColumns.push( _header );
 					
@@ -482,17 +488,11 @@
 				var columnIndex:int = 0;
 				for each ( var dgColumn:AdvancedDataGridColumn in dataGridColumns ) 
 				{
-					/*if ( !dataGridColumnsProps[columnIndex].aincrement ) 
-					{
-						if ( dataGridColumnsProps[columnIndex].notnull )
-							tableRow[ dgColumn.dataField ] = 'REQUIRED';
-						else
-							tableRow[ dgColumn.dataField ] = 'NULL';
-					} 
-					else 
-					{*/
+					if ( defaultGridColumns.hasOwnProperty( dgColumn.headerText ) )
+						tableRow[ dgColumn.dataField ] = defaultGridColumns[ dgColumn.headerText ];
+					else
 						tableRow[ dgColumn.dataField ] = 'NULL';
-					//}
+					
 					columnIndex++;
 				}
 				
