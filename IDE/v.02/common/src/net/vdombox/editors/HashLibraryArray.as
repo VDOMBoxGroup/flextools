@@ -470,6 +470,10 @@ package net.vdombox.editors
 				if ( !flag )
 				{
 					var importItemVO : ImportItemVO;
+					
+					if ( !scope.imports )
+						return null;
+					
 					for each ( importItemVO in scope.imports.toArray() )
 					{
 						var obj : Object = getPositionToken( importItemVO.source, importToken, bp, lang, prevImport );

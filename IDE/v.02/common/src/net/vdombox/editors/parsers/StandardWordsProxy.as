@@ -272,6 +272,7 @@ package net.vdombox.editors.parsers
 			field.members.setValue( "send_file", new Field( "def", 0 , "send_file" ) );
 			field.members.setValue( "redirect", new Field( "def", 0 , "redirect" ) );
 			field.members.setValue( "terminate", new Field( "def", 0 , "terminate" ) );
+			field.members.setValue( "shared_variables", new Field( "def", 0 , "shared_variables" ) );
 			
 			_standardPythonObjects.setValue("response", field );
 			

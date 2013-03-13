@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("net.vdombox.ide.common.view.components.windows.GenerateGettesSetterWindow")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			
+			import spark.events.TextOperationEvent;
+			
+			protected function getSet_changeHandler(event:TextOperationEvent):void
+			{
+				hostComponent.getSet = getSet.text;
+			}
+			
+			protected function variable_changeHandler(event:TextOperationEvent):void
+			{
+				hostComponent.variable = variable.text;
+			}
+			
+			protected function getter_changeHandler(event:Event):void
+			{
+				hostComponent.getter = getter.selected;
+			}
+			
+			protected function setter_changeHandler(event:Event):void
+			{
+				hostComponent.setter = setter.selected;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="disabledAndInactive" />
+		<s:State name="normalAndInactive" />
+		<s:State name="disabled" />
+		<s:State name="normal" />
+	</s:states>
+	
+	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
+		<s:fill>
+			<s:SolidColor color="#424242"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Rect top="9" bottom="9" left="9" right="9">
+			<s:fill>
+				<s:SolidColor color="#2f2f2f"/>
+			</s:fill>
+	</s:Rect>
+	
+	<s:VGroup width="100%" height="100%" gap="5" verticalAlign="middle"
+			  top="9" bottom="9" left="9" right="9">
+		
+		<s:HGroup width="100%" paddingLeft="5" paddingRight="5">
+			<s:Label text="Variable" color="0xFFFFFF"/>
+			<s:Spacer width="100%"/>
+			<s:TextInput id="variable" width="190" text="{ hostComponent.variable }" change="variable_changeHandler(event)"/>
+		</s:HGroup>
+		
+		<s:HGroup width="100%" paddingLeft="5" paddingRight="5">
+			<s:Label text="Getter/Setter name" color="0xFFFFFF"/>
+			<s:Spacer width="100%"/>
+			<s:TextInput id="getSet" width="190" text="{ hostComponent.getSet }" change="getSet_changeHandler(event)"/>
+		</s:HGroup>
+		
+		<s:VGroup width="100%" paddingLeft="5" paddingRight="5" gap="2">
+			<s:CheckBox id="getter" label="Getter" color="0xFFFFFF" selected="true" skinClass="spark.skins.spark.CheckBoxSkin" change="getter_changeHandler(event)"/>
+			
+			<s:CheckBox id="setter" label="Setter" color="0xFFFFFF" selected="true" skinClass="spark.skins.spark.CheckBoxSkin" change="setter_changeHandler(event)"/>
+		</s:VGroup>
+		
+		<s:HGroup width="100%" gap="30" horizontalAlign="center">
+			<button:VDOMButton label="Ok" click="hostComponent.ok_close_window()"/>
+			
+			<button:VDOMButton label="Cancel" click="hostComponent.no_close_window()"/>
+		</s:HGroup>
+		
+	</s:VGroup>
+</s:Skin>

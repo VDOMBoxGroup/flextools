@@ -23,13 +23,16 @@ package ro.victordramba.scriptarea
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.editors.HashLibraryArray;
+	import net.vdombox.editors.parsers.LanguageVO;
 	import net.vdombox.editors.parsers.base.BackwardsParser;
+	import net.vdombox.editors.parsers.base.BlockPosition;
 	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
+	import net.vdombox.ide.common.view.components.windows.GenerateGettesSetterWindow;
 	import net.vdombox.ide.common.view.components.windows.ScriptStructureWindow;
 	import net.vdombox.utils.WindowManager;
 
@@ -130,8 +133,14 @@ package ro.victordramba.scriptarea
 			t.addEventListener( TimerEvent.TIMER, timerHandler, false, 0, true );
 		}
 		
+		private var contextX : int;
+		private var contextY : int;
+		
 		private function contextMenuHandler( event : MouseEvent ) : void
 		{
+			contextX = event.localX;
+			contextY = event.localY;
+			
 			if ( !contextMenu )
 				contextMenu = new ContextMenu();
 			
@@ -173,6 +182,13 @@ package ro.victordramba.scriptarea
 				}
 			}
 			
+			if ( controller.lang == LanguageVO.python)
+			{
+				var getSetItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_get_set' ));
+				getSetItem.addEventListener( Event.SELECT, getSetContextMenuHandler, false, 0, true );
+				contextMenu.addItem( getSetItem );
+			}
+			
 		}
 		
 		private function copyContextMenuHandler( event : Event ) : void
@@ -199,6 +215,109 @@ package ro.victordramba.scriptarea
 		{
 			dispatchEvent( new ScriptAreaComponenrEvent ( ScriptAreaComponenrEvent.GLOBAL_RENAME, false, false, { oldName : str, controller : controller } ) );
 		}
+		
+		private function getSetContextMenuHandler( event : Event ) : void
+		{
+			var cursorPosition : int = getIndexForPoint( new Point( contextX, contextY ) );
+			token = controller.getTokenByPos( cursorPosition );
+			if ( !token )
+				return;
+			
+			var bp : BackwardsParser = new BackwardsParser;
+			if ( !bp.parse( text, token.pos + token.string.length ) )
+				return;
+			
+			var variable : String = '';
+			
+			for ( var i : int = 0; i < bp.names.length; i++ )
+			{
+				variable += bp.names[i] + '.';
+			}
+			
+			variable = variable.substr(0, variable.length - 1);
+			
+			var generateGetterSetterWindow : GenerateGettesSetterWindow = new GenerateGettesSetterWindow( variable );
+			
+			generateGetterSetterWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
+			generateGetterSetterWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
+			
+			WindowManager.getInstance().addWindow(generateGetterSetterWindow, null, true);
+			
+			function applyHandler( event : PopUpWindowEvent ) : void
+			{
+				WindowManager.getInstance().removeWindow( generateGetterSetterWindow );
+				var variable : String = event.name;
+				var getSet : String = event.detail as String;
+				var getter : Boolean = generateGetterSetterWindow.getter;
+				var setter : Boolean = generateGetterSetterWindow.setter;
+				
+				for( var i : int = 0; i < _indentLines.length; i++ )
+				{	
+					if ( _indentLines[i].end > _selStart )
+					{
+						var spaceCount : int = _indentLines[i].otstyp.spaces;
+						var tabCount : int = _indentLines[i].otstyp.tabs - 1;
+						
+						var block : String = '\n\n';
+						if ( getter )
+						{
+							addSpace();
+							
+							block += '@property\n';
+							
+							addSpace();
+							
+							block += 'def ' + getSet +'( self ):\n'
+							
+							addSpace(true);
+							
+							block += 'return ' + variable + '\n\n';
+						}
+						
+						if ( setter )
+						{
+							addSpace();
+							
+							block += '@' + getSet + '.setter\n';
+							
+							addSpace();
+							
+							block += 'def ' + getSet +'( self, value ):\n'
+							
+							addSpace(true);
+							
+							block += variable + ' = value \n\n';	
+						}
+						
+						replaceText( _indentLines[i].end, _indentLines[i].end, block );
+						
+						dispatchEvent( new Event( Event.CHANGE, true, false ) );
+						break;
+					}
+				}
+				
+				function addSpace( incTab : Boolean = false ) : void
+				{
+					var i : int;
+					
+					for ( i = 1; i < spaceCount; i++ )
+					{
+						block += ' ';
+					}
+					
+					for ( i = incTab ? -1 : 0; i < tabCount; i++ )
+					{
+						block += '\t';
+					}
+				}
+			}
+			
+			function cancelHandler( event : PopUpWindowEvent ) : void
+			{
+				WindowManager.getInstance().removeWindow( generateGetterSetterWindow );
+			}
+		}
+		
 		
 		private function findWordBound( start : int, left : Boolean ) : int
 		{
@@ -463,7 +582,7 @@ package ro.victordramba.scriptarea
 			if ( !bp.parse( text, token.pos + token.string.length ) )
 				return false;
 			
-			if ( controller.lang == "vscript" )
+			if ( controller.lang == LanguageVO.vscript )
 				bp.toLowerCase();
 			
 			var f : Field = token.scope.getLastRecursionField( bp.names[0] );
@@ -551,9 +670,12 @@ package ro.victordramba.scriptarea
 			{
 				name = bp.names[i];
 				
+				if ( name == "self" )
+					continue;
+				
 				scope = scope.getField( name );
 				
-				if ( !scope /*|| ( t.scope.fieldType == "class" && scope.fieldType != "def" ) */|| ( t.scope != token.scope && t.scope.fieldType == "top" && controller.actionVO is ServerActionVO ) )
+				if ( !scope || ( t.scope != token.scope && t.scope.fieldType == "top" && controller.actionVO is ServerActionVO ) )
 					return false;
 			}
 			

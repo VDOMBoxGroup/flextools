@@ -477,7 +477,7 @@ package net.vdombox.editors.parsers.python
 							
 							if ( stackBlocks.length > 0 )
 							{
-								stackBlocks[stackBlocks.length - 1].end = tokens[index].pos;
+								stackBlocks[stackBlocks.length - 1].end = tokens[index].pos + tokens[index].string.length;
 								
 								if ( !blocks )
 									blocks = new Array();

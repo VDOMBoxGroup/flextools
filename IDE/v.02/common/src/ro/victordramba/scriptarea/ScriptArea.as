@@ -135,7 +135,7 @@ package ro.victordramba.scriptarea
 		
 		private var defaultColor : uint = 0xFFFFFF;
 		
-		private var _indentLines : Array;
+		protected var _indentLines : Array;
 		
 		public var showIndentLines : Boolean = false;
 		
