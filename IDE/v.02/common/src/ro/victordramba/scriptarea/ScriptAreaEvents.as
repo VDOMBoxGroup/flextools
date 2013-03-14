@@ -253,7 +253,7 @@ package ro.victordramba.scriptarea
 				
 				for( var i : int = 0; i < _indentLines.length; i++ )
 				{	
-					if ( _indentLines[i].end > _selStart )
+					if ( _indentLines[i].end > cursorPosition )
 					{
 						var spaceCount : int = _indentLines[i].otstyp.spaces;
 						var tabCount : int = _indentLines[i].otstyp.tabs - 1;
