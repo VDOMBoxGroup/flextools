@@ -17,6 +17,9 @@
 				if ( event.ctrlKey && event.keyCode == Keyboard.F )
 				{
 					currentState = "find";
+					findBox.findText.setFocus();
+					findBox.findText.text = pythonScriptEditor.scriptAreaComponent.selectionText;
+					findBox.findText.selectAll();
 				}
 			}
 			

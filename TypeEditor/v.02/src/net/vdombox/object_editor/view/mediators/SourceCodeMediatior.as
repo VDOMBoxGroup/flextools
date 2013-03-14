@@ -5,14 +5,15 @@ package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
-
+	
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.editors.PythonScriptEditor;
+	import net.vdombox.object_editor.event.ScriptAreaComponenrEvent;
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.SourceCode;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -29,7 +30,7 @@ package net.vdombox.object_editor.view.mediators
 			view.addEventListener( FlexEvent.SHOW, showHandler );
 		}
 
-		private function validateObjectTypeVO(event: Event):void
+		private function validateObjectTypeVO(event: ScriptAreaComponenrEvent):void
 		{
 			addStar();
 			objectTypeVO.sourceCode  = view.pythonScriptEditor.scriptAreaComponent.text;
@@ -45,7 +46,7 @@ package net.vdombox.object_editor.view.mediators
 		{	
 			var pythonScriptEditor: PythonScriptEditor = view.pythonScriptEditor;
 			pythonScriptEditor.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-			pythonScriptEditor.addEventListener( Event.CHANGE, validateObjectTypeVO );
+			pythonScriptEditor.addEventListener( ScriptAreaComponenrEvent.TEXT_CHANGE, validateObjectTypeVO );
 			pythonScriptEditor.addedToStageHadler(null);
 			pythonScriptEditor.loadSource( objectTypeVO.sourceCode, "zzz" );
 		}		

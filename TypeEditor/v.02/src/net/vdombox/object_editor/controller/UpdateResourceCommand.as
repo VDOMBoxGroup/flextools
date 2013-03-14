@@ -19,6 +19,19 @@ package net.vdombox.object_editor.controller
 		override public function execute( note:INotification ) :void
 		{
 			var id: String = note.getBody() as String;
+			
+			var name : String = note.getName();
+			var changeID : Boolean = false;
+			
+			switch ( name )
+			{
+				case ResourcesMediator.UPDATE_ICON:
+				{
+					changeID = true;
+					
+					break;
+				}
+			}
 
 			var fileRef:FileReference = new FileReference();
 			fileRef.addEventListener(Event.SELECT, fileSelected);
@@ -34,9 +47,18 @@ package net.vdombox.object_editor.controller
 			function fileDounloaded(event:Event):void
 			{				
 				var resourcesProxy:ResourcesProxy = facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
-				resourcesProxy.changeContent(fileRef);
-				facade.sendNotification(Information.INFORMATION_CHANGED);
-				facade.sendNotification(Resourses.RESOURCES_CHANGED);	
+				var resVO: ResourceVO = resourcesProxy.changeContent(id, changeID, fileRef);
+				
+				//if ( changeID )
+				//{
+					facade.sendNotification(ResourcesMediator.RESOURCE_CHANGED,{ resourceVO : resVO, oldID : id } );
+//				}
+//				else
+//				{
+//					facade.sendNotification(Information.INFORMATION_CHANGED);
+//					facade.sendNotification(Resourses.RESOURCES_CHANGED);	
+//				}
+				//facade.sendNotification( ResourcesMediator.RESOURCE_UPLOADED, resVO );
 			}
 		}
 	}

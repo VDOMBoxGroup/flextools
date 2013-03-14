@@ -40,6 +40,7 @@
 				{
 					scriptAreaComponent.addEventListener( Event.SCROLL, scriptAreaComponent_scrollHandler, false, 0, true );
 					scriptAreaComponent.addEventListener( Event.CHANGE, scriptAreaComponent_changeHandler, false, 0, true );
+					scriptAreaComponent.addEventListener( KeyboardEvent.KEY_DOWN, scriptAreaComponent_keyDownHandler, false, 0, true );
 				}
 
 				if ( hsb )
@@ -84,6 +85,11 @@
 			}
 
 			private function scriptAreaComponent_changeHandler( event : Event ) : void
+			{
+				updateScrollBar();
+			}
+			
+			private function scriptAreaComponent_keyDownHandler( event : KeyboardEvent ) : void
 			{
 				updateScrollBar();
 			}

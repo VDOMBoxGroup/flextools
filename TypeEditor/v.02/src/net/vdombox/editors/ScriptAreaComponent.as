@@ -59,6 +59,11 @@ package net.vdombox.editors
 		{
 			return area.selectionEndIndex;
 		}
+		
+		public function get selectionText() : String
+		{
+			return area.selectionText;
+		}
 
 		public function get text() : String
 		{

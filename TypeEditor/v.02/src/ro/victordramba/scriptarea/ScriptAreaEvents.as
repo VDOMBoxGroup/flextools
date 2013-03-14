@@ -17,6 +17,8 @@ package ro.victordramba.scriptarea
 	import flash.utils.setInterval;
 	
 	import mx.events.IndexChangedEvent;
+	
+	import net.vdombox.object_editor.event.ScriptAreaComponenrEvent;
 
 	/*import flash.desktop.Clipboard;
 	   import flash.desktop.ClipboardFormats;
@@ -127,6 +129,7 @@ package ro.victordramba.scriptarea
 				{
 					replaceSelection( str );
 					dipatchChange();
+					dipatchChangeText();
 				}
 			}
 			catch ( e : SecurityError )
@@ -138,7 +141,10 @@ package ro.victordramba.scriptarea
 		private function onCopy( e : Event = null ) : void
 		{
 			if ( _selStart != _selEnd )
+			{
+				Clipboard.generalClipboard.clear();
 				Clipboard.generalClipboard.setData( ClipboardFormats.TEXT_FORMAT, _text.substring( _selStart, _selEnd ) );
+			}
 		}
 
 		private function onCut( e : Event = null ) : void
@@ -146,6 +152,7 @@ package ro.victordramba.scriptarea
 			onCopy();
 			replaceSelection( '' );
 			dipatchChange();
+			dipatchChangeText();
 		}
 
 		private function onSelectAll( e : Event ) : void
@@ -211,12 +218,14 @@ package ro.victordramba.scriptarea
 		{
 			undo();
 			dipatchChange();
+			dipatchChangeText();
 		}
 		
 		public function redo_fun() : void
 		{
 			redo();
 			dipatchChange();
+			dipatchChangeText();
 		}
 
 		private function onKeyDown( e : KeyboardEvent ) : void
@@ -259,6 +268,8 @@ package ro.victordramba.scriptarea
 					replaceSelection( '' );
 				
 				dipatchChange();
+				dipatchChangeText();
+				
 				return;
 				
 			}
@@ -463,6 +474,7 @@ package ro.victordramba.scriptarea
 				else
 					replaceSelection( '' );
 				dipatchChange();
+				dipatchChangeText();
 			}
 			else if ( k == Keyboard.DELETE )
 			{
@@ -471,6 +483,7 @@ package ro.victordramba.scriptarea
 				else
 					replaceSelection( '' );
 				dipatchChange();
+				dipatchChangeText();
 			}
 			else if ( k == Keyboard.TAB )
 			{
@@ -496,6 +509,7 @@ package ro.victordramba.scriptarea
 					_setSelection( begin, begin + str.length + 1, true );
 				}
 				dipatchChange();
+				dipatchChangeText();
 			}
 			else if ( k == Keyboard.ENTER )
 			{
@@ -505,6 +519,7 @@ package ro.victordramba.scriptarea
 					str += '\t';
 				replaceSelection( '\r' + str );
 				dipatchChange();
+				dipatchChangeText();
 			}
 			/*else if ( c == '}' && _text.charAt( _caret - 1 ) == '\t' )
 			{
@@ -576,6 +591,16 @@ package ro.victordramba.scriptarea
 			if ( stage )
 				stage.focus = this;
 			dipatchChange();
+			dipatchChangeText()
+		}
+		
+		
+		public override function replaceFind( findText : String, reText : String, replaceAll : Boolean = false ) : void
+		{
+			super.replaceFind( findText, reText, replaceAll );
+			
+			dipatchChange();
+			dipatchChangeText()
 		}
 
 		private function saveLastCol() : void
@@ -585,7 +610,12 @@ package ro.victordramba.scriptarea
 
 		private function dipatchChange() : void
 		{
-			dispatchEvent( new IndexChangedEvent( IndexChangedEvent.CHANGE, true, false ) );
+			dispatchEvent( new IndexChangedEvent( IndexChangedEvent.CHANGE, true, false )  );
+		}
+		
+		public function dipatchChangeText() : void
+		{
+			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_CHANGE, true, false ) );
 		}
 	}
 }

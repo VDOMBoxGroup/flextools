@@ -20,6 +20,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ResourcesProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.model.vo.ResourceVO;
+	import net.vdombox.object_editor.view.essence.Information;
 	import net.vdombox.object_editor.view.essence.Resourses;
 	
 	import org.puremvc.as3.interfaces.IMediator;
@@ -50,11 +51,14 @@ package net.vdombox.object_editor.view.mediators
 		 * @default
 		 */
 		public static const UPDATE_RESOURCE			:String = "updateResource";
+		public static const UPDATE_ICON			:String = "updateIcon";
 		/**
 		 *
 		 * @default
 		 */
 		public static const RESOURCE_UPLOADED		:String = "resourceUploaded";
+		
+		public static const RESOURCE_CHANGED		:String	= "resourceChanged";	
 
 		private var objectTypeVO:ObjectTypeVO;
 
@@ -71,6 +75,7 @@ package net.vdombox.object_editor.view.mediators
 
 			facade.registerCommand(ADD_RESOURCE, 	AddResourceCommand);
 			facade.registerCommand(UPDATE_RESOURCE, UpdateResourceCommand);
+			facade.registerCommand(UPDATE_ICON, UpdateResourceCommand);
 		}
 
 		private function show(event: FlexEvent): void
@@ -144,18 +149,54 @@ package net.vdombox.object_editor.view.mediators
 
 		override public function listNotificationInterests():Array 
 		{			
-			return [ RESOURCE_UPLOADED, Resourses.RESOURCES_CHANGED, ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED ];
+			return [ RESOURCE_UPLOADED, Resourses.RESOURCES_CHANGED, ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, RESOURCE_CHANGED ];
 		}
 
 		override public function handleNotification( note:INotification ):void 
 		{
+			var body : Object = note.getBody();
+			
 			switch ( note.getName() ) 
 			{				
 				case RESOURCE_UPLOADED:
-					var resVO: ResourceVO = note.getBody() as ResourceVO;
+				{
+					var resVO: ResourceVO = body as ResourceVO;
 					objectTypeVO.resources.addItem(resVO);
 					addStar();
 					break;	
+				}
+					
+				case RESOURCE_CHANGED:
+				{
+					resVO = body.resourceVO as ResourceVO;
+					var oldID : String = body.oldID as String;
+					var oldResourse : String = resourcesProxy.geIconByID( oldID );
+					var newResourse : String = resourcesProxy.geIconByID( resVO.id );
+					
+					if ( objectTypeVO.icon == oldResourse )
+						objectTypeVO.icon = newResourse;
+					else if ( objectTypeVO.structureIcon == oldResourse )
+						objectTypeVO.structureIcon = newResourse;
+					else if ( objectTypeVO.editorIcon == oldResourse )
+						objectTypeVO.editorIcon = newResourse;
+					
+					var resources : ArrayCollection = objectTypeVO.resources;
+					
+					for ( var i : int = 0; i < resources.length; i++ )
+					{
+						if ( resources[i].id == oldID )
+						{
+							objectTypeVO.resources.removeItemAt(i);
+							objectTypeVO.resources.addItemAt(resVO, i);
+						}
+					}
+						
+					addStar();
+					
+					facade.sendNotification(Information.INFORMATION_CHANGED);
+					facade.sendNotification(Resourses.RESOURCES_CHANGED);	
+					break;	
+				}
 				
 				case Resourses.RESOURCES_CHANGED:
 				{

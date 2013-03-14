@@ -197,7 +197,7 @@ package net.vdombox.object_editor.view.mediators
 
 		private function changeResourse(event:MouseEvent):void
 		{
-			facade.sendNotification(ResourcesMediator.UPDATE_RESOURCE, event.currentTarget.name);
+			facade.sendNotification(ResourcesMediator.UPDATE_ICON, event.currentTarget.name);
 		}
 
 		override public function listNotificationInterests():Array 

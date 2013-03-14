@@ -88,6 +88,13 @@ package net.vdombox.editors.parsers.python
 				c = currentChar();
 				start = pos;
 			}
+			
+			if ( c == "*" && string.charAt( pos + 1 ) == "*" )
+			{
+				pos += 2;
+				c = currentChar();
+				start = pos;
+			}
 
 			if ( isNumber( c ) )
 			{
@@ -98,7 +105,13 @@ package net.vdombox.editors.parsers.python
 
 			if ( c == "#" )
 			{
-				skipUntil( "\r" );
+				skipUntil( "\n" );
+				return new Token( string.substring( start, pos ), Token.COMMENT, pos );
+			}
+			
+			if ( c == "'" && string.substr( pos, 3 ) == "'''" )
+			{
+				skipUntil( "'''" );
 				return new Token( string.substring( start, pos ), Token.COMMENT, pos );
 			}
 
@@ -498,30 +511,6 @@ package net.vdombox.editors.parsers.python
 					}
 					field = null;
 				}
-			}
-
-
-			if ( t.string == "{" && _scope )
-			{
-				currentBlock.imports = imports;
-				_scope.pos = t.pos;
-				_scope.parent = scope;
-				scope = _scope;
-				t.scope = scope;
-				//info += pos + ")" + scope.parent.name + "->" + scope.name+"\n";
-				_scope = null;
-			}
-
-			else if ( t.string == "}" && t.parent.pos == scope.pos )
-			{
-				//info += scope.parent.name + "<-" + scope.name+"\n";
-				scope = scope.parent;
-
-				//force a ; to close the scope here. needs further testing
-				var sepT : Token = new Token( ";", Token.SYMBOL, t.pos + 1 );
-				sepT.scope = scope;
-				sepT.parent = t.parent;
-				tokens.push( sepT );
 			}
 
 			return true;

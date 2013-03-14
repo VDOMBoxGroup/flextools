@@ -103,14 +103,21 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		 * @param resVO
 		 * @param fileRef
 		 */
-		public function changeContent(fileRef: FileReference):void
+		public function changeContent(oldID : String, changeID : Boolean, fileRef: FileReference):ResourceVO
 		{
-			var id:String = UIDUtil.createUID().toLowerCase();
+			var id:String = changeID ? UIDUtil.createUID().toLowerCase() : oldID;
 			var base64Data:Base64Encoder = new Base64Encoder();
+			
 			base64Data.insertNewLines = false;
 			base64Data.encodeBytes(fileRef.data);
 
 			writeResoucetoFileSystem(id, base64Data.toString());
+			
+			return new ResourceVO(id, fileRef.name, fileRef.extension);
+			
+			
+			//sendNotification( ApplicationFacade.RESOURCE_CHANGED, {  } );
+			
 		}
 
 		/**
@@ -207,6 +214,11 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			//todo должен быть id в любом случае!!!!!!!!!!!!!
 			if 	(imgResourseID == null) imgResourseID = "";
 			return imgResourseID;
+		}
+		
+		public function geIconByID(value:String):String
+		{
+			return "#Res(" + value + ")";
 		}
 	}
 }
