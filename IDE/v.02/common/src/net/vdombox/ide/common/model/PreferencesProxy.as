@@ -92,6 +92,7 @@ package net.vdombox.ide.common.model
 			colorSchemes.push( obsidianColorSheme );
 			colorSchemes.push( hromeColorSheme );
 			colorSchemes.push( pastelColorSheme );
+			colorSchemes.push( monokaiColorSheme );
 			
 			for each ( var name : String in nameSchemes )
 			{
@@ -159,6 +160,11 @@ package net.vdombox.ide.common.model
 				case "pastel":
 				{
 					return pastelColorSheme;
+				}
+					
+				case "monokai":
+				{
+					return monokaiColorSheme;
 				}
 					
 				default:
@@ -303,6 +309,36 @@ package net.vdombox.ide.common.model
 			colorSchemeVO.indentLinesShapeColor	= 0xFFFFFF;
 			colorSchemeVO.cursorColor			= 0xDDDDDD;
 			colorSchemeVO.skobkiColor			= 0xc0c0c0;
+			
+			colorSchemeVO.needChangeColorSelected = false;
+			
+			return colorSchemeVO;
+		}
+		
+		private function get monokaiColorSheme() : ColorSchemeVO
+		{
+			var colorSchemeVO : ColorSchemeVO = new ColorSchemeVO( "monokai" );
+			
+			colorSchemeVO.defaul_t 				= 0xFFFFFF;
+			colorSchemeVO.keyword 				= 0xf92672;
+			colorSchemeVO.keyword2 				= 0x94558d;
+			colorSchemeVO.keyword3 				= 0xf92672;
+			colorSchemeVO.e4x 					= 0x613BB9;
+			colorSchemeVO.comment 				= 0x75715e;
+			colorSchemeVO.nameClass 			= 0xa6e22e;
+			colorSchemeVO.nameFunction 			= 0x66d9ef;
+			colorSchemeVO.number 				= 0x990099;
+			colorSchemeVO.regExp 				= 0xa3a020;
+			colorSchemeVO.string 				= 0xd0d2b5;
+			colorSchemeVO.stringLiteral			= 0xFFFFFF;
+			colorSchemeVO.symbol 				= 0xe6db74;
+			colorSchemeVO.topType 				= 0x981056;
+			colorSchemeVO.backGroundColor 		= 0x272822;
+			colorSchemeVO.selectionColor 		= 0x506064;
+			colorSchemeVO.selectionRectsColor	= 0x404E51;
+			colorSchemeVO.indentLinesShapeColor	= 0xd0d2b5;
+			colorSchemeVO.cursorColor			= 0xFFFFFF;
+			colorSchemeVO.skobkiColor			= 0xFFFFFF;
 			
 			colorSchemeVO.needChangeColorSelected = false;
 			

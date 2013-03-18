@@ -416,7 +416,7 @@ package net.vdombox.editors.parsers.python
 			{
 				for each ( var block : BlockPosition in stackBlocks )
 				{
-					block.end = tokens[ tokens.length - 1].pos;
+					block.end = tokens[ tokens.length - 1].pos + tokens[ tokens.length - 1].string.length;
 					if ( !blocks )
 						blocks = new Array();
 					
