@@ -228,7 +228,6 @@
 			
 			protected function attributesList_updateCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
 				if ( NeedSetVerticalScrollPosition )
 				{
 					attributesList.scroller.verticalScrollBar.viewport.verticalScrollPosition = verticalScrollPosition;
