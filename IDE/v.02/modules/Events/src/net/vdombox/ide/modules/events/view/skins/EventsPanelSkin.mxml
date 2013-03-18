@@ -12,7 +12,10 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
+			
 			import net.vdombox.ide.common.view.components.VDOMImage;
+			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			import net.vdombox.ide.modules.events.events.EventsPanelEvent;
 			import net.vdombox.ide.modules.events.view.components.EventItemRenderer;
 
@@ -32,6 +35,12 @@
 			protected function createServerAction_clickHandler(event:MouseEvent):void
 			{
 				dispatchEvent( new EventsPanelEvent( EventsPanelEvent.CREATE_SERVER_ACTION_CLICK ) );
+			}
+			
+			protected function actionsList_creationCompleteHandler(event:FlexEvent):void
+			{
+				var list : List = event.target as List;
+				list.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 			}
 			
 		]]>
@@ -89,9 +98,10 @@
 				
 		</s:Group>
 			
-		<s:List id="eventsList"
+		<s:List id="eventsList" verticalScrollPolicy="on"
 					height="100%" labelField="name" width="100%" contentBackgroundAlpha="0"
-					dragEnabled="true" itemRenderer="net.vdombox.ide.modules.events.view.components.EventItemRenderer"/>
+					dragEnabled="true" itemRenderer="net.vdombox.ide.modules.events.view.components.EventItemRenderer"
+					creationComplete="actionsList_creationCompleteHandler(event)"/>
 	</s:VGroup>
 		
 	<s:VGroup width="100%" height="100%" gap="0">
@@ -129,9 +139,10 @@
 			
 		</s:Group>
 
-		<s:List id="actionsList"
+		<s:List id="actionsList" verticalScrollPolicy="on"
 						height="100%" labelField="name" width="100%" contentBackgroundAlpha="0"
-						dragEnabled="true" itemRenderer="net.vdombox.ide.modules.events.view.components.ActionItemRenderer"/>
+						dragEnabled="true" itemRenderer="net.vdombox.ide.modules.events.view.components.ActionItemRenderer"
+						creationComplete="actionsList_creationCompleteHandler(event)"/>
 	</s:VGroup>
 
 		
