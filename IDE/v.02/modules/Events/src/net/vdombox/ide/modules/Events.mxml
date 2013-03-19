@@ -35,10 +35,10 @@
 			thumbSkin : ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMMXHScrollTrumbSkin");
 		}
 		
-		/*s|VScrollBar
+		s|VScrollBar
 		{	
 			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMVScrollBarSkin");  
-		}*/
+		}
 		
 		s|HScrollBar
 		{	
