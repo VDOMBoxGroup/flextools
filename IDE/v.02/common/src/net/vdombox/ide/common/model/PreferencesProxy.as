@@ -327,14 +327,14 @@ package net.vdombox.ide.common.model
 			colorSchemeVO.comment 				= 0x75715e;
 			colorSchemeVO.nameClass 			= 0xa6e22e;
 			colorSchemeVO.nameFunction 			= 0x66d9ef;
-			colorSchemeVO.number 				= 0x990099;
+			colorSchemeVO.number 				= 0xae81ff;
 			colorSchemeVO.regExp 				= 0xa3a020;
-			colorSchemeVO.string 				= 0xd0d2b5;
+			colorSchemeVO.string 				= 0xe6db74;
 			colorSchemeVO.stringLiteral			= 0xFFFFFF;
 			colorSchemeVO.symbol 				= 0xe6db74;
 			colorSchemeVO.topType 				= 0x981056;
 			colorSchemeVO.backGroundColor 		= 0x272822;
-			colorSchemeVO.selectionColor 		= 0x506064;
+			colorSchemeVO.selectionColor 		= 0x49483e;
 			colorSchemeVO.selectionRectsColor	= 0x404E51;
 			colorSchemeVO.indentLinesShapeColor	= 0xd0d2b5;
 			colorSchemeVO.cursorColor			= 0xFFFFFF;

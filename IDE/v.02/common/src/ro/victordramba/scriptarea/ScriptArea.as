@@ -279,7 +279,8 @@ package ro.victordramba.scriptarea
 			
 			ClearLines();
 			
-			updateIndentLines();
+			if ( showIndentLines )
+				updateIndentLines();
 
 			dispatchEvent( new Event( Event.SCROLL, true ) );
 		}
@@ -1092,6 +1093,9 @@ package ro.victordramba.scriptarea
 			//simple tabs, 4 spaces, no align
 			visibleText = visibleText.replace( /\t/g, "    " );
 			//visibleText = visibleText.replace( /&/g, "&amp;" );
+			
+			trace( "visibleText" );
+			trace( visibleText );
 
 			tf.htmlText = visibleText;
 			
