@@ -234,15 +234,22 @@
 			switch ( step )
 			{
 				case cKeyRequest:
+					
+					btnAcceptKey.enabled = true;
+					
 					vsProcess.selectedChild = cKeyRequest;
 					break;
 				
 				case cGeneral:
+					btnRun.enabled = true;
+					
 					vsProcess.selectedChild = cGeneral;
 					btnRun.setFocus ();
 					break;
 				
 				case cLicense:
+					btnLicenseContinue.enabled = licenseCheckBox.selected;
+					
 					var projectLicense : String = ContextManager.templates.getItemAt( 0 ).selectedProject.license;
 					if (!projectLicense)
 						runingTemplate();
@@ -254,10 +261,17 @@
 					break;
 
 				case cProcess:
+					btnCancel.enabled = true;
+					
 					vsProcess.selectedChild = cProcess;
 					break;
 
 				case cFinal:
+					btnCancel.enabled = false;
+					
+					btnExit.enabled = isDesktopApplication;
+					btnExit.visible = isDesktopApplication;
+					
 					vsProcess.selectedChild = cFinal;
 					break;
 				
@@ -290,7 +304,7 @@
 			
 		private function runingTemplate():void
 		{
-			vsProcess.selectedChild = cProcess;
+			processStep(cProcess);
 
 			try
 			{
@@ -434,6 +448,8 @@
 			{
 				if ( event.detail == AlertPopup.YES )
 				{
+					btnCancel.enabled = false;
+					
 					terminateTemplate();
 					processStep ( cFinal );
 				}
@@ -473,6 +489,40 @@
 				else
 					appNameLabel.setStyle("fontSize", 26);
 			}
+		}
+			
+		protected function btnRun_clickHandler(event:MouseEvent):void
+		{
+			btnRun.enabled = false;
+			processStep ( cLicense );
+		}
+			
+		protected function btnLicenseContinue_clickHandler(event:MouseEvent):void
+		{
+			btnLicenseContinue.enabled = false;
+			
+			licenseAccepting();
+		}
+			
+		protected function btnCancel_clickHandler(event:MouseEvent):void
+		{
+			//btnCancel.enabled = false;
+			
+			alertInterrupt();
+		}
+			
+		protected function btnExit_clickHandler(event:MouseEvent):void
+		{
+			btnExit.enabled = false;
+			
+			exitApplication();
+		}
+			
+		protected function btnAcceptKey_clickHandler(event:MouseEvent):void
+		{
+			btnAcceptKey.enabled = false;
+			
+			onKeyAccept(event);
 		}
 			
 		]]>
@@ -556,7 +606,7 @@
 						 horizontalAlign="right" verticalAlign="middle">
 					<control:RoundButton id="btnAcceptKey"
 										 label="{LanguageManager.sentences.accept}"
-										 click="onKeyAccept(event)"/>
+										 click="btnAcceptKey_clickHandler(event)"/>
 				</mx:HBox>
 			</mx:Canvas>
 
@@ -576,7 +626,7 @@
 						 horizontalAlign="right" verticalAlign="middle">
 					<control:RoundButton id="btnRun"
 										 label="{LanguageManager.sentences.next}"
-										 click="{processStep ( cLicense );}"/>
+										 click="btnRun_clickHandler(event)"/>
 				</mx:HBox>
 			</mx:Canvas>
 			
@@ -602,7 +652,7 @@
 					<control:RoundButton id="btnLicenseContinue"
 										 label="Next"
 										 enabled="{licenseCheckBox.selected}"
-										 click="licenseAccepting();"/>
+										 click="btnLicenseContinue_clickHandler(event)"/>
 				</mx:HBox>
 			</mx:Canvas>
 
@@ -620,7 +670,7 @@
 						 horizontalAlign="right" verticalAlign="middle">
 					<control:RoundButton id="btnCancel"
 										 label="{LanguageManager.sentences.cancel}"
-										 click="alertInterrupt()"/>
+										 click="btnCancel_clickHandler(event)"/>
 				</mx:HBox>
 
 			</mx:Canvas>
@@ -638,7 +688,7 @@
 					<control:RoundButton id="btnExit"
 										 height="100%"
 										 label="{LanguageManager.sentences.exit}"
-										 click="exitApplication();"
+										 click="btnExit_clickHandler(event)"
 										 visible="{isDesktopApplication}"/>
 				</mx:HBox>
 
