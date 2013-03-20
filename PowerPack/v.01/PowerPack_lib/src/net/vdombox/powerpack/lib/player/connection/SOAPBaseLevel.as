@@ -11,7 +11,7 @@ import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 import mx.utils.StringUtil;
 
-import net.vdombox.editors.parsers.base.Token;
+
 import net.vdombox.powerpack.lib.player.connection.protect.MD5;
 import net.vdombox.powerpack.lib.player.events.SOAPErrorEvent;
 import net.vdombox.powerpack.lib.player.gen.parse.ListParser;
