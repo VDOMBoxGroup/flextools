@@ -24,6 +24,7 @@
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditorWindow;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.LinkSelection;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.FlatButtonSkin;
+			import net.vdombox.utils.StringUtils;
 			import net.vdombox.utils.WindowManager;
 			
 			public var attributesObject : Object;
@@ -53,7 +54,7 @@
 				
 				var attributeVO : AttributeVO = new AttributeVO( "value", "%тамnfb%3#" );
 				
-				attributeVO.value = activeEditor.getContent();
+				attributeVO.value = StringUtils.spaceToNbsp( activeEditor.getContent() );
 				vdomObjectAttributesVO.attributes = [attributeVO];
 				
 				return vdomObjectAttributesVO;
@@ -185,7 +186,8 @@
 				
 				if ( tinyMCE && activeEditor)
 				{
-					value = activeEditor.getContent();
+					value = StringUtils.spaceToNbsp( activeEditor.getContent() );
+					
 					attributesObject[ "value" ].value = value;
 					
 					dispatchEvent( new Event( Event.CHANGE ) );
@@ -356,7 +358,7 @@
 			{
 				var codeEditor : CodeEditorWindow = new CodeEditorWindow();
 				
-				codeEditor.code = activeEditor.getContent();
+				codeEditor.code = StringUtils.spaceToNbsp( activeEditor.getContent() );
 				codeEditor.title = resourceManager.getString( 'Wysiwyg_General', 'html_source_editor_title' );
 				
 				codeEditor.addEventListener( CodeEditorWindow.EVENT_CODE_CHANGED, updateCodeHandler );

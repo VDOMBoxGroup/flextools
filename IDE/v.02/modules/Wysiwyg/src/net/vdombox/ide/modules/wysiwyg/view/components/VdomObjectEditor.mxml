@@ -110,8 +110,23 @@
 			public function set xmlPresentation(value: VdomObjectXMLPresentationVO): void
 			{
 				_value = value;
+				
+				trace(value.xmlPresentation);
+				
+				trace("convert");
+				
+				trace(convert( value.xmlPresentation ));
+				
 				if ( xmlScriptEditor )
-					xmlScriptEditor.scriptAreaComponent.text = value.xmlPresentation;
+					xmlScriptEditor.scriptAreaComponent.text = convert( value.xmlPresentation );
+			}
+			
+			public function convert(data:String):String 
+			{
+				var b:ByteArray = new ByteArray();
+				b.writeMultiByte(data,"unicode");
+				b.position = 0;
+				return b.readMultiByte( b.length, "unicode" );;
 			}
 			
 			public function get state(): String
