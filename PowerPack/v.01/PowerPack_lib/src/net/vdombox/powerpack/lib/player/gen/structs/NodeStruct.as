@@ -44,7 +44,8 @@ public dynamic class NodeStruct
 
 	public function set text(value:String):void
 	{
-		_text = value;
+		
+		_text = value ? value : "";
 		 
 	}
 
