@@ -166,6 +166,8 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.SERVER_APPLICATION_CREATED:
 				{
 					applicationVO = body as ApplicationVO;
+					
+					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applicationVO );
 
 					sendNotification( ApplicationFacade.SET_RESOURCE, newResourceVO );
 

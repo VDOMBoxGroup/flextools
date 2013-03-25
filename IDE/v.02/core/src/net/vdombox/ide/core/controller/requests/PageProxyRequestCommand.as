@@ -44,6 +44,10 @@ package net.vdombox.ide.core.controller.requests
 				throw new Error( "no page VO" );
 
 			applicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + "/" + pageVO.applicationVO.id ) as ApplicationProxy;
+			
+			if ( !applicationProxy )
+				return;
+			
 			pageProxy = applicationProxy.getPageProxy( pageVO ) as PageProxy;
 			
 			switch ( target )
