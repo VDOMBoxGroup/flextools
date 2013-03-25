@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.events.EditorEvent;
 	import net.vdombox.ide.common.events.WorkAreaEvent;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.tabnavigator.Tab;
@@ -23,6 +24,9 @@ package net.vdombox.ide.modules.dataBase.view
 	{
 		public static const NAME : String = "WorkAreaMediator";
 		
+		private var statesProxy : StatesProxy;
+		private var applicationVO : ApplicationVO;
+		
 		public function WorkAreaMediator( viewComponent : Object )
 		{
 			super( NAME, viewComponent );
@@ -37,6 +41,8 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		override public function onRegister() : void
 		{
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+			
 			addHandlers();
 		}
 		
@@ -85,6 +91,11 @@ package net.vdombox.ide.modules.dataBase.view
 				case Notifications.BODY_START:
 				{
 					isActive = true;
+					
+					if ( applicationVO && applicationVO.id != statesProxy.selectedApplication.id )
+						workArea.closeAllEditors();
+					
+					applicationVO = statesProxy.selectedApplication;
 					
 					break;
 				}
@@ -247,7 +258,7 @@ package net.vdombox.ide.modules.dataBase.view
 		
 		private function clearData() : void
 		{
-			workArea.closeAllEditors();
+			//workArea.closeAllEditors();
 		}
 	}
 }
