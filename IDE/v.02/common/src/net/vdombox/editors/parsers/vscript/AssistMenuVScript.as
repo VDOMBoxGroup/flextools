@@ -79,15 +79,10 @@ package net.vdombox.editors.parsers.vscript
 				tt = rt.substr( 2, 1 );
 				rt = rt.substr( 0, 2 );
 			}
-				
-			if (rt == 'wen' || rt == 'sa' && tt == " " || tt == "=" )
-				menuDataStr = ctrl.getTypeOptions();
-			else if (trigger == '.')
-				menuDataStr = ctrl.getMemberList(pos);
-			else if (trigger == '')
-				menuDataStr = ctrl.getAllOptions(pos);
-			else if (trigger == '(')
+			
+			if (trigger == '(')
 			{
+				menuDataStr = ctrl.getAllOptions(pos);
 				var fd:String = ctrl.getFunctionDetails(pos);
 				if (fd)
 				{
@@ -95,7 +90,18 @@ package net.vdombox.editors.parsers.vscript
 					showToolTip();
 					return;
 				}
+				
+				if ( !autoShowAutoComplete && !forced && !showing )
+					return;
 			}
+			else if ( !autoShowAutoComplete && !forced && !showing )
+				return;	
+			if (rt == 'wen' || rt == 'sa' && tt == " " || tt == "=" )
+				menuDataStr = ctrl.getTypeOptions();
+			else if (trigger == '.')
+				menuDataStr = ctrl.getMemberList(pos);
+			else if (trigger == '')
+				menuDataStr = ctrl.getAllOptions(pos);
 			
 			if ( !menuDataStr || menuDataStr.length == 0 )
 			{

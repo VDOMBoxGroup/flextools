@@ -52,6 +52,8 @@ package net.vdombox.editors.parsers.base
 		
 		protected var vdomToolTip : VDOMToolTip;
 		
+		protected var showing : Boolean = false;
+		
 		
 		
 		public function AssistMenu( field : ScriptAreaComponent, ctrl : Controller, stage : Stage, onComplete : Function )
@@ -106,7 +108,10 @@ package net.vdombox.editors.parsers.base
 			}
 			
 			if ( e.keyCode == Keyboard.SPACE && e.ctrlKey )
+			{
 				triggerAssist(true);
+				showing = true;
+			}
 			else if ( e.keyCode == Keyboard.BACKSPACE || e.keyCode == Keyboard.DELETE || e.keyCode == Keyboard.LEFT || e.keyCode == Keyboard.RIGHT )
 			{
 				if ( menu.showed )
@@ -115,10 +120,8 @@ package net.vdombox.editors.parsers.base
 		}
 		
 		protected function onTextInput( e : ScriptAreaComponenrEvent ) : void
-		{			
-			if ( autoShowAutoComplete )
-				triggerAssist(false, e.detail as String );
-				
+		{	
+			triggerAssist(false, e.detail as String );
 		}	
 		
 		private function onPressNavigationKeyHandler( e : ScriptAreaComponenrEvent ) : void
@@ -213,6 +216,7 @@ package net.vdombox.editors.parsers.base
 		protected function menuDispose() : void
 		{
 			fld.assistMenuOpened = false;
+			showing = false;
 			
 			_menu.dispose();
 			helpWindow.dispose();

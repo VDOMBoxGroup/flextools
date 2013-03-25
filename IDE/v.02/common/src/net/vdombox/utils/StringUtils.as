@@ -36,6 +36,18 @@ package net.vdombox.utils
 			return str2;
 		}
 		
+		public static function spaceToNbsp( str : String ) : String
+		{
+			for ( var i : int = 0; i < str.length; i++ )
+			{
+				var gi : int = str.charCodeAt( i );
+				if ( gi == 65440 )
+					str = str.substr( 0, i ) +'&nbsp;' + str.substr( i+1 );
+			}
+			
+			return str;
+		}
+		
 		public static  function getNumberLine( script : String, index : int ) : int
 		{
 			var count : int = 0;

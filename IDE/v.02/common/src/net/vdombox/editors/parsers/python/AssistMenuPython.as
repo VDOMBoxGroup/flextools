@@ -79,12 +79,9 @@ package net.vdombox.editors.parsers.python
 				forced = true;
 			/*if (rt == 'new' || rt == 'as' || rt == 'is' || rt == ':' || rt == 'extends' || rt == 'implements')
 				menuDataStr = ctrl.getTypeOptions();*/
-			if (trigger == '.')
-				menuDataStr = ctrl.getMemberList(pos);
-			else if (trigger == '')
-				menuDataStr = ctrl.getAllOptions(pos);
-			else if (trigger == '(')
+			if (trigger == '(')
 			{
+				menuDataStr = ctrl.getAllOptions(pos);
 				var fd:String = ctrl.getFunctionDetails(pos);
 				if (fd)
 				{
@@ -92,8 +89,17 @@ package net.vdombox.editors.parsers.python
 					showToolTip();
 					return;
 				}
+				
+				if ( !autoShowAutoComplete && !forced && !showing )
+					return;
 			}
-
+			else if ( !autoShowAutoComplete && !forced && !showing )
+				return;
+			else if (trigger == '.')
+				menuDataStr = ctrl.getMemberList(pos);
+			else if (trigger == '')
+				menuDataStr = ctrl.getAllOptions(pos);
+			
 			if ( !menuDataStr || menuDataStr.length == 0 )
 			{
 				menuDispose();
