@@ -310,7 +310,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			var imagesFilter : FileFilter   = new FileFilter( 'Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png' );
 			var docFilter : FileFilter      = new FileFilter( 'Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt' );
 			
-			openFile.browseForOpen( "Choose file to upload", [ imagesFilter, docFilter, allFilesFilter ] );
+			openFile.browseForOpen( "Choose file to upload", [ allFilesFilter, imagesFilter, docFilter ] );
 			
 			function fileSelected( event:Event ) : void
 			{
