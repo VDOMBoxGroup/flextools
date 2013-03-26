@@ -6,6 +6,8 @@ package net.vdombox.ide.modules.preview.view
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.model.StatesProxy;
+	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.modules.preview.view.components.Toolset;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -21,6 +23,7 @@ package net.vdombox.ide.modules.preview.view
 		}
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
+		private var statesProxy : StatesProxy;
 
 		public function get toolset() : Toolset
 		{
@@ -30,16 +33,25 @@ package net.vdombox.ide.modules.preview.view
 		override public function onRegister() : void
 		{
 			addEventListeners()
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 		}
 
 		private function addEventListeners() : void
 		{
-			toolset.toolsetButton.addEventListener( MouseEvent.CLICK, toolsetButton_clickHandler )
+			toolset.toolsetButton.addEventListener( MouseEvent.CLICK, toolsetButton_clickHandler );
+			toolset.popUpImage.addEventListener( MouseEvent.CLICK, popUpImage_clickHandler )
 		}
 
 		private function toolsetButton_clickHandler( event : MouseEvent ) : void
 		{
-			sendNotification( Notifications.SELECT_MODULE );
+			sendNotification( StatesProxy.GET_ALL_STATES );
+			//sendNotification( Notifications.SELECT_MODULE );
+		}
+		
+		private function popUpImage_clickHandler( event : MouseEvent ) : void
+		{
+			var applicationVO : ApplicationVO = statesProxy.selectedApplication;
+			
 		}
 	}
 }

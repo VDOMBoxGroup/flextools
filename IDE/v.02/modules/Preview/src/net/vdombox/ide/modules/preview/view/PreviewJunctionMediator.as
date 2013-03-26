@@ -8,8 +8,12 @@ package net.vdombox.ide.modules.preview.view
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.messages.SimpleMessage;
 	import net.vdombox.ide.common.controller.messages.UIQueryMessage;
+	import net.vdombox.ide.common.controller.names.PPMOperationNames;
+	import net.vdombox.ide.common.controller.names.PPMPlaceNames;
+	import net.vdombox.ide.common.controller.names.PPMStatesTargetNames;
 	import net.vdombox.ide.common.controller.names.PipeNames;
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
+	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -34,6 +38,7 @@ package net.vdombox.ide.modules.preview.view
 
 			interests.push( Notifications.EXPORT_TOOLSET );
 			interests.push( Notifications.SELECT_MODULE );
+			interests.push( StatesProxy.GET_ALL_STATES );
 
 			return interests;
 		}
@@ -79,6 +84,15 @@ package net.vdombox.ide.modules.preview.view
 					
 					break;
 				}	
+					
+				case StatesProxy.GET_ALL_STATES:
+				{
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
 		
 			}
 
@@ -108,10 +122,48 @@ package net.vdombox.ide.modules.preview.view
 
 			}
 		}
-
+		
 		public function handleProxyMessage( message : ProxyMessage ) : void
 		{
 			var place : String = message.proxy;
+			
+			/*switch ( place )
+			{
+				/*case PPMPlaceNames.STATES:
+				{
+					sendNotification( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, message );
+					
+					break;
+				}
+					
+				case PPMPlaceNames.TYPES:
+				{
+					sendNotification( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, message );
+					
+					break;
+				}
+					
+				case PPMPlaceNames.APPLICATION:
+				{
+					sendNotification( Notifications.PROCESS_APPLICATION_PROXY_MESSAGE, message );
+					
+					break;
+				}
+					
+				case PPMPlaceNames.PAGE:
+				{
+					sendNotification( Notifications.PROCESS_PAGE_PROXY_MESSAGE, message );
+					
+					break;
+				}
+					
+				case PPMPlaceNames.OBJECT:
+				{
+					sendNotification( Notifications.PROCESS_OBJECT_PROXY_MESSAGE, message );
+					
+					break;
+				}
+			}*/
 		}
 
 		public function tearDown() : void

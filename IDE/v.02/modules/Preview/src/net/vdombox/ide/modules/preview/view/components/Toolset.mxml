@@ -7,6 +7,11 @@
 	<fx:Metadata> 
 		[ResourceBundle("Preview_General")] 
 	</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.common.view.components.VDOMImage;
+		]]>
+	</fx:Script>
 
 	<s:layout>
 
@@ -17,4 +22,11 @@
 							  height="100%" click="{toolsetButton.selected = false}"
 							  label="{resourceManager.getString( 'Preview_General', 'toolset_button_label' ) }"
 							  skinClass="net.vdombox.ide.common.view.skins.button.ToolsetButtonSkin" />
+	
+	<s:HGroup height="100%" verticalAlign="middle" paddingBottom="13">
+		
+		<s:Image id="popUpImage" width="16" height="16" source="{ VDOMImage.Class_ }" skinClass="spark.skins.spark.ImageSkin"/>
+		
+	</s:HGroup>
+	
 </s:Group>
