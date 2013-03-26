@@ -32,17 +32,28 @@ package net.vdombox.ide.common.model._vo
 			_id = id;
 		}
 
-		private var _active				: String
-		private var _description 		: String
-		private var _iconID 			: String
-		private var _id 				: String
-		private var _indexPageID 		: String
-		private var _name				: String
-		private var _numberOfObjects 	: int
-		private var _numberOfPages 		: int
-		private var _scriptingLanguage	: String
-		private var _serverVersion 		: String
-		private var _version 			: String
+		private var _active				: String;
+		private var _description 		: String;
+		private var _iconID 			: String;
+		private var _id 				: String;
+		private var _indexPageID 		: String;
+		private var _name				: String;
+		private var _numberOfObjects 	: int;
+		private var _numberOfPages 		: int;
+		private var _scriptingLanguage	: String;
+		private var _serverVersion 		: String;
+		private var _version 			: String;
+		private var _hosts				: Array;
+
+		public function get hosts():Array
+		{
+			return _hosts;
+		}
+
+		public function set hosts(value:Array):void
+		{
+			_hosts = value;
+		}
 
 		public function get active():String
 		{
@@ -121,6 +132,13 @@ package net.vdombox.ide.common.model._vo
 			_scriptingLanguage	= information.ScriptingLanguage[ 0 ];
 			_active				= information.Active[ 0 ];
 			_version			= information.Version[ 0 ];
+			
+			hosts = new Array();
+			
+			for each( var xml : XML in information.Hosts..Host )
+			{
+				hosts.push( xml.toString() );
+			}
 		}
 	}
 }
