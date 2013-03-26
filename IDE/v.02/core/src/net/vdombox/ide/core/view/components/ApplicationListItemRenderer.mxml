@@ -18,6 +18,7 @@
 			import mx.graphics.SolidColorStroke;
 			import mx.utils.ObjectUtil;
 			
+			import net.vdombox.editors.parsers.LanguageVO;
 			import net.vdombox.ide.common.model._vo.ApplicationVO;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			
@@ -26,6 +27,14 @@
 			public static const RENDERER_CHANGED : String = "rendererChanged";
 			public static const RENDERER_DOUBLE_CLICK : String = "rendererDoubleClick";
 			public static const ICON_REQUEST : String = "iconRequest1";
+			
+			[Bindable]
+			[Embed( source = "assets/python.png" )]
+			public static var python : Class;
+			
+			[Bindable]
+			[Embed( source = "assets/vscript.png" )]
+			public static var vscript : Class;
 			
 			private var _resourceVO : ResourceVO;
 			
@@ -64,6 +73,8 @@
 						
 						applicationDescription.text = applicationVO.description;
 						
+						imageLanguage.source = applicationVO.scriptingLanguage == LanguageVO.python ? python : vscript;
+						
 						pages.text = resourceManager.getString( 'Core_General', 'create_edit_application_pages' ) + " - " + applicationVO.numberOfPages;
 						
 						objects.text = resourceManager.getString( 'Core_General', 'create_edit_application_objects' ) + " - " + applicationVO.numberOfObjects;
@@ -78,6 +89,8 @@
 						
 						applicationDescription.text = "";
 						
+						imageLanguage.source = null;
+						
 						pages.text = "";
 						
 						objects.text = "";
@@ -86,9 +99,6 @@
 							
 						toolTip = "";
 					}
-					
-					
-					
 					
 					validateResourceVO();
 			}
@@ -227,11 +237,17 @@
 						/>
 		</s:VGroup>
 		
+		<mx:Image id="imageLanguage"
+				  width="16" height="16"
+				  smoothBitmapContent="true"/>
+		
+		<s:Spacer width="6"/>
+		
 	</s:HGroup>
 	
 	<s:Group id="lineGroup" width="100%" height="100%"/>
 	
-	<s:Rect right="0" height="100%" width="50">
+	<s:Rect right="0" height="100%" width="35">
 		<s:fill>
 			<s:LinearGradient>
 				<s:GradientEntry color="#2f2f2f" alpha="0"/>
