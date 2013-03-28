@@ -18,7 +18,7 @@
 		<s:HorizontalLayout />
 	</s:layout>
 
-	<button:ToolsetButton id="toolsetButton"
+	<button:ToolsetButton id="toolsetButton" color="0xFFFF00"
 							  height="100%" click="{toolsetButton.selected = false}"
 							  label="{resourceManager.getString( 'Preview_General', 'toolset_button_label' ) }"
 							  skinClass="net.vdombox.ide.common.view.skins.button.ToolsetButtonSkin" />

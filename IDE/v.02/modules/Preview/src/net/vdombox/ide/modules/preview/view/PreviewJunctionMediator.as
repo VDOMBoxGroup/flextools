@@ -87,9 +87,9 @@ package net.vdombox.ide.modules.preview.view
 					
 				case StatesProxy.GET_ALL_STATES:
 				{
-					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
+					message = new SimpleMessage( SimpleMessageHeaders.GET_APPLICATIONS_HOSTS, body, multitonKey );
 					
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					junction.sendMessage( PipeNames.STDCORE, message );
 					
 					break;
 				}

@@ -44,14 +44,13 @@ package net.vdombox.ide.modules.preview.view
 
 		private function toolsetButton_clickHandler( event : MouseEvent ) : void
 		{
-			sendNotification( StatesProxy.GET_ALL_STATES );
-			//sendNotification( Notifications.SELECT_MODULE );
+			
+			sendNotification( Notifications.SELECT_MODULE );
 		}
 		
 		private function popUpImage_clickHandler( event : MouseEvent ) : void
 		{
-			var applicationVO : ApplicationVO = statesProxy.selectedApplication;
-			
+			sendNotification( StatesProxy.GET_ALL_STATES, toolset.toolsetButton );
 		}
 	}
 }
