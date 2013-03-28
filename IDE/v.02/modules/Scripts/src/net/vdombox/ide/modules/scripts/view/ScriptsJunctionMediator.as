@@ -329,7 +329,7 @@ package net.vdombox.ide.modules.scripts.view
 					
 					break
 				}
-
+					
 				case Notifications.GET_LIBRARIES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.LIBRARIES, body );
