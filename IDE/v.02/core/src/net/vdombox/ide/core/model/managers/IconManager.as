@@ -6,12 +6,14 @@ package net.vdombox.ide.core.model.managers
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
 	
+	import mx.charts.CategoryAxis;
 	import mx.graphics.codec.PNGEncoder;
 	
 	import net.vdombox.ide.common.model._vo.ResourceVO;
@@ -169,8 +171,8 @@ package net.vdombox.ide.core.model.managers
 					createIcon();
 					
 				}
-			}else
-			if ( !fileExists( file ) )
+			}
+			else if ( !fileExists( file ) )
 				file = getStandartIcon();
 
 
@@ -237,8 +239,9 @@ package net.vdombox.ide.core.model.managers
 		{
 			var loader : Loader = new Loader();
 			loader.name = _resourceVO.id;
-			loader.loadBytes( _resourceVO.data );
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, contentLoaderInfoCompleteHandler );
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+			loader.loadBytes( _resourceVO.data );
 		}
 
 
@@ -258,6 +261,11 @@ package net.vdombox.ide.core.model.managers
 			_resourceVO.icon = icon;
 			cacheManager.cacheFile( _resourceVO.iconId, icon );
 
+		}
+		
+		private function onBytesLoaded(event:Event):void
+		{
+			trace("ttt");
 		}
 
 		//convert to bitmapData 

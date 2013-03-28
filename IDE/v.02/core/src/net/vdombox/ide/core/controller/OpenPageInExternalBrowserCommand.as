@@ -3,6 +3,7 @@ package net.vdombox.ide.core.controller
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	
+	import net.vdombox.ide.core.model.ApplicationsHostsProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	
@@ -37,7 +38,15 @@ package net.vdombox.ide.core.controller
 
 		private function get URL() : String
 		{
-			return "http://" + serverProxy.server + "/" + statesProxy.selectedApplication.id + "/" + statesProxy.selectedPage.id;
+			var applicationsHostsProxy : ApplicationsHostsProxy = facade.retrieveProxy( ApplicationsHostsProxy.NAME ) as ApplicationsHostsProxy;
+			var selectedHost : String = applicationsHostsProxy.getSelectedHost( serverProxy.server + statesProxy.selectedApplication.id );
+			
+			if( selectedHost == "default" || selectedHost == "" )
+				return "http://" + serverProxy.server + "/" + statesProxy.selectedApplication.id + "/" + statesProxy.selectedPage.id;
+			else
+				return "http://" + selectedHost + "/" + statesProxy.selectedPage.name;
+			
+			
 		}
 	}
 }

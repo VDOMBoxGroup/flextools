@@ -166,7 +166,6 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.RESOURCES_PROXY_RESPONSE:
 				{
 					junction.sendMessage( PipeNames.PROXIESOUT, body as ProxyMessage );
-					var now:Date = new Date();
 					
 					break;
 				}

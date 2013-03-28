@@ -51,6 +51,14 @@ package net.vdombox.ide.core.controller.responses
 					break;
 				
 				}
+					
+				case ApplicationFacade.SELECTED_APP_GETTED:
+				{
+					var application : ApplicationVO = body as ApplicationVO;
+					//
+					message = new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.APPLICATION, application );
+					
+				}
 			}
 
 			sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, message );

@@ -52,6 +52,12 @@ package net.vdombox.ide.core.controller
 					sendNotification( ApplicationFacade.OPEN_PAGE_IN_EXTERNAL_BROWSER );
 					break;
 				}
+					
+				case SimpleMessageHeaders.GET_APPLICATIONS_HOSTS:
+				{
+					sendNotification( ApplicationFacade.GET_APPLICATIONS_HOSTS, body );
+					break;
+				}
 			}
 		}
 	}

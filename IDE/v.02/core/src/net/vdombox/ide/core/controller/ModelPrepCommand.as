@@ -1,5 +1,6 @@
 package net.vdombox.ide.core.controller
 {
+	import net.vdombox.ide.core.model.ApplicationsHostsProxy;
 	import net.vdombox.ide.core.model.LocalesProxy;
 	import net.vdombox.ide.core.model.LogProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
@@ -21,6 +22,7 @@ package net.vdombox.ide.core.controller
 		override public function execute( notification : INotification ) : void
 		{
 			facade.registerProxy( new SharedObjectProxy() );
+			facade.registerProxy( new ApplicationsHostsProxy() );
 			facade.registerProxy( new SessionProxy() );
 			facade.registerProxy( new SettingsStorageProxy() );
 			facade.registerProxy( new StatesProxy() );
