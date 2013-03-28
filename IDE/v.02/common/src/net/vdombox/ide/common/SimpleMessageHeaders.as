@@ -21,6 +21,7 @@ package net.vdombox.ide.common
 		public static const CLOSE_WINDOW : String = "closeWindow";*/
 		
 		public static const OPEN_BROWSER : String = "openBrowser";
+		public static const GET_APPLICATIONS_HOSTS : String = "getSelectedApplication";
 		
 		
 	}
