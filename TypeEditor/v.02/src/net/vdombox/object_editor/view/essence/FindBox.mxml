@@ -119,7 +119,7 @@
 	</s:Rect>
 	
 	<mx:Image right="10" top="5"
-			  source="@Embed('assets/icons/Delete.png')" click="image1_clickHandler(event)"/>
+			  source="@Embed('/assets/icons/Delete.png')" click="image1_clickHandler(event)"/>
 	
 	<s:VGroup width="100%" height="100%" paddingLeft="20" paddingTop="5" paddingBottom="5" verticalAlign="middle">
 		

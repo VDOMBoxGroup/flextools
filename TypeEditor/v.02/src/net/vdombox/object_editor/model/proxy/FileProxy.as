@@ -7,7 +7,7 @@ package net.vdombox.object_editor.model.proxy
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
-	
+
 	import mx.controls.Alert;
 	
 	import net.vdombox.object_editor.model.ErrorLogger;
@@ -25,11 +25,17 @@ package net.vdombox.object_editor.model.proxy
 		}
 
 		public function readFile( path:String ):String
-		{	
+		{
+            if (!path)
+                return "";
+
 			var data:String = "";
 			
 			var file:File = new File;
 			file.nativePath = path;
+
+            if (!file.exists)
+                return "";
 
 			var stream:FileStream = new FileStream();   
 			try
@@ -109,5 +115,70 @@ package net.vdombox.object_editor.model.proxy
 				trace("Failed: file was not deleted.", error.message);
 			}			
 		}
+
+        public function getFolderContent ( folderPath : String ) : Array
+        {
+            var folder : File = getFile(folderPath);
+
+            if (!folder || !folder.exists || !folder.isDirectory)
+                return null;
+
+            return folder.getDirectoryListing();
+        }
+
+        public function filterLaTexFiles ( files : Array ) : Array
+        {
+            if (!files)
+                return null;
+
+            var laTexFiles : Array = files.filter(isLaTexFile);
+
+            function isLaTexFile (element:File, index:int, arr:Array):Boolean
+            {
+                return (element.extension.toLowerCase() == "tex");
+            }
+
+            return laTexFiles;
+        }
+
+        public function getFileName ( file : File) : String
+        {
+            if (!file)
+                return "";
+
+            var fullName : String = file.name;
+
+            return fullName.substring(0, fullName.lastIndexOf(file.extension)-1)
+        }
+
+        public function getCorrectFilePath ( path : String ) : String
+        {
+            if (!path)
+                return "";
+
+            path = path.replace(/\\/g, "/");
+
+            return path;
+        }
+
+        public function getFile ( path : String ) : File
+        {
+            if (!path)
+                return new File();
+
+            var file : File;
+
+            try
+            {
+                file = new File (path);
+            }
+            catch (e : Error)
+            {
+                file = null;
+            }
+
+            return file;
+        }
+
 	}
 }

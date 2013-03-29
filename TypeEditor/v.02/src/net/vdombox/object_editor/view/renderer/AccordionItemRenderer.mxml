@@ -11,7 +11,7 @@
 			import mx.utils.Base64Decoder;
 			
 			public static const CHOSE_OBJECT:String = "ChoseObject";
-			public static const NAME		:String = "ListItemRenderer";
+//			public static const NAME		:String = "ListItemRenderer";
 			
 			public function choseObject():void
 			{			

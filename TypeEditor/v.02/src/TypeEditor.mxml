@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:WindowedApplication  xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					   xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:WindowedApplication  xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:ns="net.vdombox.object_editor.view.essence.*"
-					   xmlns:vs="net.vdombox.object_editor.view.*" 
+					   xmlns:vs="net.vdombox.object_editor.view.*"
 					   xmlns:local="*"
 					   xmlns:containers="flexlib.containers.*"
 					   preinitialize="facade.preinitialize(this)"
-					   creationComplete="facade.startup(this)">
+					   creationComplete="facade.startup(this)"
+                       minWidth="800" minHeight="600">
 
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects)  -->
@@ -40,23 +41,20 @@
 		
 	]]>
 </fx:Script>
-	
-	<mx:HDividedBox width="100%" height="100%">
-		<mx:VBox  height="100%" width="150" >
-			<s:HGroup>
-				<s:Button id="openButton" 		label="Open" 	width="55"	toolTip="open directory of types"/>
-				<s:Button id="newObjectButton" 	label="New"		width="50"	toolTip="create new Object"/>
-				<s:Button id="delObjectButton" 	label="X"		width="30"	toolTip="delete Object"/>
-			</s:HGroup>
-						
-			<vs:ObjectsAccordion id="objAccordion" width="100%"/>					
-		</mx:VBox>
-		
-		<containers:SuperTabNavigator id="tabNavigator" width="100%" height="100%"
-									  stopScrollingEvent ="{MouseEvent.MOUSE_OUT}"
-									  startScrollingEvent="{MouseEvent.MOUSE_OVER}">			
-		</containers:SuperTabNavigator>		
-		
-	</mx:HDividedBox> 
+
+    <mx:VBox  height="100%" width="100%" >
+
+        <vs:MainMenu id="mainMenu" width="100%"></vs:MainMenu>
+
+        <mx:HDividedBox width="100%" height="100%">
+            <vs:ObjectsAccordion id="objAccordion" width="150"/>
+
+            <containers:SuperTabNavigator id="tabNavigator" width="100%" height="100%"
+                                          stopScrollingEvent ="{MouseEvent.MOUSE_OUT}"
+                                          startScrollingEvent="{MouseEvent.MOUSE_OVER}">
+            </containers:SuperTabNavigator>
+
+        </mx:HDividedBox>
+    </mx:VBox>
 	
 </s:WindowedApplication>

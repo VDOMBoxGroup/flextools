@@ -17,19 +17,26 @@ package net.vdombox.object_editor.view.mediators
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	import flash.utils.ByteArray;
-	
-	import mx.controls.Alert;
-	import mx.events.CloseEvent;
+
+import mx.collections.ArrayCollection;
+
+import mx.controls.Alert;
+import mx.core.UIComponent;
+import mx.events.CloseEvent;
 	import mx.managers.PopUpManager;
 	import mx.utils.ObjectProxy;
-	
-	import net.vdombox.object_editor.event.PopupEvent;
+
+import net.vdombox.object_editor.Utils.WindowManager;
+
+import net.vdombox.object_editor.event.PopupEvent;
 	import net.vdombox.object_editor.model.Item;
 	import net.vdombox.object_editor.model.POSTUploadBuilder;
 	import net.vdombox.object_editor.model.proxy.ConnectToServerProxy;
 	import net.vdombox.object_editor.model.proxy.FileProxy;
-	import net.vdombox.object_editor.model.proxy.ObjectsProxy;
-	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
+import net.vdombox.object_editor.model.proxy.LaTexProxy;
+import net.vdombox.object_editor.model.proxy.ObjectsProxy;
+import net.vdombox.object_editor.model.proxy.componentsProxy.AttributesProxy;
+import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ConnectInfoVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
@@ -43,8 +50,10 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.view.essence.Resourses;
 	import net.vdombox.object_editor.view.essence.SourceCode;
 	import net.vdombox.object_editor.view.popups.ConnectToServerWindow;
-	
-	import org.puremvc.as3.interfaces.IMediator;
+import net.vdombox.object_editor.view.popups.DescriptionsUpdateWindow;
+import net.vdombox.object_editor.view.popups.DocumentationSettingsWindow;
+
+import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 
@@ -98,6 +107,7 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new SourceCodeMediatior( sourceCode,  objTypeVO ) );
 			facade.registerMediator( new ResourcesMediator 	( resourses,   objTypeVO ) );
 
+            view.updateDescriptions.addEventListener  ( MouseEvent.CLICK, btnUpdateDescriptionsClickHandler );
 			view.saveObjectTypeButton.addEventListener  ( MouseEvent.CLICK, saveObjectType );
 			view.saveAsObjectTypeButton.addEventListener( MouseEvent.CLICK, saveAsObjectType );
 			view.connectObjectTypeToServerButton.addEventListener( MouseEvent.CLICK, connectToServer );
@@ -112,6 +122,58 @@ package net.vdombox.object_editor.view.mediators
 		{
 			connectToServerProxy = facade.retrieveProxy( ConnectToServerProxy.NAME ) as ConnectToServerProxy;
 		}
+
+        private var needToUpdateDescriptions : Boolean = false;
+        private function btnUpdateDescriptionsClickHandler(event:MouseEvent):void
+        {
+            if (!laTexProxy.typesDocPath)
+            {
+                needToUpdateDescriptions = true;
+                openDocumentationSettingsWindow();
+                return;
+            }
+
+            updateDescriptions();
+        }
+
+        private function updateDescriptions () : void
+        {
+            objectTypeProxy.clearTypeAttributesLaTexPaths(objectTypeVO);
+            objectTypeProxy.setTypeAttributesLaTexPaths(objectTypeVO);
+
+            openDescriptionsUpdateWindow ();
+        }
+
+        private function openDocumentationSettingsWindow () : void
+        {
+            var docSettingsWindow : DocumentationSettingsWindow = new DocumentationSettingsWindow();
+
+            var docSettingsWindowMediator : DocumentationSettingsWindowMediator = new DocumentationSettingsWindowMediator( docSettingsWindow );
+            facade.registerMediator( docSettingsWindowMediator );
+
+            docSettingsWindow.addEventListener(Event.CLOSE, closeEventHandler);
+            WindowManager.getInstance().addWindow(docSettingsWindow, UIComponent(view.parentApplication), true);
+
+            function closeEventHandler ( event : Event) : void
+            {
+                needToUpdateDescriptions = false;
+
+                docSettingsWindow.removeEventListener(Event.CLOSE, closeEventHandler);
+            }
+        }
+
+        private function openDescriptionsUpdateWindow () : void
+        {
+            var descriptionsUpdateWindow : DescriptionsUpdateWindow = new DescriptionsUpdateWindow();
+
+            var descriptionsUpdateWindowMediator : DescriptionsUpdateWindowMediator = new DescriptionsUpdateWindowMediator( descriptionsUpdateWindow );
+            facade.registerMediator( descriptionsUpdateWindowMediator );
+
+            descriptionsUpdateWindow.attributes = objectTypeVO.attributes;
+            descriptionsUpdateWindow.typeVO = objectTypeVO;
+
+            WindowManager.getInstance().addWindow(descriptionsUpdateWindow, UIComponent(view.parentApplication), true);
+        }
 
 		private function saveObjectType(event:MouseEvent):void
 		{
@@ -146,7 +208,6 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function loadObjectType( event : MouseEvent ) : void
 		{
-			
 			sendNotification( ApplicationFacade.UPLOAD_TYPE_TO_SERVER, objectTypeVO );
 		}
 
@@ -194,7 +255,8 @@ package net.vdombox.object_editor.view.mediators
 		
 		private function removeEventListeners():void
 		{
-			view.saveObjectTypeButton.removeEventListener	( MouseEvent.CLICK, saveObjectType );
+            view.updateDescriptions.removeEventListener  ( MouseEvent.CLICK, btnUpdateDescriptionsClickHandler );
+            view.saveObjectTypeButton.removeEventListener	( MouseEvent.CLICK, saveObjectType );
 			view.saveAsObjectTypeButton.removeEventListener	( MouseEvent.CLICK, saveAsObjectType );
 			view.connectObjectTypeToServerButton.removeEventListener( MouseEvent.CLICK, connectToServer );
 			view.loadObjectTypeToServerButton.removeEventListener( MouseEvent.CLICK, loadObjectType );
@@ -229,6 +291,8 @@ package net.vdombox.object_editor.view.mediators
 			interests.push( ApplicationFacade.SERVER_LOGIN_OK );
 			interests.push( OBJECT_TYPE_CHAGED );
 			interests.push( OBJECT_TYPE_VIEW_SAVED );
+
+            interests.push( ApplicationFacade.TYPES_DOC_PATH_CHANGED );
 			
 			return interests;
 		}
@@ -257,6 +321,18 @@ package net.vdombox.object_editor.view.mediators
 					
 					break;
 				}
+
+                case ApplicationFacade.TYPES_DOC_PATH_CHANGED :
+                {
+                    if (needToUpdateDescriptions)
+                    {
+                        needToUpdateDescriptions = false;
+                        updateDescriptions();
+                    }
+
+
+                    break;
+                }
 			}
 		}
 
@@ -265,7 +341,16 @@ package net.vdombox.object_editor.view.mediators
 			return viewComponent as ObjectView;
 		}
 
-		private var objectTypeProxy:ObjectTypeProxy;
-	}
+        private function get objectTypeProxy() : ObjectTypeProxy
+        {
+            return facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
+        }
+
+        private function get laTexProxy() : LaTexProxy
+        {
+            return facade.retrieveProxy(LaTexProxy.NAME) as LaTexProxy;
+        }
+
+    }
 }
 

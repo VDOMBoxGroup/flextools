@@ -110,21 +110,20 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			}
 			return retString;
 		}
-		public function getWords(langsVO:LanguagesVO,id:String):Object
+
+		public function getWords( langsVO : LanguagesVO, id : String ) : Object
 		{	
-			var localeName:String = langsVO.currentLocation;
 			var wordsVO:ArrayCollection = langsVO.words;
-			var retString:Object;
 
 			for each (var word:Object in wordsVO)
 			{		
-				if (word["ID"] == id)
+				if ( word["ID"] == id )
 				{
-					retString = word;
-					break;
+					return word;
 				}
 			}
-			return retString;
+
+			return "";
 		}
 
 		/*public function setWord(langsVO:LanguagesVO,newWord:String):void
@@ -155,20 +154,20 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			var matchResult:Array = code.match(regResource);			
 			if (matchResult)
 			{
-				var word:String = getWord( langsVO, matchResult[1] );
+				var word:String = getWord( langsVO, matchResult[1], langsVO.currentLocation );
 				return word;								
 			}
+
 			return "";
 		}
 				
 		/**
-		 * 
-		 * @param langsVO - current LanguagesVO
+		 *
 		 * @param code in formate: #Lang(ID)
 		 * @return ID
 		 * 
 		 */		
-		public function getRegExpID(langsVO:LanguagesVO,code:String):String
+		public function getRegExpID(code:String):String
 		{				
 			var regResource:RegExp = /#Lang\((\d+)\)/;
 			var matchResult:Array = code.match(regResource);			
@@ -182,21 +181,17 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		 * @return a word in the current location
 		 * 
 		 */		
-		private function getWord(langsVO:LanguagesVO,id:String):String
+		public function getWord( langsVO : LanguagesVO, id : String, localeName : String ) : String
 		{
-			var localeName:String = langsVO.currentLocation;
-			var wordsVO:ArrayCollection = langsVO.words;
-			var retString:String;
-			
-			for each (var word:Object in wordsVO)
+			for each (var word : Object in langsVO.words)
 			{
 				if (word["ID"] == id)
 				{
-					retString = word[localeName];
-					break;
+					return word[localeName];
 				}
 			}
-			return retString;
+
+			return "";
 		}
 
 		public function createXML(languagesVO: LanguagesVO):XML
@@ -238,7 +233,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			//wordID have format: "#Lang(ID)"
 			var wordID:String = langsVO.getNextId( startId, newValue ).toString();  
 			
-			var str:String = getRegExpID( langsVO,wordID );
+			var str:String = getRegExpID( wordID );
 			langsVO.isUsedWords[str]	= true;
 			langsVO.isWordsOwner[str]	= owner;
 			return wordID;
@@ -252,7 +247,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{
 			for each (var id:String in IDs)
 			{
-				var s:String = getRegExpID(objVO.languages, id);
+				var s:String = getRegExpID(id);
 				var st:String = objVO.languages.isWordsOwner[s] as String;
 				var ar:Array = st.split(".");
 				objVO.languages.isWordsOwner[s] = newValue + "."+ ar[ar.length-1];
@@ -284,7 +279,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		 */
 		public function used(langsVO: LanguagesVO, firstNumberID:uint, idString:String, owner:String):String
 		{	
-			var id:String = getRegExpID(langsVO, idString);
+			var id:String = getRegExpID(idString);
 			var newID:String = getNextId(langsVO, firstNumberID.toString().slice(0,1), "", tempGetWords(langsVO, id));
 			
 			var idNumber:String = newID.toString().slice(6,newID.length-1);
@@ -297,7 +292,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{		
 			if (word != "")
 			{
-				var id:String = getRegExpID(objTypeVO.languages, word);
+				var id:String = getRegExpID(word);
 				var words:Object = getWords(objTypeVO.languages, id);
 				if (words)
 				{
@@ -305,6 +300,16 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					objTypeVO.languages.words.removeItemAt(ind);
 				}
 			}
-		}		
+		}
+
+        public function updateWordValue ( typeVO : ObjectTypeVO, id : String, locale : String, newValue : String ) : void
+        {
+            for each (var word : Object in typeVO.languages.words)
+            {
+                if (word["ID"] == id)
+                    word[locale] = newValue;
+            }
+        }
+
 	}
 }

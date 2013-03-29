@@ -3,11 +3,15 @@
  */
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
-	import mx.controls.Alert;
+import flash.filesystem.File;
+
+import mx.controls.Alert;
 	import mx.messaging.channels.StreamingAMFChannel;
 	
 	import net.vdombox.object_editor.model.ErrorLogger;
-	import net.vdombox.object_editor.model.vo.ActionParameterVO;
+import net.vdombox.object_editor.model.proxy.FileProxy;
+import net.vdombox.object_editor.model.proxy.LaTexProxy;
+import net.vdombox.object_editor.model.vo.ActionParameterVO;
 	import net.vdombox.object_editor.model.vo.ActionVO;
 	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
 	import net.vdombox.object_editor.model.vo.AttributeVO;
@@ -83,6 +87,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			languagesProxy.used(objTypeVO.languages, 0, "#Lang(003)", "Information.Container");
 		}
 
+
 		private function reuseEventsID( objTypeVO: ObjectTypeVO):void
 		{
 			for each (var eventObj:Object in objTypeVO.events)
@@ -156,7 +161,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				
 				while (langs = regLangs.exec(attr.codeInterface))
 				{
-					var id:String = languagesProxy.getRegExpID(objTypeVO.languages, langs[1]);
+					var id:String = languagesProxy.getRegExpID(langs[1]);
 					tempStr		  = languagesProxy.used(objTypeVO.languages, 4, langs[1], "Attributes."+ attr.name +".CodeInterface."+langs[2]);
 					codeIntValue += "(" + tempStr + "|" + langs[2] + ")|";
 				}	
@@ -239,7 +244,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		private function sourceCodeToXML(sourceCode:String):XML
 		{				
 			var sourceCodeXML:XML = <SourceCode/>;
-			sourceCodeXML.appendChild( XML("\n"+"<![CDATA[" + sourceCode +"]]>") )
+			sourceCodeXML.appendChild( XML("\n"+"<![CDATA[" + sourceCode +"]]>") );
 				
 			return sourceCodeXML;
 		}
@@ -419,6 +424,16 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			return facade.retrieveProxy(ResourcesProxy.NAME) as ResourcesProxy;
 		}
 
+        private function get laTexProxy() : LaTexProxy
+        {
+            return facade.retrieveProxy(LaTexProxy.NAME) as LaTexProxy;
+        }
+
+        private function get fileProxy () : FileProxy
+        {
+            return facade.retrieveProxy(FileProxy.NAME) as FileProxy;
+        }
+
 		private function checkLang(strXML:String, strVO:String):void
 		{
 			if (strXML != strVO)
@@ -434,5 +449,76 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					//todo: делаем запись в лог ошибок
 			}
 		}
+
+        public function getTypeLaTexPath ( typeVO : ObjectTypeVO) : String
+        {
+            if (!typeVO || !laTexProxy.typesDocPath)
+                return "";
+
+            return fileProxy.getCorrectFilePath( laTexProxy.typesDocPath + "/type/" + typeVO.name + ".tex" );
+        }
+
+        public function setTypeAttributesLaTexPaths ( typeVO : ObjectTypeVO ) : void
+        {
+            if (!typeVO)
+                return;
+
+            var typeLaTexPath : String = getTypeLaTexPath (typeVO);
+            var typeLaTexContent : String = fileProxy.readFile (typeLaTexPath);
+
+            var typeAttributesLaTexPaths = laTexProxy.getTypeAttributesPaths(typeLaTexContent);
+
+            for each (var attributeLaTexPath : String in typeAttributesLaTexPaths)
+            {
+                var typeAttributeLaTexContent : String = fileProxy.readFile(attributeLaTexPath);
+
+                var attributeName : String = laTexProxy.getAttributeName(typeAttributeLaTexContent);
+
+                var attributeVO : AttributeVO = getTypeAttributeByName(typeVO, attributeName);
+
+                if (!attributeVO)
+                    continue;
+
+                attributeVO.laTexFilePath = attributeLaTexPath;
+            }
+
+        }
+
+        public function clearTypeAttributesLaTexPaths ( typeVO : ObjectTypeVO ) : void
+        {
+            if (!typeVO)
+                return;
+
+            for each (var item : Object in typeVO.attributes)
+            {
+                if (!item || !item.data)
+                    continue;
+
+                var attrVO : AttributeVO = item.data as AttributeVO;
+                attrVO.laTexFilePath = "";
+            }
+        }
+
+        private function getTypeAttributeByName (typeVO : ObjectTypeVO, attrName : String) : AttributeVO
+        {
+            for each (var item : Object in typeVO.attributes)
+            {
+                if (item && item.data && item.data is AttributeVO && item.data["name"] == attrName)
+                    return item.data as AttributeVO;
+            }
+
+            return null;
+        }
+
+        public function updateAttributeDescription (attributeVO : AttributeVO, typeVO : ObjectTypeVO, descrValue : String) : void
+        {
+            if (!typeVO || !attributeVO)
+                return;
+
+            var langID : String = languagesProxy.getRegExpID(attributeVO.help);
+
+            languagesProxy.updateWordValue(typeVO, langID, "en_US", descrValue)
+        }
+
 	}
 }

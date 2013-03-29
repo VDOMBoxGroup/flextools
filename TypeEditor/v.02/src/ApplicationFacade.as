@@ -42,12 +42,15 @@ package
 		public static const STARTUP						:String	= "startup";	
 		
 		public static const CONNECT_TO_SERVER			:String	= "connectToServer";	
-		public static const UPLOAD_TYPE_TO_SERVER		:String	= "uploadTypeToServer";	
+		public static const UPLOAD_TYPE_TO_SERVER		:String	= "uploadTypeToServer";
+
+        public static const TYPES_DOC_PATH_CHANGED		:String	= "typesDocPathChanged";
 
 		public static function getInstance() : ApplicationFacade 
 		{
 			if (instance == null)
 				instance = new ApplicationFacade( );
+
 			return instance as ApplicationFacade;
 		}
 

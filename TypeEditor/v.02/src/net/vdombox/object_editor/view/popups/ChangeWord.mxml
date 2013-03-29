@@ -8,80 +8,69 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
-			import mx.controls.dataGridClasses.DataGridColumn;
-			import mx.events.CloseEvent;
-			import mx.events.FlexEvent;
-			import mx.managers.PopUpManager;
-			
-			import net.vdombox.object_editor.model.Language;
-			import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
-			
-			import org.puremvc.as3.patterns.facade.Facade;
-			
-			import spark.events.TextOperationEvent;			
-			
-			[Bindable]
-			private var arWords:ArrayCollection = new ArrayCollection();
-			
-			//			[bindable]
-//			public var wordCode:String = "";
-			public var wordCode:Object = "";
-			private function creationComplete():void 
-			{				
-				addEventListener(CloseEvent.CLOSE, closeHandler); 
-				//PopUpManager.centerPopUp(this);
-				this.x = 200;
-				this.y = 200;			
-				
-				dispatchEvent( new FlexEvent( FlexEvent.CREATION_COMPLETE ));								
-			}
-			
-			public function showWordsList( wordss:ArrayCollection ):void//, lan:String):void 
-			{
+        import mx.collections.ArrayCollection;
+        import mx.events.CloseEvent;
+        import mx.events.FlexEvent;
+        import mx.managers.PopUpManager;
+
+        [Bindable]
+        private var arWords:ArrayCollection = new ArrayCollection();
+
+        //			[bindable]
+        //			public var wordCode:String = "";
+        public var wordCode:Object = "";
+
+        private function creationComplete():void {
+            addEventListener(CloseEvent.CLOSE, closeHandler);
+            //PopUpManager.centerPopUp(this);
+            this.x = 200;
+            this.y = 200;
+
+            dispatchEvent(new FlexEvent(FlexEvent.CREATION_COMPLETE));
+        }
+
+        public function showWordsList(wordss:ArrayCollection):void//, lan:String):void
+        {
 //				for each(var word:XML in languageXML.children())
-				//				{
-				//					arWords.addItem({"label":word.toString(), "data":word.@ID});
-				//				}
+            //				{
+            //					arWords.addItem({"label":word.toString(), "data":word.@ID});
+            //				}
 //				arWords = words;
-				wordsDataGrid.dataProvider = wordss;
-								
-				/*if(lan == "")return;				
-				var cols:Array = words.columns;
-				var dataGridColumn: DataGridColumn = new DataGridColumn(lan);
-				dataGridColumn.dataField = lan;
-				
-				cols.push(dataGridColumn);
-				words.columns = cols;	*/			
-				
+            wordsDataGrid.dataProvider = wordss;
+
+            /*if(lan == "")return;
+             var cols:Array = words.columns;
+             var dataGridColumn: DataGridColumn = new DataGridColumn(lan);
+             dataGridColumn.dataField = lan;
+
+             cols.push(dataGridColumn);
+             words.columns = cols;	*/
+
 //				var language:Language = Language.getInstance();
 //				var languageXML:XML = language.getLanguageXML("en_US");
 //				for each(var word:XML in languageXML.children())
 //				{
 //					arWords.addItem({"label":word.toString(), "data":word.@ID});
 //				}
-				//				words.selectedIndex = 0;	
-			}
-			
-			private function closeHandler(cEvent:CloseEvent):void 
-			{
+            //				words.selectedIndex = 0;
+        }
+
+        private function closeHandler(cEvent:CloseEvent):void {
 //				languageName = lnName.text;
-				PopUpManager.removePopUp(this);
-			}
-			
-			private function button1_clickHandler():void
-			{
-				// TODO Auto-generated method stub
-				wordsDataGrid.selectedItem["name"] = "#Lang("+wordsDataGrid.selectedItem["ID"]+")";
-				wordCode = wordsDataGrid.selectedItem;
-				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
-			}
-			
-			private function cancel():void
-			{
-				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
-			}			
-		]]>
+            PopUpManager.removePopUp(this);
+        }
+
+        private function button1_clickHandler():void {
+            // TODO Auto-generated method stub
+            wordsDataGrid.selectedItem["name"] = "#Lang(" + wordsDataGrid.selectedItem["ID"] + ")";
+            wordCode = wordsDataGrid.selectedItem;
+            dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+        }
+
+        private function cancel():void {
+            dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+        }
+        ]]>
 	</fx:Script>
 	
 	<s:VGroup  width="228" height="367">

@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<Window xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx"
+          title="Update descriptions"
+          width="600" height="500" minWidth="600" minHeight="500"
+          resizable="false"
+          creationComplete="creationCompleteHandler(event)">
+
+
+    <fx:Script>
+        <![CDATA[
+        import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
+        import mx.events.FlexEvent;
+
+        import net.vdombox.object_editor.Utils.WindowManager;
+        import net.vdombox.object_editor.event.UpdateDescriptionEvent;
+        import net.vdombox.object_editor.model.vo.DescriptionListItemVO;
+        import net.vdombox.object_editor.model.vo.ObjectTypeVO;
+
+        import spark.events.IndexChangeEvent;
+
+        public var typeVO:ObjectTypeVO;
+
+        private var _attributes:ArrayCollection = new ArrayCollection();
+
+        [Bindable]
+        public function get attributes():ArrayCollection {
+            return _attributes;
+        }
+
+        public function set attributes(value:ArrayCollection):void {
+            _attributes.removeAll();
+
+            for each (var attributeItem:Object in value) {
+                if (!attributeItem)
+                    continue;
+
+                var listItem:DescriptionListItemVO = new DescriptionListItemVO();
+                listItem.displayName = attributeItem.label;
+                listItem.data = attributeItem.data;
+                listItem.checked = false;
+
+                _attributes.addItem(listItem);
+            }
+        }
+
+        public function get checkedAttributes():ArrayCollection {
+            var _checkedAttributes:ArrayCollection = new ArrayCollection();
+
+            for each (var attributeItem:DescriptionListItemVO in attributes) {
+                if (!attributeItem)
+                    continue;
+
+                if (attributeItem.checked)
+                    _checkedAttributes.addItem(attributeItem);
+            }
+
+            return _checkedAttributes;
+        }
+
+        private function checkAllAttributes(value:Boolean):void {
+            for each (var attrItem:DescriptionListItemVO in attributes) {
+                attrItem.checked = value;
+            }
+        }
+
+        private function creationCompleteHandler(event:FlexEvent):void {
+            WindowManager.getInstance().centerWindow(this);
+
+            statusBar.visible = false;
+
+            addEventListener(Event.CLOSE, closeHandler);
+        }
+
+        private function closeHandler(event:Event):void {
+            removeEventListener(Event.CLOSE, closeHandler);
+
+            WindowManager.getInstance().removeWindow(this);
+        }
+
+        private function attributesList_changeHandler(event:IndexChangeEvent):void {
+            dispatchEvent(new UpdateDescriptionEvent(UpdateDescriptionEvent.SELECTED_ATTRIBUTE_CHANGED));
+        }
+
+        private function attributesList_creationCompleteHandler(event:FlexEvent):void
+        {
+            if (!attributes || attributes.length < 1)
+                return;
+
+            attributesList.selectedIndex = 0;
+            dispatchEvent(new UpdateDescriptionEvent(UpdateDescriptionEvent.SELECTED_ATTRIBUTE_CHANGED));
+        }
+
+        private function btnSelectAll_clickHandler(event:MouseEvent):void {
+            checkAllAttributes(true);
+        }
+
+        private function btnDeselectAll_clickHandler(event:MouseEvent):void {
+            checkAllAttributes(false);
+        }
+
+        private function btnUpdate_clickHandler(event:MouseEvent):void {
+            if (!checkedAttributes || checkedAttributes.length < 1)
+            {
+                Alert.show( "No selected items.", "Notification", Alert.OK, this );
+                return;
+            }
+
+            dispatchEvent(new UpdateDescriptionEvent(UpdateDescriptionEvent.UPDATE_ATTRIBUTES_DESCRIPTIONS));
+        }
+
+        private function btnClose_clickHandler(event:MouseEvent):void {
+            close();
+        }
+
+
+        ]]>
+    </fx:Script>
+
+     <VGroup width="100%" height="100%"
+             paddingBottom="10" paddingTop="10" paddingLeft="10" paddingRight="10">
+
+         <HGroup width="100%" height="100%">
+             <VGroup width="180" height="100%">
+                 <Label text="Attributes: "/>
+                 <List id="attributesList"
+                       width="100%" height="100%"
+                       itemRenderer="net.vdombox.object_editor.view.renderer.DescriptionsListItemRenderer"
+                       dataProvider="{attributes}"
+                       labelField="displayName"
+                       allowMultipleSelection="false"
+                       change="attributesList_changeHandler(event)"
+                       creationComplete="attributesList_creationCompleteHandler(event)"/>
+             </VGroup>
+
+             <mx:ViewStack id="descriptionsStack"
+                        width="100%" height="100%">
+
+             </mx:ViewStack>
+         </HGroup>
+
+         <mx:HRule width="100%"/>
+
+         <HGroup width="100%" height="30" verticalAlign="middle">
+             <mx:Button label="Select All" click="btnSelectAll_clickHandler(event)"/>
+             <mx:Button label="Deselect All" click="btnDeselectAll_clickHandler(event)"/>
+             <mx:Spacer width="100%"/>
+             <mx:Button label="Update" toolTip="Update selected items" click="btnUpdate_clickHandler(event)"/>
+             <mx:Button label="Close" click="btnClose_clickHandler(event)"/>
+         </HGroup>
+
+
+     </VGroup>
+
+</Window>

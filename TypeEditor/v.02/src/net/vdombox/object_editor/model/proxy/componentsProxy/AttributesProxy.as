@@ -3,11 +3,15 @@
  */
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
-	import mx.collections.ArrayCollection;
+import flash.filesystem.File;
+
+import mx.collections.ArrayCollection;
 	
 	import net.vdombox.object_editor.model.ErrorLogger;
-	import net.vdombox.object_editor.model.vo.AttributeVO;
-	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
+import net.vdombox.object_editor.model.proxy.FileProxy;
+import net.vdombox.object_editor.model.proxy.LaTexProxy;
+import net.vdombox.object_editor.model.vo.AttributeVO;
+import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	
 	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
@@ -78,5 +82,22 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 				return atributesCollection;
 			}
 		}
+
+        private function get languagesProxy() : LanguagesProxy
+        {
+            return facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
+        }
+
+        private function get laTexProxy() : LaTexProxy
+        {
+            return facade.retrieveProxy(LaTexProxy.NAME) as LaTexProxy;
+        }
+
+        private function get fileProxy() : FileProxy
+        {
+            return facade.retrieveProxy(FileProxy.NAME) as FileProxy;
+        }
+
+
 	}
 }

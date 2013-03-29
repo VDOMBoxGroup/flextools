@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<s:Window xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark" xmlns:essence="net.vdombox.object_editor.view.essence.*"
+          title="Types documentation settings"
+          width="400" height="200" minWidth="400" minHeight="200"
+          resizable="false"
+        creationComplete="creationCompleteHandler(event)">
+
+    <s:VGroup width="100%" height="100%" paddingRight="10" paddingLeft="10" paddingTop="10" paddingBottom="10">
+
+        <s:VGroup width="100%" verticalAlign="middle" horizontalAlign="left">
+            <s:Label text="Types documentation folder: " />
+            <essence:FileBrowseBox id="typesDocFolderBox"
+                                   mode="{FileBrowseBox.MODE_DIR}" defaultPath="{File.desktopDirectory.nativePath}"
+                                   browseTitle="Select types documentation folder"
+                                   width="100%"/>
+        </s:VGroup>
+
+        <s:Spacer height="20"/>
+
+        <s:HGroup width="100%" verticalAlign="middle" horizontalAlign="right">
+            <s:Button id="btnOk" label="OK" click="btnOK_clickHandler(event)"/>
+            <s:Button id="btnCancel" label="Cancel" click="btnCancel_clickHandler(event)"/>
+        </s:HGroup>
+
+    </s:VGroup>
+
+    <fx:Script>
+        <![CDATA[
+        import mx.events.FlexEvent;
+
+        import net.vdombox.object_editor.Utils.WindowManager;
+
+        import net.vdombox.object_editor.event.DocumentationSettingsEvent;
+        import net.vdombox.object_editor.view.essence.FileBrowseBox;
+
+        private function btnOK_clickHandler(event:MouseEvent):void {
+            dispatchEvent(new DocumentationSettingsEvent(DocumentationSettingsEvent.SAVE_DOC_SETTINGS))
+        }
+
+        private function btnCancel_clickHandler(event:MouseEvent):void {
+            dispatchEvent(new DocumentationSettingsEvent(DocumentationSettingsEvent.CANCEL_DOC_SETTINGS))
+        }
+
+        private function creationCompleteHandler(event:FlexEvent):void {
+            WindowManager.getInstance().centerWindow(this);
+
+            statusBar.visible = false;
+
+            addEventListener( Event.CLOSE, closeHandler );
+        }
+
+        private function closeHandler(event:Event) : void
+        {
+            removeEventListener( Event.CLOSE, closeHandler );
+
+            WindowManager.getInstance().removeWindow(this);
+        }
+
+        ]]>
+    </fx:Script>
+</s:Window>

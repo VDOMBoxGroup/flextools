@@ -1,20 +1,19 @@
 package net.vdombox.object_editor.controller
 {
-	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.filesystem.File;
-	import flash.net.SharedObject;
-	
-	import mx.managers.PopUpManager;
-	
-	import net.vdombox.object_editor.view.mediators.CreateObjectMediator;
-	import net.vdombox.object_editor.view.popups.NameObject;
-	
-	import org.puremvc.as3.interfaces.ICommand;
-	import org.puremvc.as3.interfaces.INotification;
-	import org.puremvc.as3.patterns.command.SimpleCommand;
+import flash.events.Event;
+import flash.filesystem.File;
+import flash.net.SharedObject;
 
-	/**
+import mx.managers.PopUpManager;
+
+import net.vdombox.object_editor.view.mediators.MainMenuMediator;
+import net.vdombox.object_editor.view.popups.NameObject;
+
+import org.puremvc.as3.interfaces.ICommand;
+import org.puremvc.as3.interfaces.INotification;
+import org.puremvc.as3.patterns.command.SimpleCommand;
+
+/**
 	 * Command copy file "assets/newObject/newObject.xml" to users file with new name in the current directory.
 	 * Finally Command send Notification: CreateObjectMediator.CREATE_GUIDS with new file.
 	 * 
@@ -49,12 +48,12 @@ package net.vdombox.object_editor.controller
 			{	
 				if (event.currentTarget.objName.text)
 				{
-//todo проверить на существование
+                    //todo проверить на существование
 					newFilePath += "\\"+event.currentTarget.objName.text +".xml";
 					newFile = newFile.resolvePath(newFilePath);
 					trace("newFile.exists "+newFile.exists);
 					original.copyTo(newFile, true);	
-					facade.sendNotification( CreateObjectMediator.CREATE_GUIDS, newFile );						
+					facade.sendNotification( MainMenuMediator.CREATE_GUIDS, newFile );
 				}
 			}	
 		}

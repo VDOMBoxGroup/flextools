@@ -206,7 +206,7 @@ package net.vdombox.object_editor.Utils
 			fitToContent( window, windowData.content );
 			
 			if ( !window.hasOwnProperty( "notCenteralize" ) )
-				moveToCenter( window );
+				centerWindow( window );
 			
 			var handlers : Array = 
 				[
@@ -315,7 +315,7 @@ package net.vdombox.object_editor.Utils
 			}
 		}
 		
-		private function moveToCenter( window : Window ) : void
+		public function centerWindow( window : Window ) : void
 		{
 			var screen : Screen = Screen.getScreensForRectangle( window.nativeWindow.bounds )[ 0 ];
 			

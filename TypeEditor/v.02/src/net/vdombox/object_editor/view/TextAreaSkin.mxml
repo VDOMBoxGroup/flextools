@@ -35,240 +35,221 @@
     
     <fx:Script fb:purpose="styling">
         <![CDATA[
-			import mx.core.FlexVersion;
-			import mx.core.UIComponent;
-			
-			import net.vdombox.object_editor.Utils.WindowManager;
-			import net.vdombox.object_editor.event.StringAttributeEditWindowEvent;
-			import net.vdombox.object_editor.view.popups.StringAttributeEditWindow;
-			
-			import spark.events.TextOperationEvent;
+        import mx.core.FlexVersion;
+        import mx.core.UIComponent;
+
+        import net.vdombox.object_editor.Utils.WindowManager;
+        import net.vdombox.object_editor.event.StringAttributeEditWindowEvent;
+        import net.vdombox.object_editor.view.popups.StringAttributeEditWindow;
+
+        import spark.events.TextOperationEvent;
 
         private var lineBreakChanged:Boolean;
         private var paddingChanged:Boolean;
         private var verticalAlignChanged:Boolean;
-        
+
         /* Define the skin elements that should not be colorized. 
-           For text area, the skin itself is colorized but the individual parts are not as well 
-           as the border since it uses the borderColor style. */
+         For text area, the skin itself is colorized but the individual parts are not as well
+         as the border since it uses the borderColor style. */
         static private const exclusions:Array = ["background", "scroller", "promptDisplay", "border"];
-        
+
         /* exclusions before Flex 4.5 for backwards-compatibility purposes */
         static private const exclusions_4_0:Array = ["background", "scroller", "promptDisplay"];
-        
+
         /**
          * @private
          */
-        override public function get colorizeExclusions():Array 
-        {
+        override public function get colorizeExclusions():Array {
             // Since border is styleable via borderColor, no need to allow chromeColor to affect
             // the border.  This is wrapped in a compatibility flag since this change was added  
             // in Flex 4.5
-            if (FlexVersion.compatibilityVersion < FlexVersion.VERSION_4_5)
-            {
+            if (FlexVersion.compatibilityVersion < FlexVersion.VERSION_4_5) {
                 return exclusions_4_0;
             }
-            
+
             return exclusions;
         }
-        
+
         /* Define the content fill items that should be colored by the "contentBackgroundColor" style. */
         static private const contentFill:Array = ["bgFill"];
-        
+
         /**
          *  @private
          */
-        override public function get contentItems():Array {return contentFill};
-        
+        override public function get contentItems():Array {
+            return contentFill
+        };
+
         /**
          *  @private
          */
-        override protected function commitProperties():void
-        {
+        override protected function commitProperties():void {
             super.commitProperties();
-            
-            if (lineBreakChanged)
-            {
+
+            if (lineBreakChanged) {
                 updateStringStyle("lineBreak");
                 lineBreakChanged = false;
             }
-            if (paddingChanged)
-            {
+            if (paddingChanged) {
                 updatePadding();
                 paddingChanged = false;
             }
-            if (verticalAlignChanged)
-            {
+            if (verticalAlignChanged) {
                 updateStringStyle("verticalAlign");
                 verticalAlignChanged = false;
             }
         }
-        
+
         /**
          * @private
          */
-        override protected function initializationComplete():void
-        {
+        override protected function initializationComplete():void {
             useChromeColor = true;
             super.initializationComplete();
         }
-        
+
         /**
          *  @private
          */
-        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-        {
-            if (getStyle("borderVisible") == true)
-            {
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+            if (getStyle("borderVisible") == true) {
                 border.visible = true;
                 shadow.visible = true;
                 background.left = background.top = background.right = background.bottom = 1;
                 textDisplay.left = textDisplay.top = textDisplay.right = textDisplay.bottom = 1;
-                if (promptDisplay)
-                {
+                if (promptDisplay) {
                     promptDisplay.setLayoutBoundsSize(unscaledWidth - 2, unscaledHeight - 2);
                     promptDisplay.setLayoutBoundsPosition(1, 1);
                 }
             }
-            else
-            {
+            else {
                 border.visible = false;
                 shadow.visible = false;
                 background.left = background.top = background.right = background.bottom = 0;
-                if (promptDisplay)
-                {
+                if (promptDisplay) {
                     promptDisplay.setLayoutBoundsSize(unscaledWidth - 1, unscaledHeight - 1);
                     promptDisplay.setLayoutBoundsPosition(1, 1);
                 }
             }
-            
+
             borderStroke.color = getStyle("borderColor");
             borderStroke.alpha = getStyle("borderAlpha");
-            
+
             super.updateDisplayList(unscaledWidth, unscaledHeight);
         }
-        
+
         /**
          *  @private
          */
-        private function updatePadding():void
-        {
+        private function updatePadding():void {
             if (!textDisplay)
                 return;
-            
+
             // Push padding styles into the textDisplay
             var padding:Number;
-            
+
             padding = getStyle("paddingLeft");
             if (textDisplay.getStyle("paddingLeft") != padding)
                 textDisplay.setStyle("paddingLeft", padding);
-            
+
             padding = getStyle("paddingTop");
             if (textDisplay.getStyle("paddingTop") != padding)
                 textDisplay.setStyle("paddingTop", padding);
-            
+
             padding = getStyle("paddingRight");
             if (textDisplay.getStyle("paddingRight") != padding)
                 textDisplay.setStyle("paddingRight", padding);
-            
+
             padding = getStyle("paddingBottom");
             if (textDisplay.getStyle("paddingBottom") != padding)
                 textDisplay.setStyle("paddingBottom", padding);
 
             if (!promptDisplay)
                 return;
-            
+
             padding = getStyle("paddingLeft");
             if (promptDisplay.getStyle("paddingLeft") != padding)
                 promptDisplay.setStyle("paddingLeft", padding);
-            
+
             padding = getStyle("paddingTop");
             if (promptDisplay.getStyle("paddingTop") != padding)
                 promptDisplay.setStyle("paddingTop", padding);
-            
+
             padding = getStyle("paddingRight");
             if (promptDisplay.getStyle("paddingRight") != padding)
                 promptDisplay.setStyle("paddingRight", padding);
-            
+
             padding = getStyle("paddingBottom");
             if (promptDisplay.getStyle("paddingBottom") != padding)
                 promptDisplay.setStyle("paddingBottom", padding);
         }
-        
+
         /**
          *  @private
          */
-        private function updateStringStyle(styleName:String):void
-        {
+        private function updateStringStyle(styleName:String):void {
             if (!textDisplay)
                 return;
-            
+
             // Push style into the textDisplay
             var style:String;
-            
+
             style = getStyle(styleName);
             if (textDisplay.getStyle(styleName) != style)
                 textDisplay.setStyle(styleName, style);
 
             if (!promptDisplay)
                 return;
-            
+
             // Push style into the promptDisplay
             style = getStyle(styleName);
             if (promptDisplay.getStyle(styleName) != style)
                 promptDisplay.setStyle(styleName, style);
         }
-        
+
         /**
          *  @private
          */
-        override public function styleChanged(styleProp:String):void
-        {
+        override public function styleChanged(styleProp:String):void {
             var allStyles:Boolean = !styleProp || styleProp == "styleName";
 
             super.styleChanged(styleProp);
-            
-            if (allStyles || styleProp.indexOf("lineBreak") == 0)
-            {
+
+            if (allStyles || styleProp.indexOf("lineBreak") == 0) {
                 lineBreakChanged = true;
                 invalidateProperties();
             }
-            if (allStyles || styleProp.indexOf("padding") == 0)
-            {
+            if (allStyles || styleProp.indexOf("padding") == 0) {
                 paddingChanged = true;
                 invalidateProperties();
             }
-            if (allStyles || styleProp.indexOf("verticalAlign") == 0)
-            {
+            if (allStyles || styleProp.indexOf("verticalAlign") == 0) {
                 verticalAlignChanged = true;
                 invalidateProperties();
             }
         }
-			
-			protected function textDisplay_doubleClickHandler(event:MouseEvent):void
-			{
-				// TODO Auto-generated method stub
-				var stringAttributeEditWindow : StringAttributeEditWindow = new StringAttributeEditWindow();
-				stringAttributeEditWindow.value = hostComponent.text;
-				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.APPLY, applyHandler );
-				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.CANCEL, cancelHandler );
-				
-				WindowManager.getInstance().addWindow(stringAttributeEditWindow, parentApplication as UIComponent, true);
-				
-				function applyHandler( event : StringAttributeEditWindowEvent ) : void
-				{
-					hostComponent.text = event.value;
-					hostComponent.dispatchEvent( new TextOperationEvent ( Event.CHANGE ) );
-					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
-				}
-				
-				function cancelHandler( event : StringAttributeEditWindowEvent ) : void
-				{
-					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
-				}
-			}
-			
-		]]>
+
+        protected function textDisplay_doubleClickHandler(event:MouseEvent):void {
+            // TODO Auto-generated method stub
+            var stringAttributeEditWindow:StringAttributeEditWindow;
+            stringAttributeEditWindow = new StringAttributeEditWindow();
+            stringAttributeEditWindow.value = hostComponent.text;
+            stringAttributeEditWindow.addEventListener(StringAttributeEditWindowEvent.APPLY, applyHandler);
+            stringAttributeEditWindow.addEventListener(StringAttributeEditWindowEvent.CANCEL, cancelHandler);
+
+            WindowManager.getInstance().addWindow(stringAttributeEditWindow, parentApplication as UIComponent, true);
+
+            function applyHandler(event:StringAttributeEditWindowEvent):void {
+                hostComponent.text = event.value;
+                hostComponent.dispatchEvent(new TextOperationEvent(Event.CHANGE));
+                WindowManager.getInstance().removeWindow(stringAttributeEditWindow);
+            }
+
+            function cancelHandler(event:StringAttributeEditWindowEvent):void {
+                WindowManager.getInstance().removeWindow(stringAttributeEditWindow);
+            }
+        }
+        ]]>
     </fx:Script>
     
     <fx:Script>

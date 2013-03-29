@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:events="flash.events.*"
+	horizontalGap="4" 
+	horizontalAlign="right" 
+	disabledOverlayAlpha="0.0"
+	childAdd="onChildAdd(event)"
+	creationPolicy="all">
+
+	<mx:String id="browseTitle">Select file...</mx:String>
+	<mx:String id="browseLabel">Browse...</mx:String>
+	<mx:String id="filterAll">All</mx:String>
+	<mx:String id="mode">{MODE_OPEN}</mx:String>
+	<!--<mx:String id="text"></mx:String>-->
+ 	
+ 	<mx:Metadata>
+        [Event(name="change", type="flash.events.Event")] 
+        [Event(name="select", type="flash.events.Event")] 
+        [Event(name="selectMultiple", type="flash.events.FileListEvent")] 
+    </mx:Metadata>
+
+	<mx:Script>
+		<![CDATA[
+			import flash.filesystem.File;
+			
+			import mx.core.UIComponent;
+			import mx.events.ChildExistenceChangedEvent;
+			import mx.events.FlexEvent;
+			import mx.utils.StringUtil;
+			
+			public static const MODE_OPEN	: String = "open";
+			public static const MODE_SAVE	: String = "save";
+			public static const MODE_DIR	: String = "dir";
+			public static const MODE_MULTI	: String = "multi";
+			
+			public var defaultPath : String = File.documentsDirectory.nativePath;
+			
+			public var files : Array = [];
+			public var filterArray : Array = [];
+			
+			private var _textEditable : Boolean = true;
+			
+			public function get textEditable () : Boolean
+			{
+				return _textEditable;
+			}
+			
+			public function set textEditable (value:Boolean) : void
+			{
+				if (value == _textEditable)
+					return;
+				
+				_textEditable = value;
+				
+				invalidateProperties();
+			}
+			
+			override protected function commitProperties():void
+			{
+				super.commitProperties();
+				
+				txtPathInput.editable = _textEditable;
+				
+				txtPathInput.clearStyle("backgroundColor");
+				txtPathInput.setStyle("backgroundColor", txtPathInput.editable ? 0xffffff : 0xbbbbbb);
+				txtPathInput.invalidateDisplayList();
+			}
+			
+			public override function set errorString (value : String) : void
+			{
+				txtPathInput.errorString = value;
+			}
+			
+			public function get path () : String
+			{
+				if (!txtPathInput)
+                    return "";
+
+                return StringUtil.trim(txtPathInput.text);
+			}
+			
+			public function set path (filePath : String):void
+			{
+				if (txtPathInput)
+				{
+					txtPathInput.text = filePath;
+					txtPathInput.toolTip = filePath;
+				}
+			}
+			
+			private var _pathTooltip : String;
+			override public function set toolTip(value:String):void
+			{
+				_pathTooltip = value;
+				
+				if (txtPathInput)
+					txtPathInput.toolTip = _pathTooltip;
+			}
+		    //----------------------------------
+		    //  enabled
+		    //----------------------------------
+		
+		    /**
+		     *  @private
+		     */			
+			override public function get enabled():Boolean
+			{
+				return super.enabled;
+			}
+			
+			override public function set enabled(value:Boolean):void
+			{
+				super.enabled = value;
+				
+				for each (var child:UIComponent in getChildren())
+					child.enabled = value;
+			}	
+			
+		    //--------------------------------------------------------------------------
+		    //
+		    //  Event handlers
+		    //
+		    //--------------------------------------------------------------------------
+			
+			private function onChildAdd(event:ChildExistenceChangedEvent):void
+			{
+				UIComponent(event.relatedObject).enabled = enabled;
+			}
+			
+			private function onInputTextChange(event:Event):void
+			{
+				dispatchEvent(new Event(Event.CHANGE));
+			}
+			
+			private function onBrowseClick(event:MouseEvent):void
+			{			
+            	var file:File;
+            	
+            	if (path)
+            	{
+            		try {
+            			file = new File(path);
+	    
+	            		if (!file.exists)
+    	        			file = null;
+            		} catch (e:*) {
+            			file = null;
+            		}
+            	}
+            	
+            	if (!file)
+            		file = new File(defaultPath);
+            	
+            	var filter : FileFilter = new FileFilter(
+            		StringUtil.substitute("{0} ({1})", filterAll, "*.*"), 
+            		"*.*");
+            		
+            	var filters : Array = filterArray.length > 0 ? filterArray : [filter];
+            		            	
+				file.addEventListener(Event.SELECT, onSelect);
+				file.addEventListener(FileListEvent.SELECT_MULTIPLE, onMultiSelect);
+				
+				//	use try..catch block to prevent browse exception 
+				//	(Only one file browsing session may be performed at a time.)				 
+				try
+				{
+					switch(mode.toLowerCase())
+					{
+						case MODE_SAVE:
+							file.browseForSave(browseTitle);
+							break;
+							
+						case MODE_DIR:
+							file.browseForDirectory(browseTitle);
+							break;
+							
+						case MODE_MULTI:
+							file.browseForOpenMultiple(browseTitle, filters);
+							break;
+									
+						case MODE_OPEN:
+						default:
+							file.browseForOpen(browseTitle, filters);
+					}
+				} 
+				catch(e:*){}
+			}
+				    
+		    private function onSelect(event:Event):void
+            {
+            	var file:File = event.target as File;
+           		
+				path = file.nativePath;
+				
+				files = [];
+				files.push(file);
+				
+				dispatchEvent(new Event(Event.CHANGE));
+				
+				dispatchEvent(new Event(Event.SELECT));
+            }
+
+		    private function onMultiSelect(event:FileListEvent):void
+            {
+            	files = event.files;
+            	
+            	if (files && files.length)
+            	{
+					path = File(files[0]).parent.nativePath;
+	
+					dispatchEvent(new Event(Event.CHANGE));
+            	}
+            	
+            	dispatchEvent(new FileListEvent(FileListEvent.SELECT_MULTIPLE));
+
+            }	
+            
+			protected function pathInput_creationCompleteHandler(event:FlexEvent):void
+			{
+				txtPathInput.toolTip = _pathTooltip;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:TextInput id="txtPathInput"
+		text="" 
+		change="onInputTextChange(event)"
+		visible="true"
+		width="100%"
+		creationComplete="pathInput_creationCompleteHandler(event)"/>
+		
+	<mx:Button id="btnBrowse"
+		label="{browseLabel}"		
+		paddingLeft="2" paddingRight="2" paddingTop="0" paddingBottom="0" 
+		click="onBrowseClick(event)"/>
+		
+</mx:HBox>

@@ -11,8 +11,10 @@ package net.vdombox.object_editor.model.proxy
 	
 	import net.vdombox.object_editor.model.ErrorLogger;
 	import net.vdombox.object_editor.model.Item;
-	
-	import org.puremvc.as3.interfaces.*;
+import net.vdombox.object_editor.model.vo.AttributeVO;
+import net.vdombox.object_editor.model.vo.ObjectTypeVO;
+
+import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
 	/**
@@ -145,5 +147,6 @@ package net.vdombox.object_editor.model.proxy
 			}
 			return imgResourse;
 		}
+
 	}
 }

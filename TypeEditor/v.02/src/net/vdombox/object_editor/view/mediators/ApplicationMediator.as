@@ -40,9 +40,7 @@ package net.vdombox.object_editor.view.mediators
 		
 		public function complit( ):void 
 		{			
-			facade.registerMediator( new OpenMediator				( view.openButton ) ); 
-			facade.registerMediator( new CreateObjectMediator		( view.newObjectButton ) );
-			facade.registerMediator( new DeleteObjectMediatror		( view.delObjectButton ) );
+            facade.registerMediator( new MainMenuMediator           (view.mainMenu) );
 			facade.registerMediator( new ObjectsAccordionMediator	( view.objAccordion ) );
 			
 			var erLog:ErrorLog = new ErrorLog();

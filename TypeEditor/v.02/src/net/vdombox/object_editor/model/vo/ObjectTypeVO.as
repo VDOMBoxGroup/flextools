@@ -1,6 +1,8 @@
 package net.vdombox.object_editor.model.vo
 {
-	import mx.collections.ArrayCollection;
+import flash.filesystem.File;
+
+import mx.collections.ArrayCollection;
 
 	public class ObjectTypeVO
 	{	
@@ -73,8 +75,7 @@ package net.vdombox.object_editor.model.vo
 		public var structureIcon	:String = "";
 
 		public function ObjectTypeVO()
-		{	
-
+		{
 		}		
 
 		[Bindable]
