@@ -25,7 +25,7 @@
 	
 	<s:HGroup height="100%" verticalAlign="middle" paddingBottom="13">
 		
-		<s:Image id="popUpImage" width="16" height="16" source="{ VDOMImage.Class_ }" skinClass="spark.skins.spark.ImageSkin"/>
+		<s:Image id="popUpImage" width="12" height="12" source="@Embed('src/icons/openHosts.png')" skinClass="spark.skins.spark.ImageSkin"/>
 		
 	</s:HGroup>
 	
