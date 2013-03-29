@@ -85,7 +85,7 @@ in accordance with the terms of the license agreement accompanying it.
 				 stateGroups="selectedUpStates, disabledStates, selectedStates" />
 	</s:states>
 	
-	<s:Rect id="solidColor" top="30" left="-5" right="-5" height="25" visible="false">
+	<s:Rect id="solidColor" top="30" left="-5" right="-22" height="25" visible="false">
 		<s:fill>
 			<s:SolidColor color="0xb10000"/>
 		</s:fill>
