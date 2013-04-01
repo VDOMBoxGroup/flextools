@@ -2,6 +2,7 @@ package net.vdombox.ide.common.controller
 {
 	public class Notifications
 	{
+		public static const SAVE_PARAMETERS_TABS : String = "saveParametersTabs";
 		
 //////////////////////////////////////////////////WYSIWYG/////////////////////////////////////////		
 		

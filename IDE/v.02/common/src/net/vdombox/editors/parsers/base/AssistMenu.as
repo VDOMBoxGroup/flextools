@@ -117,6 +117,11 @@ package net.vdombox.editors.parsers.base
 				if ( menu.showed )
 					triggerAssist(false);
 			}
+			else if ( e.keyCode == Keyboard.ESCAPE )
+			{
+				showing = false;
+				menu.dispose();
+			}
 		}
 		
 		protected function onTextInput( e : ScriptAreaComponenrEvent ) : void
