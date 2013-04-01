@@ -169,6 +169,8 @@ package net.vdombox.ide.modules.tree.view
 					
 					setSelectTreeElement( workArea.treeElements[workArea.treeElements.length - 1]);
 					
+					sendNotification( Notifications.GET_APPLICATION_STRUCTURE, statesProxy.selectedApplication );
+					
 					break;			
 				}
 
