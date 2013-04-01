@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.scripts.controller
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.scripts.model.GoToPositionProxy;
+	import net.vdombox.ide.modules.scripts.model.SaveParametersTabsProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -18,6 +19,7 @@ package net.vdombox.ide.modules.scripts.controller
 			facade.registerProxy( new TypesProxy() );
 			facade.registerProxy( new GoToPositionProxy() );
 			facade.registerProxy( new PreferencesProxy() );
+			facade.registerProxy( new SaveParametersTabsProxy() );
 		}
 	}
 }

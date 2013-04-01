@@ -15,6 +15,7 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.DeleteLibraryRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.GetScriptRequestCommand;
+	import net.vdombox.ide.modules.scripts.controller.SaveParametersTabsCommand;
 	import net.vdombox.ide.modules.scripts.controller.SaveScriptRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.scripts.controller.SetStructureProxyCommand;
@@ -91,6 +92,8 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( Notifications.GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 			
 			registerCommand( Notifications.STRUCTURE_GETTED, SetStructureProxyCommand );
+			
+			registerCommand( Notifications.SAVE_PARAMETERS_TABS, SaveParametersTabsCommand );
 			
 		}
 	}

@@ -12,7 +12,7 @@
 	</fx:Script>
 	<mx1:HDividedBox width="100%" height="100%" >
 	
-		<mx1:VDividedBox height="100%" width="228" minWidth="120" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
+		<mx1:VDividedBox id="librariesBox" height="100%" width="228" minWidth="120" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
 			
 			<components:LibrariesPanel id="librariesPanel"
 									   width="100%" height="50%"
@@ -23,7 +23,7 @@
 		
 		<components:ScriptArea id="scriptArea" width="1000%" height="100%"/>
 	
-		<mx1:VDividedBox height="100%" width="228" minWidth="120" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
+		<mx1:VDividedBox id="actionsBox" height="100%" width="228" minWidth="120" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
 	
 			<components:ContainersPanel id="containersPanel"
 										width="100%" height="40%" 

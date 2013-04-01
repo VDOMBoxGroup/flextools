@@ -1,10 +1,13 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import flash.events.Event;
+	
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
+	import net.vdombox.ide.modules.scripts.model.SaveParametersTabsProxy;
 	import net.vdombox.ide.modules.scripts.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -92,14 +95,40 @@ package net.vdombox.ide.modules.scripts.view
 		
 		private function removeHandlers() : void
 		{
+			body.librariesBox.removeEventListener( Event.RESIZE, resizeHandler );
+			body.actionsBox.removeEventListener( Event.RESIZE, resizeHandler );
+			
 			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
 		
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
+			var saveParametersTabsProxy : SaveParametersTabsProxy = facade.retrieveProxy( SaveParametersTabsProxy.NAME ) as SaveParametersTabsProxy;
+			body.librariesBox.width = saveParametersTabsProxy.libraryWidth;
+			body.actionsBox.width = saveParametersTabsProxy.actionsWidth;
+			
+			if ( saveParametersTabsProxy.containersHeight != 0 && saveParametersTabsProxy.globalScriptsHeight != 0 )
+			{
+				body.containersPanel.percentHeight = saveParametersTabsProxy.containersHeight * 100;
+				body.globalScriptsPanel.percentHeight = saveParametersTabsProxy.globalScriptsHeight * 100;
+				body.serverScriptsPanel.percentHeight = 100.0 - body.containersPanel.percentHeight - body.globalScriptsPanel.percentHeight;
+			}
+				
+			body.librariesBox.addEventListener( Event.RESIZE, resizeHandler, false, 0 , true );
+			body.actionsBox.addEventListener( Event.RESIZE, resizeHandler, false, 0 , true );
+			body.containersPanel.addEventListener( Event.RESIZE, resizeHandler, false, 0 , true );
+			body.globalScriptsPanel.addEventListener( Event.RESIZE, resizeHandler, false, 0 , true );
+			
+			
 			sendNotification( Notifications.BODY_CREATED, body );
 			
 			checkConditions();
+		}
+		
+		private function resizeHandler( event : Event ) : void
+		{
+			sendNotification( Notifications.SAVE_PARAMETERS_TABS, { librariesBox : body.librariesBox.width, actionsBox : body.actionsBox.width,
+																	containersPanel : body.containersPanel.height / body.actionsBox.height, globalScriptsPanel : body.globalScriptsPanel.height / body.actionsBox.height } );
 		}
 		
 		private function checkConditions() : void
