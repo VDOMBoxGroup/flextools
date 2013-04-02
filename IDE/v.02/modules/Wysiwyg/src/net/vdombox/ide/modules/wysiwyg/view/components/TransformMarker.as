@@ -64,7 +64,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var _moveMode : Boolean;
 		private var _resizeMode : uint;
 
-		private var _selectedItem : UIComponent;
+		private var _selectedItem : RendererBase;
 
 		private var _markerSelected : Boolean;
 
@@ -152,7 +152,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 			}
 
-			_selectedItem = item as UIComponent;
+			_selectedItem = item as RendererBase;
 			
 			if ( !_selectedItem )
 				return;
@@ -363,11 +363,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( !_selectedItem )
 				return;
 			
-			if ( !(_selectedItem as RendererBase).typeVO )
+			if ( !_selectedItem.typeVO )
 				refresh();
 			
-			var editComponent : Object = (_selectedItem as RendererBase).editableComponent;
-			if (  editComponent && ( (_selectedItem as RendererBase).typeVO && (_selectedItem as RendererBase).typeVO.name == "text" || (_selectedItem as RendererBase).typeVO.name == "richtext" ))
+			var editComponent : Object = _selectedItem.editableComponent;
+			if (  editComponent && ( _selectedItem.typeVO && _selectedItem.typeVO.name == "text" || _selectedItem.typeVO.name == "richtext" || _selectedItem.typeVO.name == "calendar" ))
 			{
 				if ( measuredWidth != editComponent.width )
 				{
