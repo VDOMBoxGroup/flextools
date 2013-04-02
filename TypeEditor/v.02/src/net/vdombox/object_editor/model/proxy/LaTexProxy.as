@@ -64,8 +64,7 @@ import flash.utils.Timer;
         public function getTypeAttributesPaths ( typeLaTexContent : String ) : Array
         {
             var startIndex : int = typeLaTexContent.indexOf("\subsection{Attributes}");
-            var endIndex : int = typeLaTexContent.indexOf("\n\r\n", startIndex);
-            var attrSection : String = typeLaTexContent.substring(startIndex, endIndex);
+            var attrSection : String = typeLaTexContent.substring(startIndex);
 
             var attributesRelatedPaths : Array = attrSection.split("\n");
 
@@ -77,6 +76,9 @@ import flash.utils.Timer;
             var attributesNativePaths : Array = [];
             for each (var attrRelatedPath : String in attributesRelatedPaths)
             {
+				if (!attrRelatedPath)
+					break;
+				
                 attrRelatedPath = attrRelatedPath.substring(attrRelatedPath.indexOf("{")+1, attrRelatedPath.indexOf("}"));
                 attrRelatedPath = attrRelatedPath.substring(5); // remove "types/" from the beginning
 
