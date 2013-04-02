@@ -17,7 +17,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ErrorMacroCommand;
 	import net.vdombox.ide.core.controller.GetApplicationListCommand;
 	import net.vdombox.ide.core.controller.GetResourceItemRendererCommand;
-	import net.vdombox.ide.core.controller.GetApplicationsHostsCommand;
+	import net.vdombox.ide.core.controller.ShowApplicationsHostsCommand;
 	import net.vdombox.ide.core.controller.GetSelectedApplicationCommand;
 	import net.vdombox.ide.core.controller.GetSettingsCommand;
 	import net.vdombox.ide.core.controller.GetTypesCommand;
@@ -370,7 +370,7 @@ package net.vdombox.ide.core
 		public static const OBJECT_REMOTE_CALL_GETTED : String = "objectRemoteCallGetted";
 		public static const OBJECT_REMOTE_CALL_ERROR_GETTED : String = "objectRemoteCallErrorGetted";
 		
-		public static const GET_APPLICATIONS_HOSTS  : String = "getSelectedApp";
+		public static const SHOW_APPLICATIONS_HOSTS  : String = "showApplicationsHosts";
 		public static const SELECTED_APP_GETTED  : String = "selectedAppGetted";
 		
 		
@@ -613,7 +613,7 @@ package net.vdombox.ide.core
 			
 			registerCommand( CLEAR_PROXY_STORAGE, ClearProxiesStorageCommand );
 			
-			registerCommand( GET_APPLICATIONS_HOSTS, GetApplicationsHostsCommand );
+			registerCommand( SHOW_APPLICATIONS_HOSTS, ShowApplicationsHostsCommand );
 			
 		}
 	}

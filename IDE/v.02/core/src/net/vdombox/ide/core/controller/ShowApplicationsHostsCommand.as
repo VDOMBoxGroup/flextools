@@ -20,7 +20,7 @@ package net.vdombox.ide.core.controller
 	
 	import spark.components.Image;
 
-	public class GetApplicationsHostsCommand extends SimpleCommand
+	public class ShowApplicationsHostsCommand extends SimpleCommand
 	{
 		private var toolsetButton : ToolsetButton;
 		private var popUpApplicationsHosts : PopUpApplicationsHosts;
@@ -90,7 +90,10 @@ package net.vdombox.ide.core.controller
 		
 		private function get URL() : String
 		{
-			return "http://" + host + "/" + statesProxy.selectedPage.name;
+			if( host == "default" )
+				return "http://" + serverProxy.server + "/" + statesProxy.selectedApplication.id + "/" + statesProxy.selectedPage.id;
+			else
+				return "http://" + host + "/" + statesProxy.selectedPage.name;
 		}
 		
 		private function dispose() : void

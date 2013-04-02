@@ -55,7 +55,7 @@ package net.vdombox.ide.core.controller
 					
 				case SimpleMessageHeaders.GET_APPLICATIONS_HOSTS:
 				{
-					sendNotification( ApplicationFacade.GET_APPLICATIONS_HOSTS, body );
+					sendNotification( ApplicationFacade.SHOW_APPLICATIONS_HOSTS, body );
 					break;
 				}
 			}
