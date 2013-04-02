@@ -87,7 +87,10 @@ in accordance with the terms of the license agreement accompanying it.
 	
 	<s:Rect id="solidColor" top="30" left="-5" right="-22" height="25" visible="false">
 		<s:fill>
-			<s:SolidColor color="0xb10000"/>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="#B70000"/>
+				<s:GradientEntry color="#8e0001"/>
+			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
 	
