@@ -6,24 +6,24 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 import flash.filesystem.File;
 
 import mx.controls.Alert;
-	import mx.messaging.channels.StreamingAMFChannel;
-	
-	import net.vdombox.object_editor.model.ErrorLogger;
+import mx.messaging.channels.StreamingAMFChannel;
+
+import net.vdombox.object_editor.model.ErrorLogger;
 import net.vdombox.object_editor.model.proxy.FileProxy;
 import net.vdombox.object_editor.model.proxy.LaTexProxy;
 import net.vdombox.object_editor.model.vo.ActionParameterVO;
-	import net.vdombox.object_editor.model.vo.ActionVO;
-	import net.vdombox.object_editor.model.vo.ActionsContainerVO;
-	import net.vdombox.object_editor.model.vo.AttributeVO;
-	import net.vdombox.object_editor.model.vo.EventParameterVO;
-	import net.vdombox.object_editor.model.vo.EventVO;
-	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
-	import net.vdombox.object_editor.view.essence.Attributes;
-	import net.vdombox.object_editor.view.essence.Resourses;
-	import net.vdombox.object_editor.view.mediators.ApplicationMediator;
-	
-	import org.puremvc.as3.interfaces.*;
-	import org.puremvc.as3.patterns.proxy.Proxy;
+import net.vdombox.object_editor.model.vo.ActionVO;
+import net.vdombox.object_editor.model.vo.ActionsContainerVO;
+import net.vdombox.object_editor.model.vo.AttributeVO;
+import net.vdombox.object_editor.model.vo.EventParameterVO;
+import net.vdombox.object_editor.model.vo.EventVO;
+import net.vdombox.object_editor.model.vo.ObjectTypeVO;
+import net.vdombox.object_editor.view.essence.Attributes;
+import net.vdombox.object_editor.view.essence.Resourses;
+import net.vdombox.object_editor.view.mediators.ApplicationMediator;
+
+import org.puremvc.as3.interfaces.*;
+import org.puremvc.as3.patterns.proxy.Proxy;
 
 	public class ObjectTypeProxy extends Proxy implements IProxy
 	{
@@ -466,7 +466,7 @@ import net.vdombox.object_editor.model.vo.ActionParameterVO;
             var typeLaTexPath : String = getTypeLaTexPath (typeVO);
             var typeLaTexContent : String = fileProxy.readFile (typeLaTexPath);
 
-            var typeAttributesLaTexPaths = laTexProxy.getTypeAttributesPaths(typeLaTexContent);
+            var typeAttributesLaTexPaths : Array = laTexProxy.getTypeAttributesPaths(typeLaTexContent);
 
             for each (var attributeLaTexPath : String in typeAttributesLaTexPaths)
             {
