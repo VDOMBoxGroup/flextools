@@ -7,10 +7,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import flash.display.PixelSnapping;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
+	import flash.net.FileReference;
+	import flash.net.FileReferenceList;
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
@@ -91,6 +94,9 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( Notifications.RESOURCES_GETTED );
 			interests.push( Notifications.RESOURCE_UPLOADED );
 			
+			interests.push( Notifications.START_LOADING_RESOURCES );
+			interests.push( Notifications.FINISH_LOADING_RESOURCES );
+			
 			return interests;
 		}
 		
@@ -142,6 +148,21 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case Notifications.RESOURCE_UPLOADED:
 				{
 					addNewResourceInList( body as ResourceVO );
+					
+					break;
+				}
+					
+				case Notifications.START_LOADING_RESOURCES:
+				{
+					var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_new_resource' );
+					createSpinnerPopup(spinnerTxt);
+					
+					break;
+				}
+					
+				case Notifications.FINISH_LOADING_RESOURCES:
+				{
+					removeSpinnerPopup();
 					
 					break;
 				}
@@ -213,8 +234,6 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			resVO.viewType = ResourceVO.BIG_PICTURE_VIEW;
 			
 			resourcesArea.addResource(  resVO );
-			
-			removeSpinnerPopup();
 		}
 		
 		private function applyNameFilter( event : Event ) : void
@@ -302,41 +321,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		
 		private function loadFileHandler( event : ResourceVOEvent ) : void
 		{
-			var openFile : File = new File();
-			
-			openFile.addEventListener(Event.SELECT, fileSelected);
-			
-			var allFilesFilter : FileFilter = new FileFilter( "All Files (*.*)", "*.*" );
-			var imagesFilter : FileFilter   = new FileFilter( 'Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png' );
-			var docFilter : FileFilter      = new FileFilter( 'Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt' );
-			
-			openFile.browseForOpen( "Choose file to upload", [ allFilesFilter, imagesFilter, docFilter ] );
-			
-			function fileSelected( event:Event ) : void
-			{
-				var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_new_resource' );
-				createSpinnerPopup(spinnerTxt);
-				
-				openFile.removeEventListener(Event.SELECT, fileSelected);
-				
-				openFile.addEventListener(Event.COMPLETE, fileDownloaded);
-				openFile.load();
-				
-			}
-			
-			function fileDownloaded(event:Event) : void
-			{
-				// compress and encode to base64 in Server
-				openFile.removeEventListener(Event.COMPLETE, fileDownloaded);
-				
-				var resourceVO : ResourceVO = new ResourceVO( statesProxy.selectedApplication.id );
-				resourceVO.setID( openFile.name ); //?
-				resourceVO.setData( openFile.data);
-				resourceVO.name = openFile.name;
-				resourceVO.type = openFile.type ? openFile.type.slice(1) : ""; // type has "."
-				
-				sendNotification( Notifications.UPLOAD_RESOURCE, resourceVO );
-			}
+			sendNotification( Notifications.OPEN_BROWSER_BY_LOAD );
 		}
 		
 		private function createSpinnerPopup(spinnerTxt : String) : void

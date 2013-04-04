@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.resourceBrowser
 	import net.vdombox.ide.modules.resourceBrowser.controller.DeleteResourceRequestCommand;
 	import net.vdombox.ide.modules.resourceBrowser.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.resourceBrowser.controller.InitializeSettingsCommand;
+	import net.vdombox.ide.modules.resourceBrowser.controller.LoadResourceCommand;
 	import net.vdombox.ide.modules.resourceBrowser.controller.ResourceDeletedCommand;
 	import net.vdombox.ide.modules.resourceBrowser.controller.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.resourceBrowser.controller.SetSettingsCommand;
@@ -68,6 +69,8 @@ package net.vdombox.ide.modules.resourceBrowser
 			registerCommand( Notifications.BODY_CREATED, BodyCreatedCommand );
 
 			registerCommand( Notifications.TEAR_DOWN, TearDownCommand );
+			
+			registerCommand( Notifications.OPEN_BROWSER_BY_LOAD, LoadResourceCommand );
 		}
 	}
 }
