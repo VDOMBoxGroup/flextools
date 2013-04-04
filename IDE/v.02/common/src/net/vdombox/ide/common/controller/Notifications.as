@@ -337,6 +337,11 @@ package net.vdombox.ide.common.controller
 		
 		public static const ALL_TABS_DELETED : String = "allTabsDeleted";
 		
+		public static const OPEN_BROWSER_BY_LOAD : String = "openBrowserByLoad";
+		
+		public static const START_LOADING_RESOURCES : String = "startLoadingResources";
+		public static const FINISH_LOADING_RESOURCES : String = "finishLoadingResources";
+		
 		
 ///////////////////////////////////////////Preview////////////////////////////////////////////////////////////
 		
