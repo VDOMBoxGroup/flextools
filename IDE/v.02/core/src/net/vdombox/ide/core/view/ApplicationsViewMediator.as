@@ -15,9 +15,9 @@ package net.vdombox.ide.core.view
 	
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.SettingsProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
-	import net.vdombox.ide.core.model.vo.SettingsVO;
 	import net.vdombox.ide.core.view.components.ApplicationListItemRenderer;
 	import net.vdombox.ide.core.view.components.ApplicationsView;
 	
@@ -66,8 +66,6 @@ package net.vdombox.ide.core.view
 		}
 
 		private var _selectedApplicationVO : ApplicationVO;
-
-		private var _settingsVO : SettingsVO;
 
 		private var applications : Array;
 
@@ -190,17 +188,6 @@ package net.vdombox.ide.core.view
 		 *
 		 * @return
 		 */
-		public function get settingsVO() : SettingsVO
-		{
-			var settingsProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
-
-			return settingsProxy.settings;
-		}
-
-		/**
-		 *
-		 * @return
-		 */
 		public function get statesProxy() : StatesProxy
 		{
 			return facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
@@ -276,9 +263,13 @@ package net.vdombox.ide.core.view
 		 */
 		private function getApplicationsFromSettings() : ApplicationVO
 		{
+			var settingsProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
+			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			var applicationID : String = settingsProxy.getSelectedApp( serverProxy.server );
+			
 			for ( var i : int = 0; i < applications.length; i++ )
 			{
-				if ( applications[ i ].id == settingsVO.lastApplicationID )
+				if ( applications[ i ].id == applicationID )
 					return applications[ i ] as ApplicationVO;
 			}
 

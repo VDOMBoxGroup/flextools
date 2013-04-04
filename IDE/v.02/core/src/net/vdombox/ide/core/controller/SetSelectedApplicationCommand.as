@@ -4,9 +4,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.SettingsProxy;
-	import net.vdombox.ide.core.model.SettingsStorageProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
-	import net.vdombox.ide.core.model.vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -29,21 +27,19 @@ package net.vdombox.ide.core.controller
 			
 			sendNotification( ApplicationFacade.CLEAR_PROXY_STORAGE );	
 			
-			settingsProxy.settings.lastApplicationID = applicationVO.id;
+			settingsProxy.setSelectedApp( serverProxy.server, applicationVO.id );
 		}
 		
 		private function get lastOpenedApplication(): ApplicationVO
-		{
-			settingsProxy.importSettings( settings );
+		{			
+			var applicationID : String = settingsProxy.getSelectedApp( serverProxy.server );
 			
-			var settingsVO : SettingsVO = settingsProxy.settings;
-			
-			if ( !settingsVO )
+			if ( applicationID == "" )
 				return null;
 			
 			for each( var applicationVO : ApplicationVO in applications)
 			{
-				if ( applicationVO.id == settingsVO.lastApplicationID )
+				if ( applicationVO.id == applicationID )
 					return  applicationVO;
 			}
 			
@@ -68,12 +64,6 @@ package net.vdombox.ide.core.controller
 		private function get settingsProxy() : SettingsProxy
 		{
 			return facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
-		}
-		
-		private function get settings() : Object
-		{
-			var settingsStorageProxy : SettingsStorageProxy = facade.retrieveProxy( SettingsStorageProxy.NAME ) as SettingsStorageProxy;
-			return settingsStorageProxy.loadSettings( "applicationManagerWindow" );
 		}
 		
 		private function get applications() : Array

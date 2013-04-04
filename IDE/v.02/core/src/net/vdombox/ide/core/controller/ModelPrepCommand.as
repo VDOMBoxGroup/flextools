@@ -9,7 +9,6 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.SessionProxy;
 	import net.vdombox.ide.core.model.SettingsProxy;
-	import net.vdombox.ide.core.model.SettingsStorageProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.TypesProxy;
@@ -24,7 +23,6 @@ package net.vdombox.ide.core.controller
 			facade.registerProxy( new SharedObjectProxy() );
 			facade.registerProxy( new ApplicationsHostsProxy() );
 			facade.registerProxy( new SessionProxy() );
-			facade.registerProxy( new SettingsStorageProxy() );
 			facade.registerProxy( new StatesProxy() );
 
 			facade.registerProxy( new LocalesProxy() );

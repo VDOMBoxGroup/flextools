@@ -10,7 +10,6 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.common.interfaces.IVIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
-	import net.vdombox.ide.core.model.SettingsStorageProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
 	
@@ -32,7 +31,6 @@ package net.vdombox.ide.core.view
 		}
 		
 		private var modulesProxy : ModulesProxy;
-		private var settingsProxy : SettingsStorageProxy;
 		
 		private var moduleWithSettings : Object;
 		private var settingsScreensList : Object;
@@ -50,7 +48,6 @@ package net.vdombox.ide.core.view
 			addHandlers();
 			
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
-			settingsProxy = facade.retrieveProxy( SettingsStorageProxy.NAME ) as SettingsStorageProxy;
 			
 			settingsScreensList = {};
 		}
