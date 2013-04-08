@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minWidth="10" minHeight="10"
-			 height="12" width="12" xmlns:mx="library://ns.adobe.com/flex/mx">
-	
+			 minWidth="10"
+			 minHeight="10"
+			 height="12"
+			 width="12"
+			 xmlns:mx="library://ns.adobe.com/flex/mx">
+
 	<fx:Metadata>
 		[HostComponent("spark.components.Button")] 
 	</fx:Metadata>
@@ -12,51 +15,101 @@
 			import net.vdombox.ide.common.view.components.VDOMImage;
 		]]>
 	</fx:Script>
-	
+
 	<fx:Declarations>
 		<s:SolidColorStroke id="stroke1"
 							color="#ffffff"
 							weight="1.7"/>
-		
+
 		<s:SolidColorStroke id="stroke2"
 							color="#ffffff"
 							weight="1"/>
-		
+
 		<s:SolidColorStroke id="stroke12"
 							color="#ffff00"
 							weight="1.7"/>
-		
+
 		<s:SolidColorStroke id="stroke22"
 							color="#ffff00"
 							weight="1"/>
 	</fx:Declarations>
-	
+
 	<s:states>
 		<s:State name="up"/>
 		<s:State name="over"/>
 		<s:State name="down"/>
 		<s:State name="disabled"/>
 	</s:states>
-	
-	<mx:Image width="100%" height="100%" source="{ VDOMImage.Clear }"/>
-	
+
+	<mx:Image width="100%"
+			  height="100%"
+			  source="{ VDOMImage.Clear }"/>
+
 	<!-- back rect ... -->
 	<!-- vertical lines -->
-	<s:Line xFrom="10.5" yFrom="2" xTo="10.5" yTo="8" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- right -->
-	<s:Line xFrom="3.5" yFrom="2" xTo="3.5" yTo="8" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- left -->
-	
+	<s:Line xFrom="10.5"
+			yFrom="2"
+			xTo="10.5"
+			yTo="8"
+			stroke="{stroke2}"
+			stroke.over="{stroke22}"/>
+	<!-- right -->
+	<s:Line xFrom="3.5"
+			yFrom="2"
+			xTo="3.5"
+			yTo="8"
+			stroke="{stroke2}"
+			stroke.over="{stroke22}"/>
+	<!-- left -->
+
 	<!-- horizontal lines -->
-	<s:Line xFrom="3.5" yFrom="1" xTo="10" yTo="1" stroke="{stroke1}" stroke.over="{stroke12}"/> 			<!-- top -->
-	<s:Line xFrom="3.5" yFrom="7" xTo="10.5" yTo="7" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- bottom -->
+	<s:Line xFrom="3.5"
+			yFrom="1"
+			xTo="10"
+			yTo="1"
+			stroke="{stroke1}"
+			stroke.over="{stroke12}"/>
+	<!-- top -->
+	<s:Line xFrom="3.5"
+			yFrom="7"
+			xTo="10.5"
+			yTo="7"
+			stroke="{stroke2}"
+			stroke.over="{stroke22}"/>
+	<!-- bottom -->
 	<!-- ... back rect -->
-	
+
 	<!-- front rect ... -->
 	<!-- vertical lines -->
-	<s:Line xFrom="7.5" yFrom="5" xTo="7.5" yTo="11" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- right -->
-	<s:Line xFrom="0.5" yFrom="5" xTo="0.5" yTo="11" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- left -->
-	
+	<s:Line xFrom="7.5"
+			yFrom="5"
+			xTo="7.5"
+			yTo="11"
+			stroke="{stroke2}"
+			stroke.over="{stroke22}"/>
+	<!-- right -->
+	<s:Line xFrom="0.5"
+			yFrom="5"
+			xTo="0.5"
+			yTo="11"
+			stroke="{stroke2}"
+			stroke.over="{stroke22}"/>
+	<!-- left -->
+
 	<!-- horizontal lines -->
-	<s:Line xFrom="0.5" yFrom="4" xTo="7" yTo="4" stroke="{stroke1}" stroke.over="{stroke12}"/> 			<!-- top -->
-	<s:Line xFrom="0.5" yFrom="10" xTo="7.5" yTo="10" stroke="{stroke2}" stroke.over="{stroke22}"/>		<!-- bottom -->
+	<s:Line xFrom="0.5"
+			yFrom="4"
+			xTo="7"
+			yTo="4"
+			stroke="{stroke1}"
+			stroke.over="{stroke12}"/>
+	<!-- top -->
+	<s:Line xFrom="0.5"
+			yFrom="10"
+			xTo="7.5"
+			yTo="10"
+			stroke="{stroke2}"
+			stroke.over="{stroke22}"/>
+	<!-- bottom -->
 	<!-- ... front rect -->
 </s:SparkSkin>

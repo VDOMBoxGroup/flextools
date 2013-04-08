@@ -3,7 +3,8 @@
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*"
-			 creationComplete="creationCompleteHandler()" xmlns:tabnavigator="net.vdombox.ide.common.view.components.tabnavigator.*">
+			 creationComplete="creationCompleteHandler()"
+			 xmlns:tabnavigator="net.vdombox.ide.common.view.components.tabnavigator.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
@@ -35,34 +36,43 @@
 			}
 		]]>
 	</fx:Script>
-	
+
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.common.view.components.tabnavigator.TabNavigator")]
 	</fx:Metadata>
-	
+
 	<s:states>
 		<s:State name="normal"/>
 		<s:State name="disabled"/>
 	</s:states>
 
 	<s:Group id="tabBarGroup"
-			 left="0" right="0" top="-20"
+			 left="0"
+			 right="0"
+			 top="-20"
 			 updateComplete="checkScrollbar()">
-		
+
 		<s:TabBar id="tabBar"
 				  skinClass="net.vdombox.ide.common.view.skins.tabnavigator.TabBarSkin"
 				  requireSelection="true"/>
 	</s:Group>
 
-	<s:Scroller height="100%" width="100%" y="0">
+	<s:Scroller height="100%"
+				width="100%"
+				y="0">
 		<s:Group id="contentGroup"/>
 	</s:Scroller>
 
-	<tabnavigator:TabNavigatorScrollBar id="hsb" 
-											   top="-22"
-											   height="24" width="100%"
-											   pageSize="60" stepSize="2" 
-											   repeatInterval="150" skinClass="net.vdombox.ide.common.view.skins.tabnavigator.TabNavigatorScrollBarSkin"
-											   visible="false" smoothScrolling="true" viewport="{ tabBarGroup }"/>
+	<tabnavigator:TabNavigatorScrollBar id="hsb"
+										top="-22"
+										height="24"
+										width="100%"
+										pageSize="60"
+										stepSize="2"
+										repeatInterval="150"
+										skinClass="net.vdombox.ide.common.view.skins.tabnavigator.TabNavigatorScrollBarSkin"
+										visible="false"
+										smoothScrolling="true"
+										viewport="{ tabBarGroup }"/>
 
 </s:SparkSkin>

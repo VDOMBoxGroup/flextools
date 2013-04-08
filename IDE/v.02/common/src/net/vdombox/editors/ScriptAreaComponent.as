@@ -6,13 +6,13 @@ package net.vdombox.editors
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
+
 	import net.vdombox.editors.parsers.base.Controller;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.model._vo.ColorSchemeVO;
-	
+
 	import ro.victordramba.scriptarea.ScriptAreaEvents;
-	
+
 	import spark.core.SpriteVisualElement;
 
 	public class ScriptAreaComponent extends SpriteVisualElement
@@ -22,7 +22,7 @@ package net.vdombox.editors
 			super();
 
 			area = new ScriptAreaEvents();
-			
+
 			area.width = width;
 
 			addChild( area );
@@ -34,10 +34,11 @@ package net.vdombox.editors
 
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
 			addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
-			
-			addEventListener(FocusEvent.FOCUS_IN, function(e:Event):void {
+
+			addEventListener( FocusEvent.FOCUS_IN, function( e : Event ) : void
+			{
 				stage.focus = area;
-			});
+			} );
 		}
 
 		private var area : ScriptAreaEvents;
@@ -47,13 +48,13 @@ package net.vdombox.editors
 		private var lineNums : LineNumbers;
 
 		private var viewPos : Point = new Point();
-		
-		public function get assistMenuOpened():Boolean
+
+		public function get assistMenuOpened() : Boolean
 		{
 			return area.assistMenuOpened;
 		}
 
-		public function set assistMenuOpened(value:Boolean):void
+		public function set assistMenuOpened( value : Boolean ) : void
 		{
 			area.assistMenuOpened = value;
 		}
@@ -62,8 +63,8 @@ package net.vdombox.editors
 		{
 			area.controller = value;
 		}
-		
-		public function get controller( ) : Controller
+
+		public function get controller() : Controller
 		{
 			return area.controller;
 		}
@@ -72,12 +73,12 @@ package net.vdombox.editors
 		{
 			return area.caretIndex;
 		}
-		
+
 		public function set caretIndex( value : int ) : void
 		{
 			area.caretIndex = value;
 		}
-		
+
 		public function setFocus() : void
 		{
 			if ( stage )
@@ -153,12 +154,12 @@ package net.vdombox.editors
 
 			update();
 		}
-		
+
 		public function getScriptLang() : String
 		{
 			return area.scriptLang;
 		}
-		
+
 		public function set scriptLang( value : String ) : void
 		{
 			area.scriptLang = value;
@@ -167,7 +168,7 @@ package net.vdombox.editors
 		override public function setLayoutBoundsSize( width : Number, height : Number, postLayoutTransform : Boolean = true ) : void
 		{
 			super.setLayoutBoundsSize( width, height, postLayoutTransform )
-				
+
 			update();
 		}
 
@@ -191,7 +192,7 @@ package net.vdombox.editors
 		{
 			area.applyFormatRuns();
 		}
-		
+
 		public function addIndentLines( indentLines : Array ) : void
 		{
 			area.indentLines = indentLines;
@@ -214,17 +215,17 @@ package net.vdombox.editors
 		{
 			area.setSelection( beginIndex, endIndex );
 		}
-		
+
 		public function get selectionText() : String
 		{
 			return area.selectionText;
 		}
-		
+
 		public function findText( findText : String, type : int, caseSensitive : Boolean ) : Boolean
 		{
 			return area.findText( findText, type, caseSensitive );
 		}
-		
+
 		public function replaceFind( findText : String, replaceText : String, replaceAll : Boolean = false ) : void
 		{
 			area.replaceFind( findText, replaceText, replaceAll );
@@ -326,10 +327,10 @@ package net.vdombox.editors
 			{
 				viewPos.y = area.scrollV;
 				updateNums();
-//				fireStateChanged( true );
+					//				fireStateChanged( true );
 			}
 		}
-		
+
 		public function sendUpdate() : void
 		{
 			area.dipatchChange();
@@ -339,7 +340,7 @@ package net.vdombox.editors
 		{
 			dispatchEvent( new Event( Event.CHANGE ) );
 		}
-		
+
 		private function area_textInputHandler( event : ScriptAreaComponenrEvent ) : void
 		{
 			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_INPUT, false, false, event.detail ) );
@@ -348,53 +349,53 @@ package net.vdombox.editors
 		private function updateScrollBars() : void
 		{
 		}
-		
+
 		public function undo_fun() : void
 		{
 			area.undo_fun();
 		}
-		
+
 		public function redo_fun() : void
 		{
 			area.redo_fun();
 		}
-		
+
 		public function goToPos( pos : int, len : int ) : void
 		{
-			area.goToPos(pos, len);
+			area.goToPos( pos, len );
 		}
-		
+
 		public function set colorScheme( value : ColorSchemeVO ) : void
 		{
 			area.colorScheme = value;
 		}
-		
+
 		public function set showIndentLines( value : Boolean ) : void
 		{
 			area.showIndentLines = value;
 		}
-		
+
 		public function set fontSize( value : uint ) : void
 		{
 			area.fontSize = value;
 			lineNums.box = area.boxSize;
 			lineNums.fmt = area.textFormat;
-			
+
 			lineNums.clearCache();
 			update()
 		}
-		
+
 		public function renameByArray( words : Array, oldName : String, newName : String ) : void
 		{
 			area.renameByArray( words, oldName, newName );
 		}
-		
+
 		public function set selectKeyByAutoComplte( value : String ) : void
 		{
 			area.selectKeyByAutoComplte = value;
 		}
-		
-		public function get letterBoxHeight():int
+
+		public function get letterBoxHeight() : int
 		{
 			return area.letterBoxHeight;
 		}

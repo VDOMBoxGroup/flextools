@@ -1,19 +1,18 @@
 package net.vdombox.ide.common.model._vo
 {
 	import mx.utils.StringUtil;
-	
+
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.view.components.VDOMImage;
-	
+
 	/**
 	 * The ServerActionVO is Visual Object of VDOM Server Action.
-	 * ServerActionVO is contained in VDOM Application. 
+	 * ServerActionVO is contained in VDOM Application.
 	 */
-	public class ServerActionVO  implements IEventBaseVO
+	public class ServerActionVO implements IEventBaseVO
 	{
-		private const TO_XML_TMPL : String =
-			"<Action Name=\"{0}\" Language=\"{1}\" Top=\"{2}\" Left=\"{3}\" State=\"{4}\"><![CDATA[{5}]\]></Action>";
+		private const TO_XML_TMPL : String = "<Action Name=\"{0}\" Language=\"{1}\" Top=\"{2}\" Left=\"{3}\" State=\"{4}\"><![CDATA[{5}]\]></Action>";
 
 		private var _top : int = 0;
 
@@ -26,7 +25,7 @@ package net.vdombox.ide.common.model._vo
 
 		[Bindable]
 		public var language : String = "";
-		
+
 		[Bindable]
 		public var saved : Boolean = true;
 
@@ -35,51 +34,52 @@ package net.vdombox.ide.common.model._vo
 		private var _id : String = "";
 
 		private var _objectID : String;
+
 		private var _objectName : String;
 
 		private var _containerID : String;
-		
+
 		private var _containerVO : IVDOMObjectVO;
-		
+
 		[Bindable]
 		public var used : Boolean = false;
 
-		public function get containerName():String
+		public function get containerName() : String
 		{
 			if ( _containerVO )
 				return _containerVO.name;
 			else
 				return "";
 		}
-		
-		public function get containerVO():IVDOMObjectVO
+
+		public function get containerVO() : IVDOMObjectVO
 		{
 			return _containerVO;
 		}
 
-		public function set containerVO(value:IVDOMObjectVO):void
+		public function set containerVO( value : IVDOMObjectVO ) : void
 		{
 			_containerVO = value;
 		}
 
 		[Bindable]
-		public function get top():int
+		public function get top() : int
 		{
 			return _top;
 		}
 
-		public function set top(value:int):void
+		public function set top( value : int ) : void
 		{
 			_top = value;
 		}
-		
+
 		[Bindable]
 		public function get left() : int
 		{
 			return _left;
 		}
-		
-		public function set left(value : int) : void
+
+		public function set left( value : int ) : void
 		{
 			_left = value;
 		}
@@ -98,18 +98,18 @@ package net.vdombox.ide.common.model._vo
 		{
 			return [];
 		}
-		
+
 		[Bindable]
 		public function get state() : Boolean
 		{
 			return _state;
 		}
-		
-		public function set state(value : Boolean) : void
+
+		public function set state( value : Boolean ) : void
 		{
 			_state = value;
 		}
-		
+
 		public function get objectID() : String
 		{
 			return _objectID;
@@ -119,12 +119,12 @@ package net.vdombox.ide.common.model._vo
 		{
 			return _objectName;
 		}
-		
+
 		public function get containerID() : String
 		{
 			return _containerID;
 		}
-		
+
 		public function setID( value : String ) : void
 		{
 			_id = value;
@@ -144,7 +144,7 @@ package net.vdombox.ide.common.model._vo
 		{
 			_objectName = value;
 		}
-		
+
 		public function setContainerID( value : String ) : void
 		{
 			_containerID = value;
@@ -165,19 +165,19 @@ package net.vdombox.ide.common.model._vo
 
 			if ( testValue !== null )
 				_name = testValue;
-			
+
 			testValue = propertiesXML.@Language[ 0 ];
-			
+
 			if ( testValue !== null )
 				language = testValue;
 
 			testValue = propertiesXML.@Top[ 0 ];
-			
+
 			if ( testValue !== null )
 				top = int( testValue );
 
 			testValue = propertiesXML.@Left[ 0 ];
-			
+
 			if ( testValue !== null )
 				left = int( testValue );
 
@@ -197,11 +197,11 @@ package net.vdombox.ide.common.model._vo
 				_objectID = testValue;
 
 			testValue = propertiesXML.@ObjectName[ 0 ];
-			
+
 			if ( testValue !== null )
 				_objectName = testValue;
 
-			
+
 			script = propertiesXML[ 0 ];
 		}
 
@@ -211,38 +211,38 @@ package net.vdombox.ide.common.model._vo
 
 			copy.setID( _id );
 			copy.setName( _name );
-			
+
 			copy.setObjectID( _objectID );
 			copy.setObjectName( _objectName );
 			copy.setContainerID( _containerID );
-			
+
 			copy.top = _top;
-			
+
 			copy.left = _left;
 			copy.state = _state;
 
 			return copy;
 		}
-		
+
 		public function clone() : ServerActionVO
 		{
 			var copy : ServerActionVO = new ServerActionVO();
-			
+
 			copy.setID( _id );
 			copy.setName( _name );
-			
+
 			copy.setObjectID( _objectID );
 			copy.setObjectName( _objectName );
 			copy.setContainerID( _containerID );
-			
+
 			copy.top = _top;
-			
+
 			copy.left = _left;
 			copy.state = _state;
-			
+
 			copy.script = script;
 			copy.language = language;
-			
+
 			return copy;
 		}
 
@@ -261,15 +261,15 @@ package net.vdombox.ide.common.model._vo
 			}
 			else
 			{
-				result = <Action Name={ _name } ObjectID={_objectID} Language={ language } Top={top} Left={left} State={state}>{script}</Action>;
+				result = <Action Name={_name} ObjectID={_objectID} Language={language} Top={top} Left={left} State={state}>{script}</Action>;
 			}
 
-			if( _id && _id != "" )
+			if ( _id && _id != "" )
 				result.@ID = _id;
-			
+
 			return result;
 		}
-		
+
 		public function get icon() : Class
 		{
 			return VDOMImage.ServerActionIcon;

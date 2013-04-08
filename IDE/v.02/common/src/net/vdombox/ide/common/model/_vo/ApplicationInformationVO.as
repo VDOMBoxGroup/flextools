@@ -18,7 +18,7 @@ package net.vdombox.ide.common.model._vo
 		public var scriptingLanguage : String
 
 		public var active : String = "1"
-			
+
 		public var version : String;
 
 
@@ -40,8 +40,8 @@ package net.vdombox.ide.common.model._vo
 
 			if ( scriptingLanguage !== null )
 				info.appendChild( <ScriptingLanguage>{scriptingLanguage}</ScriptingLanguage> );
-			
-			if ( version !== null && version !== "")
+
+			if ( version !== null && version !== "" )
 				info.appendChild( <Version>{version}</Version> );
 
 			info.appendChild( <Active>{active}</Active> );

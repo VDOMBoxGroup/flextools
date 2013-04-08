@@ -9,65 +9,67 @@ package net.vdombox.editors.parsers
 	public class StructureDB
 	{
 		static private var _structure : Object;
+
 		static private var _pageXML : XML;
+
 		static private var _objectXML : XML;
-		
+
 		public function StructureDB()
 		{
 		}
-		
-		static public function set structure(value:XML):void
+
+		static public function set structure( value : XML ) : void
 		{
 			if ( !_structure )
 				_structure = [];
-		
+
 			_structure[ value.@id ] = value;
 		}
-		
+
 		static public function getChildrenForObject( selfObjectVO : IVDOMObjectVO, bp : BackwardsParser ) : Vector.<AutoCompleteItemVO>
 		{
 			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
-			
+
 			var pageVO : PageVO = selfObjectVO is PageVO ? selfObjectVO as PageVO : ObjectVO( selfObjectVO ).pageVO;
-			
+
 			_pageXML = _structure[ pageVO.id ];
-			
+
 			if ( !_pageXML )
 				return a;
-			
+
 			var objects : XMLList;
 			var object : XML;
 			var flag : Boolean = false;
 			var typeDB : TypeDB = TypeDB.inst;
-			
+
 			if ( selfObjectVO is PageVO )
 			{
 				objects = _pageXML.children();
-				
+
 				if ( bp.names.length > 1 )
 				{
 					for ( var i : int = 1; i < bp.names.length; i++ )
 					{
 						flag = false;
-						
+
 						for each ( object in objects )
 						{
-							if ( object.@name == bp.names[i] )
+							if ( object.@name == bp.names[ i ] )
 							{
 								objects = object.children();
 								flag = true;
 								break;
 							}
 						}
-						
+
 						if ( !flag )
 							return a;
 					}
 				}
-				
-				
+
+
 				a = object ? typeDB.getVectorByType( object.@typeID ) : typeDB.getVectorByType( selfObjectVO.typeVO.id );
-				
+
 				for each ( object in objects )
 				{
 					a.push( new AutoCompleteItemVO( VDOMImage.Standard, object.@name ) );
@@ -76,7 +78,7 @@ package net.vdombox.editors.parsers
 			else
 			{
 				objects = _pageXML..object;
-				
+
 				for each ( object in objects )
 				{
 					if ( object.@id == selfObjectVO.id )
@@ -86,41 +88,41 @@ package net.vdombox.editors.parsers
 						break;
 					}
 				}
-				
+
 				if ( !flag )
 					return a;
-				
+
 				if ( bp.names.length > 1 )
 				{
 					for ( i = 1; i < bp.names.length; i++ )
 					{
 						flag = false;
-						
+
 						for each ( object in objects )
 						{
-							if ( object.@name == bp.names[i] )
+							if ( object.@name == bp.names[ i ] )
 							{
 								objects = object.children();
 								flag = true;
 								break;
 							}
 						}
-						
+
 						if ( !flag )
 							return a;
 					}
 				}
-				
-				
+
+
 				a = object ? typeDB.getVectorByType( object.@typeID ) : typeDB.getVectorByType( selfObjectVO.typeVO.id );
-				
+
 				for each ( object in objects )
 				{
 					a.push( new AutoCompleteItemVO( VDOMImage.Standard, object.@name ) );
 				}
 			}
-			
+
 			return a;
-		}		
+		}
 	}
 }

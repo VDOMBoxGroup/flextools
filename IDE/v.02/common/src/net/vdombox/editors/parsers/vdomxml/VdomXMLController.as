@@ -4,16 +4,16 @@ package net.vdombox.editors.parsers.vdomxml
 	import flash.events.Event;
 	import flash.net.SharedObject;
 	import flash.utils.getTimer;
-	
+
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.TypeDB;
 	import net.vdombox.editors.parsers.base.Controller;
-	
+
 	import ro.victordramba.thread.ThreadEvent;
 	import ro.victordramba.thread.ThreadsController;
 
-	[Event( type="flash.events.Event", name="change" )]
+	[Event( type = "flash.events.Event", name = "change" )]
 
 	public class VdomXMLController extends Controller
 	{
@@ -90,7 +90,7 @@ package net.vdombox.editors.parsers.vdomxml
 		{
 			return _parser.newResolver().isInAttribute( pos );
 		}
-		
+
 		public override function get lang() : String
 		{
 			return "vdomxml";

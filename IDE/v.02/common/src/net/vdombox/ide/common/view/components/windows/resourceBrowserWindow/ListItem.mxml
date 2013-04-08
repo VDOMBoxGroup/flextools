@@ -15,7 +15,7 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.events.ResourceVOEvent;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 
@@ -33,11 +33,13 @@
 			override public function set data( value : Object ) : void
 			{
 
-				this.dispatchEvent(new ResourceVOEvent(ResourceVOEvent.LIST_ITEM_CREATION_COMPLETE));
-				
-				/*if ( value == super.data )
-					return;*/
-				
+				this.dispatchEvent( new ResourceVOEvent( ResourceVOEvent.LIST_ITEM_CREATION_COMPLETE ) );
+
+				/*
+				   if ( value == super.data )
+				   return;
+				 */
+
 				super.data = value;
 
 				resourceVO = value as ResourceVO;
@@ -48,22 +50,22 @@
 				addContentElement();
 			}
 
-			override protected function stateChanged(oldState:String, newState:String, recursive:Boolean) : void
+			override protected function stateChanged( oldState : String, newState : String, recursive : Boolean ) : void
 			{
-				super.stateChanged(oldState, newState, recursive);
+				super.stateChanged( oldState, newState, recursive );
 
 				if ( itemElement )
 					itemElement.selected = selected;
 			}
 
-			override public function set visible(value:Boolean):void
+			override public function set visible( value : Boolean ) : void
 			{
 				super.visible = value;
 			}
-			
+
 			private function addContentElement() : void
 			{
-				 
+
 				if ( !visible )
 					return;
 
@@ -75,16 +77,16 @@
 						{
 							if ( itemElement is ListItemNotEmptyContent ) // old element is NOT empty
 							{
-								ListItemNotEmptyContent(itemElement).data = resourceVO;
+								ListItemNotEmptyContent( itemElement ).data = resourceVO;
 								return;
 							}
 							// old element is empty -> remove it
-							removeElement(itemElement);
+							removeElement( itemElement );
 						}
 
 						itemElement = new ListItemNotEmptyContent();
-						ListItemNotEmptyContent(itemElement).data = resourceVO;
-						addElement(itemElement);
+						ListItemNotEmptyContent( itemElement ).data = resourceVO;
+						addElement( itemElement );
 					}
 					else
 					{
@@ -92,16 +94,16 @@
 						{
 							if ( itemElement is ListItemBigPreviewContent ) // old element is NOT empty
 							{
-								ListItemBigPreviewContent(itemElement).data = resourceVO;
+								ListItemBigPreviewContent( itemElement ).data = resourceVO;
 								return;
 							}
 							// old element is empty -> remove it
-							removeElement(itemElement);
+							removeElement( itemElement );
 						}
-						
+
 						itemElement = new ListItemBigPreviewContent();
-						ListItemBigPreviewContent(itemElement).data = resourceVO;
-						addElement(itemElement);
+						ListItemBigPreviewContent( itemElement ).data = resourceVO;
+						addElement( itemElement );
 					}
 				}
 				else // new element is empty `
@@ -114,52 +116,61 @@
 						}
 
 						// old element is NOT empty -> remove it
-						removeElement(itemElement);
+						removeElement( itemElement );
 					}
 					itemElement = new ListItemEmptyContent();
-					addElement(itemElement);
+					addElement( itemElement );
 				}
 
 			}
 
-			protected function creationCompleteHandler(event:FlexEvent) : void
+			protected function creationCompleteHandler( event : FlexEvent ) : void
 			{
 				creationCompleted = true;
 
 				addContentElement();
 			}
 
-			protected function doubleClickHandler(event:MouseEvent) : void
+			protected function doubleClickHandler( event : MouseEvent ) : void
 			{
 				dispatchEvent( new Event( ITEM_DOUBLE_CLICKED ) );
 			}
 
-			protected function showHandler(event:FlexEvent) : void
+			protected function showHandler( event : FlexEvent ) : void
 			{
 				addContentElement();
 			}
 
-			protected function hideHandler(event:FlexEvent) : void
+			protected function hideHandler( event : FlexEvent ) : void
 			{
 			}
 		]]>
 	</fx:Script>
 
 	<s:states>
-		<s:State name="normal" />
-		<s:State name="hovered" />
-		<s:State name="selected" />
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
 	</s:states>
 
-	<s:Group height="64" width="184" id="groupBG" visible="{itemElement is ListItemBigPreviewContent ? false : true}">
-		<s:Rect height="100%" width="100%" radiusX="4" radiusY="4">
+	<s:Group height="64"
+			 width="184"
+			 id="groupBG"
+			 visible="{itemElement is ListItemBigPreviewContent ? false : true}">
+		<s:Rect height="100%"
+				width="100%"
+				radiusX="4"
+				radiusY="4">
 			<s:stroke>
-				<s:SolidColorStroke color="#424242" weight="1" />
+				<s:SolidColorStroke color="#424242"
+									weight="1"/>
 			</s:stroke>
 			<s:fill>
 				<s:LinearGradient rotation="90">
-					<s:GradientEntry color="#FFFFFF" color.selected="#b50000" />
-					<s:GradientEntry color="#bcbcbc" color.selected="#9e0000" />
+					<s:GradientEntry color="#FFFFFF"
+									 color.selected="#b50000"/>
+					<s:GradientEntry color="#bcbcbc"
+									 color.selected="#9e0000"/>
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>

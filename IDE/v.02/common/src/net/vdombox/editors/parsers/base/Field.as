@@ -1,110 +1,111 @@
 package net.vdombox.editors.parsers.base
 {
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	
+
 	import ro.victordramba.util.HashList;
 	import ro.victordramba.util.HashMap;
 
 	public class Field
 	{
-		public function Field(fieldType:String='', pos:uint=0, name:String='')
+		public function Field( fieldType : String = '', pos : uint = 0, name : String = '' )
 		{
 			this.fieldType = fieldType;
 			this.pos = pos;
 			this.name = name;
 		}
-		
-		public var pos:uint;
-		
+
+		public var pos : uint;
+
 		/**
 		 * can be: top,class,def,var
 		 */
-		
+
 		public var fieldType : String;
-		
+
 		/**
 		 * name of the field (e.g. var name)
 		 */
-		
-		public var name:String;
-		
+
+		public var name : String;
+
 		/**
 		 * top packages, package classes, class members, function local vars
 		 */
-		public var members:HashMap/*of Field*/ = new HashMap;
-		
+		public var members : HashMap /*of Field*/ = new HashMap;
+
 		//set at resolve time, late
-		public var sourcePath:String;
-		
+		public var sourcePath : String;
+
 		/**
 		 * unresolved type
 		 */
-		public var type:Multiname;
-		
+		public var type : Multiname;
+
 		public var typeVO : TypeVO;
-		
+
 		/**
 		 * parent scope
 		 */
-		public var parent:Field;
-		
-		public var children:Array;
-		
-		
-		
-		public var imports:HashMap;//used to solve names and types
-		
+		public var parent : Field;
+
+		public var children : Array;
+
+
+
+		public var imports : HashMap; //used to solve names and types
+
 		/*
-		
-		/**
-		* public, private, protected, internal or namespace
-		*/
-		public var access:String = 'public';
-		
+		 *
+		   /**
+		 * public, private, protected, internal or namespace
+		 */
+		public var access : String = 'public';
+
 		/**
 		 * function parameters
 		 */
-		public var params:HashList/*of Field*/ = new HashList;
-		
-		
-		public var hasRestParams:Boolean = false;
-		
-		public var isGetter:Boolean;
-		
-		public var isStatic:Boolean;
-		
-		public var isClassMethod:Boolean;
-		
-		public var indent:String;
-		
+		public var params : HashList /*of Field*/ = new HashList;
+
+
+		public var hasRestParams : Boolean = false;
+
+		public var isGetter : Boolean;
+
+		public var isStatic : Boolean;
+
+		public var isClassMethod : Boolean;
+
+		public var indent : String;
+
 		/**
 		 * unresolved type of extended class
 		 */
-		public var extendz:Multiname;
-		
-		
-		public var defaultValue:String = '';
-		
+		public var extendz : Multiname;
+
+
+		public var defaultValue : String = '';
+
 		public var className : String;
+
 		public var description : String;
-		
-		public function addMember(field:Field, isStatic:Boolean):void
+
+		public function addMember( field : Field, isStatic : Boolean ) : void
 		{
 			field.isStatic = isStatic;
-			members.setValue(field.name, field);
+			members.setValue( field.name, field );
 		}
-		
-		public function isAnnonimus():Boolean
+
+		public function isAnnonimus() : Boolean
 		{
 			return name == '(';
 		}
-		
-		public function toString():String
+
+		public function toString() : String
 		{
 			return fieldType + " " + name;
 			//return (access ? access + ' ' : '') + fieldType + ' ' + name + (type? ': '+type.type : '');
 		}
-		
+
 		public function getField( name : String ) : Field
 		{
 			if ( params.hasKey( name ) )
@@ -114,7 +115,7 @@ package net.vdombox.editors.parsers.base
 			else
 				return null;
 		}
-		
+
 		public function getRecursionField( name : String ) : Field
 		{
 			if ( members.hasKey( name ) )
@@ -127,14 +128,14 @@ package net.vdombox.editors.parsers.base
 					return null;
 			}
 		}
-		
+
 		public function getLastRecursionField( name : String ) : Field
 		{
 			var f : Field;
-			
+
 			if ( parent )
-				f =  parent.getLastRecursionField( name );
-			
+				f = parent.getLastRecursionField( name );
+
 			if ( f )
 				return f;
 			else if ( members.hasKey( name ) )

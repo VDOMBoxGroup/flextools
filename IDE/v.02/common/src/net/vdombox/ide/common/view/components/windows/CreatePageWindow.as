@@ -1,53 +1,55 @@
 package net.vdombox.ide.common.view.components.windows
 {
-	
+
 	import flash.display.NativeWindowSystemChrome;
-	
+
 	import mx.collections.ArrayList;
-	
+
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.common.view.skins.windows.CreatePageWindowSkin;
-	
+
 	import spark.components.List;
 	import spark.components.Window;
 
 	public class CreatePageWindow extends Window
 	{
-		[SkinPart( required="true" )]
+
+		[SkinPart( required = "true" )]
 		public var pageTypeList : List;
-		
+
 		[Bindable]
 		public var _pagesDataProvider : ArrayList;
-		
+
 		public function set pagesDataProvider( value : Array ) : void
 		{
 			value.sortOn( "name", Array.CASEINSENSITIVE );
 			_pagesDataProvider = new ArrayList( value );
 		}
-		
-		
+
+
 		public function get selectedPageType() : TypeVO
 		{
 			return pageTypeList.selectedItem as TypeVO;
 		}
-		
+
 		public function CreatePageWindow()
 		{
 			super();
-			
-			systemChrome	= NativeWindowSystemChrome.NONE;
-			transparent 	= true;
-			
+
+			systemChrome = NativeWindowSystemChrome.NONE;
+			transparent = true;
+
 			width = 400;
 			height = 432;
-			
+
 			minWidth = 400;
 			minHeight = 432;
-			
+
 			this.setFocus();
 		}
-		
-		override public function stylesInitialized():void {
+
+		override public function stylesInitialized() : void
+		{
 			super.stylesInitialized();
 			this.setStyle( "skinClass", CreatePageWindowSkin );
 		}

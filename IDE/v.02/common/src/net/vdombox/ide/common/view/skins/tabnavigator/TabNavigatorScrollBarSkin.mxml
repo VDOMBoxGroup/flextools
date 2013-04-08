@@ -3,7 +3,8 @@
 <s:SparkSkin xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="15" minWidth="35">
+			 minHeight="15"
+			 minWidth="35">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -15,8 +16,10 @@
 	</fx:Metadata>
 
 	<fx:Script fb:purpose="styling">
-		/* Define the skin elements that should not be colorized.
-		 For scroll bar, the skin itself is colorized but the individual parts are not. */
+		/*
+		   Define the skin elements that should not be colorized.
+		   For scroll bar, the skin itself is colorized but the individual parts are not.
+		 */
 		static private const exclusions : Array = [ "track", "thumb", "decrementButton", "incrementButton" ];
 
 		/**
@@ -61,14 +64,20 @@
 		 @copy spark.components.supportClasses.ScrollBarBase#decrementButton
 		 @see spark.skins.spark.ScrollBarLeftButtonSkin -->
 	<s:Button id="decrementButton"
-			  enabled.inactive="false" focusEnabled="false" height="100%"
-			  left="0" skinClass="spark.skins.spark.ScrollBarLeftButtonSkin"/>
+			  enabled.inactive="false"
+			  focusEnabled="false"
+			  height="100%"
+			  left="0"
+			  skinClass="spark.skins.spark.ScrollBarLeftButtonSkin"/>
 
 	<!--- The default skin class is ScrollBarRightButtonSkin.
 		 @copy spark.components.supportClasses.ScrollBarBase#incrementButton
 		 @see spark.skins.spark.ScrollBarRightButtonSkin -->
 	<s:Button id="incrementButton"
-			  enabled.inactive="false" focusEnabled="false" height="100%"
-			  right="0" skinClass="spark.skins.spark.ScrollBarRightButtonSkin"/>
+			  enabled.inactive="false"
+			  focusEnabled="false"
+			  height="100%"
+			  right="0"
+			  skinClass="spark.skins.spark.ScrollBarRightButtonSkin"/>
 
 </s:SparkSkin>

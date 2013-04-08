@@ -1,10 +1,10 @@
 package net.vdombox.ide.common.view.components.tabnavigator
 {
 	import flash.events.EventDispatcher;
-	
+
 	import mx.core.IVisualElement;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.events.TabEvent;
 
 	public class Tab extends EventDispatcher
@@ -16,14 +16,14 @@ package net.vdombox.ide.common.view.components.tabnavigator
 
 		[Bindable]
 		public var closable : Boolean = true;
-		
+
 		[Bindable]
 		public var label : String = "Untitled";
-		
+
 		public var originLabel : String = "Untitled";
-		
+
 		public var id : String;
-		
+
 		private var _objects : Vector.<IVisualElement>;
 
 		public function get numElements() : int
@@ -88,22 +88,18 @@ package net.vdombox.ide.common.view.components.tabnavigator
 		public function removeElement( element : IVisualElement ) : IVisualElement
 		{
 			var index : int = _objects.indexOf( element );
-			
+
 			if ( index == -1 )
 				throw new RangeError( ResourceManager.getInstance().getString( "components", "objectNotFoundInDisplayLayer", [ element ] ) );
 
 			// Notify that the object is to be deleted
-			dispatchEvent( new TabEvent( TabEvent.ELEMENT_REMOVE,
-				false /*bubbles*/,
-				false /*cancelable*/,
-				element,
-				index ) );
-			
+			dispatchEvent( new TabEvent( TabEvent.ELEMENT_REMOVE, false /*bubbles*/, false /*cancelable*/, element, index ) );
+
 			_objects.splice( index, 1 );
-			
+
 			return element;
 		}
-		
+
 		public function removeAllElements() : void
 		{
 			_objects.splice( 0, _objects.length );;

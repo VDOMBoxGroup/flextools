@@ -3,14 +3,14 @@ package net.vdombox.ide.common.view.components.tabnavigator
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
 	import mx.core.EventPriority;
 	import mx.core.mx_internal;
 	import mx.events.FlexEvent;
 	import mx.events.PropertyChangeEvent;
 	import mx.events.ResizeEvent;
 	import mx.events.SandboxMouseEvent;
-	
+
 	import spark.components.supportClasses.ScrollBarBase;
 	import spark.core.IViewport;
 	import spark.core.NavigationUnit;
@@ -37,7 +37,7 @@ package net.vdombox.ide.common.view.components.tabnavigator
 			// when Range constrains value
 			var cWidth : Number = viewport.contentWidth;
 			maximum = ( cWidth == 0 ) ? hsp : cWidth - viewportWidth;
-//			pageSize = viewportWidth;
+			//			pageSize = viewportWidth;
 		}
 
 		override public function set viewport( newViewport : IViewport ) : void
@@ -118,7 +118,7 @@ package net.vdombox.ide.common.view.components.tabnavigator
 
 			thumb.setLayoutBoundsPosition( Math.round( thumbPosParentX ), thumb.getLayoutBoundsY() );
 		}
-		
+
 		override protected function setValue( value : Number ) : void
 		{
 			super.setValue( value );
@@ -136,8 +136,8 @@ package net.vdombox.ide.common.view.components.tabnavigator
 				// For now, just change pageSize temporarily and call the superclass
 				// implementation.
 				oldPageSize = pageSize;
-//				pageSize = Math.abs( viewport.getHorizontalScrollPositionDelta(
-//					( increase ) ? NavigationUnit.PAGE_RIGHT : NavigationUnit.PAGE_LEFT ) );
+					//				pageSize = Math.abs( viewport.getHorizontalScrollPositionDelta(
+					//					( increase ) ? NavigationUnit.PAGE_RIGHT : NavigationUnit.PAGE_LEFT ) );
 			}
 			super.changeValueByPage( increase );
 			if ( viewport )
@@ -148,8 +148,7 @@ package net.vdombox.ide.common.view.components.tabnavigator
 		{
 			if ( viewport )
 			{
-				var vpPageSize : Number = Math.abs( viewport.getHorizontalScrollPositionDelta(
-					( newValue > value ) ? NavigationUnit.PAGE_RIGHT : NavigationUnit.PAGE_LEFT ) );
+				var vpPageSize : Number = Math.abs( viewport.getHorizontalScrollPositionDelta( ( newValue > value ) ? NavigationUnit.PAGE_RIGHT : NavigationUnit.PAGE_LEFT ) );
 				super.animatePaging( newValue, vpPageSize );
 				return;
 			}
@@ -166,14 +165,14 @@ package net.vdombox.ide.common.view.components.tabnavigator
 				// For now, just change pageSize temporarily and call the superclass
 				// implementation.
 				oldStepSize = stepSize;
-//				stepSize = Math.abs(viewport.getHorizontalScrollPositionDelta(
-//					(increase) ? NavigationUnit.RIGHT : NavigationUnit.LEFT));
+					//				stepSize = Math.abs(viewport.getHorizontalScrollPositionDelta(
+					//					(increase) ? NavigationUnit.RIGHT : NavigationUnit.LEFT));
 			}
 			super.changeValueByStep( increase );
 			if ( viewport )
 				stepSize = oldStepSize;
 		}
-		
+
 		override protected function partAdded( partName : String, instance : Object ) : void
 		{
 			if ( instance == thumb )
@@ -185,22 +184,20 @@ package net.vdombox.ide.common.view.components.tabnavigator
 
 			if ( instance == decrementButton )
 			{
-				decrementButton.addEventListener( FlexEvent.BUTTON_DOWN,
-					navButton_buttonDownHandler );
+				decrementButton.addEventListener( FlexEvent.BUTTON_DOWN, navButton_buttonDownHandler );
 			}
 
 			if ( instance == incrementButton )
 			{
-				incrementButton.addEventListener( FlexEvent.BUTTON_DOWN,
-					navButton_buttonDownHandler );
+				incrementButton.addEventListener( FlexEvent.BUTTON_DOWN, navButton_buttonDownHandler );
 			}
 
 			super.partAdded( partName, instance );
 		}
 
 		/**
-		 *  @private
-		 *  Set this scrollbar's value to the viewport's current horizontalScrollPosition.
+		 * @private
+		 * Set this scrollbar's value to the viewport's current horizontalScrollPosition.
 		 */
 		override mx_internal function viewportHorizontalScrollPositionChangeHandler( event : PropertyChangeEvent ) : void
 		{
@@ -209,9 +206,9 @@ package net.vdombox.ide.common.view.components.tabnavigator
 		}
 
 		/**
-		 *  @private
-		 *  Set this scrollbar's maximum to the viewport's contentWidth
-		 *  less the viewport width and its pageSize to the viewport's width.
+		 * @private
+		 * Set this scrollbar's maximum to the viewport's contentWidth
+		 * less the viewport width and its pageSize to the viewport's width.
 		 */
 		override mx_internal function viewportResizeHandler( event : ResizeEvent ) : void
 		{
@@ -220,8 +217,8 @@ package net.vdombox.ide.common.view.components.tabnavigator
 		}
 
 		/**
-		 *  @private
-		 *  Set this scrollbar's maximum to the viewport's contentWidth less the viewport width.
+		 * @private
+		 * Set this scrollbar's maximum to the viewport's contentWidth less the viewport width.
 		 */
 		override mx_internal function viewportContentWidthChangeHandler( event : PropertyChangeEvent ) : void
 		{
@@ -233,10 +230,10 @@ package net.vdombox.ide.common.view.components.tabnavigator
 		}
 
 		/**
-		 *  @private
-		 *  Scroll horizontally by event.delta "steps".  This listener is added to the viewport
-		 *  at a lower priority then the vertical scrollbar mouse wheel listener, so that vertical
-		 *  scrolling is preferred when both scrollbars exist.
+		 * @private
+		 * Scroll horizontally by event.delta "steps".  This listener is added to the viewport
+		 * at a lower priority then the vertical scrollbar mouse wheel listener, so that vertical
+		 * scrolling is preferred when both scrollbars exist.
 		 */
 		mx_internal function mouseWheelHandler( event : MouseEvent ) : void
 		{
@@ -252,14 +249,14 @@ package net.vdombox.ide.common.view.components.tabnavigator
 			for ( var hStep : int = 0; hStep < nSteps; hStep++ )
 			{
 				var hspDelta : Number = vp.getHorizontalScrollPositionDelta( navigationUnit ) * 2;
-//				var hspDelta:Number = 2;
+				//				var hspDelta:Number = 2;
 
 				if ( !isNaN( hspDelta ) )
 				{
 					changeValueByStep( event.delta < 0 )
-//					vp.horizontalScrollPosition += hspDelta;
-//					if (vp is IInvalidating)
-//						IInvalidating(vp).validateNow();
+						//					vp.horizontalScrollPosition += hspDelta;
+						//					if (vp is IInvalidating)
+						//						IInvalidating(vp).validateNow();
 				}
 			}
 
@@ -276,30 +273,26 @@ package net.vdombox.ide.common.view.components.tabnavigator
 			var increment : Boolean = ( event.target == incrementButton );
 
 			// Dispatch changeStart for the first step if we can make a step.
-			if ( !isStepping &&
-				( ( increment && value < maximum ) ||
-				( !increment && value > minimum ) ) )
+			if ( !isStepping && ( ( increment && value < maximum ) || ( !increment && value > minimum ) ) )
 			{
 				dispatchEvent( new FlexEvent( FlexEvent.CHANGE_START ) );
 				isStepping = true;
-				systemManager.getSandboxRoot().addEventListener( MouseEvent.MOUSE_UP,
-					button_buttonUpHandler, true );
-				systemManager.getSandboxRoot().addEventListener(
-					SandboxMouseEvent.MOUSE_UP_SOMEWHERE, button_buttonUpHandler );
+				systemManager.getSandboxRoot().addEventListener( MouseEvent.MOUSE_UP, button_buttonUpHandler, true );
+				systemManager.getSandboxRoot().addEventListener( SandboxMouseEvent.MOUSE_UP_SOMEWHERE, button_buttonUpHandler );
 			}
 
 			changeValueByPage( increment );
 
 			// Only animate if smoothScrolling enabled and we're not at the end already
-//			if ( getStyle( "smoothScrolling" ) &&
-//				( ( increment && value < maximum ) ||
-//				( !increment && value > minimum ) ) )
-//			{
-//				// Default stepSize may be too small to be useful here; use fraction of
-//				// pageSize if it's larger
-//				animateStepping( increment ? maximum : minimum,
-//					Math.max( pageSize / 10, stepSize ) );
-//			}
+			//			if ( getStyle( "smoothScrolling" ) &&
+			//				( ( increment && value < maximum ) ||
+			//				( !increment && value > minimum ) ) )
+			//			{
+			//				// Default stepSize may be too small to be useful here; use fraction of
+			//				// pageSize if it's larger
+			//				animateStepping( increment ? maximum : minimum,
+			//					Math.max( pageSize / 10, stepSize ) );
+			//			}
 			return;
 		}
 

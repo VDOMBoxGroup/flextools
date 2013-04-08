@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="12" minWidth="12" maxWidth="12">
+			 minHeight="12"
+			 minWidth="12"
+			 maxWidth="12">
 
 	<fx:Metadata>
 		[HostComponent("spark.components.Button")] 
@@ -9,7 +11,8 @@
 
 	<fx:Declarations>
 		<s:SolidColorStroke id="stroke1"
-							color="#cccccc" color.over="#aaaaaa"
+							color="#cccccc"
+							color.over="#aaaaaa"
 							weight="2"/>
 	</fx:Declarations>
 
@@ -21,14 +24,24 @@
 	</s:states>
 
 	<s:Rect id="fill"
-			height="10" width="10">
+			height="10"
+			width="10">
 		<s:fill>
-			<s:SolidColor color="black" alpha="0.01"/>
+			<s:SolidColor color="black"
+						  alpha="0.01"/>
 		</s:fill>
 	</s:Rect>
 
-	<s:Line xFrom="2" yFrom="2" xTo="8" yTo="8" stroke="{stroke1}"/>
+	<s:Line xFrom="2"
+			yFrom="2"
+			xTo="8"
+			yTo="8"
+			stroke="{stroke1}"/>
 
-	<s:Line xFrom="8" yFrom="2" xTo="2" yTo="8" stroke="{stroke1}"/>
+	<s:Line xFrom="8"
+			yFrom="2"
+			xTo="2"
+			yTo="8"
+			stroke="{stroke1}"/>
 
 </s:SparkSkin>

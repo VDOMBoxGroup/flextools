@@ -5,22 +5,27 @@ package net.vdombox.ide.common.controller.messages
 
 	public class LogFilterMessage extends FilterControlMessage
 	{
-		protected static const BASE:String 			= FilterControlMessage.BASE+'/LoggerModule/'
-		public static const LOG_FILTER_NAME:String 	= BASE+'/LoggerModule/logFilter/';
-		public static const SET_LOG_LEVEL:String 	= BASE+'LoggerModule/setLogLevel';
-		
-		public var logLevel:Number;
+		protected static const BASE : String = FilterControlMessage.BASE + '/LoggerModule/'
 
-		public function LogFilterMessage( action:String, logLevel:Number=0 )
+		public static const LOG_FILTER_NAME : String = BASE + '/LoggerModule/logFilter/';
+
+		public static const SET_LOG_LEVEL : String = BASE + 'LoggerModule/setLogLevel';
+
+		public var logLevel : Number;
+
+		public function LogFilterMessage( action : String, logLevel : Number = 0 )
 		{
-			super( action, LOG_FILTER_NAME, null, {logLevel:logLevel});
-			this.logLevel=logLevel; 
+			super( action, LOG_FILTER_NAME, null, { logLevel: logLevel } );
+			this.logLevel = logLevel;
 		}
-		
-		public static function filterLogByLevel( message:IPipeMessage, params:Object):void		
+
+		public static function filterLogByLevel( message : IPipeMessage, params : Object ) : void
 		{
-			if (message.getHeader().logLevel > params.logLevel) { throw new Error(); }
+			if ( message.getHeader().logLevel > params.logLevel )
+			{
+				throw new Error();
+			}
 		}
-		
+
 	}
 }

@@ -10,21 +10,21 @@ package net.vdombox.editors.parsers
 		public function FactoryTokenizers()
 		{
 		}
-		
+
 		public static function getTokenizer( lang : String, string : String ) : Tokenizer
 		{
-			switch(lang)
+			switch ( lang )
 			{
 				case LanguageVO.python:
 				{
 					return new PythonTokenizer( string );
 				}
-					
+
 				case LanguageVO.vscript:
 				{
 					return new VScriptTokenizer( string );
 				}
-					
+
 				default:
 				{
 					return new VdomXMLTokenizer( string )

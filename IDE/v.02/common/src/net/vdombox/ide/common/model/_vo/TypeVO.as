@@ -4,16 +4,20 @@ package net.vdombox.ide.common.model._vo
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceBundle;
 	import mx.resources.ResourceManager;
+
 	/**
-	 *	The TypeVO is version of the Object`s description. 
+	 * The TypeVO is version of the Object`s description.
 	 */
 	public class TypeVO
 	{
 		private const STANDART_CATEGORIES : Array = [ "usual", "standard", "form", "table", "database", "debug" ];
-		
+
 		private var attributesXML : XML;
+
 		private var eventsXML : XML;
+
 		private var actionsXML : XML;
+
 		private var languages : XMLList;
 
 		public function TypeVO( typeXML : XML )
@@ -28,28 +32,28 @@ package net.vdombox.ide.common.model._vo
 			var child : XML;
 			var propertyName : String;
 			var propertyValue : String;
-			
-			if( informationXML )
+
+			if ( informationXML )
 			{
 				_typeID = informationXML.ID[ 0 ].toString();
-				
+
 				var informationXMLList : XMLList = informationXML.*;
-				
+
 				extractResources( informationXMLList, languages );
-				
+
 				for each ( child in informationXMLList )
 				{
 					propertyName = child.localName().toString().toLowerCase();
 					propertyValue = child[ 0 ];
-					
+
 					informationPropertyObject[ propertyName ] = propertyValue;
 				}
 			}
-			
+
 			_attributeDescriptions = null;
-			
+
 			_events = null;
-			
+
 			_actions = null;
 		}
 
@@ -60,13 +64,15 @@ package net.vdombox.ide.common.model._vo
 		private var _typeID : String;
 
 		private var _information : TypeInformationVO;
-		
+
 		private var _attributeDescriptions : Array;
+
 		private var _events : Array;
+
 		private var _actions : Array;
 
 		private var informationPropertyObject : Object = {};
-		
+
 		public var includedInUserCategory : Boolean = false;
 
 		public function get information() : TypeInformationVO
@@ -79,23 +85,23 @@ package net.vdombox.ide.common.model._vo
 			if ( !_attributeDescriptions )
 			{
 				_attributeDescriptions = [];
-				
-				if( attributesXML )
+
+				if ( attributesXML )
 				{
 					var attributesXMLList : XMLList = attributesXML.*;
-					
+
 					extractResources( attributesXMLList, languages );
-					
+
 					var child : XML;
-					
+
 					for each ( child in attributesXML.* )
 					{
 						_attributeDescriptions.push( new AttributeDescriptionVO( _typeID, child ) );
 					}
-					
+
 				}
 			}
-			
+
 			return _attributeDescriptions.slice();
 		}
 
@@ -104,57 +110,57 @@ package net.vdombox.ide.common.model._vo
 			if ( !_actions )
 			{
 				_actions = [];
-				
-				if( actionsXML )
+
+				if ( actionsXML )
 				{
 					var actionsXMLList : XMLList = actionsXML..Action;
 					var clientActionVO : ClientActionVO;
-					
+
 					extractResources( actionsXMLList, languages );
-					
+
 					var child : XML;
-					
+
 					for each ( child in actionsXMLList )
 					{
 						clientActionVO = new ClientActionVO( _typeID );
 						clientActionVO.setProperties( child );
-						
+
 						_actions.push( clientActionVO );
 					}
 				}
 			}
-			
+
 			return _actions.slice();
 		}
-		
+
 		public function get events() : Array
 		{
 			if ( !_events )
 			{
 				_events = [];
-				
-				if( eventsXML )
+
+				if ( eventsXML )
 				{
 					var eventsXMLList : XMLList = eventsXML..Event;
 					var eventVO : EventVO;
-					
+
 					extractResources( eventsXMLList, languages );
-					
+
 					var child : XML;
-					
+
 					for each ( child in eventsXMLList )
 					{
 						eventVO = new EventVO( _typeID );
 						eventVO.setProperties( child );
-						
+
 						_events.push( eventVO );
 					}
 				}
 			}
-			
+
 			return _events.slice();
 		}
-		
+
 		public function get id() : String
 		{
 			return getInformationProperty( "id" );
@@ -180,8 +186,10 @@ package net.vdombox.ide.common.model._vo
 			return getInformationProperty( "classname" );
 		}
 
-		/* this three properties are implementation of "iconID state" values.
-		 MD5 values return empty string*/
+		/*
+		   this three properties are implementation of "iconID state" values.
+		   MD5 values return empty string
+		 */
 
 		public function get iconID() : String
 		{
@@ -280,7 +288,7 @@ package net.vdombox.ide.common.model._vo
 		{
 			return getInformationProperty( "version" );
 		}
-		
+
 		public function get interfaceType() : String
 		{
 			return getInformationProperty( "interfacetype" );
@@ -301,11 +309,11 @@ package net.vdombox.ide.common.model._vo
 			return int( getInformationProperty( "container" ) );
 		}
 
-		public function getEventVOByName ( eventName : String ) : EventVO
+		public function getEventVOByName( eventName : String ) : EventVO
 		{
 			var result : EventVO;
 			var eventVO : EventVO;
-			
+
 			for each ( eventVO in events )
 			{
 				if ( eventVO.name == eventName )
@@ -314,10 +322,10 @@ package net.vdombox.ide.common.model._vo
 					break;
 				}
 			}
-			
+
 			return result;
 		}
-		
+
 		private function getInformationProperty( valueName : String ) : String
 		{
 			var value : String = "";
@@ -361,7 +369,7 @@ package net.vdombox.ide.common.model._vo
 				var phraseID : String;
 
 
-				for each( matchItem in matchResult )
+				for each ( matchItem in matchResult )
 				{
 					phraseID = matchItem.substring( 6, matchItem.length - 1 );
 					sents = languages.Sentence.( @ID == phraseID )
@@ -393,46 +401,46 @@ package net.vdombox.ide.common.model._vo
 
 				resourceManager.addResourceBundle( resourceBundle );
 			}
-			
+
 		}
-		
-		public function getPhraseById (phraseId : String) : String
+
+		public function getPhraseById( phraseId : String ) : String
 		{
 			var typeId : String = id || _typeID;
-			
-			var phrase : String = resourceManager.getString(typeId, phraseId);
-			
-			if (!phrase || phrase == "null")
-				phrase = extractPhrase(phraseId);
-			
+
+			var phrase : String = resourceManager.getString( typeId, phraseId );
+
+			if ( !phrase || phrase == "null" )
+				phrase = extractPhrase( phraseId );
+
 			return phrase;
 		}
-		
-		private function extractPhrase (phraseId : String) : String
+
+		private function extractPhrase( phraseId : String ) : String
 		{
 			var typeId : String = id || _typeID;
-			
+
 			var locale : String;
 			var sents : XMLList;
-			
+
 			sents = languages.Sentence.( @ID == phraseId )
-			
+
 			for each ( var sent : XML in sents )
 			{
 				locale = sent.parent().@Code;
-				
+
 				var resourceBundle : IResourceBundle = resourceManager.getResourceBundle( locale, typeId );
-				
+
 				if ( !resourceBundle )
 					resourceBundle = new ResourceBundle( locale, typeId );
-				
+
 				resourceBundle.content[ sent.@ID.toString() ] = sent[ 0 ].toString();
 			}
 			resourceManager.addResourceBundle( resourceBundle );
-			
-			return resourceManager.getString(typeId, phraseId);
+
+			return resourceManager.getString( typeId, phraseId );
 		}
-		
-		
+
+
 	}
 }

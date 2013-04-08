@@ -22,19 +22,27 @@ package net.vdombox.editors.parsers.vdomxml
 		internal var topScope : Field;
 
 		private var currentBlock : VdomXMLToken;
+
 		private var _scope : Field;
+
 		private var field : Field;
+
 		private var param : Field;
+
 		private var defParamValue : String;
+
 		private var paramsBlock : Boolean;
+
 		private var scope : Field;
+
 		private var isStatic : Boolean = false;
+
 		private var access : String;
 
 		private var position : uint;
 
 		private var isTagInside : Boolean;
-		
+
 		public function get precentReady() : Number
 		{
 			return position / string.length;
@@ -128,10 +136,10 @@ package net.vdombox.editors.parsers.vdomxml
 			else if ( char == "=" && isTagInside )
 			{
 				tokenString = string.substring( startPosition, ++position );
-				
+
 				return new VdomXMLToken( tokenString, VdomXMLToken.EQUAL, position );
 			}
-			
+
 			else if ( isLetter( char ) )
 			{
 				prevToken = tokens.length > 0 ? tokens[ tokens.length - 1 ] : null;
@@ -181,14 +189,14 @@ package net.vdombox.editors.parsers.vdomxml
 				}
 
 			}
-//			if ( isWhitespace( char ) )
-//			{
-//				skipWhitespace();
-//
-//				char = getCurrentChar();
-//
-//				startPosition = position;
-//			}
+			//			if ( isWhitespace( char ) )
+			//			{
+			//				skipWhitespace();
+			//
+			//				char = getCurrentChar();
+			//
+			//				startPosition = position;
+			//			}
 
 
 			//unknown
@@ -218,7 +226,7 @@ package net.vdombox.editors.parsers.vdomxml
 
 				//top scope
 				topScope = scope = new Field( "top", 0, "top" );
-				
+
 				position = 0;
 				defParamValue = null;
 				paramsBlock = false;
@@ -231,13 +239,13 @@ package net.vdombox.editors.parsers.vdomxml
 			tokens.push( t );
 			t.parent = currentBlock;
 			currentBlock.children.push( t );
-			
+
 			if ( t.string == "<" )
 			{
 				currentBlock = t;
 				t.children = [];
 			}
-			
+
 			else if ( ( t.string == ">" || t.string == "/>" ) && currentBlock.parent )
 			{
 				currentBlock = currentBlock.parent as VdomXMLToken;
@@ -278,20 +286,20 @@ package net.vdombox.editors.parsers.vdomxml
 				position = p + exit.length;
 		}
 
-//		private function skipUntilWithEscNL( exit : String ) : void
-//		{
-//			//this is faster than regexp
-//			pos++;
-//			var c : String;
-//			while ( ( c = string.charAt( pos ) ) != exit && c != "\r" && c )
-//			{
-//				if ( c == "\\" )
-//					pos++;
-//				pos++;
-//			}
-//			if ( c )
-//				pos++;
-//		}
+		//		private function skipUntilWithEscNL( exit : String ) : void
+		//		{
+		//			//this is faster than regexp
+		//			pos++;
+		//			var c : String;
+		//			while ( ( c = string.charAt( pos ) ) != exit && c != "\r" && c )
+		//			{
+		//				if ( c == "\\" )
+		//					pos++;
+		//				pos++;
+		//			}
+		//			if ( c )
+		//				pos++;
+		//		}
 
 		private function skipWhitespace() : void
 		{
@@ -344,11 +352,11 @@ package net.vdombox.editors.parsers.vdomxml
 			return false;
 		}
 
-//		private function isKeyword( str : String ) : Boolean
-//		{
-//			return keywords.getValue( str );
-//		}
-//
+		//		private function isKeyword( str : String ) : Boolean
+		//		{
+		//			return keywords.getValue( str );
+		//		}
+		//
 		private function lengthSort( strA : String, strB : String ) : int
 		{
 			if ( strA.length < strB.length )

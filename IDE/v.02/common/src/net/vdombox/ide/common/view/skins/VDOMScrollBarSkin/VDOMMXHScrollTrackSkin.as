@@ -8,20 +8,20 @@ package net.vdombox.ide.common.view.skins.VDOMScrollBarSkin
 		{
 			super();
 		}
-		
-		override public function get measuredWidth():Number
+
+		override public function get measuredWidth() : Number
 		{
 			return 8;
 		}
-		
-		override protected function updateDisplayList (w:Number, h:Number) : void
+
+		override protected function updateDisplayList( w : Number, h : Number ) : void
 		{
-			super.updateDisplayList(w, h);
-			
+			super.updateDisplayList( w, h );
+
 			graphics.clear();
-			
-			drawRoundRect ( 0, 0, w, h, 1, 0x000000, 0.25);
-			
+
+			drawRoundRect( 0, 0, w, h, 1, 0x000000, 0.25 );
+
 		}
 	}
 }

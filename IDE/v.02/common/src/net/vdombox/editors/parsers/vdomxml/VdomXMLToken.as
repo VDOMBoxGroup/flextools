@@ -1,20 +1,29 @@
 package net.vdombox.editors.parsers.vdomxml
 {
 	import flash.utils.Dictionary;
-	
+
 	import net.vdombox.editors.parsers.base.Token;
 
 	internal class VdomXMLToken extends Token
 	{
 		public static const TAGNAME : String = "tagName";
+
 		public static const OPENTAG : String = "openTag";
+
 		public static const CLOSETAG : String = "closeTag";
+
 		public static const ATTRIBUTENAME : String = "attributeName";
+
 		public static const ATTRIBUTEVALUE : String = "attributeValue";
+
 		public static const EQUAL : String = "equal";
+
 		public static const PROCESSING_INSTRUCTIONS : String = "processingInstructions";
+
 		public static const CDATA : String = "cdata";
+
 		public static const COMMENT : String = "comment";
+
 		public static const SYMBOL : String = "symbol";
 
 		public static const map : Dictionary = new Dictionary( true );

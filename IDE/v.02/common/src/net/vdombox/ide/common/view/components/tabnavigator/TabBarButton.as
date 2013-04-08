@@ -1,11 +1,11 @@
 package net.vdombox.ide.common.view.components.tabnavigator
 {
 	import flash.events.MouseEvent;
-	
+
 	import mx.binding.utils.BindingUtils;
 	import mx.binding.utils.ChangeWatcher;
 	import mx.events.ListEvent;
-	
+
 	import spark.components.Button;
 	import spark.components.ButtonBarButton;
 	import spark.primitives.Graphic;
@@ -17,29 +17,30 @@ package net.vdombox.ide.common.view.components.tabnavigator
 		public function TabBarButton() : void
 		{
 		}
-		
-		[SkinPart( required="true" )]
+
+		[SkinPart( required = "true" )]
 		public var closeButton : Button;
-		
-		[SkinPart( required="true" )]
+
+		[SkinPart( required = "true" )]
 		public var bgUsualBtn : Graphic;
-		
-		[SkinPart( required="true" )]
+
+		[SkinPart( required = "true" )]
 		public var bgFirstBtn : Graphic;
-		
+
 
 		private var _closeIncluded : Boolean = true;
+
 		private var _firstBtn : Boolean = true;
-		
+
 		private var cw : ChangeWatcher;
 
 		[Bindable]
-		public function get firstBtn():Boolean
+		public function get firstBtn() : Boolean
 		{
 			return _firstBtn;
 		}
 
-		public function set firstBtn(value:Boolean):void
+		public function set firstBtn( value : Boolean ) : void
 		{
 			_firstBtn = value;
 		}
@@ -58,22 +59,22 @@ package net.vdombox.ide.common.view.components.tabnavigator
 		override public function set data( value : Object ) : void
 		{
 			super.data = value;
-			
+
 			var tab : Tab = value as Tab;
-			
-			if( !tab )
+
+			if ( !tab )
 				return;
-			
-			if( cw )
+
+			if ( cw )
 				cw.unwatch();
-			
+
 			cw = BindingUtils.bindProperty( this, "canClose", tab, "closable", false, true );
 		}
 
 		override protected function partAdded( partName : String, instance : Object ) : void
 		{
 			super.partAdded( partName, instance );
-			
+
 			if ( instance == closeButton )
 				closeButton.addEventListener( MouseEvent.CLICK, closeButton_clickHandler, false, 0, true );
 		}
@@ -92,6 +93,6 @@ package net.vdombox.ide.common.view.components.tabnavigator
 
 			dispatchEvent( new ListEvent( CLOSE_TAB, true, false, -1, itemIndex ) );
 		}
-		
+
 	}
 }

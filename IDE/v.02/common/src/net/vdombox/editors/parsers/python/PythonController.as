@@ -6,18 +6,18 @@ package net.vdombox.editors.parsers.python
 	import flash.net.SharedObject;
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
-	
+
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.base.Controller;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
-	
+
 	import ro.victordramba.thread.ThreadEvent;
 	import ro.victordramba.thread.ThreadsController;
 
-	[Event( type="flash.events.Event", name="change" )]
+	[Event( type = "flash.events.Event", name = "change" )]
 
 	public class PythonController extends Controller
 	{
@@ -25,24 +25,24 @@ package net.vdombox.editors.parsers.python
 		{
 			fld = textField;
 			_actionVO = __actionVO;
-			
+
 			//TODO refactor, Controller should probably be a singleton
-			
+
 			tc = new ThreadsController( stage );
-			
+
 			parser = new PythonParser;
-			
+
 			tc.addEventListener( ThreadEvent.THREAD_READY, function( e : ThreadEvent ) : void
 			{
 				if ( e.thread != parser )
 					return;
-				
+
 				parser.applyFormats( fld );
 				//cursorMoved(textField.caretIndex);
 				status = 'Parse time: ' + ( getTimer() - t0 ) + 'ms ' + parser.tokenCount + ' tokens';
 				dispatchEvent( new Event( 'status' ) );
 			} );
-			
+
 			tc.addEventListener( ThreadEvent.PROGRESS, function( e : ThreadEvent ) : void
 			{
 				if ( e.thread != parser )
@@ -53,7 +53,7 @@ package net.vdombox.editors.parsers.python
 			} );
 		}
 
-		
+
 
 		public function saveTypeDB() : void
 		{
@@ -71,7 +71,7 @@ package net.vdombox.editors.parsers.python
 
 		public override function getMemberList( index : int ) : Vector.<AutoCompleteItemVO>
 		{
-			return PythonParser( parser ).newResolver().getMemberList( fld.text, index , _actionVO );
+			return PythonParser( parser ).newResolver().getMemberList( fld.text, index, _actionVO );
 		}
 
 		public override function getFunctionDetails( index : int ) : String
@@ -98,23 +98,23 @@ package net.vdombox.editors.parsers.python
 		{
 			return PythonParser( parser ).newResolver().isInScope( name, pos );
 		}
-		
+
 		public override function set actionVO( actVO : Object ) : void
 		{
 			_actionVO = actVO;
 			parser.actionVO = actVO;
 		}
-		
+
 		public override function getTokenByPos( pos : int ) : Token
 		{
 			return parser.getTokenByPos( pos );
 		}
-		
+
 		public override function get commentString() : String
 		{
 			return "#";
 		}
-		
+
 		public override function get lang() : String
 		{
 			return "python";

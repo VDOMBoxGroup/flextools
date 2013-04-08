@@ -1,9 +1,10 @@
 package net.vdombox.ide.common.model._vo
 {
+
 	/**
-	 * The StructureObjectVO is Visual Object of VDOM Structure. 
+	 * The StructureObjectVO is Visual Object of VDOM Structure.
 	 * For the user it is a Tree of Objects.
-	 * StructureObjectVO is contained in VDOM Application. 
+	 * StructureObjectVO is contained in VDOM Application.
 	 */
 	public class StructureObjectVO
 	{
@@ -69,9 +70,7 @@ package net.vdombox.ide.common.model._vo
 
 		public function toXML() : XML
 		{
-			var objectXML : XML =
-				<Object ID={_id} top={top} left={left} ResourceID={resourceID} state={state}/>
-				;
+			var objectXML : XML = <Object ID={_id} top={top} left={left} ResourceID={resourceID} state={state}/>;
 			var levelsXMLArray : Array = [];
 			var levelObjectVO : LevelObjectVO;
 			var levelXML : XML;
@@ -82,9 +81,7 @@ package net.vdombox.ide.common.model._vo
 				levelNumber = levelObjectVO.level;
 
 				if ( !levelsXMLArray[ levelNumber ] )
-					levelsXMLArray[ levelNumber ] =
-						<Level Index={levelNumber}/>
-						;
+					levelsXMLArray[ levelNumber ] = <Level Index={levelNumber}/>;
 
 				levelsXMLArray[ levelNumber ].appendChild( levelObjectVO.toXML() );
 			}

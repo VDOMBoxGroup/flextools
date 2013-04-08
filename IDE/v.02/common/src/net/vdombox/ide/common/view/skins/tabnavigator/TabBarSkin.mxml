@@ -3,7 +3,8 @@
 		xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:local="*"
 		xmlns:s="library://ns.adobe.com/flex/spark"
-		xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*" xmlns:tabnavigator="net.vdombox.ide.common.view.components.tabnavigator.*">
+		xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*"
+		xmlns:tabnavigator="net.vdombox.ide.common.view.components.tabnavigator.*">
 
 	<fx:Metadata>
 		[HostComponent("spark.components.TabBar")]
@@ -14,21 +15,22 @@
 			import mx.core.UIComponent;
 
 			/**
-			 *  @private
-			 *  Push the cornerRadius style to the item renderers.
+			 * @private
+			 * Push the cornerRadius style to the item renderers.
 			 */
 			override protected function updateDisplayList( unscaledWidth : Number, unscaleHeight : Number ) : void
 			{
 				const numElements : int = dataGroup.numElements;
 				const cornerRadius : int = hostComponent.getStyle( "cornerRadius" );
-				
+
 				for ( var i : int = 0; i < numElements; i++ )
 				{
 					var tabBarBtn : UIComponent = dataGroup.getElementAt( i ) as UIComponent;
-					
-					if ( tabBarBtn ) {
+
+					if ( tabBarBtn )
+					{
 						tabBarBtn.setStyle( "cornerRadius", cornerRadius );
-						tabBarBtn["firstBtn"] = i == 0;
+						tabBarBtn[ "firstBtn" ] = i == 0;
 					}
 				}
 
@@ -44,14 +46,16 @@
 
 	<!--- @copy spark.components.SkinnableDataContainer#dataGroup -->
 	<s:DataGroup id="dataGroup"
-				 height="100%" width="100%">
+				 height="100%"
+				 width="100%">
 		<s:layout>
 			<s:ButtonBarHorizontalLayout gap="-16"/>
 		</s:layout>
 
 		<s:itemRenderer>
 			<fx:Component>
-				<tabnavigator:TabBarButton mouseChildren="true" skinClass="net.vdombox.ide.common.view.skins.button.TabBarButtonSkin"/>
+				<tabnavigator:TabBarButton mouseChildren="true"
+										   skinClass="net.vdombox.ide.common.view.skins.button.TabBarButtonSkin"/>
 			</fx:Component>
 		</s:itemRenderer>
 

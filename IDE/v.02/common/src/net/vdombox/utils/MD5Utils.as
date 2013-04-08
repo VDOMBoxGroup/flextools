@@ -20,12 +20,15 @@ package net.vdombox.utils
 		 */
 
 		public static const HEX_FORMAT_LOWERCASE : uint = 0;
+
 		public static const HEX_FORMAT_UPPERCASE : uint = 1;
 
 		public static const BASE64_PAD_CHARACTER_DEFAULT_COMPLIANCE : String = "";
+
 		public static const BASE64_PAD_CHARACTER_RFC_COMPLIANCE : String = "=";
 
 		public static var hexcase : uint = 0; /* hex output format. 0 - lowercase; 1 - uppercase        */
+
 		public static var b64pad : String = ""; /* base-64 pad character. "=" for strict RFC compliance   */
 
 		public static function encrypt( string : String ) : String
@@ -64,8 +67,7 @@ package net.vdombox.utils
 
 		public static function any_hmac_md5( key : String, data : String, encoding : String ) : String
 		{
-			return rstr2any( rstr_hmac_md5( str2rstr_utf8( key ), str2rstr_utf8( data ) ),
-							 encoding );
+			return rstr2any( rstr_hmac_md5( str2rstr_utf8( key ), str2rstr_utf8( data ) ), encoding );
 		}
 
 		/*
@@ -101,8 +103,7 @@ package net.vdombox.utils
 				opad[ i ] = bkey[ i ] ^ 0x5C5C5C5C;
 			}
 
-			var hash : Array = binl_md5( ipad.concat( rstr2binl( data ) ), 512 +
-										 data.length * 8 );
+			var hash : Array = binl_md5( ipad.concat( rstr2binl( data ) ), 512 + data.length * 8 );
 			return binl2rstr( binl_md5( opad.concat( hash ), 512 + 128 ) );
 		}
 
@@ -117,8 +118,7 @@ package net.vdombox.utils
 			for ( var i : Number = 0; i < input.length; i++ )
 			{
 				x = input.charCodeAt( i );
-				output += hex_tab.charAt( ( x >>> 4 ) & 0x0F ) + hex_tab.charAt( x &
-																				 0x0F );
+				output += hex_tab.charAt( ( x >>> 4 ) & 0x0F ) + hex_tab.charAt( x & 0x0F );
 			}
 			return output;
 		}
@@ -133,9 +133,7 @@ package net.vdombox.utils
 			var len : Number = input.length;
 			for ( var i : Number = 0; i < len; i += 3 )
 			{
-				var triplet : Number = ( input.charCodeAt( i ) << 16 ) | ( i + 1 <
-					len ? input.charCodeAt( i + 1 ) << 8 : 0 ) | ( i + 2 < len ?
-					input.charCodeAt( i + 2 ) : 0 );
+				var triplet : Number = ( input.charCodeAt( i ) << 16 ) | ( i + 1 < len ? input.charCodeAt( i + 1 ) << 8 : 0 ) | ( i + 2 < len ? input.charCodeAt( i + 2 ) : 0 );
 				for ( var j : Number = 0; j < 4; j++ )
 				{
 					if ( i * 8 + j * 6 > input.length * 8 )
@@ -160,9 +158,7 @@ package net.vdombox.utils
 			var dividend : Array = new Array( input.length / 2 );
 			for ( i = 0; i < dividend.length; i++ )
 			{
-				dividend[ i ] = ( input.charCodeAt( i * 2 ) << 8 ) | input.charCodeAt( i *
-																					   2 +
-																					   1 );
+				dividend[ i ] = ( input.charCodeAt( i * 2 ) << 8 ) | input.charCodeAt( i * 2 + 1 );
 			}
 
 			/*
@@ -220,17 +216,11 @@ package net.vdombox.utils
 				if ( x <= 0x7F )
 					output += String.fromCharCode( x );
 				else if ( x <= 0x7FF )
-					output += String.fromCharCode( 0xC0 | ( ( x >>> 6 ) & 0x1F ),
-												   0x80 | ( x & 0x3F ) );
+					output += String.fromCharCode( 0xC0 | ( ( x >>> 6 ) & 0x1F ), 0x80 | ( x & 0x3F ) );
 				else if ( x <= 0xFFFF )
-					output += String.fromCharCode( 0xE0 | ( ( x >>> 12 ) & 0x0F ),
-												   0x80 | ( ( x >>> 6 ) & 0x3F ),
-												   0x80 | ( x & 0x3F ) );
+					output += String.fromCharCode( 0xE0 | ( ( x >>> 12 ) & 0x0F ), 0x80 | ( ( x >>> 6 ) & 0x3F ), 0x80 | ( x & 0x3F ) );
 				else if ( x <= 0x1FFFFF )
-					output += String.fromCharCode( 0xF0 | ( ( x >>> 18 ) & 0x07 ),
-												   0x80 | ( ( x >>> 12 ) & 0x3F ),
-												   0x80 | ( ( x >>> 6 ) & 0x3F ),
-												   0x80 | ( x & 0x3F ) );
+					output += String.fromCharCode( 0xF0 | ( ( x >>> 18 ) & 0x07 ), 0x80 | ( ( x >>> 12 ) & 0x3F ), 0x80 | ( ( x >>> 6 ) & 0x3F ), 0x80 | ( x & 0x3F ) );
 			}
 			return output;
 		}
@@ -242,8 +232,7 @@ package net.vdombox.utils
 		{
 			var output : String = "";
 			for ( var i : Number = 0; i < input.length; i++ )
-				output += String.fromCharCode( input.charCodeAt( i ) & 0xFF, ( input.charCodeAt( i ) >>>
-											   8 ) & 0xFF );
+				output += String.fromCharCode( input.charCodeAt( i ) & 0xFF, ( input.charCodeAt( i ) >>> 8 ) & 0xFF );
 			return output;
 		}
 
@@ -251,8 +240,7 @@ package net.vdombox.utils
 		{
 			var output : String = "";
 			for ( var i : Number = 0; i < input.length; i++ )
-				output += String.fromCharCode( ( input.charCodeAt( i ) >>> 8 ) &
-											   0xFF, input.charCodeAt( i ) & 0xFF );
+				output += String.fromCharCode( ( input.charCodeAt( i ) >>> 8 ) & 0xFF, input.charCodeAt( i ) & 0xFF );
 			return output;
 		}
 
@@ -269,8 +257,7 @@ package net.vdombox.utils
 				output[ i ] = 0;
 			}
 			for ( i = 0; i < input.length * 8; i += 8 )
-				output[ i >> 5 ] |= ( input.charCodeAt( i / 8 ) & 0xFF ) << ( i %
-					32 );
+				output[ i >> 5 ] |= ( input.charCodeAt( i / 8 ) & 0xFF ) << ( i % 32 );
 			return output;
 		}
 
@@ -281,8 +268,7 @@ package net.vdombox.utils
 		{
 			var output : String = "";
 			for ( var i : Number = 0; i < input.length * 32; i += 8 )
-				output += String.fromCharCode( ( input[ i >> 5 ] >>> ( i % 32 ) ) &
-											   0xFF );
+				output += String.fromCharCode( ( input[ i >> 5 ] >>> ( i % 32 ) ) & 0xFF );
 			return output;
 		}
 
@@ -386,33 +372,27 @@ package net.vdombox.utils
 		/*
 		 * These functions implement the four basic operations the algorithm uses.
 		 */
-		public static function md5_cmn( q : Number, a : Number, b : Number, x : Number,
-										s : Number, t : Number ) : Number
+		public static function md5_cmn( q : Number, a : Number, b : Number, x : Number, s : Number, t : Number ) : Number
 		{
-			return safe_add( bit_rol( safe_add( safe_add( a, q ), safe_add( x, t ) ),
-									  s ), b );
+			return safe_add( bit_rol( safe_add( safe_add( a, q ), safe_add( x, t ) ), s ), b );
 		}
 
-		public static function md5_ff( a : Number, b : Number, c : Number, d : Number,
-									   x : Number, s : Number, t : Number ) : Number
+		public static function md5_ff( a : Number, b : Number, c : Number, d : Number, x : Number, s : Number, t : Number ) : Number
 		{
 			return md5_cmn( ( b & c ) | ( ( ~b ) & d ), a, b, x, s, t );
 		}
 
-		public static function md5_gg( a : Number, b : Number, c : Number, d : Number,
-									   x : Number, s : Number, t : Number ) : Number
+		public static function md5_gg( a : Number, b : Number, c : Number, d : Number, x : Number, s : Number, t : Number ) : Number
 		{
 			return md5_cmn( ( b & d ) | ( c & ( ~d ) ), a, b, x, s, t );
 		}
 
-		public static function md5_hh( a : Number, b : Number, c : Number, d : Number,
-									   x : Number, s : Number, t : Number ) : Number
+		public static function md5_hh( a : Number, b : Number, c : Number, d : Number, x : Number, s : Number, t : Number ) : Number
 		{
 			return md5_cmn( b ^ c ^ d, a, b, x, s, t );
 		}
 
-		public static function md5_ii( a : Number, b : Number, c : Number, d : Number,
-									   x : Number, s : Number, t : Number ) : Number
+		public static function md5_ii( a : Number, b : Number, c : Number, d : Number, x : Number, s : Number, t : Number ) : Number
 		{
 			return md5_cmn( c ^ ( b | ( ~d ) ), a, b, x, s, t );
 		}

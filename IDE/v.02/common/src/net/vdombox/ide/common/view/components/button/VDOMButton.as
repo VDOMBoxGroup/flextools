@@ -1,7 +1,7 @@
 package net.vdombox.ide.common.view.components.button
 {
 	import net.vdombox.ide.common.view.skins.button.VDOMButtonSkin;
-	
+
 	import spark.components.Button;
 
 	public class VDOMButton extends Button
@@ -9,24 +9,24 @@ package net.vdombox.ide.common.view.components.button
 		public function VDOMButton()
 		{
 			super();
-			
+
 			_icon = null;
-			
+
 			minHeight = 29;
 			height = 29;
 		}
 
 		private var _icon : Object;
-		
+
 		private var _select : Boolean = false;
 
 		[Bindable]
-		public function get select():Boolean
+		public function get select() : Boolean
 		{
 			return _select;
 		}
 
-		public function set select(value:Boolean):void
+		public function set select( value : Boolean ) : void
 		{
 			_select = value;
 		}

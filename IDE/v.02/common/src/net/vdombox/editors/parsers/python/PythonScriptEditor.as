@@ -1,7 +1,7 @@
 package net.vdombox.editors.parsers.python
 {
 	import flash.events.Event;
-	
+
 	import net.vdombox.editors.parsers.base.BaseScriptEditor;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 
@@ -12,7 +12,7 @@ package net.vdombox.editors.parsers.python
 			super();
 			//addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
 		}
-		
+
 		private var fileName : String;
 
 		public override function loadSource( source : String, filePath : String ) : void
@@ -26,13 +26,15 @@ package net.vdombox.editors.parsers.python
 
 		protected override function initiaize() : void
 		{
-			/*if ( controller )
-				return;*/
-			
+			/*
+			   if ( controller )
+			   return;
+			 */
+
 			_controller = new PythonController( stage, scriptAreaComponent, _actionVO );
 
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
-			
+
 			if ( assistMenu )
 				assistMenu.clear();
 
@@ -40,11 +42,11 @@ package net.vdombox.editors.parsers.python
 
 			addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
-			
+
 			scriptAreaComponent.controller = controller;
 		}
 
-		
+
 
 		private function controller_statusHandler( event : Event ) : void
 		{
@@ -60,7 +62,7 @@ package net.vdombox.editors.parsers.python
 		{
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
 		}
-		
+
 		public override function set actionVO( value : Object ) : void
 		{
 			_actionVO = value;

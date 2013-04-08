@@ -1,10 +1,10 @@
 /*
- PureMVC MultiCore - Copyright(c) 2006-08 Futurescale, Inc., Some rights reserved.
- Your reuse is governed by the Creative Commons Attribution 3.0 United States License
-*/
+   PureMVC MultiCore - Copyright(c) 2006-08 Futurescale, Inc., Some rights reserved.
+   Your reuse is governed by the Creative Commons Attribution 3.0 United States License
+ */
 package org.puremvc.as3.multicore.interfaces
 {
-	
+
 	/**
 	 * The interface definition for a PureMVC Proxy.
 	 *
@@ -20,43 +20,44 @@ package org.puremvc.as3.multicore.interfaces
 	 * <LI>Maintain references to one or more pieces of model data.</LI>
 	 * <LI>Provide methods for manipulating that data.</LI>
 	 * <LI>Generate <code>INotifications</code> when their model data changes.</LI>
-	 * <LI>Expose their name as a <code>public static const</code> called <code>NAME</code>, if they are not instantiated multiple times.</LI>
+	 * <LI>Expose their name as a <code>public static const</code> called <code>NAME</code>, if they are not instantiated
+	 * multiple times.</LI>
 	 * <LI>Encapsulate interaction with local or remote services used to fetch and persist model data.</LI>
 	 * </UL>
 	 */
 	public interface IProxy extends INotifier
 	{
-		
+
 		/**
 		 * Get the Proxy name
-		 * 
+		 *
 		 * @return the Proxy instance name
 		 */
-		function getProxyName():String;
-		
+		function getProxyName() : String;
+
 		/**
 		 * Set the data object
-		 * 
+		 *
 		 * @param data the data object
 		 */
-		function setData( data:Object ):void;
-		
+		function setData( data : Object ) : void;
+
 		/**
 		 * Get the data object
-		 * 
+		 *
 		 * @return the data as type Object
 		 */
-		function getData():Object; 
-		
+		function getData() : Object;
+
 		/**
 		 * Called by the Model when the Proxy is registered
-		 */ 
-		function onRegister( ):void;
+		 */
+		function onRegister() : void;
 
 		/**
 		 * Called by the Model when the Proxy is removed
-		 */ 
-		function onRemove( ):void;
-		
+		 */
+		function onRemove() : void;
+
 	}
 }

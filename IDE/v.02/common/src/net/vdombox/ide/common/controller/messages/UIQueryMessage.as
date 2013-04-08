@@ -1,7 +1,7 @@
 package net.vdombox.ide.common.controller.messages
 {
 	import mx.core.UIComponent;
-	
+
 	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 
 	/**
@@ -21,12 +21,12 @@ package net.vdombox.ide.common.controller.messages
 		public function UIQueryMessage( name : String, component : UIComponent = null, recipientKey : String = null )
 		{
 			_recipientKey = recipientKey;
-				
+
 			super( Message.NORMAL, name, component );
 		}
 
 		protected var _recipientKey : String;
-		
+
 		public function get name() : String
 		{
 			return header as String;
@@ -36,7 +36,7 @@ package net.vdombox.ide.common.controller.messages
 		{
 			return body as UIComponent;
 		}
-		
+
 		public function get recipientKey() : String
 		{
 			return _recipientKey;

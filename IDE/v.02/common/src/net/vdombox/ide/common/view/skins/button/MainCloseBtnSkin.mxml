@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minWidth="10" minHeight="10"
-			 height="12" width="12" xmlns:mx="library://ns.adobe.com/flex/mx">
-	
+			 minWidth="10"
+			 minHeight="10"
+			 height="12"
+			 width="12"
+			 xmlns:mx="library://ns.adobe.com/flex/mx">
+
 	<fx:Metadata>
 		[HostComponent("spark.components.Button")] 
 	</fx:Metadata>
@@ -12,27 +15,39 @@
 			import net.vdombox.ide.common.view.components.VDOMImage;
 		]]>
 	</fx:Script>
-	
+
 	<fx:Declarations>
 		<s:SolidColorStroke id="stroke1"
 							color="#ffffff"
 							weight="2.5"/>
-		
+
 		<s:SolidColorStroke id="stroke2"
 							color="#ffff00"
 							weight="2.5"/>
 	</fx:Declarations>
-	
+
 	<s:states>
 		<s:State name="up"/>
 		<s:State name="over"/>
 		<s:State name="down"/>
 		<s:State name="disabled"/>
 	</s:states>
-	
-	<mx:Image width="100%" height="100%" source="{ VDOMImage.Clear }"/>
-	
-	<s:Line xFrom="1.5" yFrom="1.5" xTo="8.5" yTo="8.5" stroke="{stroke1}" stroke.over="{stroke2}"/>
-	<s:Line xFrom="8.5" yFrom="1.5" xTo="1.5" yTo="8.5" stroke="{stroke1}" stroke.over="{stroke2}"/>
-	
+
+	<mx:Image width="100%"
+			  height="100%"
+			  source="{ VDOMImage.Clear }"/>
+
+	<s:Line xFrom="1.5"
+			yFrom="1.5"
+			xTo="8.5"
+			yTo="8.5"
+			stroke="{stroke1}"
+			stroke.over="{stroke2}"/>
+	<s:Line xFrom="8.5"
+			yFrom="1.5"
+			xTo="1.5"
+			yTo="8.5"
+			stroke="{stroke1}"
+			stroke.over="{stroke2}"/>
+
 </s:SparkSkin>

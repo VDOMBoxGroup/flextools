@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			xmlns:s="library://ns.adobe.com/flex/spark" 
-			xmlns:mx="library://ns.adobe.com/flex/mx"
-			minHeight="20" maxHeight="20">
-	
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 minHeight="20"
+		 maxHeight="20">
+
 	<fx:Script>
 		<![CDATA[
 			import mx.managers.PopUpManager;
+
 			private var _showed : Boolean = false;
-			
-			public function get showed():Boolean
+
+			public function get showed() : Boolean
 			{
 				return _showed;
 			}
-			
+
 			public function set text( title : String ) : void
-			{				
+			{
 				lblTitle.htmlText = title;
 			}
-			
+
 			public function show( owner : DisplayObjectContainer, x : int, y : int ) : void
 			{
 				if ( showed )
 					dispose();
-				
+
 				this.x = x;
 				this.y = y;
 				_showed = true;
 				PopUpManager.addPopUp( this, owner.parent );
 			}
-			
+
 			public function dispose() : void
 			{
 				_showed = false;
@@ -37,19 +39,25 @@
 			}
 		]]>
 	</fx:Script>
-	
+
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	</fx:Declarations> 
-	
-	<s:Rect width="100%" height="100%"
-			radiusX="3" radiusY="3">
+	</fx:Declarations>
+
+	<s:Rect width="100%"
+			height="100%"
+			radiusX="3"
+			radiusY="3">
 		<s:fill>
 			<s:SolidColor color="#555555"/>
 		</s:fill>
 	</s:Rect>
-	
-	<mx:Label id="lblTitle" width="100%" height="100%" top="0"
-			  paddingLeft="10" paddingRight="10"
+
+	<mx:Label id="lblTitle"
+			  width="100%"
+			  height="100%"
+			  top="0"
+			  paddingLeft="10"
+			  paddingRight="10"
 			  color="0xFFFFFF"/>
 </s:Group>

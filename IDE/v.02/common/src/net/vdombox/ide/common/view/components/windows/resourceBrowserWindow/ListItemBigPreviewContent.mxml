@@ -12,131 +12,137 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.events.ResourceVOEvent;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
-			
-			public var resourceVO					: ResourceVO;
-			public var prevResVO					: ResourceVO;
-			
-			private var creationCompleted			: Boolean;
-			private var _iconRequested				: Boolean;
-			
-			private var needToAddSpinner			: Boolean;
-			private var needToDeleteSpinner			: Boolean;
-			
-			
-			override public function set data ( value : Object ) : void 
+
+			public var resourceVO : ResourceVO;
+
+			public var prevResVO : ResourceVO;
+
+			private var creationCompleted : Boolean;
+
+			private var _iconRequested : Boolean;
+
+			private var needToAddSpinner : Boolean;
+
+			private var needToDeleteSpinner : Boolean;
+
+
+			override public function set data( value : Object ) : void
 			{
 				super.data = value;
-				
+
 				resourceVO = value as ResourceVO;
-				
-				if (resourceVO && 
-					prevResVO &&
-					resourceVO.id == prevResVO.id) 
+
+				if ( resourceVO && prevResVO && resourceVO.id == prevResVO.id )
 				{
 					_iconRequested = true;
-				} else 
+				}
+				else
 				{
 					_iconRequested = false;
 				}
-				
+
 				setProperties();
 			}
-			
-			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+
+			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 			{
-				super.updateDisplayList(unscaledWidth, unscaledHeight);
-				
-				if (needToAddSpinner)
+				super.updateDisplayList( unscaledWidth, unscaledHeight );
+
+				if ( needToAddSpinner )
 				{
 					needToAddSpinner = false;
 					addSpinner();
 					return;
 				}
-				
-				if (needToDeleteSpinner)
+
+				if ( needToDeleteSpinner )
 				{
 					needToDeleteSpinner = false;
 					removeSpinner();
 					return;
 				}
 			}
-			
-			private function setProperties ():void
+
+			private function setProperties() : void
 			{
-				if (!creationCompleted)
+				if ( !creationCompleted )
 					return;
-				
-				if (resourceVO  )
+
+				if ( resourceVO )
 				{
-					resName.text	= resourceVO.name;
-					resName.toolTip	= resourceVO.name;
-					type.text		= resourceVO.type;
-					if (resourceVO.size >= 0) {
-						resSize.text = (resourceVO.size/1000).toString() + "kb"; 
+					resName.text = resourceVO.name;
+					resName.toolTip = resourceVO.name;
+					type.text = resourceVO.type;
+					if ( resourceVO.size >= 0 )
+					{
+						resSize.text = ( resourceVO.size / 1000 ).toString() + "kb";
 					}
-					
-					if(resourceVO.icon)
+
+					if ( resourceVO.icon )
 					{
 						smoothImage.source = resourceVO.icon;
-						
+
 						needToDeleteSpinner = true;
 						invalidateDisplayList();
-						//removeSpinner();
+							//removeSpinner();
 					}
 					else
 					{
-						if (!_iconRequested) 
+						if ( !_iconRequested )
 							BindingUtils.bindSetter( iconLoaded, resourceVO, "icon", false, true );
 					}
-					
+
 					return;
-				} else {			
+				}
+				else
+				{
 					////trace ("Error: null resource in notEmptyElement");
 				}
 			}
-			
-			protected function creationCompleteHandler(event:FlexEvent):void
+
+			protected function creationCompleteHandler( event : FlexEvent ) : void
 			{
 				creationCompleted = true;
-				
+
 				needToAddSpinner = true;
 				invalidateDisplayList();
-				
+
 				setProperties();
-				
+
 			}
-			
+
 			private var loader : Loader;
+
 			private function iconLoaded( object : Object = null ) : void
 			{
-				
+
 				if ( !object )
 				{
 					// FIXME: сделать увеличиваюшуюся задержку (100, 200, 400,  мах = 800)
 					smoothImage.source = null;
-					
+
 					_iconRequested = true;
 					prevResVO = resourceVO;
-					
+
 					needToAddSpinner = true;
 					invalidateDisplayList();
 					//addSpinner();
-					
-					var timer:Timer = new Timer(1000, 1);
-					timer.addEventListener(TimerEvent.TIMER, requestIcon);
+
+					var timer : Timer = new Timer( 1000, 1 );
+					timer.addEventListener( TimerEvent.TIMER, requestIcon );
 					timer.start();
-					
+
 					return;
 				}
-				
+
 				loader = new Loader();
-				
+
 				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
 				loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
-				
+
 				try
 				{
 					loader.loadBytes( resourceVO.icon );
@@ -145,165 +151,224 @@
 				{
 					// FIXME Сделать обработку исключения если не грузится изображение
 				}
-				
-				function requestIcon(event:TimerEvent):void
+
+				function requestIcon( event : TimerEvent ) : void
 				{
 					//					//trace ("requestIcon : " + resourceVO.name);
 					dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_ICON ) );
 				}
-				
+
 			}
-			
-			private function onBytesLoaded(event:Event):void
+
+			private function onBytesLoaded( event : Event ) : void
 			{
 				loader = null;
-				
+
 				if ( event.type == IOErrorEvent.IO_ERROR )
 					return;
-				
+
 				smoothImage.source = Bitmap( event.target.content );
-				
+
 				needToDeleteSpinner = true;
 				invalidateDisplayList();
 				//removeSpinner();
 			}
-			
+
 			private function deleteButton_clickHandler( event : MouseEvent ) : void
 			{
 				acceptDeleteHandler();
 			}
-			
-			private function acceptDeleteHandler() : void// (event : CloseEvent ) : void
+
+			private function acceptDeleteHandler() : void // (event : CloseEvent ) : void
 			{
 				var lie : ListItemEvent = new ListItemEvent( ListItemEvent.DELETE_RESOURCE );
 				lie.resource = resourceVO;
 				owner.dispatchEvent( lie );
 			}
-			
-			protected function smoothImage_clickHandler(event:MouseEvent):void
+
+			protected function smoothImage_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent(new Event(ResourceVOEvent.PREVIEW_RESOURCE));
+				dispatchEvent( new Event( ResourceVOEvent.PREVIEW_RESOURCE ) );
 			}
-			
-			private function addSpinner():void
+
+			private function addSpinner() : void
 			{
-				try {
-					if (spinnerContainer.getElementIndex(spinner) != -1) {
+				try
+				{
+					if ( spinnerContainer.getElementIndex( spinner ) != -1 )
+					{
 						return;
 					}
-				} catch (e:Error) {
 				}
-				
+				catch ( e : Error )
+				{
+				}
+
 				spinner.width = spinnerContainer.width;
 				spinner.height = spinnerContainer.height;
-				
-				spinnerContainer.addElement(spinner);
-				
+
+				spinnerContainer.addElement( spinner );
+
 				spinner.rotateImage();
 			}
-			
-			private function removeSpinner():void
+
+			private function removeSpinner() : void
 			{
-				if (!spinner)
+				if ( !spinner )
 					return;
-				
+
 				spinner.stopRotateImage();
-				
-				try {
-					spinnerContainer.removeElement(spinner);
-				} catch (e:Error)
+
+				try
 				{
-					
+					spinnerContainer.removeElement( spinner );
+				}
+				catch ( e : Error )
+				{
+
 				}
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<fx:Declarations>
-		<resourceBrowserWindow:SpinningSmoothImage id="spinner" height="100%" width="100%"
+		<resourceBrowserWindow:SpinningSmoothImage id="spinner"
+												   height="100%"
+												   width="100%"
 												   maintainAspectRatio="true"
-												   scaleContent="true" 
+												   scaleContent="true"
 												   smoothBitmapContent="true"
 												   cachePolicy="on"
 												   cacheAsBitmap="true"
 												   source="@Embed('assets/spinner.png')"/>
 	</fx:Declarations>
-	
+
 	<s:states>
 		<s:State name="normal"/>
-		<s:State name="hovered"/>	
+		<s:State name="hovered"/>
 		<s:State name="selected"/>
 	</s:states>
-	
-	<s:Group height="205" width="170">
-		
-		<s:VGroup height="100%" width="100%"  
-				  paddingTop="3" paddingLeft="3" paddingRight="3" paddingBottom="3"
-				  gap="3"
-				  >
-			<s:Group id="imageArea" width="100%" height="170">
-				
-				<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
+
+	<s:Group height="205"
+			 width="170">
+
+		<s:VGroup height="100%"
+				  width="100%"
+				  paddingTop="3"
+				  paddingLeft="3"
+				  paddingRight="3"
+				  paddingBottom="3"
+				  gap="3">
+			<s:Group id="imageArea"
+					 width="100%"
+					 height="170">
+
+				<s:Rect width="100%"
+						height="100%"
+						radiusX="10"
+						radiusY="10">
 					<s:fill>
 						<s:LinearGradient rotation="90">
-							<s:GradientEntry color="#3F3F3F" color.selected="#b50000" />
-							<s:GradientEntry color="#191919" color.selected="#9e0000"/>
+							<s:GradientEntry color="#3F3F3F"
+											 color.selected="#b50000"/>
+							<s:GradientEntry color="#191919"
+											 color.selected="#9e0000"/>
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
-				
-				<s:HGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
-					<s:Group width="160" height="160">
-						<resourceBrowserWindow:SmoothImage id="smoothImage" height="100%" width="100%"
-														   verticalAlign="middle" horizontalAlign="center" 
+
+				<s:HGroup width="100%"
+						  height="100%"
+						  verticalAlign="middle"
+						  horizontalAlign="center">
+					<s:Group width="160"
+							 height="160">
+						<resourceBrowserWindow:SmoothImage id="smoothImage"
+														   height="100%"
+														   width="100%"
+														   verticalAlign="middle"
+														   horizontalAlign="center"
 														   maintainAspectRatio="false"
-														   scaleContent="false" 
+														   scaleContent="false"
 														   smoothBitmapContent="true"
-														   cacheAsBitmap="true" />
-						
+														   cacheAsBitmap="true"/>
+
 						<s:HGroup id="spinnerContainer"
-								  height="20" width="20"
-								  left="10" top="10"
-								  horizontalAlign="center" verticalAlign="middle">
+								  height="20"
+								  width="20"
+								  left="10"
+								  top="10"
+								  horizontalAlign="center"
+								  verticalAlign="middle">
 						</s:HGroup>
-						
-						<mx:Canvas height="100%" width="100%" 
-								   backgroundColor="#000000" backgroundAlpha="0.01"
+
+						<mx:Canvas height="100%"
+								   width="100%"
+								   backgroundColor="#000000"
+								   backgroundAlpha="0.01"
 								   doubleClick="smoothImage_clickHandler(event)">
 						</mx:Canvas>
-						
+
 					</s:Group>
-					
+
 				</s:HGroup>
-				
+
 				<s:Button id="deleteButton"
 						  enabled="true"
-						  width="16" height="16"
+						  width="16"
+						  height="16"
 						  toolTip="Delete"
-						  right="10" top="5" 
+						  right="10"
+						  top="5"
 						  click="deleteButton_clickHandler( event );"
-						  skinClass="net.vdombox.ide.common.view.skins.button.DeleteResourceBtnSkin"
-						  />
-				
+						  skinClass="net.vdombox.ide.common.view.skins.button.DeleteResourceBtnSkin"/>
+
 			</s:Group>
-			
-			
-			<s:VGroup width="100%" height="100%" gap="1" verticalAlign="middle" horizontalAlign="center" paddingTop="3">
-				<s:Label id="resName" width="100%" height="100%" text="" textAlign="left" color="#FFFFFF" 
-						 fontWeight="bold" fontFamily="Arial" fontSize="12" />
-				
-				<s:HGroup width="100%" height="100%" gap="3" right="5" verticalAlign="middle">
-					<s:Label id="type" text="" textAlign="left" color="#FFFFFF" 
-							 fontWeight="normal" fontFamily="Arial" fontSize="10"/>
+
+
+			<s:VGroup width="100%"
+					  height="100%"
+					  gap="1"
+					  verticalAlign="middle"
+					  horizontalAlign="center"
+					  paddingTop="3">
+				<s:Label id="resName"
+						 width="100%"
+						 height="100%"
+						 text=""
+						 textAlign="left"
+						 color="#FFFFFF"
+						 fontWeight="bold"
+						 fontFamily="Arial"
+						 fontSize="12"/>
+
+				<s:HGroup width="100%"
+						  height="100%"
+						  gap="3"
+						  right="5"
+						  verticalAlign="middle">
+					<s:Label id="type"
+							 text=""
+							 textAlign="left"
+							 color="#FFFFFF"
+							 fontWeight="normal"
+							 fontFamily="Arial"
+							 fontSize="10"/>
 					<mx:Spacer width="1"/>
-					<s:Label id="resSize" width="100%" text="" textAlign="left" color="#FFFFFF" 
-							 fontWeight="normal" fontFamily="Arial" fontSize="10" visible="false"/>
-				</s:HGroup>	
+					<s:Label id="resSize"
+							 width="100%"
+							 text=""
+							 textAlign="left"
+							 color="#FFFFFF"
+							 fontWeight="normal"
+							 fontFamily="Arial"
+							 fontSize="10"
+							 visible="false"/>
+				</s:HGroup>
 			</s:VGroup>
-			
+
 		</s:VGroup>
-		
+
 	</s:Group>
-	
+
 </s:ItemRenderer>

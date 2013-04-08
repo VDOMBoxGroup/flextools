@@ -8,36 +8,43 @@ package ro.victordramba.scriptarea
 		{
 			super();
 		}
-		
-		private var _width:int;
-		private var _height:int;
-		override public function set width(value:Number):void
+
+		private var _width : int;
+
+		private var _height : int;
+
+		override public function set width( value : Number ) : void
 		{
-			if (value == _width) return;
+			if ( value == _width )
+				return;
 			_width = value;
 			updateSize()
 		}
-		override public function get width():Number
+
+		override public function get width() : Number
 		{
 			return _width;
 		}
-		override public function set height(value:Number):void
+
+		override public function set height( value : Number ) : void
 		{
-			if (_height == value) return;
+			if ( _height == value )
+				return;
 			_height = value;
 			updateSize()
 		}
-		override public function get height():Number
+
+		override public function get height() : Number
 		{
 			return _height;
 		}
-		
-		protected function updateSize():void
+
+		protected function updateSize() : void
 		{
 			graphics.clear();
-			graphics.beginFill(0xFFFFFF, 1);
+			graphics.beginFill( 0xFFFFFF, 1 );
 			//graphics.lineStyle(0);
-			graphics.drawRect(-50, 0, _width+50, _height);
+			graphics.drawRect( -50, 0, _width + 50, _height );
 		}
 	}
 }

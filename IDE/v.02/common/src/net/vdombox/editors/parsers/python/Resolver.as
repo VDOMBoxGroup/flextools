@@ -13,19 +13,22 @@ package net.vdombox.editors.parsers.python
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
 	import net.vdombox.ide.common.view.components.VDOMImage;
-	
+
 	import ro.victordramba.util.HashMap;
 
 
 	internal class Resolver
 	{
 		private var classDB : ClassDB;
+
 		private var typeDB : TypeDB;
+
 		private var tokenizer : PythonTokenizer;
 
 		private var tokenScopeClass : Field;
-		
+
 		private var a : Vector.<AutoCompleteItemVO>;
+
 		private var bp : BackwardsParser;
 
 		public function Resolver( tokenizer : PythonTokenizer )
@@ -51,8 +54,7 @@ package net.vdombox.editors.parsers.python
 			var isStatic : Boolean = false;
 			var scope : Field;
 			var f : Field;
-			for ( scope = t.scope; scope &&
-				scope.fieldType == 'function' || scope.fieldType == 'get' || scope.fieldType == 'set'; scope = scope.parent )
+			for ( scope = t.scope; scope && scope.fieldType == 'function' || scope.fieldType == 'get' || scope.fieldType == 'set'; scope = scope.parent )
 			{
 				if ( scope.members.hasKey( name ) || scope.params.hasKey( name ) )
 					return true;
@@ -114,31 +116,31 @@ package net.vdombox.editors.parsers.python
 		}
 
 		public function getAllOptions( pos : int ) : Vector.<AutoCompleteItemVO>
-		{	
+		{
 			var f : Field;
-			
+
 			//all package level items
 			var t : PythonToken = tokenizer.tokenByPos( pos ) as PythonToken;
-			
-			if (  t && ( t.type == Token.COMMENT || t.type == Token.STRING ) )
+
+			if ( t && ( t.type == Token.COMMENT || t.type == Token.STRING ) )
 				return null;
-			
+
 			if ( t && t.type == Token.ENDLINE )
 			{
 				var tt : PythonToken = tokenizer.tokenByPos( pos - 1 ) as PythonToken;
 				if ( tt.string == "from" || tt.string == "import" )
 					t = tt;
 			}
-				
-			
+
+
 			if ( t && ( t.string == "from" || t.importZone && !t.importFrom ) )
 				return HashLibraryArray.getLibrariesName();
 			else if ( t && t.importZone )
 				return HashLibraryArray.getImportToLibraty( t.importFrom, "python" );
-			
+
 			// default keywords
 			a = StandardWordsProxy.pythonWords;
-			
+
 			//find the scope
 			if ( !t )
 				return a;
@@ -149,15 +151,14 @@ package net.vdombox.editors.parsers.python
 			function addKeys( map : HashMap ) : void
 			{
 				for each ( var name : String in map.getKeys() )
-					a.push( new AutoCompleteItemVO( VDOMImage.Parameter, name ));
+					a.push( new AutoCompleteItemVO( VDOMImage.Parameter, name ) );
 			}
-			
+
 			//find items in function scope chain
 			//also, find if we are in static scope
 			var isStatic : Boolean = false;
-			
-			for ( scope = t.scope; scope &&
-				scope.fieldType == 'def'; scope = scope.parent )
+
+			for ( scope = t.scope; scope && scope.fieldType == 'def'; scope = scope.parent )
 			{
 				//addKeys( scope.members );
 				addKeys( scope.params );
@@ -168,7 +169,7 @@ package net.vdombox.editors.parsers.python
 			//current class
 			for each ( f in tokenizer.members.toArray() )
 				a.push( StandardWordsProxy.getAutoCompleteItemVOByField( f ) );
-				
+
 			if ( t.parent.scope.imports )
 			{
 				var ff : Object;
@@ -184,13 +185,15 @@ package net.vdombox.editors.parsers.python
 						a.push( new AutoCompleteItemVO( VDOMImage.Library, ff.name ) );
 				}
 			}
-			
-			/*if ( t.scope.fieldType == "class" || t.scope.fieldType == "top" )
-			{
-				for each ( f in t.scope.members.toArray() )
-					a.push( f.name );
-			}*/
-			
+
+			/*
+			   if ( t.scope.fieldType == "class" || t.scope.fieldType == "top" )
+			   {
+			   for each ( f in t.scope.members.toArray() )
+			   a.push( f.name );
+			   }
+			 */
+
 			return a;
 		}
 
@@ -201,7 +204,7 @@ package net.vdombox.editors.parsers.python
 			a = new Vector.<AutoCompleteItemVO>;
 			for each ( var f : Field in lst )
 				a.push( new AutoCompleteItemVO( VDOMImage.Standard, f.name ) );
-				
+
 			a.sort( Array.CASEINSENSITIVE );
 			return a;
 		}
@@ -230,10 +233,12 @@ package net.vdombox.editors.parsers.python
 				str += str2 + ",";
 			}
 			//rest
-			/*if ( field.hasRestParams )
-				a[ a.length - 1 ] = '...' + par.name;*/
+			/*
+			   if ( field.hasRestParams )
+			   a[ a.length - 1 ] = '...' + par.name;
+			 */
 
-			return field.name + '(' + str.substring(0, str.length - 1) + ')';
+			return field.name + '(' + str.substring( 0, str.length - 1 ) + ')';
 		}
 
 		/**
@@ -242,13 +247,13 @@ package net.vdombox.editors.parsers.python
 		public function getMemberList( text : String, pos : int, actionVO : Object ) : Vector.<AutoCompleteItemVO>
 		{
 			a = new Vector.<AutoCompleteItemVO>;
-			
+
 			var flag : Boolean = resolve( text, pos, actionVO );
-			
+
 			if ( flag )
 				return a;
-				
-			
+
+
 			if ( !resolved )
 				if ( !a )
 					return null;
@@ -256,13 +261,13 @@ package net.vdombox.editors.parsers.python
 					return a;
 
 			//convert member list in string list
-			
+
 			for each ( var m : Field in listMembers( resolved, resolvedIsClass ).toArray() )
 			{
 				if ( a.indexOf( m.name ) == -1 )
 					a.push( StandardWordsProxy.getAutoCompleteItemVOByField( m ) );
 			}
-			
+
 			a.sort( Array.CASEINSENSITIVE );
 			return a;
 		}
@@ -284,8 +289,10 @@ package net.vdombox.editors.parsers.python
 
 		private function listTypeMembers( type : Field, skipConstructor : Boolean = true ) : HashMap
 		{
-			/*if ( type.fieldType != 'class' && type.fieldType != 'interface' )
-				throw new Error( 'type has to be class' );*/
+			/*
+			   if ( type.fieldType != 'class' && type.fieldType != 'interface' )
+			   throw new Error( 'type has to be class' );
+			 */
 
 			var map : HashMap = new HashMap;
 
@@ -307,22 +314,24 @@ package net.vdombox.editors.parsers.python
 					continue;
 				}
 
-				for each ( m  in type.members.toArray() )
+				for each ( m in type.members.toArray() )
 				{
 					if ( m.isStatic )
 						continue;
 					if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) )
 						map.setValue( m.name, m );
 				}
-				
-				/*for each ( m in type.selfMembers.toArray() )
-				{
-					if ( m.isStatic )
-						continue;
-					var constrCond : Boolean = ( m.name == type.name ) && skipConstructor;
-					if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) && !constrCond )
-						map.setValue( m.name, m );
-				}*/
+
+				/*
+				   for each ( m in type.selfMembers.toArray() )
+				   {
+				   if ( m.isStatic )
+				   continue;
+				   var constrCond : Boolean = ( m.name == type.name ) && skipConstructor;
+				   if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) && !constrCond )
+				   map.setValue( m.name, m );
+				   }
+				 */
 			}
 
 			return map;
@@ -351,7 +360,9 @@ package net.vdombox.editors.parsers.python
 
 
 		private var resolved : Field;
+
 		private var resolvedIsClass : Boolean;
+
 		private var resolvedRef : Field;
 
 		private function resolve( text : String, pos : int, actionVO : Object = null ) : Boolean
@@ -372,7 +383,7 @@ package net.vdombox.editors.parsers.python
 			var t : PythonToken = PythonToken( tokenizer.tokenByPos( bp.startPos ) );
 			if ( !t )
 				return false;
-			
+
 			if ( StandardWordsProxy.standardPythonObjects.hasKey( t.string ) )
 			{
 				resolved = StandardWordsProxy.standardPythonObjects.getValue( t.string );
@@ -382,11 +393,11 @@ package net.vdombox.editors.parsers.python
 				var i : int = 0;
 				var name : String = bp.names[ 0 ];
 				var itemType : String = bp.types[ 0 ];
-	
+
 				var imports : HashMap = findImports( t );
-	
+
 				findScopeClass( t.scope );
-	
+
 				//1. is it in function scope chain?
 				var isStatic : Boolean = false;
 				for ( scope = t.scope; scope && ( scope.fieldType == 'def' || scope.fieldType == 'top' || scope.fieldType == 'class' ); scope = scope.parent )
@@ -407,70 +418,70 @@ package net.vdombox.editors.parsers.python
 					{
 						var impotrElement : Object = t.parent.scope.imports.getValue( name );
 						a = HashLibraryArray.getTokensToLibratyClass( impotrElement.source, impotrElement.systemName, bp, LanguageVO.python );
-						resolvedRef = HashLibraryArray.getTokenToLibratyClass(impotrElement.source, impotrElement.systemName, bp, LanguageVO.python );
+						resolvedRef = HashLibraryArray.getTokenToLibratyClass( impotrElement.source, impotrElement.systemName, bp, LanguageVO.python );
 						return true;
-						//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );
+							//return hashLibraries.getTokensToLibratyClass( t.imports.getValue( name ).source, impotrElement.systemName );
 					}
-						
+
 				}
-	
+
 				var scope : Field;
-	
+
 				//2. is it this or super?
-				
+
 				if ( name == 'self' && tokenScopeClass )
 				{
 					if ( resolved )
 						tokenScopeClass.members.merge( resolved.members );
 					resolved = tokenScopeClass;
-					
-					for each( var field : Field in tokenScopeClass.members.toArray() )
+
+					for each ( var field : Field in tokenScopeClass.members.toArray() )
 					{
 						if ( field.parent.name == tokenScopeClass.name )
 							resolved.members.setValue( field.name, field );
 					}
 				}
-				
-				
+
+
 				if ( name == 'self' && actionVO is ServerActionVO && !tokenScopeClass )
 				{
 					a = StructureDB.getChildrenForObject( ServerActionVO( actionVO ).containerVO, bp );
 				}
-	
-	
+
+
 				//3. or is it in the class/inheritance scope?
-				for ( scope = tokenScopeClass; !resolved && scope; scope = classDB.resolveName(scope.extendz) )
+				for ( scope = tokenScopeClass; !resolved && scope; scope = classDB.resolveName( scope.extendz ) )
 				{
 					var m : Field = scope.members.getValue( name );
 					if ( !m )
 						continue;
-	
+
 					if ( scope != tokenScopeClass && m.access == 'private' )
 						continue;
-	
+
 					//skip constructors in inheritance chain
 					if ( m.name == scope.name )
 						continue;
-	
+
 					if ( !isStatic || m.isStatic )
 						resolved = m;
 				}
-	
+
 				//4. last, is it an imported thing?
 				if ( !resolved && imports )
 				{
 					resolved = classDB.resolveName( new Multiname( name, imports ) );
-					
+
 				}
-	
+
 				//we didn't find the first name, we quit
 				if ( !resolved )
 					return false;
 				else if ( resolved.fieldType == 'class' && itemType == BackwardsParser.NAME && name != 'self' )
 					resolvedIsClass = true;
-			
+
 			}
-			
+
 			checkReturnType();
 
 
@@ -502,17 +513,20 @@ package net.vdombox.editors.parsers.python
 				}
 
 
-				/*if ( resolved.type && resolved.fieldType == 'var' || resolved.fieldType == 'get' || resolved.fieldType == 'set' ||
-					( itemType == BackwardsParser.FUNCTION && resolved.fieldType == 'def' ) )
-				{
-					resolved = typeDB.resolveName( resolved.type );
-				}
-				else if ( resolved.fieldType == 'def' && itemType != BackwardsParser.FUNCTION )
-				{
-					resolved = classDB.resolveName( new Multiname( 'def' ) );
-				}*/
+			/*
+			   if ( resolved.type && resolved.fieldType == 'var' || resolved.fieldType == 'get' || resolved.fieldType ==
+			   'set' ||
+			   ( itemType == BackwardsParser.FUNCTION && resolved.fieldType == 'def' ) )
+			   {
+			   resolved = typeDB.resolveName( resolved.type );
+			   }
+			   else if ( resolved.fieldType == 'def' && itemType != BackwardsParser.FUNCTION )
+			   {
+			   resolved = classDB.resolveName( new Multiname( 'def' ) );
+			   }
+			 */
 			}
-			
+
 			return false;
 		}
 
@@ -526,6 +540,6 @@ package net.vdombox.editors.parsers.python
 			if ( tokenScopeClass.fieldType != 'class' )
 				tokenScopeClass = null;
 		}
-		
+
 	}
 }

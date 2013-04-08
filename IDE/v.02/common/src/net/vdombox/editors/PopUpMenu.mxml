@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
-		xmlns:mx="library://ns.adobe.com/flex/mx"
-		xmlns:s="library://ns.adobe.com/flex/spark"
-		maxHeight="310"
-		maxWidth="310"
-		>
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 maxHeight="310"
+		 maxWidth="310">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import mx.managers.PopUpManager;
-			
+
 			import net.vdombox.editors.parsers.AutoCompleteItemVO;
-			
+
 			import spark.components.Scroller;
-			
+
 			private var _showed : Boolean = false;
-			
+
 			private var screenHeight : int = Screen.mainScreen.bounds.height;
+
 			private var screenWidth : int = Screen.mainScreen.bounds.width;
-			
+
 			private const menuHeight : int = 310;
+
 			private const menuWidth : int = 310;
 
-			public function get showed():Boolean
+			public function get showed() : Boolean
 			{
 				return _showed;
 			}
@@ -33,8 +34,8 @@
 				value.sort( comp );
 				menu.dataProvider = new ArrayList( value );
 			}
-			
-			protected function comp(x:AutoCompleteItemVO, y:AutoCompleteItemVO):int
+
+			protected function comp( x : AutoCompleteItemVO, y : AutoCompleteItemVO ) : int
 			{
 				if ( x.value.toLowerCase() < y.value.toLowerCase() )
 					return -1;
@@ -49,76 +50,84 @@
 
 			public function getSelectedValue() : String
 			{
-				return menu.selectedItem.hasOwnProperty( "value" )? menu.selectedItem.value : menu.selectedItem;
+				return menu.selectedItem.hasOwnProperty( "value" ) ? menu.selectedItem.value : menu.selectedItem;
 			}
 
 			public function show( owner : DisplayObjectContainer, x : int, y : int ) : void
 			{
 				if ( showed )
 					dispose();
-				
+
 				if ( y + menuHeight + 15 > screenHeight )
 					y = y - menuHeight - 1;
 				if ( x + menuWidth + 15 > screenWidth )
 					x = screenWidth - menuWidth - 15;
-				
+
 				this.x = x;
 				this.y = y;
 				_showed = true;
 				PopUpManager.addPopUp( this, owner.parent );
 			}
-			
-			
+
+
 
 			public function dispose() : void
 			{
 				_showed = false;
 				PopUpManager.removePopUp( this );
 			}
-			
+
 			public function set selectedIndex( value : int ) : void
 			{
 				menu.selectedIndex = value;
 			}
-			
+
 			public function get selectedIndex() : int
 			{
 				return menu.selectedIndex;
 			}
-			
+
 			public function get selectedItem() : AutoCompleteItemVO
 			{
 				return menu.selectedItem as AutoCompleteItemVO;
 			}
-			
+
 			public function get length() : int
 			{
 				return menu.dataProvider.length;
 			}
-			
+
 			public function get scroller() : Scroller
 			{
 				return menu.scroller;
 			}
 		]]>
 	</fx:Script>
-	
-	<s:Rect left="0" top="0" right="0" bottom="0"
-			radiusX="6" radiusY="6">
+
+	<s:Rect left="0"
+			top="0"
+			right="0"
+			bottom="0"
+			radiusX="6"
+			radiusY="6">
 		<s:fill>
-			<s:SolidColor color="#555555" />
+			<s:SolidColor color="#555555"/>
 		</s:fill>
-		
+
 	</s:Rect>
-	
-	<s:List id="menu" 
-			left="5" top="5" right="3" bottom="5"
+
+	<s:List id="menu"
+			left="5"
+			top="5"
+			right="3"
+			bottom="5"
 			maxHeight="300"
 			minWidth="300"
 			requireSelection="true"
 			doubleClickEnabled="true"
 			arrowKeysWrapFocus="true"
 			itemRenderer="net.vdombox.editors.AutoCompleteItemRenderer"
-			contentBackgroundColor="#555555" borderVisible="false"/>
+			contentBackgroundColor="#555555"
+			borderVisible="false"/>
 
 </s:Group>

@@ -8,7 +8,7 @@ package ro.victordramba.scriptarea
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.utils.Timer;
-	
+
 	import net.vdombox.editors.parsers.base.BlockPosition;
 	import net.vdombox.editors.parsers.base.Controller;
 	import net.vdombox.editors.parsers.base.Token;
@@ -25,22 +25,22 @@ package ro.victordramba.scriptarea
 			mouseEnabled = true;
 			buttonMode = true;
 			useHandCursor = false;
-			
+
 			backgroundShape = new Shape;
 			addChild( backgroundShape );
-			
+
 			selectionShapeRects = new Shape;
 			addChild( selectionShapeRects );
-			
+
 			selectionShape = new Shape;
 			addChild( selectionShape );
-			
+
 			indentLinesShape = new Shape;
 			addChild( indentLinesShape );
-			
+
 			linesShape = new Shape;
 			addChild( linesShape );
-			
+
 			tf = new TextField;
 			tf.multiline = true;
 			tf.wordWrap = false;
@@ -79,8 +79,11 @@ package ro.victordramba.scriptarea
 		}
 
 		protected var _caret : int;
+
 		protected var _start : int;
+
 		protected var _selStart : int = 0;
+
 		protected var _selEnd : int = 0;
 
 		protected var cursor : ScriptCursor;
@@ -92,36 +95,45 @@ package ro.victordramba.scriptarea
 		private var tf : TextField;
 
 		private var _letterBoxHeight : int;
+
 		private var letterBoxWidth : int;
 
 		private var _scrollH : int = 0;
+
 		private var _scrollV : int = 0;
 
 		private var firstPos : int = 0;
+
 		private var lastPos : int = 0;
 
 		private var _maxScrollH : int = 0;
+
 		private var _maxScrollV : int = 0;
-		
+
 		private var backgroundShape : Shape;
+
 		private var backgroundShapeColor : uint = 0xFFFFFF;
 
 		private var selectionShape : Shape;
+
 		private var selectionShapeColor : uint = 0x3399FF;
-		
+
 		private var selectionShapeRects : Shape;
+
 		private var selectionShapeRectsColor : uint = 0xD4D4D4;
-		
+
 		private var indentLinesShape : Shape;
+
 		private var indentLinesShapeColor : uint = 0x000000;
-			
+
 		private var selectionSkobkiColor : uint = 0xc0c0c0;
-		
+
 		private var needChangeColorSelected : Boolean = true;
-		
+
 		private var linesShape : Shape;
 
 		private var undoBuff : Array = [];
+
 		private var redoBuff : Array = [];
 
 		//format. very simplified
@@ -130,69 +142,69 @@ package ro.victordramba.scriptarea
 		private var fmt : TextFormat;
 
 		private var savedUndoIndex : int = 0;
-		
+
 		public var controller : Controller;
-		
+
 		private var defaultColor : uint = 0xFFFFFF;
-		
+
 		protected var _indentLines : Array;
-		
+
 		public var showIndentLines : Boolean = false;
-		
-		public function set indentLines(value:Array):void
+
+		public function set indentLines( value : Array ) : void
 		{
 			_indentLines = value;
-			
+
 			if ( showIndentLines )
 				updateIndentLines();
 			else
 				clearIndentLines();
 		}
-		
+
 		private function clearIndentLines() : void
 		{
 			var g : Graphics = indentLinesShape.graphics;
-			
+
 			g.clear();
 		}
-		
+
 		private function updateIndentLines() : void
 		{
 			var g : Graphics = indentLinesShape.graphics;
-			
+
 			g.clear();
-			
+
 			g.beginFill( indentLinesShapeColor, 1 );
-			
+
 			var point1 : Point;
 			var point2 : Point;
 			var step : int = 3;
 			var px : int = 0;
 			var py : int = 0;
-			
+
 			for each ( var blockPosition : BlockPosition in _indentLines )
-			{				
-				if ( text.charAt( blockPosition.start - 1 ) == '\r' ||  text.charAt( blockPosition.start - 1 ) == '\n' || blockPosition.start == 0)
+			{
+				if ( text.charAt( blockPosition.start - 1 ) == '\r' || text.charAt( blockPosition.start - 1 ) == '\n' || blockPosition.start == 0 )
 					continue;
-				
+
 				point1 = getPointForIndex( blockPosition.start );
 				point2 = getPointForIndex( blockPosition.end );
-				
+
 				px = point1.x;
-				
+
 				py = point1.y + _letterBoxHeight + 3;
 				point2.y += _letterBoxHeight;
-				
+
 				while ( py < point2.y )
 				{
 					g.drawCircle( point1.x - indentLinesShape.x, py - indentLinesShape.y, 0.5 );
-					
+
 					py += step;
 				}
 			}
 		}
 
-		public function get letterBoxHeight():int
+		public function get letterBoxHeight() : int
 		{
 			return _letterBoxHeight;
 		}
@@ -205,26 +217,26 @@ package ro.victordramba.scriptarea
 			selectionShapeRectsColor = value.selectionRectsColor;
 			indentLinesShapeColor = value.indentLinesShapeColor;
 			needChangeColorSelected = value.needChangeColorSelected;
-			cursor.color= value.cursorColor;
+			cursor.color = value.cursorColor;
 		}
-		
+
 		public function set fontSize( value : uint ) : void
-		{			
+		{
 			fmt = new TextFormat( "Courier New", value, 0 );
-			
+
 			tf.defaultTextFormat = fmt;
-			
+
 			var tmp : String = tf.text;
-				
+
 			tf.text = " ";
-			
+
 			_letterBoxHeight = tf.getLineMetrics( 0 ).height;
 			letterBoxWidth = tf.getLineMetrics( 0 ).width;
-			
+
 			tf.text = tmp;
-			
+
 			ScriptCursor.height = letterBoxHeight;
-			
+
 			updateCaret();
 			updateScrollProps();
 			updateSize();
@@ -264,21 +276,23 @@ package ro.victordramba.scriptarea
 			_scrollV = Math.min( Math.max( 0, value ), _maxScrollV );
 
 			//tf.y = selectionShape.y = selectionShapeRects.y = linesShape.y = indentLinesShape.y = -_scrollV * _letterBoxHeight;
-			
+
 			updateScrollProps();
 
 			updateCaret();
-			
-			/*if ( !blocked )
-			{
-				t.start();
-				blocked = true;
-			}*/
+
+			/*
+			   if ( !blocked )
+			   {
+			   t.start();
+			   blocked = true;
+			   }
+			 */
 
 			_setSelection( _selStart, _selEnd );
-			
+
 			ClearLines();
-			
+
 			if ( showIndentLines )
 				updateIndentLines();
 
@@ -309,12 +323,12 @@ package ro.victordramba.scriptarea
 		{
 			return _caret;
 		}
-		
+
 		public function set caretIndex( value : int ) : void
 		{
 			if ( value < 0 || value > text.length )
 				return;
-			
+
 			_caret = value;
 			_setSelection( value, value );
 			updateCaret();
@@ -329,7 +343,7 @@ package ro.victordramba.scriptarea
 		{
 			return _selEnd;
 		}
-		
+
 		public function get selectionText() : String
 		{
 			return _text.substring( _selStart, _selEnd );
@@ -372,14 +386,14 @@ package ro.victordramba.scriptarea
 
 			setSelection( pos, pos );
 		}
-		
+
 		public function replaceFind( findText : String, reText : String, replaceAll : Boolean = false ) : void
 		{
 			if ( findText == "" )
 				return;
-			
+
 			var index : int;
-			
+
 			if ( replaceAll )
 			{
 				index = text.indexOf( findText );
@@ -392,223 +406,223 @@ package ro.victordramba.scriptarea
 			else
 			{
 				index = text.indexOf( findText, _caret );
-				
+
 				if ( index == -1 )
 					return;
-				
+
 				replaceText( index, index + findText.length, reText );
 			}
-			
+
 			_caret = index;
-			
+
 			updateCaret();
 			checkScrollToCursor();
 			updateScrollProps();
-			
+
 			var g : Graphics = selectionShape.graphics;
 			g.clear();
-			
+
 			g.beginFill( selectionShapeColor, 1 );
-			
+
 			var p0 : Point = getPointForIndex( index );
 			var p1 : Point = getPointForIndex( index + _replaceText.length );
-			
+
 			g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
-			
+
 			selectionRects( findText );
-			
+
 			_replaceText( 0, 0, "" );
-		}	
-		
+		}
+
 		private var _selectRects : Array = new Array();
-		
+
 		private function clearRect() : void
 		{
 			var g : Graphics = selectionShapeRects.graphics;
 			g.clear();
-			
+
 			g = selectionShape.graphics;
 			g.clear();
 		}
-		
+
 		public function findText( findText : String, type : int, caseSensitive : Boolean ) : Boolean
 		{
 			clearRect();
-			
+
 			if ( findText == "" )
 			{
 				_setSelection( 0, 0 );
 				return false;
 			}
-				
+
 			var index : int;
 			var string : String = caseSensitive ? text.toLocaleLowerCase() : text;
-			
+
 			if ( type == 0 )
 			{
 				index = string.indexOf( findText, _caret );
-				
+
 				if ( index == -1 )
 					index = string.indexOf( findText );
 			}
-			
+
 			else if ( type == 1 )
 			{
 				var saveInd : int = -1;
 				var ind : int = string.indexOf( findText );
 				var car : int = _caret;
-				
-				while ( saveInd == -1 && ind != -1)
+
+				while ( saveInd == -1 && ind != -1 )
 				{
 					while ( ind < car && ind != -1 )
 					{
 						saveInd = ind;
 						ind = string.indexOf( findText, ind + 1 );
 					}
-					
+
 					if ( saveInd == -1 )
 						car = text.length - 1;
 				}
-				
+
 				index = saveInd;
 			}
 			else if ( type == 2 )
 			{
 				index = string.indexOf( findText, _caret );
-				
+
 				if ( index == _caret )
 					index = string.indexOf( findText, _caret + 1 );
-				
+
 				if ( index == -1 )
 					index = string.indexOf( findText );
 			}
-			
+
 			if ( index == -1 )
 			{
 				_setSelection( 0, 0 );
 				return false;
 			}
-			
+
 			goToPos( index, findText.length );
-			
+
 			//selectionRects( findText );
-			
+
 			_replaceText( 0, 0, "" );
-			
+
 			return true;
 		}
-		
+
 		public function goToPos( pos : int, len : int ) : void
 		{
 			_caret = pos;
-			
+
 			updateCaret();
 			checkScrollToCursor();
 			updateScrollProps();
-			
+
 			_selStart = pos;
 			_selEnd = pos + len;
-			
+
 			var g : Graphics = selectionShape.graphics;
 			g.clear();
-			
+
 			g.beginFill( selectionShapeColor, 1 );
-			
+
 			var p0 : Point = getPointForIndex( _selStart );
 			var p1 : Point = getPointForIndex( _selEnd );
-			
+
 			g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
-			
+
 			//setSelectionRects();
-			
+
 			_replaceText( 0, 0, "" );
 		}
-		
+
 		private function selectionRects( findText : String ) : void
 		{
 			var index : int = text.indexOf( findText );
 			var step : int = findText.length;
-			
+
 			var g : Graphics = selectionShapeRects.graphics;
 			g.clear();
 			g.beginFill( selectionShapeRectsColor, .9 );
-			
+
 			var t : Token = controller.getTokenByPos( index );
 			while ( index != -1 )
 			{
 				var p0 : Point = getPointForIndex( index );
 				var p1 : Point = getPointForIndex( index + step );
-					
+
 				g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
-				
+
 				index = text.indexOf( findText, index + 1 );
 			}
 		}
-		
+
 		private function setSelectionRects() : void
 		{
 			var g : Graphics = selectionShapeRects.graphics;
 			g.clear();
-			
+
 			if ( _selStart == _selEnd )
 				return;
-			
+
 			var t : Token = controller.getTokenByPos( _selStart );
-			
+
 			if ( !t )
 				return;
-			
+
 			var _start : int = _selStart;
 			var _end : int = _selStart;
-			
+
 			var _startRect : int;
 			var _endRect : int;
-			
+
 			while ( /\w/.test( _text.charAt( _start ) ) )
 				_start--;
-			
+
 			_start++;
-			
+
 			while ( /\w/.test( _text.charAt( _end ) ) )
 				_end++;
-			
+
 			var strFind : String = text.slice( _start, _end );
 			var strTemp : String;
-			
+
 			if ( strFind == "" )
 				return;
-			
+
 			var index : int = text.indexOf( strFind );
 			var step : int = _end - _start;
-			
+
 			g.beginFill( selectionShapeRectsColor, 1 );
-			
+
 			while ( index != -1 )
 			{
 				_startRect = _endRect = index;
-				
+
 				while ( /\w/.test( _text.charAt( _startRect ) ) )
 					_startRect--;
-				
+
 				_startRect++;
-				
+
 				while ( /\w/.test( _text.charAt( _endRect ) ) )
 					_endRect++;
-					
+
 				if ( text.slice( _startRect, _endRect ) == strFind )
 				{
-					
+
 					var p0 : Point = getPointForIndex( index );
 					var p1 : Point = getPointForIndex( index + step );
-					
+
 					var t2 : Token = controller.getTokenByPos( index );
 					if ( !t2 )
 						return;
-					
+
 					if ( t.string == t2.string )
 						g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
 				}
-				
+
 				index = text.indexOf( strFind, index + 1 );
 			}
 		}
@@ -617,7 +631,7 @@ package ro.victordramba.scriptarea
 		{
 			_selStart = beginIndex;
 			_selEnd = endIndex;
-			
+
 			_start = _selStart;
 
 			if ( _selStart > _selEnd )
@@ -625,7 +639,7 @@ package ro.victordramba.scriptarea
 				var tmp : int = _selEnd;
 				_selEnd = _selStart;
 				_selStart = tmp;
-				
+
 				_start = _selEnd;
 			}
 
@@ -634,7 +648,7 @@ package ro.victordramba.scriptarea
 			var g : Graphics = selectionShape.graphics;
 
 			g.clear();
-			
+
 			setSelectionRects();
 
 			if ( _selStart != _selEnd && _selStart <= lastPos && _selEnd >= firstPos )
@@ -669,7 +683,7 @@ package ro.victordramba.scriptarea
 				cursor.y = p1.y + tf.y;
 				checkScrollToCursor();
 			}
-			
+
 			_replaceText( 0, 0, "" );
 		}
 
@@ -696,15 +710,15 @@ package ro.victordramba.scriptarea
 
 		public function replaceText( startIndex : int, endIndex : int, text : String ) : void
 		{
-			if( !text )
+			if ( !text )
 				text = "";
-			
+
 			text = text.replace( /\r\n/g, NL );
 			text = text.replace( /\n/g, NL );
-			
+
 			if ( _text == text )
 				return;
-			
+
 			undoBuff.push( { s: startIndex, e: startIndex + text.length, t: _text.substring( startIndex, endIndex ) } );
 			redoBuff.length = 0;
 			_replaceText( startIndex, endIndex, text );
@@ -741,7 +755,7 @@ package ro.victordramba.scriptarea
 				if ( _text.charAt( i ) == "\t" )
 					tabs++;
 			}
-			text.charAt(378)
+			text.charAt( 378 )
 
 			//simple tabs, just 4 spaces, no align
 			return new Point( ( index - lastNL + tabs * 3 ) * letterBoxWidth + 1, ( lines - _scrollV ) * letterBoxHeight + 2 );
@@ -756,13 +770,13 @@ package ro.victordramba.scriptarea
 				else
 					beginIndex = _selEnd;
 			}
-			
+
 			if ( endIndex > _selStart && endIndex < _selEnd )
 			{
 				endIndex = _selStart;
 			}
-				
-			runs.push( { begin: beginIndex, end: endIndex, color: color, bold: bold, italic: italic, error : error } );
+
+			runs.push( { begin: beginIndex, end: endIndex, color: color, bold: bold, italic: italic, error: error } );
 		}
 
 		public function clearFormatRuns() : void
@@ -774,20 +788,20 @@ package ro.victordramba.scriptarea
 		{
 			_replaceText( 0, 0, "" );
 		}
-		
+
 		public function addIndentLines( indentLines : Array ) : void
 		{
 			this.indentLines = indentLines;
 		}
 
 		protected function undo() : void
-		{		
+		{
 			if ( undoBuff.length <= 1 )
 				return;
-			
+
 			var o : Object = undoBuff.pop();
 			redoBuff.push( { s: o.s, e: o.s + o.t.length, t: _text.substring( o.s, o.e ) } );
-			
+
 			_replaceText( o.s, o.e, o.t );
 			_caret = o.s + o.t.length;
 			_setSelection( _caret, _caret, true );
@@ -810,7 +824,7 @@ package ro.victordramba.scriptarea
 		{
 			super.updateSize();
 
-//			tf.width = width;
+			//			tf.width = width;
 			tf.height = height;
 			visibleRows = Math.floor( ( height - 4 ) / letterBoxHeight );
 			updateScrollProps();
@@ -924,28 +938,28 @@ package ro.victordramba.scriptarea
 			_maxScrollV = Math.max( 0, lineCount - visibleRows );
 
 			var newWidth : Number = Math.max( maxLength * ( letterBoxWidth + 1 ), width ); //TODO почему + 1
-			
-			if( tf.width != newWidth )
+
+			if ( tf.width != newWidth )
 			{
 				tf.width = newWidth;
 				_setSelection( selectionBeginIndex, selectionEndIndex, true )
 				updateCaret();
 			}
-			
+
 			//var newX : Number = tf.width - width;
-			
-			if( width <= 0 )
+
+			if ( width <= 0 )
 				return;
-			
+
 			var newX : Number = cursor.getX() - tf.x - width + 48;
-			
+
 			if ( tf.x < newX && cursor.getX() > width - 48 )
 			{
 				if ( newX < 0 )
 					newX = 0;
 				tf.x = -newX;
 				selectionShape.x = selectionShapeRects.x = linesShape.x = indentLinesShape.x = -newX;
-			} 
+			}
 			else if ( cursor.getX() < 0 )
 			{
 				if ( cursor.getX() < tf.x )
@@ -991,17 +1005,17 @@ package ro.victordramba.scriptarea
 
 			_replaceText( 0, 0, "" );
 		}
-		
+
 		private function setBackgroundSize() : void
 		{
 			backgroundShape.width = width;
 			backgroundShape.height = height;
-			
+
 			var g : Graphics = backgroundShape.graphics;
 			g.clear();
-			
+
 			g.beginFill( backgroundShapeColor, 1 );
-			
+
 			g.drawRect( 0, 0, width, height );
 		}
 
@@ -1069,12 +1083,12 @@ package ro.victordramba.scriptarea
 
 				if ( o.begin > lastPos && o.end > lastPos )
 					break;
-				
+
 				if ( o.begin > pos )
 				{
 					slices.push( setColorForSimpleText( pos, o.begin ) );
 				}
-				
+
 				slices.push( setColorForSpecialText() );
 
 				if ( o.end > lastPos )
@@ -1086,28 +1100,28 @@ package ro.victordramba.scriptarea
 			}
 
 			if ( pos < lastPos )
-				slices.push( setColorForSimpleText( pos, lastPos ));
+				slices.push( setColorForSimpleText( pos, lastPos ) );
 
 			var visibleText : String = slices.join( "" );
 
 			//simple tabs, 4 spaces, no align
 			visibleText = visibleText.replace( /\t/g, "    " );
 			//visibleText = visibleText.replace( /&/g, "&amp;" );
-			
+
 			trace( "visibleText" );
 			trace( visibleText );
 
 			tf.htmlText = visibleText;
-			
+
 			if ( tf.width < tf.textWidth )
 				tf.width = tf.textWidth + 10;
-			
+
 			setBackgroundSize();
-			
+
 			function setColorForSpecialText() : String
 			{
 				var str : String;
-				
+
 				if ( o.begin >= _selStart && o.begin <= _selEnd && needChangeColorSelected )
 				{
 					if ( o.end < _selEnd )
@@ -1118,7 +1132,7 @@ package ro.victordramba.scriptarea
 						str += "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( _selEnd, o.end ) ) + "</font>";
 					}
 				}
-				else if ( o.begin <= _selStart && o.end >= _selStart  && needChangeColorSelected )
+				else if ( o.begin <= _selStart && o.end >= _selStart && needChangeColorSelected )
 				{
 					var tt : int = o.end < lastPos ? o.end : lastPos;
 					if ( o.end <= _selEnd )
@@ -1130,31 +1144,31 @@ package ro.victordramba.scriptarea
 					{
 						str = "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( o.begin, firstPos ), Math.max( _selStart, firstPos ) ) ) + "</font>";
 						str += "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( _selStart, firstPos ), Math.max( _selEnd, firstPos ) ) ) + "</font>";
-						str += "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( _selEnd, firstPos ),  tt ) ) + "</font>";
+						str += "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( _selEnd, firstPos ), tt ) ) + "</font>";
 					}
 				}
 				else
 				{
 					str = "<font color=\"#" + o.color + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( o.begin, firstPos ), o.end ) ) + "</font>";
-					
+
 					if ( o.bold )
 						str = "<b>" + str + "</b>";
-					
+
 					if ( o.italic )
 						str = "<i>" + str + "</i>";
-					
+
 					if ( o.error )
 						str = "<u>" + str + "</u>";
 				}
-				
+
 				return str;
 			}
-			
+
 			function setColorForSimpleText( begin : int, end : int ) : String
 			{
 				var str : String;
-				
-				if ( begin >= _selStart && begin <= _selEnd  && needChangeColorSelected )
+
+				if ( begin >= _selStart && begin <= _selEnd && needChangeColorSelected )
 				{
 					if ( end <= _selEnd )
 						str = "<font color=\"#" + "ffffff" + "\">" + StringUtils.toHtmlEnc( _text.substring( Math.max( begin, firstPos ), end ) ) + "</font>";
@@ -1182,42 +1196,42 @@ package ro.victordramba.scriptarea
 				{
 					str = StringUtils.toHtmlEnc( _text.substring( Math.max( begin, firstPos ), end ) );
 				}
-				
+
 				return str;
 			}
 		}
-		
-		protected function drawGoToToken( pos : int, len : int ):void
+
+		protected function drawGoToToken( pos : int, len : int ) : void
 		{
 			var g : Graphics = linesShape.graphics;
 			g.clear();
-			
+
 			g.beginFill( 0x0000FF, 1 );
-			
+
 			var p0 : Point = getPointForIndex( pos );
 			var p1 : Point = getPointForIndex( pos + len );
-			
+
 			g.drawRect( p0.x, p0.y + letterBoxHeight, p1.x - p0.x, 1 );
 		}
-		
-		protected function ClearLines():void
+
+		protected function ClearLines() : void
 		{
 			var g : Graphics = linesShape.graphics;
 			g.clear();
 		}
-		
+
 		protected function drawSkobki( pos1 : int, pos2 : int ) : void
 		{
 			var g : Graphics = linesShape.graphics;
-			
+
 			g.beginFill( selectionSkobkiColor, 0.8 );
-			
+
 			var p : Point = getPointForIndex( pos1 );
-			
+
 			g.drawRect( p.x, p.y, letterBoxWidth, letterBoxHeight );
-			
+
 			p = getPointForIndex( pos2 );
-			
+
 			g.drawRect( p.x, p.y, letterBoxWidth, letterBoxHeight );
 		}
 	}

@@ -3,7 +3,7 @@ package net.vdombox.editors.parsers
 	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 	import net.vdombox.ide.common.view.components.VDOMImage;
-	
+
 	import ro.victordramba.util.HashMap;
 
 	public class TypeDB
@@ -73,7 +73,7 @@ package net.vdombox.editors.parsers
 		public function listAll() : Vector.<Field>
 		{
 			var a : Vector.<Field> = parentDB ? parentDB.listAll() : new Vector.<Field>;
-			
+
 			a = a.concat( Vector.<Field>( data.toArray() ) );
 			return a;
 		}
@@ -81,51 +81,51 @@ package net.vdombox.editors.parsers
 		public function getType( typeName : String ) : Field
 		{
 			typeName = typeName.toLowerCase();
-			
+
 			var typeField : Field = data.getValue( typeName );
-			
+
 			if ( !typeField )
 				return null;
-			
+
 			if ( typeField.members.toArray().length == 1 )
 			{
 				var attributeDescriptions : Array = typeField.typeVO.attributeDescriptions;
 				var attributeDescriptionVO : AttributeDescriptionVO;
-				
+
 				for each ( attributeDescriptionVO in attributeDescriptions )
 				{
 					typeField.members.setValue( attributeDescriptionVO.name, new Field( "attribute", 0, attributeDescriptionVO.name ) );
 				}
 			}
-			
+
 			return typeField;
 		}
-		
+
 		public function getVectorByType( typeID : String ) : Vector.<AutoCompleteItemVO>
-		{			
+		{
 			var typeField : Field;
-			for each( typeField in data.toArray() )
+			for each ( typeField in data.toArray() )
 			{
 				if ( typeField.typeVO.id == typeID )
 					break;
 			}
-			
+
 			var a : Vector.<AutoCompleteItemVO> = new Vector.<AutoCompleteItemVO>();
-			
+
 			if ( typeField.members.toArray().length == 1 )
 			{
 				var attributeDescriptions : Array = typeField.typeVO.attributeDescriptions;
 				var attributeDescriptionVO : AttributeDescriptionVO;
-				
+
 				for each ( attributeDescriptionVO in attributeDescriptions )
 				{
 					a.push( new AutoCompleteItemVO( VDOMImage.Standard, attributeDescriptionVO.name ) );
 				}
 			}
-			
+
 			return a;
 		}
-		
+
 		public function toString() : String
 		{
 			//return data.toArray().join(',');

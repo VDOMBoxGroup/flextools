@@ -1,10 +1,10 @@
 package net.vdombox.editors.parsers.vdomxml
 {
 	import flash.events.Event;
-	
+
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.skins.ScriptEditorSkin;
-	
+
 	import spark.components.SkinnableContainer;
 
 	public class XMLScriptEditor extends SkinnableContainer
@@ -14,11 +14,13 @@ package net.vdombox.editors.parsers.vdomxml
 			setStyle( "skinClass", net.vdombox.editors.skins.ScriptEditorSkin );
 		}
 
-		[SkinPart( required="true" )]
+		[SkinPart( required = "true" )]
 		public var scriptAreaComponent : ScriptAreaComponent;
 
 		private var controller : VdomXMLController;
+
 		private var fileName : String;
+
 		private var assistMenu : AssistMenuVdomXML;
 
 		public function loadSource( source : String, filePath : String ) : void
@@ -30,14 +32,14 @@ package net.vdombox.editors.parsers.vdomxml
 				controller.sourceChanged( scriptAreaComponent.text, fileName );
 		}
 
-		override protected function partAdded(partName:String, instance:Object):void
+		override protected function partAdded( partName : String, instance : Object ) : void
 		{
 			super.partAdded( partName, instance );
-			
-			if( instance == scriptAreaComponent )
+
+			if ( instance == scriptAreaComponent )
 				initiaize();
 		}
-		
+
 		private function initiaize() : void
 		{
 			controller = new VdomXMLController( stage, scriptAreaComponent );
@@ -48,7 +50,7 @@ package net.vdombox.editors.parsers.vdomxml
 
 			scriptAreaComponent.addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
-			
+
 			scriptAreaComponent.controller = controller;
 		}
 

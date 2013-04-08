@@ -1,83 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="400"
+		 height="300"
 		 click="group1_clickHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
-			
+
 			private var _showed : Boolean = false;
-			
-			public function get showed():Boolean
+
+			public function get showed() : Boolean
 			{
 				return _showed;
 			}
-			
+
 			public function setData( transcription : String, description : String ) : void
-			{				
+			{
 				this.transcription.text = transcription;
 				this.description.htmlText = description;
 			}
-			
+
 			public function show( owner : DisplayObjectContainer, x : int, y : int ) : void
 			{
 				if ( showed )
 					dispose();
-				
+
 				if ( transcription.text == "" && !description.text )
 					return;
-				
+
 				this.x = x;
 				this.y = y;
 				_showed = true;
-				
+
 				validateNow();
-				
+
 				PopUpManager.addPopUp( this, owner.parent );
 			}
-			
+
 			public function dispose() : void
 			{
 				_showed = false;
 				PopUpManager.removePopUp( this );
 			}
-			
-			
-			protected function group1_clickHandler(event:MouseEvent):void
+
+
+			protected function group1_clickHandler( event : MouseEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				event.stopImmediatePropagation();
 			}
-			
-			protected function description_updateCompleteHandler(event:FlexEvent):void
+
+			protected function description_updateCompleteHandler( event : FlexEvent ) : void
 			{
 				this.height = this.description.textHeight < 360 ? this.description.textHeight + 40 : 400;
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
-	<s:Rect width="100%" height="100%"
-			radiusX="5" radiusY="5">
+
+	<s:Rect width="100%"
+			height="100%"
+			radiusX="5"
+			radiusY="5">
 		<s:fill>
 			<s:SolidColor color="#555555"/>
 		</s:fill>
 	</s:Rect>
-	
-	<s:VGroup width="100%" height="100%" paddingLeft="10" paddingTop="10" paddingRight="10" paddingBottom="10">
-		
-		<s:Label id="transcription" width="100%" color="0xFFFFFF" />
-		
+
+	<s:VGroup width="100%"
+			  height="100%"
+			  paddingLeft="10"
+			  paddingTop="10"
+			  paddingRight="10"
+			  paddingBottom="10">
+
+		<s:Label id="transcription"
+				 width="100%"
+				 color="0xFFFFFF"/>
+
 		<mx:TextArea id="description"
-					width="100%" height="100%"
-					borderVisible="false" contentBackgroundAlpha="0"
-					editable="false" color="0xFFFFFF" updateComplete="description_updateCompleteHandler(event)"/>
-		
+					 width="100%"
+					 height="100%"
+					 borderVisible="false"
+					 contentBackgroundAlpha="0"
+					 editable="false"
+					 color="0xFFFFFF"
+					 updateComplete="description_updateCompleteHandler(event)"/>
+
 	</s:VGroup>
-	
+
 </s:Group>

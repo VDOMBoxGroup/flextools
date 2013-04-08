@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark"
-		minHeight="16" minWidth="16">
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 minHeight="16"
+			 minWidth="16">
 
 	<fx:Metadata>
 		[HostComponent("spark.components.Button")]
 	</fx:Metadata>
-	
+
 	<s:states>
-		<s:State name="disabled" />
-		<s:State name="down" />
-		<s:State name="over" />
-		<s:State name="up" />
+		<s:State name="disabled"/>
+		<s:State name="down"/>
+		<s:State name="over"/>
+		<s:State name="up"/>
 	</s:states>
-	
+
 	<s:BitmapImage source="@Embed('assets/btn_delete.png')"
-				   left="0" right="0" top="0" bottom="0" 
-				   width="100%" height="100%"/>
-	
+				   left="0"
+				   right="0"
+				   top="0"
+				   bottom="0"
+				   width="100%"
+				   height="100%"/>
+
 </s:SparkSkin>

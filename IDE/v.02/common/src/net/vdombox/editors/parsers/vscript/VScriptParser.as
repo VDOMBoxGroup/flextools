@@ -2,16 +2,16 @@ package net.vdombox.editors.parsers.vscript
 {
 	import flash.text.*;
 	import flash.utils.setTimeout;
-	
+
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.base.Parser;
-	
+
 	public class VScriptParser extends Parser
-	{				
+	{
 		public function VScriptParser()
 		{
 		}
-		
+
 		public static function addSourceFile( source : String, fileName : String, onComplete : Function ) : void
 		{
 			source = source.replace( /(\n|\r\n)/g, '\r' );
@@ -22,19 +22,18 @@ package net.vdombox.editors.parsers.vscript
 			}
 			setTimeout( onComplete, 1 );
 		}
-		
-		
+
+
 		//private var typeDB:TypeDB;
-		
-		private static const topType : RegExp =
-			/^(:?int|uint|Number|Boolean|RegExp|String|void|Function|Class|Array|Date|ByteArray|Vector|Object|XML|XMLList|Error)$/;
-		
-		public override  function load( source : String, fileName : String ) : void
+
+		private static const topType : RegExp = /^(:?int|uint|Number|Boolean|RegExp|String|void|Function|Class|Array|Date|ByteArray|Vector|Object|XML|XMLList|Error)$/;
+
+		public override function load( source : String, fileName : String ) : void
 		{
 			tokenizer2 = new VScriptTokenizer( source );
 			this.fileName = fileName;
 		}
-		
+
 		public override function runSlice() : Boolean
 		{
 			var b : Boolean = tokenizer2.runSlice();
@@ -46,15 +45,17 @@ package net.vdombox.editors.parsers.vscript
 			}
 			return b;
 		}
-		
-		/*public function getNodeByPos(pos:uint):Token
-		{
-		if (!tokenizer) return null;
-		return tokenizer.tokenByPos(pos);
-		}*/
-		
-		
-		
+
+		/*
+		   public function getNodeByPos(pos:uint):Token
+		   {
+		   if (!tokenizer) return null;
+		   return tokenizer.tokenByPos(pos);
+		   }
+		 */
+
+
+
 		public function newResolver() : Resolver
 		{
 			return new Resolver( tokenizer as VScriptTokenizer );

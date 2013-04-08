@@ -8,12 +8,12 @@ package net.vdombox.utils
 	import flash.events.Event;
 	import flash.events.NativeWindowDisplayStateEvent;
 	import flash.utils.Dictionary;
-	
+
 	import mx.core.FlexGlobals;
 	import mx.core.IVisualElement;
 	import mx.core.UIComponent;
 	import mx.events.AIREvent;
-	
+
 	import spark.components.Window;
 	import spark.components.WindowedApplication;
 
@@ -53,8 +53,7 @@ package net.vdombox.utils
 				throw new Error( "Instance already exists." );
 		}
 
-		public function createWindow( content : UIComponent, title : String, parent : UIComponent = null, 
-									  isModal : Boolean = true, childList : String = null, windowOptions : NativeWindowInitOptions = null ) : Window
+		public function createWindow( content : UIComponent, title : String, parent : UIComponent = null, isModal : Boolean = true, childList : String = null, windowOptions : NativeWindowInitOptions = null ) : Window
 		{
 			if ( !windowsInfo )
 				windowsInfo = [];
@@ -101,54 +100,54 @@ package net.vdombox.utils
 			windowsInfo.push( windowData );
 			return window;
 		}
-		
+
 		public function addWindow( window : Window, parent : UIComponent = null, isModal : Boolean = false ) : void
-		{			
+		{
 			if ( !windowsInfo )
 				windowsInfo = [];
-			
+
 			var win2 : Object = window;
-			
+
 			if ( windowsInfo.length > 0 && win2.hasOwnProperty( "content" ) )
 			{
 				var win1 : Object = windowsInfo[ windowsInfo.length - 1 ].window;
-				
+
 				if ( win1.hasOwnProperty( "content" ) && win1.content == win2.content )
 					return;
-				
+
 			}
-			
+
 			if ( !handlerDictionary )
 				handlerDictionary = new Dictionary();
-			
+
 			var nativeWindow : NativeWindow = window.nativeWindow;
-			
-			if( nativeWindow && nativeWindow.closed )
+
+			if ( nativeWindow && nativeWindow.closed )
 				return;
-			
+
 			const windowData : WindowData = new WindowData();
-			
+
 			windowData.parent = parent;
 			windowData.isModal = parent == null ? false : isModal;
 			windowData.window = window;
-			
+
 			windowsInfo.push( windowData );
-			
-			if( nativeWindow )
+
+			if ( nativeWindow )
 			{
 				initializeWindow( window );
 			}
 			else
 			{
 				window.visible = false;
-				
+
 				window.addEventListener( AIREvent.WINDOW_COMPLETE, window_windowCompleteHandler );
 				window.open( false );
 			}
 		}
-		
-//		public function addWi
-		
+
+		//		public function addWi
+
 		public function removeWindow( component : * ) : void
 		{
 			var nativeWindow : NativeWindow;
@@ -189,81 +188,73 @@ package net.vdombox.utils
 
 			while ( windowsInfo.length > 0 )
 			{
-				closeWindow( WindowData( windowsInfo[ 0 ]).nativeWindow );
+				closeWindow( WindowData( windowsInfo[ 0 ] ).nativeWindow );
 			}
 		}
 
 		private function initializeWindow( window : Window ) : void
 		{
 			var nativeWindow : NativeWindow = window.nativeWindow;
-			
+
 			var windowData : WindowData = findWindowInfoByWindow( nativeWindow );
-			
+
 			if ( !windowData )
 				return;
-			
+
 			fitToContent( window, windowData.content );
-			
+
 			if ( !window.hasOwnProperty( "notCenteralize" ) )
 				moveToCenter( window );
-			
-			var handlers : Array = 
-				[
-					{ type: Event.CLOSE, handler: nativeWindow_closeHandler }, 
-					{ type: Event.ACTIVATE, handler: nativeWindow_activateHandler }
-				];
-			
+
+			var handlers : Array = [ { type: Event.CLOSE, handler: nativeWindow_closeHandler }, { type: Event.ACTIVATE, handler: nativeWindow_activateHandler } ];
+
 			addHandlers( nativeWindow, handlers );
-			
+
 			if ( windowData.parent == null )
 			{
 				window.visible = true;
 				nativeWindow.activate();
 				return;
 			}
-			
+
 			var parentNativeWindow : NativeWindow = windowData.parent.stage.nativeWindow;
 			var isParentWindowLocked : Boolean = windowIsLocked( parentNativeWindow );
-			
+
 			if ( isParentWindowLocked && windowData.isModal )
 			{
-				var parentHandlers : Array = 
-					[
-						{ type: NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, handler: nativeWindow_displayStateChangingHandler }, 
-						{ type: Event.CLOSING, handler: parent_closingHandler }, { type: Event.ACTIVATE, handler: nativeWindow_activateHandler }
-					];
-				
+				var parentHandlers : Array = [ { type: NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, handler: nativeWindow_displayStateChangingHandler }, { type: Event.CLOSING, handler: parent_closingHandler }, { type: Event.ACTIVATE, handler: nativeWindow_activateHandler } ];
+
 				addHandlers( parentNativeWindow, parentHandlers );
-				
+
 				if ( windowData.parent.parentApplication )
 					windowData.parent.parentApplication.enabled = false;
 				else
 					windowData.parent.enabled = false;
 			}
-			
+
 			if ( handlerDictionary[ parentNativeWindow ] === undefined )
 			{
 				parentNativeWindow.addEventListener( Event.ACTIVATE, nativeWindow_activateHandler );
-				handlerDictionary[ parentNativeWindow ] = [{ type: Event.ACTIVATE, handler: nativeWindow_activateHandler }];
+				handlerDictionary[ parentNativeWindow ] = [ { type: Event.ACTIVATE, handler: nativeWindow_activateHandler } ];
 			}
-			
+
 			window.visible = true;
 			nativeWindow.activate();
 		}
-		
+
 		private function fitToContent( window : Window, content : UIComponent ) : void
 		{
-			if( !window || !content )
+			if ( !window || !content )
 				return;
-			
+
 			var oldWidth : Number = window.width;
 			var oldHeight : Number = window.height;
 
-			var containerWidth : Number = Math.max( content.width, content.getExplicitOrMeasuredWidth());
+			var containerWidth : Number = Math.max( content.width, content.getExplicitOrMeasuredWidth() );
 
-			var containerHeight : Number = Math.max( content.height, content.getExplicitOrMeasuredHeight());
+			var containerHeight : Number = Math.max( content.height, content.getExplicitOrMeasuredHeight() );
 
-//			var vm : EdgeMetrics = window.vie
+			//			var vm : EdgeMetrics = window.vie
 
 			window.minWidth = content.minWidth; //+ vm.left + vm.right;
 			window.minHeight = content.minHeight; //+ vm.top + vm.bottom;
@@ -275,21 +266,20 @@ package net.vdombox.utils
 
 		private function windowIsLocked( nativeWindow : NativeWindow ) : Boolean
 		{
-			var isLockedWindow : Boolean = windowsInfo.some( 
-				function( element : *, index : int, arr : Array ) : Boolean
-				{
-					var parent : UIComponent = element.parent;
+			var isLockedWindow : Boolean = windowsInfo.some( function( element : *, index : int, arr : Array ) : Boolean
+			{
+				var parent : UIComponent = element.parent;
 
-					if ( !element.isModal || parent == null || parent.stage == null )
-						return false;
-
-					var parentNativeWindow : NativeWindow = parent.stage.nativeWindow;
-
-					if ( parentNativeWindow && parentNativeWindow == nativeWindow )
-						return true;
-
+				if ( !element.isModal || parent == null || parent.stage == null )
 					return false;
-				});
+
+				var parentNativeWindow : NativeWindow = parent.stage.nativeWindow;
+
+				if ( parentNativeWindow && parentNativeWindow == nativeWindow )
+					return true;
+
+				return false;
+			} );
 
 			return isLockedWindow;
 		}
@@ -310,7 +300,7 @@ package net.vdombox.utils
 
 			for ( var i : uint = 0; i < length; i++ )
 			{
-				WindowData( windowsInfo[ i ]).nativeWindow.visible = visible;
+				WindowData( windowsInfo[ i ] ).nativeWindow.visible = visible;
 			}
 		}
 
@@ -318,8 +308,8 @@ package net.vdombox.utils
 		{
 			var screen : Screen = Screen.getScreensForRectangle( window.nativeWindow.bounds )[ 0 ];
 
-			if( screen && window && window )
-				window.move( Math.max( screen.bounds.width / 2 - window.width / 2, 0 ), Math.max( screen.bounds.height / 2 - window.height / 2, 0 ));
+			if ( screen && window && window )
+				window.move( Math.max( screen.bounds.width / 2 - window.width / 2, 0 ), Math.max( screen.bounds.height / 2 - window.height / 2, 0 ) );
 		}
 
 		private function findWindowInfoByWindow( nativeWindow : NativeWindow ) : WindowData
@@ -337,16 +327,16 @@ package net.vdombox.utils
 		private function findFirstModalWindowInfoByParentWindow( nativeWindow : NativeWindow ) : WindowData
 		{
 			const n : int = windowsInfo.length;
-			
+
 			for ( var i : int = 0; i < n; i++ )
 			{
 				var windowData : WindowData = windowsInfo[ i ];
-				
+
 				if ( windowData.parent == null )
 					continue;
-				
+
 				var parentNativeWindow : NativeWindow = NativeWindow( windowData.parent.stage.nativeWindow );
-				
+
 				if ( windowData.isModal && nativeWindow == parentNativeWindow )
 					return windowData;
 			}
@@ -356,9 +346,9 @@ package net.vdombox.utils
 		private function findAllModalPopupInfoByParentWindow( parentNativeWindow : NativeWindow ) : Array
 		{
 			var newArr : Array = windowsInfo.filter( function( element : *, index : int, arr : Array ) : Boolean
-				{
-					return parentNativeWindow == element.parent.stage.nativeWindow;
-				})
+			{
+				return parentNativeWindow == element.parent.stage.nativeWindow;
+			} )
 			return newArr;
 		}
 
@@ -371,7 +361,7 @@ package net.vdombox.utils
 
 			nativeWindow.removeEventListener( Event.CLOSE, nativeWindow_closeHandler );
 
-			windowData.window.dispatchEvent( new Event( Event.CLOSE ));
+			windowData.window.dispatchEvent( new Event( Event.CLOSE ) );
 			ArrayUtils.removeValueFromArray( windowsInfo, windowData );
 			removeHandlers( nativeWindow );
 
@@ -396,27 +386,27 @@ package net.vdombox.utils
 		private function addHandlers( nativeWindow : NativeWindow, handlers : Array ) : void
 		{
 			removeHandlers( nativeWindow );
-			
+
 			handlerDictionary[ nativeWindow ] = handlers;
 
 			handlers.forEach( function( element : *, index : int, arr : Array ) : void
 			{
-				nativeWindow.addEventListener( element[ "type" ], element[ "handler" ]);
-			})
+				nativeWindow.addEventListener( element[ "type" ], element[ "handler" ] );
+			} )
 		}
 
 		private function removeHandlers( nativeWindow : NativeWindow ) : void
 		{
 			var handlers : Array = handlerDictionary[ nativeWindow ];
-			
+
 			if ( handlers == null )
 				return;
 
 			handlers.forEach( function( element : *, index : int, arr : Array ) : void
 			{
-				nativeWindow.removeEventListener( element[ "type" ], element[ "handler" ]);
-			})
-			
+				nativeWindow.removeEventListener( element[ "type" ], element[ "handler" ] );
+			} )
+
 			delete handlerDictionary[ nativeWindow ]
 		}
 
@@ -535,13 +525,13 @@ class WindowData
 	}
 
 	public var content : UIComponent;
-	
+
 	public var parent : UIComponent;
-	
+
 	public var isModal : Boolean;
-	
+
 	public var window : Window;
-	
+
 	public function get nativeWindow() : NativeWindow
 	{
 		if ( window )

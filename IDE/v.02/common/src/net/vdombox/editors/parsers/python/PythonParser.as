@@ -2,7 +2,7 @@ package net.vdombox.editors.parsers.python
 {
 	import flash.text.*;
 	import flash.utils.setTimeout;
-	
+
 	import net.vdombox.editors.parsers.ClassDB;
 	import net.vdombox.editors.parsers.base.Parser;
 
@@ -27,8 +27,7 @@ package net.vdombox.editors.parsers.python
 
 		//private var typeDB:TypeDB;
 
-		private static const topType : RegExp =
-			/^(:?int|uint|Number|Boolean|RegExp|String|void|Function|Class|Array|Date|ByteArray|Vector|Object|XML|XMLList|Error)$/;
+		private static const topType : RegExp = /^(:?int|uint|Number|Boolean|RegExp|String|void|Function|Class|Array|Date|ByteArray|Vector|Object|XML|XMLList|Error)$/;
 
 		public override function load( source : String, fileName : String ) : void
 		{

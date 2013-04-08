@@ -1,11 +1,12 @@
 package net.vdombox.ide.common.interfaces
 {
+
 	public interface IVIModule
 	{
 		function get moduleID() : String;
 
 		function get moduleName() : String;
-		
+
 		function get version() : String;
 
 		function get hasToolset() : Boolean;
@@ -19,9 +20,9 @@ package net.vdombox.ide.common.interfaces
 		function getSettingsScreen() : void;
 
 		function getBody() : void;
-		
+
 		function initializeSettings() : void;
-		
+
 		function tearDown() : void;
 	}
 }

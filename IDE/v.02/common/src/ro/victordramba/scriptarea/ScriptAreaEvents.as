@@ -19,9 +19,9 @@ package ro.victordramba.scriptarea
 	import flash.utils.Timer;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
-	
+
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.editors.parsers.LanguageVO;
 	import net.vdombox.editors.parsers.base.BackwardsParser;
@@ -36,37 +36,42 @@ package ro.victordramba.scriptarea
 	import net.vdombox.ide.common.view.components.windows.ScriptStructureWindow;
 	import net.vdombox.utils.WindowManager;
 
-	/*import flash.desktop.Clipboard;
+	/*
+	   import flash.desktop.Clipboard;
 	   import flash.desktop.ClipboardFormats;
 	   import flash.events.Event;
 	   import flash.events.FocusEvent;
 	   import flash.events.KeyboardEvent;
 	   import flash.events.MouseEvent;
 	   import flash.geom.Point;
-	 import flash.ui.Keyboard;*/
+	   import flash.ui.Keyboard;
+	 */
 
 	public class ScriptAreaEvents extends ScriptArea
 	{
 		private var lastCol : int = 0;
+
 		private var extChar : int;
+
 		private var inputTF : TextField;
-		
+
 		public var scriptLang : String = "pytnon";
-		
+
 		private var token : Token;
-		
+
 		public var assistMenuOpened : Boolean = false;
-		
+
 		private var str : String;
-		
+
 		private var t : Timer;
+
 		private var blocked : Boolean = false;
-		
+
 		private var _selectKeyByAutoComplte : uint = Keyboard.ENTER;
 
 		public function ScriptAreaEvents()
 		{
-			
+
 			doubleClickEnabled = true;
 			focusRect = false;
 
@@ -81,7 +86,7 @@ package ro.victordramba.scriptarea
 			} );
 
 
-			addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown);
+			addEventListener( KeyboardEvent.KEY_DOWN, onKeyDown );
 			addEventListener( FocusEvent.KEY_FOCUS_CHANGE, function( e : FocusEvent ) : void
 			{
 				e.preventDefault();
@@ -112,10 +117,12 @@ package ro.victordramba.scriptarea
 				_setSelection( findWordBound( pos, true ), findWordBound( pos, false ), true );
 			} );
 
-			/*addEventListener( Event.CUT, onCut );
-			addEventListener( Event.COPY, onCopy );
-			addEventListener( Event.PASTE, onPaste );
-			addEventListener( Event.SELECT_ALL, onSelectAll );*/
+			/*
+			   addEventListener( Event.CUT, onCut );
+			   addEventListener( Event.COPY, onCopy );
+			   addEventListener( Event.PASTE, onPaste );
+			   addEventListener( Event.SELECT_ALL, onSelectAll );
+			 */
 
 			addEventListener( MouseEvent.ROLL_OVER, function( e : MouseEvent ) : void
 			{
@@ -125,124 +132,125 @@ package ro.victordramba.scriptarea
 			{
 				Mouse.cursor = MouseCursor.AUTO;
 			} );
-			
-			addEventListener( MouseEvent.CONTEXT_MENU, contextMenuHandler, false, 0 , true );
-			
+
+			addEventListener( MouseEvent.CONTEXT_MENU, contextMenuHandler, false, 0, true );
+
 			t = new Timer( 300, 1 );
-			
+
 			t.addEventListener( TimerEvent.TIMER, timerHandler, false, 0, true );
 		}
-		
+
 		private var contextX : int;
+
 		private var contextY : int;
-		
+
 		private function contextMenuHandler( event : MouseEvent ) : void
 		{
 			contextX = event.localX;
 			contextY = event.localY;
-			
+
 			if ( !contextMenu )
 				contextMenu = new ContextMenu();
-			
+
 			contextMenu.removeAllItems();
-			
-			var copyItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_copy' ));
+
+			var copyItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_copy' ) );
 			copyItem.addEventListener( Event.SELECT, copyContextMenuHandler, false, 0, true );
 			contextMenu.addItem( copyItem );
-			
-			var cutItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_cut' ));
+
+			var cutItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_cut' ) );
 			cutItem.addEventListener( Event.SELECT, cutContextMenuHandler, false, 0, true );
 			contextMenu.addItem( cutItem );
-			
+
 			if ( _selStart == _selEnd )
 			{
 				copyItem.enabled = false;
 				cutItem.enabled = false;
 			}
-			
-			var pasteItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_paste' ));
+
+			var pasteItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_paste' ) );
 			pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
 			contextMenu.addItem( pasteItem );
-			
+
 			str = text.substring( _selStart, _selEnd );
 			str = controller.getRegisterWord( str );
 			token = controller.getTokenByPos( _selStart );
-			
+
 			if ( token.hasMember( str ) )
 			{
-				var renameItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_rename' ));
+				var renameItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_rename' ) );
 				renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );
 				contextMenu.addItem( renameItem );
-				
+
 				if ( ( controller.actionVO is LibraryVO ) && !token.scope.parent || ( token.scope.parent.name == "top" && token.string == token.scope.name ) )
 				{
-					var globalRenameItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_global_rename' ));
+					var globalRenameItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_global_rename' ) );
 					globalRenameItem.addEventListener( Event.SELECT, globalRenameContextMenuHandler, false, 0, true );
 					contextMenu.addItem( globalRenameItem );
 				}
 			}
-			
-			if ( controller.lang == LanguageVO.python)
+
+			if ( controller.lang == LanguageVO.python )
 			{
-				var getSetItem : ContextMenuItem = new ContextMenuItem(ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_get_set' ));
+				var getSetItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_get_set' ) );
 				getSetItem.addEventListener( Event.SELECT, getSetContextMenuHandler, false, 0, true );
 				contextMenu.addItem( getSetItem );
 			}
-			
+
 		}
-		
+
 		private function copyContextMenuHandler( event : Event ) : void
 		{
 			onCopy();
 		}
-		
+
 		private function cutContextMenuHandler( event : Event ) : void
 		{
 			onCut();
 		}
-		
+
 		private function pasteContextMenuHandler( event : Event ) : void
 		{
 			onPaste();
 		}
-		
+
 		private function renameContextMenuHandler( event : Event ) : void
 		{
-			dispatchEvent( new ScriptAreaComponenrEvent ( ScriptAreaComponenrEvent.RENAME, false, false, { oldName : str, controller : controller } ) );
+			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.RENAME, false, false, { oldName: str, controller: controller } ) );
 		}
-		
+
 		private function globalRenameContextMenuHandler( event : Event ) : void
 		{
-			dispatchEvent( new ScriptAreaComponenrEvent ( ScriptAreaComponenrEvent.GLOBAL_RENAME, false, false, { oldName : str, controller : controller } ) );
+			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.GLOBAL_RENAME, false, false, { oldName: str, controller: controller } ) );
 		}
-		
+
 		private function getSetContextMenuHandler( event : Event ) : void
 		{
 			var cursorPosition : int = getIndexForPoint( new Point( contextX, contextY ) );
 			token = controller.getTokenByPos( cursorPosition );
 			if ( !token )
 				return;
-			
+
 			var bp : BackwardsParser = new BackwardsParser;
 			if ( !bp.parse( text, token.pos + token.string.length ) )
 				return;
-			
+
 			var variable : String = '';
-			
+
 			for ( var i : int = 0; i < bp.names.length; i++ )
 			{
-				variable += bp.names[i] + '.';
+				variable += bp.names[ i ] + '.';
 			}
-			
-			variable = variable.substr(0, variable.length - 1);
-			
+
+			variable = variable.substr( 0, variable.length - 1 );
+
 			var generateGetterSetterWindow : GenerateGettesSetterWindow = new GenerateGettesSetterWindow( variable );
-			
+
 			generateGetterSetterWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			generateGetterSetterWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
-			
-			WindowManager.getInstance().addWindow(generateGetterSetterWindow, null, true);
-			
+
+			WindowManager.getInstance().addWindow( generateGetterSetterWindow, null, true );
+
 			function applyHandler( event : PopUpWindowEvent ) : void
 			{
 				WindowManager.getInstance().removeWindow( generateGetterSetterWindow );
@@ -250,75 +258,75 @@ package ro.victordramba.scriptarea
 				var getSet : String = event.detail as String;
 				var getter : Boolean = generateGetterSetterWindow.getter;
 				var setter : Boolean = generateGetterSetterWindow.setter;
-				
-				for( var i : int = 0; i < _indentLines.length; i++ )
-				{	
-					if ( _indentLines[i].end > cursorPosition )
+
+				for ( var i : int = 0; i < _indentLines.length; i++ )
+				{
+					if ( _indentLines[ i ].end > cursorPosition )
 					{
-						var spaceCount : int = _indentLines[i].otstyp.spaces;
-						var tabCount : int = _indentLines[i].otstyp.tabs - 1;
-						
+						var spaceCount : int = _indentLines[ i ].otstyp.spaces;
+						var tabCount : int = _indentLines[ i ].otstyp.tabs - 1;
+
 						var block : String = '\n\n';
 						if ( getter )
 						{
 							addSpace();
-							
+
 							block += '@property\n';
-							
+
 							addSpace();
-							
-							block += 'def ' + getSet +'( self ):\n'
-							
-							addSpace(true);
-							
+
+							block += 'def ' + getSet + '( self ):\n'
+
+							addSpace( true );
+
 							block += 'return ' + variable + '\n\n';
 						}
-						
+
 						if ( setter )
 						{
 							addSpace();
-							
+
 							block += '@' + getSet + '.setter\n';
-							
+
 							addSpace();
-							
-							block += 'def ' + getSet +'( self, value ):\n'
-							
-							addSpace(true);
-							
-							block += variable + ' = value \n\n';	
+
+							block += 'def ' + getSet + '( self, value ):\n'
+
+							addSpace( true );
+
+							block += variable + ' = value \n\n';
 						}
-						
-						replaceText( _indentLines[i].end, _indentLines[i].end, block );
-						
+
+						replaceText( _indentLines[ i ].end, _indentLines[ i ].end, block );
+
 						dispatchEvent( new Event( Event.CHANGE, true, false ) );
 						break;
 					}
 				}
-				
+
 				function addSpace( incTab : Boolean = false ) : void
 				{
 					var i : int;
-					
+
 					for ( i = 1; i < spaceCount; i++ )
 					{
 						block += ' ';
 					}
-					
+
 					for ( i = incTab ? -1 : 0; i < tabCount; i++ )
 					{
 						block += '\t';
 					}
 				}
 			}
-			
+
 			function cancelHandler( event : PopUpWindowEvent ) : void
 			{
 				WindowManager.getInstance().removeWindow( generateGetterSetterWindow );
 			}
 		}
-		
-		
+
+
 		private function findWordBound( start : int, left : Boolean ) : int
 		{
 			if ( left )
@@ -358,8 +366,7 @@ package ro.victordramba.scriptarea
 			}
 			catch ( e : SecurityError )
 			{
-			}
-			; //can't paste
+			}; //can't paste
 		}
 
 		private function onCopy( e : Event = null ) : void
@@ -393,7 +400,7 @@ package ro.victordramba.scriptarea
 					dragStart = _caret;
 				else
 					dragStart = _start;
-				
+
 				_setSelection( dragStart, getIndexForPoint( new Point( mouseX, mouseY ) ), true );
 			}
 			else
@@ -401,7 +408,7 @@ package ro.victordramba.scriptarea
 				dragStart = getIndexForPoint( new Point( mouseX, mouseY ) );
 				_setSelection( dragStart, dragStart, true );
 			}
-			
+
 			ClearLines();
 			selectedSkobki( dragStart );
 
@@ -423,7 +430,7 @@ package ro.victordramba.scriptarea
 			}
 
 			function onMouseUp( e : MouseEvent ) : void
-			{ 
+			{
 				stage.removeEventListener( MouseEvent.MOUSE_UP, onMouseUp );
 				stage.removeEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
 				_setSelection( dragStart, getIndexForPoint( new Point( mouseX, mouseY ) ), true );
@@ -440,22 +447,22 @@ package ro.victordramba.scriptarea
 				}
 			}
 		}
-		
+
 		private function selectedSkobki( pos : int ) : void
 		{
 			var token1 : Token = controller.getTokenByPos( pos - 1 );
 			var token2 : Token;
-			
+
 			if ( !token1 || token1.type != Token.SYMBOL || token1.pos != pos - 1 )
 				return;
-			
+
 			var pos2 : int = pos - 1;
-			
+
 			var tempPos : int;
 			var tempPos2 : int;
 			var step : int = 0;
 			var flag : Boolean = false;
-			
+
 			if ( token1.string == "(" )
 			{
 				while ( true )
@@ -467,7 +474,7 @@ package ro.victordramba.scriptarea
 						flag = false;
 						break;
 					}
-					
+
 					if ( tempPos > tempPos2 && tempPos2 > 0 )
 					{
 						token2 = controller.getTokenByPos( tempPos2 );
@@ -481,34 +488,34 @@ package ro.victordramba.scriptarea
 					}
 					else
 						pos2 = tempPos;
-					
+
 					token2 = controller.getTokenByPos( pos2 );
 					if ( token2.type == Token.SYMBOL && token2.string == ")" )
 					{
-						if ( step == 0)
+						if ( step == 0 )
 						{
 							flag = true;
 							break;
 						}
 						else
 							step--;
-						
+
 					}
 				}
 			}
 			else if ( token1.string == ")" )
 			{
 				while ( true )
-				{					
+				{
 					tempPos = text.lastIndexOf( "(", pos2 - 1 );
 					tempPos2 = text.lastIndexOf( ")", pos2 - 1 );
-					
+
 					if ( tempPos < 0 )
 					{
 						flag = false;
 						break;
 					}
-					
+
 					if ( tempPos < tempPos2 )
 					{
 						token2 = controller.getTokenByPos( tempPos2 );
@@ -522,11 +529,11 @@ package ro.victordramba.scriptarea
 					}
 					else
 						pos2 = tempPos;
-					
+
 					token2 = controller.getTokenByPos( pos2 );
-					if ( token2.type == Token.SYMBOL && token2.string == "("  )
+					if ( token2.type == Token.SYMBOL && token2.string == "(" )
 					{
-						if ( step == 0)
+						if ( step == 0 )
 						{
 							flag = true;
 							break;
@@ -535,19 +542,19 @@ package ro.victordramba.scriptarea
 							step--;
 					}
 				}
-				
+
 			}
 			else
 				return;
-			
-			if (!flag)
+
+			if ( !flag )
 				return;
-			
-			drawSkobki( pos-1, pos2 );
-			
-			
+
+			drawSkobki( pos - 1, pos2 );
+
+
 		}
-		
+
 		public function onMouseClick( e : MouseEvent ) : void
 		{
 			if ( e.ctrlKey )
@@ -556,7 +563,7 @@ package ro.victordramba.scriptarea
 				ClearLines();
 			}
 		}
-		
+
 		public function onMouseMove( e : MouseEvent ) : void
 		{
 			if ( e.ctrlKey )
@@ -565,31 +572,31 @@ package ro.victordramba.scriptarea
 					ClearLines();
 			}
 		}
-		
-		private function onKeyUp( event : KeyboardEvent ):void
+
+		private function onKeyUp( event : KeyboardEvent ) : void
 		{
 			ClearLines();
 		}
-		
-		private function CheckGoTo( needGo : Boolean ):Boolean
+
+		private function CheckGoTo( needGo : Boolean ) : Boolean
 		{
 			var cursorPosition : int = getIndexForPoint( new Point( mouseX, mouseY ) );
 			token = controller.getTokenByPos( cursorPosition );
 			if ( !token )
 				return false;
-			
+
 			var bp : BackwardsParser = new BackwardsParser;
 			if ( !bp.parse( text, token.pos + token.string.length ) )
 				return false;
-			
+
 			if ( controller.lang == LanguageVO.vscript )
 				bp.toLowerCase();
-			
-			var f : Field = token.scope.getLastRecursionField( bp.names[0] );
-			
+
+			var f : Field = token.scope.getLastRecursionField( bp.names[ 0 ] );
+
 			var info : Object;
 			var position : int;
-			
+
 			if ( f && f.className && bp.names.length > 1 )
 			{
 				var className : String = f.className.toLowerCase();
@@ -603,7 +610,7 @@ package ro.victordramba.scriptarea
 						if ( !info )
 							return false;
 						position = info.position;
-						
+
 						if ( position != -1 )
 						{
 							if ( needGo )
@@ -618,14 +625,14 @@ package ro.victordramba.scriptarea
 				{
 					for ( var i : int = 1; i < bp.names.length; i++ )
 					{
-						name = bp.names[i];
-						
+						name = bp.names[ i ];
+
 						f2 = f2.getField( name );
-						
+
 						if ( !f2 || ( f2 != token.scope && f2.fieldType == "top" && controller.actionVO is ServerActionVO ) )
 							return false;
 					}
-					
+
 					if ( needGo )
 						goToPos( f2.pos, token.string.length );
 					else
@@ -633,15 +640,15 @@ package ro.victordramba.scriptarea
 					return true;
 				}
 			}
-			
-			if ( token.parent && token.parent.scope.imports && token.parent.scope.imports.hasKey( bp.names[0] ) )
+
+			if ( token.parent && token.parent.scope.imports && token.parent.scope.imports.hasKey( bp.names[ 0 ] ) )
 			{
-				var lib : Object = token.parent.scope.imports.getValue( bp.names[0] );
+				var lib : Object = token.parent.scope.imports.getValue( bp.names[ 0 ] );
 				info = HashLibraryArray.getPositionToken( lib.source, lib.systemName, bp, controller.lang );
 				if ( !info )
 					return false;
 				position = info.position;
-				
+
 				if ( position != -1 )
 				{
 					if ( needGo )
@@ -651,60 +658,60 @@ package ro.victordramba.scriptarea
 					return true;
 				}
 			}
-			
+
 			return getFiled( token, bp, needGo );
 		}
-		
+
 		private function getFiled( t : Token, bp : BackwardsParser, needGo : Boolean ) : Boolean
 		{
 			if ( !t )
 				return false;
-			
+
 			if ( getFiled( t.parent, bp, needGo ) )
 				return true;
-			
+
 			var scope : Field = t.scope;
 			var name : String;
-			
+
 			for ( var i : int = 0; i < bp.names.length; i++ )
 			{
-				name = bp.names[i];
-				
+				name = bp.names[ i ];
+
 				if ( name == "self" )
 					continue;
-				
+
 				scope = scope.getField( name );
-				
+
 				if ( !scope || ( t.scope != token.scope && t.scope.fieldType == "top" && controller.actionVO is ServerActionVO ) )
 					return false;
 			}
-			
+
 			if ( needGo )
 				goToPos( scope.pos, token.string.length );
 			else
 				drawGoToToken( token.pos, token.string.length );
 			return true;
 		}
-		
+
 		public function undo_fun() : void
 		{
 			undo();
 			dipatchChange();
 			dipatchChangeText();
 		}
-		
+
 		public function redo_fun() : void
 		{
 			redo();
 			dipatchChange();
 			dipatchChangeText();
 		}
-		
+
 		private var eventPressNavigetionKey : ScriptAreaComponenrEvent = new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.PRESS_NAVIGATION_KEY );
 
 		private function onKeyDown( e : KeyboardEvent ) : void
-		{	
-			if ( assistMenuOpened && ( e.keyCode == _selectKeyByAutoComplte || e.keyCode == Keyboard.UP  || e.keyCode == Keyboard.DOWN  || e.keyCode == Keyboard.ENTER ) )
+		{
+			if ( assistMenuOpened && ( e.keyCode == _selectKeyByAutoComplte || e.keyCode == Keyboard.UP || e.keyCode == Keyboard.DOWN || e.keyCode == Keyboard.ENTER ) )
 			{
 				if ( e.keyCode == _selectKeyByAutoComplte )
 					eventPressNavigetionKey.detail = "Enter";
@@ -714,114 +721,113 @@ package ro.victordramba.scriptarea
 					eventPressNavigetionKey.detail = "Down";
 				else
 					eventPressNavigetionKey.detail = "Close";
-				
+
 				dispatchEvent( eventPressNavigetionKey );
-				
+
 				if ( eventPressNavigetionKey.detail != "Close" )
 					e.stopImmediatePropagation();
-				
+
 				return;
-			}		
-			
+			}
+
 			var c : String = String.fromCharCode( e.charCode );
 			var k : int = e.keyCode;
 			var i : int;
-			if (e.ctrlKey &&  (k == Keyboard.INSERT  || c ==  'c' || c == 'C' ))
+			if ( e.ctrlKey && ( k == Keyboard.INSERT || c == 'c' || c == 'C' ) )
 			{
 				onCopy();
 			}
-			else if (  e.shiftKey && k == Keyboard.INSERT 
-				|| e.ctrlKey  &&  ( c ==  'v' || c ==  'V') )
+			else if ( e.shiftKey && k == Keyboard.INSERT || e.ctrlKey && ( c == 'v' || c == 'V' ) )
 			{
 				onPaste();
-				//dipatchChange(); //?
+					//dipatchChange(); //?
 			}
-				
-			else if (  e.altKey && k == Keyboard.BACKSPACE 
-				|| e.ctrlKey  &&  ( c ==  'z' || c ==  'Z')) // z & Z ?
+
+			else if ( e.altKey && k == Keyboard.BACKSPACE || e.ctrlKey && ( c == 'z' || c == 'Z' ) ) // z & Z ?
 			{
 				undo_fun();
 				return;
 			}
-			else if ( e.ctrlKey &&  ( c ==  'y' || c ==  'Y') )
+			else if ( e.ctrlKey && ( c == 'y' || c == 'Y' ) )
 			{
 				redo_fun();
 				return;
 			}
-			else if (  e.shiftKey && k == Keyboard.DELETE 
-				|| e.ctrlKey  &&  ( c ==  'x' || c ==  'X') )
+			else if ( e.shiftKey && k == Keyboard.DELETE || e.ctrlKey && ( c == 'x' || c == 'X' ) )
 			{
 				onCopy();
-				
+
 				if ( _caret < length && _selStart == _selEnd )
 					replaceText( _caret, _caret + 1, '' );
 				else
 					replaceSelection( '' );
-				
+
 				dipatchChange();
 				dipatchChangeText();
 				return;
-				
+
 			}
-			else if ( e.ctrlKey  &&  ( c ==  'a' || c ==  'A') )
+			else if ( e.ctrlKey && ( c == 'a' || c == 'A' ) )
 			{
 				_setSelection( 0, this.length, false );
 				return;
 			}
-			else if ( e.ctrlKey  &&  ( c ==  'd' || c ==  'D') )
+			else if ( e.ctrlKey && ( c == 'd' || c == 'D' ) )
 			{
 				var p : int = text.lastIndexOf( "\r", _caret - 1 );
-				
+
 				_selStart = p != -1 ? p + 1 : 0;
-				_selEnd = text.indexOf("\r", _caret ) + 1;
-				replaceSelection('');
-				
+				_selEnd = text.indexOf( "\r", _caret ) + 1;
+				replaceSelection( '' );
+
 				return;
 			}
-			else if ( e.ctrlKey  &&  ( c ==  'o' || c ==  'O') )
+			else if ( e.ctrlKey && ( c == 'o' || c == 'O' ) )
 			{
 				token = controller.getTokenByPos( 0 );
-				
+
 				if ( !token )
 					return;
-				
+
 				var scriptStructureWindow : ScriptStructureWindow = new ScriptStructureWindow();
 				scriptStructureWindow.structure = token.scope.members;
 				scriptStructureWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 				scriptStructureWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
 				stage.addEventListener( MouseEvent.MOUSE_DOWN, closeScriptStructureWindowHandler );
-				
+
 				WindowManager.getInstance().addWindow( scriptStructureWindow, null, false );
-				
+
 				return;
 			}
-			
-			
-			
-			/*if (extChar==0 && e.charCode > 127)
-			{
-			extChar = e.charCode;
-			return;
-			}
-			
-			if (extChar > 0)
-			{
-			c = Util.decodeUTF(e.charCode, extChar);
-			extChar = 0;
-			}*/
-			
-			
-			
-			
+
+
+
+			/*
+			   if (extChar==0 && e.charCode > 127)
+			   {
+			   extChar = e.charCode;
+			   return;
+			   }
+
+			   if (extChar > 0)
+			   {
+			   c = Util.decodeUTF(e.charCode, extChar);
+			   extChar = 0;
+			   }
+			 */
+
+
+
+
 			if ( k == Keyboard.CONTROL || k == Keyboard.SHIFT || e.keyCode == 3 /*ALT*/ || e.keyCode == Keyboard.ESCAPE )
 				return;
-			
+
 			//debug(e.charCode+' '+e.keyCode);
-			
+
 			//var line:TextLine = getLineAt(_caret);
 			var re : RegExp;
 			var pos : int;
-			
+
 			if ( k == Keyboard.RIGHT )
 			{
 				if ( e.ctrlKey )
@@ -874,20 +880,20 @@ package ro.victordramba.scriptarea
 				if ( i != -1 )
 				{
 					_caret = i + 1;
-					
+
 					//line = lines[line.index+1];
-					
+
 					i = _text.indexOf( NL, _caret );
 					if ( i == -1 )
 						i = _text.length;
-					
-					
+
+
 					//restore col
 					if ( i - _caret > lastCol )
 						_caret += lastCol;
 					else
 						_caret = i;
-					
+
 					if ( e.shiftKey )
 						extendSel( false );
 				}
@@ -903,16 +909,16 @@ package ro.victordramba.scriptarea
 						_caret = i + 1;
 					else
 						_caret = 0;
-					
+
 					//line = lines[line.index - 1];
 					//_caret = line.start;
-					
+
 					//restore col
 					if ( lineBegin - _caret > lastCol )
 						_caret += lastCol;
 					else
 						_caret = lineBegin;
-					
+
 					if ( e.shiftKey )
 						extendSel( true );
 				}
@@ -1005,12 +1011,12 @@ package ro.victordramba.scriptarea
 						end = _text.length - 1;
 					var begin : int = _text.lastIndexOf( NL, _selStart - 1 ) + 1;
 					var str : String = _text.substring( begin, end );
-					
+
 					if ( e.shiftKey )
 						str = str.replace( /\r\s/g, '\r' ).replace( /^\s/, '' );
 					else
 						str = '\t' + str.replace( /\r/g, '\r\t' );
-					
+
 					replaceText( begin, end, str );
 					_setSelection( begin, begin + str.length + 1, true );
 				}
@@ -1023,14 +1029,14 @@ package ro.victordramba.scriptarea
 				end = _text.indexOf( NL, _selEnd );
 				if ( end == -1 )
 					end = _text.length - 1;
-				
+
 				begin = _text.lastIndexOf( NL, _selStart ) + 1;
-				
+
 				if ( begin > end )
 					return;
-				
+
 				str = _text.substring( begin, end );
-				
+
 				var t : Token;
 				var addComment : Boolean = false;
 				i = end;
@@ -1040,25 +1046,25 @@ package ro.victordramba.scriptarea
 					t = controller.getTokenByPos( i );
 					if ( !t )
 						return;
-					
+
 					if ( t.type != Token.COMMENT && t.type != Token.ENDLINE )
 					{
 						addComment = true;
 					}
 					i = t.pos - 1;
 				}
-				
+
 				var commentString : String = controller.commentString;
-				
+
 				if ( addComment )
 				{
-					var string : String = "\r" + commentString ;
+					var string : String = "\r" + commentString;
 					str = commentString + str.replace( /\r/g, string );
 				}
 				else
 				{
 					var index1 : int = 0;
-					
+
 					while ( index1 < str.length && index1 != -1 )
 					{
 						var index2 : int = str.indexOf( commentString, index1 );
@@ -1066,54 +1072,56 @@ package ro.victordramba.scriptarea
 						index1 = str.indexOf( "\r", index2 );
 					}
 				}
-				
+
 				replaceText( begin, end, str );
 				_setSelection( begin, begin + str.length + 1, true );
-					
+
 				dipatchChange();
 				dipatchChangeText();
-			}			
+			}
 			else if ( k == Keyboard.ENTER )
 			{
 				i = _text.lastIndexOf( NL, _caret - 1 );
 				str = _text.substring( i + 1, _caret ).match( /^\s*/ )[ 0 ];
-				
-				switch(scriptLang)
+
+				switch ( scriptLang )
 				{
 					case "vscript":
 					{
-						
-						
+
+
 						break;
 					}
-						
+
 					default:
 					{
 						if ( _text.charAt( _caret - 1 ) == ':' )
 							str += '\t';
-						
+
 						break;
 					}
 				}
-				
-				
-				
-				
+
+
+
+
 				replaceSelection( '\r' + str );
 				dipatchChange();
 				dipatchChangeText();
 			}
-			/*else if ( c == '}' && _text.charAt( _caret - 1 ) == '\t' )
-			{
-				replaceText( _caret - 1, _caret, '}' );
-				dipatchChange();
-			}*/
-				//else if (e.ctrlKey) return;
+			/*
+			   else if ( c == '}' && _text.charAt( _caret - 1 ) == '\t' )
+			   {
+			   replaceText( _caret - 1, _caret, '}' );
+			   dipatchChange();
+			   }
+			 */
+			//else if (e.ctrlKey) return;
 			else if ( e.charCode != 0 )
 			{
 				//replaceSelection(c);
 				//dipatchChange();
-				
+
 				//don't capture CTRL+Key
 				if ( e.ctrlKey && !e.altKey )
 					return;
@@ -1122,20 +1130,20 @@ package ro.victordramba.scriptarea
 			}
 			else
 				return;
-			
+
 			if ( !e.shiftKey && k != Keyboard.TAB )
 				_setSelection( _caret, _caret );
-			
+
 			updateCaret();
 			updateSize();
-			
+
 			//save last column
 			if ( k != Keyboard.UP && k != Keyboard.DOWN && k != Keyboard.TAB )
 				saveLastCol();
-			
+
 			checkScrollToCursor();
 			e.updateAfterEvent();
-			
+
 			//local function
 			function extendSel( left : Boolean ) : void
 			{
@@ -1154,31 +1162,31 @@ package ro.victordramba.scriptarea
 						_setSelection( _caret, _selEnd );
 				}
 			}
-			
+
 			function applyHandler( event : PopUpWindowEvent ) : void
 			{
 				if ( event.detail )
 					goToPos( event.detail.pos, event.detail.len );
-				
+
 				WindowManager.getInstance().removeWindow( event.target );
 				stage.removeEventListener( MouseEvent.MOUSE_DOWN, closeScriptStructureWindowHandler );
 			}
-			
+
 			function cancelHandler( event : PopUpWindowEvent ) : void
 			{
 				WindowManager.getInstance().removeWindow( event.target );
 				stage.removeEventListener( MouseEvent.MOUSE_DOWN, closeScriptStructureWindowHandler );
 			}
-			
-			
+
+
 			function closeScriptStructureWindowHandler( event : MouseEvent ) : void
 			{
 				WindowManager.getInstance().removeWindow( scriptStructureWindow );
 			}
 		}
-		
-		
-		
+
+
+
 
 		private function captureInput() : void
 		{
@@ -1196,7 +1204,7 @@ package ro.victordramba.scriptarea
 			e.preventDefault();
 			if ( stage )
 				stage.focus = this;
-			dipatchChange(e.text);
+			dipatchChange( e.text );
 			dipatchChangeText();
 			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_INPUT, false, false, e.text ) );
 		}
@@ -1206,9 +1214,9 @@ package ro.victordramba.scriptarea
 			lastCol = _caret - _text.lastIndexOf( NL, _caret - 1 ) - 1;
 		}
 
-		public function dipatchChange(text : String = "") : void
+		public function dipatchChange( text : String = "" ) : void
 		{
-			if ( text == ".")
+			if ( text == "." )
 			{
 				timerHandler( null );
 			}
@@ -1218,26 +1226,26 @@ package ro.victordramba.scriptarea
 				t.start();
 			}
 		}
-		
+
 		private function timerHandler( event : TimerEvent ) : void
 		{
 			dispatchEvent( new Event( Event.CHANGE, true, false ) );
 			blocked = false;
 		}
-		
+
 		public function dipatchChangeText() : void
 		{
 			dispatchEvent( new ScriptAreaComponenrEvent( ScriptAreaComponenrEvent.TEXT_CHANGE, true, false ) );
 		}
-		
+
 		public override function replaceFind( findText : String, reText : String, replaceAll : Boolean = false ) : void
 		{
 			super.replaceFind( findText, reText, replaceAll );
-			
+
 			dipatchChange();
 			dipatchChangeText();
 		}
-		
+
 		public function renameByArray( words : Array, oldName : String, newName : String ) : void
 		{
 			var oldNameLength : int = oldName.length;
@@ -1247,11 +1255,11 @@ package ro.victordramba.scriptarea
 				index = xml.@index;
 				replaceText( index, index + oldNameLength, newName );
 			}
-			
+
 			dipatchChange();
 			dipatchChangeText();
 		}
-		
+
 		public function set selectKeyByAutoComplte( value : String ) : void
 		{
 			if ( value == "tab" )

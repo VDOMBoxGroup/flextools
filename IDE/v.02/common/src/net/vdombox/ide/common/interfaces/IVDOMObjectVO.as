@@ -1,7 +1,7 @@
 package net.vdombox.ide.common.interfaces
 {
 	import net.vdombox.ide.common.model._vo.TypeVO;
-	
+
 
 	public interface IVDOMObjectVO
 	{
@@ -14,7 +14,7 @@ package net.vdombox.ide.common.interfaces
 		function set name( value : String ) : void;
 
 		function setID( value : String ) : void;
-		
+
 		function setXMLDescription( description : XML ) : void;
 	}
 }

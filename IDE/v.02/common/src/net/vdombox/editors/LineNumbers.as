@@ -11,14 +11,21 @@ package net.vdombox.editors
 	public class LineNumbers extends Sprite
 	{
 		public var fmt : TextFormat;
+
 		public var box : Point;
+
 		private static var cache : Array = [];
+
 		private var begin : int;
+
 		private var markLines : Array;
+
 		private var markColor : uint;
+
 		private var markTips : Array;
 
 		private var numbers : Sprite;
+
 		private var marks : Sprite;
 
 
@@ -50,7 +57,7 @@ package net.vdombox.editors
 			cache[ no ] = bd;
 			return new Bitmap( bd );
 		}
-		
+
 		public function clearCache() : void
 		{
 			cache = [];
@@ -95,7 +102,7 @@ package net.vdombox.editors
 				m.graphics.drawRect( 0, 0, box.x * 5, box.y - 1 );
 				m.y = ( markLines[ i ] - begin - 1 ) * box.y;
 
-//				JSharedToolTip.getSharedInstance().registerComponent(m, markTips[i]);
+				//				JSharedToolTip.getSharedInstance().registerComponent(m, markTips[i]);
 
 
 				marks.addChild( m );

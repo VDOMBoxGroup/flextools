@@ -6,13 +6,13 @@ package net.vdombox.editors.parsers.vdomxml
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
-	
+
 	import net.vdombox.editors.ScriptAreaComponent;
 	import net.vdombox.editors.parsers.AutoCompleteItemVO;
 	import net.vdombox.editors.parsers.base.AssistMenu;
 	import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 	import net.vdombox.ide.common.view.components.VDOMImage;
-	
+
 	import ro.victordramba.util.vectorToArray;
 
 	public class AssistMenuVdomXML extends AssistMenu
@@ -20,7 +20,7 @@ package net.vdombox.editors.parsers.vdomxml
 		public function AssistMenuVdomXML( field : ScriptAreaComponent, ctrl : VdomXMLController, stage : Stage, onComplete : Function )
 		{
 			super( field, ctrl, stage, onComplete );
-			
+
 			fld.removeEventListener( ScriptAreaComponenrEvent.TEXT_INPUT, onTextInput );
 		}
 
@@ -41,10 +41,10 @@ package net.vdombox.editors.parsers.vdomxml
 
 		private function onKeyDown( e : KeyboardEvent ) : void
 		{
-			if ( e.keyCode == Keyboard.SPACE && e.ctrlKey)
+			if ( e.keyCode == Keyboard.SPACE && e.ctrlKey )
 				triggerAssist();
 		}
-		
+
 		private function onKeyUp( e : Event ) : void
 		{
 			//triggerAssist();
@@ -67,13 +67,15 @@ package net.vdombox.editors.parsers.vdomxml
 			{
 				menuData = VdomXMLController( ctrl ).getAllTypes();
 
-				/*if ( menuData && menuData.length > 0 )
-				{
-					for ( i = 0; i < menuData.length; i++ )
-					{
-						menuData[ i ] = { label: menuData[ i ], value: menuData[ i ].toUpperCase() };
-					}
-				}*/
+				/*
+				   if ( menuData && menuData.length > 0 )
+				   {
+				   for ( i = 0; i < menuData.length; i++ )
+				   {
+				   menuData[ i ] = { label: menuData[ i ], value: menuData[ i ].toUpperCase() };
+				   }
+				   }
+				 */
 
 				if ( !menuData )
 					menuData = new Vector.<AutoCompleteItemVO>;
@@ -85,13 +87,17 @@ package net.vdombox.editors.parsers.vdomxml
 				menuData = VdomXMLController( ctrl ).getAttributesList( pos );
 				var eqStr : String = "=\"\"";
 
-				/*if ( menuData && menuData.length > 0 )
-				{
-					for ( i = 0; i < menuData.length; i++ )
-					{
-						menuData[ i ] = { label: menuData[ i ], value: menuData[ i ] /*+ eqStr*//* };
-					}
-				}*/
+				/*
+				   if ( menuData && menuData.length > 0 )
+				   {
+				   for ( i = 0; i < menuData.length; i++ )
+				   {
+				   menuData[ i ] = { label: menuData[ i ], value: menuData[ i ] /*+ eqStr
+				 */ /*
+				   };
+				   }
+				   }
+				 */
 
 			}
 
@@ -100,7 +106,7 @@ package net.vdombox.editors.parsers.vdomxml
 				menuDispose();
 				return;
 			}
-			
+
 			var showingMenu : Boolean = true;
 			if ( menuStr.length )
 				showingMenu = filterMenu();
@@ -114,7 +120,7 @@ package net.vdombox.editors.parsers.vdomxml
 		protected override function showMenu( index : int ) : void
 		{
 			fld.assistMenuOpened = true;
-			
+
 			var p : Point;
 			menu.setListData( vectorToArray( menuData ) );
 			menu.selectedIndex = 0;
@@ -130,7 +136,7 @@ package net.vdombox.editors.parsers.vdomxml
 			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
 
 			//stage.focus = menu;
-//			FocusManager.getManager( stage ).setFocusOwner( menu );
+			//			FocusManager.getManager( stage ).setFocusOwner( menu );
 		}
 
 	}

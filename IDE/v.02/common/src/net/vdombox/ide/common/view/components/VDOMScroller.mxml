@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Scroller xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:Scroller xmlns:fx="http://ns.adobe.com/mxml/2009"
+			xmlns:s="library://ns.adobe.com/flex/spark"
 			xmlns:mx="library://ns.adobe.com/flex/mx"
 			creationComplete="creationCompleteHandler(event)"
 			remove="removeHandler(event)"
 			skinClass="spark.skins.spark.ScrollerSkin">
-	
+
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			protected function mouseWheelHandler(event:MouseEvent):void
+
+			protected function mouseWheelHandler( event : MouseEvent ) : void
 			{
 				event.stopImmediatePropagation();
-				
+
 				if ( event.shiftKey )
 					horizontalScrollBar.viewport.horizontalScrollPosition -= event.delta;
 				else
 					verticalScrollBar.viewport.verticalScrollPosition -= event.delta;
 			}
-			
-			protected function creationCompleteHandler(event:FlexEvent):void
+
+			protected function creationCompleteHandler( event : FlexEvent ) : void
 			{
-				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true);
+				addEventListener( MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true );
 			}
-			
-			protected function removeHandler(event:FlexEvent):void
+
+			protected function removeHandler( event : FlexEvent ) : void
 			{
-				removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true);
+				removeEventListener( MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true );
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>

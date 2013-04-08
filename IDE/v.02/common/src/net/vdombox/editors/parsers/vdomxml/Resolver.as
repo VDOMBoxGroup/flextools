@@ -7,13 +7,14 @@ package net.vdombox.editors.parsers.vdomxml
 	import net.vdombox.editors.parsers.base.Field;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.ide.common.view.components.VDOMImage;
-	
+
 	import ro.victordramba.util.HashMap;
 
 
 	internal class Resolver
 	{
 		private var typeDB : TypeDB;
+
 		private var tokenizer : VdomXMLTokenizer;
 
 		public function Resolver( tokenizer : VdomXMLTokenizer )
@@ -28,10 +29,7 @@ package net.vdombox.editors.parsers.vdomxml
 
 			var token : VdomXMLToken = tokenizer.tokenByPos( position ) as VdomXMLToken;
 
-			if ( token &&
-				( ( token.type == VdomXMLToken.TAGNAME && position <= token.pos + token.string.length ) ||
-				( token.type == VdomXMLToken.OPENTAG && position == token.pos + token.string.length ) ) ||
-				( token.type == VdomXMLToken.CLOSETAG && token.string == "</" && position == token.pos + token.string.length ))
+			if ( token && ( ( token.type == VdomXMLToken.TAGNAME && position <= token.pos + token.string.length ) || ( token.type == VdomXMLToken.OPENTAG && position == token.pos + token.string.length ) ) || ( token.type == VdomXMLToken.CLOSETAG && token.string == "</" && position == token.pos + token.string.length ) )
 				result = true;
 
 			return result;
@@ -45,9 +43,7 @@ package net.vdombox.editors.parsers.vdomxml
 
 			if ( token && token.string != "<" )
 			{
-				if ( ( token.type == VdomXMLToken.TAGNAME && position > token.pos + token.string.length ) ||
-					( token.type == VdomXMLToken.ATTRIBUTENAME && position <= token.pos + token.string.length ) ||
-					( token.type == VdomXMLToken.ATTRIBUTEVALUE && position > token.pos + token.string.length ) )
+				if ( ( token.type == VdomXMLToken.TAGNAME && position > token.pos + token.string.length ) || ( token.type == VdomXMLToken.ATTRIBUTENAME && position <= token.pos + token.string.length ) || ( token.type == VdomXMLToken.ATTRIBUTEVALUE && position > token.pos + token.string.length ) )
 				{
 					result = true;
 				}
@@ -93,15 +89,15 @@ package net.vdombox.editors.parsers.vdomxml
 			if ( type )
 			{
 				a = new Vector.<AutoCompleteItemVO>;
-				
+
 				for each ( var m : Field in type.members.toArray() )
 				{
 					a.push( new AutoCompleteItemVO( VDOMImage.Standard, m.name ) );
 				}
 			}
 
-//			for each ( var m : Field in listMembers( resolved, resolvedIsClass ).toArray() )
-//				a.push( m.name );
+			//			for each ( var m : Field in listMembers( resolved, resolvedIsClass ).toArray() )
+			//				a.push( m.name );
 
 			return a;
 		}
@@ -114,9 +110,9 @@ package net.vdombox.editors.parsers.vdomxml
 		private function listStaticMembers( type : Field ) : HashMap
 		{
 			var map : HashMap = new HashMap;
-//			for each ( var m : Field in type.members.toArray() )
-//				if ( m.isStatic && ( m.access == 'public' || tokenScopeClass == type ) )
-//					map.setValue( m.name, m );
+			//			for each ( var m : Field in type.members.toArray() )
+			//				if ( m.isStatic && ( m.access == 'public' || tokenScopeClass == type ) )
+			//					map.setValue( m.name, m );
 			return map;
 		}
 
@@ -131,24 +127,24 @@ package net.vdombox.editors.parsers.vdomxml
 
 			var protectedOK : Boolean = false;
 
-//			for ( ; type; type = typeDB.resolveName( type.extendz ) )
-//			{
-//				if ( tokenScopeClass == type )
-//				{
-//					protectedOK = true;
-//					map.merge( type.members );
-//					continue;
-//				}
-//
-//				for each ( var m : Field in type.members.toArray() )
-//				{
-//					if ( m.isStatic )
-//						continue;
-//					var constrCond : Boolean = ( m.name == type.name ) && skipConstructor;
-//					if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) && !constrCond )
-//						map.setValue( m.name, m );
-//				}
-//			}
+			//			for ( ; type; type = typeDB.resolveName( type.extendz ) )
+			//			{
+			//				if ( tokenScopeClass == type )
+			//				{
+			//					protectedOK = true;
+			//					map.merge( type.members );
+			//					continue;
+			//				}
+			//
+			//				for each ( var m : Field in type.members.toArray() )
+			//				{
+			//					if ( m.isStatic )
+			//						continue;
+			//					var constrCond : Boolean = ( m.name == type.name ) && skipConstructor;
+			//					if ( ( m.access == 'public' || ( protectedOK && m.access == 'protected' ) ) && !constrCond )
+			//						map.setValue( m.name, m );
+			//				}
+			//			}
 
 			return map;
 		}
@@ -176,7 +172,9 @@ package net.vdombox.editors.parsers.vdomxml
 
 
 		private var resolved : Field;
+
 		private var resolvedIsClass : Boolean;
+
 		private var resolvedRef : Field;
 
 		private function resolve( text : String, pos : int ) : void

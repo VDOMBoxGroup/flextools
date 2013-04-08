@@ -34,10 +34,10 @@ package net.vdombox.ide.common.model._vo
 		public static const RESOURCE_TEMP : String = "tempResource";
 
 		public static const RESOURCE_NONE : String = "noneResource";
-		
+
 		//viewType
 		public static const STANDARD_VIEW : String = "standardView";
-		
+
 		public static const BIG_PICTURE_VIEW : String = "bigPictureView";
 
 		public function ResourceVO( ownerID : String )
@@ -65,7 +65,7 @@ package net.vdombox.ide.common.model._vo
 		private var _data : ByteArray;
 
 		public var icon : ByteArray;
-		
+
 		public var viewType : String = STANDARD_VIEW;
 
 		private var _iconID : String;
@@ -134,16 +134,16 @@ package net.vdombox.ide.common.model._vo
 			_type = value;
 		}
 
-//
-//		[Bindable(event="propertyDataChange")]
-//		public function get data() : ByteArray
-//		{
-//			return _data;
-//		}
-//		
-//		public function set data( value : ByteArray ) : void
-//		{
-//		}		
+		//
+		//		[Bindable(event="propertyDataChange")]
+		//		public function get data() : ByteArray
+		//		{
+		//			return _data;
+		//		}
+		//		
+		//		public function set data( value : ByteArray ) : void
+		//		{
+		//		}		
 
 		public function get size() : int
 		{
@@ -162,9 +162,9 @@ package net.vdombox.ide.common.model._vo
 
 		public function setID( value : String ) : void
 		{
-			if (value == "" || value == null)
+			if ( value == "" || value == null )
 				throw new Error( "no resource ID" );
-				
+
 			_id = value;
 		}
 

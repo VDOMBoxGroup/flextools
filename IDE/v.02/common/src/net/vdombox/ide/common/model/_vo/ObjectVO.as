@@ -1,6 +1,7 @@
 package net.vdombox.ide.common.model._vo
 {
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+
 	/**
 	 * The ObjectVO is Visual Object of VDOM Object and instance of Type (TypeVO).
 	 * A Top Lavel Contaioner and an Object may contain many Objects.
@@ -13,12 +14,13 @@ package net.vdombox.ide.common.model._vo
 			_pageVO = pageVO;
 			_typeVO = typeVO;
 		}
-				
+
 		public var parentID : String;
-		
+
 		private var _id : String;
 
 		private var _pageVO : PageVO;
+
 		private var _typeVO : TypeVO;
 
 		private var _name : String;
@@ -52,7 +54,7 @@ package net.vdombox.ide.common.model._vo
 		{
 			_id = value;
 		}
-		
+
 		public function setXMLDescription( description : XML ) : void
 		{
 			name = description.@Name[ 0 ];

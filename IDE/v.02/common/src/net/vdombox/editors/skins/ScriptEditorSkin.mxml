@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:editors="net.vdombox.editors.*"
-		xmlns:fx="http://ns.adobe.com/mxml/2009"
-		xmlns:mx="library://ns.adobe.com/flex/mx"
-		xmlns:s="library://ns.adobe.com/flex/spark"
-		xmlns:view="view.*"
-		addedToStage="addedToStageHandler()">
+			 xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:mx="library://ns.adobe.com/flex/mx"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 xmlns:view="view.*"
+			 addedToStage="addedToStageHandler()">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.ResizeEvent;
-			
+
 			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 
 
 			private var hcw : ChangeWatcher;
+
 			private var vcw : ChangeWatcher;
-		
+
 
 			private function updateScrollBar() : void
 			{
@@ -39,7 +40,7 @@
 				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 				addEventListener( Event.RESIZE, resizeHandler, false, 0, true );
 				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
-				
+
 				hsb.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
 				vsb.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
 
@@ -96,7 +97,7 @@
 			{
 				updateScrollBar();
 			}
-			
+
 			private function scriptAreaComponent_keyDownHandler( event : KeyboardEvent ) : void
 			{
 				updateScrollBar();
@@ -111,7 +112,6 @@
 			{
 				scriptAreaComponent.scrollV = vsb.value;
 			}
-			
 		]]>
 	</fx:Script>
 
@@ -122,15 +122,22 @@
 
 
 	<editors:ScriptAreaComponent id="scriptAreaComponent"
-								 bottom="{ hsb.height }" left="0" right="{ vsb.width }" top="0"/>
+								 bottom="{ hsb.height }"
+								 left="0"
+								 right="{ vsb.width }"
+								 top="0"/>
 
 	<s:HScrollBar id="hsb"
 				  minimum="0"
-				  bottom="0" left="0" right="{ vsb.width }"
+				  bottom="0"
+				  left="0"
+				  right="{ vsb.width }"
 				  change="hsb_changeHandler(event)"/>
 
 	<s:VScrollBar id="vsb"
 				  minimum="1"
-				  bottom="{ hsb.height }" right="0" top="0"
+				  bottom="{ hsb.height }"
+				  right="0"
+				  top="0"
 				  change="vsb_changeHandler(event)"/>
 </s:SparkSkin>

@@ -2,20 +2,22 @@
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
-		  
 		  width="250"
-		  paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+		  paddingBottom="5"
+		  paddingLeft="5"
+		  paddingRight="5"
+		  paddingTop="5"
 		  creationComplete="creationCompleteHandler()">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.events.ValidationResultEvent;
 			import mx.validators.RegExpValidator;
-			
+
 			import net.vdombox.ide.common.events.CreateActionWindowEvent;
 
 			private var regExpValidator : RegExpValidator = new RegExpValidator();
-			
+
 			private function creationCompleteHandler() : void
 			{
 				regExpValidator.source = nameTextInput;
@@ -47,20 +49,22 @@
 	</fx:Script>
 
 	<s:RichText id="description"
-				text="{ resourceManager.getString( 'Scripts_General', 'description' ) }" width="100%" />
+				text="{ resourceManager.getString( 'Scripts_General', 'description' ) }"
+				width="100%"/>
 
 	<s:TextInput id="nameTextInput"
-				 width="100%" />
+				 width="100%"/>
 
 	<s:HGroup width="100%">
 
-		<mx:Spacer width="100%" />
+		<mx:Spacer width="100%"/>
 
 		<s:Button id="okButton"
-				  enabled="false" label="{ resourceManager.getString( 'Scripts_General', 'ok' ) }"
-				  click="dispatchEvent( new CreateActionWindowEvent( CreateActionWindowEvent.PERFORM_CREATE ) )" />
+				  enabled="false"
+				  label="{ resourceManager.getString( 'Scripts_General', 'ok' ) }"
+				  click="dispatchEvent( new CreateActionWindowEvent( CreateActionWindowEvent.PERFORM_CREATE ) )"/>
 
 		<s:Button label="{ resourceManager.getString( 'Scripts_General', 'cancel' ) }"
-				  click="dispatchEvent( new CreateActionWindowEvent( CreateActionWindowEvent.PERFORM_CANCEL ) )" />
+				  click="dispatchEvent( new CreateActionWindowEvent( CreateActionWindowEvent.PERFORM_CANCEL ) )"/>
 	</s:HGroup>
 </s:VGroup>

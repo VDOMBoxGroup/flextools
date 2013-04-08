@@ -16,26 +16,20 @@ package net.vdombox.utils
 	{
 		private static const SPECIALS : Array = [ "alpha", "beta", "rc" ];
 
-		
-//		 * <pre>
-//		 * Algorithm for comparing versions
-//		 *   1. Every +,-,_,SPACE is replaced by DOT : 1.2+-__5 => 1.2...5
-//		 *   2. All sequence of DOT are replaced by one single DOT  1.2...5 => 1.2.5
-//		 *   3. A DOT is inserted between any DIGIT - ALPHANUMERIC: 1beta1 => 1.beta.1
-//		 *   4. The version is split using DOT as delimiter
-//		 *   5. The numbers are compared as number, the alphanumeric as string with the exception of alpha, beta and rc, where alpha < beta < rc
-//		 * </pre>
-		 
+
+		//		 * <pre>
+		//		 * Algorithm for comparing versions
+		//		 *   1. Every +,-,_,SPACE is replaced by DOT : 1.2+-__5 => 1.2...5
+		//		 *   2. All sequence of DOT are replaced by one single DOT  1.2...5 => 1.2.5
+		//		 *   3. A DOT is inserted between any DIGIT - ALPHANUMERIC: 1beta1 => 1.beta.1
+		//		 *   4. The version is split using DOT as delimiter
+		//		 *   5. The numbers are compared as number, the alphanumeric as string with the exception of alpha, beta and rc, where alpha < beta < rc
+		//		 * </pre>
+
 		public static function isNewerVersion( currentVersion : String, newVersion : String ) : Boolean
 		{
-			var v1 : String = currentVersion.replace( /[+\-_ ]/g, "." ).replace( /\.(\.)+/g,
-																				 "." ).replace( /([^\d\.])([^\D\.])/g,
-																								"$1.$2" ).replace( /([^\D\.])([^\d\.])/g,
-																												   "$1.$2" );
-			var v2 : String = newVersion.replace( /[+\-_ ]/g, "." ).replace( /\.(\.)+/g,
-																			 "." ).replace( /([^\d\.])([^\D\.])/g,
-																							"$1.$2" ).replace( /([^\D\.])([^\d\.])/g,
-																											   "$1.$2" );
+			var v1 : String = currentVersion.replace( /[+\-_ ]/g, "." ).replace( /\.(\.)+/g, "." ).replace( /([^\d\.])([^\D\.])/g, "$1.$2" ).replace( /([^\D\.])([^\d\.])/g, "$1.$2" );
+			var v2 : String = newVersion.replace( /[+\-_ ]/g, "." ).replace( /\.(\.)+/g, "." ).replace( /([^\d\.])([^\D\.])/g, "$1.$2" ).replace( /([^\D\.])([^\d\.])/g, "$1.$2" );
 
 			var parts1 : Array = v1.split( "." );
 			var parts2 : Array = v2.split( "." );
@@ -115,14 +109,8 @@ package net.vdombox.utils
 
 		public static function isUpdateNeeded( neededVersion : String, aviableVersion : String ) : Boolean
 		{
-			var v1 : String = aviableVersion.replace( /[+\-_ ]/g, "." ).replace( /\.(\.)+/g,
-																				 "." ).replace( /([^\d\.])([^\D\.])/g,
-																								"$1.$2" ).replace( /([^\D\.])([^\d\.])/g,
-																												   "$1.$2" );
-			var v2 : String = neededVersion.replace( /[+\-_ ]/g, "." ).replace( /\.(\.)+/g,
-																				"." ).replace( /([^\d\.])([^\D\.])/g,
-																							   "$1.$2" ).replace( /([^\D\.])([^\d\.])/g,
-																												  "$1.$2" );
+			var v1 : String = aviableVersion.replace( /[+\-_ ]/g, "." ).replace( /\.(\.)+/g, "." ).replace( /([^\d\.])([^\D\.])/g, "$1.$2" ).replace( /([^\D\.])([^\d\.])/g, "$1.$2" );
+			var v2 : String = neededVersion.replace( /[+\-_ ]/g, "." ).replace( /\.(\.)+/g, "." ).replace( /([^\d\.])([^\D\.])/g, "$1.$2" ).replace( /([^\D\.])([^\d\.])/g, "$1.$2" );
 
 			var parts1 : Array = v1.split( "." );
 			var parts2 : Array = v2.split( "." );
@@ -204,15 +192,15 @@ package net.vdombox.utils
 		{
 			var appXML : XML = NativeApplication.nativeApplication.applicationDescriptor;
 			var ns : Namespace = appXML.namespace();
-			var str:String = ""; 
-			
+			var str : String = "";
+
 			str = appXML.ns::version;
-			if (!str)
+			if ( !str )
 				str = appXML.ns::versionNumber;
-			
+
 			return str;
 		}
-		
+
 		public static function getApplicationName() : String
 		{
 			var appXML : XML = NativeApplication.nativeApplication.applicationDescriptor;
