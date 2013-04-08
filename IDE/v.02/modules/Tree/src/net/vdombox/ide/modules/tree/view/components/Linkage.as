@@ -6,16 +6,16 @@ package net.vdombox.ide.modules.tree.view.components
 	import flash.display.LineScaleMode;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
 	import mx.binding.utils.BindingUtils;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.modules.tree.events.LinkageEvent;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
-	
+
 	import spark.components.Button;
 	import spark.components.DropDownList;
 	import spark.events.IndexChangeEvent;
@@ -35,15 +35,19 @@ package net.vdombox.ide.modules.tree.view.components
 			addEventListener( IndexChangeEvent.CHANGE, chengIndex, true, 0, true );
 		}
 
-		[Embed( source="assets/delete_linkage.png" )]
+		[Embed( source = "assets/delete_linkage.png" )]
 		private var deleteLinkageClass : Class;
 
 		private const RTL : Number = 0;
+
 		private const LTR : Number = 1;
+
 		private const UTD : Number = 0;
+
 		private const DTU : Number = 1;
 
 		private var SOURCE_WATCHERS : String = "sourceWatchers";
+
 		private var TARGET_WATCHERS : String = "targetWatchers";
 
 		private var _linkageVO : LinkageVO;
@@ -57,20 +61,24 @@ package net.vdombox.ide.modules.tree.view.components
 		private var activeChanged : Boolean;
 
 		private var _target : TreeElementVO;
+
 		private var _source : TreeElementVO;
 
 		private var sourceChanged : Boolean;
+
 		private var targetChanged : Boolean;
 
 		private var watchers : Object;
 
 		private var deleteImage : SmoothImage;
+
 		private var _signatureGroup : SignatureGroup;
 
 		private var _signatureVisible : Boolean;
+
 		private var isSignatureVisibleChanged : Boolean;
 
-		public function get signatureGroup():SignatureGroup
+		public function get signatureGroup() : SignatureGroup
 		{
 			return _signatureGroup;
 		}
@@ -154,13 +162,13 @@ package net.vdombox.ide.modules.tree.view.components
 			{
 				_signatureGroup = new SignatureGroup();
 				signatureGroup.addEventListener( MouseEvent.CLICK, signatureGroup_clickHandler, false, 0, true );
-				
-				if( _linkageVO )
+
+				if ( _linkageVO )
 				{
 					signatureGroup.color = _linkageVO.level.color;
 					signatureGroup.number = _linkageVO.index;
 				}
-						
+
 			}
 		}
 
@@ -182,7 +190,7 @@ package net.vdombox.ide.modules.tree.view.components
 				}
 				else
 				{
-					if( signatureGroup.parent == this )
+					if ( signatureGroup.parent == this )
 						removeChild( signatureGroup );
 				}
 			}
@@ -422,11 +430,9 @@ package net.vdombox.ide.modules.tree.view.components
 			graphics.moveTo( startPoint.x, startPoint.y );
 			graphics.lineTo( endPoint.x, endPoint.y );
 
-			graphics.lineTo( endPoint.x + Math.cos( alphaAngle + arrowHeadAngle ) * arrowHeadLength,
-				endPoint.y + Math.sin( alphaAngle + arrowHeadAngle ) * arrowHeadLength );
+			graphics.lineTo( endPoint.x + Math.cos( alphaAngle + arrowHeadAngle ) * arrowHeadLength, endPoint.y + Math.sin( alphaAngle + arrowHeadAngle ) * arrowHeadLength );
 
-			graphics.lineTo( endPoint.x + Math.cos( alphaAngle - arrowHeadAngle ) * arrowHeadLength,
-				endPoint.y + Math.sin( alphaAngle - arrowHeadAngle ) * arrowHeadLength );
+			graphics.lineTo( endPoint.x + Math.cos( alphaAngle - arrowHeadAngle ) * arrowHeadLength, endPoint.y + Math.sin( alphaAngle - arrowHeadAngle ) * arrowHeadLength );
 
 			graphics.lineTo( endPoint.x, endPoint.y );
 		}
@@ -476,15 +482,15 @@ package net.vdombox.ide.modules.tree.view.components
 		{
 			dispatchEvent( new LinkageEvent( LinkageEvent.REMOVED ) );
 		}
-		
+
 		private function clickHandler( event : MouseEvent ) : void
 		{
 			if ( !stage )
 				return;
 
-			if( event.target is SignatureGroup || event.target is Button )
+			if ( event.target is SignatureGroup || event.target is Button )
 				return;
-			
+
 			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
 
 			var buttonX : int = event.localX - deleteImage.width / 2;
@@ -510,7 +516,7 @@ package net.vdombox.ide.modules.tree.view.components
 		private function deleteImage_clickHandler( event : MouseEvent ) : void
 		{
 			dispatchEvent( new TreeElementEvent( TreeElementEvent.DELETE_LINKAGE ) );
-			
+
 			event.stopImmediatePropagation();
 		}
 
@@ -518,25 +524,25 @@ package net.vdombox.ide.modules.tree.view.components
 		{
 			if ( event.target is Button )
 				return;
-			
+
 			var linkageEvent : LinkageEvent = new LinkageEvent( LinkageEvent.CLICK );
-			linkageEvent.detail = { x : event.localX, y : event.localY };
+			linkageEvent.detail = { x: event.localX, y: event.localY };
 			dispatchEvent( linkageEvent );
-			
+
 			event.stopImmediatePropagation();
 		}
-		
+
 		public function updateNumber() : void
 		{
 			signatureGroup.number = linkageVO.index;
 		}
-		
+
 		private function chengIndex( event : IndexChangeEvent ) : void
 		{
-			var linkVO : LinkageVO = (event.target as DropDownList).selectedItem as LinkageVO;
-			
+			var linkVO : LinkageVO = ( event.target as DropDownList ).selectedItem as LinkageVO;
+
 			var linkageEvent : LinkageEvent = new LinkageEvent( LinkageEvent.INDEX_CHANGE );
-			linkageEvent.detail = { firstLinkageVO : this.linkageVO, secondLinkageVO : linkVO };
+			linkageEvent.detail = { firstLinkageVO: this.linkageVO, secondLinkageVO: linkVO };
 			dispatchEvent( linkageEvent );
 		}
 	}

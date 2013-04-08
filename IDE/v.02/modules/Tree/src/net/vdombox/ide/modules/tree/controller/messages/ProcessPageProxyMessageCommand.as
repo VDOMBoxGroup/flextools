@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -29,8 +29,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 				{
 					var vdomObjectAttributesVO : VdomObjectAttributesVO = body.vdomObjectAttributesVO as VdomObjectAttributesVO;
 
-					var allPageRecipients : Object = statesProxy.getObject( place + Notifications.DELIMITER + operation +
-						Notifications.DELIMITER + target );
+					var allPageRecipients : Object = statesProxy.getObject( place + Notifications.DELIMITER + operation + Notifications.DELIMITER + target );
 
 					var pageRecipient : Array = allPageRecipients[ vdomObjectAttributesVO.vdomObjectVO.id ];
 					var recipientID : String;
@@ -48,7 +47,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 						{
 							sendNotification( Notifications.PAGE_ATTRIBUTES_SETTED + Notifications.DELIMITER + recipientID, vdomObjectAttributesVO );
 						}
-						
+
 						sendNotification( Notifications.PAGE_ATTRIBUTES_SETTED, vdomObjectAttributesVO );
 					}
 
@@ -56,7 +55,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 
 					break;
 				}
-					
+
 				case PPMPageTargetNames.NAME:
 				{
 					if ( operation == PPMOperationNames.UPDATE )

@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -81,7 +81,7 @@ package net.vdombox.ide.modules.tree.view
 
 			interests.push( Notifications.PAGE_ATTRIBUTES_GETTED + Notifications.DELIMITER + mediatorName );
 			interests.push( Notifications.PAGE_ATTRIBUTES_SETTED );
-			
+
 			interests.push( Notifications.APPLICATION_INFORMATION_SETTED );
 			//interests.push( Notifications.SELECTED_TREE_ELEMENT_CHANGED );
 
@@ -93,7 +93,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
-			
+
 
 			switch ( name )
 			{
@@ -121,10 +121,10 @@ package net.vdombox.ide.modules.tree.view
 				case Notifications.PAGE_ATTRIBUTES_SETTED:
 				{
 					var newPageAttributesVO : VdomObjectAttributesVO = body as VdomObjectAttributesVO;
-					
-					if( newPageAttributesVO && newPageAttributesVO.vdomObjectVO.id == treeElementVO.pageVO.id )
+
+					if ( newPageAttributesVO && newPageAttributesVO.vdomObjectVO.id == treeElementVO.pageVO.id )
 						vdomObjectAttributesVO = newPageAttributesVO;
-					
+
 					break;
 				}
 
@@ -138,16 +138,18 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				/*case Notifications.SELECTED_TREE_ELEMENT_CHANGED:
-				{
-					if ( this.treeElementVO == body as TreeElementVO )
-						treeElement.selected = true;
-					else
-						treeElement.selected = false;
-					
-					break;
-				}*/
-					
+				/*
+				   case Notifications.SELECTED_TREE_ELEMENT_CHANGED:
+				   {
+				   if ( this.treeElementVO == body as TreeElementVO )
+				   treeElement.selected = true;
+				   else
+				   treeElement.selected = false;
+
+				   break;
+				   }
+				 */
+
 				case Notifications.EXPAND_ALL_TREE_ELEMENTS:
 				{
 					if ( treeElementVO && !treeElementVO.state )
@@ -163,26 +165,26 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
-					
+
 				case Notifications.APPLICATION_INFORMATION_SETTED:
 				{
 					var applicationVO : ApplicationVO = body as ApplicationVO;
-					
-					if( applicationVO && treeElementVO && treeElementVO.pageVO.id == applicationVO.indexPageID )
+
+					if ( applicationVO && treeElementVO && treeElementVO.pageVO.id == applicationVO.indexPageID )
 						treeElement.isIndexPage = true;
 					else
 						treeElement.isIndexPage = false;
-					
+
 					break;
 				}
-					
+
 				case Notifications.PAGE_NAME_SETTED:
 				{
 					var treeElementPageVO : PageVO = body as PageVO;
-					
-					if (treeElement.treeElementVO && treeElementPageVO.id == treeElement.treeElementVO.pageVO.id)
+
+					if ( treeElement.treeElementVO && treeElementPageVO.id == treeElement.treeElementVO.pageVO.id )
 						treeElement.nameAttribute = treeElementPageVO.name;
-					
+
 					break;
 				}
 			}
@@ -219,20 +221,19 @@ package net.vdombox.ide.modules.tree.view
 
 		private function createLinkageRequestHandler( event : TreeElementEvent ) : void
 		{
-//			sendNotification( Notifications.CREATE_LINKAGE_REQUEST, treeElementVO );
+			//			sendNotification( Notifications.CREATE_LINKAGE_REQUEST, treeElementVO );
 		}
-		
+
 		private function savePageNameHandler( event : TreeElementEvent ) : void
 		{
 			sendNotification( Notifications.SET_PAGE_NAME, treeElement.treeElementVO.pageVO );
 		}
-		
+
 		private function savePageAttributesHandler( event : TreeElementEvent ) : void
 		{
 			if ( treeElement.vdomObjectAttributesVO )
 			{
-				sendNotification( Notifications.SET_PAGE_ATTRIBUTES,
-					treeElement.vdomObjectAttributesVO);
+				sendNotification( Notifications.SET_PAGE_ATTRIBUTES, treeElement.vdomObjectAttributesVO );
 			}
 		}
 	}

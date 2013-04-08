@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.TypeVO;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -30,8 +30,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 				{
 					var typeVO : TypeVO = body as TypeVO;
 
-					var allTypeRecipients : Object = statesProxy.getObject( place + Notifications.DELIMITER + operation +
-						Notifications.DELIMITER + target );
+					var allTypeRecipients : Object = statesProxy.getObject( place + Notifications.DELIMITER + operation + Notifications.DELIMITER + target );
 
 					var typeRecipient : Array = allTypeRecipients[ typeVO.id ];
 

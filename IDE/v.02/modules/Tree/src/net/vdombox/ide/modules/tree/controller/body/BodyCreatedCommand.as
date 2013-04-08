@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.tree.controller.body
 	import net.vdombox.ide.modules.tree.view.LevelsPanelMediator;
 	import net.vdombox.ide.modules.tree.view.WorkAreaMediator;
 	import net.vdombox.ide.modules.tree.view.components.Body;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -14,8 +14,8 @@ package net.vdombox.ide.modules.tree.controller.body
 			var body : Body = notification.getBody() as Body;
 
 			facade.registerMediator( new WorkAreaMediator( body.treeCanvas ) );
-			
-//			facade.registerMediator( new MenuPanelMediator( body.menuPanel ) );
+
+			//			facade.registerMediator( new MenuPanelMediator( body.menuPanel ) );
 			facade.registerMediator( new LevelsPanelMediator( body.levelsPanel ) );
 		}
 	}

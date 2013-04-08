@@ -2,7 +2,8 @@
 <s:SparkSkin xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 alpha.disabled="0.5" blendMode="normal">
+			 alpha.disabled="0.5"
+			 blendMode="normal">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -10,18 +11,22 @@
 		* @copy spark.skins.spark.ApplicationSkin#hostComponent
 		*/
 		[HostComponent("spark.components.TextArea")]
-		]]>		
+		]]>
 	</fx:Metadata>
 
 	<fx:Script fb:purpose="styling">
 		import spark.filters.DropShadowFilter;
 
 		private var lineBreakChanged : Boolean;
+
 		private var paddingChanged : Boolean;
+
 		private var verticalAlignChanged : Boolean;
 
-		/* Define the skin elements that should not be colorized.
-		 For text area, the skin itself is colorized but the individual parts are not. */
+		/*
+		   Define the skin elements that should not be colorized.
+		   For text area, the skin itself is colorized but the individual parts are not.
+		 */
 		static private const exclusions : Array = [ "background", "scroller" ];
 
 		/**
@@ -36,16 +41,15 @@
 		static private const contentFill : Array = [ "bgFill" ];
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		override public function get contentItems() : Array
 		{
 			return contentFill
-		}
-		;
+		};
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		override protected function commitProperties() : void
 		{
@@ -78,7 +82,7 @@
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 		{
@@ -104,7 +108,7 @@
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		private function updatePadding() : void
 		{
@@ -132,7 +136,7 @@
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		private function updateStringStyle( styleName : String ) : void
 		{
@@ -148,7 +152,7 @@
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		override public function styleChanged( styleProp : String ) : void
 		{
@@ -182,13 +186,12 @@
 			private static const focusExclusions : Array = [ "textDisplay" ];
 
 			/**
-			 *  @private
+			 * @private
 			 */
 			override public function get focusSkinExclusions() : Array
 			{
 				return focusExclusions;
-			}
-			;
+			};
 		]]>
 	</fx:Script>
 
@@ -202,7 +205,10 @@
 	<!-- border -->
 	<!--- @private -->
 	<s:Rect id="border"
-			bottom="0" left="0" right="0" top="0">
+			bottom="0"
+			left="0"
+			right="0"
+			top="0">
 		<s:stroke>
 			<!--- @private -->
 			<s:SolidColorStroke id="borderStroke"
@@ -213,7 +219,10 @@
 	<!-- fill -->
 	<!--- Defines the appearance of the TextArea component's background. -->
 	<s:Rect id="background"
-			bottom="1" left="1" right="1" top="1"
+			bottom="1"
+			left="1"
+			right="1"
+			top="1"
 			filters="{[ new DropShadowFilter(4, 45, 0xC7C7C7, 1,4,4,1,1,true,false) ]}">
 		<s:fill>
 			<!--- @private Defines the background fill color. -->
@@ -226,7 +235,9 @@
 	<!--- @private -->
 	<s:Rect id="shadow"
 			height="1"
-			left="1" right="1" top="1">
+			left="1"
+			right="1"
+			top="1">
 		<s:fill>
 			<s:SolidColor color="0x000000"
 						  alpha="0.12"/>
@@ -235,11 +246,17 @@
 
 	<!--- Defines the scroller that is used to scroll the TextArea control. -->
 	<s:Scroller id="scroller"
-				bottom="0" left="0" right="0" top="0"
-				minViewportInset="1" measuredSizeIncludesScrollBars="false" hasFocusableChildren="false">
+				bottom="0"
+				left="0"
+				right="0"
+				top="0"
+				minViewportInset="1"
+				measuredSizeIncludesScrollBars="false"
+				hasFocusableChildren="false">
 		<!--- @copy spark.components.supportClasses.SkinnableTextBase#textDisplay -->
 		<s:RichEditableText id="textDisplay"
-							heightInLines="10" widthInChars="15"/>
+							heightInLines="10"
+							widthInChars="15"/>
 	</s:Scroller>
 
 </s:SparkSkin>

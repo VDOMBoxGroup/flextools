@@ -2,12 +2,13 @@
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  height="400" width="550">
+		  height="400"
+		  width="550">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
-			
+
 			import net.vdombox.ide.common.events.WindowEvent;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 
@@ -53,18 +54,24 @@
 	</fx:Script>
 
 	<s:List id="resourcesList"
-			dataProvider="{ _resources }" height="100%" width="100%"
-			itemRenderer="net.vdombox.ide.modules.tree.view.components.ResourceItemRenderer" useVirtualLayout="false"/>
+			dataProvider="{ _resources }"
+			height="100%"
+			width="100%"
+			itemRenderer="net.vdombox.ide.modules.tree.view.components.ResourceItemRenderer"
+			useVirtualLayout="false"/>
 
 	<s:HGroup width="100%"
-			  bottom="0" paddingLeft="5" paddingRight="5" verticalAlign="middle">
+			  bottom="0"
+			  paddingLeft="5"
+			  paddingRight="5"
+			  verticalAlign="middle">
 
 		<mx:Spacer width="100%"/>
 
 		<s:Button label="Create"
-					click="dispatchEvent( new WindowEvent( WindowEvent.PERFORM_APPLY ) )" />
-		
+				  click="dispatchEvent( new WindowEvent( WindowEvent.PERFORM_APPLY ) )"/>
+
 		<s:Button label="Cancel"
-				  click="dispatchEvent( new WindowEvent( WindowEvent.PERFORM_CANCEL ) )" />
+				  click="dispatchEvent( new WindowEvent( WindowEvent.PERFORM_CANCEL ) )"/>
 	</s:HGroup>
 </s:VGroup>

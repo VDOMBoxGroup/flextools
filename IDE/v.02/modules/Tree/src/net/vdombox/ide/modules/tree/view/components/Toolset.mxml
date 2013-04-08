@@ -3,7 +3,6 @@
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:components="net.vdombox.ide.modules.tree.view.components.*"
-		 
 		 height="100%">
 
 	<fx:Metadata> 
@@ -12,11 +11,12 @@
 
 	<s:layout>
 
-		<s:HorizontalLayout />
+		<s:HorizontalLayout/>
 	</s:layout>
 
 	<components:ToolsetButton id="toolsetButton"
-							  height="100%" icon="@Embed('assets/tree_icon.png')"
+							  height="100%"
+							  icon="@Embed('assets/tree_icon.png')"
 							  label="{ resourceManager.getString( 'Tree_General', 'toolset_button_label' ) }"
-							  skinClass="net.vdombox.ide.modules.tree.view.skins.ToolsetButtonSkin" />
+							  skinClass="net.vdombox.ide.modules.tree.view.skins.ToolsetButtonSkin"/>
 </s:Group>

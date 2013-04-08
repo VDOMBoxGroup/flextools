@@ -4,36 +4,38 @@
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 creationComplete="creationCompleteHandler()">
-	
+
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.tree.view.components.TreeElement")]
 	</fx:Metadata>
-	
+
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
-			
+
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
-			
+
 			import spark.filters.GlowFilter;
-			
+
 			[Bindable]
 			private var selectionFilters : Array;
-			
+
 			[Bindable]
 			private var multiSelectionFilters : Array;
-			
+
 			private var _treeElementVO : TreeElementVO;
-			
+
 			private var isDataChanged : Boolean = false;
+
 			private var isStateChanged : Boolean = false;
+
 			private var isSelected : Boolean = false;
-			
+
 			[Bindable]
 			private var isIndexPage : Boolean
-			
+
 			protected function hideButton_clickHandler( event : MouseEvent ) : void
 			{
 				if ( currentState == "normal" || currentState == "disabled" )
@@ -44,42 +46,42 @@
 				{
 					currentState = currentState.substr( 0, currentState.length - 8 );
 				}
-				
+
 				isStateChanged = true;
 				invalidateProperties();
 			}
-			
+
 			public function set treeElementVO( value : TreeElementVO ) : void
 			{
 				_treeElementVO = value;
-				
+
 				isDataChanged = true;
 				invalidateProperties();
 			}
-			
+
 			protected function creationCompleteHandler() : void
 			{
 				BindingUtils.bindProperty( this, "treeElementVO", hostComponent, "treeElementVO", true );
 				BindingUtils.bindSetter( selectionChanged, hostComponent, "selected", true );
 				BindingUtils.bindSetter( indexPageChanged, hostComponent, "isIndexPage", true );
 				BindingUtils.bindSetter( statePropertyChanged, hostComponent, [ "treeElementVO", "state" ], true );
-				
+
 				var glowFilter : GlowFilter = new GlowFilter( 0xA8AAA9, 1, 6, 6, 3 );
-				
+
 				selectionFilters = [ new GlowFilter( 0xFFFFFF, 1, 9, 9, 255 ) ];
 				multiSelectionFilters = [ new GlowFilter( 0xA8C6EE, 1, 9, 9, 255 ) ];
-				
+
 				typeImage.filters = [ glowFilter ];
 			}
-			
+
 			override protected function commitProperties() : void
 			{
 				super.commitProperties();
-				
+
 				if ( isDataChanged )
 				{
 					isDataChanged = false;
-					
+
 					if ( _treeElementVO )
 					{
 						if ( !hostComponent.treeElementVO.state && ( currentState == "normal" || currentState == "disabled" ) )
@@ -88,103 +90,137 @@
 							currentState = currentState.substring( 0, currentState.length - 8 );
 					}
 				}
-				
+
 				if ( isStateChanged )
 				{
 					isStateChanged = false;
-					
+
 					if ( !hostComponent.treeElementVO )
 						return;
-					
+
 					if ( currentState == "normal" || currentState == "disabled" )
 						hostComponent.treeElementVO.state = true;
 					else
 						hostComponent.treeElementVO.state = false;
-					
+
 					hostComponent.dispatchEvent( new TreeElementEvent( TreeElementEvent.STATE_CHANGED ) );
 				}
 			}
-			
+
 			private function statePropertyChanged( value : Boolean ) : void
 			{
 				if ( !value && ( currentState == "normal" || currentState == "disabled" ) )
 					currentState = currentState + "AndShort";
 				else if ( value && ( currentState == "normalAndShort" || currentState == "disabledAndShort" ) )
 					currentState = currentState.substring( 0, currentState.length - 8 );
-				
+
 			}
-			
+
 			private function selectionChanged( value : Boolean ) : void
 			{
-				/*if ( value && !isSelected )
-				{
-				mainGroup.filters = selectionFilters;
-				isSelected = true;					
-				}
-				else if ( !value && isSelected )
-				{
-				mainGroup.filters = null;
-				isSelected = false;
-				}*/
+			/*
+			   if ( value && !isSelected )
+			   {
+			   mainGroup.filters = selectionFilters;
+			   isSelected = true;
+			   }
+			   else if ( !value && isSelected )
+			   {
+			   mainGroup.filters = null;
+			   isSelected = false;
+			   }
+			 */
 			}
-			
+
 			private function indexPageChanged( value : Boolean ) : void
 			{
 				isIndexPage = value
 			}
 		]]>
 	</fx:Script>
-	
+
 	<s:states>
-		
-		<s:State name="normal" stateGroups="full"/>
-		<s:State name="disabled" stateGroups="full"/>
-		
-		<s:State name="normalAndShort" stateGroups="short"/>
-		<s:State name="disabledAndShort" stateGroups="short"/>
+
+		<s:State name="normal"
+				 stateGroups="full"/>
+		<s:State name="disabled"
+				 stateGroups="full"/>
+
+		<s:State name="normalAndShort"
+				 stateGroups="short"/>
+		<s:State name="disabledAndShort"
+				 stateGroups="short"/>
 	</s:states>
-	
+
 	<!--Shadow-->
-	
+
 	<s:RectangularDropShadow id="dropShadow"
-							 bottom="0" color="#000000" left="0" right="0"
+							 bottom="0"
+							 color="#000000"
+							 left="0"
+							 right="0"
 							 top="0"
-							 alpha="0.42" angle="45" blRadius="10" blurX="8"
-							 blurY="8" brRadius="10" distance="8" tlRadius="10"
+							 alpha="0.42"
+							 angle="45"
+							 blRadius="10"
+							 blurX="8"
+							 blurY="8"
+							 brRadius="10"
+							 distance="8"
+							 tlRadius="10"
 							 trRadius="10"/>
 	<!--Mask-->
-	
+
 	<s:Group id="backgroundMask"
-			 bottom="0" left="0" right="0" top="0">
-		
-		<s:Rect bottom="0" left="0" right="0" top="0"
-				radiusX="6" radiusY="6">
+			 bottom="0"
+			 left="0"
+			 right="0"
+			 top="0">
+
+		<s:Rect bottom="0"
+				left="0"
+				right="0"
+				top="0"
+				radiusX="6"
+				radiusY="6">
 			<s:fill>
 				<s:SolidColor color="gray"
 							  alpha="0"/>
 			</s:fill>
 		</s:Rect>
-		
+
 	</s:Group>
-	
-	<s:Group id="mainGroup" filters="{ hostComponent.multiSelected ? multiSelectionFilters : hostComponent.selected ? selectionFilters : null }"
-			 bottom="0" left="0" right="0" top="0"
+
+	<s:Group id="mainGroup"
+			 filters="{ hostComponent.multiSelected ? multiSelectionFilters : hostComponent.selected ? selectionFilters : null }"
+			 bottom="0"
+			 left="0"
+			 right="0"
+			 top="0"
 			 mask="{backgroundMask}">
-		
-		<s:Rect bottom="0" left="0" right="0" top="0">
+
+		<s:Rect bottom="0"
+				left="0"
+				right="0"
+				top="0">
 			<s:fill>
 				<s:SolidColor color="0xB7B7B7"/>
 			</s:fill>
 		</s:Rect>
-		
-		<s:VGroup left="0" right="0"
+
+		<s:VGroup left="0"
+				  right="0"
 				  gap="1">
-			
-			<s:Group id="headerGroup" width="100%" 
-					 doubleClickEnabled="true" doubleClick="hideButton_clickHandler( event )">
-				
+
+			<s:Group id="headerGroup"
+					 width="100%"
+					 doubleClickEnabled="true"
+					 doubleClick="hideButton_clickHandler( event )">
+
 				<s:Rect height="25"
-						bottom="0" left="0" right="0">
+						bottom="0"
+						left="0"
+						right="0">
 					<s:fill>
 						<s:LinearGradient rotation="90">
 							<s:GradientEntry color="{ isIndexPage ? 0xE64D4D : 0x737373 }"/>
@@ -192,14 +228,19 @@
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
-				
-				<s:HGroup width="100%" height="100%" verticalAlign="middle" paddingLeft="5" paddingRight="21">
-					
+
+				<s:HGroup width="100%"
+						  height="100%"
+						  verticalAlign="middle"
+						  paddingLeft="5"
+						  paddingRight="21">
+
 					<components:SmoothImage id="typeImage"
-											height="16"  source="{ hostComponent.typeResource.data }"
+											height="16"
+											source="{ hostComponent.typeResource.data }"
 											width="16"/>
-					
-					
+
+
 					<s:Label id="pageNameLabel"
 							 text="{ hostComponent.nameAttribute }"
 							 toolTip="{ hostComponent.nameAttribute }"
@@ -207,12 +248,18 @@
 							 color="#FFFFFF"
 							 textAlign="center"
 							 maxDisplayedLines="1"/>
-					
+
 				</s:HGroup>
-				
-				<s:Group top="0" bottom="0" right="0" width="40">
-					
-					<s:Rect bottom="0" left="0" right="0" top="0">
+
+				<s:Group top="0"
+						 bottom="0"
+						 right="0"
+						 width="40">
+
+					<s:Rect bottom="0"
+							left="0"
+							right="0"
+							top="0">
 						<s:fill>
 							<s:LinearGradient rotation="90">
 								<s:GradientEntry color="{ isIndexPage ? 0xE64D4D : 0x737373 }"/>
@@ -220,39 +267,64 @@
 							</s:LinearGradient>
 						</s:fill>
 					</s:Rect>
-					
-					<s:HGroup id="imageGroup" height="100%" horizontalAlign="right" verticalAlign="middle" paddingRight="5" gap="1">
-						
-						<mx:Image id="arrowButton" source="{VDOMImage.Arrow}" 
-								  width="16" height="16" smoothBitmapContent="true"
-								  alpha=".5" mouseOver="{ arrowButton.alpha = 1 }" mouseOut="{ arrowButton.alpha = .5 }"
+
+					<s:HGroup id="imageGroup"
+							  height="100%"
+							  horizontalAlign="right"
+							  verticalAlign="middle"
+							  paddingRight="5"
+							  gap="1">
+
+						<mx:Image id="arrowButton"
+								  source="{VDOMImage.Arrow}"
+								  width="16"
+								  height="16"
+								  smoothBitmapContent="true"
+								  alpha=".5"
+								  mouseOver="{ arrowButton.alpha = 1 }"
+								  mouseOut="{ arrowButton.alpha = .5 }"
 								  click="hostComponent.dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE ) )"/>
-						
-						<mx:Image id="deleteButton" source="{VDOMImage.DeleteWhite}" 
-								  width="16" height="16" smoothBitmapContent="true"
-								  alpha=".5" mouseOver="{ deleteButton.alpha = 1 }" mouseOut="{ deleteButton.alpha = .5 }"/>
-						
+
+						<mx:Image id="deleteButton"
+								  source="{VDOMImage.DeleteWhite}"
+								  width="16"
+								  height="16"
+								  smoothBitmapContent="true"
+								  alpha=".5"
+								  mouseOver="{ deleteButton.alpha = 1 }"
+								  mouseOut="{ deleteButton.alpha = .5 }"/>
+
 					</s:HGroup>
-					
+
 				</s:Group>
-				
+
 			</s:Group>
-			
-			<s:Group width="100%" itemCreationPolicy="immediate" includeIn="full">
-				<s:Rect bottom="0" left="0" right="0" top="0">
+
+			<s:Group width="100%"
+					 itemCreationPolicy="immediate"
+					 includeIn="full">
+				<s:Rect bottom="0"
+						left="0"
+						right="0"
+						top="0">
 					<s:fill>
 						<mx:SolidColor color="white"/>
 					</s:fill>
 				</s:Rect>
-				
+
 				<s:Group id="contentGroup"
 						 width="100%"/>
 			</s:Group>
-			
-			
-			<s:Group width="100%" height="16" includeIn="full">
-				
-				<s:Rect bottom="0" left="0" right="0" top="0">
+
+
+			<s:Group width="100%"
+					 height="16"
+					 includeIn="full">
+
+				<s:Rect bottom="0"
+						left="0"
+						right="0"
+						top="0">
 					<s:fill>
 						<s:LinearGradient rotation="90">
 							<s:GradientEntry color="{ isIndexPage ? 0xE64D4D : 0x737373 }"/>
@@ -260,29 +332,33 @@
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
-				
-				<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-					
-					<mx:Image source="{VDOMImage.ArrClose}" click="hideButton_clickHandler( event )" />
-					
+
+				<s:HGroup width="100%"
+						  height="100%"
+						  horizontalAlign="center"
+						  verticalAlign="middle">
+
+					<mx:Image source="{VDOMImage.ArrClose}"
+							  click="hideButton_clickHandler( event )"/>
+
 				</s:HGroup>
-				
+
 				<!--<components:ElementButton id="hideButton"
 				height="17" icon.full="@Embed('assets/hide.png')" icon.short="@Embed('assets/show.png')" label.full="{ resourceManager.getString( 'Tree_General', 'tree_element_hide' ) }"
 				label.short="{ resourceManager.getString( 'Tree_General', 'tree_element_show' ) }" minWidth="10" width="100%"
 				cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
 				click="hideButton_clickHandler( event )"/>
-				
+
 				<components:ElementButton height="17" icon="@Embed('assets/arrow.png')" label="{ resourceManager.getString( 'Tree_General', 'tree_element_create_linkage' ) }" minWidth="10"
 				width="100%"
 				cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
 				click="hostComponent.dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE ) )"/>
-				
+
 				<components:ElementButton id="deleteButton"
 				height="17" icon="@Embed('assets/delete.png')" label="{ resourceManager.getString( 'Tree_General', 'tree_element_delete' ) }" minWidth="10"
 				width="100%"
 				cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"/> -->
-				
+
 			</s:Group>
 		</s:VGroup>
 	</s:Group>

@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.tree.view
 {
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.view.components.button.AlertButton;
@@ -16,7 +16,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
 	import net.vdombox.ide.modules.tree.view.components.WorkArea;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -31,6 +31,7 @@ package net.vdombox.ide.modules.tree.view
 		}
 
 		private var statesProxy : StatesProxy;
+
 		private var structureProxy : StructureProxy;
 
 		private var isActive : Boolean;
@@ -74,26 +75,26 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( Notifications.LINKAGES_INDEX_UPDATE );
 
 			interests.push( Notifications.APPLICATION_STRUCTURE_SETTED );
-			
+
 			interests.push( Notifications.CHECK_SAVE_IN_WORKAREA );
 			interests.push( Notifications.SAVE_CHANGED );
-			
+
 			return interests;
 		}
-		
+
 		private function setSelectTreeElement( treeElVO : TreeElementVO ) : void
 		{
-			var elements:Array = workArea.getTreeElements();
-			for each (var t:TreeElement in elements)
+			var elements : Array = workArea.getTreeElements();
+			for each ( var t : TreeElement in elements )
 			{
 				if ( t.treeElementVO == treeElVO )
 				{
 					t.selected = true;
 					break;
-				}				
-			}	
+				}
+			}
 		}
-		
+
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var name : String = notification.getName();
@@ -116,12 +117,14 @@ package net.vdombox.ide.modules.tree.view
 							workArea.treeElements = structureProxy.treeElements;
 
 						sendNotification( Notifications.GET_APPLICATION_STRUCTURE, statesProxy.selectedApplication );
-						/*if ( structureProxy.linkages )
-							workArea.linkages = structureProxy.linkages;*/
+						/*
+						   if ( structureProxy.linkages )
+						   workArea.linkages = structureProxy.linkages;
+						 */
 
 						if ( statesProxy.selectedPage )
 						{
-							statesProxy.selectedTreeElement = structureProxy.getTreeElementByVO(statesProxy.selectedPage); // VO
+							statesProxy.selectedTreeElement = structureProxy.getTreeElementByVO( statesProxy.selectedPage ); // VO
 							setSelectTreeElement( statesProxy.selectedTreeElement );
 						}
 						break;
@@ -130,8 +133,8 @@ package net.vdombox.ide.modules.tree.view
 				case StatesProxy.SELECTED_APPLICATION_CHANGED:
 				{
 					clearData();
-					
-					break; 
+
+					break;
 				}
 				case Notifications.BODY_STOP:
 				{
@@ -152,26 +155,26 @@ package net.vdombox.ide.modules.tree.view
 				case StatesProxy.SELECTED_TREE_LEVEL_CHANGED:
 				{
 					workArea.selectedTreeLevelVO = statesProxy.selectedTreeLevel;
-					
+
 					break;
 				}
-					
+
 				case Notifications.TREE_ELEMENTS_CHANGED:
-				{					
-					workArea.treeElements = body as Array;					
-					
-					break;			
+				{
+					workArea.treeElements = body as Array;
+
+					break;
 				}
 
 				case Notifications.TREE_ELEMENT_ADD:
-				{					
-					workArea.treeElements = body as Array;					
-					
-					setSelectTreeElement( workArea.treeElements[workArea.treeElements.length - 1]);
-					
+				{
+					workArea.treeElements = body as Array;
+
+					setSelectTreeElement( workArea.treeElements[ workArea.treeElements.length - 1 ] );
+
 					sendNotification( Notifications.GET_APPLICATION_STRUCTURE, statesProxy.selectedApplication );
-					
-					break;			
+
+					break;
 				}
 
 				case Notifications.LINKAGES_CHANGED:
@@ -180,63 +183,63 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
-					
+
 				case Notifications.LINKAGES_INDEX_UPDATE:
 				{
 					workArea.updateLinkageIndex();
-					
+
 					break;
 				}
-					
+
 				case Notifications.CHECK_SAVE_IN_WORKAREA:
 				{
 					if ( workArea.skin.currentState == "unsaved" )
-						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : false } );
+						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO: statesProxy.selectedApplication, object: body, saved: false } );
 					else
-						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : true } );
-					
+						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO: statesProxy.selectedApplication, object: body, saved: true } );
+
 					break;
 				}
-					
+
 				case Notifications.SAVE_CHANGED:
 				{
 					saveHandler();
-					
+
 					break;
 				}
-					
+
 				case Notifications.APPLICATION_STRUCTURE_SETTED:
 				{
 					workArea.skin.currentState = "normal"; //TODO: добавить public свойство для изменения внутреннего state;
-					
+
 					break;
-				}	
-					
-//				case Notifications.CREATE_LINKAGE_REQUEST:
-//				{
-//					shadowLinkage = new Linkage();
-//
-//					shadowLinkageVO = new LinkageVO();
-//
-//					var sourceTreeElementVO : TreeElementVO = body as TreeElementVO;
-//					shadowTargetTreeElementVO = new TreeElementVO( sourceTreeElementVO.pageVO );
-//
-//					shadowLinkageVO.source = sourceTreeElementVO;
-//					shadowLinkageVO.target = shadowTargetTreeElementVO;
-//					shadowLinkageVO.level = selectedTreeLevelVO;
-//
-//					shadowLinkage.linkageVO = shadowLinkageVO;
-//
-//					shadowLinkage.alpha = 0.4;
-//
-//					workArea.linkagesContainer.addElement( shadowLinkage );
-//
-//					workArea.stage.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-//					workArea.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler );
-//					workArea.addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, true );
-//
-//					break;
-//				}
+				}
+
+					//				case Notifications.CREATE_LINKAGE_REQUEST:
+					//				{
+					//					shadowLinkage = new Linkage();
+					//
+					//					shadowLinkageVO = new LinkageVO();
+					//
+					//					var sourceTreeElementVO : TreeElementVO = body as TreeElementVO;
+					//					shadowTargetTreeElementVO = new TreeElementVO( sourceTreeElementVO.pageVO );
+					//
+					//					shadowLinkageVO.source = sourceTreeElementVO;
+					//					shadowLinkageVO.target = shadowTargetTreeElementVO;
+					//					shadowLinkageVO.level = selectedTreeLevelVO;
+					//
+					//					shadowLinkage.linkageVO = shadowLinkageVO;
+					//
+					//					shadowLinkage.alpha = 0.4;
+					//
+					//					workArea.linkagesContainer.addElement( shadowLinkage );
+					//
+					//					workArea.stage.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
+					//					workArea.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler );
+					//					workArea.addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, true );
+					//
+					//					break;
+					//				}
 			}
 		}
 
@@ -244,11 +247,11 @@ package net.vdombox.ide.modules.tree.view
 		{
 			workArea.addEventListener( TreeElementEvent.CREATED, treeElement_createdHandler, true, 0, true );
 			workArea.addEventListener( TreeElementEvent.REMOVED, treeElement_removedHandler, true, 0, true );
-			
-			
+
+
 			workArea.addEventListener( LinkageEvent.CREATED, linkage_createdHandler, true, 0, true );
 			workArea.addEventListener( LinkageEvent.REMOVED, linkage_removedHandler, true, 0, true );
-			
+
 			workArea.addEventListener( WorkAreaEvent.SAVE, saveHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.UNDO, undoHandler, false, 0, true );
 
@@ -259,9 +262,9 @@ package net.vdombox.ide.modules.tree.view
 
 			workArea.addEventListener( WorkAreaEvent.SHOW_SIGNATURE, showSignatureHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.HIDE_SIGNATURE, hideSignatureHandler, false, 0, true );
-			
+
 			workArea.addEventListener( WorkAreaEvent.SET_START, makeStartPageHandler, false, 0, true );
-			
+
 			workArea.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true, 0, true );
 			workArea.addEventListener( LinkageEvent.CLICK, signatureGroupClick, true, 0, true );
 			workArea.addEventListener( LinkageEvent.INDEX_CHANGE, indexChangeHandler, true, 0, true );
@@ -277,7 +280,7 @@ package net.vdombox.ide.modules.tree.view
 
 			workArea.removeEventListener( LinkageEvent.CREATED, linkage_createdHandler, true );
 			workArea.removeEventListener( LinkageEvent.REMOVED, linkage_removedHandler, true );
-			
+
 			workArea.removeEventListener( WorkAreaEvent.CREATE_PAGE, createPageHandler );
 
 			workArea.removeEventListener( WorkAreaEvent.CREATE_PAGE, createPageHandler );
@@ -285,7 +288,7 @@ package net.vdombox.ide.modules.tree.view
 
 			workArea.removeEventListener( WorkAreaEvent.SHOW_SIGNATURE, showSignatureHandler );
 			workArea.removeEventListener( WorkAreaEvent.HIDE_SIGNATURE, hideSignatureHandler );
-			
+
 			workArea.removeEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler, true );
 			workArea.removeEventListener( LinkageEvent.CLICK, signatureGroupClick, true );
 			workArea.removeEventListener( LinkageEvent.INDEX_CHANGE, indexChangeHandler, true );
@@ -303,12 +306,12 @@ package net.vdombox.ide.modules.tree.view
 		{
 			sendNotification( Notifications.SAVE_REQUEST );
 		}
-		
+
 		private function undoHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( Notifications.UNDO_REQUEST );
 		}
-		
+
 		private function createPageHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( Notifications.OPEN_CREATE_PAGE_WINDOW_REQUEST, workArea );
@@ -323,17 +326,17 @@ package net.vdombox.ide.modules.tree.view
 		{
 			sendNotification( Notifications.TREE_ELEMENT_REMOVED, event.target as TreeElement );
 		}
-		
+
 		private function linkage_createdHandler( event : LinkageEvent ) : void
 		{
 			sendNotification( Notifications.LINKAGE_CREATED, event.target as Linkage );
 		}
-		
+
 		private function linkage_removedHandler( event : LinkageEvent ) : void
 		{
 			sendNotification( Notifications.LINKAGE_REMOVED, event.target as Linkage );
 		}
-		
+
 		private function expandAllHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( Notifications.EXPAND_ALL_TREE_ELEMENTS );
@@ -353,15 +356,15 @@ package net.vdombox.ide.modules.tree.view
 		{
 			sendNotification( Notifications.HIDE_SIGNATURE );
 		}
-		
+
 		private function makeStartPageHandler( event : WorkAreaEvent ) : void
 		{
-			sendNotification( Notifications.SET_APPLICATION_INFORMATION, { applicationVO : statesProxy.selectedApplication, pageID : statesProxy.selectedPage.id } );
+			sendNotification( Notifications.SET_APPLICATION_INFORMATION, { applicationVO: statesProxy.selectedApplication, pageID: statesProxy.selectedPage.id } );
 		}
-		
+
 		private function keyDownHandler( event : KeyboardEvent ) : void
 		{
-			if( event.keyCode == Keyboard.F5 )
+			if ( event.keyCode == Keyboard.F5 )
 			{
 				if ( workArea.skin.currentState == "unsaved" )
 				{
@@ -370,30 +373,30 @@ package net.vdombox.ide.modules.tree.view
 				}
 				else
 				{
-					facade.sendNotification( Notifications.GET_PAGES, { applicationVO: statesProxy.selectedApplication} );
-					facade.sendNotification( Notifications.GET_APPLICATION_STRUCTURE, { applicationVO: statesProxy.selectedApplication} );
+					facade.sendNotification( Notifications.GET_PAGES, { applicationVO: statesProxy.selectedApplication } );
+					facade.sendNotification( Notifications.GET_APPLICATION_STRUCTURE, { applicationVO: statesProxy.selectedApplication } );
 				}
 			}
-			
-			if( !event.ctrlKey )
+
+			if ( !event.ctrlKey )
 				return;
-			
+
 			if ( event.keyCode == Keyboard.S )
 				saveHandler();
 		}
-		
+
 		private function signatureGroupClick( event : LinkageEvent ) : void
 		{
 			var linkage : Linkage = event.target as Linkage;
-			
+
 			workArea.openIndexList( structureProxy.linkages, linkage, event.detail );
 		}
-		
+
 		private function indexChangeHandler( event : LinkageEvent ) : void
-		{			
+		{
 			structureProxy.exchange( event.detail.firstLinkageVO, event.detail.secondLinkageVO );
 		}
-		
-		
+
+
 	}
 }

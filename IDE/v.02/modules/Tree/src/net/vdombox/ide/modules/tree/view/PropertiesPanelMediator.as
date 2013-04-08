@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.view.components.PropertiesPanel;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelector;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -59,9 +59,9 @@ package net.vdombox.ide.modules.tree.view
 
 			interests.push( Notifications.PAGE_ATTRIBUTES_GETTED + Notifications.DELIMITER + mediatorName );
 			interests.push( Notifications.PAGE_ATTRIBUTES_SETTED + Notifications.DELIMITER + mediatorName );
-			
+
 			interests.push( Notifications.APPLICATION_INFORMATION_SETTED );
-			
+
 			interests.push( Notifications.PAGE_NAME_SETTED );
 
 			return interests;
@@ -71,10 +71,10 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
-			
+
 			if ( !isActive && name != Notifications.BODY_START )
 				return;
-			
+
 			switch ( name )
 			{
 				case Notifications.BODY_START:
@@ -83,7 +83,7 @@ package net.vdombox.ide.modules.tree.view
 					{
 						isActive = true;
 						updateAttributes();
-						
+
 						break;
 					}
 				}
@@ -108,12 +108,11 @@ package net.vdombox.ide.modules.tree.view
 				{
 					propertiesPanel.vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
-					if ( statesProxy.selectedTreeElement && statesProxy.selectedTreeElement.resourceVO &&
-						statesProxy.selectedTreeElement.resourceVO.id && !statesProxy.selectedTreeElement.resourceVO.data )
+					if ( statesProxy.selectedTreeElement && statesProxy.selectedTreeElement.resourceVO && statesProxy.selectedTreeElement.resourceVO.id && !statesProxy.selectedTreeElement.resourceVO.data )
 					{
-						sendNotification( Notifications.LOAD_RESOURCE, { resourceVO : statesProxy.selectedTreeElement.resourceVO } )
+						sendNotification( Notifications.LOAD_RESOURCE, { resourceVO: statesProxy.selectedTreeElement.resourceVO } )
 					}
-					
+
 					propertiesPanel.treeElementVO = statesProxy.selectedTreeElement;
 
 					break;
@@ -125,40 +124,40 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
-					
+
 				case Notifications.APPLICATION_INFORMATION_SETTED:
 				{
 					var applicationVO : ApplicationVO = body as ApplicationVO;
-					
-					if( !propertiesPanel.treeElementVO )
+
+					if ( !propertiesPanel.treeElementVO )
 						return;
-					
-					if( applicationVO && propertiesPanel.treeElementVO.pageVO && propertiesPanel.treeElementVO.pageVO.id == applicationVO.indexPageID )
+
+					if ( applicationVO && propertiesPanel.treeElementVO.pageVO && propertiesPanel.treeElementVO.pageVO.id == applicationVO.indexPageID )
 						propertiesPanel.makeStartButton.enabled = false;
 					else
 						propertiesPanel.makeStartButton.enabled = true;
-					
+
 					break;
 				}
-				
+
 				case Notifications.PAGE_NAME_SETTED:
 				{
 					var treeElementPageVO : PageVO = body as PageVO;
-					
-					if (propertiesPanel.treeElementVO && propertiesPanel.treeElementVO.pageVO.id == treeElementPageVO.id)
+
+					if ( propertiesPanel.treeElementVO && propertiesPanel.treeElementVO.pageVO.id == treeElementPageVO.id )
 						propertiesPanel.nameAttribute = treeElementPageVO.name;
-					
+
 					break;
 				}
-					
+
 			}
 		}
-		
-		private function updateAttributes():void
+
+		private function updateAttributes() : void
 		{
 			propertiesPanel.treeElementVO = null;
 			propertiesPanel.vdomObjectAttributesVO = null;
-			
+
 			if ( statesProxy.selectedPage )
 				sendNotification( Notifications.GET_PAGE_ATTRIBUTES, { pageVO: statesProxy.selectedPage, recipientID: mediatorName } );
 		}
@@ -175,7 +174,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private function removeHandlers() : void
 		{
-			propertiesPanel.removeEventListener( PropertiesPanelEvent.SAVE_PAGE_NAME, savePageNameHandler);
+			propertiesPanel.removeEventListener( PropertiesPanelEvent.SAVE_PAGE_NAME, savePageNameHandler );
 			propertiesPanel.removeEventListener( PropertiesPanelEvent.SAVE_PAGE_ATTRIBUTES, savePageAttributesHandler );
 			propertiesPanel.removeEventListener( PropertiesPanelEvent.MAKE_START_PAGE, makeStartPageHandler );
 			propertiesPanel.removeEventListener( PropertiesPanelEvent.DELETE_PAGE, deletePageHandler );
@@ -188,28 +187,30 @@ package net.vdombox.ide.modules.tree.view
 
 		private function savePageNameHandler( event : PropertiesPanelEvent ) : void
 		{
-			if (propertiesPanel.treeElementVO && propertiesPanel.treeElementVO.pageVO)
+			if ( propertiesPanel.treeElementVO && propertiesPanel.treeElementVO.pageVO )
 			{
 				sendNotification( Notifications.SET_PAGE_NAME, propertiesPanel.treeElementVO.pageVO );
 			}
 		}
-		
+
 		private function savePageAttributesHandler( event : PropertiesPanelEvent ) : void
 		{
 			if ( propertiesPanel.vdomObjectAttributesVO )
 			{
-				sendNotification( Notifications.SET_PAGE_ATTRIBUTES,
-					propertiesPanel.vdomObjectAttributesVO);
-				
-				/*sendNotification( Notifications.SET_PAGE_ATTRIBUTES,
-					{ pageVO: propertiesPanel.vdomObjectAttributesVO.vdomObjectVO, pageAttributesVO: propertiesPanel.vdomObjectAttributesVO,
-						recipientID: mediatorName } );*/
+				sendNotification( Notifications.SET_PAGE_ATTRIBUTES, propertiesPanel.vdomObjectAttributesVO );
+
+				/*
+				   sendNotification( Notifications.SET_PAGE_ATTRIBUTES,
+				   { pageVO: propertiesPanel.vdomObjectAttributesVO.vdomObjectVO, pageAttributesVO:
+				   propertiesPanel.vdomObjectAttributesVO,
+				   recipientID: mediatorName } );
+				 */
 			}
 		}
 
 		private function makeStartPageHandler( event : PropertiesPanelEvent ) : void
 		{
-			sendNotification( Notifications.SET_APPLICATION_INFORMATION, { applicationVO : propertiesPanel.treeElementVO.pageVO.applicationVO, pageID : propertiesPanel.treeElementVO.pageVO.id } );
+			sendNotification( Notifications.SET_APPLICATION_INFORMATION, { applicationVO: propertiesPanel.treeElementVO.pageVO.applicationVO, pageID: propertiesPanel.treeElementVO.pageVO.id } );
 		}
 
 		private function deletePageHandler( event : PropertiesPanelEvent ) : void

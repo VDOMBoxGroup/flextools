@@ -2,7 +2,6 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
-			 
 			 alpha.disabledStates="0.5">
 
 	<fx:Metadata>
@@ -15,8 +14,10 @@
 	</fx:Metadata>
 
 	<fx:Script>
-		/* Define the skin elements that should not be colorized.
-		 For button, the graphics are colorized but the label is not. */
+		/*
+		   Define the skin elements that should not be colorized.
+		   For button, the graphics are colorized but the label is not.
+		 */
 		static private const exclusions : Array = [ "labelDisplay", "check" ];
 
 		/**
@@ -36,59 +37,73 @@
 		override public function get symbolItems() : Array
 		{
 			return symbols
-		}
-		;
+		};
 
 		override public function get focusSkinExclusions() : Array
 		{
 			return [ labelDisplay ]
-		}
-		;
+		};
 	</fx:Script>
 
 	<s:states>
 
-		<s:State name="up" />
+		<s:State name="up"/>
 
-		<s:State name="over" stateGroups="overStates" />
+		<s:State name="over"
+				 stateGroups="overStates"/>
 
-		<s:State name="down" stateGroups="downStates" />
+		<s:State name="down"
+				 stateGroups="downStates"/>
 
-		<s:State name="disabled" stateGroups="disabledStates" />
+		<s:State name="disabled"
+				 stateGroups="disabledStates"/>
 
-		<s:State name="upAndSelected" stateGroups="selectedStates" />
+		<s:State name="upAndSelected"
+				 stateGroups="selectedStates"/>
 
-		<s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
+		<s:State name="overAndSelected"
+				 stateGroups="overStates, selectedStates"/>
 
-		<s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
+		<s:State name="downAndSelected"
+				 stateGroups="downStates, selectedStates"/>
 
 		<s:State name="disabledAndSelected"
-				 stateGroups="disabledStates, selectedStates" />
+				 stateGroups="disabledStates, selectedStates"/>
 	</s:states>
 
-	<s:Group height="13" width="13"
+	<s:Group height="13"
+			 width="13"
 			 verticalCenter="0">
 		<!-- drop shadow -->
 
-		<s:Ellipse bottom="-1" left="-1" right="-1" top="-1">
+		<s:Ellipse bottom="-1"
+				   left="-1"
+				   right="-1"
+				   top="-1">
 
 			<s:stroke>
 
-				<s:LinearGradientStroke rotation="90" weight="1">
+				<s:LinearGradientStroke rotation="90"
+										weight="1">
 
 					<s:GradientEntry color="0x000000"
 									 color.downStates="0xFFFFFF"
-									 alpha="0.011" alpha.downStates="0" />
+									 alpha="0.011"
+									 alpha.downStates="0"/>
 
 					<s:GradientEntry color="0x000000"
 									 color.downStates="0xFFFFFF"
-									 alpha="0.121" alpha.downStates="0.57" />
+									 alpha="0.121"
+									 alpha.downStates="0.57"/>
 				</s:LinearGradientStroke>
 			</s:stroke>
 		</s:Ellipse>
 		<!-- fill -->
 
-		<s:Ellipse bottom="1" left="1" right="1" top="1">
+		<s:Ellipse bottom="1"
+				   left="1"
+				   right="1"
+				   top="1">
 
 			<s:fill>
 
@@ -96,22 +111,26 @@
 
 					<s:GradientEntry color="0xFFFFFF"
 									 color.downStates="0xAAAAAA"
-									 alpha="0.85" />
+									 alpha="0.85"/>
 
 					<s:GradientEntry color="0xD8D8D8"
 									 color.downStates="0x929496"
-									 alpha="0.85" />
+									 alpha="0.85"/>
 				</s:LinearGradient>
 			</s:fill>
 		</s:Ellipse>
 
-		<s:Ellipse bottom="1" left="1" right="1" top="1">
+		<s:Ellipse bottom="1"
+				   left="1"
+				   right="1"
+				   top="1">
 
 			<s:fill>
 
 				<s:SolidColor id="overFill"
 							  color="0"
-							  alpha="0" alpha.overStates="0.5" />
+							  alpha="0"
+							  alpha.overStates="0.5"/>
 			</s:fill>
 		</s:Ellipse>
 		<!-- fill highlight -->
@@ -121,35 +140,42 @@
 			<s:fill>
 
 				<s:SolidColor color="0xFFFFFF"
-							  alpha="0.33" />
+							  alpha="0.33"/>
 			</s:fill>
 		</s:Path>
 		<!-- layer 6: highlight stroke (all states except down) -->
 
-		<s:Ellipse bottom="1" left="1" right="1" top="1">
+		<s:Ellipse bottom="1"
+				   left="1"
+				   right="1"
+				   top="1">
 
 			<s:stroke>
 
-				<s:LinearGradientStroke rotation="90" weight="1">
+				<s:LinearGradientStroke rotation="90"
+										weight="1">
 
 					<s:GradientEntry color="0xFFFFFF"
 									 color.downStates="0x939393"
-									 alpha.overStates="0.22" />
+									 alpha.overStates="0.22"/>
 
 					<s:GradientEntry color="0xD8D8D8"
 									 color.downStates="0xB1B1B1"
-									 alpha.overStates="0.22" />
+									 alpha.overStates="0.22"/>
 				</s:LinearGradientStroke>
 			</s:stroke>
 		</s:Ellipse>
 
 		<s:Rect height="1"
-				left="5" right="5" top="1">
+				left="5"
+				right="5"
+				top="1">
 
 			<s:fill>
 
-				<s:SolidColor color="0xFFFFFF" color.downStates="0x939393"
-							  alpha.overStates="0.22" />
+				<s:SolidColor color="0xFFFFFF"
+							  color.downStates="0x939393"
+							  alpha.overStates="0.22"/>
 			</s:fill>
 		</s:Rect>
 		<!-- layer 6: highlight stroke (down state only) -->
@@ -212,17 +238,23 @@
 			 </s:stroke>
 			 </s:Rect>-->
 
-		<s:Ellipse bottom="0" left="0" right="0" top="0">
+		<s:Ellipse bottom="0"
+				   left="0"
+				   right="0"
+				   top="0">
 
 			<s:stroke>
 
-				<s:LinearGradientStroke rotation="90" weight="1">
+				<s:LinearGradientStroke rotation="90"
+										weight="1">
 
 					<s:GradientEntry color="0x000000"
-									 alpha="0.5625" alpha.downStates="0.6375" />
+									 alpha="0.5625"
+									 alpha.downStates="0.6375"/>
 
 					<s:GradientEntry color="0x000000"
-									 alpha="0.75" alpha.downStates="0.85" />
+									 alpha="0.75"
+									 alpha.downStates="0.85"/>
 				</s:LinearGradientStroke>
 			</s:stroke>
 		</s:Ellipse>
@@ -230,13 +262,17 @@
 		<!--- The checkmark in the box for this skin. To create a custom check mark, create a custom skin class. -->
 
 		<s:Ellipse id="check"
-				   bottom="1" left="1" right="1" top="1"
-				   includeIn="selectedStates" itemCreationPolicy="immediate">
+				   bottom="1"
+				   left="1"
+				   right="1"
+				   top="1"
+				   includeIn="selectedStates"
+				   itemCreationPolicy="immediate">
 
 			<s:fill>
 
 				<s:SolidColor id="checkMarkFill"
-							  alpha="0.8" />
+							  alpha="0.8"/>
 			</s:fill>
 		</s:Ellipse>
 		<!--<s:Path id="check"
@@ -257,7 +293,12 @@
 	<!-- Label -->
 
 	<s:Label id="labelDisplay"
-			 bottom="3" left="18" right="0" textAlign="start" top="3"
-			 verticalAlign="middle" verticalCenter="2"
-			 maxDisplayedLines="1" />
+			 bottom="3"
+			 left="18"
+			 right="0"
+			 textAlign="start"
+			 top="3"
+			 verticalAlign="middle"
+			 verticalCenter="2"
+			 maxDisplayedLines="1"/>
 </s:SparkSkin>

@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelector;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelectorWindow;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -90,7 +90,7 @@ package net.vdombox.ide.modules.tree.view
 		private function addHandlers() : void
 		{
 			resourceSelectorWindow.addEventListener( WindowEvent.PERFORM_CANCEL, cancelHandler, false, 0, true );
-			resourceSelectorWindow.addEventListener( WindowEvent.PERFORM_APPLY, applyHandler,false, 0, true );
+			resourceSelectorWindow.addEventListener( WindowEvent.PERFORM_APPLY, applyHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -103,14 +103,14 @@ package net.vdombox.ide.modules.tree.view
 		{
 			_resourceSelector.value = resourceSelectorWindow.value;
 			facade.removeMediator( mediatorName );
-			
+
 			//sendNotification( Notifications.CLOSE_WINDOW, resourceSelectorWindow );
 		}
 
 		private function cancelHandler( event : WindowEvent ) : void
 		{
 			facade.removeMediator( mediatorName );
-			
+
 			//sendNotification( Notifications.CLOSE_WINDOW, resourceSelectorWindow );
 		}
 	}

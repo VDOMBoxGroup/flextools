@@ -3,19 +3,20 @@
 					  xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
-					  width="200" x="@{ _treeElementVO.left }" y="@{ _treeElementVO.top }"
+					  width="200"
+					  x="@{ _treeElementVO.left }"
+					  y="@{ _treeElementVO.top }"
 					  skinClass="net.vdombox.ide.modules.tree.view.skins.TreeElementSkin"
-					  creationComplete="creationCompleteHandler()" 
-					  remove="removeHandler()"				 
-					  >
-	
+					  creationComplete="creationCompleteHandler()"
+					  remove="removeHandler()">
+
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.controls.Image;
 			import mx.core.UIComponent;
 			import mx.events.ResizeEvent;
-			
+
 			import net.vdombox.ide.common.events.PopUpWindowEvent;
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.common.model._vo.AttributeVO;
@@ -29,143 +30,145 @@
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
 			import net.vdombox.utils.WindowManager;
-			
+
 			import spark.components.Group;
-			
-			[SkinPart( required="true" )]
+
+			[SkinPart( required = "true" )]
 			public var headerGroup : Group;
-			
-			[SkinPart( required="true" )]
+
+			[SkinPart( required = "true" )]
 			public var typeImage : SmoothImage;
-			
-			[SkinPart( required="true" )]
+
+			[SkinPart( required = "true" )]
 			public var deleteButton : Image;
-			
+
 			[Bindable]
 			private var _typeResource : ResourceVO;
-			
+
 			[Bindable]
 			private var _pageResource : ResourceVO
-			
+
 			[Bindable]
 			private var _treeElementVO : TreeElementVO;
-			
+
 			[Bindable]
 			private var _title : String;
-			
+
 			private var _nameAttribute : String;
-			
+
 			[Bindable]
 			private var _typeName : String;
-			
+
 			[Bindable]
 			public var isIndexPage : Boolean;
-			
+
 			private var _selected : Boolean;
-			
+
 			[Bindable]
 			public var multiSelected : Boolean = false;
-			
+
 			private var mouseOffcetX : int;
-			
+
 			private var mouseOffcetY : int;
-			
+
 			private var moved : Boolean = false;
-			
+
 			[Embed( source = "assets/arrow.png" )]
 			public static var array : Class;
-			
+
 			private var _vdomObjectAttributesVO : VdomObjectAttributesVO;
-			
+
 			[Bindable]
 			private var descriptionAttributeVO : AttributeVO;
-			
-			public function get vdomObjectAttributesVO():VdomObjectAttributesVO
+
+			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
 			{
 				return _vdomObjectAttributesVO;
 			}
-			
-			public function set vdomObjectAttributesVO(value:VdomObjectAttributesVO):void
+
+			public function set vdomObjectAttributesVO( value : VdomObjectAttributesVO ) : void
 			{
 				_vdomObjectAttributesVO = value;
 				descriptionAttributeVO = getAttributeByName( "description" );
 				_title = getAttributeValue( "title" );
-				
+
 			}
-			
+
 			[Bindable]
 			public function get typeResource() : ResourceVO
 			{
 				return _typeResource;
 			}
-			
+
 			public function set typeResource( value : ResourceVO ) : void
 			{
 				_typeResource = value;
 			}
-			
+
 			[Bindable]
 			public function get nameAttribute() : String
 			{
 				return _nameAttribute;
 			}
-			
-			public function set nameAttribute(name:String) : void
+
+			public function set nameAttribute( name : String ) : void
 			{
 				_nameAttribute = name;
 			}
-			
+
 			[Bindable]
 			public function get typeName() : String
 			{
 				return _typeName;
 			}
-			
+
 			public function set typeName( value : String ) : void
 			{
 				_typeName = value;
 			}
-			
+
 			public function get treeElementVO() : TreeElementVO
 			{
 				return _treeElementVO;
 			}
-			
+
 			public function set treeElementVO( value : TreeElementVO ) : void
 			{
 				_treeElementVO = value;
-				
-				if( _treeElementVO && _treeElementVO.pageVO && _treeElementVO.pageVO.id == _treeElementVO.pageVO.applicationVO.indexPageID )
+
+				if ( _treeElementVO && _treeElementVO.pageVO && _treeElementVO.pageVO.id == _treeElementVO.pageVO.applicationVO.indexPageID )
 					isIndexPage = true;
 				else
 					isIndexPage = false;
-				
-				if (treeElementVO)
+
+				if ( treeElementVO )
 					nameAttribute = treeElementVO.pageVO.name;
-				
-				/*if ( image && !treeElementVO.resourceVO )
-				{
-				image.source = array;
-				rectImage.visible = true;
-				}*/
+
+			/*
+			   if ( image && !treeElementVO.resourceVO )
+			   {
+			   image.source = array;
+			   rectImage.visible = true;
+			   }
+			 */
 			}
-			
+
 			[Bindable]
 			public function get selected() : Boolean
 			{
 				return _selected;
 			}
-			
+
 			public function set selected( value : Boolean ) : void
 			{
 				if ( _selected != value )
 					_selected = value;
 			}
-			
+
 			private function getAttributeValue( attributeName : String ) : String
 			{
 				var result : String;
-				
+
 				for each ( var attributeVO : AttributeVO in _vdomObjectAttributesVO.attributes )
 				{
 					if ( attributeVO.name == attributeName )
@@ -174,52 +177,52 @@
 						break;
 					}
 				}
-				
+
 				return result;
 			}
-			
+
 			private function getAttributeByName( name : String ) : AttributeVO
 			{
 				var result : AttributeVO;
-				
+
 				for each ( var attributeVO : AttributeVO in _vdomObjectAttributesVO.attributes )
 				{
 					if ( attributeVO.name == name )
 					{
 						result = attributeVO;
-						
+
 						break;
 					}
 				}
-				
+
 				return result;
 			}
-			
+
 			override protected function partAdded( partName : String, instance : Object ) : void
 			{
 				super.partAdded( partName, instance );
-				
+
 				if ( instance == headerGroup )
 					headerGroup.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
-				
+
 				if ( instance == typeImage )
 					typeImage.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
-				
+
 				if ( instance == deleteButton )
 					deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );
 			}
-			
+
 			private function sizeChanged( value : Object ) : void
 			{
-				if( _treeElementVO )
+				if ( _treeElementVO )
 				{
 					_treeElementVO.width = width;
 					_treeElementVO.height = height;
-				}					
+				}
 			}
-			
+
 			// todo Bad decision. Remake.
-			private function show():void
+			private function show() : void
 			{
 				if ( selected )
 				{
@@ -227,39 +230,41 @@
 					selected = true;
 				}
 			}
-			
+
 			private function creationCompleteHandler() : void
 			{
 				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATED ) );
-				
+
 				BindingUtils.bindSetter( sizeChanged, this, "width" );
 				BindingUtils.bindSetter( sizeChanged, this, "height" );
-				
-				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0 , true );
-				skin.addEventListener( MouseEvent.MOUSE_DOWN, skinMouseDownHandler, true, 0 , true );
-				
+
+				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
+				skin.addEventListener( MouseEvent.MOUSE_DOWN, skinMouseDownHandler, true, 0, true );
+
 				show();
-				
-				/*if ( !treeElementVO.resourceVO || !treeElementVO.resourceVO.data )
-				{
-				image.source = array;
-				rectImage.visible = true;
-				}*/
-				
-				
+
+			/*
+			   if ( !treeElementVO.resourceVO || !treeElementVO.resourceVO.data )
+			   {
+			   image.source = array;
+			   rectImage.visible = true;
+			   }
+			 */
+
+
 			}
-			
+
 			private function removeHandler() : void
 			{
 				dispatchEvent( new TreeElementEvent( TreeElementEvent.REMOVED ) );
 			}
-			
+
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
-				if( deleteButton !== event.target && !event.shiftKey && !multiSelected )
+				if ( deleteButton !== event.target && !event.shiftKey && !multiSelected )
 					dispatchEvent( new TreeElementEvent( TreeElementEvent.SELECTION ) );
 			}
-			
+
 			private function skinMouseDownHandler( event : MouseEvent ) : void
 			{
 				if ( event.shiftKey )
@@ -268,168 +273,170 @@
 						multiSelected = true;
 					else
 						multiSelected = !multiSelected;
-					
-					dispatchEvent( new TreeElementEvent ( TreeElementEvent.MULTI_SELECTED ) );
+
+					dispatchEvent( new TreeElementEvent( TreeElementEvent.MULTI_SELECTED ) );
 				}
 				else
 				{
 					skin.addEventListener( MouseEvent.MOUSE_UP, skinMouseUpHandler, true, 0, true );
 				}
 			}
-			
+
 			private function skinMouseUpHandler( event : MouseEvent ) : void
-			{		
+			{
 				skin.removeEventListener( MouseEvent.MOUSE_UP, skinMouseUpHandler, true );
 				if ( !moved )
-					dispatchEvent( new TreeElementEvent ( TreeElementEvent.CLICK ) );
+					dispatchEvent( new TreeElementEvent( TreeElementEvent.CLICK ) );
 			}
-			
+
 			private function header_mouseDownHandler( event : MouseEvent ) : void
 			{
 				moved = false;
-				
+
 				stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
-				
+
 				mouseOffcetX = mouseX;
 				mouseOffcetY = mouseY;
 			}
-			
+
 			private function stage_mouseMoveHandler( event : MouseEvent ) : void
 			{
 				moved = true;
-				
+
 				var newX : int = parent.mouseX - mouseOffcetX;
 				var newY : int = parent.mouseY - mouseOffcetY;
-				
+
 				if ( newX < 0 )
 					newX = 0;
-				
+
 				if ( newY < 0 )
 					newY = 0;
-				
+
 				var dx : int = int( newX - x );
-				var dy : int = int ( newY - y );
-				
+				var dy : int = int( newY - y );
+
 				if ( multiSelected )
-				{				
-					var moveEvent : TreeElementEvent = new TreeElementEvent ( TreeElementEvent.MULTI_SELECT_MOVED );
-					moveEvent.object = { dx : dx, dy : dy };
+				{
+					var moveEvent : TreeElementEvent = new TreeElementEvent( TreeElementEvent.MULTI_SELECT_MOVED );
+					moveEvent.object = { dx: dx, dy: dy };
 					dispatchEvent( moveEvent );
 				}
 				else
 				{
 					x = newX;
 					y = newY;
-					
-					dispatchEvent( new TreeElementEvent( TreeElementEvent.MOVE, {x : mouseOffcetX, y :  mouseOffcetY, dx : dx, dy : dy} ) );
+
+					dispatchEvent( new TreeElementEvent( TreeElementEvent.MOVE, { x: mouseOffcetX, y: mouseOffcetY, dx: dx, dy: dy } ) );
 				}
-				
-				/*	treeElementVO.left = x;
-				treeElementVO.top = y;*/
-				
+
+			/*
+			   treeElementVO.left = x;
+			   treeElementVO.top = y;
+			 */
+
 			}
-			
+
 			private function stage_mouseMoveHandlerExt( event : MouseEvent ) : void
 			{
 				dispatchEvent( new TreeElementEvent( TreeElementEvent.MOVED ) );
 				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
 			}
-			
+
 			private function stage_mouseUpHandler( event : MouseEvent ) : void
 			{
 				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
 				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 			}
-			
+
 			private function setStartPageButton_clickHandler( event : MouseEvent ) : void
 			{
 				//				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE_REQUEST ) );
 			}
-			
-			private function deleteButton_clickHandler( event : MouseEvent ) :void
+
+			private function deleteButton_clickHandler( event : MouseEvent ) : void
 			{
 				Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
-				
-				Alert.Show( "Delete page", "Are you sure want to delete " + nameAttribute + " ?",AlertButton.OK_No, this.parentApplication, deleteHandler);
-				
-				function deleteHandler(event : PopUpWindowEvent) : void
+
+				Alert.Show( "Delete page", "Are you sure want to delete " + nameAttribute + " ?", AlertButton.OK_No, this.parentApplication, deleteHandler );
+
+				function deleteHandler( event : PopUpWindowEvent ) : void
 				{
-					if (event.detail == Alert.YES)
+					if ( event.detail == Alert.YES )
 					{
 						dispatchEvent( new TreeElementEvent( TreeElementEvent.DELETE ) );
 					}
 				}
-				
+
 			}
-			
-			protected function textinput1_keyDownHandler(event:KeyboardEvent):void
+
+			protected function textinput1_keyDownHandler( event : KeyboardEvent ) : void
 			{
-				if (treeElementVO && treeElementVO.pageVO)
+				if ( treeElementVO && treeElementVO.pageVO )
 				{
 					if ( event.keyCode == Keyboard.ENTER )
 					{
 						treeElementVO.pageVO.name = txtName.text;
-						dispatchEvent( new TreeElementEvent ( TreeElementEvent.SAVE_PAGE_NAME ) );
+						dispatchEvent( new TreeElementEvent( TreeElementEvent.SAVE_PAGE_NAME ) );
 					}
 				}
 			}
-			
-			protected function txtName_focusOutHandler(event:FocusEvent):void
+
+			protected function txtName_focusOutHandler( event : FocusEvent ) : void
 			{
-				if (treeElementVO && treeElementVO.pageVO)
+				if ( treeElementVO && treeElementVO.pageVO )
 				{
 					treeElementVO.pageVO.name = txtName.text;
-					dispatchEvent( new TreeElementEvent ( TreeElementEvent.SAVE_PAGE_NAME ) );
+					dispatchEvent( new TreeElementEvent( TreeElementEvent.SAVE_PAGE_NAME ) );
 				}
-				
+
 				shadowName.visible = false;
 			}
-			
-			protected function txtDescription_focusOutHandler(event:FocusEvent):void
+
+			protected function txtDescription_focusOutHandler( event : FocusEvent ) : void
 			{
 				if ( _vdomObjectAttributesVO )
 				{
-					dispatchEvent( new TreeElementEvent ( TreeElementEvent.SAVE_PAGE_ATTRIBUTES ) )
+					dispatchEvent( new TreeElementEvent( TreeElementEvent.SAVE_PAGE_ATTRIBUTES ) )
 				}
-				
+
 				shadowDiscription.visible = false;
 			}
-			
-			protected function txtName_focusInHandler(event:FocusEvent):void
+
+			protected function txtName_focusInHandler( event : FocusEvent ) : void
 			{
 				shadowName.visible = true;
 			}
-			
-			protected function txtDescription_focusInHandler(event:FocusEvent):void
+
+			protected function txtDescription_focusInHandler( event : FocusEvent ) : void
 			{
 				shadowDiscription.visible = true;
 			}
-			
-			protected function txtDescription_doubleClickHandler(event:MouseEvent):void
+
+			protected function txtDescription_doubleClickHandler( event : MouseEvent ) : void
 			{
 				event.stopImmediatePropagation();
 				var stringAttributeEditWindow : StringAttributeEditWindow = new StringAttributeEditWindow();
 				stringAttributeEditWindow.value = txtDescription.text;
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.APPLY, applyHandler );
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.CANCEL, cancelHandler );
-				
-				WindowManager.getInstance().addWindow(stringAttributeEditWindow, parentApplication as UIComponent, true);
-				
+
+				WindowManager.getInstance().addWindow( stringAttributeEditWindow, parentApplication as UIComponent, true );
+
 				function applyHandler( event : StringAttributeEditWindowEvent ) : void
 				{
 					txtDescription.text = event.value;
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
 				}
-				
+
 				function cancelHandler( event : StringAttributeEditWindowEvent ) : void
 				{
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
 				}
 			}
-			
-			protected function txtDescription_resizeHandler(event:ResizeEvent):void
+
+			protected function txtDescription_resizeHandler( event : ResizeEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				if ( txtDescription.height < 150 )
@@ -437,21 +444,21 @@
 				else
 					scroll.height = 150;
 			}
-			
+
 			public function hasMoved( dx : int, dy : int ) : Boolean
 			{
 				if ( x + dx < 0 || y + dy < 0 )
 					return false;
-				
+
 				return true;
 			}
-			
+
 			public function moveElement( dx : int, dy : int ) : void
 			{
 				if ( multiSelected )
-				{				
-					var moveEvent : TreeElementEvent = new TreeElementEvent ( TreeElementEvent.MULTI_SELECT_MOVED );
-					moveEvent.object = { dx : dx, dy : dy };
+				{
+					var moveEvent : TreeElementEvent = new TreeElementEvent( TreeElementEvent.MULTI_SELECT_MOVED );
+					moveEvent.object = { dx: dx, dy: dy };
 					dispatchEvent( moveEvent );
 				}
 				else
@@ -460,95 +467,131 @@
 					y += dy;
 				}
 			}
-			
+
 			public function moveTo( dx : int, dy : int, target : TreeElement ) : void
 			{
 				x += dx;
 				y += dy;
-				
+
 				if ( target == this )
 				{
-					dispatchEvent( new TreeElementEvent( TreeElementEvent.MOVE, {x : mouseOffcetX, y :  mouseOffcetY, dx : dx, dy : dy} ) );
+					dispatchEvent( new TreeElementEvent( TreeElementEvent.MOVE, { x: mouseOffcetX, y: mouseOffcetY, dx: dx, dy: dy } ) );
 				}
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<s:layout>
-		
+
 		<s:VerticalLayout gap="1"/>
 	</s:layout>
-	
-	<s:VGroup width="100%" gap="5">
-		
-		<s:HGroup width="100%" height="100%" paddingTop="5" gap="5">
-			
-			<s:Group width="100%" height="100%">
-				
-				<s:VGroup width="100%" height="100%" gap="0">
+
+	<s:VGroup width="100%"
+			  gap="5">
+
+		<s:HGroup width="100%"
+				  height="100%"
+				  paddingTop="5"
+				  gap="5">
+
+			<s:Group width="100%"
+					 height="100%">
+
+				<s:VGroup width="100%"
+						  height="100%"
+						  gap="0">
 					<s:Group width="100%">
-						<s:TextInput id="txtName" text="{ nameAttribute }" left="5" right="5"
-									 borderVisible="false" contentBackgroundAlpha="0" focusAlpha="0"
-									 keyDown="textinput1_keyDownHandler(event)" 
-									 focusIn="txtName_focusInHandler(event)" focusOut="txtName_focusOutHandler(event)"/>
-						
-						<s:Group id="shadowName" width="100%" height="100%" visible="false">
-							
-							<s:Rect top="0" width="100%" height="6">
+						<s:TextInput id="txtName"
+									 text="{ nameAttribute }"
+									 left="5"
+									 right="5"
+									 borderVisible="false"
+									 contentBackgroundAlpha="0"
+									 focusAlpha="0"
+									 keyDown="textinput1_keyDownHandler(event)"
+									 focusIn="txtName_focusInHandler(event)"
+									 focusOut="txtName_focusOutHandler(event)"/>
+
+						<s:Group id="shadowName"
+								 width="100%"
+								 height="100%"
+								 visible="false">
+
+							<s:Rect top="0"
+									width="100%"
+									height="6">
 								<s:fill>
-									<s:BitmapFill source="{VDOMImage.ShadowLineWhite}" />
+									<s:BitmapFill source="{VDOMImage.ShadowLineWhite}"/>
 								</s:fill>
 							</s:Rect>
-							
+
 						</s:Group>
 					</s:Group>
-					
-					
+
+
 					<s:Line width="100%">
 						<s:stroke>
-							<s:SolidColorStroke color="0xC7C7C7" weight="1"/>
+							<s:SolidColorStroke color="0xC7C7C7"
+												weight="1"/>
 						</s:stroke>
 					</s:Line>
-					
-					<s:Scroller id="scroll" width="100%" maxHeight="150">
+
+					<s:Scroller id="scroll"
+								width="100%"
+								maxHeight="150">
 						<s:Group>
-							<s:RichEditableText id="txtDescription" text="@{ descriptionAttributeVO.value }" width="100%"
-												color="0x474747" paddingBottom="3" paddingLeft="8" paddingRight="8" paddingTop="3" 
-												focusIn="txtDescription_focusInHandler(event)"  focusOut="txtDescription_focusOutHandler(event)"
-												doubleClick="txtDescription_doubleClickHandler(event)" resize="txtDescription_resizeHandler(event)"/>
-							
-							<s:Group id="shadowDiscription" width="100%" height="100%" visible="false">
-								
-								<s:Rect top="0" width="100%" height="6">
+							<s:RichEditableText id="txtDescription"
+												text="@{ descriptionAttributeVO.value }"
+												width="100%"
+												color="0x474747"
+												paddingBottom="3"
+												paddingLeft="8"
+												paddingRight="8"
+												paddingTop="3"
+												focusIn="txtDescription_focusInHandler(event)"
+												focusOut="txtDescription_focusOutHandler(event)"
+												doubleClick="txtDescription_doubleClickHandler(event)"
+												resize="txtDescription_resizeHandler(event)"/>
+
+							<s:Group id="shadowDiscription"
+									 width="100%"
+									 height="100%"
+									 visible="false">
+
+								<s:Rect top="0"
+										width="100%"
+										height="6">
 									<s:fill>
-										<s:BitmapFill source="{VDOMImage.ShadowLineWhite}" />
+										<s:BitmapFill source="{VDOMImage.ShadowLineWhite}"/>
 									</s:fill>
 								</s:Rect>
-								
+
 							</s:Group>
-							
+
 						</s:Group>
 					</s:Scroller>
-					
+
 					<s:Line width="100%">
 						<s:stroke>
-							<s:SolidColorStroke color="0xC7C7C7" weight="1"/>
+							<s:SolidColorStroke color="0xC7C7C7"
+												weight="1"/>
 						</s:stroke>
 					</s:Line>
 				</s:VGroup>
-				
-				
+
+
 			</s:Group>
-			
+
 		</s:HGroup>
-		
-		
+
+
 		<s:Label text="{_typeName.toUpperCase()}"
-				 bottom="3" color="0xC7C7C7" width="100%"
+				 bottom="3"
+				 color="0xC7C7C7"
+				 width="100%"
 				 textAlign="center"
 				 maxDisplayedLines="1"/>
-		
+
 	</s:VGroup>
-	
+
 </s:SkinnableContainer>

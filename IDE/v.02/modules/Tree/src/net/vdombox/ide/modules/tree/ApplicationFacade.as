@@ -39,7 +39,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.settings.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.tree.controller.settings.SetSettingsCommand;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 
@@ -86,7 +86,7 @@ package net.vdombox.ide.modules.tree
 
 			registerCommand( Notifications.TREE_ELEMENT_CREATED, TreeElementCreatedCommand );
 			registerCommand( Notifications.TREE_ELEMENT_REMOVED, TreeElementRemovedCommand );
-			
+
 			registerCommand( Notifications.LINKAGE_CREATED, LinkageCreatedCommand );
 			registerCommand( Notifications.LINKAGE_REMOVED, LinkageRemovedCommand );
 
@@ -95,25 +95,25 @@ package net.vdombox.ide.modules.tree
 
 			registerCommand( Notifications.PAGES_GETTED, PagesGettedCommand );
 			registerCommand( Notifications.APPLICATION_STRUCTURE_GETTED, ApplicationStructureGettedCommand );
-			
+
 			registerCommand( Notifications.GET_TREE_LEVELS, GetTreeLevelsCommand );
 
 			registerCommand( Notifications.PAGE_TYPE_ITEM_RENDERER_CREATED, PageTypeItemRendererCreatedCommand );
 
 			registerCommand( Notifications.CREATE_PAGE_REQUEST, CreatePageRequestCommand );
 			registerCommand( Notifications.DELETE_PAGE_REQUEST, DeletePageRequestCommand );
-			
+
 			registerCommand( Notifications.SAVE_REQUEST, SaveRequestCommand );
 			registerCommand( Notifications.UNDO_REQUEST, UndoRequestCommand );
-			
+
 			registerCommand( Notifications.PAGE_CREATED, PageCreatedCommand );
 			registerCommand( Notifications.PAGE_DELETED, PageDeletedCommand );
-			
+
 			registerCommand( StatesProxy.SELECTED_TREE_LEVEL_CHANGE_REQUEST, SelectedTreeLevelChangeRequestCommand );
 			registerCommand( StatesProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, SelectedTreeElementChangeRequestCommand );
-			
+
 			registerCommand( Notifications.OPEN_RESOURCE_SELECTOR_REQUEST, OpenResourceSelectorRequestCommand );
-			
+
 			registerCommand( Notifications.BODY_STOP, BodyStopCommand );
 			registerCommand( Notifications.TEAR_DOWN, TearDownCommand );
 		}

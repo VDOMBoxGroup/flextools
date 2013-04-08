@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -15,44 +15,44 @@ package net.vdombox.ide.modules.tree.controller.messages
 		override public function execute( notification : INotification ) : void
 		{
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
-			
+
 			var body : Object = message.getBody();
 			var target : String = message.target;
 			var operation : String = message.operation;
-			
+
 			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-			
+
 			switch ( target )
 			{
 				case PPMStatesTargetNames.ALL_STATES:
 				{
-					
+
 					statesProxy.setStates( body );
 					sendNotification( StatesProxy.ALL_STATES_GETTED, body );
 					break;
 				}
-					
+
 				case PPMStatesTargetNames.SELECTED_APPLICATION:
 				{
 					var selectedApplication : ApplicationVO = body as ApplicationVO;
 					statesProxy.selectedApplication = selectedApplication;
-					
+
 					break;
 				}
-					
+
 				case PPMStatesTargetNames.SELECTED_PAGE:
 				{
 					var selectedPageVO : PageVO = body as PageVO;
 					statesProxy.selectedPage = selectedPageVO;
-					
+
 					break;
 				}
-					
+
 				case PPMStatesTargetNames.SELECTED_OBJECT:
 				{
 					var selectedObjectVO : ObjectVO = body as ObjectVO;
 					statesProxy.selectedObject = selectedObjectVO;
-					
+
 					break;
 				}
 			}

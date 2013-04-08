@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.tree.controller
 	import net.vdombox.ide.modules.Tree;
 	import net.vdombox.ide.modules.tree.view.TreeJunctionMediator;
 	import net.vdombox.ide.modules.tree.view.TreeMediator;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 

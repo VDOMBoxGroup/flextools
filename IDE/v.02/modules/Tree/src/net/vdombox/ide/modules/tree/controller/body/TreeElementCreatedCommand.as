@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.tree.controller.body
 {
 	import net.vdombox.ide.modules.tree.view.TreeElementMediator;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 

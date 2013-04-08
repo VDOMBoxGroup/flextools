@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.tree.controller.body
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -17,8 +17,7 @@ package net.vdombox.ide.modules.tree.controller.body
 
 			if ( statesProxy.selectedApplication && pageVO )
 			{
-				sendNotification( Notifications.DELETE_PAGE,
-					{ applicationVO: statesProxy.selectedApplication, pageVO: pageVO } );
+				sendNotification( Notifications.DELETE_PAGE, { applicationVO: statesProxy.selectedApplication, pageVO: pageVO } );
 			}
 		}
 	}

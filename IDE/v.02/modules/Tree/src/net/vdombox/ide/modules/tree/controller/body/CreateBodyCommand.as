@@ -4,24 +4,25 @@ package net.vdombox.ide.modules.tree.controller.body
 	import net.vdombox.ide.modules.tree.view.BodyMediator;
 	import net.vdombox.ide.modules.tree.view.TreeMediator;
 	import net.vdombox.ide.modules.tree.view.components.Body;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
+
 	/**
 	 * The CreateBodyCommand creating body of Tree
 	 * @author Alexey Andreev
-	 * 
+	 *
 	 */
 	public class CreateBodyCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			
+
 			var body : Body;
 			var bodyMediator : BodyMediator;
 
 			var treeMediator : TreeMediator = facade.retrieveMediator( TreeMediator.NAME ) as TreeMediator;
-			
+
 			if ( facade.hasMediator( BodyMediator.NAME ) )
 			{
 				bodyMediator = facade.retrieveMediator( BodyMediator.NAME ) as BodyMediator;
@@ -32,10 +33,10 @@ package net.vdombox.ide.modules.tree.controller.body
 				body = new Body();
 				facade.registerMediator( new BodyMediator( body ) )
 			}
-			
-			
+
+
 			body.moduleFactory = treeMediator.tree.moduleFactory;
-			
+
 			facade.sendNotification( Notifications.EXPORT_BODY, body );
 			facade.sendNotification( Notifications.MODULE_SELECTED );
 		}

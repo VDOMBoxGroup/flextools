@@ -2,7 +2,6 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				xmlns:mx="library://ns.adobe.com/flex/halo"
-				
 				height="25">
 
 	<fx:Script>
@@ -12,50 +11,68 @@
 	</fx:Script>
 
 	<s:states>
-		<s:State name="normal" />
-		<s:State name="hovered" />
-		<s:State name="selected" />
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
 	</s:states>
-	
-	<s:Rect left="-2" width="100%" top="-2" bottom="-2">
+
+	<s:Rect left="-2"
+			width="100%"
+			top="-2"
+			bottom="-2">
 		<s:fill>
 			<s:SolidColor id="rectColor"
 						  color.normal="#3A3A3A"
 						  color.hovered="#00000A"
 						  alpha.hovered="0.8"
-						  color.selected="#00000A" />
+						  color.selected="#00000A"/>
 		</s:fill>
 	</s:Rect>
 
-	<s:HGroup height="100%" width="100%"
-			  paddingLeft="3" paddingRight="3" verticalAlign="middle">
+	<s:HGroup height="100%"
+			  width="100%"
+			  paddingLeft="3"
+			  paddingRight="3"
+			  verticalAlign="middle">
 
 		<s:CheckBox id="cbx"
-					height="100%" selected="@{ data.visible }"
+					height="100%"
+					selected="@{ data.visible }"
 					skinClass="net.vdombox.ide.modules.tree.view.skins.LevelCheckBoxSkin"
-					symbolColor="{data.color}" />
+					symbolColor="{data.color}"/>
 
 		<s:Rect width="1"
-				bottom="3" top="3">
+				bottom="3"
+				top="3">
 
 			<s:fill>
 
-				<s:SolidColor color="gray" />
+				<s:SolidColor color="gray"/>
 			</s:fill>
 		</s:Rect>
 
-		<s:Label text="{ data.label }" width="100%" color="#FFFFFF"/>
+		<s:Label text="{ data.label }"
+				 width="100%"
+				 color="#FFFFFF"/>
 	</s:HGroup>
 
-	<s:Line top="-2" left="-2" width="100%">
+	<s:Line top="-2"
+			left="-2"
+			width="100%">
 		<s:stroke>
-			<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1" />
+			<s:SolidColorStroke color="#FFFFFF"
+								alpha="0.5"
+								weight="1"/>
 		</s:stroke>
 	</s:Line>
-	
-	<s:Line bottom="-2" left="-2" width="100%">
+
+	<s:Line bottom="-2"
+			left="-2"
+			width="100%">
 		<s:stroke>
-			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1" />
+			<s:SolidColorStroke color="#000000"
+								alpha="0.5"
+								weight="1"/>
 		</s:stroke>
 	</s:Line>
 </s:ItemRenderer>

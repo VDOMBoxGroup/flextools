@@ -19,46 +19,46 @@
 			import net.vdombox.ide.modules.tree.view.skins.TextInputShadowedSkin;
 
 			private var _treeElementVO : TreeElementVO;
-			
+
 			private var _vdomObjectAttributesVO : VdomObjectAttributesVO;
 
 			[Bindable]
 			private var _nameAttribute : String = "";
-			
+
 			[Bindable]
 			private var _typeAttribute : String = "";
 
 			[Bindable]
 			private var descriptionAttributeVO : AttributeVO;
 
-			
+
 			[Bindable]
-			public function get treeElementVO():TreeElementVO
+			public function get treeElementVO() : TreeElementVO
 			{
 				return _treeElementVO;
 			}
 
-			public function set treeElementVO(value:TreeElementVO):void
+			public function set treeElementVO( value : TreeElementVO ) : void
 			{
 				_treeElementVO = value;
-				
-				if (_treeElementVO)
+
+				if ( _treeElementVO )
 				{
 					_nameAttribute = _treeElementVO.pageVO.name;
 					_typeAttribute = _treeElementVO.pageVO.typeVO.displayName;
-				} 
-				else 
+				}
+				else
 				{
 					_nameAttribute = "";
 					_typeAttribute = "";
 				}
 			}
-			
-			public function set nameAttribute(name:String):void
+
+			public function set nameAttribute( name : String ) : void
 			{
 				_nameAttribute = name;
-				
-				if (treeElementVO)
+
+				if ( treeElementVO )
 					treeElementVO.pageVO.name = name;
 			}
 
@@ -73,25 +73,25 @@
 
 				pageAttributesChanged();
 			}
-			
+
 			private function pageAttributesChanged() : void
 			{
 				if ( _vdomObjectAttributesVO )
 				{
 					descriptionAttributeVO = getAttributeByName( "description" );
-					
+
 					var indexPageID : String;
 
-					if( _vdomObjectAttributesVO.vdomObjectVO is PageVO )
+					if ( _vdomObjectAttributesVO.vdomObjectVO is PageVO )
 						indexPageID = PageVO( _vdomObjectAttributesVO.vdomObjectVO ).applicationVO.indexPageID
-					else if( _vdomObjectAttributesVO.vdomObjectVO is ObjectVO )
+					else if ( _vdomObjectAttributesVO.vdomObjectVO is ObjectVO )
 						indexPageID = ObjectVO( _vdomObjectAttributesVO.vdomObjectVO ).pageVO.applicationVO.indexPageID
-					
+
 					if ( indexPageID == _vdomObjectAttributesVO.vdomObjectVO.id )
 						makeStartButton.enabled = false;
 					else
 						makeStartButton.enabled = true;
-					
+
 					saveButton.enabled = true;
 					deleteButton.enabled = true;
 
@@ -121,15 +121,15 @@
 
 				return result;
 			}
-			
-			private function saveProperties():void
+
+			private function saveProperties() : void
 			{
-				if (treeElementVO && treeElementVO.pageVO)
+				if ( treeElementVO && treeElementVO.pageVO )
 				{
 					treeElementVO.pageVO.name = txtPageName.text;
-					dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.SAVE_PAGE_NAME ) );
+					dispatchEvent( new PropertiesPanelEvent( PropertiesPanelEvent.SAVE_PAGE_NAME ) );
 				}
-				dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.SAVE_PAGE_ATTRIBUTES ) )
+				dispatchEvent( new PropertiesPanelEvent( PropertiesPanelEvent.SAVE_PAGE_ATTRIBUTES ) )
 			}
 		]]>
 	</fx:Script>
@@ -139,10 +139,13 @@
 		<s:VerticalLayout gap="1"/>
 	</s:layout>
 
-	<s:Group height="24" width="100%">
+	<s:Group height="24"
+			 width="100%">
 
 		<s:Rect width="42"
-				bottom="0" left="0" top="0">
+				bottom="0"
+				left="0"
+				top="0">
 			<s:fill>
 				<s:LinearGradient rotation="90">
 					<s:GradientEntry color="0xEDEDED"/>
@@ -151,29 +154,42 @@
 			</s:fill>
 		</s:Rect>
 
-		<s:Rect bottom="0" left="42" right="0" top="0">
+		<s:Rect bottom="0"
+				left="42"
+				right="0"
+				top="0">
 			<s:fill>
 				<mx:SolidColor color="white"/>
 			</s:fill>
 		</s:Rect>
 
-		<s:HGroup height="100%" width="100%"
-				  paddingLeft="3" paddingRight="5" verticalAlign="middle">
+		<s:HGroup height="100%"
+				  width="100%"
+				  paddingLeft="3"
+				  paddingRight="5"
+				  verticalAlign="middle">
 
-			<s:Label text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_name' ) }" width="37" />
-			
+			<s:Label text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_name' ) }"
+					 width="37"/>
+
 			<s:TextInput id="txtPageName"
-						 text="@{ _nameAttribute }" width="100%"
-						 borderColor="0xC5C5C5" focusAlpha="0" skinClass="net.vdombox.ide.modules.tree.view.skins.TextInputShadowedSkin"
-						 borderVisible="true" />
+						 text="@{ _nameAttribute }"
+						 width="100%"
+						 borderColor="0xC5C5C5"
+						 focusAlpha="0"
+						 skinClass="net.vdombox.ide.modules.tree.view.skins.TextInputShadowedSkin"
+						 borderVisible="true"/>
 		</s:HGroup>
 
 	</s:Group>
 
-	<s:Group height="24" width="100%">
+	<s:Group height="24"
+			 width="100%">
 
 		<s:Rect width="42"
-				bottom="0" left="0" top="0">
+				bottom="0"
+				left="0"
+				top="0">
 			<s:fill>
 				<s:LinearGradient rotation="90">
 					<s:GradientEntry color="0xEDEDED"/>
@@ -182,16 +198,24 @@
 			</s:fill>
 		</s:Rect>
 
-		<s:Rect bottom="0" left="42" right="0" top="0">
+		<s:Rect bottom="0"
+				left="42"
+				right="0"
+				top="0">
 			<s:fill>
 				<mx:SolidColor color="white"/>
 			</s:fill>
 		</s:Rect>
 
-		<s:HGroup height="100%" width="100%"
-				  paddingLeft="3" paddingRight="5" verticalAlign="middle">
-			<s:Label text="Img" width="37"/>
-			<components:ResourceSelector value="@{ treeElementVO.resourceVO }" width="100%" />
+		<s:HGroup height="100%"
+				  width="100%"
+				  paddingLeft="3"
+				  paddingRight="5"
+				  verticalAlign="middle">
+			<s:Label text="Img"
+					 width="37"/>
+			<components:ResourceSelector value="@{ treeElementVO.resourceVO }"
+										 width="100%"/>
 		</s:HGroup>
 
 	</s:Group>
@@ -199,7 +223,9 @@
 	<s:Group width="100%">
 
 		<s:Rect height="20"
-				left="0" right="0" top="0">
+				left="0"
+				right="0"
+				top="0">
 			<s:fill>
 				<s:LinearGradient rotation="90">
 					<s:GradientEntry color="0xEDEDED"/>
@@ -208,28 +234,43 @@
 			</s:fill>
 		</s:Rect>
 
-		<s:Rect bottom="0" left="0" right="0" top="20">
+		<s:Rect bottom="0"
+				left="0"
+				right="0"
+				top="20">
 			<s:fill>
 				<mx:SolidColor color="white"/>
 			</s:fill>
 		</s:Rect>
 
 		<s:VGroup width="100%"
-				  paddingBottom="5" paddingLeft="3" paddingRight="5" paddingTop="5">
-			
-			<s:Label height="15" text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_description' ) }"/>
-			
-			<s:TextArea height="55" text="@{ descriptionAttributeVO.value }" width="100%"
-						borderColor="0xC5C5C5" focusAlpha="0" skinClass="net.vdombox.ide.modules.tree.view.skins.TextAreaShadowedSkin"
+				  paddingBottom="5"
+				  paddingLeft="3"
+				  paddingRight="5"
+				  paddingTop="5">
+
+			<s:Label height="15"
+					 text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_description' ) }"/>
+
+			<s:TextArea height="55"
+						text="@{ descriptionAttributeVO.value }"
+						width="100%"
+						borderColor="0xC5C5C5"
+						focusAlpha="0"
+						skinClass="net.vdombox.ide.modules.tree.view.skins.TextAreaShadowedSkin"
 						borderVisible="true"
 						left="2"/>
 		</s:VGroup>
 
 	</s:Group>
 
-	<s:Group height="25" width="100%">
+	<s:Group height="25"
+			 width="100%">
 
-		<s:Rect bottom="0" left="0" right="0" top="0">
+		<s:Rect bottom="0"
+				left="0"
+				right="0"
+				top="0">
 			<s:fill>
 				<s:LinearGradient rotation="90">
 					<s:GradientEntry color="0xEDEDED"/>
@@ -238,14 +279,19 @@
 			</s:fill>
 		</s:Rect>
 
-		<s:HGroup height="100%" width="100%"
-				  paddingLeft="5" paddingRight="5" verticalAlign="middle">
+		<s:HGroup height="100%"
+				  width="100%"
+				  paddingLeft="5"
+				  paddingRight="5"
+				  verticalAlign="middle">
 
 			<s:Label text="Type"/>
 
-			<components:SmoothImage height="18" width="18"/>
+			<components:SmoothImage height="18"
+									width="18"/>
 
-			<s:Label id="typeNameLabel" text="{_typeAttribute}"/>
+			<s:Label id="typeNameLabel"
+					 text="{_typeAttribute}"/>
 
 		</s:HGroup>
 
@@ -254,19 +300,27 @@
 	<s:controlBarContent>
 
 		<components:ElementButton id="makeStartButton"
-								  enabled="false" height="20" icon="{VDOMImage.Save}" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_start' ) }"
+								  enabled="false"
+								  height="20"
+								  icon="{VDOMImage.Save}"
+								  label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_start' ) }"
 								  width="100%"
 								  skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
 								  click="dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.MAKE_START_PAGE ) )"/>
 
 		<components:ElementButton id="deleteButton"
-								  enabled="false" height="20" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_delete' ) }"
+								  enabled="false"
+								  height="20"
+								  label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_delete' ) }"
 								  width="100%"
 								  skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
 								  click="dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.DELETE_PAGE ) )"/>
 
 		<components:ElementButton id="saveButton"
-								  enabled="false" height="20" icon="{VDOMImage.Save}" label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_save' ) }"
+								  enabled="false"
+								  height="20"
+								  icon="{VDOMImage.Save}"
+								  label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_save' ) }"
 								  width="100%"
 								  skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
 								  click="saveProperties()"/>

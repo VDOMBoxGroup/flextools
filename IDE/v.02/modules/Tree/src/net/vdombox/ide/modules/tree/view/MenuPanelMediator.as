@@ -2,11 +2,11 @@ package net.vdombox.ide.modules.tree.view
 {
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.Panel;
 
 	public class MenuPanelMediator extends Mediator implements IMediator
@@ -19,11 +19,11 @@ package net.vdombox.ide.modules.tree.view
 		}
 
 		private var statesProxy : StatesProxy;
-		
+
 		private var isActive : Boolean;
-		
+
 		private var isExpand : Boolean;
-		
+
 		public function get menuPanel() : Panel
 		{
 			return viewComponent as Panel;
@@ -32,20 +32,20 @@ package net.vdombox.ide.modules.tree.view
 		override public function onRegister() : void
 		{
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-			
+
 			isActive = false;
-			
+
 			addHandlers();
-			
+
 			isExpand = true;
 		}
 
 		override public function onRemove() : void
 		{
 			removeHandlers();
-			
+
 			clearData();
-			
+
 			isExpand = true;
 		}
 
@@ -66,7 +66,7 @@ package net.vdombox.ide.modules.tree.view
 
 			if ( !isActive && name != Notifications.BODY_START )
 				return;
-			
+
 			switch ( name )
 			{
 				case Notifications.BODY_START:
@@ -74,17 +74,17 @@ package net.vdombox.ide.modules.tree.view
 					if ( statesProxy.selectedApplication )
 					{
 						isActive = true;
-						
+
 						break;
 					}
 				}
-					
+
 				case Notifications.BODY_STOP:
 				{
 					isActive = false;
-					
+
 					clearData();
-					
+
 					break;
 				}
 			}
@@ -113,7 +113,7 @@ package net.vdombox.ide.modules.tree.view
 		private function clearData() : void
 		{
 		}
-		
+
 		private function menuPanel_createPageHandler( event : MenuPanelEvent ) : void
 		{
 			sendNotification( Notifications.OPEN_CREATE_PAGE_WINDOW_REQUEST, menuPanel );

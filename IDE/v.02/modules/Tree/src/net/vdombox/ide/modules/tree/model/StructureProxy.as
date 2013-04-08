@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.tree.model
 {
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.LevelObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.tree.model
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -24,28 +24,24 @@ package net.vdombox.ide.modules.tree.model
 			super( NAME );
 		}
 
-		private const LEVELS_PROERTIES : Array = [ { color: 0xfcd700, level: 0 }, { color: 0x7ddd00,
-				level: 1 }, { color: 0xdd00c0, level: 2 }, { color: 0x00ddc6,
-				level: 3 }, { color: 0xdd0044, level: 4 }, { color: 0xb100dd,
-				level: 5 }, { color: 0x81C9FF, level: 6 }, { color: 0x082478,
-				level: 7 } ];
+		private const LEVELS_PROERTIES : Array = [ { color: 0xfcd700, level: 0 }, { color: 0x7ddd00, level: 1 }, { color: 0xdd00c0, level: 2 }, { color: 0x00ddc6, level: 3 }, { color: 0xdd0044, level: 4 }, { color: 0xb100dd, level: 5 }, { color: 0x81C9FF, level: 6 }, { color: 0x082478, level: 7 } ];
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
 		private var rawStructure : Array;
 
-//		-----------------------------
+		//		-----------------------------
 		private var _treeLevels : Array;
 
 		/**
-		 * Array of TreeElementVO. 
+		 * Array of TreeElementVO.
 		 */
 		private var _treeElements : Array;
 
 		/**
 		 * treeElementsObject[ treeElementVO.id ] = treeElementVO;
 		 */
-		private var treeElementsObject : Object; 
+		private var treeElementsObject : Object;
 
 		private var _linkages : Array;
 
@@ -59,15 +55,15 @@ package net.vdombox.ide.modules.tree.model
 		}
 
 		/**
-		 * Array of TreeElementVO. 
+		 * Array of TreeElementVO.
 		 */
 		public function get treeElements() : Array
 		{
 			return _treeElements;
 		}
-		
+
 		/**
-		 * @param value - Array of TreeElementVO. 
+		 * @param value - Array of TreeElementVO.
 		 */
 		public function set treeElements( value : Array ) : void
 		{
@@ -221,18 +217,18 @@ package net.vdombox.ide.modules.tree.model
 			treeElementsChanged = true;
 
 			commitProperties();
-			
-			sendNotification( Notifications.TREE_ELEMENT_ADD, treeElements );			
-				
-			selectTreeElementChange(treeElementVO);
+
+			sendNotification( Notifications.TREE_ELEMENT_ADD, treeElements );
+
+			selectTreeElementChange( treeElementVO );
 		}
-		
+
 		//todo не корректно работает надо исправить
-		private function selectTreeElementChange(treeElementVO:TreeElementVO):void
-		{			
+		private function selectTreeElementChange( treeElementVO : TreeElementVO ) : void
+		{
 			if ( treeElementVO && treeElementVO.pageVO )
 			{
-				sendNotification( StatesProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );				
+				sendNotification( StatesProxy.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );
 			}
 		}
 
@@ -265,13 +261,13 @@ package net.vdombox.ide.modules.tree.model
 			var linkageVO : LinkageVO;
 			if ( value.target.width == 0 )
 				return;
-			
-			for each( linkageVO in linkages )
+
+			for each ( linkageVO in linkages )
 			{
 				if ( linkageVO == value )
 					return;
 			}
-			
+
 			_linkages.push( value );
 
 			//sendNotification( Notifications.LINKAGES_CHANGED, linkages );
@@ -291,9 +287,7 @@ package net.vdombox.ide.modules.tree.model
 
 				try
 				{
-					if ( currentLinkageVO === value ||
-						( currentLinkageVO.source.id == value.source.id && currentLinkageVO.target.id == value.target.id &&
-						currentLinkageVO.level.level == value.level.level ) )
+					if ( currentLinkageVO === value || ( currentLinkageVO.source.id == value.source.id && currentLinkageVO.target.id == value.target.id && currentLinkageVO.level.level == value.level.level ) )
 					{
 						thisIndex = true;
 					}
@@ -306,47 +300,43 @@ package net.vdombox.ide.modules.tree.model
 				{
 					deleteLinkage = currentLinkageVO;
 					_linkages.splice( i, 1 );
-					
+
 					for ( i = 0; i < _linkages.length; i++ )
 					{
-						if ( _linkages[i].source == deleteLinkage.source  && _linkages[i].level == deleteLinkage.level && _linkages[i].index > deleteLinkage.index )
-							_linkages[i].index--;
+						if ( _linkages[ i ].source == deleteLinkage.source && _linkages[ i ].level == deleteLinkage.level && _linkages[ i ].index > deleteLinkage.index )
+							_linkages[ i ].index--;
 					}
-					
+
 					sendNotification( Notifications.LINKAGES_INDEX_UPDATE, linkages );
 					break;
 				}
 			}
 		}
-		
+
 		public function exchange( firstLinkVO : LinkageVO, secondLinkVO : LinkageVO ) : void
 		{
 			var currentLinkageVO : LinkageVO;
 			var firstLinkageIndex : int = -1;
 			var secondLinkageIndex : int = -1;
-			
+
 			for ( var i : int = 0; i < _linkages.length; i++ )
 			{
 				currentLinkageVO = _linkages[ i ] as LinkageVO;
-				if ( currentLinkageVO === firstLinkVO ||
-					( currentLinkageVO.source.id == firstLinkVO.source.id && currentLinkageVO.target.id == firstLinkVO.target.id &&
-						currentLinkageVO.level.level == firstLinkVO.level.level ) )
+				if ( currentLinkageVO === firstLinkVO || ( currentLinkageVO.source.id == firstLinkVO.source.id && currentLinkageVO.target.id == firstLinkVO.target.id && currentLinkageVO.level.level == firstLinkVO.level.level ) )
 				{
 					firstLinkageIndex = i;
 				}
-				else if ( currentLinkageVO === secondLinkVO ||
-					( currentLinkageVO.source.id == secondLinkVO.source.id && currentLinkageVO.target.id == secondLinkVO.target.id &&
-						currentLinkageVO.level.level == secondLinkVO.level.level ) )
+				else if ( currentLinkageVO === secondLinkVO || ( currentLinkageVO.source.id == secondLinkVO.source.id && currentLinkageVO.target.id == secondLinkVO.target.id && currentLinkageVO.level.level == secondLinkVO.level.level ) )
 				{
 					secondLinkageIndex = i;
 				}
-				
+
 				if ( firstLinkageIndex >= 0 && secondLinkageIndex >= 0 )
 				{
-					var tempIndex : int = _linkages[firstLinkageIndex].index;
-					_linkages[firstLinkageIndex].index = _linkages[secondLinkageIndex].index;
-					_linkages[secondLinkageIndex].index = tempIndex;
-						
+					var tempIndex : int = _linkages[ firstLinkageIndex ].index;
+					_linkages[ firstLinkageIndex ].index = _linkages[ secondLinkageIndex ].index;
+					_linkages[ secondLinkageIndex ].index = tempIndex;
+
 					sendNotification( Notifications.LINKAGES_INDEX_UPDATE, linkages );
 					break;
 				}
@@ -434,8 +424,7 @@ package net.vdombox.ide.modules.tree.model
 				if ( !rawStructureObject )
 					continue;
 
-				if ( ( !treeElementVO.resourceVO && rawStructureObject.resourceID ) ||
-					( treeElementVO.resourceVO && treeElementVO.resourceVO.id != rawStructureObject.resourceID ) )
+				if ( ( !treeElementVO.resourceVO && rawStructureObject.resourceID ) || ( treeElementVO.resourceVO && treeElementVO.resourceVO.id != rawStructureObject.resourceID ) )
 				{
 					resourceVO = new ResourceVO( treeElementVO.pageVO.applicationVO.id );
 					resourceVO.setID( rawStructureObject.resourceID );

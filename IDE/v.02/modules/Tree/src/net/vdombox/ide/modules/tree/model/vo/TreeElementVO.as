@@ -12,9 +12,9 @@ package net.vdombox.ide.modules.tree.model.vo
 
 			top = 0;
 			left = 0;
-			
+
 			resourceVO = null;
-			
+
 			state = false;
 		}
 

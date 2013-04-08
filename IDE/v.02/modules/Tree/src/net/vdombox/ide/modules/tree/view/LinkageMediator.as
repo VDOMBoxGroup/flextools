@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -36,22 +36,22 @@ package net.vdombox.ide.modules.tree.view
 		override public function onRemove() : void
 		{
 		}
-		
+
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
-			
+
 			interests.push( Notifications.SHOW_SIGNATURE );
 			interests.push( Notifications.HIDE_SIGNATURE );
-			
+
 			return interests;
 		}
-		
+
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
-			
+
 			switch ( name )
 			{
 				case Notifications.SHOW_SIGNATURE:
@@ -59,7 +59,7 @@ package net.vdombox.ide.modules.tree.view
 					linkage.signatureVisible = true;
 					break
 				}
-					
+
 				case Notifications.HIDE_SIGNATURE:
 				{
 					linkage.signatureVisible = false;

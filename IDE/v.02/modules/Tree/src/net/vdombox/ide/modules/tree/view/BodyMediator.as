@@ -1,11 +1,11 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.tree.model.StatesProxy;
 	import net.vdombox.ide.modules.tree.view.components.Body;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -22,9 +22,11 @@ package net.vdombox.ide.modules.tree.view
 		private var statesProxy : StatesProxy;
 
 		private var isAllStatesGetted : Boolean;
+
 		private var isPagesGetted : Boolean;
+
 		private var isApplicationStructureGetted : Boolean;
-		
+
 		private var isBodyStarted : Boolean;
 
 		public function get body() : Body
@@ -51,7 +53,7 @@ package net.vdombox.ide.modules.tree.view
 			isApplicationStructureGetted = false;
 
 			isBodyStarted = false;
-			
+
 			removeHandlers();
 		}
 
@@ -83,22 +85,22 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
-				
+
 				case StatesProxy.SELECTED_APPLICATION_CHANGED:
 				{
 					isAllStatesGetted = true;
-					
+
 					if ( statesProxy.selectedApplication )
 					{
 						sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
 						sendNotification( Notifications.GET_APPLICATION_STRUCTURE, statesProxy.selectedApplication );
 					}
-					
+
 					checkConditions();
-					
+
 					break;
 				}
-					
+
 				case StatesProxy.ALL_STATES_GETTED:
 				{
 					isAllStatesGetted = true;
@@ -139,7 +141,7 @@ package net.vdombox.ide.modules.tree.view
 					isPagesGetted = false;
 
 					sendNotification( Notifications.BODY_STOP );
-					
+
 					isBodyStarted = false;
 
 					break;

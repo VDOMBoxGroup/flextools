@@ -3,9 +3,9 @@ package net.vdombox.ide.modules.tree.view.components
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.view.components.button.WorkAreaButton;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.events.WorkAreaEvent;
@@ -13,7 +13,7 @@ package net.vdombox.ide.modules.tree.view.components
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
 	import net.vdombox.ide.modules.tree.view.skins.WorkAreaSkin;
-	
+
 	import spark.components.Group;
 	import spark.components.Scroller;
 	import spark.components.SkinnableContainer;
@@ -24,8 +24,8 @@ package net.vdombox.ide.modules.tree.view.components
 	{
 		public function WorkArea()
 		{
-			super();			
-			
+			super();
+
 			setStyle( "skinClass", WorkAreaSkin );
 
 			addEventListener( WorkAreaEvent.AUTO_SPACING, autoSpacingHandler, false, 0, true );
@@ -35,32 +35,32 @@ package net.vdombox.ide.modules.tree.view.components
 
 			addEventListener( TreeElementEvent.MOVED, treeElement_movedHandler, true, 0, true );
 			addEventListener( TreeElementEvent.STATE_CHANGED, treeElement_stateChangedHandler, true, 0, true );
-			
+
 			addEventListener( TreeElementEvent.CREATE_LINKAGE, treeElement_createLinkageHandler, true, 0, true );
 			addEventListener( TreeElementEvent.DELETE_LINKAGE, treeElement_deleteLinkageHandler, true, 0, true );
-			
+
 			addEventListener( TreeElementEvent.DELETE, treeElement_deleteHandler, true, 0, true );
-			
+
 			addEventListener( TreeElementEvent.MULTI_SELECTED, elementMultiSelectedHandler, true, 0, true );
-			
+
 			addEventListener( TreeElementEvent.CLICK, elementClickHandler, true, 0, true );
-			
+
 			addEventListener( TreeElementEvent.MULTI_SELECT_MOVED, elementMultiSelectMovedHandler, true, 0, true );
-			
+
 			addEventListener( TreeElementEvent.MOVE, moveElementHandler, true, 0, true );
-			
+
 			addEventListener( FlexEvent.CREATION_COMPLETE, addHandlersShadow );
 		}
 
-		[SkinPart( required="true" )]
+		[SkinPart( required = "true" )]
 		public var linkagesLayer : Group;
 
-		[SkinPart( required="true" )]
+		[SkinPart( required = "true" )]
 		public var scroller : Scroller;
 
 		[SkinPart]
 		public var scaleGroup : Group;
-		
+
 		[SkinPart]
 		public var saveButton : WorkAreaButton;
 
@@ -75,7 +75,7 @@ package net.vdombox.ide.modules.tree.view.components
 
 		[Bindable]
 		public var isSignatureShowed : Boolean;
-		
+
 		private var multiSelectElements : Object;
 
 		private var isStatePropertyChanged : Boolean;
@@ -83,44 +83,47 @@ package net.vdombox.ide.modules.tree.view.components
 		/**
 		 * for save current treeElement?
 		 * treeElementsObject[ treeElementVO.id ] = treeElement;
-		 */		
+		 */
 		private var treeElementsObject : Object;
+
 		private var linkagesObject : Object;
 
 		private var shadowLinkage : Linkage;
+
 		private var shadowLinkageVO : LinkageVO;
+
 		private var shadowTargetTreeElementVO : TreeElementVO;
 
 		private var _selectedTreeLevelVO : TreeLevelVO;
 
-//		private var selectedTreeLevelVO : TreeLevelVO;
+		//		private var selectedTreeLevelVO : TreeLevelVO;
 
 		/**
-		 * @return Array of TreeElementVO. 
-		 */		
+		 * @return Array of TreeElementVO.
+		 */
 		public function get treeElements() : Array
 		{
 			var result : Array = [];
-			
+
 			var numTreeElements : int = numElements;
 			var currentTreeElement : TreeElement;
-			
+
 			for ( var i : int = 0; i < numTreeElements; i++ )
 			{
 				currentTreeElement = getElementAt( i ) as TreeElement;
-				
-				if( currentTreeElement && currentTreeElement.treeElementVO )
+
+				if ( currentTreeElement && currentTreeElement.treeElementVO )
 				{
 					result.push( currentTreeElement.treeElementVO );
 				}
 			}
-			
+
 			return result;
 		}
-		
+
 		/**
-		 * @param treeElements - Array of treeElementVO. 
-		 */		
+		 * @param treeElements - Array of treeElementVO.
+		 */
 		public function set treeElements( treeElements : Array ) : void
 		{
 			var treeElement : TreeElement;
@@ -153,7 +156,7 @@ package net.vdombox.ide.modules.tree.view.components
 
 				addElement( treeElement );
 
-//				sendNotification( Notifications.TREE_ELEMENT_CREATED, { viewComponent: treeElement, treeElementVO: treeElementVO } );
+					//				sendNotification( Notifications.TREE_ELEMENT_CREATED, { viewComponent: treeElement, treeElementVO: treeElementVO } );
 			}
 
 			for each ( treeElement in oldElements )
@@ -172,23 +175,23 @@ package net.vdombox.ide.modules.tree.view.components
 		public function get linkages() : Array
 		{
 			var result : Array = [];
-			
+
 			var numLinkages : int = linkagesLayer.numElements;
 			var currentLinkage : Linkage;
-			
+
 			for ( var i : int = 0; i < numLinkages; i++ )
 			{
 				currentLinkage = linkagesLayer.getElementAt( i ) as Linkage;
-				
-				if( currentLinkage && currentLinkage.linkageVO )
+
+				if ( currentLinkage && currentLinkage.linkageVO )
 				{
 					result.push( currentLinkage.linkageVO );
 				}
 			}
-			
+
 			return result;
 		}
-		
+
 		public function set linkages( linkages : Array ) : void
 		{
 			var linkage : Linkage;
@@ -221,9 +224,9 @@ package net.vdombox.ide.modules.tree.view.components
 				linkagesLayer.addElement( linkage );
 			}
 
-			for each ( linkage in oldLinkages)
+			for each ( linkage in oldLinkages )
 			{
-				if( linkage && linkage.parent && linkage.parent == linkagesLayer )
+				if ( linkage && linkage.parent && linkage.parent == linkagesLayer )
 					linkagesLayer.removeElement( linkage );
 			}
 
@@ -233,33 +236,33 @@ package net.vdombox.ide.modules.tree.view.components
 				skin.currentState = "disabled";
 			else
 				skin.currentState = "normal";
-			
+
 			isSignatureShowed = false;
 			isStatePropertyChanged = true;
-			
+
 			invalidateProperties();
 		}
 
-		public function updateLinkageIndex( ) : void
+		public function updateLinkageIndex() : void
 		{
-			
+
 			var numLinkages : int = linkagesLayer.numElements;
 			var currentLinkage : Linkage;
-			
+
 			for ( var i : int = 0; i < numLinkages; i++ )
 			{
 				currentLinkage = linkagesLayer.getElementAt( i ) as Linkage;
-				
-				if( currentLinkage )
+
+				if ( currentLinkage )
 				{
 					currentLinkage.updateNumber();
 				}
 			}
-			
+
 			skin.currentState = "unsaved";
-			
+
 		}
-		
+
 		public function set selectedTreeLevelVO( value : TreeLevelVO ) : void
 		{
 			_selectedTreeLevelVO = value;
@@ -283,7 +286,7 @@ package net.vdombox.ide.modules.tree.view.components
 			{
 				if ( !elements[ 0 ] )
 					return;
-				
+
 				sortObject = new SortObject();
 				sortObject.element = elements[ 0 ];
 				currentDepthArray = [ sortObject ];
@@ -554,9 +557,9 @@ package net.vdombox.ide.modules.tree.view.components
 			return { parentless: parentless, linkageless: linkageless };
 		}
 
-		/** 
+		/**
 		 * @return Array of TreeElements.
-		 */		
+		 */
 		public function getTreeElements() : Array
 		{
 			var elements : Array = [];
@@ -713,8 +716,7 @@ package net.vdombox.ide.modules.tree.view.components
 				{
 					currentLinkage = linkagesLayer.getElementAt( i ) as Linkage;
 
-					if ( currentLinkage && ( ( currentLinkage.source && currentLinkage.source.id == treeElement.treeElementVO.id ) ||
-						( currentLinkage.target && currentLinkage.target.id == treeElement.treeElementVO.id ) ) )
+					if ( currentLinkage && ( ( currentLinkage.source && currentLinkage.source.id == treeElement.treeElementVO.id ) || ( currentLinkage.target && currentLinkage.target.id == treeElement.treeElementVO.id ) ) )
 					{
 						linkagesLayer.removeElement( currentLinkage );
 						i--;
@@ -724,158 +726,162 @@ package net.vdombox.ide.modules.tree.view.components
 
 			skin.currentState = "unsaved";
 		}
-		
+
 		private function elementMultiSelectedHandler( event : TreeElementEvent ) : void
 		{
 			var treeElement : TreeElement = event.target as TreeElement;
-			
+
 			if ( !treeElement.multiSelected )
 			{
 				delete multiSelectElements[ treeElement.treeElementVO.pageVO.id ];
 				return;
 			}
-			
+
 			if ( !multiSelectElements )
 				multiSelectElements = [];
-			
+
 			multiSelectElements[ treeElement.treeElementVO.pageVO.id ] = treeElement;
 		}
-		
+
 		private function elementClickHandler( event : TreeElementEvent ) : void
 		{
 			var treeElement : TreeElement = event.target as TreeElement;
-			
+
 			removeAllSelectedElements();
-			
+
 			multiSelectElements = [];
 		}
-		
-		public function removeAllSelectedElements( ) : void
+
+		public function removeAllSelectedElements() : void
 		{
 			if ( multiSelectElements )
 			{
 				var element : TreeElement;
 				for each ( element in multiSelectElements )
 					element.multiSelected = false;
-				
+
 				multiSelectElements = null;
 			}
 		}
-		
+
 		private function elementMultiSelectMovedHandler( event : TreeElementEvent ) : void
 		{
 			var dx : int = event.object.dx;
 			var dy : int = event.object.dy;
-			
+
 			var baseElement : TreeElement;
 			var target : TreeElement = event.target as TreeElement;
-			
+
 			for each ( baseElement in multiSelectElements )
-			if ( !baseElement.hasMoved( dx, dy ) )
-				return;
-			
+				if ( !baseElement.hasMoved( dx, dy ) )
+					return;
+
 			for each ( baseElement in multiSelectElements )
 				baseElement.moveTo( dx, dy, target );
 		}
-		
+
 		private var temp : Number;
+
 		private var element : TreeElement;
+
 		private var offsetX : Number;
+
 		private var offsetY : Number;
-		
+
 		private var dx : int;
+
 		private var dy : int;
-		
+
 		private var verticalScrollPosition : int;
+
 		private var horizontalScrollPosition : int;
-		
+
 		private function changeSizeGroupToBottom( event : Event ) : void
 		{
 			element.moveElement( 0, dy );
 			temp = element.y + offsetY - scroller.height / scaleGroup.scaleX + 10;
-			
+
 			if ( temp > verticalScrollPosition )
 				scroller.verticalScrollBar.viewport.verticalScrollPosition = temp;
 			else
 				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom );
 		}
-		
+
 		private function changeSizeGroupToRight( event : Event ) : void
 		{
 			element.moveElement( dx, 0 );
 			temp = ( element.x + offsetX ) - scroller.width / scaleGroup.scaleX;
-			
+
 			if ( temp > horizontalScrollPosition )
 				scroller.horizontalScrollBar.viewport.horizontalScrollPosition = temp;
 			else
 				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToRight );
 		}
-		
+
 		private function changeSizeGroupToTop( event : Event ) : void
 		{
 			element.moveElement( 0, dy );
-			
+
 			if ( element.y + offsetY < verticalScrollPosition )
 				scroller.verticalScrollBar.viewport.verticalScrollPosition = element.y + offsetY;
 			else
 				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToTop );
 		}
-		
+
 		private function changeSizeGroupToLeft( event : Event ) : void
 		{
 			element.moveElement( dx, 0 );
-			
+
 			if ( element.x + offsetX - 10 < horizontalScrollPosition )
-				scroller.horizontalScrollBar.viewport.horizontalScrollPosition =element.x + offsetX - 10;
+				scroller.horizontalScrollBar.viewport.horizontalScrollPosition = element.x + offsetX - 10;
 			else
 				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft );
 		}
-		
+
 		private function moveElementHandler( event : TreeElementEvent ) : void
 		{
 			element = event.target as TreeElement;
-			
+
 			offsetX = event.object.x;
 			offsetY = event.object.y;
-			
+
 			dx = event.object.dx;
 			dy = event.object.dy;
-			
+
 			verticalScrollPosition = scroller.verticalScrollBar.viewport.verticalScrollPosition;
 			horizontalScrollPosition = scroller.horizontalScrollBar.viewport.horizontalScrollPosition;
-			
-			if ( verticalScrollPosition + ( element.y - verticalScrollPosition + offsetY ) * scaleGroup.scaleX > verticalScrollPosition + scroller.height - 10)
+
+			if ( verticalScrollPosition + ( element.y - verticalScrollPosition + offsetY ) * scaleGroup.scaleX > verticalScrollPosition + scroller.height - 10 )
 				addEventListener( Event.ENTER_FRAME, changeSizeGroupToBottom, false, 0, true );
-			
+
 			if ( horizontalScrollPosition + ( element.x - horizontalScrollPosition + offsetX ) * scaleGroup.scaleX > horizontalScrollPosition + scroller.width )
 				addEventListener( Event.ENTER_FRAME, changeSizeGroupToRight, false, 0, true );
-			
+
 			if ( element.y + offsetY < verticalScrollPosition )
 				addEventListener( Event.ENTER_FRAME, changeSizeGroupToTop, false, 0, true );
-			
-			if ( element.x + offsetX  < horizontalScrollPosition + 10 )
+
+			if ( element.x + offsetX < horizontalScrollPosition + 10 )
 				addEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft, false, 0, true );
 		}
-		
-		public function setMultiSelectInRect ( rectLeft : int, rectTop : int, rectRigth : int, rectBottom : int ) : void
+
+		public function setMultiSelectInRect( rectLeft : int, rectTop : int, rectRigth : int, rectBottom : int ) : void
 		{
 			var count : int = contentGroup.numElements;
-			
+
 			var i : int;
 			var baseElement : TreeElement;
-			
+
 			for ( i = 0; i < count; i++ )
 			{
 				baseElement = contentGroup.getElementAt( i ) as TreeElement;
-				
-				if ( baseElement.x + baseElement.width > rectLeft && baseElement.x < rectRigth
-					&& baseElement.y + baseElement.height > rectTop && baseElement.y < rectBottom )
+
+				if ( baseElement.x + baseElement.width > rectLeft && baseElement.x < rectRigth && baseElement.y + baseElement.height > rectTop && baseElement.y < rectBottom )
 				{
 					baseElement.multiSelected = true;
-					
+
 					if ( !multiSelectElements )
 						multiSelectElements = [];
-					
+
 					multiSelectElements[ baseElement.treeElementVO.pageVO.id ] = baseElement;
 				}
 			}
@@ -1025,9 +1031,7 @@ package net.vdombox.ide.modules.tree.view.components
 				{
 					currentLinkage = linkagesLayer.getElementAt( i ) as Linkage;
 
-					if ( currentLinkage && currentLinkage.target && currentLinkage.linkageVO && currentLinkage.source &&
-						currentLinkage.target.id == newTargetTreeElementVO.id &&
-						currentLinkage.source.id == newSourceTreeElementVO.id && currentLinkage.linkageVO.level.level == newTreeLevelVO.level )
+					if ( currentLinkage && currentLinkage.target && currentLinkage.linkageVO && currentLinkage.source && currentLinkage.target.id == newTargetTreeElementVO.id && currentLinkage.source.id == newSourceTreeElementVO.id && currentLinkage.linkageVO.level.level == newTreeLevelVO.level )
 					{
 						isLinkageCorrected = false;
 						break;
@@ -1062,30 +1066,30 @@ package net.vdombox.ide.modules.tree.view.components
 
 			removeShadowHandlers();
 		}
-		
+
 		public function openIndexList( linkages : Array, link : Linkage, coordinates : Object ) : void
 		{
 			var linkVO : LinkageVO = link.linkageVO;
 			var linkVO2 : LinkageVO;
 			var sourceLinkages : Array = new Array();
-			
-			for each( linkVO2 in linkages )
+
+			for each ( linkVO2 in linkages )
 			{
 				if ( linkVO2.source == linkVO.source && linkVO2.level == linkVO.level && linkVO2 != linkVO )
 					sourceLinkages.push( linkVO2 )
 			}
-			
+
 			link.signatureGroup.openIndexList( sourceLinkages, coordinates );
 		}
-		
+
 		private function addHandlersShadow( event : FlexEvent ) : void
 		{
 			if ( !stage )
 				return;
-			
-			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0 , false );
+
+			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0, false );
 		}
-		
+
 		private function mouseUpHandler( event : MouseEvent ) : void
 		{
 			if ( hasEventListener( Event.ENTER_FRAME ) )
@@ -1096,7 +1100,7 @@ package net.vdombox.ide.modules.tree.view.components
 				removeEventListener( Event.ENTER_FRAME, changeSizeGroupToLeft );
 			}
 		}
-			
+
 	}
 }
 
