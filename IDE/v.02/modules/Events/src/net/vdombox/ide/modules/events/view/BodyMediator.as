@@ -1,12 +1,12 @@
 package net.vdombox.ide.modules.events.view
 {
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.events.view.components.Body;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -55,7 +55,7 @@ package net.vdombox.ide.modules.events.view
 
 		override public function handleNotification( notification : INotification ) : void
 		{
-			switch ( notification.getName())
+			switch ( notification.getName() )
 			{
 				case Notifications.PIPES_READY:
 				{
@@ -77,12 +77,12 @@ package net.vdombox.ide.modules.events.view
 				case Notifications.MODULE_DESELECTED:
 				{
 					isReady = false;
-					
+
 					sendNotification( Notifications.BODY_STOP );
 
 					break;
 				}
-					
+
 			}
 		}
 

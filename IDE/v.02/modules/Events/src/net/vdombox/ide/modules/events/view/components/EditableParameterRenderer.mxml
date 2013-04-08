@@ -7,7 +7,7 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.core.UIComponent;
-			
+
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.common.model._vo.ActionParameterVO;
 			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
@@ -15,9 +15,9 @@
 			import net.vdombox.utils.WindowManager;
 
 			private var _data : ActionParameterVO;
-			
+
 			private var text : String;
-			
+
 			[Bindable]
 			public function get data() : ActionParameterVO
 			{
@@ -29,52 +29,54 @@
 				_data = value
 				text = value.value;
 			}
-			
-			protected function textinput1_doubleClickHandler(event:MouseEvent):void
+
+			protected function textinput1_doubleClickHandler( event : MouseEvent ) : void
 			{
 				event.stopImmediatePropagation();
 				var stringAttributeEditWindow : StringAttributeEditWindow = new StringAttributeEditWindow();
 				stringAttributeEditWindow.value = actionText.text;
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.APPLY, applyHandler );
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.CANCEL, cancelHandler );
-				
-				WindowManager.getInstance().addWindow(stringAttributeEditWindow, parentApplication as UIComponent, true);
-				
+
+				WindowManager.getInstance().addWindow( stringAttributeEditWindow, parentApplication as UIComponent, true );
+
 				function applyHandler( event : StringAttributeEditWindowEvent ) : void
 				{
 					actionText.text = event.value;
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
-					dispatchEvent( new ElementEvent ( ElementEvent.PARAMETER_EDIT ) );
+					dispatchEvent( new ElementEvent( ElementEvent.PARAMETER_EDIT ) );
 				}
-				
+
 				function cancelHandler( event : StringAttributeEditWindowEvent ) : void
 				{
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
 				}
 			}
-			
-			protected function actionText_focusOutHandler(event:FocusEvent):void
+
+			protected function actionText_focusOutHandler( event : FocusEvent ) : void
 			{
 				if ( text != actionText.text )
 				{
-					text = /*StringUtils.getCDataParserString( */actionText.text /*)*/;
-					dispatchEvent( new ElementEvent ( ElementEvent.PARAMETER_EDIT ) );
+					text = /*StringUtils.getCDataParserString( */ actionText.text /*)*/;
+					dispatchEvent( new ElementEvent( ElementEvent.PARAMETER_EDIT ) );
 				}
 			}
-			
-			private function keyDownEnterHandler(event:KeyboardEvent):void
+
+			private function keyDownEnterHandler( event : KeyboardEvent ) : void
 			{
-				if (event.keyCode == Keyboard.ENTER && text != actionText.text )
+				if ( event.keyCode == Keyboard.ENTER && text != actionText.text )
 				{
 					text = actionText.text;
-					dispatchEvent( new ElementEvent ( ElementEvent.PARAMETER_EDIT ) );
+					dispatchEvent( new ElementEvent( ElementEvent.PARAMETER_EDIT ) );
 				}
 			}
-			
 		]]>
 	</fx:Script>
 
-	<s:Rect bottom="0" left="0" right="0" top="0">
+	<s:Rect bottom="0"
+			left="0"
+			right="0"
+			top="0">
 
 		<s:fill>
 
@@ -88,20 +90,34 @@
 	</s:Rect>
 
 	<s:HGroup width="100%"
-			  horizontalAlign="left" paddingLeft="4" paddingRight="4" verticalAlign="middle"
+			  horizontalAlign="left"
+			  paddingLeft="4"
+			  paddingRight="4"
+			  verticalAlign="middle"
 			  verticalCenter="0"
 			  gap="0">
 
-		<mx:Image height="16" source="@Embed('assets/parameter.png')" width="16" alpha="0.3"/>
+		<mx:Image height="16"
+				  source="@Embed('assets/parameter.png')"
+				  width="16"
+				  alpha="0.3"/>
 		<mx:Spacer width="9"/>
 		<s:Label text="{ data.name }"/>
 		<mx:Spacer width="4"/>
-		<s:TextInput id="actionText" minWidth="0" text="@{ data.value }" width="100%"
-					 focusAlpha="0" doubleClick="textinput1_doubleClickHandler(event)" focusOut="actionText_focusOutHandler(event)"
+		<s:TextInput id="actionText"
+					 minWidth="0"
+					 text="@{ data.value }"
+					 width="100%"
+					 focusAlpha="0"
+					 doubleClick="textinput1_doubleClickHandler(event)"
+					 focusOut="actionText_focusOutHandler(event)"
 					 keyDown="keyDownEnterHandler(event)"/>
 	</s:HGroup>
 
-	<s:Line xFrom="24" xTo="24" yFrom="0" yTo="20">
+	<s:Line xFrom="24"
+			xTo="24"
+			yFrom="0"
+			yTo="20">
 		<s:stroke>
 			<s:SolidColorStroke color="0xB6B6B6"
 								weight="1"/>

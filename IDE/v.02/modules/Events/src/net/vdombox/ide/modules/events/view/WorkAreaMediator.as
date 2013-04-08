@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.events.view
 	import flash.desktop.NativeApplication;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model.StatesProxy;
@@ -17,7 +17,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.BaseElement;
 	import net.vdombox.ide.modules.events.view.components.WorkArea;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -32,16 +32,20 @@ package net.vdombox.ide.modules.events.view
 		}
 
 		private var isActive : Boolean;
+
 		private var statesProxy : StatesProxy;
+
 		private var visibleElementProxy : VisibleElementProxy;
+
 		private var treePanelCreateCompleted : Boolean = false;
+
 		private var sendChildrenQuery : Boolean = false;
 
 		public function get workArea() : WorkArea
 		{
 			return viewComponent as WorkArea;
 		}
-		
+
 		override public function onRegister() : void
 		{
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
@@ -65,26 +69,26 @@ package net.vdombox.ide.modules.events.view
 
 			interests.push( Notifications.APPLICATION_EVENTS_GETTED );
 			interests.push( Notifications.APPLICATION_EVENTS_SETTED );
-			
+
 			interests.push( StatesProxy.SELECTED_PAGE_CHANGED );
 			interests.push( StatesProxy.SELECTED_OBJECT_CHANGED );
-			
+
 			interests.push( Notifications.CHILDREN_ELEMENTS_GETTED );
 			interests.push( Notifications.STRUCTURE_GETTED );
-			
+
 			interests.push( Notifications.CHECK_SAVE_IN_WORKAREA );
-			
+
 			interests.push( Notifications.SAVE_CHANGED );
-			
+
 			interests.push( Notifications.UNDO_REDO_GETTED );
-			
+
 			interests.push( Notifications.SET_SELECTED_ACTION );
 			interests.push( Notifications.SET_SELECTED_ACTION );
-			
+
 			interests.push( Notifications.GET_USED_ACTIONS );
-			
+
 			interests.push( Notifications.CREATE_SELECTED_ACTION );
-			
+
 			return interests;
 		}
 
@@ -92,7 +96,7 @@ package net.vdombox.ide.modules.events.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
-			
+
 			var objectID : String;
 			var element : Object;
 			var leng : Number;
@@ -124,50 +128,49 @@ package net.vdombox.ide.modules.events.view
 						workArea.removeAllElements();
 						workArea.linkagesLayer.removeAllElements();
 						workArea.pageName.text = body.name;
-						sendNotification( Notifications.GET_APPLICATION_EVENTS,
-										  { applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
-						
-						workArea.skin.currentState = "normal"; 
+						sendNotification( Notifications.GET_APPLICATION_EVENTS, { applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
+
+						workArea.skin.currentState = "normal";
 					}
 					break;
 				}
-					
+
 				case Notifications.APPLICATION_EVENTS_GETTED:
 				{
 					workArea.dataProvider = body as ApplicationEventsVO;
 					showElementsView = visibleElementProxy.showCurrent;
 					setElementsCurrentVisibleState();
-					
-					
+
+
 					var messageStackProxy : MessageStackProxy = facade.retrieveProxy( MessageStackProxy.NAME + workArea.dataProvider.pageVO.id ) as MessageStackProxy;
 					if ( !messageStackProxy || messageStackProxy.length == 0 )
 						setMessageHandler();
-						
+
 					break;
 				}
-					
+
 				case Notifications.APPLICATION_EVENTS_SETTED:
 				{
 					workArea.skin.currentState = "normal"; //TODO: добавить public свойство для изменения внутреннего state
-					
+
 					break;
 				}
-					
+
 				case StatesProxy.SELECTED_OBJECT_CHANGED:
 				{
 					setVisibleElementsForAllObjects();
 					setElementsCurrentVisibleState();
-					
+
 					sendActions();
 					break;
 				}
-					
+
 				case Notifications.CHILDREN_ELEMENTS_GETTED:
 				{
 					setVisibleElementsForContainer( body as XML );
 					break;
 				}
-					
+
 				case Notifications.STRUCTURE_GETTED:
 				{
 					treePanelCreateCompleted = true;
@@ -176,65 +179,65 @@ package net.vdombox.ide.modules.events.view
 						sendChildrenQuery = false;
 						sendNotification( Notifications.GET_CHILDREN_ELEMENTS );
 					}
-					
+
 					break;
 				}
-					
+
 				case Notifications.CHECK_SAVE_IN_WORKAREA:
 				{
 					if ( workArea.skin.currentState == "unsaved" )
-						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : false } );
+						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO: statesProxy.selectedApplication, object: body, saved: false } );
 					else
-						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO : statesProxy.selectedApplication, object : body , saved : true } );
-					
+						sendNotification( Notifications.SAVE_IN_WORKAREA_CHECKED, { applicationVO: statesProxy.selectedApplication, object: body, saved: true } );
+
 					break;
 				}
-					
+
 				case Notifications.SAVE_CHANGED:
 				{
 					saveHandler();
-					
+
 					break;
 				}
-					
+
 				case Notifications.UNDO_REDO_GETTED:
 				{
 					workArea.dataProvider = body as ApplicationEventsVO;
-					
-					workArea.skin.currentState = "unsaved"; 
-					
+
+					workArea.skin.currentState = "unsaved";
+
 					break;
 				}
-					
+
 				case Notifications.SET_SELECTED_ACTION:
 				{
 					workArea.showSelectedAction( body as String );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_USED_ACTIONS:
 				{
 					sendActions();
-					
+
 					break;
 				}
-					
+
 				case Notifications.CREATE_SELECTED_ACTION:
 				{
 					workArea.createBaseAction( body as IEventBaseVO );
-					
+
 					break;
 				}
-					
+
 			}
 		}
-		
+
 		private function setVisibleElementsForContainer( item : XML ) : void
 		{
 			if ( !item )
 				return;
-			
+
 			setVisibleElementsForAllObjects();
 			var leng : Number = workArea.contentGroup.numElements;
 			var element : BaseElement;
@@ -242,14 +245,14 @@ package net.vdombox.ide.modules.events.view
 
 			var xmlList : XMLList = item..object;
 			objectsID.push( item.@id );
-			
+
 			var objectXML : XML;
-			
-			for each( objectXML in xmlList)
+
+			for each ( objectXML in xmlList )
 			{
 				objectsID.push( objectXML.@id );
 			}
-			
+
 			for ( var i : int = 0; i < leng; i++ )
 			{
 				element = workArea.contentGroup.getElementAt( i ) as BaseElement;
@@ -257,16 +260,16 @@ package net.vdombox.ide.modules.events.view
 				if ( element && !findIDinArray( element.objectID, objectsID ) )
 					element.visible = false;
 			}
-			
+
 			workArea.setVisibleStateForCurrnetLinkages( objectsID );
 		}
-		
+
 		private function findIDinArray( objectID : String, arrayID : Array ) : Boolean
 		{
 			var itemID : String;
 			for each ( itemID in arrayID )
 			{
-				if ( itemID == objectID)
+				if ( itemID == objectID )
 					return true;
 			}
 			return false;
@@ -295,8 +298,8 @@ package net.vdombox.ide.modules.events.view
 			NativeApplication.nativeApplication.removeEventListener( KeyboardEvent.KEY_DOWN, appKeyDownHandler, true );
 			workArea.removeEventListener( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED, showCurrentElementsStateChanged );
 		}
-		
-		private function set showElementsView ( value : String ) : void
+
+		private function set showElementsView( value : String ) : void
 		{
 			visibleElementProxy.showCurrent = value;
 			workArea.showElementsView = value;
@@ -307,12 +310,12 @@ package net.vdombox.ide.modules.events.view
 			else if ( value == "Active" )
 				workArea._showElementsView.toolTip = "ctrl + 3";
 		}
-		
+
 		private function setVisibleElementsForCurrentObject() : void
 		{
 			var leng : Number = workArea.contentGroup.numElements;
 			var element : BaseElement;
-			
+
 			var newTarget : Object = statesProxy.selectedObject ? statesProxy.selectedObject : statesProxy.selectedPage;
 			var objectID : String = newTarget.id;
 
@@ -322,18 +325,18 @@ package net.vdombox.ide.modules.events.view
 				element.alpha = 1;
 				if ( element && element.objectID != objectID )
 					element.visible = false;
-				
+
 			}
-			
+
 			workArea.setVisibleStateForCurrnetLinkages( objectID );
 
 		}
-		
+
 		private function setVisibleElementsForAllObjects() : void
 		{
 			var leng : Number = workArea.contentGroup.numElements;
 			var element : BaseElement;
-			
+
 			for ( var i : int = 0; i < leng; i++ )
 			{
 				element = workArea.contentGroup.getElementAt( i ) as BaseElement;
@@ -345,37 +348,37 @@ package net.vdombox.ide.modules.events.view
 			}
 			workArea.setVisibleStateForAllLinkages( false );
 		}
-		
-		private function saveHandler( event : WorkAreaEvent = null) : void
+
+		private function saveHandler( event : WorkAreaEvent = null ) : void
 		{
-			sendNotification( Notifications.SET_APPLICATION_EVENTS, { applicationEventsVO : workArea.dataProvider, needForUpdate: false } );
+			sendNotification( Notifications.SET_APPLICATION_EVENTS, { applicationEventsVO: workArea.dataProvider, needForUpdate: false } );
 		}
-		
+
 		private function undoHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( Notifications.UNDO, statesProxy.selectedPage );
 		}
-		
+
 		private function redoHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( Notifications.REDO, statesProxy.selectedPage );
 		}
-		
-		private function setMessageHandler( event : WorkAreaEvent = null) : void
+
+		private function setMessageHandler( event : WorkAreaEvent = null ) : void
 		{
 			sendNotification( Notifications.SET_MESSAGE, workArea.dataProvider );
 		}
-		
+
 		private function showCurrentElementsStateChanged( event : WorkAreaEvent ) : void
 		{
-			showElementsView = workArea.showElementsView ;
+			showElementsView = workArea.showElementsView;
 			setElementsCurrentVisibleState();
 			sendActions();
 		}
-		
+
 		private function setElementsCurrentVisibleState() : void
 		{
-			showElementsView = workArea.showElementsView ;
+			showElementsView = workArea.showElementsView;
 			if ( workArea.showElementsView == "Full view" )
 				setVisibleElementsForAllObjects();
 			else if ( workArea.showElementsView == "Active + embedded" )
@@ -388,26 +391,26 @@ package net.vdombox.ide.modules.events.view
 			else if ( workArea.showElementsView == "Active" )
 				setVisibleElementsForCurrentObject();
 		}
-		
+
 		private function keyDownHandler( event : KeyboardEvent ) : void
-		{			
-			if( !event.ctrlKey )
+		{
+			if ( !event.ctrlKey )
 				return;
-			
+
 			if ( event.keyCode == Keyboard.Z )
 				sendNotification( Notifications.UNDO, statesProxy.selectedPage );
 			else if ( event.keyCode == Keyboard.Y )
 				sendNotification( Notifications.REDO, statesProxy.selectedPage );
 			else if ( event.keyCode == Keyboard.S )
 				saveHandler();
-			
+
 		}
-		
+
 		private function appKeyDownHandler( event : KeyboardEvent ) : void
 		{
-			if( !isActive )
+			if ( !isActive )
 				return;
-			
+
 			if ( event.keyCode == Keyboard.F5 )
 			{
 				if ( workArea.skin.currentState == "unsaved" )
@@ -417,19 +420,18 @@ package net.vdombox.ide.modules.events.view
 				}
 				else
 				{
-					sendNotification( Notifications.GET_APPLICATION_EVENTS,
-						{ applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
+					sendNotification( Notifications.GET_APPLICATION_EVENTS, { applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 				}
 			}
-			
-			if( !event.ctrlKey )
+
+			if ( !event.ctrlKey )
 				return;
-			
+
 			if ( event.keyCode == Keyboard.NUMBER_1 )
 			{
 				showElementsView = "Full view";
 				setVisibleElementsForAllObjects();
-			} 
+			}
 			else if ( event.keyCode == Keyboard.NUMBER_2 )
 			{
 				showElementsView = "Active + embedded";
@@ -441,20 +443,20 @@ package net.vdombox.ide.modules.events.view
 				setVisibleElementsForCurrentObject();
 			}
 		}
-		
+
 		private function sendActions( event : WorkAreaEvent = null ) : void
 		{
 			var clientActions : Object = [];
 			var serverActions : Object = [];
 			var events : Object = [];
-			
+
 			var leng : int = workArea.contentGroup.numElements;
 			var baseElement : BaseElement;
-				
+
 			for ( var i : int = 0; i < leng; i++ )
 			{
 				baseElement = workArea.contentGroup.getElementAt( i ) as BaseElement;
-				
+
 				if ( baseElement.data is EventVO )
 					events[ baseElement.uniqueName ] = baseElement;
 				else if ( baseElement.data is ClientActionVO )
@@ -462,9 +464,9 @@ package net.vdombox.ide.modules.events.view
 				else
 					serverActions[ baseElement.data.name + baseElement.data.objectID ] = baseElement;
 			}
-			
-			sendNotification( Notifications.SET_USED_ACTIONS, { events : events, clientActions : clientActions, serverActions : serverActions } );
-				
+
+			sendNotification( Notifications.SET_USED_ACTIONS, { events: events, clientActions: clientActions, serverActions: serverActions } );
+
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.events.view
 {
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.events.model.MessageProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -38,19 +38,19 @@ package net.vdombox.ide.modules.events.view
 	public class EventsJunctionMediator extends LoggingJunctionMediator
 	{
 		public static const NAME : String = "EventsJunctionMediator";
-		
+
 		private var messageProxy : MessageProxy;
 
 		public function EventsJunctionMediator()
 		{
 			super( NAME, new Junction() );
 		}
-		
+
 		override public function onRegister() : void
 		{
 			messageProxy = facade.retrieveProxy( MessageProxy.NAME ) as MessageProxy;
 		}
-		
+
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
@@ -66,34 +66,34 @@ package net.vdombox.ide.modules.events.view
 
 			interests.push( StatesProxy.GET_ALL_STATES );
 			interests.push( StatesProxy.SET_ALL_STATES );
-			
+
 			interests.push( StatesProxy.SET_SELECTED_PAGE );
 			interests.push( StatesProxy.SET_SELECTED_OBJECT );
-			
+
 			interests.push( Notifications.GET_SERVER_ACTIONS_LIST );
-			
+
 			interests.push( Notifications.GET_APPLICATION_EVENTS );
 			interests.push( Notifications.SET_APPLICATION_EVENTS );
-			
+
 			interests.push( Notifications.GET_PAGE_SRUCTURE );
 
 			interests.push( Notifications.GET_PAGES );
-			
+
 			interests.push( Notifications.GET_OBJECT );
 			interests.push( Notifications.BODY_STOP );
-			
+
 			interests.push( Notifications.LOAD_RESOURCE );
 			interests.push( TypesProxy.GET_TYPES );
-			
+
 			interests.push( Notifications.GET_SERVER_ACTIONS );
-			
+
 			interests.push( Notifications.UNDO );
 			interests.push( Notifications.REDO );
-			
+
 			interests.push( Notifications.SET_MESSAGE );
-			
+
 			interests.push( Notifications.SAVE_IN_WORKAREA_CHECKED );
-			
+
 			interests.push( Notifications.CREATE_SERVER_ACTION );
 
 			return interests;
@@ -106,7 +106,7 @@ package net.vdombox.ide.modules.events.view
 			var body : Object = notification.getBody();
 
 			var message : IPipeMessage;
-			
+
 			var placeName : String;
 			var targetName : String;
 
@@ -149,7 +149,7 @@ package net.vdombox.ide.modules.events.view
 					message = new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
-					
+
 					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 
 					break;
@@ -190,34 +190,34 @@ package net.vdombox.ide.modules.events.view
 
 					break;
 				}
-					
+
 				case StatesProxy.SET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
 
 				case StatesProxy.SET_SELECTED_PAGE:
-				{					
+				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case StatesProxy.SET_SELECTED_OBJECT:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_PAGES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
@@ -226,43 +226,43 @@ package net.vdombox.ide.modules.events.view
 
 					break;
 				}
-					
+
 				case Notifications.GET_OBJECT:
 				{
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECT, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_APPLICATION_EVENTS:
 				{
-					message = new ProxyMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.EVENTS, body );
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.EVENTS, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.SET_APPLICATION_EVENTS:
 				{
-					message = new ProxyMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.EVENTS, body );
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.EVENTS, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_PAGE_SRUCTURE:
 				{
-					message = new ProxyMessage(  PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_SERVER_ACTIONS_LIST:
 				{
-					
+
 					if ( body is ObjectVO )
 					{
 						placeName = PPMPlaceNames.OBJECT;
@@ -273,45 +273,44 @@ package net.vdombox.ide.modules.events.view
 						placeName = PPMPlaceNames.PAGE;
 						targetName = PPMPageTargetNames.SERVER_ACTIONS_LIST
 					}
-					
+
 					if ( placeName && targetName )
 					{
 						message = new ProxyMessage( placeName, PPMOperationNames.READ, targetName, body );
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
 					}
-					
+
 					break;
 				}
-					
-				case Notifications.BODY_STOP :
+
+				case Notifications.BODY_STOP:
 				{
-					junction.sendMessage( PipeNames.STDCORE,
-						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
-					
+					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+
 					break;
-				}		
-					
+				}
+
 				case Notifications.LOAD_RESOURCE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case TypesProxy.GET_TYPES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_SERVER_ACTIONS:
 				{
-					
+
 					if ( body is ObjectVO )
 					{
 						placeName = PPMPlaceNames.OBJECT;
@@ -322,65 +321,65 @@ package net.vdombox.ide.modules.events.view
 						placeName = PPMPlaceNames.PAGE;
 						targetName = PPMPageTargetNames.SERVER_ACTIONS;
 					}
-					
+
 					if ( placeName && targetName )
 					{
 						message = new ProxyMessage( placeName, PPMOperationNames.READ, targetName, body );
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
 					}
-					
+
 					break;
 				}
-					
+
 				case Notifications.UNDO:
 				{
-					if ( messageProxy.hasUndo( body as PageVO) )
+					if ( messageProxy.hasUndo( body as PageVO ) )
 						sendNotification( Notifications.UNDO_REDO_GETTED, messageProxy.getUndo( body as PageVO ) );
-					
+
 					break;
 				}
-					
+
 				case Notifications.REDO:
 				{
-					if ( messageProxy.hasRedo( body as PageVO) )
+					if ( messageProxy.hasRedo( body as PageVO ) )
 						sendNotification( Notifications.UNDO_REDO_GETTED, messageProxy.getRedo( body as PageVO ) );
-					
+
 					break;
 				}
-					
+
 				case Notifications.SET_MESSAGE:
 				{
-					messageProxy.push( body.pageVO, body as ApplicationEventsVO );	
-					
+					messageProxy.push( body.pageVO, body as ApplicationEventsVO );
+
 					break;
 				}
-					
+
 				case Notifications.SAVE_IN_WORKAREA_CHECKED:
 				{
 					if ( !body.object )
 					{
 						message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.SAVED, body );
-						
+
 						if ( message )
 							junction.sendMessage( PipeNames.PROXIESOUT, message );
 					}
-			
+
 					break;
 				}
-					
+
 				case Notifications.CREATE_SERVER_ACTION:
 				{
 					if ( body.hasOwnProperty( "objectVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.SERVER_ACTION, body );
 					else if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.SERVER_ACTION, body );
-					
-					if( message )
+
+					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break
 				}
-					
+
 			}
 
 			super.handleNotification( notification );
@@ -399,9 +398,9 @@ package net.vdombox.ide.modules.events.view
 					if ( recipientKey != multitonKey )
 						return;
 
-					
-//					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
-//					
+
+					//					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
+					//					
 					break;
 				}
 
@@ -410,8 +409,7 @@ package net.vdombox.ide.modules.events.view
 					if ( recipientKey != multitonKey )
 						return;
 
-					junction.sendMessage( PipeNames.STDLOG,
-										  new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( Notifications.PIPES_READY );
 

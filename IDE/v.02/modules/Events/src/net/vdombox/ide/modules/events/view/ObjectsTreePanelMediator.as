@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.events.view
 	import mx.controls.Tree;
 	import mx.events.ListEvent;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
@@ -17,7 +17,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.modules.events.model.MessageProxy;
 	import net.vdombox.ide.modules.events.model.VisibleElementProxy;
 	import net.vdombox.ide.modules.events.view.components.ObjectsTreePanel;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -38,15 +38,16 @@ package net.vdombox.ide.modules.events.view
 		private var _pages : Object;
 
 		private var selectedObject : ObjectVO;
+
 		private var selectedPage : PageVO;
 
 		[Bindable]
 		private var pagesXMLList : XMLList;
-		
+
 		private var currentPageXML : XML;
-		
+
 		private var visibleElementProxy : VisibleElementProxy;
-		
+
 		private var treePanelCreateCompleted : Boolean = false;
 
 		public function get objectsTreePanel() : ObjectsTreePanel
@@ -68,7 +69,7 @@ package net.vdombox.ide.modules.events.view
 
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			visibleElementProxy = facade.retrieveProxy( VisibleElementProxy.NAME ) as VisibleElementProxy;
-			
+
 			addHandlers();
 		}
 
@@ -89,9 +90,9 @@ package net.vdombox.ide.modules.events.view
 			interests.push( Notifications.PAGE_STRUCTURE_GETTED );
 
 			interests.push( Notifications.OBJECT_GETTED );
-			
+
 			interests.push( Notifications.GET_CHILDREN_ELEMENTS );
-			
+
 			interests.push( Notifications.SAVE_IN_WORKAREA_CHECKED );
 			interests.push( Notifications.APPLICATION_EVENTS_SETTED );
 
@@ -125,7 +126,7 @@ package net.vdombox.ide.modules.events.view
 				case Notifications.BODY_STOP:
 				{
 					isActive = false;
-					
+
 					var messageProxy : MessageProxy = facade.retrieveProxy( MessageProxy.NAME ) as MessageProxy;
 					messageProxy.removeAll( _pages );
 
@@ -144,7 +145,7 @@ package net.vdombox.ide.modules.events.view
 				case Notifications.PAGE_STRUCTURE_GETTED:
 				{
 					var pageXMLTree : XML = notification.getBody() as XML;
-					
+
 					if ( pageXMLTree )
 					{
 						if ( pageXMLTree.@typeID != "753ea72c-475d-4a29-96be-71c522ca2097" )
@@ -161,21 +162,21 @@ package net.vdombox.ide.modules.events.view
 						sendNotification( Notifications.GET_PAGES, statesProxy.selectedApplication );
 						return;
 					}
-				
+
 					currentPageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
 					currentPageXML.setChildren( pageXMLTree.* );
 					//currentPageXML.appendChild( pageXMLTree.* );
 
 					//objectsTree.validateNow();
 					selectCurrentPage( false );
-					
+
 					if ( !treePanelCreateCompleted )
 					{
 						treePanelCreateCompleted = true;
 						sendNotification( Notifications.STRUCTURE_GETTED );
 					}
-					
-					
+
+
 					break;
 				}
 
@@ -186,30 +187,28 @@ package net.vdombox.ide.modules.events.view
 
 					break;
 				}
-					
+
 				case Notifications.GET_CHILDREN_ELEMENTS:
 				{
 					sendNotification( Notifications.CHILDREN_ELEMENTS_GETTED, objectsTreePanel.selectedObject );
-					
+
 					break;
 				}
-					
+
 				case Notifications.SAVE_IN_WORKAREA_CHECKED:
 				{
 					if ( body.object != this )
 						return;
-					
+
 					if ( ( body.saved as Boolean ) )
 						changeFunction();
 					else
 					{
-						Alert.Show( ResourceManager.getInstance().getString( 'Events_General', 'save_the_changes_title' ),
-									ResourceManager.getInstance().getString( 'Events_General', 'save_the_changes' ), 
-									AlertButton.OK_No, objectsTreePanel.parentApplication, alertHandler );
+						Alert.Show( ResourceManager.getInstance().getString( 'Events_General', 'save_the_changes_title' ), ResourceManager.getInstance().getString( 'Events_General', 'save_the_changes' ), AlertButton.OK_No, objectsTreePanel.parentApplication, alertHandler );
 					}
 					return;
 				}
-					
+
 				case Notifications.APPLICATION_EVENTS_SETTED:
 				{
 					if ( needChangePage )
@@ -217,17 +216,17 @@ package net.vdombox.ide.modules.events.view
 						needChangePage = false;
 						changeFunction();
 					}
-					
+
 					break;
 				}
 			}
 		}
-		
+
 		private var needChangePage : Boolean = false;
-		
+
 		private function alertHandler( event : PopUpWindowEvent ) : void
 		{
-			if (event.detail == Alert.YES)
+			if ( event.detail == Alert.YES )
 			{
 				needChangePage = true;
 				sendNotification( Notifications.SAVE_CHANGED );
@@ -235,20 +234,20 @@ package net.vdombox.ide.modules.events.view
 			else
 				changeFunction();
 		}
-		
-		private function setVisibleForElements( pageXML : XML) : void
+
+		private function setVisibleForElements( pageXML : XML ) : void
 		{
 			var xmlList : XMLList = pageXML..object;
 			var objectXML : XML;
 			var typeID : String;
-			var typeProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy ;
-			
-			for each( objectXML in xmlList)
+			var typeProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
+
+			for each ( objectXML in xmlList )
 			{
 				typeID = objectXML.@typeID;
 				var typeVO : TypeVO = typeProxy.getTypeVObyID( typeID )
 				objectXML.@iconID = typeVO.structureIconID;
-				//				//trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
+					//				//trace("typeID: " + typeID+ " visible: " + objectXML.@visible)
 			}
 		}
 
@@ -262,15 +261,15 @@ package net.vdombox.ide.modules.events.view
 		private function addHandlers() : void
 		{
 			objectsTree.addEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler, false, 0, true );
-			objectsTreePanel.addEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
+			objectsTreePanel.addEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			objectsTree.removeEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler );
-			objectsTreePanel.removeEventListener(ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true); 
+			objectsTreePanel.removeEventListener( ResourceVOEvent.GET_RESOURCE_REQUEST, getResourceRequestHandler, true );
 		}
-		
+
 
 		private function showPages( pages : Array ) : void
 		{
@@ -282,8 +281,7 @@ package net.vdombox.ide.modules.events.view
 				if ( pages[ i ].typeVO.id != "753ea72c-475d-4a29-96be-71c522ca2097" )
 				{
 					_pages[ pages[ i ].id ] = pages[ i ];
-					pagesXMLList +=
-						<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id} iconID={pages[ i ].typeVO.structureIconID}/>;
+					pagesXMLList += <page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id} iconID={pages[ i ].typeVO.structureIconID}/>;
 				}
 			}
 
@@ -291,55 +289,55 @@ package net.vdombox.ide.modules.events.view
 
 			selectCurrentPage();
 		}
-		
-		private function selectCurrentPage(  needGetPageStructure : Boolean = true  ) : void
+
+		private function selectCurrentPage( needGetPageStructure : Boolean = true ) : void
 		{
 			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-			
-			if( statesProxy.selectedPage )
+
+			if ( statesProxy.selectedPage )
 			{
 				if ( statesProxy.selectedObject )
 					objectsTreePanel.selectedPageID = statesProxy.selectedObject.id;
 				else
 					objectsTreePanel.selectedPageID = statesProxy.selectedPage.id;
-				
+
 				if ( !needGetPageStructure )
 					return;
-				
-				sendNotification( StatesProxy.SELECTED_PAGE_CHANGED, statesProxy.selectedPage);
+
+				sendNotification( StatesProxy.SELECTED_PAGE_CHANGED, statesProxy.selectedPage );
 				sendNotification( Notifications.GET_PAGE_SRUCTURE, statesProxy.selectedPage );
-				
+
 			}
 			else
 			{
 				////trace("Error: not selected Page in Event Modul");
 			}
 		}
-		
+
 		private function getPageXML( id : String ) : XML
-		{	
-			for each ( var page:XML in objectsTree.dataProvider)
+		{
+			for each ( var page : XML in objectsTree.dataProvider )
 			{
-				if (page.@id == id)
+				if ( page.@id == id )
 					return page;
 			}
-			
+
 			return null;
 		}
 
 		private var item : XML;
-		
+
 		private function objectsTree_ChangeHandler( event : ListEvent ) : void
 		{
 			item = event.itemRenderer.data as XML;
-			
+
 			var id : String = item.@id;
-			
+
 			if ( item.name() == "page" )
 			{
-				if( currentPageXML )
+				if ( currentPageXML )
 					delete currentPageXML.*;
-				
+
 				if ( id != currentPageXML.@id )
 					sendNotification( Notifications.CHECK_SAVE_IN_WORKAREA, this );
 				else
@@ -349,7 +347,7 @@ package net.vdombox.ide.modules.events.view
 			{
 				var pageID : String
 				var parent : XML = item.parent();
-				
+
 				while ( parent )
 				{
 					if ( parent.name() != "page" )
@@ -357,25 +355,25 @@ package net.vdombox.ide.modules.events.view
 						parent = parent.parent();
 						continue;
 					}
-					
+
 					pageID = parent.@id;
 					parent = null;
 				}
-				
+
 				sendNotification( Notifications.GET_OBJECT, { pageVO: _pages[ pageID ], objectID: id } );
 			}
-			
-			
+
+
 		}
-		
+
 		private function changeFunction() : void
 		{
 			var id : String = item.@id;
-			
+
 			sendNotification( StatesProxy.CHANGE_SELECTED_PAGE_REQUEST, _pages[ id ] );
 			sendNotification( Notifications.GET_PAGE_SRUCTURE, _pages[ id ] );
 		}
-		
+
 		private function getResourceRequestHandler( event : ResourceVOEvent ) : void
 		{
 			sendNotification( Notifications.GET_RESOURCE_REQUEST, event.target );

@@ -25,23 +25,23 @@ package net.vdombox.ide.modules.events
 	import net.vdombox.ide.modules.events.controller.messages.ProcessPageProxyMessageCommand;
 	import net.vdombox.ide.modules.events.controller.messages.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.events.controller.messages.ProcessTypesProxyMessageCommand;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 
 	/**
-	 * 
+	 *
 	 * @author adelfos
-	 * Notifications basic fasad 
-	 * 
+	 * Notifications basic fasad
+	 *
 	 */
 	public class ApplicationFacade extends Facade implements IFacade
 	{
-		
+
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )
-				 instanceMap[ key ] = new ApplicationFacade( key );
+				instanceMap[ key ] = new ApplicationFacade( key );
 			return instanceMap[ key ] as ApplicationFacade;
 		}
 
@@ -69,7 +69,7 @@ package net.vdombox.ide.modules.events
 			registerCommand( SettingsProxy.GET_SETTINGS, GetSettingsCommand );
 			registerCommand( SettingsProxy.SET_SETTINGS, SetSettingsCommand );
 			registerCommand( SettingsProxy.SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
-			
+
 			registerCommand( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
 			registerCommand( Notifications.PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( Notifications.PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
@@ -82,11 +82,11 @@ package net.vdombox.ide.modules.events
 			registerCommand( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 
 			registerCommand( Notifications.TEAR_DOWN, TearDownCommand );
-			
+
 			registerCommand( Notifications.GET_RESOURCE_REQUEST, GetResourceRequestCommand );
-			
+
 			registerCommand( Notifications.CREATE_SCRIPT_REQUEST, CreateScriptRequestCommand );
-			
+
 			registerCommand( Notifications.GET_SERVER_ACTIONS_REQUEST, GetServerActionsRequestCommand );
 		}
 	}

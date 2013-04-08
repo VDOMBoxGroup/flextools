@@ -3,8 +3,10 @@
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minWidth="200" creationComplete="sparkskin1_creationCompleteHandler(event)" 
-			 xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:view="net.vdombox.ide.common.view.*">
+			 minWidth="200"
+			 creationComplete="sparkskin1_creationCompleteHandler(event)"
+			 xmlns:mx1="library://ns.adobe.com/flex/mx"
+			 xmlns:view="net.vdombox.ide.common.view.*">
 
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.events.view.components.ActionElement")]
@@ -14,7 +16,7 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.interfaces.IEventBaseVO;
 			import net.vdombox.ide.common.model._vo.ClientActionVO;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
@@ -22,20 +24,21 @@
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 
 			private var _data : IEventBaseVO;
-			
+
 			private var isDataChanged : Boolean = false;
+
 			private var isStateChanged : Boolean = false;
-			
+
 			private var creationCompleted : Boolean = false;
-			
+
 			public function set data( value : IEventBaseVO ) : void
 			{
 				_data = value;
-				
+
 				isDataChanged = true;
 				invalidateProperties();
 			}
-			
+
 			protected function hideButton_clickHandler( event : MouseEvent ) : void
 			{
 				if ( currentState == "normal" || currentState == "disabled" )
@@ -49,18 +52,18 @@
 
 				isStateChanged = true;
 				invalidateProperties();
-				
+
 				hostComponent.dispatchEvent( new ElementEvent( ElementEvent.STATE_CHANGED ) );
 			}
-			
+
 			override protected function commitProperties() : void
 			{
 				super.commitProperties();
-				
+
 				if ( isDataChanged )
 				{
 					isDataChanged = false;
-					
+
 					if ( hostComponent.data )
 					{
 						if ( !hostComponent.data.state && ( currentState == "normal" || currentState == "disabled" ) )
@@ -69,21 +72,21 @@
 							currentState = currentState.substring( 0, currentState.length - 8 );
 					}
 				}
-				
+
 				if ( isStateChanged )
 				{
 					isStateChanged = false;
-					
+
 					if ( !hostComponent.data )
 						return;
-					
+
 					if ( currentState == "normal" || currentState == "disabled" )
 						hostComponent.data.state = true;
 					else
 						hostComponent.data.state = false;
 				}
 			}
-			
+
 			public function setLayout( flag : Boolean ) : void
 			{
 				if ( bottomGroup.includeInLayout == !flag )
@@ -92,7 +95,7 @@
 					arrayImage.includeInLayout = flag;
 				}
 			}
-			
+
 			override protected function stateChanged( oldState : String, newState : String, recursive : Boolean ) : void
 			{
 				if ( !hostComponent.data )
@@ -103,70 +106,95 @@
 
 				if ( newState == "normal" || newState == "disabled" )
 				{
-					/*if ( hostComponent.data is ClientActionVO )
-						titleLabel.text = headerGroup.toolTip = "Client Action";
-					else if ( hostComponent.data is ServerActionVO )
-						titleLabel.text = headerGroup.toolTip = "Server Action";*/
-					
+					/*
+					   if ( hostComponent.data is ClientActionVO )
+					   titleLabel.text = headerGroup.toolTip = "Client Action";
+					   else if ( hostComponent.data is ServerActionVO )
+					   titleLabel.text = headerGroup.toolTip = "Server Action";
+					 */
+
 					titleLabel.text = headerGroup.toolTip = hostComponent.data.name;
-					
+
 					if ( creationCompleted )
-						setLayout(true);
+						setLayout( true );
 				}
 				else
 				{
 					if ( hostComponent.data is ClientActionVO || hostComponent.data is ServerActionVO )
 						titleLabel.text = headerGroup.toolTip = hostComponent.data.objectName + ":" + hostComponent.data.name;
-					
-					if ( creationCompleted  )
-						setLayout(false);
+
+					if ( creationCompleted )
+						setLayout( false );
 				}
 			}
 
-			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
+			protected function sparkskin1_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				doubleClickEnabled = true;
 				BindingUtils.bindProperty( this, "data", hostComponent, "data", true );
 				creationCompleted = true;
 			}
-			
 		]]>
 	</fx:Script>
 
 
 	<s:states>
-		
-		<s:State name="normalAndShort" stateGroups="short"/>
-		<s:State name="disabledAndShort" stateGroups="short"/>
 
-		<s:State name="normal" stateGroups="full"/>
-		<s:State name="disabled" stateGroups="full"/>
+		<s:State name="normalAndShort"
+				 stateGroups="short"/>
+		<s:State name="disabledAndShort"
+				 stateGroups="short"/>
+
+		<s:State name="normal"
+				 stateGroups="full"/>
+		<s:State name="disabled"
+				 stateGroups="full"/>
 
 	</s:states>
 
 	<!--Shadow-->
-	
-	<s:Rect left="-2" top="-2" right="-2" bottom="-2"
+
+	<s:Rect left="-2"
+			top="-2"
+			right="-2"
+			bottom="-2"
 			visible="{hostComponent.selected}"
-			radiusX="6" radiusY="6">
+			radiusX="6"
+			radiusY="6">
 		<s:fill>
 			<s:SolidColor color="#A8C6EE"/>
 		</s:fill>
 	</s:Rect>
 
 	<s:RectangularDropShadow id="dropShadow"
-							 bottom="0" color="#000000" left="0" right="0"
+							 bottom="0"
+							 color="#000000"
+							 left="0"
+							 right="0"
 							 top="0"
-							 alpha="0.42" angle="45" blRadius="10" blurX="8"
-							 blurY="8" brRadius="10" distance="8" tlRadius="10"
+							 alpha="0.42"
+							 angle="45"
+							 blRadius="10"
+							 blurX="8"
+							 blurY="8"
+							 brRadius="10"
+							 distance="8"
+							 tlRadius="10"
 							 trRadius="10"/>
 	<!--Mask-->
 
 	<s:Group id="backgroundMask"
-			 bottom="0" left="0" right="0" top="0">
+			 bottom="0"
+			 left="0"
+			 right="0"
+			 top="0">
 
-		<s:Rect bottom="0" left="0" right="0" top="0"
-				radiusX="6" radiusY="6">
+		<s:Rect bottom="0"
+				left="0"
+				right="0"
+				top="0"
+				radiusX="6"
+				radiusY="6">
 
 			<s:fill>
 
@@ -176,10 +204,16 @@
 		</s:Rect>
 	</s:Group>
 
-	<s:Group bottom="0" left="0" right="0" top="0"
+	<s:Group bottom="0"
+			 left="0"
+			 right="0"
+			 top="0"
 			 mask="{backgroundMask}">
 
-		<s:Rect bottom="0" left="0" right="0" top="0">
+		<s:Rect bottom="0"
+				left="0"
+				right="0"
+				top="0">
 
 			<s:fill>
 
@@ -187,13 +221,19 @@
 			</s:fill>
 		</s:Rect>
 
-		<s:VGroup left="0" right="0"
+		<s:VGroup left="0"
+				  right="0"
 				  gap="1">
 
 			<s:Group id="headerGroup"
-					 height="28" width="100%" doubleClick="hideButton_clickHandler(event)">
+					 height="28"
+					 width="100%"
+					 doubleClick="hideButton_clickHandler(event)">
 
-				<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:Rect bottom="0"
+						left="0"
+						right="0"
+						top="0">
 
 					<s:fill>
 
@@ -205,28 +245,42 @@
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
-					
-				<s:Label id="titleLabel" width="100%"
-								text="{ hostComponent.title }"
-								color="#FFFFFF" textAlign="center"
-								verticalCenter="0" maxDisplayedLines="1"/>	
-						
-				<s:Group bottom="0" right="0" top="0" width="25">
-					<s:Rect width="100%" height="100%">						
-						<s:fill>						
-							<s:LinearGradient rotation="90">				
-								<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x8023Ef }"/>				
+
+				<s:Label id="titleLabel"
+						 width="100%"
+						 text="{ hostComponent.title }"
+						 color="#FFFFFF"
+						 textAlign="center"
+						 verticalCenter="0"
+						 maxDisplayedLines="1"/>
+
+				<s:Group bottom="0"
+						 right="0"
+						 top="0"
+						 width="25">
+					<s:Rect width="100%"
+							height="100%">
+						<s:fill>
+							<s:LinearGradient rotation="90">
+								<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x8023Ef }"/>
 								<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x5C07B9 }"/>
 							</s:LinearGradient>
 						</s:fill>
 					</s:Rect>
-						
-					<s:HGroup id="imageGroup" height="100%" horizontalAlign="right" verticalAlign="middle" paddingRight="5">
-							
-						<mx1:Image id="imageDelete" source="{VDOMImage.DeleteWhite}"
-									   alpha=".5"  mouseOver="{ imageDelete.alpha = 1 }" mouseOut="{ imageDelete.alpha = .5 }"
-									   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )" />
-							
+
+					<s:HGroup id="imageGroup"
+							  height="100%"
+							  horizontalAlign="right"
+							  verticalAlign="middle"
+							  paddingRight="5">
+
+						<mx1:Image id="imageDelete"
+								   source="{VDOMImage.DeleteWhite}"
+								   alpha=".5"
+								   mouseOver="{ imageDelete.alpha = 1 }"
+								   mouseOut="{ imageDelete.alpha = .5 }"
+								   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )"/>
+
 					</s:HGroup>
 				</s:Group>
 
@@ -234,30 +288,43 @@
 
 			<s:Group id="contentGroup"
 					 width="100%"
-					 itemCreationPolicy="immediate" includeIn="full"/>
+					 itemCreationPolicy="immediate"
+					 includeIn="full"/>
 
-			<s:Group id="bottomGroup" width="100%" height="16" includeInLayout="false">
-				
-				<s:Rect bottom="0" left="0" right="0" top="0">
+			<s:Group id="bottomGroup"
+					 width="100%"
+					 height="16"
+					 includeInLayout="false">
+
+				<s:Rect bottom="0"
+						left="0"
+						right="0"
+						top="0">
 					<s:fill>
-						
+
 						<s:LinearGradient rotation="90">
-							
+
 							<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x7A1EE5 }"/>
-							
+
 							<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x5905B5 }"/>
 						</s:LinearGradient>
-						
+
 					</s:fill>
-					
+
 				</s:Rect>
-				
-				<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-					
-					<mx1:Image id="arrayImage" source="{VDOMImage.ArrClose}" click="hideButton_clickHandler(event)" includeInLayout="false"/>
-					
+
+				<s:HGroup width="100%"
+						  height="100%"
+						  horizontalAlign="center"
+						  verticalAlign="middle">
+
+					<mx1:Image id="arrayImage"
+							   source="{VDOMImage.ArrClose}"
+							   click="hideButton_clickHandler(event)"
+							   includeInLayout="false"/>
+
 				</s:HGroup>
-				
+
 			</s:Group>
 		</s:VGroup>
 	</s:Group>

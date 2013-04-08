@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<common:VIModule 
-	xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:mx="library://ns.adobe.com/flex/halo"
-	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:common="net.vdombox.ide.common.*">
-	
+<common:VIModule xmlns:fx="http://ns.adobe.com/mxml/2009"
+				 xmlns:mx="library://ns.adobe.com/flex/halo"
+				 xmlns:s="library://ns.adobe.com/flex/spark"
+				 xmlns:common="net.vdombox.ide.common.*">
+
 	<fx:Style>
 		@namespace s "library://ns.adobe.com/flex/spark";
 		@namespace mx "library://ns.adobe.com/flex/halo";
@@ -46,9 +45,9 @@
 		}
 		
 	</fx:Style>
-	
+
 	<fx:Script>
-		<![CDATA[ 
+		<![CDATA[
 			import net.vdombox.ide.common.controller.Notifications;
 			import net.vdombox.ide.common.model.SettingsProxy;
 			import net.vdombox.ide.modules.events.ApplicationFacade;
@@ -121,12 +120,12 @@
 			override public function getBody() : void
 			{
 				facade.sendNotification( Notifications.CREATE_BODY );
-				facade.sendNotification( Notifications.MODULE_SELECTED)
+				facade.sendNotification( Notifications.MODULE_SELECTED )
 			}
-			
-			override public function deSelect():void
+
+			override public function deSelect() : void
 			{
-				facade.sendNotification(Notifications.MODULE_DESELECTED);
+				facade.sendNotification( Notifications.MODULE_DESELECTED );
 			}
 
 			override public function initializeSettings() : void

@@ -2,10 +2,12 @@
 <s:SparkSkin xmlns:components="net.vdombox.ide.modules.events.view.components.*"
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
-			 xmlns:s="library://ns.adobe.com/flex/spark" 
-			 xmlns:mx1="library://ns.adobe.com/flex/mx" 
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 xmlns:mx1="library://ns.adobe.com/flex/mx"
 			 creationComplete="sparkskin1_creationCompleteHandler(event)"
-			 remove="sparkskin1_removeHandler(event)" xmlns:button="net.vdombox.ide.common.view.components.button.*" xmlns:components1="net.vdombox.ide.common.view.components.*">
+			 remove="sparkskin1_removeHandler(event)"
+			 xmlns:button="net.vdombox.ide.common.view.components.button.*"
+			 xmlns:components1="net.vdombox.ide.common.view.components.*">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -17,36 +19,37 @@
 			import mx.collections.ArrayCollection;
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 			import net.vdombox.ide.modules.events.events.WorkAreaEvent;
-			
+
 			import spark.events.IndexChangeEvent;
-			
+
 			[Bindable]
 			private var scale : Number = 1;
-			
+
 			private var scrollPosition : Point;
+
 			private var _NeedSetVerticalScrollPosition : Boolean = false;
-			
+
 			private var multiRect : Rect = new Rect();
-			
+
 			protected function scroller_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				// TODO Auto-generated method stub
-				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
-				
-				addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler, true, 0, true );
-				
-				addEventListener(ElementEvent.MOUSE_DOWN, elementMouseDownHandler, true, 0, true );
-				
+				addEventListener( MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
+
+				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, true, 0, true );
+
+				addEventListener( ElementEvent.MOUSE_DOWN, elementMouseDownHandler, true, 0, true );
+
 				scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
 				scroller.horizontalScrollBar.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
 			}
-			
+
 			protected function showElementsView_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				// TODO Auto-generated method stub
@@ -56,50 +59,50 @@
 				sourceDropDownList.addItem( 'Active' );
 				_showElementsView.dataProvider = sourceDropDownList;
 			}
-			
+
 			protected function _showElementsView_changeHandler( event : IndexChangeEvent ) : void
 			{
-				dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED ) );
+				dispatchEvent( new WorkAreaEvent( WorkAreaEvent.SHOW_ELEMENTS_STATE_CHANGED ) );
 			}
-			
+
 			private function mouseMoveHandler( event : MouseEvent ) : void
-			{				
-				var pt:Point;
-				
-				pt = new Point(event.localX, event.localY);
-				pt = event.target.localToGlobal(pt);
-				
-				pt=multiRectGroup.globalToContent(pt);
-				
+			{
+				var pt : Point;
+
+				pt = new Point( event.localX, event.localY );
+				pt = event.target.localToGlobal( pt );
+
+				pt = multiRectGroup.globalToContent( pt );
+
 				multiRect.width = pt.x - multiRect.x;
 				multiRect.height = pt.y - multiRect.y;
 			}
-			
+
 			private function mouseUpHandler( event : MouseEvent ) : void
 			{
-				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
-				removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true );
-				
+				removeEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
+				removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
+
 				if ( multiRect.width < 0 )
 				{
 					multiRect.x += multiRect.width;
 					multiRect.width = -1 * multiRect.width;
 				}
-				
+
 				if ( multiRect.height < 0 )
 				{
 					multiRect.y += multiRect.height;
 					multiRect.height = -1 * multiRect.height;
 				}
-				
+
 				hostComponent.setMultiSelectInRect( multiRect.x, multiRect.y, multiRect.x + multiRect.width, multiRect.y + multiRect.height );
-				
+
 				multiRect.width = 0;
 				multiRect.height = 0;
-				
+
 				multiRectGroup.removeAllElements();
 			}
-			
+
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
 				if ( !event.ctrlKey && event.target is Group && event.target.id == "scaleGroup" )
@@ -109,95 +112,94 @@
 						hostComponent.removeAllSelectedElements();
 						hostComponent.clearUsedElements();
 					}
-					
-					var pt:Point;
-				
-					pt = new Point(event.localX, event.localY);
-					pt = event.target.localToGlobal(pt);
-					
-					pt=multiRectGroup.globalToContent(pt);
-					
+
+					var pt : Point;
+
+					pt = new Point( event.localX, event.localY );
+					pt = event.target.localToGlobal( pt );
+
+					pt = multiRectGroup.globalToContent( pt );
+
 					multiRect.left = pt.x;
 					multiRect.top = pt.y;
-					
+
 					multiRectGroup.addElement( multiRect );
-					
-					addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
-					addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true, 0, true );
-					
+
+					addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
+					addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0, true );
+
 					return;
 				}
-				
+
 				if ( !event.ctrlKey )
 					return;
-				
+
 				scale = 1;
-				
+
 				_NeedSetVerticalScrollPosition = true;
-				
-				pt = new Point(event.localX, event.localY);
-				pt = event.target.localToGlobal(pt);
-				
-				pt=scroller.globalToContent(pt);
-				
+
+				pt = new Point( event.localX, event.localY );
+				pt = event.target.localToGlobal( pt );
+
+				pt = scroller.globalToContent( pt );
+
 				scrollPosition = pt;
 			}
-			
+
 			private function elementMouseDownHandler( event : ElementEvent ) : void
 			{
-				contentGroup.swapElementsAt( contentGroup.getElementIndex( UIComponent(event.target) ), contentGroup.numElements - 1 );
+				contentGroup.swapElementsAt( contentGroup.getElementIndex( UIComponent( event.target ) ), contentGroup.numElements - 1 );
 			}
-			
-			
+
+
 			private function mouseWheelHandler( event : MouseEvent ) : void
 			{
 				if ( event.ctrlKey )
-				{		
-					if ( event.delta > 0 && scale < 3)
+				{
+					if ( event.delta > 0 && scale < 3 )
 						scale += 0.1;
 					else if ( event.delta < 0 && scale > 0.25 )
 						scale -= 0.1;
-					
-									
+
+
 					event.stopImmediatePropagation();
 				}
-				
+
 				event.delta = event.delta > 0 ? 30 : -30;
 			}
-			
-			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function sparkskin1_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				addEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true, 0 , true );
-				
-				multiRect.stroke =  new SolidColorStroke( 0x0000FF, 1 );
+				addEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true, 0, true );
+
+				multiRect.stroke = new SolidColorStroke( 0x0000FF, 1 );
 			}
-			
+
 			private function setFocusOnWorkArea( event : MouseEvent ) : void
 			{
 				setFocus();
 			}
-			
-			protected function sparkskin1_removeHandler(event:FlexEvent):void
+
+			protected function sparkskin1_removeHandler( event : FlexEvent ) : void
 			{
 				removeEventListener( MouseEvent.MOUSE_DOWN, setFocusOnWorkArea, true );
 			}
-			
-			protected function scaleSlider_changeHandler(event:Event):void
+
+			protected function scaleSlider_changeHandler( event : Event ) : void
 			{
 				scale = scaleSlider.value;
 			}
-			
-			protected function scroller_updateCompleteHandler(event:FlexEvent):void
+
+			protected function scroller_updateCompleteHandler( event : FlexEvent ) : void
 			{
 				if ( _NeedSetVerticalScrollPosition )
 				{
 					_NeedSetVerticalScrollPosition = false;
-					
+
 					scroller.verticalScrollBar.viewport.verticalScrollPosition = scrollPosition.y - scroller.height / 2;
 					scroller.horizontalScrollBar.viewport.horizontalScrollPosition = scrollPosition.x - scroller.width / 2;
 				}
 			}
-			
 		]]>
 	</fx:Script>
 
@@ -209,7 +211,10 @@
 	</s:states>
 
 	<s:Rect id="backgroundRect"
-			bottom="0" left="0" right="0" top="0">
+			bottom="0"
+			left="0"
+			right="0"
+			top="0">
 
 		<s:fill>
 
@@ -224,7 +229,9 @@
 	</s:Rect>
 
 	<s:Rect height="28"
-			left="1" right="1" top="1">
+			left="1"
+			right="1"
+			top="1">
 		<s:fill>
 			<s:LinearGradient rotation="90">
 				<s:GradientEntry color="0xCDCDCD"/>
@@ -234,60 +241,105 @@
 	</s:Rect>
 
 	<s:HGroup height="30"
-			  left="1" right="1" top="1"
-			  gap="0" paddingRight="20" verticalAlign="middle">
+			  left="1"
+			  right="1"
+			  top="1"
+			  gap="0"
+			  paddingRight="20"
+			  verticalAlign="middle">
 		<button:WorkAreaButton id="saveButton"
-								   enabled="true" enabled.disabled="false" height="20" 
-								   icon="{VDOMImage.Save}" iconDown="{ VDOMImage.Save_White }"
-								   label="{ resourceManager.getString( 'Events_General', 'work_area_save' ) }"
-								   highlighted="false" highlighted.unsaved="true"
-								   backgroundDownColor="#daa440" textDownColor="#F0F0F0"/>
-		
+							   enabled="true"
+							   enabled.disabled="false"
+							   height="20"
+							   icon="{VDOMImage.Save}"
+							   iconDown="{ VDOMImage.Save_White }"
+							   label="{ resourceManager.getString( 'Events_General', 'work_area_save' ) }"
+							   highlighted="false"
+							   highlighted.unsaved="true"
+							   backgroundDownColor="#daa440"
+							   textDownColor="#F0F0F0"/>
+
 		<button:WorkAreaButton id="undoButton"
-							   height="20" icon="{VDOMImage.Undo}"
+							   height="20"
+							   icon="{VDOMImage.Undo}"
 							   label="{ resourceManager.getString( 'Events_General', 'work_area_undo' ) }"/>
-		
+
 		<button:WorkAreaButton id="redoButton"
-								   height="20" icon="{VDOMImage.Redo}"
-								   label="{ resourceManager.getString( 'Events_General', 'work_area_redo' ) }"/>
-		
-		
-		<s:HGroup width="100%" horizontalAlign="center" gap="3" paddingLeft="10" paddingRight="10">
-			
-			<s:Label text="{ resourceManager.getString( 'Events_General', 'work_area_page' ) }" width="100%" textAlign="right" height="100%" verticalAlign="middle" color="#6215D6"/>
-			
-			<s:TextInput id="pageName" editable="false" selectable="false" contentBackgroundAlpha="0" borderVisible="false"  width="100%" color="#6215D6"/>
-			
+							   height="20"
+							   icon="{VDOMImage.Redo}"
+							   label="{ resourceManager.getString( 'Events_General', 'work_area_redo' ) }"/>
+
+
+		<s:HGroup width="100%"
+				  horizontalAlign="center"
+				  gap="3"
+				  paddingLeft="10"
+				  paddingRight="10">
+
+			<s:Label text="{ resourceManager.getString( 'Events_General', 'work_area_page' ) }"
+					 width="100%"
+					 textAlign="right"
+					 height="100%"
+					 verticalAlign="middle"
+					 color="#6215D6"/>
+
+			<s:TextInput id="pageName"
+						 editable="false"
+						 selectable="false"
+						 contentBackgroundAlpha="0"
+						 borderVisible="false"
+						 width="100%"
+						 color="#6215D6"/>
+
 		</s:HGroup>
-		
-		
-		<s:HSlider id="scaleSlider" width="100" visible="false"
-				   minimum=".1" maximum="3" value="{scale}" 
-				   stepSize=".1" changeEnd="scaleSlider_changeHandler(event)" />
-		
-		<s:Label text="{Math.round( scale * 10 ) / 10}" visible="false"/>
-		
-		<s:Label text="{ resourceManager.getString( 'Events_General', 'work_area_show_current' ) }" />
-		
-		<mx1:Spacer width="5" />
-		
-		<s:DropDownList id="_showElementsView" width="140" height="20" creationComplete="showElementsView_creationCompleteHandler(event)" change="_showElementsView_changeHandler(event)"/>
-		
+
+
+		<s:HSlider id="scaleSlider"
+				   width="100"
+				   visible="false"
+				   minimum=".1"
+				   maximum="3"
+				   value="{scale}"
+				   stepSize=".1"
+				   changeEnd="scaleSlider_changeHandler(event)"/>
+
+		<s:Label text="{Math.round( scale * 10 ) / 10}"
+				 visible="false"/>
+
+		<s:Label text="{ resourceManager.getString( 'Events_General', 'work_area_show_current' ) }"/>
+
+		<mx1:Spacer width="5"/>
+
+		<s:DropDownList id="_showElementsView"
+						width="140"
+						height="20"
+						creationComplete="showElementsView_creationCompleteHandler(event)"
+						change="_showElementsView_changeHandler(event)"/>
+
 	</s:HGroup>
 
 	<s:Group id="workLayers"
-			 bottom="0" left="0" right="0" top="30"
-			 >
-		<s:Rect height="100%" width="100%">
+			 bottom="0"
+			 left="0"
+			 right="0"
+			 top="30">
+		<s:Rect height="100%"
+				width="100%">
 			<s:fill>
-				<s:BitmapFill source = "{VDOMImage.BG_WorkArea}" smooth="true" fillMode="repeat"/>
+				<s:BitmapFill source="{VDOMImage.BG_WorkArea}"
+							  smooth="true"
+							  fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
 
-		<components1:VDOMScroller id="scroller" height="100%" width="100%" 
+		<components1:VDOMScroller id="scroller"
+								  height="100%"
+								  width="100%"
 								  creationComplete="scroller_creationCompleteHandler(event)"
 								  updateComplete="scroller_updateCompleteHandler(event)">
-			<s:Group id="scaleGroup" scaleX="{scale}" scaleY="{scale}">
+			<s:Group id="scaleGroup"
+					 scaleX="{scale}"
+					 scaleY="{scale}">
 				<s:Group id="linkagesLayer"/>
 				<s:Group id="contentGroup"/>
 				<s:Group id="multiRectGroup"/>

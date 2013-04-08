@@ -8,16 +8,16 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.Image;
-			
+
 			import spark.components.List;
 
-			[SkinPart( required="true" )]
+			[SkinPart( required = "true" )]
 			public var eventsList : List;
 
-			[SkinPart( required="true" )]
+			[SkinPart( required = "true" )]
 			public var actionsList : List;
-			
-			[SkinPart( required="true" )]
+
+			[SkinPart( required = "true" )]
 			public var createServerAction : Image;
 		]]>
 	</fx:Script>

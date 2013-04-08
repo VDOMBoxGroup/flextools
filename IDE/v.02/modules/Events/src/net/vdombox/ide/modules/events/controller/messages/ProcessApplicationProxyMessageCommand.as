@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.events.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -35,24 +35,24 @@ package net.vdombox.ide.modules.events.controller.messages
 				case PPMApplicationTargetNames.SAVED:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( Notifications.CHECK_SAVE_IN_WORKAREA , null );
+						sendNotification( Notifications.CHECK_SAVE_IN_WORKAREA, null );
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
 						sendNotification( Notifications.SAVE_CHANGED );
 					}
-						
-					
+
+
 					break;
 				}
-					
+
 				case PPMApplicationTargetNames.PAGES:
 				{
 					if ( operation == PPMOperationNames.READ )
 						sendNotification( Notifications.PAGES_GETTED, body.pages );
-					
+
 					break;
 				}
-					
+
 				case PPMApplicationTargetNames.EVENTS:
 				{
 					if ( operation == PPMOperationNames.READ )
@@ -60,11 +60,10 @@ package net.vdombox.ide.modules.events.controller.messages
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
 						sendNotification( Notifications.APPLICATION_EVENTS_SETTED );
-						if ( body.hasOwnProperty("needForUpdate") )
+						if ( body.hasOwnProperty( "needForUpdate" ) )
 						{
 							if ( body.needForUpdate )
-								sendNotification( Notifications.GET_APPLICATION_EVENTS,
-									{ applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
+								sendNotification( Notifications.GET_APPLICATION_EVENTS, { applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 						}
 					}
 					break;

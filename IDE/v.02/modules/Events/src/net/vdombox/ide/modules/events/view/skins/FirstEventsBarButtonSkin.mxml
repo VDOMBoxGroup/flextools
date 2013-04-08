@@ -18,7 +18,8 @@
 -->
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="21" minWidth="21"
+			 minHeight="21"
+			 minWidth="21"
 			 alpha.disabledStates="0.5">
 	<!-- host component -->
 
@@ -32,8 +33,10 @@
 	</fx:Metadata>
 
 	<fx:Script>
-		/* Define the skin elements that should not be colorized.
-		 For toggle button, the graphics are colorized but the label is not. */
+		/*
+		   Define the skin elements that should not be colorized.
+		   For toggle button, the graphics are colorized but the label is not.
+		 */
 		static private const exclusions : Array = [ "labelDisplay" ];
 
 		/**
@@ -50,19 +53,26 @@
 
 		<s:State name="up"/>
 
-		<s:State name="over" stateGroups="overStates"/>
+		<s:State name="over"
+				 stateGroups="overStates"/>
 
-		<s:State name="down" stateGroups="downStates"/>
+		<s:State name="down"
+				 stateGroups="downStates"/>
 
-		<s:State name="disabled" stateGroups="disabledStates"/>
+		<s:State name="disabled"
+				 stateGroups="disabledStates"/>
 
-		<s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates"/>
+		<s:State name="upAndSelected"
+				 stateGroups="selectedStates, selectedUpStates"/>
 
-		<s:State name="overAndSelected" stateGroups="overStates, selectedStates"/>
+		<s:State name="overAndSelected"
+				 stateGroups="overStates, selectedStates"/>
 
-		<s:State name="downAndSelected" stateGroups="downStates, selectedStates"/>
+		<s:State name="downAndSelected"
+				 stateGroups="downStates, selectedStates"/>
 
-		<s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates"/>
+		<s:State name="disabledAndSelected"
+				 stateGroups="selectedUpStates, disabledStates, selectedStates"/>
 	</s:states>
 	<!-- layer 1: shadow -->
 	<!--<s:Rect left="0" right="0" bottom="-1" height="1">
@@ -75,20 +85,34 @@
 		 </s:Rect>-->
 	<!-- layer 2: fill -->
 
-	<s:Rect bottom="0" left="1" right="1"
-			top="1" top.selectedStates="-1"
-			topLeftRadiusX="5" topLeftRadiusY="5" topRightRadiusX="5" topRightRadiusY="5">
+	<s:Rect bottom="0"
+			left="1"
+			right="1"
+			top="1"
+			top.selectedStates="-1"
+			topLeftRadiusX="5"
+			topLeftRadiusY="5"
+			topRightRadiusX="5"
+			topRightRadiusY="5">
 
 		<s:fill>
 
 			<s:LinearGradient rotation="90">
 
-				<s:GradientEntry color="0x707175" color.downStates="0x707175" color.overStates="0x707175" color.selectedUpStates="0xCDCDCD"
-								 alpha="0.85" alpha.selectedStates="1"/>
-
-				<s:GradientEntry color="0x161616" color.downStates="0x161616" color.over="0x161616" color.overAndSelected="0xCDCDCD"
+				<s:GradientEntry color="0x707175"
+								 color.downStates="0x707175"
+								 color.overStates="0x707175"
 								 color.selectedUpStates="0xCDCDCD"
-								 alpha="0.85" alpha.selectedStates="1"/>
+								 alpha="0.85"
+								 alpha.selectedStates="1"/>
+
+				<s:GradientEntry color="0x161616"
+								 color.downStates="0x161616"
+								 color.over="0x161616"
+								 color.overAndSelected="0xCDCDCD"
+								 color.selectedUpStates="0xCDCDCD"
+								 alpha="0.85"
+								 alpha.selectedStates="1"/>
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
@@ -165,9 +189,17 @@
 	<!--- Defines the appearance of the label(s) for the middle button(s) in the ButtonBar component. -->
 
 	<s:Label id="labelDisplay"
-			 bottom="2" color="0xD3D3D5" color.down="black" color.over="white"
-			 color.selectedStates="black" horizontalCenter="0" left="10"
-			 right="10" textAlign="center" top="2" verticalAlign="middle"
+			 bottom="2"
+			 color="0xD3D3D5"
+			 color.down="black"
+			 color.over="white"
+			 color.selectedStates="black"
+			 horizontalCenter="0"
+			 left="10"
+			 right="10"
+			 textAlign="center"
+			 top="2"
+			 verticalAlign="middle"
 			 verticalCenter="1"
 			 maxDisplayedLines="1">
 	</s:Label>

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <components:BaseElement xmlns:components="net.vdombox.ide.modules.events.view.components.*"
-					  xmlns:fx="http://ns.adobe.com/mxml/2009"
-					  xmlns:mx="library://ns.adobe.com/flex/halo"
-					  xmlns:s="library://ns.adobe.com/flex/spark"
-					  width="180"
-					  skinClass="net.vdombox.ide.modules.events.view.skins.ActionElementSkin"
-					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)">
+						xmlns:fx="http://ns.adobe.com/mxml/2009"
+						xmlns:mx="library://ns.adobe.com/flex/halo"
+						xmlns:s="library://ns.adobe.com/flex/spark"
+						width="180"
+						skinClass="net.vdombox.ide.modules.events.view.skins.ActionElementSkin"
+						creationComplete="skinnablecontainer1_creationCompleteHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.model._vo.ActionParameterVO;
 			import net.vdombox.ide.common.model._vo.ClientActionVO;
 			import net.vdombox.ide.modules.events.view.skins.ActionElementSkin;
-			
+
 			import spark.components.Group;
 			import spark.components.Label;
 
-			[SkinPart( required="true" )]
+			[SkinPart( required = "true" )]
 			public var headerGroup : Group;
-		
+
 			public override function get uniqueName() : String
 			{
 				return data ? data.name + data.objectID + data.id : "";
@@ -32,17 +32,17 @@
 				{
 					if ( parameters && data.parameters == parameters )
 						return;
-					
+
 					parameters = data.parameters;
-					
+
 					isNeedUpdateParameters = false;
 					parametersContainer.removeAllElements();
-					
+
 					nameGroup.includeInLayout = true;
 					//actionRenderer.includeInLayout = true;
-					
+
 					if ( skin.currentState == "normal" || skin.currentState == "disabled" )
-						(skin as ActionElementSkin).setLayout(true);
+						( skin as ActionElementSkin ).setLayout( true );
 
 					if ( data.parameters.length == 0 )
 						return;
@@ -50,7 +50,7 @@
 					var parameter : ActionParameterVO;
 					var parameterRenderer : EditableParameterRenderer;
 					var parameterRendererFactory : ClassFactory = new ClassFactory( EditableParameterRenderer );
-				
+
 					parameterRendererFactory.properties = { percentWidth: 100 };
 
 					for each ( parameter in data.parameters )
@@ -62,8 +62,8 @@
 
 						parametersContainer.addElement( parameterRenderer );
 					}
-					
-					if( nameGroup )
+
+					if ( nameGroup )
 					{
 						nameGroup.visible = data is ClientActionVO;
 					}
@@ -85,7 +85,6 @@
 				if ( instance == headerGroup )
 					headerGroup.removeEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler );
 			}
-			
 		]]>
 	</fx:Script>
 
@@ -94,9 +93,15 @@
 		<s:VerticalLayout gap="1"/>
 	</components:layout>
 
-	<s:Group height="20" width="100%" id="nameGroup" includeInLayout="false">
+	<s:Group height="20"
+			 width="100%"
+			 id="nameGroup"
+			 includeInLayout="false">
 
-		<s:Rect bottom="0" left="0" right="0" top="0">
+		<s:Rect bottom="0"
+				left="0"
+				right="0"
+				top="0">
 
 			<s:fill>
 
@@ -109,7 +114,13 @@
 			</s:fill>
 		</s:Rect>
 
-		<s:Label text="{ data.objectName }" textAlign="center" verticalCenter="0" left="5" right="5" width="100%" maxDisplayedLines="1"/>
+		<s:Label text="{ data.objectName }"
+				 textAlign="center"
+				 verticalCenter="0"
+				 left="5"
+				 right="5"
+				 width="100%"
+				 maxDisplayedLines="1"/>
 	</s:Group>
 
 	<!--<components:ParameterRenderer id="actionRenderer" icon="@Embed('assets/event.png')" width="100%"

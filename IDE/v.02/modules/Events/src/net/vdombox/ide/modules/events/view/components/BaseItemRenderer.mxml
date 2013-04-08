@@ -2,105 +2,130 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				xmlns:mx="library://ns.adobe.com/flex/mx"
-				
-				focusEnabled="false" xmlns:view="net.vdombox.ide.common.view.*"
+				focusEnabled="false"
+				xmlns:view="net.vdombox.ide.common.view.*"
 				minHeight="22"
 				click="itemrenderer1_clickHandler(event)"
-				doubleClickEnabled="true" doubleClick="itemrenderer1_doubleClickHandler(event)">
-	
+				doubleClickEnabled="true"
+				doubleClick="itemrenderer1_doubleClickHandler(event)">
+
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.modules.events.events.EventsPanelEvent;
-			
+
 			[Bindable]
 			protected var currentIcon : Class;
-			
+
 			private var _data : Object;
-			
+
 			override public function set data( value : Object ) : void
 			{
 				_data = value;
-				
+
 				super.data = value;
 			}
-			
+
 			[Bindable]
 			override public function get data() : Object
 			{
 				return _data;
 			}
-			
-			protected function itemrenderer1_clickHandler(event:MouseEvent):void
+
+			protected function itemrenderer1_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new EventsPanelEvent ( EventsPanelEvent.RENDERER_CLICK ) );
+				dispatchEvent( new EventsPanelEvent( EventsPanelEvent.RENDERER_CLICK ) );
 			}
-			
-			protected function itemrenderer1_doubleClickHandler(event:MouseEvent):void
+
+			protected function itemrenderer1_doubleClickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new EventsPanelEvent ( EventsPanelEvent.RENDERER_DOUBLE_CLICK ) );
+				dispatchEvent( new EventsPanelEvent( EventsPanelEvent.RENDERER_DOUBLE_CLICK ) );
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<s:states>
-		
-		<s:State name="normal" />
-		
-		<s:State name="hovered" />
-		
-		<s:State name="selected" />
-		
-		<s:State name="normalAndShowsCaret" />
-		
-		<s:State name="hoveredAndShowsCaret" />
-		
-		<s:State name="selectedAndShowsCaret" />
+
+		<s:State name="normal"/>
+
+		<s:State name="hovered"/>
+
+		<s:State name="selected"/>
+
+		<s:State name="normalAndShowsCaret"/>
+
+		<s:State name="hoveredAndShowsCaret"/>
+
+		<s:State name="selectedAndShowsCaret"/>
 	</s:states>
-	
-	<s:Rect left="-2" width="100%" top="-2" bottom="-2">
+
+	<s:Rect left="-2"
+			width="100%"
+			top="-2"
+			bottom="-2">
 		<s:fill>
 			<s:SolidColor id="rectColor"
 						  color.normal="{ data.used ? 0x292C38 : 0x3A3A3A }"
 						  color.hovered="#00000A"
 						  alpha.hovered="0.8"
-						  color.selected="#00000A" />
+						  color.selected="#00000A"/>
 		</s:fill>
 	</s:Rect>
-	
+
 	<s:Group id="groupContent"
 			 width="100%"
 			 top="-2"
 			 bottom="-2">
-		
-		<s:HGroup width="100%" height="100%" verticalAlign="middle" paddingLeft="4" gap="4">
-			
-			<mx:Image height="14" width="5" source="@Embed('assets/divider_v.png')"/>
-			
-			<s:HGroup height="22" width="100%"
-					  left="0" right="0" verticalAlign="middle">
-				
-				<mx:Image height="16" source="{currentIcon}" width="16" />
-				
-				<s:TextInput text="{ data.name }" width="100%"
-							 borderVisible="false" contentBackgroundAlpha="0"
-							 editable="false" selectable="false"
-							 color="#FFFFFF" />
+
+		<s:HGroup width="100%"
+				  height="100%"
+				  verticalAlign="middle"
+				  paddingLeft="4"
+				  gap="4">
+
+			<mx:Image height="14"
+					  width="5"
+					  source="@Embed('assets/divider_v.png')"/>
+
+			<s:HGroup height="22"
+					  width="100%"
+					  left="0"
+					  right="0"
+					  verticalAlign="middle">
+
+				<mx:Image height="16"
+						  source="{currentIcon}"
+						  width="16"/>
+
+				<s:TextInput text="{ data.name }"
+							 width="100%"
+							 borderVisible="false"
+							 contentBackgroundAlpha="0"
+							 editable="false"
+							 selectable="false"
+							 color="#FFFFFF"/>
 			</s:HGroup>
-			
+
 		</s:HGroup>
-		
+
 	</s:Group>
-	
-	<s:Line top="-2" left="-2" width="100%">
+
+	<s:Line top="-2"
+			left="-2"
+			width="100%">
 		<s:stroke>
-			<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1" />
+			<s:SolidColorStroke color="#FFFFFF"
+								alpha="0.5"
+								weight="1"/>
 		</s:stroke>
 	</s:Line>
-	
-	<s:Line bottom="-2" left="-2" width="100%">
+
+	<s:Line bottom="-2"
+			left="-2"
+			width="100%">
 		<s:stroke>
-			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1" />
+			<s:SolidColorStroke color="#000000"
+								alpha="0.5"
+								weight="1"/>
 		</s:stroke>
 	</s:Line>
 </s:ItemRenderer>

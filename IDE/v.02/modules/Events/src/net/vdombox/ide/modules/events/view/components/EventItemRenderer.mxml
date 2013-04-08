@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <components:BaseItemRenderer xmlns:components="net.vdombox.ide.modules.events.view.components.*"
-				xmlns:fx="http://ns.adobe.com/mxml/2009"
-				xmlns:s="library://ns.adobe.com/flex/spark"
-				xmlns:mx="library://ns.adobe.com/flex/mx"
-				
-				focusEnabled="false" xmlns:view="net.vdombox.ide.common.view.*">
+							 xmlns:fx="http://ns.adobe.com/mxml/2009"
+							 xmlns:s="library://ns.adobe.com/flex/spark"
+							 xmlns:mx="library://ns.adobe.com/flex/mx"
+							 focusEnabled="false"
+							 xmlns:view="net.vdombox.ide.common.view.*">
 
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.model._vo.EventVO;
-			
-			
-			[Embed(source='assets/events.png')]
-			public var EventsIcon:Class;
-						
+
+
+			[Embed( source = 'assets/events.png' )]
+			public var EventsIcon : Class;
+
 			override public function set data( value : Object ) : void
 			{
 				currentIcon = EventsIcon;
-				
+
 				super.data = value;
-				
+
 				if ( value is EventVO )
 					toolTip = EventVO( value ).help;
 			}
-			
+
 			override public function get data() : Object
 			{
 				return super.data;
 			}
-			
-			
 		]]>
 	</fx:Script>
 

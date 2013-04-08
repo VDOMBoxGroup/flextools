@@ -6,11 +6,11 @@ package net.vdombox.ide.modules.events.view.components
 	import flash.display.LineScaleMode;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
 	import mx.binding.utils.BindingUtils;
 	import mx.controls.Image;
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 
 	public class Linkage extends UIComponent
@@ -27,18 +27,23 @@ package net.vdombox.ide.modules.events.view.components
 			addEventListener( MouseEvent.CLICK, clickHandler, false, 0, true );
 		}
 
-		[Embed( source="assets/delete_linkage.png" )]
+		[Embed( source = "assets/delete_linkage.png" )]
 		private var deleteLinkageClass : Class;
 
 		private const BASE_COLOR : uint = 0x2FDD00;
+
 		private const DELETE_COLOR : uint = 0xFF0000;
 
 		private const RTL : Number = 0;
+
 		private const LTR : Number = 1;
+
 		private const UTD : Number = 0;
+
 		private const DTU : Number = 1;
 
 		private var SOURCE_WATCHERS : String = "sourceWatchers";
+
 		private var TARGET_WATCHERS : String = "targetWatchers";
 
 		private var directionalX : uint;
@@ -50,9 +55,11 @@ package net.vdombox.ide.modules.events.view.components
 		private var activeChanged : Boolean;
 
 		private var _target : ActionElement;
+
 		private var _source : EventElement;
 
 		private var sourceChanged : Boolean;
+
 		private var targetChanged : Boolean;
 
 		private var watchers : Object;
@@ -336,11 +343,9 @@ package net.vdombox.ide.modules.events.view.components
 			graphics.moveTo( startPoint.x, startPoint.y );
 			graphics.lineTo( endPoint.x, endPoint.y );
 
-			graphics.lineTo( endPoint.x + Math.cos( alphaAngle + arrowHeadAngle ) * arrowHeadLength,
-				endPoint.y + Math.sin( alphaAngle + arrowHeadAngle ) * arrowHeadLength );
+			graphics.lineTo( endPoint.x + Math.cos( alphaAngle + arrowHeadAngle ) * arrowHeadLength, endPoint.y + Math.sin( alphaAngle + arrowHeadAngle ) * arrowHeadLength );
 
-			graphics.lineTo( endPoint.x + Math.cos( alphaAngle - arrowHeadAngle ) * arrowHeadLength,
-				endPoint.y + Math.sin( alphaAngle - arrowHeadAngle ) * arrowHeadLength );
+			graphics.lineTo( endPoint.x + Math.cos( alphaAngle - arrowHeadAngle ) * arrowHeadLength, endPoint.y + Math.sin( alphaAngle - arrowHeadAngle ) * arrowHeadLength );
 
 			graphics.lineTo( endPoint.x, endPoint.y );
 		}
@@ -392,17 +397,17 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			dispatchEvent( new ElementEvent( ElementEvent.DELETE_LINKAGE ) );
 		}
-		
-		public function setVisibleState(showHidden : Boolean):void
+
+		public function setVisibleState( showHidden : Boolean ) : void
 		{
 			alpha = 1;
 			visible = showHidden || target.visible && source.visible;
-			
+
 			// FIXME
 			// для того чтобы линки стали видны необходимо передвинуть компанент. НАдо бы пофмксить
 			source.x += 1;
 			source.x -= 1;
 		}
-		
+
 	}
 }

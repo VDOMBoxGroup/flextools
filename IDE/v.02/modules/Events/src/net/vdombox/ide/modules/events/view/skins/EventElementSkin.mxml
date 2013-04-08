@@ -4,9 +4,10 @@
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 minWidth="200"
-			 creationComplete="sparkskin1_creationCompleteHandler(event)" 
+			 creationComplete="sparkskin1_creationCompleteHandler(event)"
 			 remove="sparkskin1_removeHandler(event)"
-			 xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:view="net.vdombox.ide.common.view.*">
+			 xmlns:mx1="library://ns.adobe.com/flex/mx"
+			 xmlns:view="net.vdombox.ide.common.view.*">
 
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.events.view.components.EventElement")]
@@ -16,7 +17,7 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.model._vo.EventVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
@@ -40,8 +41,9 @@
 			private var _data : EventVO;
 
 			private var isDataChanged : Boolean = false;
+
 			private var isStateChanged : Boolean = false;
-			
+
 			private var creationCompleted : Boolean = false;
 
 			public function set data( value : EventVO ) : void
@@ -57,13 +59,13 @@
 				BindingUtils.bindProperty( this, "data", hostComponent, "data", true );
 				doubleClickEnabled = true;
 				creationCompleted = true;
-				
+
 				addEventListener( MouseEvent.MOUSE_DOWN, mouseDown, true, 0, true );
 			}
-			
+
 			private function mouseDown( event : MouseEvent ) : void
 			{
-				hostComponent.dispatchEvent( new ElementEvent ( ElementEvent.MOUSE_DOWN ) );
+				hostComponent.dispatchEvent( new ElementEvent( ElementEvent.MOUSE_DOWN ) );
 			}
 
 			override protected function commitProperties() : void
@@ -96,7 +98,7 @@
 						hostComponent.data.state = false;
 				}
 			}
-			
+
 			public function setLayout( flag : Boolean ) : void
 			{
 				if ( bottomGroup.includeInLayout == !flag )
@@ -114,47 +116,54 @@
 					return;
 				}
 
-				
-				
+
+
 				if ( newState == "normal" || newState == "disabled" )
-				{	
+				{
 					titleLabel.text = headerGroup.toolTip = hostComponent.data.name;
-					
-					if ( creationCompleted)
-						setLayout(true);
+
+					if ( creationCompleted )
+						setLayout( true );
 				}
 				else
 				{
 					titleLabel.text = headerGroup.toolTip = hostComponent.data.objectName + ":" + hostComponent.data.name;
-					
+
 					if ( creationCompleted )
-						setLayout(false);
+						setLayout( false );
 				}
 			}
-			
-			protected function sparkskin1_removeHandler(event:FlexEvent):void
+
+			protected function sparkskin1_removeHandler( event : FlexEvent ) : void
 			{
 				removeEventListener( MouseEvent.MOUSE_DOWN, mouseDown, true );
 			}
-			
 		]]>
 	</fx:Script>
 
 
 	<s:states>
-		
-		<s:State name="normalAndShort" stateGroups="short"/>
-		<s:State name="disabledAndShort" stateGroups="short"/>
 
-		<s:State name="normal" stateGroups="full"/>
-		<s:State name="disabled" stateGroups="full"/>
+		<s:State name="normalAndShort"
+				 stateGroups="short"/>
+		<s:State name="disabledAndShort"
+				 stateGroups="short"/>
 
-		
+		<s:State name="normal"
+				 stateGroups="full"/>
+		<s:State name="disabled"
+				 stateGroups="full"/>
+
+
 	</s:states>
-	
-	<s:Rect left="-2" top="-2" right="-2" bottom="-2"
+
+	<s:Rect left="-2"
+			top="-2"
+			right="-2"
+			bottom="-2"
 			visible="{hostComponent.selected}"
-			radiusX="6" radiusY="6">
+			radiusX="6"
+			radiusY="6">
 		<s:fill>
 			<s:SolidColor color="#A8C6EE"/>
 		</s:fill>
@@ -163,18 +172,34 @@
 	<!--Shadow-->
 
 	<s:RectangularDropShadow id="dropShadow"
-							 bottom="0" color="#000000" left="0" right="0"
+							 bottom="0"
+							 color="#000000"
+							 left="0"
+							 right="0"
 							 top="0"
-							 alpha="0.42" angle="45" blRadius="10" blurX="8"
-							 blurY="8" brRadius="10" distance="8" tlRadius="10"
+							 alpha="0.42"
+							 angle="45"
+							 blRadius="10"
+							 blurX="8"
+							 blurY="8"
+							 brRadius="10"
+							 distance="8"
+							 tlRadius="10"
 							 trRadius="10"/>
 	<!--Mask-->
 
 	<s:Group id="backgroundMask"
-			 bottom="0" left="0" right="0" top="0">
+			 bottom="0"
+			 left="0"
+			 right="0"
+			 top="0">
 
-		<s:Rect bottom="0" left="0" right="0" top="0"
-				radiusX="6" radiusY="6">
+		<s:Rect bottom="0"
+				left="0"
+				right="0"
+				top="0"
+				radiusX="6"
+				radiusY="6">
 
 			<s:fill>
 
@@ -184,10 +209,16 @@
 		</s:Rect>
 	</s:Group>
 
-	<s:Group bottom="0" left="0" right="0" top="0"
+	<s:Group bottom="0"
+			 left="0"
+			 right="0"
+			 top="0"
 			 mask="{backgroundMask}">
 
-		<s:Rect bottom="0" left="0" right="0" top="0">
+		<s:Rect bottom="0"
+				left="0"
+				right="0"
+				top="0">
 
 			<s:fill>
 
@@ -195,13 +226,19 @@
 			</s:fill>
 		</s:Rect>
 
-		<s:VGroup left="0" right="0"
+		<s:VGroup left="0"
+				  right="0"
 				  gap="1">
 
-			<s:Group id="headerGroup" doubleClick="hideButton_clickHandler(event)"
-					 height="28" width="100%">
+			<s:Group id="headerGroup"
+					 doubleClick="hideButton_clickHandler(event)"
+					 height="28"
+					 width="100%">
 
-				<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:Rect bottom="0"
+						left="0"
+						right="0"
+						top="0">
 					<s:fill>
 						<s:LinearGradient rotation="90">
 							<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x86C617 }"/>
@@ -209,15 +246,24 @@
 						</s:LinearGradient>
 					</s:fill>
 				</s:Rect>
-						
-				<s:Label id="titleLabel" width="100%"
-							text="{ hostComponent.title }"
-							color="#FFFFFF" textAlign="center"
-							verticalCenter="0" maxDisplayedLines="1" />	
 
-				<s:Group top="0" bottom="0" right="0" width="40">
-						
-					<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:Label id="titleLabel"
+						 width="100%"
+						 text="{ hostComponent.title }"
+						 color="#FFFFFF"
+						 textAlign="center"
+						 verticalCenter="0"
+						 maxDisplayedLines="1"/>
+
+				<s:Group top="0"
+						 bottom="0"
+						 right="0"
+						 width="40">
+
+					<s:Rect bottom="0"
+							left="0"
+							right="0"
+							top="0">
 						<s:fill>
 							<s:LinearGradient rotation="90">
 								<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x86C617 }"/>
@@ -225,47 +271,71 @@
 							</s:LinearGradient>
 						</s:fill>
 					</s:Rect>
-						
-					<s:HGroup id="imageGroup" height="100%" horizontalAlign="right" verticalAlign="middle" paddingRight="5" gap="1">
-							
-						<mx1:Image id="imageArraw" source="{VDOMImage.Arrow}" 
-								   alpha=".5" mouseOver="{ imageArraw.alpha = 1 }" mouseOut="{ imageArraw.alpha = .5 }"
-								   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.CREATE_LINKAGE ) )" />
-							
-						<mx1:Image id="imageDelete" source="{VDOMImage.DeleteWhite}" 
-								   alpha=".5" mouseOver="{ imageDelete.alpha = 1 }" mouseOut="{ imageDelete.alpha = .5 }"
-								   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )" />
-							
+
+					<s:HGroup id="imageGroup"
+							  height="100%"
+							  horizontalAlign="right"
+							  verticalAlign="middle"
+							  paddingRight="5"
+							  gap="1">
+
+						<mx1:Image id="imageArraw"
+								   source="{VDOMImage.Arrow}"
+								   alpha=".5"
+								   mouseOver="{ imageArraw.alpha = 1 }"
+								   mouseOut="{ imageArraw.alpha = .5 }"
+								   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.CREATE_LINKAGE ) )"/>
+
+						<mx1:Image id="imageDelete"
+								   source="{VDOMImage.DeleteWhite}"
+								   alpha=".5"
+								   mouseOver="{ imageDelete.alpha = 1 }"
+								   mouseOut="{ imageDelete.alpha = .5 }"
+								   click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )"/>
+
 					</s:HGroup>
-						
+
 				</s:Group>
-		
+
 			</s:Group>
 
 			<s:Group id="contentGroup"
 					 width="100%"
-					 itemCreationPolicy="immediate" includeIn="full"/>
+					 itemCreationPolicy="immediate"
+					 includeIn="full"/>
 
-			<s:Group id="bottomGroup" width="100%" height="16" includeInLayout="false">
+			<s:Group id="bottomGroup"
+					 width="100%"
+					 height="16"
+					 includeInLayout="false">
 
-				<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:Rect bottom="0"
+						left="0"
+						right="0"
+						top="0">
 					<s:fill>
-						
+
 						<s:LinearGradient rotation="90">
-							
+
 							<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x86C617 }"/>
-							
+
 							<s:GradientEntry color="{ hostComponent.used ? 0xFF0000 : 0x478003 }"/>
 						</s:LinearGradient>
-						
+
 					</s:fill>
-					
+
 				</s:Rect>
-				
-				<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
-					
-					<mx1:Image id="arrayImage" source="{VDOMImage.ArrClose}" click="hideButton_clickHandler(event)" includeInLayout="false" />
-					
+
+				<s:HGroup width="100%"
+						  height="100%"
+						  horizontalAlign="center"
+						  verticalAlign="middle">
+
+					<mx1:Image id="arrayImage"
+							   source="{VDOMImage.ArrClose}"
+							   click="hideButton_clickHandler(event)"
+							   includeInLayout="false"/>
+
 				</s:HGroup>
 
 			</s:Group>

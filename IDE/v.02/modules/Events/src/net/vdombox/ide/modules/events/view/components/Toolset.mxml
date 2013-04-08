@@ -3,7 +3,6 @@
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:components="net.vdombox.ide.modules.events.view.components.*"
-		 
 		 height="100%">
 
 	<fx:Metadata> 
@@ -12,12 +11,12 @@
 
 	<s:layout>
 
-		<s:HorizontalLayout />
+		<s:HorizontalLayout/>
 	</s:layout>
 
 	<components:ToolsetButton id="toolsetButton"
 							  height="100%"
 							  icon="@Embed('assets/events_icon.png')"
 							  label="{ resourceManager.getString( 'Events_General', 'toolset_button_label' ) }"
-							  skinClass="net.vdombox.ide.modules.events.view.skins.ToolsetButtonSkin" />
+							  skinClass="net.vdombox.ide.modules.events.view.skins.ToolsetButtonSkin"/>
 </s:Group>
