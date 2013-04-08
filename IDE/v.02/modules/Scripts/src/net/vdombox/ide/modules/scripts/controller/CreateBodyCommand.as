@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.scripts.controller
 	import net.vdombox.ide.modules.scripts.view.BodyMediator;
 	import net.vdombox.ide.modules.scripts.view.ScriptsMediator;
 	import net.vdombox.ide.modules.scripts.view.components.Body;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -16,7 +16,7 @@ package net.vdombox.ide.modules.scripts.controller
 			var bodyMediator : BodyMediator;
 
 			var scriptsMediator : ScriptsMediator = facade.retrieveMediator( ScriptsMediator.NAME ) as ScriptsMediator;
-			
+
 			if ( facade.hasMediator( BodyMediator.NAME ) )
 			{
 				bodyMediator = facade.retrieveMediator( BodyMediator.NAME ) as BodyMediator;

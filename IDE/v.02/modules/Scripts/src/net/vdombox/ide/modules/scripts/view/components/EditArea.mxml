@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HTML xmlns:mx="http://www.adobe.com/2006/mxml"
-		 horizontalScrollPolicy="off" verticalScrollPolicy="off"
-		 complete="completeHandler()" creationComplete="creationCompleteHandler()"
-		 hide="hideHandler()" show="showHandler()">
+		 horizontalScrollPolicy="off"
+		 verticalScrollPolicy="off"
+		 complete="completeHandler()"
+		 creationComplete="creationCompleteHandler()"
+		 hide="hideHandler()"
+		 show="showHandler()">
 
 	<mx:Metadata> 
         [Event(name="save", type="vdom.events.EditAreaEvent")]  
@@ -13,15 +16,17 @@
 			import flash.filesystem.File;
 			import flash.filesystem.FileMode;
 			import flash.filesystem.FileStream;
-			
+
 			import net.vdombox.ide.modules.scripts.events.EditAreaEvent;
 
 			private const ID : String = "code_editor";
+
 			private const BASE_URL : String = "app:/modules/scripts/libs/edit_area/";
 
 			private var _syntax : String = "vscript";
 
 			private var _content : String;
+
 			private var isEditorLoaded : Boolean = false;
 
 			public function get syntax() : String
@@ -31,7 +36,7 @@
 
 			public function set syntax( value : String ) : void
 			{
-				if( value )
+				if ( value )
 					_syntax = value;
 			}
 
@@ -58,7 +63,7 @@
 						var editArea : * = domWindow.window.frames[ "frame_" + ID ].editArea;
 						var saveImg : * = domWindow.window.frames[ "frame_" + ID ].document.getElementById( "save" );
 						editArea.switchClassSticky( saveImg, 'editAreaButtonDisabled', true );
-//						
+						//						
 						editArea.previous = [];
 						editArea.check_redo();
 						editArea.next = [];
@@ -88,7 +93,7 @@
 
 			private function test( ... arg ) : void
 			{
-//				//trace( arg );
+				//				//trace( arg );
 			}
 
 			private function getTemplateString() : String
@@ -142,10 +147,7 @@
 				if ( !editAreaLoader )
 					return;
 
-				editAreaLoader.init( { id: ID, start_highlight: true, font_family: "verdana, monospace",
-						toolbar: "save, |, search, go_to_line, |, undo, redo, |, select_font, |, change_smooth_selection, highlight, |, help",
-						allow_resize: "none", allow_toggle: false, language: resourceManager.localeChain[ 0 ], save_callback: save_code,
-						syntax: _syntax } );
+				editAreaLoader.init( { id: ID, start_highlight: true, font_family: "verdana, monospace", toolbar: "save, |, search, go_to_line, |, undo, redo, |, select_font, |, change_smooth_selection, highlight, |, help", allow_resize: "none", allow_toggle: false, language: resourceManager.localeChain[ 0 ], save_callback: save_code, syntax: _syntax } );
 
 				if ( _content )
 					content = _content; // FIXME: fix!

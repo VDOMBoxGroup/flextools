@@ -19,8 +19,8 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 
-			 minHeight="21" minWidth="21"
+			 minHeight="21"
+			 minWidth="21"
 			 alpha.disabledStates="0.5">
 	<!-- host component -->
 
@@ -34,8 +34,10 @@
 	</fx:Metadata>
 
 	<fx:Script>
-		/* Define the skin elements that should not be colorized.
-		 For toggle button, the graphics are colorized but the label is not. */
+		/*
+		   Define the skin elements that should not be colorized.
+		   For toggle button, the graphics are colorized but the label is not.
+		 */
 		static private const exclusions : Array = [ "labelDisplay" ];
 
 		/**
@@ -66,50 +68,58 @@
 
 	<s:states>
 
-		<s:State name="up" />
+		<s:State name="up"/>
 
-		<s:State name="over" stateGroups="overStates" />
+		<s:State name="over"
+				 stateGroups="overStates"/>
 
-		<s:State name="down" stateGroups="downStates" />
+		<s:State name="down"
+				 stateGroups="downStates"/>
 
-		<s:State name="disabled" stateGroups="disabledStates" />
+		<s:State name="disabled"
+				 stateGroups="disabledStates"/>
 
 		<s:State name="upAndSelected"
-				 stateGroups="selectedStates, selectedUpStates" />
+				 stateGroups="selectedStates, selectedUpStates"/>
 
-		<s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
+		<s:State name="overAndSelected"
+				 stateGroups="overStates, selectedStates"/>
 
-		<s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
+		<s:State name="downAndSelected"
+				 stateGroups="downStates, selectedStates"/>
 
 		<s:State name="disabledAndSelected"
-				 stateGroups="selectedUpStates, disabledStates, selectedStates" />
+				 stateGroups="selectedUpStates, disabledStates, selectedStates"/>
 	</s:states>
-	
+
 	<s:VGroup height="100%"
 			  horizontalAlign="center"
 			  gap="3"
 			  top="35">
-		
+
 		<!--<mx:Image id="buttonIcon"
 		height="24" source="{ hostComponent.icon }" />-->
-		
+
 		<s:Label id="labelDisplay"
 				 width="100%"
 				 fontFamily="Tahoma"
 				 fontSize="14"
-				 color="#9b9b9b" color.down="white" color.over="white" 
+				 color="#9b9b9b"
+				 color.down="white"
+				 color.over="white"
 				 color.selectedStates="white"
-				 horizontalCenter="0" 
+				 horizontalCenter="0"
 				 textAlign="center"
-				 maxDisplayedLines="1" />
-		
+				 maxDisplayedLines="1"/>
+
 		<s:Line width="80%"
 				includeIn="selectedStates">
 			<s:stroke>
-				<s:SolidColorStroke color="#b0b0b0" weight="0.3"/>
+				<s:SolidColorStroke color="#b0b0b0"
+									weight="0.3"/>
 			</s:stroke>
 		</s:Line>
-		
+
 	</s:VGroup>
-	
+
 </s:SparkSkin>

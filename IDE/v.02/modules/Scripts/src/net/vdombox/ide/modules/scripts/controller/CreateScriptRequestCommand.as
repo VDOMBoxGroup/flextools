@@ -1,13 +1,13 @@
 package net.vdombox.ide.modules.scripts.controller
 {
 	import mx.utils.UIDUtil;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.LibraryVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -41,14 +41,12 @@ package net.vdombox.ide.modules.scripts.controller
 
 					if ( statesProxy.selectedObject )
 					{
-						sendNotification( Notifications.CREATE_SERVER_ACTION,
-							{ objectVO: statesProxy.selectedObject, serverActionVO: serverActionVO } );
+						sendNotification( Notifications.CREATE_SERVER_ACTION, { objectVO: statesProxy.selectedObject, serverActionVO: serverActionVO } );
 					}
 
 					else if ( statesProxy.selectedPage )
 					{
-						sendNotification( Notifications.CREATE_SERVER_ACTION,
-							{ pageVO: statesProxy.selectedPage, serverActionVO: serverActionVO } );
+						sendNotification( Notifications.CREATE_SERVER_ACTION, { pageVO: statesProxy.selectedPage, serverActionVO: serverActionVO } );
 					}
 
 					break;
@@ -58,8 +56,8 @@ package net.vdombox.ide.modules.scripts.controller
 				{
 					var libraryVO : LibraryVO = new LibraryVO( scriptName, selectedApplicationVO );
 					libraryVO.script = "";
-					
-					sendNotification( Notifications.CREATE_LIBRARY, { applicationVO: selectedApplicationVO, libraryVO : libraryVO } );
+
+					sendNotification( Notifications.CREATE_LIBRARY, { applicationVO: selectedApplicationVO, libraryVO: libraryVO } );
 
 					break;
 				}

@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.scripts.view
 {
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
@@ -26,7 +26,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.model._vo.PageVO;
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -66,7 +66,7 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( StatesProxy.GET_ALL_STATES );
 			interests.push( StatesProxy.SET_ALL_STATES );
-			
+
 			interests.push( StatesProxy.SET_SELECTED_PAGE );
 
 			interests.push( StatesProxy.SET_SELECTED_OBJECT );
@@ -74,35 +74,35 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( Notifications.GET_SERVER_ACTION );
 			interests.push( Notifications.GET_SERVER_ACTIONS );
 			interests.push( Notifications.GET_ALL_SERVER_ACTIONS );
-			
+
 			interests.push( Notifications.SET_SERVER_ACTIONS );
-			
+
 			interests.push( Notifications.SET_SERVER_ACTION );
-			
+
 			interests.push( Notifications.CREATE_SERVER_ACTION );
 			interests.push( Notifications.DELETE_SERVER_ACTION );
 			interests.push( Notifications.RENAME_SERVER_ACTION );
-			
+
 			interests.push( Notifications.GET_LIBRARY );
 			interests.push( Notifications.GET_LIBRARIES );
 
 			interests.push( Notifications.CREATE_LIBRARY );
 			interests.push( Notifications.SAVE_LIBRARY );
-			
+
 			interests.push( Notifications.GET_GLOBAL_ACTION );
 			interests.push( Notifications.SAVE_GLOBAL_ACTION );
-			
+
 			interests.push( Notifications.DELETE_LIBRARY );
-			
+
 			interests.push( Notifications.BODY_STOP );
-			
+
 			interests.push( Notifications.LOAD_RESOURCE );
 			interests.push( Notifications.GET_PAGES_STRUCTURE );
-			
+
 			interests.push( TypesProxy.GET_TYPES );
-			
-			
-			
+
+
+
 
 			return interests;
 		}
@@ -114,7 +114,7 @@ package net.vdombox.ide.modules.scripts.view
 			var body : Object = notification.getBody();
 
 			var message : IPipeMessage;
-			
+
 			var placeName : String;
 			var targetName : String;
 
@@ -157,7 +157,7 @@ package net.vdombox.ide.modules.scripts.view
 					message = new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
-					
+
 					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 
 					break;
@@ -193,21 +193,21 @@ package net.vdombox.ide.modules.scripts.view
 				case StatesProxy.GET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case StatesProxy.SET_ALL_STATES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case StatesProxy.SET_SELECTED_PAGE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
@@ -261,9 +261,9 @@ package net.vdombox.ide.modules.scripts.view
 
 					break;
 				}
-					
+
 				case Notifications.GET_SERVER_ACTION:
-				{					
+				{
 					if ( body.hasOwnProperty( "objectVO" ) )
 					{
 						placeName = PPMPlaceNames.OBJECT;
@@ -274,13 +274,13 @@ package net.vdombox.ide.modules.scripts.view
 						placeName = PPMPlaceNames.PAGE;
 						targetName = PPMPageTargetNames.SERVER_ACTION;
 					}
-					
+
 					if ( placeName && targetName )
 					{
 						message = new ProxyMessage( placeName, PPMOperationNames.READ, targetName, body );
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
 					}
-					
+
 					break;
 				}
 
@@ -310,7 +310,7 @@ package net.vdombox.ide.modules.scripts.view
 
 					break;
 				}
-					
+
 				case Notifications.GET_ALL_SERVER_ACTIONS:
 				{
 					if ( body is PageVO )
@@ -318,18 +318,18 @@ package net.vdombox.ide.modules.scripts.view
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ALL_SERVER_ACTIONS, body );
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
 					}
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_LIBRARY:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.LIBRARY, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break
 				}
-					
+
 				case Notifications.GET_LIBRARIES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.LIBRARIES, body );
@@ -345,61 +345,61 @@ package net.vdombox.ide.modules.scripts.view
 					else if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTIONS_LIST, body );
 
-					if( message )
+					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
 
 					break
 				}
-					
+
 				case Notifications.SET_SERVER_ACTION:
 				{
 					if ( body.hasOwnProperty( "objectVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTION, body );
 					else if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTION, body );
-					
-					if( message )
+
+					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break
 				}
-					
+
 				case Notifications.CREATE_SERVER_ACTION:
 				{
 					if ( body.hasOwnProperty( "objectVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.SERVER_ACTION, body );
 					else if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.SERVER_ACTION, body );
-					
-					if( message )
+
+					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break
 				}
-					
+
 				case Notifications.DELETE_SERVER_ACTION:
 				{
 					if ( body.hasOwnProperty( "objectVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.DELETE, PPMObjectTargetNames.SERVER_ACTION, body );
 					else if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.DELETE, PPMPageTargetNames.SERVER_ACTION, body );
-					
-					if( message )
+
+					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break
 				}
-					
+
 				case Notifications.RENAME_SERVER_ACTION:
 				{
 					if ( body.hasOwnProperty( "objectVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.RENAME, PPMObjectTargetNames.SERVER_ACTION, body );
 					else if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.RENAME, PPMPageTargetNames.SERVER_ACTION, body );
-					
-					if( message )
+
+					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break
 				}
 
@@ -410,73 +410,72 @@ package net.vdombox.ide.modules.scripts.view
 
 					break
 				}
-				
+
 				case Notifications.SAVE_LIBRARY:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.LIBRARY, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break
 				}
-					
+
 				case Notifications.GET_GLOBAL_ACTION:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.GLOBAL_ACTION, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break
 				}
-					
+
 				case Notifications.SAVE_GLOBAL_ACTION:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.GLOBAL_ACTION, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break
 				}
-					
+
 				case Notifications.DELETE_LIBRARY:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.LIBRARY, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break
 				}
-					
-				case Notifications.BODY_STOP :
+
+				case Notifications.BODY_STOP:
 				{
-					junction.sendMessage( PipeNames.STDCORE,
-						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
-					
+					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+
 					break;
 				}
-					
+
 				case Notifications.LOAD_RESOURCE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_PAGES_STRUCTURE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case TypesProxy.GET_TYPES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
-				}	
+				}
 			}
 
 			super.handleNotification( notification );
@@ -494,13 +493,13 @@ package net.vdombox.ide.modules.scripts.view
 				{
 					if ( recipientKey == multitonKey )
 					{
-//						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
+						//						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 					}
 					else
 					{
-//						sendNotification( Notifications.MODULE_DESELECTED );
-//						junction.sendMessage( PipeNames.STDCORE,
-//											  new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+						//						sendNotification( Notifications.MODULE_DESELECTED );
+						//						junction.sendMessage( PipeNames.STDCORE,
+						//											  new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
 					}
 
 					break;
@@ -511,8 +510,7 @@ package net.vdombox.ide.modules.scripts.view
 					if ( recipientKey != multitonKey )
 						return;
 
-					junction.sendMessage( PipeNames.STDLOG,
-										  new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( Notifications.PIPES_READY );
 					break;

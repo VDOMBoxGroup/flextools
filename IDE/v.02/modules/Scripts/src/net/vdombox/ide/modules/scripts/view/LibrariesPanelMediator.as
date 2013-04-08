@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.scripts.view
 {
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.editors.HashLibraryArray;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.LibrariesPanel;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -26,9 +26,9 @@ package net.vdombox.ide.modules.scripts.view
 		}
 
 		private var statesProxy : StatesProxy;
-		
+
 		private var isActive : Boolean;
-		
+
 		private var libraries : Array;
 
 		public function get librariesPanel() : LibrariesPanel
@@ -39,16 +39,16 @@ package net.vdombox.ide.modules.scripts.view
 		override public function onRegister() : void
 		{
 			isActive = false;
-			
+
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-			
+
 			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
 			removeHandlers();
-			
+
 			clearData();
 		}
 
@@ -58,9 +58,9 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( Notifications.BODY_START );
 			interests.push( Notifications.BODY_STOP );
-			
+
 			interests.push( Notifications.SERVER_ACTION_GETTED );
-			
+
 			interests.push( Notifications.LIBRARIES_GETTED );
 			interests.push( Notifications.LIBRARY_CREATED );
 			interests.push( Notifications.LIBRARY_DELETED );
@@ -75,7 +75,7 @@ package net.vdombox.ide.modules.scripts.view
 
 			if ( !isActive && name != Notifications.BODY_START )
 				return;
-			
+
 			switch ( name )
 			{
 				case Notifications.BODY_START:
@@ -84,20 +84,20 @@ package net.vdombox.ide.modules.scripts.view
 					{
 						isActive = true;
 						sendNotification( Notifications.GET_LIBRARIES, statesProxy.selectedApplication );
-						
+
 						break;
 					}
 				}
-					
+
 				case Notifications.BODY_STOP:
 				{
 					isActive = false;
-					
+
 					clearData();
-					
+
 					break;
 				}
-				
+
 				case Notifications.SERVER_ACTION_GETTED:
 				{
 					if ( body )
@@ -110,7 +110,7 @@ package net.vdombox.ide.modules.scripts.view
 				{
 					libraries = body as Array;
 					librariesPanel.libraries = libraries.slice();
-					
+
 					HashLibraryArray.setLibraries( libraries.slice() );
 
 					break;
@@ -134,7 +134,7 @@ package net.vdombox.ide.modules.scripts.view
 
 					if ( !libraries || !libraryVO )
 						return;
-					
+
 					for ( var i : uint = 0; i < libraries.length; i++ )
 					{
 						if ( libraries[ i ].name == libraryVO.name )
@@ -171,23 +171,23 @@ package net.vdombox.ide.modules.scripts.view
 			libraries = null;
 			librariesPanel.libraries = null;
 		}
-		
+
 		private function createLibraryHandler( event : LibrariesPanelEvent ) : void
 		{
-			var renameWindow : NameObjectWindow = new NameObjectWindow( "", ResourceManager.getInstance().getString( "Scripts_General", "create_action_window_library_title" ) );	
+			var renameWindow : NameObjectWindow = new NameObjectWindow( "", ResourceManager.getInstance().getString( "Scripts_General", "create_action_window_library_title" ) );
 			renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 			renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
-			
-			WindowManager.getInstance().addWindow(renameWindow, librariesPanel.skin, true);
-			
+
+			WindowManager.getInstance().addWindow( renameWindow, librariesPanel.skin, true );
+
 			function applyHandler( event : PopUpWindowEvent ) : void
 			{
 				WindowManager.getInstance().removeWindow( renameWindow );
-				
-				sendNotification( Notifications.CREATE_SCRIPT_REQUEST, { name : event.name, target : Notifications.LIBRARY } );
-				
+
+				sendNotification( Notifications.CREATE_SCRIPT_REQUEST, { name: event.name, target: Notifications.LIBRARY } );
+
 			}
-			
+
 			function cancelHandler( event : PopUpWindowEvent ) : void
 			{
 				WindowManager.getInstance().removeWindow( renameWindow );
@@ -204,7 +204,7 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function selectedLibraryChangedHandler( event : LibrariesPanelEvent ) : void
 		{
-			sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO : librariesPanel.selectedLibrary, check : false } );
+			sendNotification( Notifications.GET_SCRIPT_REQUEST, { actionVO: librariesPanel.selectedLibrary, check: false } );
 		}
 	}
 }

@@ -11,7 +11,7 @@
 			import mx.collections.Sort;
 			import mx.collections.SortField;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.events.PopUpWindowEvent;
 			import net.vdombox.ide.common.model._vo.LibraryVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
@@ -39,7 +39,7 @@
 				var oldSelectedItem : LibraryVO;
 				var oldSelectedIndex : int;
 				var isSelectedItemChanged : Boolean = true;
-				
+
 				if ( librariesList )
 				{
 					oldSelectedIndex = librariesList.selectedIndex;
@@ -69,12 +69,12 @@
 					}
 
 					_libraries = new ArrayCollection( value );
-					
+
 					_libraries.sort = new Sort();
-					
+
 					var sortField : SortField = new SortField( "name" );
 					sortField.caseInsensitive = true;
-					
+
 					_libraries.sort.fields = [ sortField ];
 					_libraries.refresh();
 
@@ -86,16 +86,18 @@
 				else
 				{
 					_libraries = null;
-					
-					if( librariesList.selectedIndex != -1 )
+
+					if ( librariesList.selectedIndex != -1 )
 						librariesList.selectedIndex = -1;
-					
-					if( oldSelectedIndex == -1 )
+
+					if ( oldSelectedIndex == -1 )
 						isSelectedItemChanged = false;
 				}
-				
-				/*if( isSelectedItemChanged )
-					dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.SELECTED_LIBRARY_CHANGED ) )			*/		
+
+			/*
+			   if( isSelectedItemChanged )
+			   dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.SELECTED_LIBRARY_CHANGED ) )
+			 */
 			}
 
 			protected function librariesList_changeHandler( event : ListItemRendererEvent ) : void
@@ -105,65 +107,80 @@
 
 			protected function librariesList_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				librariesList.addEventListener( ListItemRendererEvent.ITEM_CHENGED,librariesList_changeHandler, true, 0, true );
+				librariesList.addEventListener( ListItemRendererEvent.ITEM_CHENGED, librariesList_changeHandler, true, 0, true );
 				librariesList.addEventListener( KeyboardEvent.KEY_DOWN, itemrenderer1_keyDownHandler, false, 0, true );
-				librariesList.addEventListener( ListItemRendererEvent.DELETE_PRESS,librariesList_delete, true, 0, true );
+				librariesList.addEventListener( ListItemRendererEvent.DELETE_PRESS, librariesList_delete, true, 0, true );
 			}
-			
-			private function librariesList_delete(event:ListItemRendererEvent):void
+
+			private function librariesList_delete( event : ListItemRendererEvent ) : void
 			{
-				var deleteEvent : LibrariesPanelEvent = new LibrariesPanelEvent( LibrariesPanelEvent.DELETE_LIBRARY);
+				var deleteEvent : LibrariesPanelEvent = new LibrariesPanelEvent( LibrariesPanelEvent.DELETE_LIBRARY );
 				deleteEvent.object = event.target.data;
-				dispatchEvent( deleteEvent );	
+				dispatchEvent( deleteEvent );
 			}
-			
-			private function itemrenderer1_keyDownHandler(event:KeyboardEvent):void
+
+			private function itemrenderer1_keyDownHandler( event : KeyboardEvent ) : void
 			{
 				if ( event.keyCode == Keyboard.DELETE )
-					Alert.Show( resourceManager.getString( 'Scripts_General', 'delete_library' ),
-						resourceManager.getString( 'Scripts_General', 'delete_Renderer' ), 
-								AlertButton.OK_No, this.parentApplication, removeactionRequest );
+					Alert.Show( resourceManager.getString( 'Scripts_General', 'delete_library' ), resourceManager.getString( 'Scripts_General', 'delete_Renderer' ), AlertButton.OK_No, this.parentApplication, removeactionRequest );
 			}
-			
-			private function removeactionRequest( event : PopUpWindowEvent ) : void 
+
+			private function removeactionRequest( event : PopUpWindowEvent ) : void
 			{
 				if ( event.detail == Alert.YES )
 				{
-					var deleteEvent : LibrariesPanelEvent = new LibrariesPanelEvent( LibrariesPanelEvent.DELETE_LIBRARY);
+					var deleteEvent : LibrariesPanelEvent = new LibrariesPanelEvent( LibrariesPanelEvent.DELETE_LIBRARY );
 					deleteEvent.object = selectedLibrary;
 					dispatchEvent( deleteEvent );
 				}
 			}
-			
-			protected function panel1_removeHandler(event:FlexEvent):void
+
+			protected function panel1_removeHandler( event : FlexEvent ) : void
 			{
-				librariesList.removeEventListener( ListItemRendererEvent.ITEM_CHENGED,librariesList_changeHandler, true );
+				librariesList.removeEventListener( ListItemRendererEvent.ITEM_CHENGED, librariesList_changeHandler, true );
 			}
-			
-			protected function panel1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function panel1_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				//titleDisplay.left = 25;
 			}
-			
 		]]>
 	</fx:Script>
-	
-	<s:Rect width="100%" height="100%">
+
+	<s:Rect width="100%"
+			height="100%">
 		<s:fill>
-			<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
+			<s:BitmapFill source="{VDOMImage.Fon_Texture}"
+						  smooth="true"
+						  fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
-	
-	<mx:Image id="icon" source="@Embed('assets/Libraries_white.png')" height="16" width="16" left="10" top="-23" 
+
+	<mx:Image id="icon"
+			  source="@Embed('assets/Libraries_white.png')"
+			  height="16"
+			  width="16"
+			  left="10"
+			  top="-23"
 			  smoothBitmapContent="true"/>
-	
-	<mx:Image id="createLibrary" source="{VDOMImage.Plus}" height="20" width="20" right="10" top="-23" 
-			  smoothBitmapContent="true" click="dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.CREATE_LIBRARY ) )"/>
+
+	<mx:Image id="createLibrary"
+			  source="{VDOMImage.Plus}"
+			  height="20"
+			  width="20"
+			  right="10"
+			  top="-23"
+			  smoothBitmapContent="true"
+			  click="dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.CREATE_LIBRARY ) )"/>
 
 	<s:List id="librariesList"
-			dataProvider="{ _libraries }" height="100%" labelField="name" width="100%"
+			dataProvider="{ _libraries }"
+			height="100%"
+			labelField="name"
+			width="100%"
 			itemRenderer="net.vdombox.ide.modules.scripts.view.components.ListItemRenderer"
-			contentBackgroundAlpha="0" borderVisible="false"
+			contentBackgroundAlpha="0"
+			borderVisible="false"
 			creationComplete="librariesList_creationCompleteHandler(event)"
 			doubleClickEnabled="true"/>
 </s:Panel>

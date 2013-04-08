@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-				xmlns:s="library://ns.adobe.com/flex/spark" 
-				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				width="100%" height="20"
-				autoDrawBackground="true" click="itemrenderer2_clickHandler(event)"
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				width="100%"
+				height="20"
+				autoDrawBackground="true"
+				click="itemrenderer2_clickHandler(event)"
 				mouseOver="itemrenderer2_mouseOverHandler(event)"
 				mouseOut="itemrenderer2_mouseOutHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.modules.scripts.events.ListItemRendererEvent;
-			
+
 			private var _data : Object;
+
 			private var _actionName : String;
 
-			private function set actionName(value:String):void
+			private function set actionName( value : String ) : void
 			{
 				_actionName = value;
 			}
@@ -24,13 +27,13 @@
 				super.data = value;
 				_data = value;
 			}
-			
+
 			[Bindable]
 			override public function get data() : Object
 			{
 				return _data;
 			}
-			
+
 			[Bindable]
 			public function get actionName() : String
 			{
@@ -39,58 +42,81 @@
 				else
 					return data.name;
 			}
-			
-			protected function itemrenderer2_clickHandler(event:MouseEvent):void
+
+			protected function itemrenderer2_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new ListItemRendererEvent ( ListItemRendererEvent.ITEM_CHENGED ) );
+				dispatchEvent( new ListItemRendererEvent( ListItemRendererEvent.ITEM_CHENGED ) );
 			}
-			
-			protected function image1_clickHandler(event:MouseEvent):void
+
+			protected function image1_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new ListItemRendererEvent ( ListItemRendererEvent.DELETE_PRESS ) );
+				dispatchEvent( new ListItemRendererEvent( ListItemRendererEvent.DELETE_PRESS ) );
 			}
-			
-			protected function itemrenderer2_mouseOverHandler(event:MouseEvent):void
+
+			protected function itemrenderer2_mouseOverHandler( event : MouseEvent ) : void
 			{
 				btnDalete.visible = true;
 			}
-			
-			protected function itemrenderer2_mouseOutHandler(event:MouseEvent):void
+
+			protected function itemrenderer2_mouseOutHandler( event : MouseEvent ) : void
 			{
 				btnDalete.visible = false;
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<s:states>
-		<s:State name="normal" /> 
-		<s:State name="selected" />
+		<s:State name="normal"/>
+		<s:State name="selected"/>
 	</s:states>
-	
-	<s:Rect width="100%" height="100%">
+
+	<s:Rect width="100%"
+			height="100%">
 		<s:fill>
-			<s:SolidColor color.normal="#F8F9F9" color.selected="#DADADA" />
+			<s:SolidColor color.normal="#F8F9F9"
+						  color.selected="#DADADA"/>
 		</s:fill>
 	</s:Rect>
-	
-	<s:Label id="itemName" text="{data.saved? actionName : '*' + actionName}" color="#000000" height="100%" verticalAlign="middle" paddingLeft="30"/>
-	
-	<s:Line top="0" left="0" width="100%">
+
+	<s:Label id="itemName"
+			 text="{data.saved? actionName : '*' + actionName}"
+			 color="#000000"
+			 height="100%"
+			 verticalAlign="middle"
+			 paddingLeft="30"/>
+
+	<s:Line top="0"
+			left="0"
+			width="100%">
 		<s:stroke>
-			<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1" />
+			<s:SolidColorStroke color="#FFFFFF"
+								alpha="0.5"
+								weight="1"/>
 		</s:stroke>
 	</s:Line>
-	
-	<s:Line bottom="0" left="0" width="100%" >
+
+	<s:Line bottom="0"
+			left="0"
+			width="100%">
 		<s:stroke>
-			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1" />
+			<s:SolidColorStroke color="#000000"
+								alpha="0.5"
+								weight="1"/>
 		</s:stroke>
 	</s:Line>
-	
-	<mx:Image id="btnIcon" left="10" height="100%" verticalAlign="middle" source="{data.icon}"/>
-	
-	<mx:Image id="btnDalete" right="7" height="100%" verticalAlign="middle" source="@Embed('assets/Close.png')"
-			  visible="false" click="image1_clickHandler(event)" />
-	
+
+	<mx:Image id="btnIcon"
+			  left="10"
+			  height="100%"
+			  verticalAlign="middle"
+			  source="{data.icon}"/>
+
+	<mx:Image id="btnDalete"
+			  right="7"
+			  height="100%"
+			  verticalAlign="middle"
+			  source="@Embed('assets/Close.png')"
+			  visible="false"
+			  click="image1_clickHandler(event)"/>
+
 </s:ItemRenderer>

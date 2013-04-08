@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" 
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="400"
+		 height="300"
 		 xmlns:components="net.vdombox.ide.modules.scripts.view.components.*"
 		 remove="group1_removeHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.modules.scripts.events.FindBoxEvent;
 			import net.vdombox.ide.modules.scripts.events.RenameBoxEvent;
-			
-			protected function findBox_creationCompleteHandler(event:FlexEvent):void
+
+			protected function findBox_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				findBox.addEventListener( FindBoxEvent.CLOSE, setNormalState, false, 0 , true );
-				
+				findBox.addEventListener( FindBoxEvent.CLOSE, setNormalState, false, 0, true );
+
 				findBox.findText.setFocus();
 			}
-			
+
 			private function setNormalState( event : * ) : void
 			{
 				currentState = "normal";
 			}
-			
-			protected function group1_removeHandler(event:FlexEvent):void
+
+			protected function group1_removeHandler( event : FlexEvent ) : void
 			{
 				findBox.removeEventListener( FindBoxEvent.CLOSE, setNormalState );
 			}
-			
-			protected function renameBox_creationCompleteHandler(event:FlexEvent):void
+
+			protected function renameBox_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				renameBox.addEventListener( RenameBoxEvent.CLOSE, setNormalState, false, 0 , true );
+				renameBox.addEventListener( RenameBoxEvent.CLOSE, setNormalState, false, 0, true );
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -44,17 +45,23 @@
 		<s:State name="findG"/>
 		<s:State name="rename"/>
 	</s:states>
-	
-	<mx:VDividedBox width="100%" height="100%">	
-		
+
+	<mx:VDividedBox width="100%"
+					height="100%">
+
 		<components:WorkArea id="workArea"
-							 height="100%" width="100%"/>
-		
-		<components:RenameBox id="renameBox" width="100%"
-							  includeIn="rename" creationComplete="renameBox_creationCompleteHandler(event)"/>
-		
-		<components:FindBox id="findBox" width="100%"
-							includeIn="find, findG" creationComplete="findBox_creationCompleteHandler(event)"/>
+							 height="100%"
+							 width="100%"/>
+
+		<components:RenameBox id="renameBox"
+							  width="100%"
+							  includeIn="rename"
+							  creationComplete="renameBox_creationCompleteHandler(event)"/>
+
+		<components:FindBox id="findBox"
+							width="100%"
+							includeIn="find, findG"
+							creationComplete="findBox_creationCompleteHandler(event)"/>
 	</mx:VDividedBox>
-	
+
 </s:Group>

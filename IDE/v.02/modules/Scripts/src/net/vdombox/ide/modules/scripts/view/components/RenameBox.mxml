@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" xmlns:button="net.vdombox.ide.common.view.components.button.*"
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="400"
+		 height="300"
+		 xmlns:button="net.vdombox.ide.common.view.components.button.*"
 		 creationComplete="group1_creationCompleteHandler(event)">
 	<fx:Script>
-		<![CDATA[			
+		<![CDATA[
 			import mx.collections.SortField;
 			import mx.collections.XMLListCollection;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.editors.parsers.FactoryTokenizers;
 			import net.vdombox.editors.parsers.base.Controller;
 			import net.vdombox.editors.parsers.base.Field;
@@ -22,297 +25,313 @@
 			import net.vdombox.utils.StringUtils;
 			import net.vdombox.utils.WindowManager;
 			import net.vdombox.utils.XMLUtils;
-			
+
 			[Bindable]
 			public var scriptsXMLList : XMLList = null;
-			
+
 			private var newName : String;
+
 			public var oldName : String;
-			
+
 			public var actionVO : Object;
+
 			public var controller : Controller;
-			
+
 			private var tokens : Array;
+
 			private var containerActionsCode : Object;
+
 			private var _containerActions : Object;
+
 			private var _containerPages : Object;
-			
+
 			private var serverActions : Array;
-			
+
 			private function findName( findName : String, script : String, lang : String ) : Array
 			{
 				var words : Array = new Array();
 				var index : int = script.lastIndexOf( findName );
-				
+
 				var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( lang, script );
 				while ( tokenizer.runSlice() )
 				{
-					
+
 				}
-				
+
 				var token : Token
-				
+
 				while ( index != -1 )
 				{
 					token = tokenizer.tokenByPos( index );
-					if ( token.string == findName && ( token.type == Token.STRING_LITERAL || token.type == Token.NAMECLASS ||
-						token.type == Token.NAMEFUNCTION ) )
+					if ( token.string == findName && ( token.type == Token.STRING_LITERAL || token.type == Token.NAMECLASS || token.type == Token.NAMEFUNCTION ) )
 					{
 						words.push( index );
 					}
 					index = script.lastIndexOf( findName, index - 1 );
 				}
-				
+
 				return words;
 			}
-			
+
 			public function getRenameData() : void
 			{
 				serverActions = new Array();
 				containerActionsCode = [];
 				_containerPages = [];
 				_containerActions = [];
-				
+
 				var lang : String = controller.lang;
 				var script : String = controller.getRegisterWord( actionVO.script );
-				
+
 				var words : Array = findName( oldName, script, lang );
-				
+
 				var index : int;
-				
+
 				var start : int = 0;
 				var end : int = 0;
-				
+
 				if ( script == "" )
 					return;
-				
+
 				script = actionVO.script;
-				
-				var serverActionXML : XML = <script name={actionVO.name} />;
-				
+
+				var serverActionXML : XML = <script name={actionVO.name}/>;
+
 				var serverActionXMLList : XMLList = new XMLList();
-				
+
 				//serverActionXMLList += serverActionXML;
-				
+
 				//serverActionXML = serverActionXMLList.( @name == actionVO.name )[ 0 ];
-				
-				var serverActionXML2 : XML = <script name='find' />;
-				
-				for each ( index in words )  
+
+				var serverActionXML2 : XML = <script name='find'/>;
+
+				for each ( index in words )
 				{
 					start = index - 1;
 					end = index;
-					
+
 					while ( script.charAt( start ) != '\n' && script.charAt( start ) != '\r' && start >= 0 )
 						start--;
-					
+
 					while ( script.charAt( ++start ) == '\t' || script.charAt( ++start ) == ' ' )
 						true;
-					
+
 					while ( script.charAt( ++end ) != '\n' && end < script.length )
 						true;
-					
-					serverActionXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ StringUtils.getNumberLine( script, index ) } 
-						index={ index } iconType={"script"} check={ true } />);
+
+					serverActionXML2.appendChild( <text name={script.slice( start - 1, end )} line={StringUtils.getNumberLine( script, index )} index={index} iconType={"script"} check={true}/> );
 				}
-				
+
 				//serverActionXML.appendChild( serverActionXML2.* );
-				
+
 				serverActionXMLList = serverActionXML2.*;
-				
+
 				var sortField : SortField = new SortField( "@index" );
 				sortField.numeric = true;
-				
+
 				scriptsXMLList = XMLUtils.sortElementsInXMLList( serverActionXMLList, [ sortField ] );
 			}
-			
+
 			public function findStringInServerActions( body : Object ) : void
 			{
 				var pageVO : PageVO = body.pageVO;
 				var actions : Array = body.serverActions;
-				
+
 				var serverActionVO : ServerActionVO;
 				var script : String;
 				var scriptLower : String;
-				
+
 				var start : int = 0;
 				var end : int = 0;
-				
+
 				for each ( serverActionVO in actions )
 				{
 					if ( serverActionVO.script == "" )
 						continue;
-					
+
 					script = serverActionVO.script;
-					
+
 					var tokenizer : Tokenizer = FactoryTokenizers.getTokenizer( controller.lang, script );
-					
-					while( tokenizer.runSlice() )
+
+					while ( tokenizer.runSlice() )
 					{
-						
+
 					}
-					
+
 					tokens = tokenizer.tokens;
 					if ( tokens.length == 0 )
 						continue;
-					
-					var token : Token = tokens[0];
-					findScope( token.scope);
-					
-					
-					
+
+					var token : Token = tokens[ 0 ];
+					findScope( token.scope );
+
+
+
 				}
-				
+
 				function findScope( scope : Field ) : void
 				{
 					if ( scope.imports.hasKey( oldName ) )
 					{
-						for each( var token : Token in tokens )
+						for each ( var token : Token in tokens )
 						{
 							if ( token.scope != scope )
 								continue;
-							
+
 							if ( token.string == oldName )
 							{
 								var index : int = token.pos;
-								
+
 								serverActions.push( serverActionVO );
-								
-								var serverActionXML : XML = <script name={ serverActionVO.name } iconType={"serverScript"} />;
-								
+
+								var serverActionXML : XML = <script name={serverActionVO.name} iconType={"serverScript"}/>;
+
 								var serverActionXMLList : XMLList;
-								
+
 								if ( containerActionsCode.hasOwnProperty( serverActionVO.containerID ) )
 									serverActionXMLList = containerActionsCode[ serverActionVO.containerID ];
 								else
 									serverActionXMLList = new XMLList();
-								
+
 								serverActionXMLList += serverActionXML;
-								
+
 								serverActionXML = serverActionXMLList.( @name == serverActionVO.name )[ 0 ];
-								
-								var serverActionXML2 : XML = <script name={ serverActionVO.name } iconType={"serverScript"}/>;
+
+								var serverActionXML2 : XML = <script name={serverActionVO.name} iconType={"serverScript"}/>;
 								var actionID : String = serverActionVO.name + serverActionVO.objectID;
-								
+
 								_containerPages[ pageVO.id ] = pageVO;
 								_containerActions[ actionID ] = serverActionVO;
-								
+
 								start = index;
 								end = index;
-								
+
 								while ( script.charAt( --start ) != '\n' && start >= 0 )
 									true;
-								
+
 								while ( script.charAt( ++start ) == '\t' || script.charAt( ++start ) == ' ' )
 									true;
-								
+
 								while ( script.charAt( ++end ) != '\n' && end < script.length )
 									true;
-								
-								serverActionXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ StringUtils.getNumberLine( script, index ) } 
-									index={ index } actionID={ actionID } pageID={ pageVO.id } iconType={"script"}/>);
-								
+
+								serverActionXML2.appendChild( <text name={script.slice( start - 1, end )} line={StringUtils.getNumberLine( script, index )} index={index} actionID={actionID} pageID={pageVO.id} iconType={"script"}/> );
+
 								serverActionXML.appendChild( serverActionXML2.* );
-								
+
 								containerActionsCode[ serverActionVO.containerID ] = serverActionXMLList;
 							}
 						}
 					}
 					else
 					{
-						for each( var scp : Field in scope.children )
+						for each ( var scp : Field in scope.children )
 						{
 							findScope( scp );
 						}
 					}
 				}
 			}
-			
-			
-			
-			protected function renameButton_clickHandler(event:MouseEvent):void
+
+
+
+			protected function renameButton_clickHandler( event : MouseEvent ) : void
 			{
-				var renameWindow : NameObjectWindow = new NameObjectWindow( oldName, resourceManager.getString( "Scripts_General", "rename_variable_window_action_title" ) );	
+				var renameWindow : NameObjectWindow = new NameObjectWindow( oldName, resourceManager.getString( "Scripts_General", "rename_variable_window_action_title" ) );
 				renameWindow.addEventListener( PopUpWindowEvent.APPLY, applyHandler );
 				renameWindow.addEventListener( PopUpWindowEvent.CANCEL, cancelHandler );
-				WindowManager.getInstance().addWindow(renameWindow, this, true);
-				
+				WindowManager.getInstance().addWindow( renameWindow, this, true );
+
 				function applyHandler( event : PopUpWindowEvent ) : void
 				{
 					newName = event.name;
-					
+
 					if ( newName == oldName )
 						return;
-					
+
 					var detail : Object = event.detail;
-					
+
 					WindowManager.getInstance().removeWindow( renameWindow );
-					
+
 					var data : XMLListCollection = findResultTree.dataProvider as XMLListCollection;
-					
+
 					var renameLines : XMLList = data.source;
 					var sortField : SortField = new SortField( "@index" );
 					sortField.numeric = true;
 					sortField.descending = true;
-					
+
 					renameLines = XMLUtils.sortElementsInXMLList( renameLines, [ sortField ] );
-					
+
 					var renameWords : Array = new Array();
 					for each ( var xml : XML in renameLines )
 					{
 						if ( xml.@check == "true" )
 							renameWords.push( xml );
 					}
-					
-					dispatchEvent( new RenameBoxEvent( RenameBoxEvent.RENAME_IN_ACTION , false, false, { words : renameWords, newName : newName } ) );
-					
-					dispatchEvent( new RenameBoxEvent ( RenameBoxEvent.CLOSE ) );
+
+					dispatchEvent( new RenameBoxEvent( RenameBoxEvent.RENAME_IN_ACTION, false, false, { words: renameWords, newName: newName } ) );
+
+					dispatchEvent( new RenameBoxEvent( RenameBoxEvent.CLOSE ) );
 				}
-				
+
 				function cancelHandler( event : PopUpWindowEvent ) : void
 				{
 					WindowManager.getInstance().removeWindow( renameWindow );
 				}
 			}
-			
-			protected function group1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function group1_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				dispatchEvent( new RenameBoxEvent ( RenameBoxEvent.CREATION_COMPLETE ) );
+				dispatchEvent( new RenameBoxEvent( RenameBoxEvent.CREATION_COMPLETE ) );
 			}
-			
-			protected function cancelButton_clickHandler(event:MouseEvent):void
+
+			protected function cancelButton_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new RenameBoxEvent ( RenameBoxEvent.CLOSE ) );
+				dispatchEvent( new RenameBoxEvent( RenameBoxEvent.CLOSE ) );
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
-	<s:Rect width="100%" height="100%">
+
+	<s:Rect width="100%"
+			height="100%">
 		<s:fill>
-			<s:SolidColor color="#b8d9f7" />
+			<s:SolidColor color="#b8d9f7"/>
 		</s:fill>
 	</s:Rect>
-	
-	<s:VGroup width="100%" height="100%" paddingLeft="5" paddingTop="5" paddingBottom="5" paddingRight="5">
-		
-		<mx:Tree id="findResultTree" width="100%" height="100%" minHeight="150"
-				 dataProvider="{scriptsXMLList}" labelField="@name"
+
+	<s:VGroup width="100%"
+			  height="100%"
+			  paddingLeft="5"
+			  paddingTop="5"
+			  paddingBottom="5"
+			  paddingRight="5">
+
+		<mx:Tree id="findResultTree"
+				 width="100%"
+				 height="100%"
+				 minHeight="150"
+				 dataProvider="{scriptsXMLList}"
+				 labelField="@name"
 				 itemRenderer="net.vdombox.ide.modules.scripts.view.components.RenameTreeItemRenderer"/>
-		
-		<s:HGroup width="100%" height="40" verticalAlign="middle" horizontalAlign="right">
-			
-			<button:VDOMButton id="cancelButton" label="Cancel"
+
+		<s:HGroup width="100%"
+				  height="40"
+				  verticalAlign="middle"
+				  horizontalAlign="right">
+
+			<button:VDOMButton id="cancelButton"
+							   label="Cancel"
 							   click="cancelButton_clickHandler(event)"/>
-			
-			<button:VDOMButton id="renameButton" label="Rename"
+
+			<button:VDOMButton id="renameButton"
+							   label="Rename"
 							   click="renameButton_clickHandler(event)"/>
-			
+
 		</s:HGroup>
-		
+
 	</s:VGroup>
-	
+
 </s:Group>

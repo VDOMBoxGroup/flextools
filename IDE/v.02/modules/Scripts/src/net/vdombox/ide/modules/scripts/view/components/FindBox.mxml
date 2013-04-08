@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:button="net.vdombox.ide.common.view.components.button.*"
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:button="net.vdombox.ide.common.view.components.button.*"
 		 creationComplete="group1_creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
@@ -9,7 +10,7 @@
 			import mx.collections.SortField;
 			import mx.collections.XMLListCollection;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.editors.ScriptAreaComponent;
 			import net.vdombox.ide.common.model._vo.LibraryVO;
 			import net.vdombox.ide.common.model._vo.PageVO;
@@ -17,99 +18,104 @@
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.scripts.events.FindBoxEvent;
 			import net.vdombox.utils.StringUtils;
-			
+
 			import spark.events.TextOperationEvent;
-			
-			private var lastButton :WorkAreaButton;
+
+			private var lastButton : WorkAreaButton;
+
 			public var selectedScriptAreaComponent : ScriptAreaComponent;
-			
+
 			[Bindable]
 			public var findType : String = "current";
-			
+
 			[Bindable]
 			public var findString : String;
+
 			private var findResult : Boolean;
-			
+
 			private var serverActions : Array;
+
 			private var containerActionsCode : Object;
+
 			private var _containerActions : Object;
+
 			private var _containerPages : Object;
-			
-			
-			
+
+
+
 			[Bindable]
 			private var scriptsXMLList : XMLList = null;
-			
-			
-			
-			public function get containerActions():Object
+
+
+
+			public function get containerActions() : Object
 			{
 				return _containerActions;
 			}
 
-			public function get containerPages():Object
+			public function get containerPages() : Object
 			{
 				return _containerPages;
 			}
-			
-			public function get lengthContainerPages():int
+
+			public function get lengthContainerPages() : int
 			{
 				var count : int = 0;
-				
+
 				for each ( var obj : Object in _containerPages )
 				{
 					count++;
 				}
-				
+
 				return count;
 			}
 
-			protected function image1_clickHandler(event:MouseEvent):void
+			protected function image1_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new FindBoxEvent ( FindBoxEvent.CLOSE ) );
+				dispatchEvent( new FindBoxEvent( FindBoxEvent.CLOSE ) );
 			}
-			
-			protected function findText_changeHandler(event:TextOperationEvent):void
-			{				
+
+			protected function findText_changeHandler( event : TextOperationEvent ) : void
+			{
 				findString = caseSensitive.selected ? findText.text.toLocaleLowerCase() : findText.text;
-				
+
 				findResult = selectedScriptAreaComponent.findText( findString, 0, caseSensitive.selected );
-				
+
 				if ( findResult || findText.text == "" || currentState == "global" )
 					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
 				else
 					findText.setStyle( "contentBackgroundColor", 0xFF0000 );
 			}
-			
-			protected function previous_clickHandler(event:MouseEvent = null):void
+
+			protected function previous_clickHandler( event : MouseEvent = null ) : void
 			{
 				lastButton = previous;
-				
+
 				findString = caseSensitive.selected ? findText.text.toLocaleLowerCase() : findText.text;
-				
+
 				findResult = selectedScriptAreaComponent.findText( findText.text, 1, caseSensitive.selected );
-				
+
 				if ( findResult || findText.text == "" )
 					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
 				else
 					findText.setStyle( "contentBackgroundColor", 0xFF0000 );
 			}
-			
-			protected function next_clickHandler(event:MouseEvent = null):void
+
+			protected function next_clickHandler( event : MouseEvent = null ) : void
 			{
 				lastButton = next;
-				
+
 				findString = caseSensitive.selected ? findText.text.toLocaleLowerCase() : findText.text;
-				
+
 				findResult = selectedScriptAreaComponent.findText( findText.text, 2, caseSensitive.selected );
-				
+
 				if ( findResult || findText.text == "" )
 					findText.setStyle( "contentBackgroundColor", 0xFFFFFF );
 				else
 					findText.setStyle( "contentBackgroundColor", 0xFF0000 );
 			}
-			
-			protected function findText_keyDownHandler(event:KeyboardEvent):void
+
+			protected function findText_keyDownHandler( event : KeyboardEvent ) : void
 			{
 				if ( event.keyCode == Keyboard.ENTER )
 				{
@@ -125,217 +131,214 @@
 							next_clickHandler();
 					}
 				}
-					
+
 			}
-			
-			protected function replace_clickHandler(event:MouseEvent):void
+
+			protected function replace_clickHandler( event : MouseEvent ) : void
 			{
 				selectedScriptAreaComponent.replaceFind( findText.text, replaceText.text );
 			}
-			
-			protected function replaceAll_clickHandler(event:MouseEvent):void
+
+			protected function replaceAll_clickHandler( event : MouseEvent ) : void
 			{
 				selectedScriptAreaComponent.replaceFind( findText.text, replaceText.text, true );
 			}
-			
-			protected function find_clickHandler(event:MouseEvent = null):void
+
+			protected function find_clickHandler( event : MouseEvent = null ) : void
 			{
 				scriptsXMLList = new XMLList();
 				containerActionsCode = [];
 				_containerPages = [];
 				_containerActions = [];
 				findString = caseSensitive.selected ? findText.text.toLowerCase() : findText.text;
-				
+
 				if ( findString == "" )
 					return;
-				
+
 				serverActions = new Array();
-				dispatchEvent( new FindBoxEvent ( FindBoxEvent.FIND_TEXT_IN_SELECTED_TYPE ) );
+				dispatchEvent( new FindBoxEvent( FindBoxEvent.FIND_TEXT_IN_SELECTED_TYPE ) );
 			}
-			
-			protected function group1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function group1_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				dispatchEvent( new FindBoxEvent ( FindBoxEvent.CREATION_COMPLETE ) );
+				dispatchEvent( new FindBoxEvent( FindBoxEvent.CREATION_COMPLETE ) );
 			}
-			
+
 			public function findStringInServerActions( body : Object ) : void
 			{
 				var pageVO : PageVO = body.pageVO;
 				var actions : Array = body.serverActions;
-				
+
 				var serverActionVO : ServerActionVO;
 				var script : String;
 				var scriptLower : String;
 				var index : int;
-				
+
 				var start : int = 0;
 				var end : int = 0;
-				
+
 				for each ( serverActionVO in actions )
 				{
 					if ( serverActionVO.script == "" )
 						continue;
-					
+
 					script = serverActionVO.script;
 					scriptLower = caseSensitive.selected ? serverActionVO.script.toLocaleLowerCase() : serverActionVO.script;
-					
+
 					index = scriptLower.indexOf( findString );
-					
+
 					if ( index == -1 )
 						continue;
-					
+
 					serverActions.push( serverActionVO );
-					
-					var serverActionXML : XML = <script name={ serverActionVO.name } iconType={"serverScript"} />;
-					
+
+					var serverActionXML : XML = <script name={serverActionVO.name} iconType={"serverScript"}/>;
+
 					var serverActionXMLList : XMLList;
-					
+
 					if ( containerActionsCode.hasOwnProperty( serverActionVO.containerID ) )
 						serverActionXMLList = containerActionsCode[ serverActionVO.containerID ];
 					else
 						serverActionXMLList = new XMLList();
-					
+
 					serverActionXMLList += serverActionXML;
-					
+
 					serverActionXML = serverActionXMLList.( @name == serverActionVO.name )[ 0 ];
-					
-					var serverActionXML2 : XML = <script name={ serverActionVO.name } iconType={"serverScript"}/>;
+
+					var serverActionXML2 : XML = <script name={serverActionVO.name} iconType={"serverScript"}/>;
 					var actionID : String = serverActionVO.name + serverActionVO.objectID;
-					
+
 					_containerPages[ pageVO.id ] = pageVO;
 					_containerActions[ actionID ] = serverActionVO;
-					
+
 					while ( index != -1 )
 					{
 						start = index;
 						end = index;
-						
+
 						while ( script.charAt( --start ) != '\n' && start >= 0 )
 							true;
-						
+
 						while ( script.charAt( ++start ) == '\t' || script.charAt( ++start ) == ' ' )
 							true;
-						
+
 						while ( script.charAt( ++end ) != '\n' && end < script.length )
 							true;
-						
-						serverActionXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ StringUtils.getNumberLine( script, index ) } 
-														index={ index } actionID={ actionID } pageID={ pageVO.id } iconType={"script"}/>);
+
+						serverActionXML2.appendChild( <text name={script.slice( start - 1, end )} line={StringUtils.getNumberLine( script, index )} index={index} actionID={actionID} pageID={pageVO.id} iconType={"script"}/> );
 						index = scriptLower.indexOf( findString, end );
 					}
-					
+
 					serverActionXML.appendChild( serverActionXML2.* );
-					
+
 					containerActionsCode[ serverActionVO.containerID ] = serverActionXMLList;
 				}
 			}
-			
+
 			public function findObjectsInStructure( structure : XMLList ) : void
 			{
 				var objects : XMLList = structure..object;
 				var completed : Boolean;
 				var i : uint;
-				
+
 				do
 				{
 					completed = true;
-					
+
 					for ( i = 0; i < objects.length(); i++ )
 					{
-						if ( objects[i].children().length() == 0 && !containerActionsCode.hasOwnProperty( objects[i].@id ))
+						if ( objects[ i ].children().length() == 0 && !containerActionsCode.hasOwnProperty( objects[ i ].@id ) )
 						{
-							delete objects[i--];
+							delete objects[ i-- ];
 							completed = false;
 						}
 					}
-				}
-				while ( !completed );
-				
+				} while ( !completed );
+
 				for ( i = 0; i < structure.length(); i++ )
 				{
-					if ( structure[i].children().length() == 0 && !containerActionsCode.hasOwnProperty( structure[i].@id ) ) 
-						delete structure[i--];
-						
+					if ( structure[ i ].children().length() == 0 && !containerActionsCode.hasOwnProperty( structure[ i ].@id ) )
+						delete structure[ i-- ];
+
 				}
-				
+
 				for ( i = 0; i < objects.length(); i++ )
 				{
-					if ( containerActionsCode.hasOwnProperty( objects[i].@id ) )
-						objects[i].appendChild( containerActionsCode[ objects[i].@id ] );
+					if ( containerActionsCode.hasOwnProperty( objects[ i ].@id ) )
+						objects[ i ].appendChild( containerActionsCode[ objects[ i ].@id ] );
 				}
-				
+
 				for ( i = 0; i < structure.length(); i++ )
 				{
-					if ( containerActionsCode.hasOwnProperty( structure[i].@id ) )
-						structure[i].appendChild( containerActionsCode[ structure[i].@id ] );
+					if ( containerActionsCode.hasOwnProperty( structure[ i ].@id ) )
+						structure[ i ].appendChild( containerActionsCode[ structure[ i ].@id ] );
 				}
-				
+
 				var xmlListCollection : XMLListCollection = new XMLListCollection( structure );
 				xmlListCollection.sort = new Sort();
 				xmlListCollection.sort.fields = [ new SortField( "@name" ) ];
 				xmlListCollection.refresh();
-								
+
 				scriptsXMLList = xmlListCollection.copy();
 			}
-			
+
 			public function findStringInLibraries( libraries : Array, title : String ) : void
 			{
 				var libraryXMLList : XMLList = new XMLList();
-				
+
 				var libraryVO : LibraryVO;
 				var index : int = -1;
-				
+
 				var start : int = 0;
 				var end : int = 0;
-				var script: String;
-				var scriptLower: String;
-				
+				var script : String;
+				var scriptLower : String;
+
 				for each ( libraryVO in libraries )
 				{
 					script = libraryVO.script;
 					scriptLower = caseSensitive.selected ? libraryVO.script.toLocaleLowerCase() : libraryVO.script;
-					
+
 					index = scriptLower.indexOf( findString );
-					
+
 					if ( index == -1 )
 						continue;
-					
+
 					_containerActions[ libraryVO.name ] = libraryVO;
-					
-					var libraryXML : XML = <script name={ libraryVO.name } iconType={title}/>;
+
+					var libraryXML : XML = <script name={libraryVO.name} iconType={title}/>;
 					libraryXMLList += libraryXML;
-					
+
 					libraryXML = libraryXMLList.( @name == libraryVO.name )[ 0 ];
-										
-					var libraryXML2 : XML = <script name={ libraryVO.name } iconType={title}/>;
-					
+
+					var libraryXML2 : XML = <script name={libraryVO.name} iconType={title}/>;
+
 					while ( index != -1 )
 					{
 						start = index;
 						end = index;
-						
+
 						while ( script.charAt( --start ) != '\n' && start >= 0 )
 							true;
-						
+
 						while ( script.charAt( ++start ) == '\t' || script.charAt( ++start ) == ' ' )
 							true;
-						
+
 						while ( script.charAt( ++end ) != '\n' && end < script.length )
 							true;
-						
-						
-						
-						libraryXML2.appendChild( <text name={ script.slice( start-1, end ) } line={ StringUtils.getNumberLine( script, index ) } index={ index }
-												iconType={"script"} actionID={ libraryVO.name }/>);
+
+
+
+						libraryXML2.appendChild( <text name={script.slice( start - 1, end )} line={StringUtils.getNumberLine( script, index )} index={index} iconType={"script"} actionID={libraryVO.name}/> );
 						index = scriptLower.indexOf( findString, end );
 					}
-					
+
 					libraryXML.appendChild( libraryXML2.* );
-				}				
-				var xml : XML = scriptsXMLList.( @name == title )[0];
+				}
+				var xml : XML = scriptsXMLList.( @name == title )[ 0 ];
 				if ( !xml )
 				{
-					xml = < object id={ title } name={ title } iconType={title}/>;
+					xml = <object id={title} name={title} iconType={title}/>;
 					xml.appendChild( libraryXMLList );
 					scriptsXMLList += xml;
 				}
@@ -344,104 +347,149 @@
 					xml.appendChild( libraryXMLList );
 				}
 			}
-			
-			protected function findOrReplace_clickHandler(event:MouseEvent):void
+
+			protected function findOrReplace_clickHandler( event : MouseEvent ) : void
 			{
 				if ( currentState == "find" )
 					currentState = "replace";
 				else
 					currentState = "find";
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
+
 	<s:states>
-		<s:State name="find" />
-		
-		<s:State name="replace" />
-		
-		<s:State name="global" />
+		<s:State name="find"/>
+
+		<s:State name="replace"/>
+
+		<s:State name="global"/>
 	</s:states>
-	
-	<s:Rect width="100%" height="100%">
+
+	<s:Rect width="100%"
+			height="100%">
 		<s:fill>
-			<s:SolidColor color="#b8d9f7" />
+			<s:SolidColor color="#b8d9f7"/>
 		</s:fill>
 	</s:Rect>
-	
-	<mx:Image right="10" top="5"
-		source="{VDOMImage.DeleteBlack}" click="image1_clickHandler(event)"/>
-	
-	<s:VGroup width="100%" height="100%" paddingLeft="5" paddingTop="5" paddingBottom="5" paddingRight="5" verticalAlign="middle">
-		
-		<s:Group width="100%" height="35">
-			
-			<s:HGroup left="0" height="100%" verticalAlign="middle" includeIn="find, replace">
-				
-				<s:Label text="{ resourceManager.getString( 'Scripts_General', 'find' ) }" />
-				
+
+	<mx:Image right="10"
+			  top="5"
+			  source="{VDOMImage.DeleteBlack}"
+			  click="image1_clickHandler(event)"/>
+
+	<s:VGroup width="100%"
+			  height="100%"
+			  paddingLeft="5"
+			  paddingTop="5"
+			  paddingBottom="5"
+			  paddingRight="5"
+			  verticalAlign="middle">
+
+		<s:Group width="100%"
+				 height="35">
+
+			<s:HGroup left="0"
+					  height="100%"
+					  verticalAlign="middle"
+					  includeIn="find, replace">
+
+				<s:Label text="{ resourceManager.getString( 'Scripts_General', 'find' ) }"/>
+
 			</s:HGroup>
-			
-			<s:HGroup left="100" left.global="0" width="100%" height="100%" verticalAlign="middle" paddingRight="50">
-				
-				<s:TextInput id="findText" width="200" width.global="400"
-							 change="findText_changeHandler(event)" keyDown="findText_keyDownHandler(event)"/>
-					
-				<button:WorkAreaButton id="previous" icon="{VDOMImage.Arrow_Left}"
-									   click="previous_clickHandler(event)" 
+
+			<s:HGroup left="100"
+					  left.global="0"
+					  width="100%"
+					  height="100%"
+					  verticalAlign="middle"
+					  paddingRight="50">
+
+				<s:TextInput id="findText"
+							 width="200"
+							 width.global="400"
+							 change="findText_changeHandler(event)"
+							 keyDown="findText_keyDownHandler(event)"/>
+
+				<button:WorkAreaButton id="previous"
+									   icon="{VDOMImage.Arrow_Left}"
+									   click="previous_clickHandler(event)"
 									   includeIn="find, replace"/>
-					
-				<button:WorkAreaButton id="next" icon="{VDOMImage.Arrow_Right}"
+
+				<button:WorkAreaButton id="next"
+									   icon="{VDOMImage.Arrow_Right}"
 									   click="next_clickHandler(event)"
 									   includeIn="find, replace"/>
-				
-				<button:WorkAreaButton id="findOrReplace" label.find="{ resourceManager.getString( 'Scripts_General', 'replace' ) }"
-									   label.replace="Find" click="findOrReplace_clickHandler(event)"
+
+				<button:WorkAreaButton id="findOrReplace"
+									   label.find="{ resourceManager.getString( 'Scripts_General', 'replace' ) }"
+									   label.replace="Find"
+									   click="findOrReplace_clickHandler(event)"
 									   includeIn="find, replace"/>
-				
-				<button:WorkAreaButton id="find" label="Find" icon="{ VDOMImage.Search }"
+
+				<button:WorkAreaButton id="find"
+									   label="Find"
+									   icon="{ VDOMImage.Search }"
 									   includeIn="global"
 									   click="find_clickHandler(event)"/>
-				
-				<s:CheckBox id="caseSensitive" label="{ resourceManager.getString( 'Scripts_General', 'caseSensitive' ) }"/>
-				
+
+				<s:CheckBox id="caseSensitive"
+							label="{ resourceManager.getString( 'Scripts_General', 'caseSensitive' ) }"/>
+
 			</s:HGroup>
-			
+
 		</s:Group>
-		
-		<s:Group width="100%" height="35" includeIn="replace">
-			
-			<s:HGroup left="0" height="100%" verticalAlign="middle">
-				
-				<s:Label text="{ resourceManager.getString( 'Scripts_General', 'replaceWith' ) }" />
-				
+
+		<s:Group width="100%"
+				 height="35"
+				 includeIn="replace">
+
+			<s:HGroup left="0"
+					  height="100%"
+					  verticalAlign="middle">
+
+				<s:Label text="{ resourceManager.getString( 'Scripts_General', 'replaceWith' ) }"/>
+
 			</s:HGroup>
-			
-			<s:HGroup left="100" width="100%" height="100%" verticalAlign="middle">
-			
-				<s:TextInput id="replaceText" width="200"/>
-			
-				<button:WorkAreaButton id="replace" label="{ resourceManager.getString( 'Scripts_General', 'replace' ) }" click="replace_clickHandler(event)"/>
-			
-				<button:WorkAreaButton id="replaceAll" label="{ resourceManager.getString( 'Scripts_General', 'replaceAll' ) }" click="replaceAll_clickHandler(event)"/>
-				
+
+			<s:HGroup left="100"
+					  width="100%"
+					  height="100%"
+					  verticalAlign="middle">
+
+				<s:TextInput id="replaceText"
+							 width="200"/>
+
+				<button:WorkAreaButton id="replace"
+									   label="{ resourceManager.getString( 'Scripts_General', 'replace' ) }"
+									   click="replace_clickHandler(event)"/>
+
+				<button:WorkAreaButton id="replaceAll"
+									   label="{ resourceManager.getString( 'Scripts_General', 'replaceAll' ) }"
+									   click="replaceAll_clickHandler(event)"/>
+
 			</s:HGroup>
-			
+
 		</s:Group>
-		
-		<s:HGroup width="100%" height="100%" includeIn="global">
-			
-			<mx:Tree id="findResultTree" width="100%" height="100%" minHeight="150"
-					 dataProvider="{scriptsXMLList}" labelField="@name"
+
+		<s:HGroup width="100%"
+				  height="100%"
+				  includeIn="global">
+
+			<mx:Tree id="findResultTree"
+					 width="100%"
+					 height="100%"
+					 minHeight="150"
+					 dataProvider="{scriptsXMLList}"
+					 labelField="@name"
 					 itemRenderer="net.vdombox.ide.modules.scripts.view.components.FindTreeItemRenderer"/>
 		</s:HGroup>
-		
-		
-		
+
+
+
 	</s:VGroup>
-	
+
 </s:Group>

@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:NavigatorContent xmlns:components="net.vdombox.ide.modules.scripts.view.components.*"
-		 xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:mx="library://ns.adobe.com/flex/halo"
-		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:components2="net.vdombox.ide.common.components.*" 
-		 xmlns:components3="net.vdombox.ide.common.view.components.*" 
-		 xmlns:button="net.vdombox.ide.common.view.components.button.*" 
-		 xmlns:mx1="library://ns.adobe.com/flex/mx"
-		 height="300" width="400" xmlns:editors="net.vdombox.editors.*"
-		 xmlns:components1="net.vdombox.components.*"
-		 remove="navigatorcontent2_removeHandler(event)" 
-		 creationComplete="navigatorcontent2_creationCompleteHandler(event)"
-		 skinClass="spark.skins.spark.SkinnableContainerSkin">
+					xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:mx="library://ns.adobe.com/flex/halo"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					xmlns:components2="net.vdombox.ide.common.components.*"
+					xmlns:components3="net.vdombox.ide.common.view.components.*"
+					xmlns:button="net.vdombox.ide.common.view.components.button.*"
+					xmlns:mx1="library://ns.adobe.com/flex/mx"
+					height="300"
+					width="400"
+					xmlns:editors="net.vdombox.editors.*"
+					xmlns:components1="net.vdombox.components.*"
+					remove="navigatorcontent2_removeHandler(event)"
+					creationComplete="navigatorcontent2_creationCompleteHandler(event)"
+					skinClass="spark.skins.spark.SkinnableContainerSkin">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.editors.parsers.base.BaseScriptEditor;
 			import net.vdombox.ide.common.events.EditorEvent;
 			import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
@@ -24,41 +26,42 @@
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
-			
+
 			private var _unsaved : Boolean = false;
-			
+
 			private var _script : String;
+
 			private var _objectVO : Object;
-			
+
 			[Bindable]
 			private var _actionVO : Object;
-			
+
 			[Bindable]
 			public var backgroundColor : uint = 0xFFFFFF;
 
 			private var _syntax : String = "vscript";
-			
+
 			public var scriptEditor : BaseScriptEditor;
 
 			[Bindable]
-			private function get unsaved():Boolean
+			private function get unsaved() : Boolean
 			{
 				return _unsaved;
 			}
 
-			private function set unsaved(value:Boolean):void
+			private function set unsaved( value : Boolean ) : void
 			{
 				_unsaved = value;
 				if ( value )
-					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.NOT_SAVED ));
+					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.NOT_SAVED ) );
 				else
-					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SAVED ));
+					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SAVED ) );
 			}
 
 			[Bindable]
 			public function get script() : String
 			{
-				return  scriptEditor ? scriptEditor.scriptAreaComponent.text : "";
+				return scriptEditor ? scriptEditor.scriptAreaComponent.text : "";
 			}
 
 			public function set script( value : String ) : void
@@ -67,17 +70,17 @@
 				if ( scriptEditor )
 				{
 					scriptEditor.scriptAreaComponent.text = value;
-					scriptEditor.dispatchEvent( new Event ( Event.CHANGE ) );
+					scriptEditor.dispatchEvent( new Event( Event.CHANGE ) );
 				}
 			}
-			
+
 			public function get editorID() : String
 			{
 				if ( actionVO )
 				{
 					if ( actionVO is ServerActionVO )
 					{
-						return  actionVO.id;
+						return actionVO.id;
 					}
 					else
 					{
@@ -87,175 +90,200 @@
 				else
 					return "";
 			}
-			
+
 			public function get objectVO() : Object
 			{
 				return _objectVO ? _objectVO : null;
 			}
-			
+
 			public function set objectVO( value : Object ) : void
 			{
 				_objectVO = value;
 			}
-			
+
 			public function get actionVO() : Object
 			{
 				return _actionVO ? _actionVO : null;
 			}
-			
+
 			public function set actionVO( value : Object ) : void
 			{
 				if ( _actionVO )
 					_actionVO.script = script;
-				
+
 				_actionVO = value;
-				value.script= value.script.replace(/&nbsp;/g, " ");
+				value.script = value.script.replace( /&nbsp;/g, " " );
 				script = value.script;
 				if ( value.saved )
 					unsaved = false;
 				else
 					unsaved = true;
 			}
-			
-			private function scriptEditor_saveHandler( event : MouseEvent  = null ) : void
+
+			private function scriptEditor_saveHandler( event : MouseEvent = null ) : void
 			{
 				dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SAVE ) );
-				
-				if (_actionVO)
+
+				if ( _actionVO )
 					_actionVO.saved = true;
-				
+
 				unsaved = false;
-				
+
 			}
-			
+
 			private function setStateInUnsave( event : Event = null ) : void
 			{
-				/*if ( !(event.target is ScriptAreaEvents) )
-					return;*/
-				
+				/*
+				   if ( !(event.target is ScriptAreaEvents) )
+				   return;
+				 */
+
 				unsaved = true;
-				
-				if (_actionVO)
+
+				if ( _actionVO )
 					_actionVO.saved = false;
 			}
-			
+
 			private function onCtrlSDown( e : KeyboardEvent ) : void
 			{
 				if ( !e.ctrlKey )
 					return;
-				
+
 				if ( e.keyCode == Keyboard.S )
 					scriptEditor_saveHandler();
 				else if ( e.keyCode == Keyboard.F )
-					dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.OPEN_FIND ) );
+					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.OPEN_FIND ) );
 				else if ( e.keyCode == Keyboard.H )
-					dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.OPEN_FIND_GLOBAL ) );
+					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.OPEN_FIND_GLOBAL ) );
 				else if ( e.keyCode == Keyboard.W )
-					dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.CLOSE_SCRIPT_EDITOR ) );
+					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.CLOSE_SCRIPT_EDITOR ) );
 			}
-			
-			protected function navigatorcontent2_removeHandler(event:FlexEvent):void
+
+			protected function navigatorcontent2_removeHandler( event : FlexEvent ) : void
 			{
 				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
-				removeEventListener(ScriptAreaComponenrEvent.TEXT_CHANGE, setStateInUnsave, true );
-				
+				removeEventListener( ScriptAreaComponenrEvent.TEXT_CHANGE, setStateInUnsave, true );
+
 				scriptEditor.removeEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true );
 			}
-			
-			protected function navigatorcontent2_creationCompleteHandler(event:FlexEvent):void
+
+			protected function navigatorcontent2_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				addEventListener(ScriptAreaComponenrEvent.TEXT_CHANGE, setStateInUnsave, true, 0, true );
+				addEventListener( ScriptAreaComponenrEvent.TEXT_CHANGE, setStateInUnsave, true, 0, true );
 			}
-			
+
 			public function setActionVO() : void
 			{
 				scriptEditor.actionVO = actionVO;
 			}
-			
+
 			public function addScriptEditor() : void
 			{
 				contetn.addElement( scriptEditor );
-				
+
 				scriptEditor.percentWidth = 100;
 				scriptEditor.percentHeight = 100;
-				
+
 				scriptEditor.addEventListener( KeyboardEvent.KEY_DOWN, onCtrlSDown, true, 0, true );
-				
-				dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.SCRIPT_EDITOR_ADDED ) );
+
+				dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SCRIPT_EDITOR_ADDED ) );
 			}
-			
-			protected function preferences_clickHandler(event:MouseEvent):void
+
+			protected function preferences_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new ScriptEditorEvent ( ScriptEditorEvent.OPEN_PREFERENCES ) );
+				dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.OPEN_PREFERENCES ) );
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<s:states>
 		<s:State name="normal"/>
 		<s:State name="disabled"/>
 	</s:states>
-	
-	<s:Rect width="100%" height="100%">
+
+	<s:Rect width="100%"
+			height="100%">
 		<s:fill>
 			<s:SolidColor color="#FFFFFF"/>
 		</s:fill>
 	</s:Rect>
-	
-	<s:VGroup id="contetn" width="100%" height="100%" gap="0" visible="{_actionVO ? true : false}">
-		<s:Group width="100%" height="30">
-			<s:Rect width="100%" height="100%">
+
+	<s:VGroup id="contetn"
+			  width="100%"
+			  height="100%"
+			  gap="0"
+			  visible="{_actionVO ? true : false}">
+		<s:Group width="100%"
+				 height="30">
+			<s:Rect width="100%"
+					height="100%">
 				<s:fill>
 					<s:LinearGradient rotation="90">
-						<s:GradientEntry color="#FFFFFF" />
-						<s:GradientEntry color="#F6F8F8" />
+						<s:GradientEntry color="#FFFFFF"/>
+						<s:GradientEntry color="#F6F8F8"/>
 					</s:LinearGradient>
 				</s:fill>
 			</s:Rect>
-			
-			<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="middle"
-					  paddingLeft="10" paddingTop="2" paddingBottom="2">
-				
+
+			<s:HGroup width="100%"
+					  height="100%"
+					  horizontalAlign="left"
+					  verticalAlign="middle"
+					  paddingLeft="10"
+					  paddingTop="2"
+					  paddingBottom="2">
+
 				<button:WorkAreaButton id="saveButton"
-										   enabled="{unsaved}" height="20" 
-										   icon="{VDOMImage.Save}" iconDown="{VDOMImage.Save_White}"
-										   label="{ resourceManager.getString( 'Scripts_General', 'save' ) }" click="scriptEditor_saveHandler( event )"
-										   highlighted="{unsaved}" 
-										   backgroundDownColor="#daa440" textDownColor="#F0F0F0"/>
-				
+									   enabled="{unsaved}"
+									   height="20"
+									   icon="{VDOMImage.Save}"
+									   iconDown="{VDOMImage.Save_White}"
+									   label="{ resourceManager.getString( 'Scripts_General', 'save' ) }"
+									   click="scriptEditor_saveHandler( event )"
+									   highlighted="{unsaved}"
+									   backgroundDownColor="#daa440"
+									   textDownColor="#F0F0F0"/>
+
 				<button:WorkAreaButton id="undoButton"
-									   height="20" icon="{VDOMImage.Undo}"
+									   height="20"
+									   icon="{VDOMImage.Undo}"
 									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_undo' ) }"
 									   click="{scriptEditor.scriptAreaComponent.undo_fun()}"/>
-				
+
 				<button:WorkAreaButton id="redoButton"
-									   height="20" icon="{VDOMImage.Redo}"
+									   height="20"
+									   icon="{VDOMImage.Redo}"
 									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_redo' ) }"
 									   click="{scriptEditor.scriptAreaComponent.redo_fun()}"/>
-				
+
 				<button:WorkAreaButton id="preferences"
 									   height="20"
 									   label="{ resourceManager.getString( 'Scripts_General', 'work_area_preferences' ) }"
 									   click="preferences_clickHandler(event)"/>
-				
+
 			</s:HGroup>
-			
-			<s:Line top="0" width="100%">
+
+			<s:Line top="0"
+					width="100%">
 				<s:stroke>
-					<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1"/>
+					<s:SolidColorStroke color="#FFFFFF"
+										alpha="0.5"
+										weight="1"/>
 				</s:stroke>
 			</s:Line>
-			
-			<s:Line bottom="0" width="100%">
+
+			<s:Line bottom="0"
+					width="100%">
 				<s:stroke>
-					<s:SolidColorStroke color="#000000" alpha="0.5" weight="1"/>
+					<s:SolidColorStroke color="#000000"
+										alpha="0.5"
+										weight="1"/>
 				</s:stroke>
 			</s:Line>
-			
+
 		</s:Group>
-		
+
 	</s:VGroup>
 
-	
+
 </s:NavigatorContent>

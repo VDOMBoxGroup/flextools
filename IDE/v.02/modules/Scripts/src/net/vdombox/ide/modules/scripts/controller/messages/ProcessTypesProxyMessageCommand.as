@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.scripts.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMTypesTargetNames;
 	import net.vdombox.ide.common.model.TypesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -25,9 +25,9 @@ package net.vdombox.ide.modules.scripts.controller.messages
 			{
 				case PPMTypesTargetNames.TYPES:
 				{
-					if( operation == PPMOperationNames.READ )
+					if ( operation == PPMOperationNames.READ )
 						typesProxy.types = body as Array;
-					
+
 					sendNotification( TypesProxy.TYPES_GETTED, body );
 
 					break;

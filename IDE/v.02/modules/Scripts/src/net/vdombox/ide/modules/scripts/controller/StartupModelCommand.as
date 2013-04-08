@@ -6,10 +6,10 @@ package net.vdombox.ide.modules.scripts.controller
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.scripts.model.GoToPositionProxy;
 	import net.vdombox.ide.modules.scripts.model.SaveParametersTabsProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
-	
+
 	public class StartupModelCommand extends SimpleCommand
 	{
 		override public function execute( note : INotification ) : void

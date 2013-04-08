@@ -6,19 +6,19 @@ package net.vdombox.ide.modules.scripts.model
 	public class GoToPositionProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "GoToPositionProxy";
-		
+
 		private var transition : Object = [];
-		
+
 		public function GoToPositionProxy()
 		{
 			super( NAME );
 		}
-		
+
 		public function add( actionVO : Object, position : int, length : int ) : void
 		{
-			transition[ actionVO.name ] = { position : position, length : length };
+			transition[ actionVO.name ] = { position: position, length: length };
 		}
-		
+
 		public function getPosition( actionVO : Object ) : Object
 		{
 			if ( transition.hasOwnProperty( actionVO.name ) )
@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.scripts.model
 				delete transition[ actionVO.name ];
 				return detail;
 			}
-			
+
 			return null;
 		}
 	}

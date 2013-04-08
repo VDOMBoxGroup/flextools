@@ -1,116 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					  xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
-					  doubleClickEnabled="true" doubleClick="mxtreeitemrenderer1_doubleClickHandler(event)"
+					  doubleClickEnabled="true"
+					  doubleClick="mxtreeitemrenderer1_doubleClickHandler(event)"
 					  creationComplete="mxtreeitemrenderer1_creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.scripts.events.FindBoxEvent;
 			import net.vdombox.ide.modules.scripts.events.RenameBoxEvent;
+
 			[Bindable]
 			private var _data : XML;
-			
+
 			[Bindable]
 			private var icon : Class;
-			
+
 			override public function set data( value : Object ) : void
 			{
 				super.data = value;
-				
+
 				_data = value as XML;
-				
+
 				if ( !_data )
 					return;
-				
+
 				line.text = _data.@line;
-				switch(_data.@iconType.toString())
+				switch ( _data.@iconType.toString() )
 				{
 					case "serverScript":
 					{
 						icon = VDOMImage.ServerActionIcon;
 						break;
 					}
-						
+
 					case "Libraries":
 					{
 						icon = VDOMImage.LibrariesIcon;
 						break;
 					}
-						
+
 					case "Global actions":
 					{
 						icon = VDOMImage.GlobalActionIcon;
 						break;
 					}
-						
+
 					case "script":
 					{
 						icon = VDOMImage.Arraw_Right_Blue;
 						break;
 					}
-						
+
 					default:
 					{
 						icon = null;
 						break;
 					}
 				}
-				
+
 				if ( check )
 					check.selected = _data.@check == "true" ? true : false;
 			}
-			
-			protected function mxtreeitemrenderer1_clickHandler(event:MouseEvent):void
+
+			protected function mxtreeitemrenderer1_clickHandler( event : MouseEvent ) : void
 			{
 				dispatchEvent( new FindBoxEvent( FindBoxEvent.DOUBLE_CLICK ) );
 			}
-			
-			protected function check_changeHandler(event:Event):void
+
+			protected function check_changeHandler( event : Event ) : void
 			{
 				_data.@check = check.selected ? "true" : false;
 			}
-			
-			protected function mxtreeitemrenderer1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function mxtreeitemrenderer1_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				if ( _data )
 				{
 					check.selected = _data.@check == "true" ? true : false;
 				}
 			}
-			
-			protected function mxtreeitemrenderer1_doubleClickHandler(event:MouseEvent):void
+
+			protected function mxtreeitemrenderer1_doubleClickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new RenameBoxEvent ( RenameBoxEvent.DOUBLE_CLICK ) );
+				dispatchEvent( new RenameBoxEvent( RenameBoxEvent.DOUBLE_CLICK ) );
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<s:states>
-		<s:State name="normal" />            
-		<s:State name="hovered" />
-		<s:State name="selected" />
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
 	</s:states>
-	<s:HGroup left="0" right="0" top="0" bottom="0" verticalAlign="middle">
-		<s:CheckBox id="check" change="check_changeHandler(event)"/>
-		<s:Rect id="indentationSpacer" width="{treeListData.indent}" percentHeight="100" alpha="0">
+	<s:HGroup left="0"
+			  right="0"
+			  top="0"
+			  bottom="0"
+			  verticalAlign="middle">
+		<s:CheckBox id="check"
+					change="check_changeHandler(event)"/>
+		<s:Rect id="indentationSpacer"
+				width="{treeListData.indent}"
+				percentHeight="100"
+				alpha="0">
 			<s:fill>
-				<s:SolidColor color="0xFFFFFF" />
+				<s:SolidColor color="0xFFFFFF"/>
 			</s:fill>
 		</s:Rect>
 		<s:Group id="disclosureGroup">
-			<s:BitmapImage source="{treeListData.disclosureIcon}" visible="{treeListData.hasChildren}" />
+			<s:BitmapImage source="{treeListData.disclosureIcon}"
+						   visible="{treeListData.hasChildren}"/>
 		</s:Group>
 		<s:Group>
 			<s:BitmapImage source="{icon}"/>
 		</s:Group>
-		
-		<s:Label id="line" />
-		
-		<s:Label id="labelField" text="{treeListData.label}" paddingTop="2"/>
+
+		<s:Label id="line"/>
+
+		<s:Label id="labelField"
+				 text="{treeListData.label}"
+				 paddingTop="2"/>
 	</s:HGroup>
 </s:MXTreeItemRenderer>

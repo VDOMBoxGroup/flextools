@@ -9,7 +9,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
-			
+
 			import net.vdombox.ide.common.events.PopUpWindowEvent;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
@@ -41,13 +41,13 @@
 				var oldSelectedItem : ServerActionVO;
 				var oldSelectedIndex : int;
 				var isSelectedItemChanged : Boolean = true;
-				
-				if( actionList )
+
+				if ( actionList )
 				{
 					oldSelectedIndex = actionList.selectedIndex;
 					oldSelectedItem = actionList.selectedItem as ServerActionVO;
 				}
-				
+
 				if ( value && value.length > 0 )
 				{
 					createServerAction.visible = true;
@@ -58,12 +58,11 @@
 						var i : uint;
 						for ( i = 0; i < value.length; i++ )
 						{
-							if ( ServerActionVO( value[ i ] ).objectID == oldSelectedItem.objectID ||
-								ServerActionVO( value[ i ] ).name == oldSelectedItem.name )
+							if ( ServerActionVO( value[ i ] ).objectID == oldSelectedItem.objectID || ServerActionVO( value[ i ] ).name == oldSelectedItem.name )
 							{
 								newSelectedIndex = i;
 								isSelectedItemChanged = false;
-								
+
 								break;
 							}
 						}
@@ -72,36 +71,36 @@
 					{
 						isSelectedItemChanged = false;
 					}
-					
+
 					_scripts = new ArrayCollection( value );
-					
+
 					_scripts.sort = new Sort();
-					
+
 					var sortField : SortField = new SortField( "name" );
 					sortField.caseInsensitive = true;
-					
+
 					_scripts.sort.fields = [ sortField ];
 					_scripts.refresh();
-					
-					if( newSelectedIndex != -1 )
+
+					if ( newSelectedIndex != -1 )
 						actionList.validateNow();
-					
+
 					actionList.selectedIndex = -1;
 				}
 				else
 				{
 					createServerAction.visible = false;
 					_scripts = null;
-					
-					if( actionList.selectedIndex != -1 )
+
+					if ( actionList.selectedIndex != -1 )
 						actionList.selectedIndex = -1;
-					
-					if( oldSelectedIndex == -1 )
+
+					if ( oldSelectedIndex == -1 )
 						isSelectedItemChanged = false;
 				}
 
 			}
-			
+
 			public function set titleAndName( value : String ) : void
 			{
 				title = resourceManager.getString( 'Scripts_General', 'server_scripts_panel_title' ) + " " + value;
@@ -118,51 +117,66 @@
 				actionList.addEventListener( KeyboardEvent.KEY_DOWN, itemrenderer1_keyDownHandler, false, 0, true );
 				actionList.addEventListener( ListItemRendererEvent.DELETE_PRESS, itemrenderer1_DeleteHandler, true, 0, true );
 			}
-			
-			private function itemrenderer1_keyDownHandler(event:KeyboardEvent):void
+
+			private function itemrenderer1_keyDownHandler( event : KeyboardEvent ) : void
 			{
 				if ( event.keyCode == Keyboard.DELETE )
-					Alert.Show( resourceManager.getString( 'Scripts_General', 'delete_server_action' ),
-								resourceManager.getString( 'Scripts_General', 'delete_Renderer' ), 
-								AlertButton.OK_No, this.parentApplication, removeactionRequest );
+					Alert.Show( resourceManager.getString( 'Scripts_General', 'delete_server_action' ), resourceManager.getString( 'Scripts_General', 'delete_Renderer' ), AlertButton.OK_No, this.parentApplication, removeactionRequest );
 			}
-			
-			private function removeactionRequest( event : PopUpWindowEvent ) : void 
+
+			private function removeactionRequest( event : PopUpWindowEvent ) : void
 			{
 				if ( event.detail == Alert.YES )
 				{
 					var deleteEvent : ServerScriptsPanelEvent = new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION );
 					deleteEvent.object = selectedScript;
-					dispatchEvent( deleteEvent );	
+					dispatchEvent( deleteEvent );
 				}
 			}
-			
-			private function itemrenderer1_DeleteHandler( event : ListItemRendererEvent ) : void 
+
+			private function itemrenderer1_DeleteHandler( event : ListItemRendererEvent ) : void
 			{
 				var deleteEvent : ServerScriptsPanelEvent = new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION );
 				deleteEvent.object = event.target.data;
-				dispatchEvent( deleteEvent );	
+				dispatchEvent( deleteEvent );
 			}
-			
 		]]>
 	</fx:Script>
-	
-	<s:Rect width="100%" height="100%">
+
+	<s:Rect width="100%"
+			height="100%">
 		<s:fill>
-			<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
+			<s:BitmapFill source="{VDOMImage.Fon_Texture}"
+						  smooth="true"
+						  fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
-	
-	<mx:Image id="icon" source="@Embed('assets/ServerScripts_white.png')" height="16" width="16" left="10" top="-23" 
+
+	<mx:Image id="icon"
+			  source="@Embed('assets/ServerScripts_white.png')"
+			  height="16"
+			  width="16"
+			  left="10"
+			  top="-23"
 			  smoothBitmapContent="true"/>
-	
-	<mx:Image id="createServerAction" source="{VDOMImage.Plus}" height="20" width="20" right="10" top="-23" 
-			  smoothBitmapContent="true" click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.CREATE_ACTION ) )"
+
+	<mx:Image id="createServerAction"
+			  source="{VDOMImage.Plus}"
+			  height="20"
+			  width="20"
+			  right="10"
+			  top="-23"
+			  smoothBitmapContent="true"
+			  click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.CREATE_ACTION ) )"
 			  visible="false"/>
 
 	<s:List id="actionList"
-			dataProvider="{ _scripts }" height="100%" labelField="name" width="100%"
-			contentBackgroundAlpha="0" borderVisible="false"
+			dataProvider="{ _scripts }"
+			height="100%"
+			labelField="name"
+			width="100%"
+			contentBackgroundAlpha="0"
+			borderVisible="false"
 			itemRenderer="net.vdombox.ide.modules.scripts.view.components.ListItemRenderer"
 			doubleClickEnabled="true"/>
 </s:Panel>

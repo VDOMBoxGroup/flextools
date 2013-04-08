@@ -1,46 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:components="net.vdombox.ide.modules.scripts.view.components.*"
-		  xmlns:fx="http://ns.adobe.com/mxml/2009"
-		  xmlns:mx="library://ns.adobe.com/flex/halo"
-		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  height="100%" width="100%" xmlns:mx1="library://ns.adobe.com/flex/mx"
-		  >
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 height="100%"
+		 width="100%"
+		 xmlns:mx1="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.modules.scripts.view.skins.PanelSkin;
 		]]>
 	</fx:Script>
-	<mx1:HDividedBox width="100%" height="100%" >
-	
-		<mx1:VDividedBox id="librariesBox" height="100%" width="228" minWidth="120" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
-			
+	<mx1:HDividedBox width="100%"
+					 height="100%">
+
+		<mx1:VDividedBox id="librariesBox"
+						 height="100%"
+						 width="228"
+						 minWidth="120"
+						 dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
+
 			<components:LibrariesPanel id="librariesPanel"
-									   width="100%" height="50%"
+									   width="100%"
+									   height="50%"
 									   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
 									   title="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_title' ) }"/>
-			
+
 		</mx1:VDividedBox>
-		
-		<components:ScriptArea id="scriptArea" width="1000%" height="100%"/>
-	
-		<mx1:VDividedBox id="actionsBox" height="100%" width="228" minWidth="120" dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
-	
+
+		<components:ScriptArea id="scriptArea"
+							   width="1000%"
+							   height="100%"/>
+
+		<mx1:VDividedBox id="actionsBox"
+						 height="100%"
+						 width="228"
+						 minWidth="120"
+						 dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
+
 			<components:ContainersPanel id="containersPanel"
-										width="100%" height="40%" 
+										width="100%"
+										height="40%"
 										skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
 										title="{ resourceManager.getString( 'Scripts_General', 'containers_panel_title' ) }"/>
-	
+
 			<components:ServerScriptsPanel id="serverScriptsPanel"
-										   width="100%" height="40%"
+										   width="100%"
+										   height="40%"
 										   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
 										   title="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_title' ) }"/>
-	
+
 			<components:GlobalScriptsPanel id="globalScriptsPanel"
-									   width="100%" height="20%"
-									   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
-									   title="{ resourceManager.getString( 'Scripts_General', 'global_scripts_panel_title' ) }"/>
-			
+										   width="100%"
+										   height="20%"
+										   skinClass="net.vdombox.ide.modules.scripts.view.skins.PanelSkin"
+										   title="{ resourceManager.getString( 'Scripts_General', 'global_scripts_panel_title' ) }"/>
+
 		</mx1:VDividedBox>
-		
+
 	</mx1:HDividedBox>
 </s:Group>

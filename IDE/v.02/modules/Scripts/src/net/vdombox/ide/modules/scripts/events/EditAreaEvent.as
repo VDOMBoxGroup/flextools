@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.scripts.events
 		public function EditAreaEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false, content : String = null )
 		{
 			super( type, bubbles, cancelable );
-			
+
 			this.content = content;
 		}
 

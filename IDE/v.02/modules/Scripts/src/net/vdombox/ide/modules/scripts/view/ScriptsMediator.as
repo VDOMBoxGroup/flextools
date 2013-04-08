@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.scripts.view
 {
 	import flash.events.Event;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.Scripts;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 

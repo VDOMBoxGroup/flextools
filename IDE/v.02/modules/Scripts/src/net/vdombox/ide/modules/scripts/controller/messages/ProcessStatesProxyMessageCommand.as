@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.scripts.controller.messages
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -28,15 +28,15 @@ package net.vdombox.ide.modules.scripts.controller.messages
 				{
 					statesProxy.setStates( body );
 					sendNotification( StatesProxy.ALL_STATES_GETTED, body );
-					
+
 					break;
 				}
-				
+
 				case PPMStatesTargetNames.SELECTED_APPLICATION:
 				{
 					var selectedApplication : ApplicationVO = body as ApplicationVO;
 					statesProxy.selectedApplication = selectedApplication;
-					
+
 					sendNotification( StatesProxy.SELECTED_APPLICATION_CHANGED );
 
 					break;
@@ -46,15 +46,15 @@ package net.vdombox.ide.modules.scripts.controller.messages
 				{
 					var selectedPageVO : PageVO = body as PageVO;
 					statesProxy.selectedPage = selectedPageVO;
-					
+
 					break;
 				}
-					
+
 				case PPMStatesTargetNames.SELECTED_OBJECT:
 				{
 					var selectedObjectVO : ObjectVO = body as ObjectVO;
 					statesProxy.selectedObject = selectedObjectVO;
-					
+
 					break;
 				}
 			}
