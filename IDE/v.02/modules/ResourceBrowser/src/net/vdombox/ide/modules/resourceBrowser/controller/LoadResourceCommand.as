@@ -5,21 +5,26 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.events.TimerEvent;
 	import flash.filesystem.File;
 	import flash.net.FileFilter;
-	import flash.net.FileReference;
-	import flash.net.FileReferenceList;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
+	import flash.utils.Timer;
+	import flash.utils.setTimeout;
 	
 	import mx.collections.ArrayList;
-	import mx.resources.ResourceManager;
+	import mx.core.Application;
+	import mx.core.FlexGlobals;
+	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.controller.Notifications;
+	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -30,6 +35,11 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 		private var pendingFiles : ArrayList;
 		private var statesProxy : StatesProxy;
 		private var fileDictionary : Dictionary;
+		private var countLoadingResources : int = 0;
+		private var countTotalResources : int = 0;
+		private var loadingBytesResources : Number = 0;
+		private var totalBytesResources : Number = 0;
+		private var tickCount : int = 0;
 		
 		override public function execute( notification : INotification ) : void
 		{
@@ -57,6 +67,15 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 			if ( pendingFiles.length > 0 )
 			{
 				sendNotification( Notifications.START_LOADING_RESOURCES );
+				
+				countLoadingResources = 0;
+				countTotalResources = pendingFiles.length;
+				
+				for each ( var file : File in pendingFiles.source )
+				{
+					totalBytesResources += file.size;
+				}
+				
 				addHandlersFile( pendingFiles.removeItemAt( 0 ) as File );
 			}
 		}
@@ -68,7 +87,6 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 			
 			urlLoader.addEventListener(Event.OPEN, openHandler);
 			urlLoader.addEventListener(Event.COMPLETE, completeHandler);
-			urlLoader.addEventListener(ProgressEvent.PROGRESS, progressHandler);
 			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 			urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
 			
@@ -81,14 +99,16 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 		{
 			urlLoader.removeEventListener(Event.OPEN, openHandler);
 			urlLoader.removeEventListener(Event.COMPLETE, completeHandler);
-			urlLoader.removeEventListener(ProgressEvent.PROGRESS, progressHandler);
 			urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 			urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
 		}
 		
 		private function openHandler( event : Event ) : void
 		{
-			trace('openHandler');
+			var urlLoader : URLLoader = event.target as URLLoader;
+			var file : File = fileDictionary[ urlLoader ];
+			
+			sendNotification( Notifications.OPEN_RESOURCES_BY_LOADING, { resourceName : file.name, resourceStatus : "Loading" } );
 		}
 		
 		private function completeHandler( event : Event ) : void
@@ -105,23 +125,32 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 			resourceVO.name = file.name;
 			resourceVO.type = file.type ? file.type.slice(1) : ""; // type has "."
 			
-			sendNotification( Notifications.UPLOAD_RESOURCE, resourceVO );
+			loadingBytesResources += file.size;
 			
-			if ( pendingFiles.length > 0 )
-				addHandlersFile( pendingFiles.removeItemAt( 0 ) as File );
-			else
-				sendNotification( Notifications.FINISH_LOADING_RESOURCES );
+			setTimeout( sendNotifications, 100 )
+			
+			
+			setTimeout( uploadResource, 300 )
+			
+			function sendNotifications( ) : void
+			{
+				sendNotification( Notifications.LOADED_RESOURCES_BY_LOADING, { totalProgtess :  { loading : countTotalResources - pendingFiles.length, total : countTotalResources },
+					resourceStatus : "Export to base64" } );
 				
-		}
-		
-		private function progressHandler( event : ProgressEvent ) : void
-		{
-			var urlLoader : URLLoader = event.target as URLLoader;
+			}
 			
-			var bytesLoaded : Number = event.bytesLoaded;
-			var bytesTotal : Number = event.bytesTotal;
-			
-			trace( bytesLoaded + "   " + bytesTotal );
+			function uploadResource( ) : void
+			{
+				
+				sendNotification( Notifications.UPLOAD_RESOURCE, resourceVO );
+				
+				//progressLoadResourceWindow.resourceStatus.text = "Complete!";
+				
+				if ( pendingFiles.length > 0 )
+					addHandlersFile( pendingFiles.removeItemAt( 0 ) as File );
+				else
+					sendNotification( Notifications.FINISH_LOADING_RESOURCES );
+			}
 		}
 		
 		private function ioErrorHandler( event : IOErrorEvent ) : void

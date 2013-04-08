@@ -3,7 +3,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" 
 		 xmlns:button="net.vdombox.ide.common.view.components.button.*"
-		 creationComplete="group1_creationCompleteHandler(event)">
+		 creationComplete="group1_creationCompleteHandler(event)" xmlns:components="net.vdombox.ide.modules.resourceBrowser.view.components.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
@@ -135,6 +135,7 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
+	
 	
 	<s:VGroup width="100%" height="100%" gap="0">
 		

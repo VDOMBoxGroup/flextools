@@ -97,6 +97,9 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( Notifications.START_LOADING_RESOURCES );
 			interests.push( Notifications.FINISH_LOADING_RESOURCES );
 			
+			interests.push( Notifications.OPEN_RESOURCES_BY_LOADING );
+			interests.push( Notifications.LOADED_RESOURCES_BY_LOADING );
+			
 			return interests;
 		}
 		
@@ -166,6 +169,25 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					
 					break;
 				}
+					
+				case Notifications.OPEN_RESOURCES_BY_LOADING:
+				{
+					spinnerPopup.resourceName.text = body.resourceName as String;
+					spinnerPopup.resourceStatus.text = body.resourceStatus as String;
+					
+					break;
+				}
+					
+				case Notifications.LOADED_RESOURCES_BY_LOADING:
+				{
+					spinnerPopup.totalCountResource.text = 'Total ' + body.totalProgtess.loading + " / " + body.totalProgtess.total;
+					
+					spinnerPopup.resourceStatus.text = body.resourceStatus as String;
+					
+					break;
+				}
+					
+					
 			}
 		}
 		
