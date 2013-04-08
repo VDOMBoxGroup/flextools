@@ -3,25 +3,28 @@
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				height="25"
-				color="#FFFFFF" fontFamily="Verdana"
+				color="#FFFFFF"
+				fontFamily="Verdana"
 				autoDrawBackground="false">
 
 	<s:layout>
-		<s:HorizontalLayout paddingLeft="5" paddingRight="5" verticalAlign="middle"
+		<s:HorizontalLayout paddingLeft="5"
+							paddingRight="5"
+							verticalAlign="middle"
 							gap="8"/>
 	</s:layout>
 
 	<fx:Script>
 		<![CDATA[
 			import flash.filesystem.File;
-			
+
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
-			
+
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderItemRendererEvent;
 
-			[Embed( source="assets/new_page.png" )]
+			[Embed( source = "assets/new_page.png" )]
 			private var newFile : Class;
 
 			[Bindable]
@@ -144,13 +147,22 @@
 	</s:states>
 
 	<mx:Image id="resourceIcon"
-			  height="16" width="16"
+			  height="16"
+			  width="16"
 			  smoothBitmapContent="true"/>
 
 	<s:TextInput id="resourceName"
-				 height="20" text="@{ resourceVO.name }" width="200"
-				 borderColor="#464646" color="#6A6A6A" focusAlpha="0" fontFamily="Verdana"
-				 editable="false" editable.normal="true" contentBackgroundAlpha="1" contentBackgroundColor="#CCCCCC"/>
+				 height="20"
+				 text="@{ resourceVO.name }"
+				 width="200"
+				 borderColor="#464646"
+				 color="#6A6A6A"
+				 focusAlpha="0"
+				 fontFamily="Verdana"
+				 editable="false"
+				 editable.normal="true"
+				 contentBackgroundAlpha="1"
+				 contentBackgroundColor="#CCCCCC"/>
 
 	<s:Label id="pathLabel"
 			 width="100%"
@@ -162,20 +174,36 @@
 			 fontFamily="Verdana"/>
 
 	<mx:Image id="deleteResource"
-			  height="16" source="@Embed('assets/delete_resource.png')" width="16"
+			  height="16"
+			  source="@Embed('assets/delete_resource.png')"
+			  width="16"
 			  click="deleteResource_clickHandler()"
-			  smoothBitmapContent="true" buttonMode="true" includeIn="normal"/>
+			  smoothBitmapContent="true"
+			  buttonMode="true"
+			  includeIn="normal"/>
 
 	<mx:Image id="uploadResource"
-			  height="16" source="@Embed('assets/upload_resource.png')" width="16"
-			  smoothBitmapContent="true" buttonMode="true" includeIn="upload"/>
+			  height="16"
+			  source="@Embed('assets/upload_resource.png')"
+			  width="16"
+			  smoothBitmapContent="true"
+			  buttonMode="true"
+			  includeIn="upload"/>
 
 	<mx:Image id="errorResource"
-			  height="16" source="@Embed('assets/block_resource.png')" width="16"
+			  height="16"
+			  source="@Embed('assets/block_resource.png')"
+			  width="16"
 			  click="deleteResource_clickHandler()"
-			  smoothBitmapContent="true" buttonMode="true" includeIn="error"/>
+			  smoothBitmapContent="true"
+			  buttonMode="true"
+			  includeIn="error"/>
 
 	<mx:Image id="completeResource"
-			  height="16" source="@Embed('assets/accept_resource.png')" width="16"
-			  smoothBitmapContent="true" buttonMode="true" includeIn="complete"/>
+			  height="16"
+			  source="@Embed('assets/accept_resource.png')"
+			  width="16"
+			  smoothBitmapContent="true"
+			  buttonMode="true"
+			  includeIn="complete"/>
 </s:ItemRenderer>

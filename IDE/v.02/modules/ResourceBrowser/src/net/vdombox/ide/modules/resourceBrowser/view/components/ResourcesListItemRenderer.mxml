@@ -29,39 +29,66 @@
 		<s:State name="selected"/>
 	</s:states>
 
-	<s:Rect bottom="0" left="0" right="0" top="0">
+	<s:Rect bottom="0"
+			left="0"
+			right="0"
+			top="0">
 		<s:fill>
 			<s:SolidColor color="0x999999"
-						  alpha="0" alpha.hovered="0.2" alpha.selected="0.4"/>
+						  alpha="0"
+						  alpha.hovered="0.2"
+						  alpha.selected="0.4"/>
 		</s:fill>
 	</s:Rect>
 
-	<s:Group bottom="5" left="5" right="5" top="5">
+	<s:Group bottom="5"
+			 left="5"
+			 right="5"
+			 top="5">
 
 		<components:Thumbnail id="thumbnail"
-							  data="{ resourseVO }" height="70" width="70"/>
+							  data="{ resourseVO }"
+							  height="70"
+							  width="70"/>
 
 		<s:VGroup width="120"
-				  bottom="0" color="white" left="75" paddingBottom="5"
-				  paddingTop="5" top="0" verticalAlign="middle">
+				  bottom="0"
+				  color="white"
+				  left="75"
+				  paddingBottom="5"
+				  paddingTop="5"
+				  top="0"
+				  verticalAlign="middle">
 
 			<s:Label text="Name:"
-					 fontFamily="Verdana" fontSize="10" textAlign="left"
+					 fontFamily="Verdana"
+					 fontSize="10"
+					 textAlign="left"
 					 maxDisplayedLines="1"/>
 
-			<s:Label text="{ resourseVO.name }" toolTip="{ resourseVO.name }" width="100%"
-					 fontFamily="Verdana" fontWeight="bold" textAlign="left"
+			<s:Label text="{ resourseVO.name }"
+					 toolTip="{ resourseVO.name }"
+					 width="100%"
+					 fontFamily="Verdana"
+					 fontWeight="bold"
+					 textAlign="left"
 					 maxDisplayedLines="1"/>
 
 			<mx:Spacer height="100%"/>
 
 			<s:HGroup width="100%">
 				<s:Label text="Type:"
-						 fontFamily="Verdana" fontSize="10" left="75" textAlign="left"
+						 fontFamily="Verdana"
+						 fontSize="10"
+						 left="75"
+						 textAlign="left"
 						 maxDisplayedLines="1"/>
 
 				<s:Label text="{ resourseVO.type.toUpperCase() }"
-						 fontFamily="Verdana" fontWeight="bold" left="75" textAlign="left"
+						 fontFamily="Verdana"
+						 fontWeight="bold"
+						 left="75"
+						 textAlign="left"
 						 maxDisplayedLines="1"/>
 			</s:HGroup>
 		</s:VGroup>

@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import flash.utils.Dictionary;
-	
+
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
@@ -22,7 +22,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.model._vo.SettingsVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -50,7 +50,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			
+
 			interests.push( Notifications.BODY_STOP );
 			interests.push( Notifications.EXPORT_TOOLSET );
 			interests.push( Notifications.EXPORT_SETTINGS_SCREEN );
@@ -69,7 +69,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( Notifications.UPLOAD_RESOURCE );
 			interests.push( Notifications.DELETE_RESOURCE );
 			interests.push( Notifications.GET_ICON );
-			
+
 			interests.push( Notifications.WRITE_ERROR );
 
 			return interests;
@@ -85,14 +85,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 			switch ( notification.getName() )
 			{
-				case Notifications.BODY_STOP :
+				case Notifications.BODY_STOP:
 				{
-					junction.sendMessage( PipeNames.STDCORE,
-						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
-					
+					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+
 					break;
-				}	
-				
+				}
+
 				case JunctionMediator.ACCEPT_INPUT_PIPE:
 				{
 					processInputPipe( notification );
@@ -109,8 +108,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case Notifications.EXPORT_TOOLSET:
 				{
-					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ),
-						multitonKey );
+					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -119,8 +117,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case Notifications.EXPORT_SETTINGS_SCREEN:
 				{
-					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ),
-						multitonKey );
+					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -138,8 +135,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case SettingsProxy.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
-					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE,
-						null, multitonKey );
+					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE, null, multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -148,8 +144,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case SettingsProxy.SAVE_SETTINGS_TO_STORAGE:
 				{
-					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body,
-						multitonKey );
+					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body, multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -185,8 +180,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case Notifications.GET_RESOURCES:
 				{
-					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
-						PPMResourcesTargetNames.RESOURCES, body );
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -213,8 +207,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 						recipients[ resourceVO ].push( recipientKey );
 					}
 
-					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
-						PPMResourcesTargetNames.RESOURCE, resourceVO );
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, resourceVO );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -223,8 +216,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case Notifications.UPLOAD_RESOURCE:
 				{
-					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE,
-						PPMResourcesTargetNames.RESOURCE, body );
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE, PPMResourcesTargetNames.RESOURCE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -233,29 +225,28 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case Notifications.DELETE_RESOURCE:
 				{
-					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE,
-						PPMResourcesTargetNames.RESOURCE, body );
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE, PPMResourcesTargetNames.RESOURCE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
 					break;
 				}
-					
+
 				case Notifications.GET_ICON:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.ICON, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.WRITE_ERROR:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.ERROR, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
 			}
@@ -276,14 +267,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					if ( recipientKey == multitonKey )
 					{
 						sendNotification( Notifications.MODULE_SELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE,
-							null, multitonKey ) );
+						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 					}
 					else
 					{
 						sendNotification( Notifications.MODULE_DESELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE,
-							null, multitonKey ) );
+						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
 					}
 
 					break;
@@ -294,8 +283,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					if ( recipientKey != multitonKey )
 						return;
 
-					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module",
-						SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module", SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( Notifications.PIPES_READY );
 					break;
@@ -390,14 +378,14 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case PPMPlaceNames.RESOURCES:
 				{
 					sendNotification( Notifications.PROCESS_RESOURCES_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
 
 				case PPMPlaceNames.STATES:
 				{
 					sendNotification( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
 			}

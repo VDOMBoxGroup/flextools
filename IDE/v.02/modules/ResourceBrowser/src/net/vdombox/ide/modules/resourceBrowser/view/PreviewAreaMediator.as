@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.PreviewArea;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -51,10 +51,10 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( Notifications.BODY_STOP );
 
 			interests.push( StatesProxy.SELECTED_RESOURCE_CHANGED );
-			
+
 			interests.push( Notifications.RESOURCE_LOADED );
 			interests.push( Notifications.RESOURCE_DELETED );
-			
+
 
 			return interests;
 		}
@@ -94,18 +94,18 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 					break;
 				}
-					
+
 				case Notifications.RESOURCE_LOADED:
 				{
 					previewArea.resourceVO = body as ResourceVO;
-					
+
 					break;
 				}
-					
+
 				case Notifications.RESOURCE_DELETED:
 				{
 					previewArea.resourceVO = null;
-					
+
 					break;
 				}
 			}

@@ -10,14 +10,12 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.utils.ObjectUtil;
-			
+
 			import net.vdombox.ide.common.model._vo.ResourceVO;
-			
+
 			import spark.filters.DropShadowFilter;
 
-			[Embed( source="assets/rect.png",
-				scaleGridTop="10", scaleGridBottom="70",
-				scaleGridLeft="10", scaleGridRight="70" )]
+			[Embed( source = "assets/rect.png", scaleGridTop = "10", scaleGridBottom = "70", scaleGridLeft = "10", scaleGridRight = "70" )]
 			[Bindable]
 			public var thumb : Class;
 
@@ -34,31 +32,35 @@
 			public function set data( value : ResourceVO ) : void
 			{
 				resourceVO = value;
-				
+
 				if ( resourceVO.icon )
 					image.source = resourceVO.icon;
 				else
 					BindingUtils.bindSetter( dataChanged, resourceVO, "icon", false, true );
-//					imageDataWatcher = BindingUtils.bindProperty( image, "source", _data, "icon", true, true );
-				
-				/*if ( _data && ( data.type == "jpg" || data.type == "jpeg" || data.type == "png" || data.type == "gif" ) )
-				{
-					currentState = "image";
-					imageDataWatcher = BindingUtils.bindProperty( image, "source", _data, "icon", true, true );
-					
-				}
-				else
-				{
-					currentState = "nopreview";
-					imageDataWatcher.unwatch();
-					image.source = null;
-				}*/
-				
+				//					imageDataWatcher = BindingUtils.bindProperty( image, "source", _data, "icon", true, true );
+
+				/*
+				   if ( _data && ( data.type == "jpg" || data.type == "jpeg" || data.type == "png" || data.type == "gif" )
+				   )
+				   {
+				   currentState = "image";
+				   imageDataWatcher = BindingUtils.bindProperty( image, "source", _data, "icon", true, true );
+
+				   }
+				   else
+				   {
+				   currentState = "nopreview";
+				   imageDataWatcher.unwatch();
+				   image.source = null;
+				   }
+				 */
+
 				invalidateDisplayList();
 			}
-			private function dataChanged( value : Object ):void
+
+			private function dataChanged( value : Object ) : void
 			{
-				image.source = ObjectUtil.copy(value);
+				image.source = ObjectUtil.copy( value );
 			}
 		]]>
 	</fx:Script>
@@ -75,20 +77,38 @@
 	</s:Rect>-->
 
 	<s:Group id="noPreview"
-			 bottom="15" left="15" right="15" textAlign="center"
+			 bottom="15"
+			 left="15"
+			 right="15"
+			 textAlign="center"
 			 top="15"
-			 itemCreationPolicy="immediate" includeIn="nopreview">
+			 itemCreationPolicy="immediate"
+			 includeIn="nopreview">
 
 		<s:RichText text="no preview"
-					bottom="0" color="#808080" fontWeight="bold" left="0"
-					right="0" textAlign="center" top="0" verticalAlign="middle"/>
+					bottom="0"
+					color="#808080"
+					fontWeight="bold"
+					left="0"
+					right="0"
+					textAlign="center"
+					top="0"
+					verticalAlign="middle"/>
 	</s:Group>
 
 	<mx:Image id="image"
-			  bottom="15" left="15" right="15" top="15"
-			  includeIn="image" itemCreationPolicy="immediate"/>
+			  bottom="15"
+			  left="15"
+			  right="15"
+			  top="15"
+			  includeIn="image"
+			  itemCreationPolicy="immediate"/>
 
 	<mx:Image source="{ thumb }"
-			  bottom="0" left="0" right="0" top="0"
-			  smoothBitmapContent="true" maintainAspectRatio="false"/>
+			  bottom="0"
+			  left="0"
+			  right="0"
+			  top="0"
+			  smoothBitmapContent="true"
+			  maintainAspectRatio="false"/>
 </s:Group>

@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.resourceBrowser.controller.messages
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMResourcesTargetNames;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -30,15 +30,15 @@ package net.vdombox.ide.modules.resourceBrowser.controller.messages
 						sendNotification( Notifications.RESOURCE_DELETED, body );
 					else if ( operation == PPMOperationNames.READ )
 						sendNotification( Notifications.RESOURCE_LOADED, body );
-					
+
 					break;
 				}
-					
+
 				case PPMResourcesTargetNames.RESOURCES:
 				{
 					if ( operation == PPMOperationNames.READ )
 						sendNotification( Notifications.RESOURCES_GETTED, body );
-					
+
 					break;
 				}
 			}

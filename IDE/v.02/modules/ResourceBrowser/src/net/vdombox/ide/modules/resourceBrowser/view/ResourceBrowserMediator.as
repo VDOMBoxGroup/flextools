@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import flash.events.Event;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.ResourceBrowser;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		override public function onRegister() : void
 		{
 			resourceBrowser.addEventListener( ResourceBrowser.TEAR_DOWN, tearDownHandler )
-			
+
 		}
 
 		public function get resourceBrowser() : ResourceBrowser

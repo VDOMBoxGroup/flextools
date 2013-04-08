@@ -5,8 +5,6 @@
 		  skinClass="net.vdombox.ide.modules.resourceBrowser.view.skins.WorkAreaButtonSkin">
 	<fx:Script>
 		<![CDATA[
-			
-
 			[Bindable]
 			public var icon : Object;
 

@@ -2,7 +2,8 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="10" minWidth="10"
+			 minHeight="10"
+			 minWidth="10"
 			 alpha.disabled="0.5">
 	<!-- host component -->
 
@@ -18,8 +19,11 @@
 	<fx:Script>
 		<![CDATA[
 			import spark.skins.spark.ButtonSkin;
-			/* Define the skin elements that should not be colorized.
-			 For button, the graphics are colorized but the label is not. */
+
+			/*
+			   Define the skin elements that should not be colorized.
+			   For button, the graphics are colorized but the label is not.
+			 */
 			static private const exclusions : Array = [ "labelDisplay" ];
 
 			/**
@@ -31,7 +35,7 @@
 			}
 
 			/**
-			 *  @private
+			 * @private
 			 */
 			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 			{
@@ -57,36 +61,53 @@
 	</s:states>
 	<!-- layer 1: shadow -->
 
-	<s:Rect bottom="-1" left="-1" right="-1" top="-1"
+	<s:Rect bottom="-1"
+			left="-1"
+			right="-1"
+			top="-1"
 			radiusX="{cornerRadius}">
 
 		<s:fill>
 
 			<s:LinearGradient rotation="90">
 
-				<s:GradientEntry color="0x000000" color.down="0xFFFFFF"
-								 alpha="0.01" alpha.down="0"/>
+				<s:GradientEntry color="0x000000"
+								 color.down="0xFFFFFF"
+								 alpha="0.01"
+								 alpha.down="0"/>
 
-				<s:GradientEntry color="0x000000" color.down="0xFFFFFF"
-								 alpha="0.07" alpha.down="0.5"/>
+				<s:GradientEntry color="0x000000"
+								 color.down="0xFFFFFF"
+								 alpha="0.07"
+								 alpha.down="0.5"/>
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
 
 	<!-- layer 2: fill -->
 
-	<s:Rect bottom="0" left="0" right="0" top="0"
+	<s:Rect bottom="0"
+			left="0"
+			right="0"
+			top="0"
 			radiusX="{cornerRadius}">
 		<s:fill>
 			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="0xEAEAE8" color.down="0xAAAAAA" color.over="0xBBBDBD"/>
-				<s:GradientEntry color="0xCCCCCC" color.down="0x929496" color.over="0x9FA0A1"/>
+				<s:GradientEntry color="0xEAEAE8"
+								 color.down="0xAAAAAA"
+								 color.over="0xBBBDBD"/>
+				<s:GradientEntry color="0xCCCCCC"
+								 color.down="0x929496"
+								 color.over="0x9FA0A1"/>
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
 
 	<s:Rect id="border"
-			bottom="0" left="0" right="0" top="0"
+			bottom="0"
+			left="0"
+			right="0"
+			top="0"
 			radiusX="{cornerRadius}">
 		<s:stroke>
 			<s:SolidColorStroke color="0xB6B6B6"/>
@@ -94,7 +115,11 @@
 	</s:Rect>
 
 	<s:Label id="labelDisplay"
-			 bottom="5" left="7" right="7" textAlign="left"
-			 top="5" verticalCenter="0"
+			 bottom="5"
+			 left="7"
+			 right="7"
+			 textAlign="left"
+			 top="5"
+			 verticalCenter="0"
 			 maxDisplayedLines="1"/>
 </s:SparkSkin>

@@ -4,7 +4,8 @@
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 minWidth="112"
-			 alpha.disabled="0.5" blendMode="normal">
+			 alpha.disabled="0.5"
+			 blendMode="normal">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -16,8 +17,10 @@
 	</fx:Metadata>
 
 	<fx:Script fb:purpose="styling">
-		/* Define the skin elements that should not be colorized.
-		 For list, the skin itself is colorized but the individual parts are not. */
+		/*
+		   Define the skin elements that should not be colorized.
+		   For list, the skin itself is colorized but the individual parts are not.
+		 */
 		static private const exclusions : Array = [ "scroller", "background" ];
 
 		/**
@@ -92,8 +95,14 @@
 			 @copy spark.components.List#dropIndicator
 		-->
 		<fx:Component id="dropIndicator">
-			<s:Group maxHeight="3" maxWidth="3" minHeight="3" minWidth="3">
-				<s:Rect bottom="0" left="0" right="0" top="0">
+			<s:Group maxHeight="3"
+					 maxWidth="3"
+					 minHeight="3"
+					 minWidth="3">
+				<s:Rect bottom="0"
+						left="0"
+						right="0"
+						top="0">
 					<s:fill>
 						<!--- Defines the color of the background. -->
 						<s:SolidColor color="0xBBBBBB"/>
@@ -110,7 +119,10 @@
 	<!-- border -->
 	<!--- @private -->
 	<s:Rect id="border"
-			bottom="0" left="0" right="0" top="0">
+			bottom="0"
+			left="0"
+			right="0"
+			top="0">
 		<s:stroke>
 			<!--- @private -->
 			<s:SolidColorStroke id="borderStroke"
@@ -121,7 +133,10 @@
 	<!-- fill -->
 	<!--- Defines the background appearance of the list-based component. -->
 	<s:Rect id="background"
-			bottom="1" left="1" right="1" top="1"
+			bottom="1"
+			left="1"
+			right="1"
+			top="1"
 			alpha=".1">
 		<s:fill>
 			<!--- Defines the color of the background. The default color is 0xFFFFFF. -->
@@ -131,9 +146,12 @@
 	</s:Rect>
 
 	<!--- The Scroller component to add scroll bars to the list. -->
-	<s:Scroller id="scroller" 
-				bottom="0" left="0" right="0" top="0"
-				minViewportInset="1" >
+	<s:Scroller id="scroller"
+				bottom="0"
+				left="0"
+				right="0"
+				top="0"
+				minViewportInset="1">
 		<!--- @copy spark.components.SkinnableDataContainer#dataGroup -->
 		<s:DataGroup id="dataGroup"
 					 itemRenderer="spark.skins.spark.DefaultItemRenderer">
@@ -142,7 +160,8 @@
 					 When switching to a different layout, HorizontalLayout for example,
 					 make sure to adjust the minWidth, minHeihgt sizes of the skin -->
 				<s:VerticalLayout horizontalAlign="contentJustify"
-								  gap="0" requestedMinRowCount="5"/>
+								  gap="0"
+								  requestedMinRowCount="5"/>
 			</s:layout>
 		</s:DataGroup>
 	</s:Scroller>

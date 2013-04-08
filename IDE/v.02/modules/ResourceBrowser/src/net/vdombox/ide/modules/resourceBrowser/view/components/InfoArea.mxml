@@ -7,7 +7,7 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
-			
+
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 
 			private const wordSize : Array = [ "bytes", "KB", "MB", "GB", "TB" ];
@@ -25,9 +25,9 @@
 
 				if ( !value )
 				{
-					if( dataWatcher )
+					if ( dataWatcher )
 						dataWatcher.unwatch();
-					
+
 					isDataChanged = true;
 				}
 				else if ( value.data )
@@ -85,25 +85,29 @@
 	<s:VGroup width="100%"
 			  gap="0">
 
-		<s:Rect height="20" width="100%">
+		<s:Rect height="20"
+				width="100%">
 			<s:fill>
 				<mx:SolidColor color="0xEEEEEE"/>
 			</s:fill>
 		</s:Rect>
 
-		<s:Rect height="20" width="100%">
+		<s:Rect height="20"
+				width="100%">
 			<s:fill>
 				<mx:SolidColor color="0xCCCCCC"/>
 			</s:fill>
 		</s:Rect>
 
-		<s:Rect height="20" width="100%">
+		<s:Rect height="20"
+				width="100%">
 			<s:fill>
 				<mx:SolidColor color="0xEEEEEE"/>
 			</s:fill>
 		</s:Rect>
 
-		<s:Rect height="20" width="100%">
+		<s:Rect height="20"
+				width="100%">
 			<s:fill>
 				<mx:SolidColor color="0xCCCCCC"/>
 			</s:fill>
@@ -117,36 +121,77 @@
 		<mx:Spacer width="100%"/>
 
 		<s:VGroup gap="0">
-			<s:Label height="20" text="{ resourceManager.getString( 'ResourceBrowser_General', 'info_area_name' ) }" width="100%"
-					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
-			<s:Label height="20" text="{ resourceManager.getString( 'ResourceBrowser_General', 'info_area_type' ) }" width="100%"
-					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
-			<s:Label height="20" text="ID: " width="100%"
-					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
-			<s:Label height="20" text="{ resourceManager.getString( 'ResourceBrowser_General', 'info_area_size' ) }" width="100%"
-					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
+			<s:Label height="20"
+					 text="{ resourceManager.getString( 'ResourceBrowser_General', 'info_area_name' ) }"
+					 width="100%"
+					 fontFamily="Verdana"
+					 fontWeight="bold"
+					 textAlign="right"
+					 verticalAlign="middle"/>
+			<s:Label height="20"
+					 text="{ resourceManager.getString( 'ResourceBrowser_General', 'info_area_type' ) }"
+					 width="100%"
+					 fontFamily="Verdana"
+					 fontWeight="bold"
+					 textAlign="right"
+					 verticalAlign="middle"/>
+			<s:Label height="20"
+					 text="ID: "
+					 width="100%"
+					 fontFamily="Verdana"
+					 fontWeight="bold"
+					 textAlign="right"
+					 verticalAlign="middle"/>
+			<s:Label height="20"
+					 text="{ resourceManager.getString( 'ResourceBrowser_General', 'info_area_size' ) }"
+					 width="100%"
+					 fontFamily="Verdana"
+					 fontWeight="bold"
+					 textAlign="right"
+					 verticalAlign="middle"/>
 		</s:VGroup>
 
 		<s:VGroup gap="0">
-			<s:Label height="20" maxWidth="350" text="{ _resourceVO.name }" width="100%"
-					 fontFamily="Verdana" fontWeight="normal" verticalAlign="middle"/>
-			<s:Label height="20" text="{ _resourceVO.type.toUpperCase() }" width="100%"
-					 fontFamily="Verdana" fontWeight="normal" verticalAlign="middle"/>
-			<s:TextInput height="20" text="{ _resourceVO.id }" width="280" editable="false" contentBackgroundAlpha="0" borderVisible="false"
-					 fontFamily="Verdana" fontWeight="normal"/>
+			<s:Label height="20"
+					 maxWidth="350"
+					 text="{ _resourceVO.name }"
+					 width="100%"
+					 fontFamily="Verdana"
+					 fontWeight="normal"
+					 verticalAlign="middle"/>
+			<s:Label height="20"
+					 text="{ _resourceVO.type.toUpperCase() }"
+					 width="100%"
+					 fontFamily="Verdana"
+					 fontWeight="normal"
+					 verticalAlign="middle"/>
+			<s:TextInput height="20"
+						 text="{ _resourceVO.id }"
+						 width="280"
+						 editable="false"
+						 contentBackgroundAlpha="0"
+						 borderVisible="false"
+						 fontFamily="Verdana"
+						 fontWeight="normal"/>
 			<s:Label id="size"
-					 height="20" width="100%"
-					 fontFamily="Verdana" fontWeight="normal" verticalAlign="middle"/>
+					 height="20"
+					 width="100%"
+					 fontFamily="Verdana"
+					 fontWeight="normal"
+					 verticalAlign="middle"/>
 		</s:VGroup>
 
 		<mx:Spacer width="100%"/>
 
 	</s:HGroup>
-	
-	<s:Rect bottom="0" left="0" right="0" top="0">
+
+	<s:Rect bottom="0"
+			left="0"
+			right="0"
+			top="0">
 		<s:stroke>
 			<mx:SolidColorStroke color="black"/>
 		</s:stroke>
 	</s:Rect>
-	
+
 </s:Group>

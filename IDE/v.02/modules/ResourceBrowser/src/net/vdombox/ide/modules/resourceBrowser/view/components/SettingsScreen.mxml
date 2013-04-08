@@ -2,10 +2,9 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
-		 
 		 implements="net.vdombox.ide.common.interfaces.ISettingsScreen"
-		 
-		 height="100%" width="100%">
+		 height="100%"
+		 width="100%">
 
 	<fx:Script>
 		<![CDATA[
@@ -18,14 +17,19 @@
 		]]>
 	</fx:Script>
 
-	<s:Rect bottom="5" left="5" right="5" top="5">
+	<s:Rect bottom="5"
+			left="5"
+			right="5"
+			top="5">
 
 		<s:stroke>
 
-			<s:SolidColorStroke color="gray" />
+			<s:SolidColorStroke color="gray"/>
 		</s:stroke>
 	</s:Rect>
 
 	<s:Label text="Settings Screen for ResourceBrowser module"
-			 color="gray" horizontalCenter="0" verticalCenter="0" />
+			 color="gray"
+			 horizontalCenter="0"
+			 verticalCenter="0"/>
 </s:Group>

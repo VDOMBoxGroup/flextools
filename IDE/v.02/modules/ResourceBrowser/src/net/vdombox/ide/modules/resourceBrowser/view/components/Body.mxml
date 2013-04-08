@@ -3,14 +3,16 @@
 		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  height="100%" width="100%">
+		  height="100%"
+		  width="100%">
 
 	<!--<components:ResourcesList id="resourcesList"
 							  height="100%" minWidth="200"/>
 
 	<components:WorkArea id="workArea"
 						 height="100%" width="100%"/> -->
-	
+
 	<components:ResourcesArea id="resourcesArea"
-							  width="100%" height="100%"/>
+							  width="100%"
+							  height="100%"/>
 </s:HGroup>

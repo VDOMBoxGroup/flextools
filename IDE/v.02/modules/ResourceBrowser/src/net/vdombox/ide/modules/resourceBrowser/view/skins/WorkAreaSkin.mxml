@@ -16,7 +16,10 @@
 	</s:states>
 
 	<s:Rect id="backgroundRect"
-			bottom="0" left="0" right="0" top="0">
+			bottom="0"
+			left="0"
+			right="0"
+			top="0">
 
 		<s:fill>
 
@@ -31,7 +34,9 @@
 	</s:Rect>
 
 	<s:Rect height="20"
-			left="1" right="1" top="1">
+			left="1"
+			right="1"
+			top="1">
 		<s:fill>
 			<s:LinearGradient rotation="90">
 				<s:GradientEntry color="0xCDCDCD"/>
@@ -41,27 +46,40 @@
 	</s:Rect>
 
 	<s:HGroup height="20"
-			  left="1" right="1" top="1"
+			  left="1"
+			  right="1"
+			  top="1"
 			  gap="0">
 
 		<components:WorkAreaButton id="deleteButton"
-								   enabled="false" height="20" icon="@Embed('assets/delete.png')"
+								   enabled="false"
+								   height="20"
+								   icon="@Embed('assets/delete.png')"
 								   label="{ resourceManager.getString( 'ResourceBrowser_General', 'work_area_delete_resource' ) }"/>
 
 		<mx:Spacer width="100%"/>
-		
-		<components:WorkAreaButton id="getResourceButton" icon="@Embed('assets/expand.png')"
-								   height="20" label="{ resourceManager.getString( 'ResourceBrowser_General', 'work_area_get_resource' ) }"/>
+
+		<components:WorkAreaButton id="getResourceButton"
+								   icon="@Embed('assets/expand.png')"
+								   height="20"
+								   label="{ resourceManager.getString( 'ResourceBrowser_General', 'work_area_get_resource' ) }"/>
 
 		<components:WorkAreaButton id="showInfoButton"
-								   height="20" icon="@Embed('assets/expand.png')" label="{ hostComponent.isInfoShowed ? resourceManager.getString( 'ResourceBrowser_General', 'work_area_hide_info' ) : resourceManager.getString( 'ResourceBrowser_General', 'work_area_show_info' ) }"/>
+								   height="20"
+								   icon="@Embed('assets/expand.png')"
+								   label="{ hostComponent.isInfoShowed ? resourceManager.getString( 'ResourceBrowser_General', 'work_area_hide_info' ) : resourceManager.getString( 'ResourceBrowser_General', 'work_area_show_info' ) }"/>
 
 		<components:WorkAreaButton id="showAddResourcesButton"
-								   height="20" icon="@Embed('assets/expand.png')" label="{ resourceManager.getString( 'ResourceBrowser_General', 'work_area_add_resources' ) }"
+								   height="20"
+								   icon="@Embed('assets/expand.png')"
+								   label="{ resourceManager.getString( 'ResourceBrowser_General', 'work_area_add_resources' ) }"
 								   highlighted="{ hostComponent.isAddResourcesShowed }"/>
 	</s:HGroup>
 
 	<s:Group id="contentGroup"
-			 bottom="10" left="10" right="10" top="30">
+			 bottom="10"
+			 left="10"
+			 right="10"
+			 top="30">
 	</s:Group>
 </s:SparkSkin>

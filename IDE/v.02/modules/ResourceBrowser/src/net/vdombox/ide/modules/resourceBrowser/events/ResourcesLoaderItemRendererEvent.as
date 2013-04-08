@@ -6,8 +6,7 @@ package net.vdombox.ide.modules.resourceBrowser.events
 	{
 		public static var REMOVE : String = "remove";
 
-		public function ResourcesLoaderItemRendererEvent( type : String, bubbles : Boolean = false,
-			cancelable : Boolean = false )
+		public function ResourcesLoaderItemRendererEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{
 			super( type, bubbles, cancelable );
 		}

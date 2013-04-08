@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.modules.resourceBrowser.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.WorkArea;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -52,7 +52,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( Notifications.BODY_STOP );
 
 			interests.push( StatesProxy.SELECTED_RESOURCE_CHANGED );
-			
+
 			interests.push( Notifications.RESOURCE_LOADED );
 
 			return interests;
@@ -93,11 +93,11 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 					break;
 				}
-					
+
 				case Notifications.RESOURCE_LOADED:
 				{
 					workArea.resourceVO = body as ResourceVO;
-					
+
 					break;
 				}
 			}
@@ -116,7 +116,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			workArea.removeEventListener( WorkAreaEvent.DELETE_RESOURCE, deleteResourceHandler );
 			workArea.removeEventListener( WorkAreaEvent.LOAD_RESOURCE, loadResourceHandler );
 			workArea.removeEventListener( WorkAreaEvent.GET_ICON, getIconHandler, true );
-			workArea.removeEventListener( WorkAreaEvent.ERROR, errorHandler);
+			workArea.removeEventListener( WorkAreaEvent.ERROR, errorHandler );
 		}
 
 		private function clearData() : void
@@ -131,17 +131,17 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			//sendNotification( Notifications.DELETE_RESOURCE_REQUEST );
 			sendNotification( Notifications.DELETE_RESOURCE, { applicationVO: statesProxy.selectedApplication, resourceVO: workArea.resourceVO } );
 		}
-		
+
 		private function loadResourceHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( Notifications.LOAD_RESOURCE, workArea.previewArea.resourceVO );
 		}
-		
+
 		private function getIconHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( Notifications.GET_ICON, workArea.previewArea.resourceVO );
 		}
-		
+
 		private function errorHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( Notifications.WRITE_ERROR, { applicationVO: statesProxy.selectedApplication, content: event.content } );

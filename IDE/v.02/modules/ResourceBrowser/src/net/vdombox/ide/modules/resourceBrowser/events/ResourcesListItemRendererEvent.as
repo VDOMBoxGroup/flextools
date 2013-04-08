@@ -6,8 +6,7 @@ package net.vdombox.ide.modules.resourceBrowser.events
 	{
 		public static var CREATED : String = "created";
 
-		public function ResourcesListItemRendererEvent( type : String, bubbles : Boolean = false,
-			cancelable : Boolean = false )
+		public function ResourcesListItemRendererEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{
 			super( type, bubbles, cancelable );
 		}

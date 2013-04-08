@@ -1,147 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" 
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="400"
+		 height="300"
 		 xmlns:button="net.vdombox.ide.common.view.components.button.*"
-		 creationComplete="group1_creationCompleteHandler(event)" xmlns:components="net.vdombox.ide.modules.resourceBrowser.view.components.*">
+		 creationComplete="group1_creationCompleteHandler(event)"
+		 xmlns:components="net.vdombox.ide.modules.resourceBrowser.view.components.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.events.ResourceVOEvent;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
-			
+
 			private var _resources : ArrayList;
-			
+
 			[Bindable]
 			public var filteredResources : int = 0;
-			
+
 			[Bindable]
 			public var totalResources : int = 0;
-			
+
 			public var deleteResourceID : String = null;
-			
+
 			[Bindable]
-			public function get resources():ArrayList
+			public function get resources() : ArrayList
 			{
 				return _resources;
 			}
 
-			public function set resources(value:ArrayList):void
+			public function set resources( value : ArrayList ) : void
 			{
 				_resources = value;
 			}
 
-			protected function nameFilter_focusInHandler(event:FocusEvent):void
+			protected function nameFilter_focusInHandler( event : FocusEvent ) : void
 			{
 				if ( nameFilter.text == resourceManager.getString( 'ResourceBrowser_General', 'resource_selector_window_filter' ) )
 					nameFilter.text = "";
 			}
-			
-			protected function nameFilter_focusOutHandler(event:FocusEvent):void
+
+			protected function nameFilter_focusOutHandler( event : FocusEvent ) : void
 			{
 				if ( nameFilter.text == "" )
 					nameFilter.text = resourceManager.getString( 'ResourceBrowser_General', 'resource_selector_window_filter' );
 			}
-			
+
 			override protected function commitProperties() : void
 			{
 				super.commitProperties();
-				
+
 				if ( deleteResourceID )
 				{
 					var selInd : uint = resourcesList.selectedIndex;
-					
+
 					resources.source = arrayWithoutResource( deleteResourceID );
-					
+
 					//totalResources = resources.length-1;					
-					
+
 					if ( resources.length > 1 && selInd > 1 )
 					{
 						selInd = ( selInd > 0 ) ? selInd - 1 : 0;
-						
-						/*selectedResourceIndex = selInd;
-						scrollToIndex = selInd;*/
+
+						/*
+						   selectedResourceIndex = selInd;
+						   scrollToIndex = selInd;
+						 */
 					}
-					
+
 					deleteResourceID = null;
 				}
-				
-				/*if ( selectedResourceIndex >= 0 )
-				{
-					if ( selectedResourceIndex != 0 )
-						resourcesList.selectedIndex = selectedResourceIndex;
-					
-					selectedResourceIndex = -1;
-				}*/
+
+			/*
+			   if ( selectedResourceIndex >= 0 )
+			   {
+			   if ( selectedResourceIndex != 0 )
+			   resourcesList.selectedIndex = selectedResourceIndex;
+
+			   selectedResourceIndex = -1;
+			   }
+			 */
 			}
-			
+
 			private function arrayWithoutResource( idRes : String ) : Array
 			{
 				var newArray : Array = new Array();
-				
+
 				for each ( var resVO : ResourceVO in resources.source )
 				{
 					if ( !resVO || resVO.id != idRes )
 						newArray.push( resVO );
 				}
-				
+
 				return newArray;
 			}
-			
+
 			public function addResource( resourceVO : ResourceVO ) : void
 			{
 				totalResources++;
-				
+
 				resources.addItem( resourceVO );
-				
+
 				//selectedResourceIndex = scrollToIndex = resources.length - 1;
-				
+
 				invalidateProperties();
 			}
-			
-			protected function vdombutton1_clickHandler(event:MouseEvent):void
+
+			protected function vdombutton1_clickHandler( event : MouseEvent ) : void
 			{
 				dispatchEvent( new ResourceVOEvent( ResourceVOEvent.LOAD_RESOURCE ) );
 			}
-			
-			protected function group1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function group1_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				resourcesList.addEventListener( ResourceVOEvent.PREVIEW_RESOURCE, previewResource, true, 0 ,true );
-				resourcesList.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
+				resourcesList.addEventListener( ResourceVOEvent.PREVIEW_RESOURCE, previewResource, true, 0, true );
+				resourcesList.addEventListener( MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 			}
-			
+
 			private function mouseWheelHandler( event : MouseEvent ) : void
 			{
 				event.delta = event.delta > 0 ? 1 : -1;
 			}
-			
-			public function previewResource(event:Event) : void
+
+			public function previewResource( event : Event ) : void
 			{
-				dispatchEvent(new Event(ResourceVOEvent.PREVIEW_RESOURCE));
+				dispatchEvent( new Event( ResourceVOEvent.PREVIEW_RESOURCE ) );
 			}
-			
-			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
+
+			protected function resourcesList_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				resourcesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
-	
-	<s:VGroup width="100%" height="100%" gap="0">
-		
-		<s:Group width="100%" height="39">
-			
-			<s:Rect bottom="0" left="0" right="0" top="0">
+
+
+	<s:VGroup width="100%"
+			  height="100%"
+			  gap="0">
+
+		<s:Group width="100%"
+				 height="39">
+
+			<s:Rect bottom="0"
+					left="0"
+					right="0"
+					top="0">
 				<s:fill>
 					<s:LinearGradient rotation="90">
 						<s:GradientEntry color="#B70000"/>
@@ -149,88 +161,123 @@
 					</s:LinearGradient>
 				</s:fill>
 			</s:Rect>
-			
-			<s:HGroup width="100%" verticalAlign="middle" paddingLeft="5" paddingRight="10" top="5">		 
-				<s:TextInput id="nameFilter" width="250" borderColor="#999999" color="#666666"
-							 fontFamily="Tahoma" fontStyle="italic" 
-							 focusIn="nameFilter_focusInHandler(event)" focusOut="nameFilter_focusOutHandler(event)"
-							 text="{ resourceManager.getString( 'ResourceBrowser_General', 'resource_selector_window_filter' ) }"  />
-				
-				<mx:Image id="__spinner" height="18"  width="18" visible="false"/>
-				
+
+			<s:HGroup width="100%"
+					  verticalAlign="middle"
+					  paddingLeft="5"
+					  paddingRight="10"
+					  top="5">
+				<s:TextInput id="nameFilter"
+							 width="250"
+							 borderColor="#999999"
+							 color="#666666"
+							 fontFamily="Tahoma"
+							 fontStyle="italic"
+							 focusIn="nameFilter_focusInHandler(event)"
+							 focusOut="nameFilter_focusOutHandler(event)"
+							 text="{ resourceManager.getString( 'ResourceBrowser_General', 'resource_selector_window_filter' ) }"/>
+
+				<mx:Image id="__spinner"
+						  height="18"
+						  width="18"
+						  visible="false"/>
+
 				<s:Label color="#FFFFFF"/>
-				
-				<s:Label 
-						 color="#FFFFFF" fontWeight="bold"/>
-				
+
+				<s:Label color="#FFFFFF"
+						 fontWeight="bold"/>
+
 				<mx:Spacer width="100%"/>
-				
-				<button:VDOMButton 
-								   label="{ resourceManager.getString( 'ResourceBrowser_General', 'resource_selector_window_upload' ) }"
+
+				<button:VDOMButton label="{ resourceManager.getString( 'ResourceBrowser_General', 'resource_selector_window_upload' ) }"
 								   icon="{VDOMImage.Add}"
 								   focusColor="#CCCCCC"
-								   click="vdombutton1_clickHandler(event)"/>	
+								   click="vdombutton1_clickHandler(event)"/>
 			</s:HGroup>
 		</s:Group>
-		
-		<s:Line width="100%" height="1">
+
+		<s:Line width="100%"
+				height="1">
 			<s:stroke>
-				<s:SolidColorStroke color="#424242" alpha="1"/>
+				<s:SolidColorStroke color="#424242"
+									alpha="1"/>
 			</s:stroke>
 		</s:Line>
 		<!-- body -->
-		<s:Group width="100%" height="100%">
-			<s:Rect width="100%" height="100%">
+		<s:Group width="100%"
+				 height="100%">
+			<s:Rect width="100%"
+					height="100%">
 				<s:fill>
-					<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
+					<s:BitmapFill source="{VDOMImage.Fon_Texture}"
+								  smooth="true"
+								  fillMode="repeat"/>
 				</s:fill>
 			</s:Rect>
-			
-			<s:VGroup width="100%" height="100%">
-				
-				<s:Group width="100%" height="100%">
-					<s:Rect width="100%" height="100%">
+
+			<s:VGroup width="100%"
+					  height="100%">
+
+				<s:Group width="100%"
+						 height="100%">
+					<s:Rect width="100%"
+							height="100%">
 						<s:fill>
-							<s:SolidColor color="#000000" alpha="0.2"/>
+							<s:SolidColor color="#000000"
+										  alpha="0.2"/>
 						</s:fill>
 					</s:Rect>
-					
-					<s:List id="resourcesList" 
-							left="4" right="2" top="4" bottom="0" 
-							width="100%" height="100%" 
-							borderVisible="false" chromeColor="#777777" contentBackgroundAlpha="0"
+
+					<s:List id="resourcesList"
+							left="4"
+							right="2"
+							top="4"
+							bottom="0"
+							width="100%"
+							height="100%"
+							borderVisible="false"
+							chromeColor="#777777"
+							contentBackgroundAlpha="0"
 							contentBackgroundColor="#383838"
 							selectionColor="#383838"
 							rollOverColor="#383838"
 							symbolColor="#383838"
-							enabled="true" focusColor="#CCCCCC"
+							enabled="true"
+							focusColor="#CCCCCC"
 							dataProvider="{resources}"
 							itemRenderer="net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItem"
 							creationComplete="resourcesList_creationCompleteHandler(event)">
 						<s:layout>
-							<s:TileLayout horizontalGap="4" verticalGap="8" requestedColumnCount="-1"  requestedRowCount="-1"
-										  >
-								
+							<s:TileLayout horizontalGap="4"
+										  verticalGap="8"
+										  requestedColumnCount="-1"
+										  requestedRowCount="-1">
+
 							</s:TileLayout>
 						</s:layout>
 					</s:List>
 				</s:Group>
-				
+
 				<!--  futer  -->
-				<s:HGroup width="100%" height="55"
-						  paddingBottom="2" paddingLeft="10" paddingRight="10" paddingTop="2"
-						  verticalAlign="middle" horizontalAlign="right">
-					
+				<s:HGroup width="100%"
+						  height="55"
+						  paddingBottom="2"
+						  paddingLeft="10"
+						  paddingRight="10"
+						  paddingTop="2"
+						  verticalAlign="middle"
+						  horizontalAlign="right">
+
 				</s:HGroup>
-				
+
 			</s:VGroup>
-			
-			<!--<s:Button id="gripper" 
+
+			<!--<s:Button id="gripper"
 					  right="0" bottom="0"
 					  tabEnabled="false"
 					  skinClass="net.vdombox.ide.common.view.skins.PopupWindowGripperSkin"
 					  alpha="0.9"/> -->
 		</s:Group>
 	</s:VGroup>
-	
+
 </s:Group>

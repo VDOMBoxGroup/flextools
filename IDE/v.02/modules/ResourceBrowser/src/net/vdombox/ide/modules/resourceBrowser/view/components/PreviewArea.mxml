@@ -7,7 +7,7 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
-			
+
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.resourceBrowser.events.WorkAreaEvent;
 
@@ -44,7 +44,7 @@
 					if ( !_resourceVO.icon )
 					{
 						dataWatcher = BindingUtils.bindSetter( dataChanged, _resourceVO, "icon", true, true );
-						dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.GET_ICON ) );
+						dispatchEvent( new WorkAreaEvent( WorkAreaEvent.GET_ICON ) );
 					}
 					else
 						preview.source = _resourceVO.icon;
@@ -105,11 +105,19 @@
 	</fx:Script>
 
 	<mx:Image id="preview"
-			  horizontalAlign="center" horizontalCenter="0" verticalAlign="middle" verticalCenter="0"
+			  horizontalAlign="center"
+			  horizontalCenter="0"
+			  verticalAlign="middle"
+			  verticalCenter="0"
 			  complete="preview_completeHandler(event)"
-			  maintainAspectRatio="true" scaleContent="true" smoothBitmapContent="true"/>
+			  maintainAspectRatio="true"
+			  scaleContent="true"
+			  smoothBitmapContent="true"/>
 
-	<s:Rect bottom="0" left="0" right="0" top="0">
+	<s:Rect bottom="0"
+			left="0"
+			right="0"
+			top="0">
 		<s:stroke>
 			<mx:SolidColorStroke color="0xEEEEEE"/>
 		</s:stroke>

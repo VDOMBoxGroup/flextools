@@ -6,8 +6,7 @@ package net.vdombox.ide.modules.resourceBrowser.events
 	{
 		public static var START_UPLOAD : String = "startUpload";
 
-		public function ResourcesLoaderEvent( type : String, bubbles : Boolean = false,
-			cancelable : Boolean = false )
+		public function ResourcesLoaderEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{
 			super( type, bubbles, cancelable );
 		}

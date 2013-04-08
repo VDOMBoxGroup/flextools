@@ -1,13 +1,13 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import flash.events.MouseEvent;
-	
+
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.Toolset;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -50,14 +50,14 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case Notifications.MODULE_SELECTED:
 				{
 					toolset.toolsetButton.selected = true;
-					
+
 					break;
 				}
-					
+
 				case Notifications.MODULE_DESELECTED:
 				{
 					toolset.toolsetButton.selected = false;
-					
+
 					break;
 				}
 			}
@@ -67,7 +67,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			toolset.toolsetButton.addEventListener( MouseEvent.CLICK, resourceButton_click )
 		}
-		
+
 		private function resourceButton_click( event : MouseEvent ) : void
 		{
 			toolset.toolsetButton.selected = !toolset.toolsetButton.selected;

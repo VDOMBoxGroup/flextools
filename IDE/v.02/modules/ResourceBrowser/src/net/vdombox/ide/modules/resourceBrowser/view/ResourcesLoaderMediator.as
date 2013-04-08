@@ -3,13 +3,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import flash.events.FileListEvent;
 	import flash.events.MouseEvent;
 	import flash.filesystem.File;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderEvent;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.ResourcesLoader;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -100,24 +100,24 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case Notifications.RESOURCE_UPLOADED:
 				{
 					var resourceVO : ResourceVO = body as ResourceVO;
-					
-					if( !resourceVO || resourcesLoader.resourcesArrayList && resourcesLoader.resourcesArrayList.length > 0 )
+
+					if ( !resourceVO || resourcesLoader.resourcesArrayList && resourcesLoader.resourcesArrayList.length > 0 )
 					{
 						var resourceItemsArray : Array = resourcesLoader.resourcesArrayList.source;
 						var currentResourceVO : ResourceVO;
-						
+
 						for ( var i : uint = 0; i < resourceItemsArray.length; i++ )
 						{
 							currentResourceVO = resourceItemsArray[ i ] as ResourceVO;
-							
-							if( currentResourceVO && currentResourceVO.id == resourceVO.id )
+
+							if ( currentResourceVO && currentResourceVO.id == resourceVO.id )
 							{
 								resourcesLoader.resourcesArrayList.removeItem( currentResourceVO );
 								break;
 							}
 						}
 					}
-					
+
 					uploadResource();
 
 					break;
@@ -144,25 +144,25 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		private function uploadResource() : void
 		{
 			var resourceVO : ResourceVO;
-			
-			if( !statesProxy.selectedApplication )
+
+			if ( !statesProxy.selectedApplication )
 				return;
-			
-			if( resourcesLoader.resourcesArrayList.length > 0 )
+
+			if ( resourcesLoader.resourcesArrayList.length > 0 )
 				resourceVO = resourcesLoader.resourcesArrayList.getItemAt( 0 ) as ResourceVO;
-			
-			if( resourceVO )
+
+			if ( resourceVO )
 				sendNotification( Notifications.UPLOAD_RESOURCE, resourceVO );
 		}
-		
+
 		private function addResourcesGroup_clickHandler( event : MouseEvent ) : void
 		{
 			file = new File();
-			
+
 			file.addEventListener( FileListEvent.SELECT_MULTIPLE, file_selectMulitpleHandler, false, 0, true );
 			file.browseForOpenMultiple( "----Перевести------" );
 		}
-		
+
 		private function file_selectMulitpleHandler( event : FileListEvent ) : void
 		{
 			if ( file )
@@ -170,32 +170,32 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				file.removeEventListener( FileListEvent.SELECT_MULTIPLE, file_selectMulitpleHandler );
 				file = null;
 			}
-			
+
 			var files : Array = event.files;
-			
+
 			if ( !statesProxy.selectedApplication || !files || files.length == 0 )
 				return;
-			
+
 			var uploadedFile : File;
 			var newResourceVO : ResourceVO;
-			
+
 			for ( var i : uint = 0; i < files.length; i++ )
 			{
 				uploadedFile = files[ i ] as File;
-				
+
 				if ( uploadedFile )
 				{
 					newResourceVO = new ResourceVO( statesProxy.selectedApplication.id );
-					
+
 					newResourceVO.name = uploadedFile.name;
 					newResourceVO.setPath( uploadedFile.nativePath );
-					newResourceVO.setType( uploadedFile["extension"].toLowerCase() ); //dirty hack;
-					
+					newResourceVO.setType( uploadedFile[ "extension" ].toLowerCase() ); //dirty hack;
+
 					resourcesLoader.resourcesArrayList.addItem( newResourceVO );
 				}
 			}
 		}
-		
+
 		private function startUploadHandler( event : ResourcesLoaderEvent ) : void
 		{
 			uploadResource();

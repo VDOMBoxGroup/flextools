@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.resourceBrowser
 	import net.vdombox.ide.modules.resourceBrowser.controller.messages.ProcessResourcesProxyMessageCommand;
 	import net.vdombox.ide.modules.resourceBrowser.controller.messages.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.resourceBrowser.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 
@@ -46,7 +46,7 @@ package net.vdombox.ide.modules.resourceBrowser
 		override protected function initializeController() : void
 		{
 			super.initializeController();
-			
+
 			registerCommand( Notifications.STARTUP, StartupCommand );
 
 			registerCommand( Notifications.CREATE_TOOLSET, CreateToolsetCommand );
@@ -63,13 +63,13 @@ package net.vdombox.ide.modules.resourceBrowser
 
 			registerCommand( StatesProxy.CHANGE_SELECTED_RESOURCE_REQUEST, ChangeSelectedObjectRequestCommand );
 			registerCommand( Notifications.DELETE_RESOURCE_REQUEST, DeleteResourceRequestCommand )
-			
+
 			registerCommand( Notifications.RESOURCE_DELETED, ResourceDeletedCommand );
-			
+
 			registerCommand( Notifications.BODY_CREATED, BodyCreatedCommand );
 
 			registerCommand( Notifications.TEAR_DOWN, TearDownCommand );
-			
+
 			registerCommand( Notifications.OPEN_BROWSER_BY_LOAD, LoadResourceCommand );
 		}
 	}

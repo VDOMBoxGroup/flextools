@@ -8,20 +8,20 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
-			
+
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.resourceBrowser.events.WorkAreaEvent;
 
-			[SkinPart( required="true" )]
+			[SkinPart( required = "true" )]
 			public var deleteButton : WorkAreaButton;
 
-			[SkinPart( required="true" )]
+			[SkinPart( required = "true" )]
 			public var showInfoButton : WorkAreaButton;
 
-			[SkinPart( required="true" )]
+			[SkinPart( required = "true" )]
 			public var showAddResourcesButton : WorkAreaButton;
-			
-			[SkinPart( required="true" )]
+
+			[SkinPart( required = "true" )]
 			public var getResourceButton : WorkAreaButton;
 
 			[Bindable]
@@ -29,10 +29,10 @@
 
 			[Bindable]
 			public var isAddResourcesShowed : Boolean = false;
-			
+
 			private var _resourceVO : ResourceVO;
 
-			public function get resourceVO():ResourceVO
+			public function get resourceVO() : ResourceVO
 			{
 				return _resourceVO;
 			}
@@ -40,7 +40,7 @@
 			public function set resourceVO( value : ResourceVO ) : void
 			{
 				_resourceVO = value;
-				
+
 				if ( value )
 					deleteButton.enabled = true;
 				else
@@ -59,7 +59,7 @@
 
 				if ( instance === deleteButton )
 					deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );
-				
+
 				if ( instance === getResourceButton )
 					getResourceButton.addEventListener( MouseEvent.CLICK, getResourceButton_clickHandler, false, 0, true );
 			}
@@ -78,7 +78,7 @@
 			{
 				dispatchEvent( new WorkAreaEvent( WorkAreaEvent.DELETE_RESOURCE ) );
 			}
-			
+
 			private function getResourceButton_clickHandler( event : MouseEvent ) : void
 			{
 				if ( !previewArea.resourceVO )
@@ -88,24 +88,24 @@
 					dispatchEvent( errorEvent );
 					return;
 				}
-					
-				
+
+
 				if ( !previewArea.resourceVO.data )
 				{
 					BindingUtils.bindSetter( dataChanged, previewArea.resourceVO, "data", true, true );
-					dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.LOAD_RESOURCE ) );
+					dispatchEvent( new WorkAreaEvent( WorkAreaEvent.LOAD_RESOURCE ) );
 				}
 				else
 					saveResource( previewArea.resourceVO );
 			}
-			
+
 			private function dataChanged( value : Object ) : void
 			{
 				if ( previewArea.resourceVO.data )
 					saveResource( previewArea.resourceVO );
 			}
-			
-			private function saveResource ( value : ResourceVO ) : void
+
+			private function saveResource( value : ResourceVO ) : void
 			{
 				var fileUpload : FileReference = new FileReference();
 				fileUpload.save( value.data, value.name );
@@ -118,14 +118,18 @@
 	</s:layout>
 
 	<components:ResourcesLoader id="resourcesLoader"
-								includeInLayout="{ isAddResourcesShowed }" maxHeight="200" width="100%"
+								includeInLayout="{ isAddResourcesShowed }"
+								maxHeight="200"
+								width="100%"
 								visible="{ isAddResourcesShowed }"/>
 
 	<components:PreviewArea id="previewArea"
-							height="100%" width="100%"/>
+							height="100%"
+							width="100%"/>
 
 	<components:InfoArea id="infoArea"
-						 includeInLayout="{ isInfoShowed }" width="100%"
+						 includeInLayout="{ isInfoShowed }"
+						 width="100%"
 						 visible="{ isInfoShowed }"/>
 
 </s:SkinnableContainer>
