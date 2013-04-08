@@ -5,7 +5,7 @@ package net.vdombox.ide.core.model.business
 	import flash.events.IEventDispatcher;
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
-	
+
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	import mx.rpc.AsyncToken;
@@ -16,7 +16,7 @@ package net.vdombox.ide.core.model.business
 	import mx.rpc.soap.Operation;
 	import mx.rpc.soap.SOAPFault;
 	import mx.rpc.soap.WebService;
-	
+
 	import net.vdombox.ide.core.events.SOAPErrorEvent;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.protect.Code;
@@ -42,11 +42,11 @@ package net.vdombox.ide.core.model.business
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
 		private var isLoadWSDLProcess : Boolean;
-		
+
 		public var cancelConnected : Boolean = false;
 
 		public function SOAP()
-		{			
+		{
 			if ( instance )
 				throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 		}
@@ -59,7 +59,7 @@ package net.vdombox.ide.core.model.business
 		public function connect( wsdl : String ) : void
 		{
 			cancelConnected = false;
-			
+
 			webService = new WebService();
 			webService.wsdl = wsdl;
 			webService.useProxy = false;
@@ -71,19 +71,19 @@ package net.vdombox.ide.core.model.business
 
 			webService.loadWSDL();
 		}
-		
+
 		public function reconnect() : void
 		{
 			webService.addEventListener( LoadEvent.LOAD, loadHandler );
 			webService.addEventListener( FaultEvent.FAULT, faultHandler );
-			
+
 			isLoadWSDLProcess = true;
-			
+
 			webService.loadWSDL();
 		}
 
 		public function disconnect() : void
-		{			
+		{
 			if ( webService )
 				webService.disconnect();
 
@@ -128,7 +128,7 @@ package net.vdombox.ide.core.model.business
 
 			args.unshift( code.sessionId, key );
 			operation.addEventListener( ResultEvent.RESULT, operationResultHandler );
-//			operation.addEventListener( FaultEvent.FAULT, operationFaultHandler );
+			//			operation.addEventListener( FaultEvent.FAULT, operationFaultHandler );
 
 			token = operation.send.apply( null, args );
 			token.key = key;
@@ -236,10 +236,10 @@ package net.vdombox.ide.core.model.business
 			}
 			catch ( error : Error )
 			{
-				var errorMsg : String = "Parse XML data error:\n" + error.message; 
+				var errorMsg : String = "Parse XML data error:\n" + error.message;
 				var fault : Fault = new Fault( "i101", errorMsg, event.result.toString() )
 				var faultEvent : FaultEvent = FaultEvent.createEvent( fault );
-				
+
 				faultHandler( faultEvent );
 				return;
 			}
@@ -253,13 +253,13 @@ package net.vdombox.ide.core.model.business
 
 		private function operationFaultHandler( event : FaultEvent ) : void
 		{
-//			faultHandler( event );
+			//			faultHandler( event );
 		}
 
 		// Реализация диспатчера
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public function addEventListener( type : String, listener : Function, useCapture : Boolean = false, priority : int = 0, useWeakReference : Boolean = false ) : void
 		{
@@ -267,18 +267,18 @@ package net.vdombox.ide.core.model.business
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public function dispatchEvent( event : Event ) : Boolean
 		{
-			if ( !cancelConnected || event.type == SOAPEvent.DISCONNECTON_OK)
+			if ( !cancelConnected || event.type == SOAPEvent.DISCONNECTON_OK )
 				return dispatcher.dispatchEvent( event );
 			else
 				return false;
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public function hasEventListener( type : String ) : Boolean
 		{
@@ -286,7 +286,7 @@ package net.vdombox.ide.core.model.business
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public function removeEventListener( type : String, listener : Function, useCapture : Boolean = false ) : void
 		{
@@ -294,7 +294,7 @@ package net.vdombox.ide.core.model.business
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public function willTrigger( type : String ) : Boolean
 		{

@@ -1,11 +1,11 @@
 package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
-	
+
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.LoginViewEvent;
 	import net.vdombox.ide.core.model.LocalesProxy;
@@ -14,7 +14,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.vo.HostVO;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
 	import net.vdombox.ide.core.view.components.LoginView;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -31,39 +31,39 @@ package net.vdombox.ide.core.view
 		private var localeProxy : LocalesProxy;
 
 		private var sharedObjectProxy : SharedObjectProxy;
-		
+
 		public var selectedHost : HostVO;
-		
+
 		//public var selectedHostIndex : int;
 
 		public function get username() : String
 		{
 			return loginView.user.text;
 		}
-		
+
 		public function get password() : String
 		{
 			return loginView.pass.text;
 		}
-		
+
 		public function get hostname() : String
 		{
 			return loginView.host.textInput.text;
 		}
-		
+
 		public function get needSave() : Boolean
 		{
-			return  loginView.saveButton.currentState == "save" ;
+			return loginView.saveButton.currentState == "save";
 		}
-		
+
 		override public function onRegister() : void
 		{
-			LogProxy.addLog( "LoginViewMediator onRegister");
+			LogProxy.addLog( "LoginViewMediator onRegister" );
 			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
 			localeProxy = facade.retrieveProxy( LocalesProxy.NAME ) as LocalesProxy;
 
 			addHandlers();
-			
+
 			try
 			{
 				validateProperties();
@@ -72,7 +72,7 @@ package net.vdombox.ide.core.view
 			{
 			}
 		}
-		
+
 		override public function onRemove() : void
 		{
 			removeHandlers();
@@ -81,9 +81,9 @@ package net.vdombox.ide.core.view
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
-			
+
 			interests.push( ApplicationFacade.SUBMIN_CLICK );
-			
+
 			return interests;
 		}
 
@@ -94,61 +94,61 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.SUBMIN_CLICK:
 				{
 					submit();
-					
+
 					break;
 				}
 			}
 		}
-		
+
 		private function get loginView() : LoginView
 		{
 			return viewComponent as LoginView;
 		}
 
 		private function addHandlers() : void
-		{						
-			loginView.addEventListener( FlexEvent.SHOW, showHandler, false, 0, true);
-			
+		{
+			loginView.addEventListener( FlexEvent.SHOW, showHandler, false, 0, true );
+
 			loginView.addEventListener( LoginViewEvent.SUBMIT, submitHandler, false, 0, true );
 
 			loginView.addEventListener( LoginViewEvent.LANGUAGE_CHANGED, languageChangedHandler, false, 0, true );
-			
+
 			loginView.addEventListener( LoginViewEvent.DELETE_CLICK, deleteHostHandler, false, 0, true );
-			
-			loginView.user.addEventListener( Event.CHANGE, usernameChangeHandler , false, 0, true);
-			
-			loginView.host.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHostHandler , false, 0, true);
+
+			loginView.user.addEventListener( Event.CHANGE, usernameChangeHandler, false, 0, true );
+
+			loginView.host.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHostHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
-		{			
-			loginView.removeEventListener( FlexEvent.SHOW, showHandler);
-			
+		{
+			loginView.removeEventListener( FlexEvent.SHOW, showHandler );
+
 			loginView.removeEventListener( LoginViewEvent.SUBMIT, submitHandler );
 
 			loginView.removeEventListener( LoginViewEvent.LANGUAGE_CHANGED, languageChangedHandler );
-			
+
 			loginView.removeEventListener( LoginViewEvent.DELETE_CLICK, deleteHostHandler );
-			
-			loginView.host.removeEventListener( Event.CHANGE, setLoginInformation);
-			
+
+			loginView.host.removeEventListener( Event.CHANGE, setLoginInformation );
+
 			loginView.user.removeEventListener( Event.CHANGE, usernameChangeHandler );
-			
+
 			loginView.host.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHostHandler );
 		}
-		
+
 		private function createCompleteHostHandler( event : FlexEvent ) : void
 		{
 			loginView.host.textInput.addEventListener( Event.CHANGE, hostnameChangeHandler, false, 0, true );
-			
+
 		}
-		
-		private function showHandler( event : FlexEvent ): void
+
+		private function showHandler( event : FlexEvent ) : void
 		{
 			LogProxy.addLog( "show" );
 			validateProperties();
 		}
-			
+
 		private function usernameChangeHandler( event : Event ) : void
 		{
 			if ( selectedHost )
@@ -159,12 +159,12 @@ package net.vdombox.ide.core.view
 					loginView.password = selectedHost.password;
 			}
 		}
-		
+
 		private function hostnameChangeHandler( event : Event ) : void
 		{
 			if ( selectedHost )
 			{
-				if ( loginView.host.textInput.text != selectedHost.host || loginView.username != selectedHost.user)
+				if ( loginView.host.textInput.text != selectedHost.host || loginView.username != selectedHost.user )
 				{
 					loginView.password = "";
 					loginView.saveButton.currentState = "notsave";
@@ -179,62 +179,62 @@ package net.vdombox.ide.core.view
 				}
 			}
 		}
-		
+
 		private function setLoginInformation( event : Event ) : void
 		{
 			if ( loginView.host.selectedItem is HostVO )
 			{
-				selectedHost = loginView.host.selectedItem as HostVO ; 
-			
+				selectedHost = loginView.host.selectedItem as HostVO;
+
 				loginView.username = selectedHost.user;
-				
+
 				loginView.password = selectedHost.password;
-				
+
 				loginView.password = selectedHost.password;
-				
+
 				localeProxy.changeLocale( selectedHost.local );
-				
+
 				loginView.selectedLanguage = localeProxy.currentLocale;
-				
+
 				//selectedHostIndex = loginView.host.selectedIndex;
-				
+
 				if ( selectedHost.password == "" )
 					loginView.saveButton.currentState = "notsave";
 				else
 					loginView.saveButton.currentState = "save";
 			}
 		}
-		
+
 		private function delSelectedHost( event : Event ) : void
 		{
 			selectedHost = null;
 			//selectedHostIndex = -1;
 		}
-		
-		private function validateProperties( ) : void
+
+		private function validateProperties() : void
 		{
-			LogProxy.addLog("validateProperties");
-			
-			var hostVO :  HostVO;
-			
-			if (!sharedObjectProxy.hosts)
+			LogProxy.addLog( "validateProperties" );
+
+			var hostVO : HostVO;
+
+			if ( !sharedObjectProxy.hosts )
 				var tt : int = 0;
-			
+
 			loginView.host.dataProvider = sharedObjectProxy.hosts;
 			selectedHost = null;
-			
-			LogProxy.addLog("validateProperties2");
-			
-			var data : ArrayCollection = loginView.host.dataProvider as ArrayCollection;	
-			
+
+			LogProxy.addLog( "validateProperties2" );
+
+			var data : ArrayCollection = loginView.host.dataProvider as ArrayCollection;
+
 			//selectedHostIndex = -1;
-			if ( sharedObjectProxy.lastHost && sharedObjectProxy.lastHost.host != ""  )
+			if ( sharedObjectProxy.lastHost && sharedObjectProxy.lastHost.host != "" )
 			{
 				var flag : Boolean = false;
-				
+
 				for each ( var h : HostVO in data )
 				{
-					if ( h.host ==  sharedObjectProxy.lastHost.host )
+					if ( h.host == sharedObjectProxy.lastHost.host )
 					{
 						flag = true;
 						loginView.host.selectedItem = h;
@@ -242,7 +242,7 @@ package net.vdombox.ide.core.view
 						break;
 					}
 				}
-				
+
 				if ( !flag )
 				{
 					selectedHost = sharedObjectProxy.lastHost;
@@ -252,7 +252,7 @@ package net.vdombox.ide.core.view
 			}
 			else if ( sharedObjectProxy.selectedHost != "" )
 			{
-				
+
 				for each ( var host : HostVO in data )
 				{
 					if ( host.host == sharedObjectProxy.selectedHost )
@@ -260,58 +260,58 @@ package net.vdombox.ide.core.view
 						loginView.host.selectedItem = host;
 					}
 				}
-				
+
 				//loginView.host.selectedIndex = sharedObjectProxy.selectedHost;
 				selectedHost = loginView.host.selectedItem as HostVO;
-				
-				//selectedHostIndex = sharedObjectProxy.selectedHost;
+
+					//selectedHostIndex = sharedObjectProxy.selectedHost;
 			}
-			
+
 			if ( selectedHost )
-			{				
+			{
 				loginView.username = selectedHost.user;
 
 				loginView.hostname = selectedHost.host;
 
 				loginView.password = selectedHost.password;
-				
+
 				if ( selectedHost.password == "" )
 					loginView.saveButton.currentState = "notsave";
 				else
 					loginView.saveButton.currentState = "save";
-				
+
 				localeProxy.changeLocale( selectedHost.local );
 			}
 			else
 			{
 				loginView.username = "";
-				
+
 				loginView.hostname = "";
-				
+
 				loginView.password = "";
-				
+
 				loginView.saveButton.currentState = "notsave";
 			}
-			
-			loginView.host.addEventListener( Event.CHANGE, setLoginInformation);
+
+			loginView.host.addEventListener( Event.CHANGE, setLoginInformation );
 
 			loginView.languages = new ArrayList( localeProxy.locales );
-			
+
 			loginView.selectedLanguage = localeProxy.currentLocale;
 		}
 
 		private function languageChangedHandler( event : Event ) : void
 		{
-			if( loginView.selectedLanguage is LocaleVO )
+			if ( loginView.selectedLanguage is LocaleVO )
 			{
 				sendNotification( ApplicationFacade.CHANGE_LOCALE, loginView.selectedLanguage );
 			}
 		}
-		
+
 		public function get selectedLanguage() : LocaleVO
 		{
 			return loginView.selectedLanguage;
-		}	
+		}
 
 		private function submitHandler( event : Event ) : void
 		{
@@ -320,16 +320,15 @@ package net.vdombox.ide.core.view
 
 		private function submit() : void
 		{
-			if ( selectedHost && (loginView.host.textInput.text != selectedHost.host || loginView.username != selectedHost.user 
-			|| loginView.password != selectedHost.password )  )
+			if ( selectedHost && ( loginView.host.textInput.text != selectedHost.host || loginView.username != selectedHost.user || loginView.password != selectedHost.password ) )
 			{
 				selectedHost = null;
-				//selectedHostIndex = -1;
+					//selectedHostIndex = -1;
 			}
 			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNUP );
 		}
-		
-		private function deleteHostHandler( event : LoginViewEvent ): void
+
+		private function deleteHostHandler( event : LoginViewEvent ) : void
 		{
 			sharedObjectProxy.removeHost( loginView.host.textInput.text );
 			sharedObjectProxy.lastHost = null;

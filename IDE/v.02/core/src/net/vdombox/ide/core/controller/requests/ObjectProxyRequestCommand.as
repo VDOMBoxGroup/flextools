@@ -8,7 +8,7 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.core.model.ObjectProxy;
 	import net.vdombox.ide.core.model.PageProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -58,16 +58,16 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if ( operation == PPMOperationNames.READ )
 						objectProxy.getServerActionsList();
-					else if( operation == PPMOperationNames.UPDATE )
-						objectProxy.setServerActions(body.serverActions as Array);
+					else if ( operation == PPMOperationNames.UPDATE )
+						objectProxy.setServerActions( body.serverActions as Array );
 					break;
 				}
-					
+
 				case PPMObjectTargetNames.SERVER_ACTIONS:
 				{
 					if ( operation == PPMOperationNames.READ )
 						objectProxy.getServerActions();
-	
+
 					break;
 				}
 
@@ -81,7 +81,7 @@ package net.vdombox.ide.core.controller.requests
 						objectProxy.setServerAction( body.serverActionVO );
 					else if ( operation == PPMOperationNames.DELETE )
 						objectProxy.deleteServerAction( body.serverActionVO );
-					else if( operation == PPMOperationNames.RENAME )
+					else if ( operation == PPMOperationNames.RENAME )
 						objectProxy.renameServerAction( body.serverActionVO, body.newName );
 					break;
 				}
@@ -111,12 +111,12 @@ package net.vdombox.ide.core.controller.requests
 
 					break;
 				}
-					
+
 				case PPMObjectTargetNames.REMOTE_CALL:
 				{
 					if ( operation == PPMOperationNames.READ )
 						objectProxy.remoteCall( body.functionName, body.value );
-					
+
 					break;
 				}
 
@@ -127,11 +127,11 @@ package net.vdombox.ide.core.controller.requests
 
 					break;
 				}
-					
+
 				case PPMObjectTargetNames.COPY:
 				{
 					objectProxy.createCopy( body.sourceID as String );
-					
+
 					break;
 				}
 			}

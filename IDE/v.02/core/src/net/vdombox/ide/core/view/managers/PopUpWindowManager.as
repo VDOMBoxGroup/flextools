@@ -8,15 +8,15 @@ package net.vdombox.ide.core.view.managers
 	import flash.events.Event;
 	import flash.events.NativeWindowDisplayStateEvent;
 	import flash.utils.Dictionary;
-	
+
 	import mx.core.EdgeMetrics;
 	import mx.core.FlexGlobals;
 	import mx.core.UIComponent;
 	import mx.core.Window;
 	import mx.events.AIREvent;
-	
+
 	import net.vdombox.utils.ArrayUtils;
-	
+
 	public class PopUpWindowManager
 	{
 		private static var instance : PopUpWindowManager;
@@ -52,15 +52,13 @@ package net.vdombox.ide.core.view.managers
 			if ( instance )
 				throw new Error( "Instance already exists." );
 
-//			var nativeWindow : NativeWindow = Application.application.nativeWindow;
-//			if ( nativeWindow )
-//				nativeWindow.addEventListener( NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING,
-//											   nativeWindow_displayStateChangingHandler );
+			//			var nativeWindow : NativeWindow = Application.application.nativeWindow;
+			//			if ( nativeWindow )
+			//				nativeWindow.addEventListener( NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING,
+			//											   nativeWindow_displayStateChangingHandler );
 		}
 
-		public function addPopUp( content : UIComponent, title : String, parent : UIComponent = null,
-								  modal : Boolean = true, childList : String = null,
-								  windowOptions : NativeWindowInitOptions = null ) : Window
+		public function addPopUp( content : UIComponent, title : String, parent : UIComponent = null, modal : Boolean = true, childList : String = null, windowOptions : NativeWindowInitOptions = null ) : Window
 		{
 			if ( !popUpInfo )
 				popUpInfo = [];
@@ -97,7 +95,7 @@ package net.vdombox.ide.core.view.managers
 
 			window.visible = false;
 			window.title = title;
-			
+
 			window.addChild( puwd.content );
 
 			window.addEventListener( AIREvent.WINDOW_COMPLETE, window_windowCompleteHandler );
@@ -141,7 +139,7 @@ package net.vdombox.ide.core.view.managers
 			if ( nativeWindow != null )
 				closeWindow( nativeWindow );
 		}
-		
+
 		public function removeAllPopUp() : void
 		{
 			while ( popUpInfo.length > 0 )
@@ -149,46 +147,44 @@ package net.vdombox.ide.core.view.managers
 				closeWindow( PopUpWindowData( popUpInfo[ 0 ] ).nativeWindow );
 			}
 		}
-		
+
 		private function fitToContent( window : Window, content : UIComponent ) : void
 		{
 			var oldWidth : Number = window.width;
 			var oldHeight : Number = window.height;
 
 			content.validateNow();
-			
+
 			var containerWidth : Number = Math.max( content.width, content.getExplicitOrMeasuredWidth() );
 
 			var containerHeight : Number = Math.max( content.height, content.getExplicitOrMeasuredHeight() );
 
 			var vm : EdgeMetrics = window.viewMetricsAndPadding;
-			
+
 			window.minWidth = content.minWidth + vm.left + vm.right;
 			window.minHeight = content.minHeight + vm.top + vm.bottom;
-			
+
 			window.width = containerWidth + vm.left + vm.right;
 			window.height = containerHeight + vm.top + vm.bottom;
-			
+
 		}
 
 		private function windowIsLocked( nativeWindow : NativeWindow ) : Boolean
 		{
-			var isLockedWindow : Boolean = popUpInfo.some( function( element : *,
-																	 index : int,
-																	 arr : Array ) : Boolean
-				{
-					var parent : UIComponent = element.parent;
+			var isLockedWindow : Boolean = popUpInfo.some( function( element : *, index : int, arr : Array ) : Boolean
+			{
+				var parent : UIComponent = element.parent;
 
-					if ( !element.isModal || parent == null || parent.stage == null )
-						return false;
-
-					var pnw : NativeWindow = parent.stage.nativeWindow;
-
-					if ( pnw && pnw == nativeWindow )
-						return true;
-
+				if ( !element.isModal || parent == null || parent.stage == null )
 					return false;
-				} );
+
+				var pnw : NativeWindow = parent.stage.nativeWindow;
+
+				if ( pnw && pnw == nativeWindow )
+					return true;
+
+				return false;
+			} );
 
 			return isLockedWindow;
 		}
@@ -217,9 +213,7 @@ package net.vdombox.ide.core.view.managers
 		{
 			var screen : Screen = Screen.getScreensForRectangle( window.nativeWindow.bounds )[ 0 ];
 
-			window.move( Math.max( screen.bounds.width / 2 - window.width / 2, 0 ),
-						 Math.max( screen.bounds.height / 2 - window.height / 2,
-								   0 ) );
+			window.move( Math.max( screen.bounds.width / 2 - window.width / 2, 0 ), Math.max( screen.bounds.height / 2 - window.height / 2, 0 ) );
 		}
 
 		private function findPopupInfoByWindow( nativeWindow : NativeWindow ) : PopUpWindowData
@@ -251,11 +245,10 @@ package net.vdombox.ide.core.view.managers
 
 		private function findAllModalPopupInfoByParentWindow( parentNativeWindow : NativeWindow ) : Array
 		{
-			var newArr : Array = popUpInfo.filter( function( element : *, index : int,
-															 arr : Array ) : Boolean
-				{
-					return parentNativeWindow == element.parent.stage.nativeWindow;
-				} )
+			var newArr : Array = popUpInfo.filter( function( element : *, index : int, arr : Array ) : Boolean
+			{
+				return parentNativeWindow == element.parent.stage.nativeWindow;
+			} )
 			return newArr;
 		}
 
@@ -295,9 +288,9 @@ package net.vdombox.ide.core.view.managers
 			handlerDictionary[ nativeWindow ] = handlers;
 
 			handlers.forEach( function( element : *, index : int, arr : Array ) : void
-				{
-					nativeWindow.addEventListener( element[ "type" ], element[ "handler" ] );
-				} )
+			{
+				nativeWindow.addEventListener( element[ "type" ], element[ "handler" ] );
+			} )
 		}
 
 		private function removeHandlers( nativeWindow : NativeWindow ) : void
@@ -307,9 +300,9 @@ package net.vdombox.ide.core.view.managers
 				return;
 
 			handlers.forEach( function( element : *, index : int, arr : Array ) : void
-				{
-					nativeWindow.removeEventListener( element[ "type" ], element[ "handler" ] );
-				} )
+			{
+				nativeWindow.removeEventListener( element[ "type" ], element[ "handler" ] );
+			} )
 		}
 
 		private function nativeWindow_activateHandler( event : Event ) : void
@@ -397,8 +390,7 @@ package net.vdombox.ide.core.view.managers
 			fitToContent( window, puwd.content );
 			centerPopUp( window );
 
-			var handlers : Array = [ { type : Event.CLOSE, handler : nativeWindow_closeHandler },
-									 { type : Event.ACTIVATE, handler : nativeWindow_activateHandler } ];
+			var handlers : Array = [ { type: Event.CLOSE, handler: nativeWindow_closeHandler }, { type: Event.ACTIVATE, handler: nativeWindow_activateHandler } ];
 
 			addHandlers( nativeWindow, handlers );
 
@@ -415,9 +407,7 @@ package net.vdombox.ide.core.view.managers
 
 			if ( isLockedWindow && puwd.isModal )
 			{
-				parentHandlers = [ { type : NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, handler : nativeWindow_displayStateChangingHandler },
-								   { type : Event.CLOSING, handler : parent_closingHandler },
-								   { type : Event.ACTIVATE, handler : nativeWindow_activateHandler } ];
+				parentHandlers = [ { type: NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, handler: nativeWindow_displayStateChangingHandler }, { type: Event.CLOSING, handler: parent_closingHandler }, { type: Event.ACTIVATE, handler: nativeWindow_activateHandler } ];
 
 				addHandlers( parentNativeWindow, parentHandlers );
 
@@ -430,7 +420,7 @@ package net.vdombox.ide.core.view.managers
 			if ( handlerDictionary[ parentNativeWindow ] === undefined )
 			{
 				parentNativeWindow.addEventListener( Event.ACTIVATE, nativeWindow_activateHandler );
-				handlerDictionary[ parentNativeWindow ] = [ { type : Event.ACTIVATE, handler : nativeWindow_activateHandler } ];
+				handlerDictionary[ parentNativeWindow ] = [ { type: Event.ACTIVATE, handler: nativeWindow_activateHandler } ];
 			}
 
 			window.visible = true;
@@ -460,10 +450,10 @@ package net.vdombox.ide.core.view.managers
 		}
 	}
 }
-	import flash.display.NativeWindow;
-	
-	import mx.core.UIComponent;
-	
+import flash.display.NativeWindow;
+
+import mx.core.UIComponent;
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -472,7 +462,7 @@ package net.vdombox.ide.core.view.managers
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- *  @private
+ * @private
  */
 class PopUpWindowData
 {
@@ -484,7 +474,7 @@ class PopUpWindowData
 	//--------------------------------------------------------------------------
 
 	/**
-	 *  Constructor.
+	 * Constructor.
 	 */
 	public function PopUpWindowData()
 	{

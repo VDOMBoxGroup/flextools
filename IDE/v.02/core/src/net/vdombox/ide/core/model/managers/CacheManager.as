@@ -5,7 +5,7 @@ package net.vdombox.ide.core.model.managers
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
-	
+
 	import mx.collections.ArrayCollection;
 	import mx.collections.IViewCursor;
 	import mx.collections.Sort;
@@ -184,7 +184,7 @@ package net.vdombox.ide.core.model.managers
 				cacheFolder.createDirectory();
 				return;
 			}
-			
+
 			sortCache();
 		}
 
@@ -197,24 +197,26 @@ package net.vdombox.ide.core.model.managers
 			else
 				return "";
 		}
-		
-		private function sortCache(  ) : void
+
+		private function sortCache() : void
 		{
 			var currentDate : Number = new Date().getTime();
 			var fileList : Array = cacheFolder.getDirectoryListing();
 			var file : File;
-			
+
 			for each ( file in fileList )
 			{
-				
-				/*var days : Number = ( currentDate - file.creationDate.time ) / 1000 / 60 / 60 / 24;
-				
-				if ( days > 17 )
-				{
-					file.deleteFile();
-					continue;
-				}*/
-				
+
+				/*
+				   var days : Number = ( currentDate - file.creationDate.time ) / 1000 / 60 / 60 / 24;
+
+				   if ( days > 17 )
+				   {
+				   file.deleteFile();
+				   continue;
+				   }
+				 */
+
 				cacheSize += file.size;
 				cachedFiles.addItem( { create: file.creationDate.time, name: file.name, size: file.size } );
 			}
@@ -233,12 +235,12 @@ package net.vdombox.ide.core.model.managers
 				cachedFiles.refresh();
 
 				var item : Object = {}
-					
+
 				var halfCacheSize : Number = CACHE_SIZE * 0.5;
 
 				while ( cacheSize > halfCacheSize )
 				{
-					
+
 
 					item = cachedFiles.getItemAt( 0 )
 

@@ -15,10 +15,10 @@ package net.vdombox.ide.core.model
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
-	
+
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.vo.GalleryItemVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -41,8 +41,8 @@ package net.vdombox.ide.core.model
 		private var currentFile : File;
 
 		private var fileStream : FileStream;
-		
-	
+
+
 
 		public function get items() : Array
 		{
@@ -66,12 +66,12 @@ package net.vdombox.ide.core.model
 
 		private function fileStream_ioErrorHandler( event : IOErrorEvent ) : void
 		{
-				sendNotification( ApplicationFacade.WRITE_ERROR, { text : event.text }  );
+			sendNotification( ApplicationFacade.WRITE_ERROR, { text: event.text } );
 		}
 
 		private function init() : void
 		{
-			
+
 			var f : File = File.applicationDirectory;
 
 			f = f.resolvePath( "gallery" );

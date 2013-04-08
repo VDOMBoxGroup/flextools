@@ -10,13 +10,13 @@ package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import mx.core.IVisualElement;
 	import mx.core.mx_internal;
 	import mx.events.FlexEvent;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.model.PreferencesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
@@ -29,11 +29,11 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.components.MainWindow;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
 
@@ -76,10 +76,11 @@ package net.vdombox.ide.core.view
 		private var windowManager : WindowManager = WindowManager.getInstance();
 
 		private var moduleVO : ModuleVO;
-		
+
 		private var typeCheckSaved : String = "";
-		
+
 		private var logOut : Boolean = false;
+
 		/**
 		 *
 		 */
@@ -104,7 +105,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.SHOW_MODULE_BODY:
 				{
 					mainWindow.addElement( body.component as IVisualElement );
-					
+
 					sendNotification( PreferencesProxy.SELECTED_COLOR_SCHEME_CHANGE );
 
 					setApplicationInfo();
@@ -119,13 +120,12 @@ package net.vdombox.ide.core.view
 
 					if ( currentModule != moduleVO )
 					{
-						if ( currentModule.moduleID == "net.vdombox.ide.modules.Events" ||
-							 currentModule.moduleID == "net.vdombox.ide.modules.Tree")
+						if ( currentModule.moduleID == "net.vdombox.ide.modules.Events" || currentModule.moduleID == "net.vdombox.ide.modules.Tree" )
 						{
 							typeCheckSaved = "changeModule";
 							sendNotification( ApplicationFacade.APPLICATION_CHECK_SAVED, statesProxy.selectedApplication );
 						}
-						else 
+						else
 							selectModule( moduleVO );
 					}
 
@@ -145,10 +145,10 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.OPEN_MAIN_WINDOW:
 				{
 					selectModule( currentModule );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.APPLICATION_SAVE_CHECKED:
 				{
 					if ( body as Boolean )
@@ -160,35 +160,35 @@ package net.vdombox.ide.core.view
 					}
 					else
 					{
-						sendNotification( ApplicationFacade.WRITE_QUESTION, { text : ResourceManager.getInstance().getString( 'Core_General', 'save_the_changes' ) }  );
+						sendNotification( ApplicationFacade.WRITE_QUESTION, { text: ResourceManager.getInstance().getString( 'Core_General', 'save_the_changes' ) } );
 					}
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.ALERT_WINDOW_CLOSE:
 				{
 					if ( body as Boolean )
 					{
 						sendNotification( ApplicationFacade.APPLICATION_SET_SAVE, statesProxy.selectedApplication );
 					}
-						
+
 					if ( typeCheckSaved == "changeModule" )
 						selectModule( moduleVO );
 					else
 						openAppManager();
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.SIGNOUT:
 				{
 					logoutHandler();
-					
+
 					break;
 				}
 			}
-			
+
 		}
 
 		override public function listNotificationInterests() : Array
@@ -203,10 +203,10 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.APPLICATION_SAVE_CHECKED );
 			interests.push( ApplicationFacade.ALERT_WINDOW_CLOSE );
 			interests.push( ApplicationFacade.SIGNOUT );
-			
+
 			return interests;
 		}
-		
+
 		private function addHandlers() : void
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler, false, 0, true );
@@ -216,8 +216,8 @@ package net.vdombox.ide.core.view
 			mainWindow.addEventListener( MainWindowEvent.SHOW_APP_MANAGER, appManagerHandler, true, 0, true );
 			mainWindow.addEventListener( Event.CLOSE, closeWindowHandler, false, 0, true );
 		}
-		
-		
+
+
 		private function removeHandlers() : void
 		{
 			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
@@ -268,8 +268,7 @@ package net.vdombox.ide.core.view
 
 		private function appManagerHandler( event : MainWindowEvent ) : void
 		{
-			if ( currentModule.moduleID == "net.vdombox.ide.modules.Events" ||
-				currentModule.moduleID == "net.vdombox.ide.modules.Tree" )
+			if ( currentModule.moduleID == "net.vdombox.ide.modules.Events" || currentModule.moduleID == "net.vdombox.ide.modules.Tree" )
 			{
 				typeCheckSaved = "appManagerOpened";
 				sendNotification( ApplicationFacade.APPLICATION_CHECK_SAVED, statesProxy.selectedApplication );
@@ -277,7 +276,7 @@ package net.vdombox.ide.core.view
 			else
 				openAppManager();
 		}
-		
+
 		private function openAppManager() : void
 		{
 			currentModule.module.deSelect();
@@ -293,14 +292,13 @@ package net.vdombox.ide.core.view
 		private function closeWindowHandler( event : Event ) : void
 		{
 			cleanup();
-			
+
 			removeHandlers();
 		}
 
 		private function get currentModule() : ModuleVO
 		{
-			return modulesProxy.getModuleByID( selectedModuleID );
-			;
+			return modulesProxy.getModuleByID( selectedModuleID );;
 		}
 
 		private function initTitle() : void
@@ -318,14 +316,14 @@ package net.vdombox.ide.core.view
 		private function logoutHandler( event : MainWindowEvent = null ) : void
 		{
 			cleanup();
-			
+
 			logOut = true;
 
 			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNOUT );
 		}
-		
+
 		private function closeHandler( event : * = null ) : void
-		{			
+		{
 			if ( logOut )
 				logOut = false
 			else
@@ -348,7 +346,7 @@ package net.vdombox.ide.core.view
 		{
 			if ( !toolsetBar || !modulesList )
 				return;
-			
+
 			toolsetBar.removeAllElements();
 
 			if ( modulesList.length == 0 )

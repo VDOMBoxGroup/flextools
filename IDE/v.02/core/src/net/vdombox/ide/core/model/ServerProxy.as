@@ -2,10 +2,10 @@ package net.vdombox.ide.core.model
 {
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
-	
+
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
-	
+
 	import net.vdombox.ide.common.model.ProxyStorage;
 	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
@@ -16,7 +16,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.vo.AuthInfoVO;
 	import net.vdombox.ide.core.model.vo.ErrorVO;
 	import net.vdombox.ide.core.model.vo.HostVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -27,10 +27,10 @@ package net.vdombox.ide.core.model
 	{
 		/**
 		 * 15 minutes.
-		 * defolt SESSION-LIFETIME = 20 minutes.  
-		 */		
-		private static const PING_TIMER : uint = 900000;    
-		
+		 * defolt SESSION-LIFETIME = 20 minutes.
+		 */
+		private static const PING_TIMER : uint = 900000;
+
 		public static const NAME : String = "ServerProxy";
 
 		public static const NOT_CONNECTED : String = "notConnected";
@@ -57,14 +57,14 @@ package net.vdombox.ide.core.model
 		private var _authInfo : AuthInfoVO;
 
 		private var _applications : Array;
-		
+
 		private var _pingServerTimer : Timer;
-		
+
 		private var hostVO : HostVO;
-		
+
 		public var reconected : Boolean = false;
 
-		public function get applications():Array
+		public function get applications() : Array
 		{
 			return _applications;
 		}
@@ -73,8 +73,8 @@ package net.vdombox.ide.core.model
 		{
 			return _authInfo;
 		}
-		 
-		
+
+
 		public function get server() : String
 		{
 			return _authInfo.hostname;
@@ -90,8 +90,8 @@ package net.vdombox.ide.core.model
 				soap.disconnect();
 
 			addHandlers();
-			
-			_pingServerTimer = new Timer(PING_TIMER);
+
+			_pingServerTimer = new Timer( PING_TIMER );
 		}
 
 		override public function onRemove() : void
@@ -102,28 +102,28 @@ package net.vdombox.ide.core.model
 		public function connect( host : HostVO ) : void
 		{
 			reconected = false;
-			
+
 			_authInfo = new AuthInfoVO();
-			
+
 			hostVO = host;
 
 			_authInfo.setHostname( hostVO.host );
 			_authInfo.setUsername( hostVO.user );
-			
+
 			sharedObjectProxy.lastHost = hostVO;
 
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_START );
 
-			soap.connect( _authInfo.WSDLFilePath );				
+			soap.connect( _authInfo.WSDLFilePath );
 		}
-		
+
 		public function reconnect() : void
 		{
 			reconected = true;
-			
-			soap.connect( _authInfo.WSDLFilePath );					
+
+			soap.connect( _authInfo.WSDLFilePath );
 		}
-		
+
 		public function disconnect() : void
 		{
 			soap.cancelConnected = true;
@@ -133,7 +133,7 @@ package net.vdombox.ide.core.model
 		public function logout() : void
 		{
 			_pingServerTimer.stop();
-			
+
 			soap.logout();
 
 			_authInfo = null;
@@ -152,9 +152,11 @@ package net.vdombox.ide.core.model
 
 		public function getApplicationProxy( applicationVO : ApplicationVO ) : ApplicationProxy
 		{
-			/*if ( _applications.indexOf( applicationVO ) == -1 )
-				return null;*/
-			
+			/*
+			   if ( _applications.indexOf( applicationVO ) == -1 )
+			   return null;
+			 */
+
 			var appVO : ApplicationVO;
 			var flag : Boolean = false;
 			for each ( appVO in _applications )
@@ -165,18 +167,17 @@ package net.vdombox.ide.core.model
 					break;
 				}
 			}
-			
+
 			if ( !flag )
 				return null;
 
-			var applicationProxy : ApplicationProxy =
-				facade.retrieveProxy( ApplicationProxy.NAME + ApplicationFacade.DELIMITER + applicationVO.id ) as ApplicationProxy;
+			var applicationProxy : ApplicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + ApplicationFacade.DELIMITER + applicationVO.id ) as ApplicationProxy;
 
 			if ( !applicationProxy )
 			{
 				applicationProxy = new ApplicationProxy( applicationVO );
 				ProxyStorage.addProxy( ApplicationProxy.NAME + "/" + applicationVO.id );
-				
+
 				facade.registerProxy( applicationProxy );
 			}
 
@@ -186,7 +187,7 @@ package net.vdombox.ide.core.model
 		private function addHandlers() : void
 		{
 			soap.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
-			
+
 			soap.addEventListener( SOAPEvent.CONNECTION_OK, soap_connectionOKHandler, false, 0, true );
 			soap.addEventListener( SOAPErrorEvent.CONNECTION_ERROR, soap_connectionErrorHandler, false, 0, true );
 
@@ -199,7 +200,7 @@ package net.vdombox.ide.core.model
 		private function removeHandlers() : void
 		{
 			soap.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
-			
+
 			soap.removeEventListener( SOAPEvent.CONNECTION_OK, soap_connectionOKHandler );
 			soap.removeEventListener( SOAPErrorEvent.CONNECTION_ERROR, soap_connectionErrorHandler );
 
@@ -219,12 +220,12 @@ package net.vdombox.ide.core.model
 		{
 			var applicationVO : ApplicationVO;
 			var applicationVOInd : Number = -1;
-			
+
 			var oldapplications : Array = [];
-			
-			if (_applications)
+
+			if ( _applications )
 				oldapplications = _applications.slice();
-			
+
 			_applications = [];
 
 			var applicationID : String;
@@ -236,30 +237,30 @@ package net.vdombox.ide.core.model
 				if ( !applicationID )
 					continue;
 
-				applicationVOInd = applicationVOIndex(oldapplications, applicationID); 
-			
-				applicationVO = applicationVOInd >= 0 ? oldapplications[applicationVOInd] : new ApplicationVO( applicationID );
-				
+				applicationVOInd = applicationVOIndex( oldapplications, applicationID );
+
+				applicationVO = applicationVOInd >= 0 ? oldapplications[ applicationVOInd ] : new ApplicationVO( applicationID );
+
 				applicationVO.setInformation( application.Information[ 0 ] );
 
 				_applications.push( applicationVO );
-				
+
 			}
-			
-			_applications.sortOn("name", Array.CASEINSENSITIVE);
+
+			_applications.sortOn( "name", Array.CASEINSENSITIVE );
 		}
-		
-		private function applicationVOIndex(applicationsVO : Array, applicationID : String) : Number
+
+		private function applicationVOIndex( applicationsVO : Array, applicationID : String ) : Number
 		{
 			var i : uint = 0;
-			for each (var applicationVO : ApplicationVO in applicationsVO)
+			for each ( var applicationVO : ApplicationVO in applicationsVO )
 			{
-				if (applicationVO.id == applicationID)
+				if ( applicationVO.id == applicationID )
 					return i;
-				
+
 				i++;
 			}
-			
+
 			return -1;
 		}
 
@@ -269,14 +270,14 @@ package net.vdombox.ide.core.model
 
 			if ( soap.ready )
 			{
-				soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0 , true );
-				soap.create_application.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0 , true );
+				soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+				soap.create_application.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			}
 
 			//only for ProgressViewMediator
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_SUCCESSFUL );
 			sendNotification( ApplicationFacade.SERVER_LOGIN_START );
-			
+
 			soap.logon( hostVO.user, hostVO.password );
 		}
 
@@ -289,48 +290,50 @@ package net.vdombox.ide.core.model
 		private function soap_loginOKHandler( event : SOAPEvent ) : void
 		{
 			var result : XML = event.result;
-			/*_authInfo.setUsername( result.Username[ 0 ] );
-			_authInfo.setHostname( result.Hostname[ 0 ] );*/
-			
-			_authInfo.serverVersion = result.ServerVersion[0].toString();
-			
+			/*
+			   _authInfo.setUsername( result.Username[ 0 ] );
+			   _authInfo.setHostname( result.Hostname[ 0 ] );
+			 */
+
+			_authInfo.serverVersion = result.ServerVersion[ 0 ].toString();
+
 			sendNotification( ApplicationFacade.SERVER_LOGIN_SUCCESSFUL, _authInfo );
-			
+
 			startInfiniteSession();
 			addHostInSharedObject();
 		}
-		
+
 		private function addHostInSharedObject() : void
 		{
 			if ( !hostVO.save )
 				hostVO.password = "";
 			//if ( !sharedObjectProxy.equalHost( hostVO ) )	
-			
+
 			sharedObjectProxy.setHost( hostVO );
-			
+
 			sharedObjectProxy.clearLastHost();
 		}
-				
+
 		private function startInfiniteSession() : void
 		{
-			
-			_pingServerTimer.addEventListener(TimerEvent.TIMER, pingOfServer); 
-			_pingServerTimer.start();				
+
+			_pingServerTimer.addEventListener( TimerEvent.TIMER, pingOfServer );
+			_pingServerTimer.start();
 		}
-		
-		public function pingOfServer(event:TimerEvent):void  
-		{ 	
+
+		public function pingOfServer( event : TimerEvent ) : void
+		{
 			soap.keep_alive();
-		} 
-		
+		}
+
 		private function soap_loginErrorHandler( event : SOAPErrorEvent ) : void
 		{
 			var error : ErrorVO = new ErrorVO();
-			
+
 			error.code = event.faultCode;
 			error.string = event.faultString;
 			error.detail = XML( event.faultDetail ).User[ 0 ];
-			
+
 			sendNotification( ApplicationFacade.SERVER_LOGIN_ERROR, error );
 		}
 
@@ -349,7 +352,7 @@ package net.vdombox.ide.core.model
 				case "list_applications":
 				{
 					createApplicationList( result.Applications[ 0 ] );
-					
+
 					if ( !reconected )
 						sendNotification( ApplicationFacade.SERVER_APPLICATIONS_GETTED, _applications.slice() );
 
@@ -368,28 +371,28 @@ package net.vdombox.ide.core.model
 				}
 			}
 		}
-				
+
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{
 			var error : ErrorVO = new ErrorVO();
-			
+
 			error.code = event.fault.faultCode;
 			error.string = event.fault.faultString;
 			error.detail = event.fault.faultDetail;
-			
+
 			//sendNotification( ApplicationFacade.SERVER_ERROR, error );
-			sendNotification( ApplicationFacade.WRITE_ERROR, { text: error.string, detail : error.detail } );
-			
+			sendNotification( ApplicationFacade.WRITE_ERROR, { text: error.string, detail: error.detail } );
+
 		}
-		
+
 		private function soap_connectionErrorHandler( event : SOAPErrorEvent ) : void
 		{
 			var error : ErrorVO = new ErrorVO();
-			
+
 			error.code = event.faultCode;
 			error.string = event.faultString;
 			error.detail = event.faultDetail;
-			
+
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_ERROR, error );
 		}
 	}

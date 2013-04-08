@@ -1,57 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-				xmlns:s="library://ns.adobe.com/flex/spark" 
-				xmlns:mx="library://ns.adobe.com/flex/mx" 
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/mx"
 				autoDrawBackground="true"
 				doubleClickEnabled="true"
-				doubleClick="doubleClickHandler(event)" height="65"
+				doubleClick="doubleClickHandler(event)"
+				height="65"
 				creationComplete="itemrenderer1_creationCompleteHandler(event)">
 	<s:states>
-		<s:State name="normal" />
-		<s:State name="selected" />
+		<s:State name="normal"/>
+		<s:State name="selected"/>
 	</s:states>
-	
+
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.events.FlexEvent;
 			import mx.graphics.SolidColorStroke;
 			import mx.utils.ObjectUtil;
-			
+
 			import net.vdombox.editors.parsers.LanguageVO;
 			import net.vdombox.ide.common.model._vo.ApplicationVO;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
-			
+
 			import spark.primitives.Line;
-			
+
 			public static const RENDERER_CHANGED : String = "rendererChanged";
+
 			public static const RENDERER_DOUBLE_CLICK : String = "rendererDoubleClick";
+
 			public static const ICON_REQUEST : String = "iconRequest1";
-			
+
 			[Bindable]
 			[Embed( source = "assets/python.png" )]
 			public static var python : Class;
-			
+
 			[Bindable]
 			[Embed( source = "assets/vscript.png" )]
 			public static var vscript : Class;
-			
+
 			private var _resourceVO : ResourceVO;
-			
-			public function get resourceVO():ResourceVO
+
+			public function get resourceVO() : ResourceVO
 			{
 				return _resourceVO;
 			}
-			
-			public function validateResourceVO():void
+
+			public function validateResourceVO() : void
 			{
-				if (!applicationVO.iconID)
+				if ( !applicationVO.iconID )
 					return;
-				
+
 				if ( _resourceVO && _resourceVO.id != applicationVO.iconID )
 					createResourse();
-				
-				if (!_resourceVO || !_resourceVO.data )
+
+				if ( !_resourceVO || !_resourceVO.data )
 					createResourse();
 			}
 
@@ -62,100 +65,101 @@
 
 			override public function set data( value : Object ) : void
 			{
-					super.data = value;
-					
-					if (!value)
-						return;
-					
-					if ( applicationVO )
-					{
-						nameLabel.text = applicationVO.name;
-						
-						applicationDescription.text = applicationVO.description;
-						
-						imageLanguage.source = applicationVO.scriptingLanguage == LanguageVO.python ? python : vscript;
-						
-						pages.text = resourceManager.getString( 'Core_General', 'create_edit_application_pages' ) + " - " + applicationVO.numberOfPages;
-						
-						objects.text = resourceManager.getString( 'Core_General', 'create_edit_application_objects' ) + " - " + applicationVO.numberOfObjects;
-						
-						version.text = applicationVO.version != "" ? ( resourceManager.getString( 'Core_General', 'create_edit_application_version' ) + ": " +  applicationVO.version ) : "";
-						
-						toolTip = applicationVO.description;
-					}
-					else
-					{
-						nameLabel.text = "";
-						
-						applicationDescription.text = "";
-						
-						imageLanguage.source = null;
-						
-						pages.text = "";
-						
-						objects.text = "";
-						
-						version.text = ""
-							
-						toolTip = "";
-					}
-					
-					validateResourceVO();
+				super.data = value;
+
+				if ( !value )
+					return;
+
+				if ( applicationVO )
+				{
+					nameLabel.text = applicationVO.name;
+
+					applicationDescription.text = applicationVO.description;
+
+					imageLanguage.source = applicationVO.scriptingLanguage == LanguageVO.python ? python : vscript;
+
+					pages.text = resourceManager.getString( 'Core_General', 'create_edit_application_pages' ) + " - " + applicationVO.numberOfPages;
+
+					objects.text = resourceManager.getString( 'Core_General', 'create_edit_application_objects' ) + " - " + applicationVO.numberOfObjects;
+
+					version.text = applicationVO.version != "" ? ( resourceManager.getString( 'Core_General', 'create_edit_application_version' ) + ": " + applicationVO.version ) : "";
+
+					toolTip = applicationVO.description;
+				}
+				else
+				{
+					nameLabel.text = "";
+
+					applicationDescription.text = "";
+
+					imageLanguage.source = null;
+
+					pages.text = "";
+
+					objects.text = "";
+
+					version.text = ""
+
+					toolTip = "";
+				}
+
+				validateResourceVO();
 			}
-			
-			private function createResourse():void
+
+			private function createResourse() : void
 			{
-				_resourceVO = new ResourceVO( applicationVO.id ); 
-				
+				_resourceVO = new ResourceVO( applicationVO.id );
+
 				_resourceVO.setID( applicationVO.iconID );
-				
+
 				BindingUtils.bindSetter( setIcon, _resourceVO, "data", false );
 			}
-			
-			public function get applicationVO(): ApplicationVO
+
+			public function get applicationVO() : ApplicationVO
 			{
 				return data as ApplicationVO;
 			}
-			
+
 			private var loader : Loader;
+
 			private function setIcon( value : Object ) : void
 			{
-				if (value)
+				if ( value )
 				{
-					imageHolder.source = ObjectUtil.copy(value);
+					imageHolder.source = ObjectUtil.copy( value );
 				}
 				else
 				{
 					imageHolder.source = null;
-					
-					dispatchEvent( new Event( ICON_REQUEST ));
+
+					dispatchEvent( new Event( ICON_REQUEST ) );
 				}
 			}
-			
+
 			private function setIconLoaded( event : Event ) : void
 			{
 				loader = null;
-				
+
 				if ( event.type == IOErrorEvent.IO_ERROR )
 					return;
-				
+
 				imageHolder.source = event.target.content;
 			}
-			
-			protected function doubleClickHandler(event:MouseEvent):void
+
+			protected function doubleClickHandler( event : MouseEvent ) : void
 			{
 				dispatchEvent( new Event( RENDERER_DOUBLE_CLICK ) );
 			}
-			
-			protected function itemrenderer1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function itemrenderer1_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				var _w : int = this.width;
 				var _h : int = this.height;
-				
+
 				var strokeColor : SolidColorStroke = new SolidColorStroke();
 				strokeColor.color = 0x484848;
 				strokeColor.weight = 2;
-				
+
 				for ( var i : int = 0; i < _w - 2; i += 5 )
 				{
 					var line : Line = new Line();
@@ -166,106 +170,143 @@
 					line.stroke = strokeColor;
 					lineGroup.addElement( line );
 				}
-				
+
 				setVisinleLine( currentState );
 			}
-			
+
 			override protected function stateChanged( oldState : String, newState : String, recursive : Boolean ) : void
 			{
 				setVisinleLine( newState );
 			}
-			
+
 			private function setVisinleLine( state : String ) : void
 			{
 				var line : Line;
 				var _visible : Boolean = state == "normal" ? true : false;
-				
+
 				for ( var i : int = 0; i < lineGroup.numElements; i++ )
 				{
 					line = lineGroup.getElementAt( i ) as Line;
 					line.visible = _visible;
 				}
 			}
-			
 		]]>
 	</fx:Script>
 	<s:Rect id="fill"
-			bottom="0" left="0" right="0" top="0">
+			bottom="0"
+			left="0"
+			right="0"
+			top="0">
 		<s:fill>
-			<s:SolidColor color="#2f2f2f" color.selected="#39829d" />
+			<s:SolidColor color="#2f2f2f"
+						  color.selected="#39829d"/>
 		</s:fill>
-		
+
 	</s:Rect>
-	
-	<s:HGroup width="100%" height="100%" 
-			  verticalAlign="middle" x="10" 
-			  paddingTop="12" paddingBottom="12"
+
+	<s:HGroup width="100%"
+			  height="100%"
+			  verticalAlign="middle"
+			  x="10"
+			  paddingTop="12"
+			  paddingBottom="12"
 			  gap="10">
 		<mx:Image id="imageHolder"
-				  width="40" height="40"
+				  width="40"
+				  height="40"
 				  smoothBitmapContent="true"/>
-		
-		<s:VGroup width="55%" height="100%" gap="0">
-			
-			<s:Label id="nameLabel"  width="260"
-					 fontSize="15" color="#fffafc"/>
-			
-			<mx:Spacer height="100%" />
-			
-			<s:Label id="version" 
-					 color="#8b8787" color.selected="#fffafc"/>
-			
+
+		<s:VGroup width="55%"
+				  height="100%"
+				  gap="0">
+
+			<s:Label id="nameLabel"
+					 width="260"
+					 fontSize="15"
+					 color="#fffafc"/>
+
+			<mx:Spacer height="100%"/>
+
+			<s:Label id="version"
+					 color="#8b8787"
+					 color.selected="#fffafc"/>
+
 		</s:VGroup>
-		
-		<s:VGroup width="45%" height="100%" gap="2">
+
+		<s:VGroup width="45%"
+				  height="100%"
+				  gap="2">
 			<s:HGroup width="100%">
-				<s:Label id="pages" fontSize="10" color="#fffafc"/>
-				
-				<s:Label id="objects" fontSize="10" color="#fffafc"/>
+				<s:Label id="pages"
+						 fontSize="10"
+						 color="#fffafc"/>
+
+				<s:Label id="objects"
+						 fontSize="10"
+						 color="#fffafc"/>
 			</s:HGroup>
-			
+
 			<s:TextArea id="applicationDescription"
 						width="100%"
 						height="100%"
 						editable="false"
 						selectable="false"
 						borderVisible="false"
-						color="#8b8787" color.selected="#fffafc"
+						color="#8b8787"
+						color.selected="#fffafc"
 						fontFamily="Arial"
-						fontSize="10" 
-						paddingLeft="0"
-						/>
+						fontSize="10"
+						paddingLeft="0"/>
 		</s:VGroup>
-		
+
 		<mx:Image id="imageLanguage"
-				  width="16" height="16"
+				  width="16"
+				  height="16"
 				  smoothBitmapContent="true"/>
-		
+
 		<s:Spacer width="6"/>
-		
+
 	</s:HGroup>
-	
-	<s:Group id="lineGroup" width="100%" height="100%"/>
-	
-	<s:Rect right="0" height="100%" width="35">
+
+	<s:Group id="lineGroup"
+			 width="100%"
+			 height="100%"/>
+
+	<s:Rect right="0"
+			height="100%"
+			width="35">
 		<s:fill>
 			<s:LinearGradient>
-				<s:GradientEntry color="#2f2f2f" alpha="0"/>
-				<s:GradientEntry color="#2f2f2f" alpha="0.02"/>
-				<s:GradientEntry color="#2f2f2f" alpha="0.08"/>
-				<s:GradientEntry color="#2f2f2f" alpha="0.1"/>
-				<s:GradientEntry color="#2f2f2f" alpha="0.15"/>
-				<s:GradientEntry color="#2f2f2f" alpha="0.2"/>
-				<s:GradientEntry color="#2f2f2f" alpha="0.3"/>
-				<s:GradientEntry color="#2f2f2f" alpha="0.4"/>
-				<s:GradientEntry color="#2f2f2f" alpha="0.5"/>
-				<s:GradientEntry color="#2f2f2f" alpha="0.6"/>
-				<s:GradientEntry color="#2f2f2f" alpha="0.7"/>
-				<s:GradientEntry color="#2f2f2f" alpha="0.9"/>
-				<s:GradientEntry color="#2f2f2f" alpha="1"/>
-				<s:GradientEntry color="#2f2f2f" alpha="1" />
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0.02"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0.08"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0.1"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0.15"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0.2"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0.3"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0.4"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0.5"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0.6"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0.7"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="0.9"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="1"/>
+				<s:GradientEntry color="#2f2f2f"
+								 alpha="1"/>
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
-	
+
 </s:ItemRenderer>

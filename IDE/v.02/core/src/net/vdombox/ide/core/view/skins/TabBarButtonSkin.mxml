@@ -18,8 +18,8 @@
 -->
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 
-			 minHeight="21" minWidth="21"
+			 minHeight="21"
+			 minWidth="21"
 			 alpha.disabledStates="0.5">
 	<!-- host component -->
 
@@ -33,8 +33,10 @@
 	</fx:Metadata>
 
 	<fx:Script>
-		/* Define the skin elements that should not be colorized.
-		 For toggle button, the graphics are colorized but the label is not. */
+		/*
+		   Define the skin elements that should not be colorized.
+		   For toggle button, the graphics are colorized but the label is not.
+		 */
 		static private const exclusions : Array = [ "labelDisplay" ];
 
 		/**
@@ -49,25 +51,30 @@
 
 	<s:states>
 
-		<s:State name="up" />
+		<s:State name="up"/>
 
-		<s:State name="over" stateGroups="overStates" />
+		<s:State name="over"
+				 stateGroups="overStates"/>
 
-		<s:State name="down" stateGroups="downStates" />
+		<s:State name="down"
+				 stateGroups="downStates"/>
 
-		<s:State name="disabled" stateGroups="disabledStates" />
+		<s:State name="disabled"
+				 stateGroups="disabledStates"/>
 
 		<s:State name="upAndSelected"
-				 stateGroups="selectedStates, selectedUpStates" />
+				 stateGroups="selectedStates, selectedUpStates"/>
 
-		<s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
+		<s:State name="overAndSelected"
+				 stateGroups="overStates, selectedStates"/>
 
-		<s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
+		<s:State name="downAndSelected"
+				 stateGroups="downStates, selectedStates"/>
 
 		<s:State name="disabledAndSelected"
-				 stateGroups="selectedUpStates, disabledStates, selectedStates" />
+				 stateGroups="selectedUpStates, disabledStates, selectedStates"/>
 	</s:states>
-	
+
 	<!--<s:Rect bottom="0" left="1" left.selectedStates="-5" right="1"
 			right.selectedStates="-5" top="1" top.selectedStates="-1"
 			topLeftRadiusX="5" topLeftRadiusY="5" topRightRadiusX="5"
@@ -90,17 +97,22 @@
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>-->
-	
+
 	<!--- Defines the appearance of the label(s) for the middle button(s) in the ButtonBar component. -->
 
 	<s:Label id="labelDisplay"
-			 color="#9b9b9b" color.down="white" color.over="white" color.selectedStates="white" 
+			 color="#9b9b9b"
+			 color.down="white"
+			 color.over="white"
+			 color.selectedStates="white"
 			 fontWeight.selectedStates="bold"
-			 textDecoration="none" textDecoration.selectedStates="underline"
-			 horizontalCenter="0" 
-			 verticalAlign="middle" verticalCenter="1"
+			 textDecoration="none"
+			 textDecoration.selectedStates="underline"
+			 horizontalCenter="0"
+			 verticalAlign="middle"
+			 verticalCenter="1"
 			 textAlign="center"
 			 maxDisplayedLines="1">
 	</s:Label>
-			
+
 </s:SparkSkin>

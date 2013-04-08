@@ -1,17 +1,17 @@
 package net.vdombox.ide.core.model
 {
 	import flash.utils.Dictionary;
-	
+
 	import mx.events.ModuleEvent;
 	import mx.modules.IModuleInfo;
 	import mx.modules.ModuleManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -25,19 +25,12 @@ package net.vdombox.ide.core.model
 		private static const MODULES_DIR : String = "app:/modules/";
 
 		private static const MODULES_XML : XML = <modules>
-				
-				<category name="Edition">									
 
-					<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
-					<module name="Preview" path="app:/modules/Preview/Preview2.swf"/>
-					<module name="Events" path="app:/modules/Events/Events.swf"/>
-					<module name="Trees" path="app:/modules/Tree/Tree.swf"/>
-					<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
-					<module name="DB" path="app:/modules/DataBase/DataBase.swf"/>
-					<module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/>
-			
-				</category>
-			</modules>
+				<category name="Edition">
+
+					<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/><module name="Preview" path="app:/modules/Preview/Preview2.swf"/><module name="Events" path="app:/modules/Events/Events.swf"/><module name="Trees" path="app:/modules/Tree/Tree.swf"/><module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/><module name="DB" path="app:/modules/DataBase/DataBase.swf"/><module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/>
+
+				</category></modules>
 
 		public function ModulesProxy( data : Object = null )
 		{
@@ -51,11 +44,11 @@ package net.vdombox.ide.core.model
 		private var modulesForLoadQue : Array;
 
 		private var resourceManager : IResourceManager;
-		
+
 		private var moduleInfo : IModuleInfo;
-		
+
 		private var countLoadedModules : int;
-		
+
 		public function get modules() : Array
 		{
 			return modulesList.slice();
@@ -71,7 +64,7 @@ package net.vdombox.ide.core.model
 			cleanup();
 		}
 
-		
+
 		public function getModuleByID( moduleID : String ) : ModuleVO
 		{
 			var modulesListLength : int = modulesList.length;
@@ -142,15 +135,15 @@ package net.vdombox.ide.core.model
 			var modulePath : String;
 			var moduleVO : ModuleVO;
 
-			var categoryXML : XML =  MODULES_XML.children()[0] //TODO Добавить проверку наличия локализованного имени и т.д.
+			var categoryXML : XML = MODULES_XML.children()[ 0 ] //TODO Добавить проверку наличия локализованного имени и т.д.
 
 			for each ( var module : XML in categoryXML.* )
 			{
 				modulePath = module.@path;
-				
-				modulesList.push( new ModuleVO(  modulePath ) );
+
+				modulesList.push( new ModuleVO( modulePath ) );
 			}
-			
+
 			countLoadedModules = modulesList.length;
 
 		}
@@ -158,7 +151,7 @@ package net.vdombox.ide.core.model
 		private function loadModuleFromQue() : void
 		{
 			if ( modulesForLoadQue.length == 0 )
-			{				
+			{
 				sendNotification( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
 				return;
 			}
@@ -182,7 +175,7 @@ package net.vdombox.ide.core.model
 		{
 			moduleInfo.removeEventListener( ModuleEvent.READY, moduleReadyHandler );
 			moduleInfo.removeEventListener( ModuleEvent.ERROR, moduleErrorHandler );
-			
+
 			var moduleVO : ModuleVO = event.module.data as ModuleVO;
 			var module : VIModule = event.module.factory.create() as VIModule;
 			module.startup();

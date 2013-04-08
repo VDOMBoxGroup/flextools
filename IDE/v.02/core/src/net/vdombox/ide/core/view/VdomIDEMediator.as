@@ -1,12 +1,12 @@
 package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
-	
+
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.TypesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -30,7 +30,7 @@ package net.vdombox.ide.core.view
 		{
 			return viewComponent as VdomIDE
 		}
-		
+
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
@@ -38,7 +38,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.INITIAL_WINDOW_OPENED );
 
 			interests.push( TypesProxy.TYPES_LOADED );
-			
+
 			return interests;
 		}
 
@@ -65,9 +65,9 @@ package net.vdombox.ide.core.view
 				}
 
 			}
-			
+
 		}
-		
+
 		private function get statesProxy() : StatesProxy
 		{
 			return facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;

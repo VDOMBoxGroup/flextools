@@ -7,7 +7,7 @@ package net.vdombox.ide.core.controller.responses
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -43,21 +43,21 @@ package net.vdombox.ide.core.controller.responses
 				{
 					var applications : Array = body as Array;
 					var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-//
+					//
 					message = new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.APPLICATIONS, applications );
-					
+
 					if ( !statesProxy.selectedApplication )
 						sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION );
 					break;
-				
+
 				}
-					
+
 				case ApplicationFacade.SELECTED_APP_GETTED:
 				{
 					var application : ApplicationVO = body as ApplicationVO;
 					//
 					message = new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.APPLICATION, application );
-					
+
 				}
 			}
 

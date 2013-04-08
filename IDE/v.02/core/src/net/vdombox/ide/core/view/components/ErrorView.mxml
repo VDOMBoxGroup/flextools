@@ -6,13 +6,13 @@
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.core.model.vo.ErrorVO;
-			
+
 			import spark.components.Button;
 
 			[Bindable]
 			public var errorVO : ErrorVO;
 
-			[SkinPart( required="true" )]
+			[SkinPart( required = "true" )]
 			public var backButton : Button;
 
 			override protected function partAdded( partName : String, instance : Object ) : void
@@ -31,13 +31,17 @@
 	</fx:Script>
 
 	<s:layout>
-		<s:VerticalLayout />
+		<s:VerticalLayout/>
 	</s:layout>
-	
-	<s:RichText text="Error({ errorVO.code }): { errorVO.string }" width="100%"
-				color="#FFFFFF" fontFamily="Verdana"/>
 
-	<s:RichText text="{ errorVO.detail }" width="100%"
-				color="#FFFFFF" fontFamily="Verdana"/>
+	<s:RichText text="Error({ errorVO.code }): { errorVO.string }"
+				width="100%"
+				color="#FFFFFF"
+				fontFamily="Verdana"/>
+
+	<s:RichText text="{ errorVO.detail }"
+				width="100%"
+				color="#FFFFFF"
+				fontFamily="Verdana"/>
 
 </s:SkinnableContainer>

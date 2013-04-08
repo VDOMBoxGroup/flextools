@@ -11,14 +11,14 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
 	/**
 	 * @flowerModelElementId _DBlEMEomEeC-JfVEe_-0Aw
 	 */
-	public class ApplicationProxyRequestCommand extends SimpleCommand 
+	public class ApplicationProxyRequestCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
 		{
@@ -65,12 +65,12 @@ package net.vdombox.ide.core.controller.requests
 				case PPMApplicationTargetNames.SERVER_ACTIONS:
 				{
 					var isFind : Boolean = body.hasOwnProperty( "isFind" ) ? body.isFind : false;
-					
+
 					if ( operation == PPMOperationNames.READ )
 					{
-						applicationProxy.getServerActions("application", null, false, isFind);
-						applicationProxy.getServerActions("session", null, false, isFind);
-						applicationProxy.getServerActions("request", null, false, isFind);
+						applicationProxy.getServerActions( "application", null, false, isFind );
+						applicationProxy.getServerActions( "session", null, false, isFind );
+						applicationProxy.getServerActions( "request", null, false, isFind );
 					}
 					break;
 				}
@@ -86,7 +86,7 @@ package net.vdombox.ide.core.controller.requests
 				case PPMApplicationTargetNames.LIBRARY:
 				{
 					libraryVO = body.libraryVO as LibraryVO;
-					
+
 					if ( operation == PPMOperationNames.READ )
 						applicationProxy.getLibrary( libraryVO, body.check as Boolean );
 					else if ( operation == PPMOperationNames.CREATE )
@@ -106,20 +106,20 @@ package net.vdombox.ide.core.controller.requests
 
 					break;
 				}
-					
+
 				case PPMApplicationTargetNames.GLOBAL_ACTION:
 				{
 					globalActionVO = body.globalActionVO as GlobalActionVO;
-					
+
 					if ( operation == PPMOperationNames.READ )
 					{
-						applicationProxy.getServerActions("application", globalActionVO, body.check);
-						applicationProxy.getServerActions("session", globalActionVO, body.check);
-						applicationProxy.getServerActions("request", globalActionVO, body.check);
+						applicationProxy.getServerActions( "application", globalActionVO, body.check );
+						applicationProxy.getServerActions( "session", globalActionVO, body.check );
+						applicationProxy.getServerActions( "request", globalActionVO, body.check );
 					}
 					else if ( operation == PPMOperationNames.UPDATE )
 						applicationProxy.updateGlobal( globalActionVO );
-					
+
 					break;
 				}
 
@@ -127,7 +127,7 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if ( operation == PPMOperationNames.READ )
 						applicationProxy.getEvents( body.pageVO );
-					else if( operation == PPMOperationNames.UPDATE )
+					else if ( operation == PPMOperationNames.UPDATE )
 						applicationProxy.setEvents( body.applicationEventsVO, body.needForUpdate );
 
 					break;
@@ -145,7 +145,7 @@ package net.vdombox.ide.core.controller.requests
 					{
 						//var applicationInformationVO : ApplicationInformationVO = body.applicationInformationVO;
 						//applicationProxy.changeApplicationInformation( applicationInformationVO );
-						sendNotification(ApplicationFacade.PAGE_SET_AS_INDEX, { pageID: body.pageID} );
+						sendNotification( ApplicationFacade.PAGE_SET_AS_INDEX, { pageID: body.pageID } );
 					}
 
 					break;
@@ -168,31 +168,31 @@ package net.vdombox.ide.core.controller.requests
 					else if ( operation == PPMOperationNames.READ )
 					{
 						var pageID : String = body.pageID as String;
-						
+
 						applicationProxy.getPageAt( pageID );
 					}
 
 					break;
 				}
-					
+
 				case PPMApplicationTargetNames.COPY:
 				{
 					applicationProxy.createCopy( body.sourceID as String );
-					
+
 					break;
 				}
-					
+
 				case PPMApplicationTargetNames.ERROR:
 				{
-					sendNotification( ApplicationFacade.WRITE_ERROR, { text : body.content }  );
-					
+					sendNotification( ApplicationFacade.WRITE_ERROR, { text: body.content } );
+
 					break;
 				}
-					
+
 				case PPMApplicationTargetNames.SAVED:
 				{
 					sendNotification( ApplicationFacade.APPLICATION_SAVE_CHECKED, body.saved );
-					
+
 					break;
 				}
 			}

@@ -5,7 +5,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.view.LoginViewMediator;
 	import net.vdombox.ide.core.view.ProgressViewMediator;
 	import net.vdombox.ide.core.view.components.InitialWindow;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -14,9 +14,9 @@ package net.vdombox.ide.core.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var initialWindow : InitialWindow = notification.getBody() as InitialWindow;
-			
-			LogProxy.addLog( "InitialWindowCreatedCommand execute");
-			
+
+			LogProxy.addLog( "InitialWindowCreatedCommand execute" );
+
 			if ( !facade.hasMediator( ProgressViewMediator.NAME ) )
 			{
 				var progressViewMediator : ProgressViewMediator = new ProgressViewMediator( initialWindow.progressView )
@@ -25,12 +25,12 @@ package net.vdombox.ide.core.controller
 
 			if ( !facade.hasMediator( LoginViewMediator.NAME ) )
 			{
-				LogProxy.addLog( "!facade.hasMediator( LoginViewMediator.NAME )");
+				LogProxy.addLog( "!facade.hasMediator( LoginViewMediator.NAME )" );
 				var loginViewMediator : LoginViewMediator = new LoginViewMediator( initialWindow.loginView );
 				facade.registerMediator( loginViewMediator );
 			}
 			else
-				LogProxy.addLog( "Facade.hasMediator( LoginViewMediator.NAME )");
+				LogProxy.addLog( "Facade.hasMediator( LoginViewMediator.NAME )" );
 
 			if ( !facade.hasMediator( ErrorViewMediator.NAME ) )
 			{

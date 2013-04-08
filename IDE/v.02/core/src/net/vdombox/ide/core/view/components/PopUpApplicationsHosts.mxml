@@ -3,93 +3,97 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 maxHeight="310"
-		 maxWidth="310"
-		 >
-	
+		 maxWidth="310">
+
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
-			
+
 			import net.vdombox.ide.common.events.PopUpWindowEvent;
-			
+
 			import spark.components.Scroller;
 			import spark.events.IndexChangeEvent;
-			
+
 			private const menuHeight : int = 310;
+
 			private const menuWidth : int = 310;
-			
+
 			private var selectedHost : String;
-			
+
 			public function setListData( value : Array, selectedHost : String ) : void
 			{
 				this.selectedHost = selectedHost;
-				
+
 				var source : ArrayList = new ArrayList();
 				source.addAll( new ArrayList( value ) );
 				source.addItemAt( "default", 0 );
 				menu.dataProvider = source;
-				
+
 				menu.addEventListener( FlexEvent.UPDATE_COMPLETE, updateCompleteHandler );
-				
+
 			}
-			
+
 			private function updateCompleteHandler( event : FlexEvent ) : void
 			{
 				menu.removeEventListener( FlexEvent.UPDATE_COMPLETE, updateCompleteHandler );
 				menu.selectedItem = selectedHost;
 				menu.height = menu.scroller.viewport.contentHeight;
 			}
-			
+
 			public function getSelectedValue() : String
 			{
-				return menu.selectedItem.hasOwnProperty( "value" )? menu.selectedItem.value : menu.selectedItem;
+				return menu.selectedItem.hasOwnProperty( "value" ) ? menu.selectedItem.value : menu.selectedItem;
 			}
-			
+
 			public function show( owner : DisplayObjectContainer, x : int, y : int ) : void
-			{				
+			{
 				this.x = x;
 				this.y = y;
 				PopUpManager.addPopUp( this, owner.parent );
 			}
-			
-			
+
+
 			public function dispose() : void
 			{
 				PopUpManager.removePopUp( this );
 			}
-			
+
 			public function set selectedIndex( value : int ) : void
 			{
 				menu.selectedIndex = value;
 			}
-			
+
 			public function get selectedIndex() : int
 			{
 				return menu.selectedIndex;
 			}
-			
+
 			public function get length() : int
 			{
 				return menu.dataProvider.length;
 			}
-			
 		]]>
 	</fx:Script>
-	
-	<s:Line top="0" width="100%">
+
+	<s:Line top="0"
+			width="100%">
 		<s:stroke>
-			<s:SolidColorStroke color="#b20000" alpha="0.5" weight="2" />
+			<s:SolidColorStroke color="#b20000"
+								alpha="0.5"
+								weight="2"/>
 		</s:stroke>
 	</s:Line>
-	
-	<s:List id="menu" top="2"
+
+	<s:List id="menu"
+			top="2"
 			minWidth="310"
 			requireSelection="true"
 			doubleClickEnabled="true"
 			arrowKeysWrapFocus="true"
-			contentBackgroundColor="#555555" borderVisible="false"
+			contentBackgroundColor="#555555"
+			borderVisible="false"
 			itemRenderer="net.vdombox.ide.core.view.components.HostsNameRenderer"/>
-	
+
 </s:Group>

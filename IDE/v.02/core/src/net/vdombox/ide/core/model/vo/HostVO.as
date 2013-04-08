@@ -1,5 +1,6 @@
 package net.vdombox.ide.core.model.vo
 {
+
 	public class HostVO
 	{
 		public function HostVO( host : String, user : String, password : String, local : LocaleVO )
@@ -10,42 +11,45 @@ package net.vdombox.ide.core.model.vo
 			_local = local;
 			save = false;
 		}
-		
+
 		private var _host : String;
+
 		private var _user : String;
+
 		private var _password : String;
+
 		private var _local : LocaleVO;
-		
+
 		public var save : Boolean;
-		
-		public function get host():String
+
+		public function get host() : String
 		{
 			return _host;
 		}
 
-		public function get user():String
+		public function get user() : String
 		{
 			return _user;
 		}
 
-		public function get password():String
+		public function get password() : String
 		{
 			return _password;
 		}
-		
-		public function set password(value : String) : void
+
+		public function set password( value : String ) : void
 		{
 			_password = value;
 		}
 
-		public function get local():LocaleVO
+		public function get local() : LocaleVO
 		{
 			return _local;
 		}
-		
-		public function set local( value : LocaleVO ): void
+
+		public function set local( value : LocaleVO ) : void
 		{
-			 _local = value;
+			_local = value;
 		}
 
 

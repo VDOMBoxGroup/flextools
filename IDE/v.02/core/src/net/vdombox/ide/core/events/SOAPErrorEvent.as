@@ -5,15 +5,16 @@ package net.vdombox.ide.core.events
 	public class SOAPErrorEvent extends Event
 	{
 		public static var CONNECTION_ERROR : String = "connectionError";
+
 		public static var LOGIN_ERROR : String = "loginError";
 
 		public var faultCode : String;
+
 		public var faultString : String;
+
 		public var faultDetail : String;
 
-		public function SOAPErrorEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true,
-								   faultCode : String = null, faultString : String = null,
-								   faultDetail : String = null )
+		public function SOAPErrorEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, faultCode : String = null, faultString : String = null, faultDetail : String = null )
 		{
 			super( type, bubbles, cancelable );
 
@@ -24,8 +25,7 @@ package net.vdombox.ide.core.events
 
 		override public function clone() : Event
 		{
-			return new SOAPErrorEvent( type, bubbles, cancelable, faultCode, faultString,
-									   faultDetail );
+			return new SOAPErrorEvent( type, bubbles, cancelable, faultCode, faultString, faultDetail );
 		}
 	}
 }

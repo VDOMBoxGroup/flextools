@@ -3,20 +3,25 @@
 		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
-		  height="410" width="580"
+		  height="410"
+		  width="580"
 		  skinClass="net.vdombox.ide.core.view.skins.InitialWindowSkin"
-		  minHeight="410" minWidth="580"
+		  minHeight="410"
+		  minWidth="580"
 		  mouseDown="window_mouseDownHandler( event )"
-		  resizable="false" showStatusBar="false" 
-		  systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true" 
-		  xmlns:components1="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+		  resizable="false"
+		  showStatusBar="false"
+		  systemChrome="{ NativeWindowSystemChrome.NONE }"
+		  transparent="true"
+		  xmlns:components1="net.vdombox.components.*"
+		  xmlns:button="net.vdombox.ide.common.view.components.button.*">
 
 	<fx:Script>
 		<![CDATA[
 			import flash.text.engine.TextLine;
-			
+
 			import net.vdombox.ide.core.events.InitialWindowEvent;
-			
+
 			import spark.components.Button;
 			import spark.components.RichEditableText;
 
@@ -29,15 +34,15 @@
 
 				nativeWindow.startMove();
 				event.stopPropagation();
-				
+
 				if ( loginView )
 				{
 					if ( loginView.host.skin && loginView.host.skin.currentState != "normal" )
 						loginView.host.skin.currentState = "normal";
-					
+
 					if ( loginView.selectLang.skin && loginView.selectLang.skin.currentState != "normal" )
 						loginView.selectLang.skin.currentState = "normal";
-					
+
 				}
 			}
 
@@ -45,17 +50,16 @@
 			{
 				dispatchEvent( new InitialWindowEvent( InitialWindowEvent.EXIT ) );
 			}
-		
+
 			private function submitButton_clickHandler( event : MouseEvent ) : void
 			{
 				dispatchEvent( new InitialWindowEvent( InitialWindowEvent.SUBMIT ) );
 			}
-			
-			protected function cancelButton_clickHandler(event:MouseEvent):void
+
+			protected function cancelButton_clickHandler( event : MouseEvent ) : void
 			{
 				dispatchEvent( new InitialWindowEvent( InitialWindowEvent.CANCEL ) );
 			}
-			
 		]]>
 	</fx:Script>
 
@@ -64,33 +68,49 @@
 		<s:State name="loginView"/>
 		<s:State name="errorView"/>
 	</s:states>
-	
+
 	<components:ProgressView id="progressView"
-						height="100%" width="100%"
-						itemCreationPolicy="immediate" includeIn="progressView"/>
-		
+							 height="100%"
+							 width="100%"
+							 itemCreationPolicy="immediate"
+							 includeIn="progressView"/>
+
 	<components:LoginView id="loginView"
-						height="100%" width="100%"
-						itemCreationPolicy="immediate" includeIn="loginView"/>
-		
+						  height="100%"
+						  width="100%"
+						  itemCreationPolicy="immediate"
+						  includeIn="loginView"/>
+
 	<components:ErrorView id="errorView"
-						height="100%" width="100%"
-						itemCreationPolicy="immediate" includeIn="errorView"/>
-		
-	<s:HGroup width="100%" horizontalAlign="right" paddingRight="40" gap="10" bottom="37">
-			
-		<button:VDOMButton id="cancelButton" includeIn="progressView" 
-						   label="{ resourceManager.getString( 'LoginForm', 'cancel_button' ) }" minWidth="100"
+						  height="100%"
+						  width="100%"
+						  itemCreationPolicy="immediate"
+						  includeIn="errorView"/>
+
+	<s:HGroup width="100%"
+			  horizontalAlign="right"
+			  paddingRight="40"
+			  gap="10"
+			  bottom="37">
+
+		<button:VDOMButton id="cancelButton"
+						   includeIn="progressView"
+						   label="{ resourceManager.getString( 'LoginForm', 'cancel_button' ) }"
+						   minWidth="100"
 						   click="cancelButton_clickHandler(event)"/>
-		
-		<button:VDOMButton id="exitButton" includeIn="loginView" 
-				label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }" minWidth="100"
-				click="exitButton_clickHandler(event)"/>
-			
-		<button:VDOMButton id="submitButton" includeIn="loginView"
-				icon="@Embed('assets/connect.png')"
-				label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
-				click="submitButton_clickHandler(event)" />
+
+		<button:VDOMButton id="exitButton"
+						   includeIn="loginView"
+						   label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }"
+						   minWidth="100"
+						   click="exitButton_clickHandler(event)"/>
+
+		<button:VDOMButton id="submitButton"
+						   includeIn="loginView"
+						   icon="@Embed('assets/connect.png')"
+						   label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }"
+						   minWidth="100"
+						   click="submitButton_clickHandler(event)"/>
 	</s:HGroup>
-		
+
 </s:Window>

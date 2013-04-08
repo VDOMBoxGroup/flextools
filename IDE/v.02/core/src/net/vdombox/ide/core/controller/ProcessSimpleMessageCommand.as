@@ -3,7 +3,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.controller.messages.SimpleMessage;
 	import net.vdombox.ide.core.ApplicationFacade;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -46,13 +46,13 @@ package net.vdombox.ide.core.controller
 					sendNotification( ApplicationFacade.SAVE_MODULE_SETTINGS, message );
 					break;
 				}
-					
+
 				case SimpleMessageHeaders.OPEN_BROWSER:
 				{
 					sendNotification( ApplicationFacade.OPEN_PAGE_IN_EXTERNAL_BROWSER );
 					break;
 				}
-					
+
 				case SimpleMessageHeaders.GET_APPLICATIONS_HOSTS:
 				{
 					sendNotification( ApplicationFacade.SHOW_APPLICATIONS_HOSTS, body );

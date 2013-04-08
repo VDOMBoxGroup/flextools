@@ -12,7 +12,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.model.TypesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -31,11 +31,11 @@ package net.vdombox.ide.core.controller
 
 			facade.registerProxy( new TypesProxy() );
 			facade.registerProxy( new ResourcesProxy() );
-			
+
 			facade.registerProxy( new ServerProxy() );
 			facade.registerProxy( new SettingsProxy() );
-			
-			LogProxy.addLog("ModelPrepCommand  ");
+
+			LogProxy.addLog( "ModelPrepCommand  " );
 		}
 	}
 }

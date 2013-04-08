@@ -1,5 +1,6 @@
 package net.vdombox.ide.core.model.business.protect
 {
+
 	/*
 	   1. Вызвав веб-сервис login, ты получаешь две строки: hash string и session key
 	   2. Создаешь экземпляр данного класса
@@ -30,7 +31,7 @@ package net.vdombox.ide.core.model.business.protect
 	   Next session:  1629876353
 	 */
 
-	
+
 
 	public class VDOMSessionProtector
 	{
@@ -53,10 +54,10 @@ package net.vdombox.ide.core.model.business.protect
 				// получаем по элементно все числа в строке
 				str = hash.substr( idx, 1 );
 				//используя sessionKey и порядковый символ получаем некоторое число
-				result += Number( calcHash( sessionKey, Number( str )));
+				result += Number( calcHash( sessionKey, Number( str ) ) );
 			}
 			var hStr : String = "0000000000" + result.toString().substr( 0, 10 );
-			
+
 			return hStr.slice( -10, hStr.length ); //возвращаем последние 10 символов
 		}
 
@@ -65,16 +66,16 @@ package net.vdombox.ide.core.model.business.protect
 		{
 			var hStr : String = "";
 			var result : String = "";
-			
+
 			switch ( val )
 			{
 				case 1:
 				{
 					//остаток от деления первых 5-ти чисел на 97
-					hStr = "00" + String( Number( sessionKey.substr( 0, 5 )) % 97 )
+					hStr = "00" + String( Number( sessionKey.substr( 0, 5 ) ) % 97 )
 					//возвращаем последние 2 символа
 					result = hStr.slice( -2, hStr.length );
-					
+
 					break;
 				}
 				case 2:
@@ -82,16 +83,16 @@ package net.vdombox.ide.core.model.business.protect
 					//строчка sessionKey на оборот
 					for ( var i : Number = sessionKey.length; i > 0; --i )
 						result += sessionKey.substr( i, 1 );
-					
+
 					result += sessionKey.substr( 0, 1 );
-					
+
 					break;
 				}
 				case 3:
 				{
 					//меняем местами первые 5 символов с последними 5-ю.
 					result = sessionKey.slice( -5, sessionKey.length ) + sessionKey.substr( 0, 5 );
-					
+
 					break;
 				}
 				case 4:
@@ -99,10 +100,10 @@ package net.vdombox.ide.core.model.business.protect
 					var num : Number = 0;
 					// Абра-Кадабра
 					for ( i = 1; i < 9; i++ )
-						num += Number( sessionKey.charAt( i )) + 41
-					
+						num += Number( sessionKey.charAt( i ) ) + 41
+
 					result = num.toString();
-					
+
 					break;
 				}
 				case 5:
@@ -113,25 +114,25 @@ package net.vdombox.ide.core.model.business.protect
 					for ( i = 0; i < sessionKey.length; i++ )
 					{
 						hStr = String.fromCharCode( sessionKey.charCodeAt( i ) ^ 43 );
-						
-						if ( !Number( hStr ))
+
+						if ( !Number( hStr ) )
 							hStr = hStr.charCodeAt().toString();
 
 						num += Number( hStr );
 					}
 
 					result = num.toString();
-					
+
 					break;
 				}
 				default:
 				{
 					result = ( Number( sessionKey ) + val ).toString();
-					
+
 					break;
 				}
 			}
-			
+
 			return result;
 		}
 	}

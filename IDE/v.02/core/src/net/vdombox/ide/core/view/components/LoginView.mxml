@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:components="net.vdombox.ide.core.view.components.*"
 		 creationComplete="group1_creationCompleteHandler(event)"
 		 addedToStage="group1_addedToStageHandler(event)"
-		 show="group1_showHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:skins="net.vdombox.ide.core.view.skins.*"
-		 >
+		 show="group1_showHandler(event)"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:skins="net.vdombox.ide.core.view.skins.*">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.core.events.LoginViewEvent;
 			import net.vdombox.ide.core.model.LogProxy;
@@ -32,12 +33,12 @@
 			public var hostname : String;
 
 			[Bindable]
-			public function get username():String
+			public function get username() : String
 			{
 				return _username;
 			}
 
-			public function set username(value:String):void
+			public function set username( value : String ) : void
 			{
 				_username = value;
 			}
@@ -49,7 +50,7 @@
 				else if ( selectLang.selectedItem )
 					return selectLang.selectedItem as LocaleVO;
 				else if ( selectLang.dataProvider )
-					return ( selectLang.dataProvider as ArrayList ).source[0] as LocaleVO;
+					return ( selectLang.dataProvider as ArrayList ).source[ 0 ] as LocaleVO;
 				return null;
 			}
 
@@ -62,134 +63,188 @@
 			{
 				dispatchEvent( new LoginViewEvent( LoginViewEvent.LANGUAGE_CHANGED ) );
 			}
-			
+
 			override protected function keyDownHandler( event : KeyboardEvent ) : void
 			{
 				if ( event.keyCode != 13 )
 					return;
-				
-				if( host.textInput.text == "" )
+
+				if ( host.textInput.text == "" )
 				{
 					host.setFocus();
 					return;
 				}
-					
-				if( user.text == "" )
+
+				if ( user.text == "" )
 				{
 					user.setFocus();
 					return;
 				}
-					
-				if( pass.text == "" )
+
+				if ( pass.text == "" )
 				{
 					pass.setFocus();
 					return;
 				}
-					
+
 				dispatchEvent( new LoginViewEvent( LoginViewEvent.SUBMIT ) );
 			}
 
-			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			protected function group1_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				LogProxy.addLog("group1_creationCompleteHandler");
+				LogProxy.addLog( "group1_creationCompleteHandler" );
 				host.setFocus();
-				
+
 			}
 
 
-			protected function group1_showHandler(event:FlexEvent):void
+			protected function group1_showHandler( event : FlexEvent ) : void
 			{
 				host.setFocus();
 			}
-			
-			protected function saveButton_clickHandler(event:MouseEvent):void
+
+			protected function saveButton_clickHandler( event : MouseEvent ) : void
 			{
-				LogProxy.addLog("saveButton_clickHandler");
+				LogProxy.addLog( "saveButton_clickHandler" );
 				if ( saveButton.currentState == "save" )
 					saveButton.currentState = "notsave";
 				else
 					saveButton.currentState = "save";
 			}
-			
-			protected function selectLang_creationCompleteHandler(event:FlexEvent):void
+
+			protected function selectLang_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				selectLang.selectedItem = selectedLanguage;
 			}
-			
-			protected function group1_addedToStageHandler(event:Event):void
+
+			protected function group1_addedToStageHandler( event : Event ) : void
 			{
 				// TODO Auto-generated method stub
-				LogProxy.addLog("group1_addedToStageHandler");
+				LogProxy.addLog( "group1_addedToStageHandler" );
 			}
-			
 		]]>
-	</fx:Script>	
-	
-		<s:VGroup gap="20" styleName="loginForm"
-				  height="100%" left="180" right="40" top="34">
-			<s:VGroup gap="3" width="100%">
-				
-				<s:Label text="{ resourceManager.getString( 'LoginForm', 'hostname' ) }" width="100%"
-						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
+	</fx:Script>
 
-				<components:ComboBoxLogin id="host" openOnInput="false" labelField="host" width="100%" height="31"
-								fontSize="18" fontFamily="Arial" focusIn="{deleteHost.visible = true}" focusOut="{deleteHost.visible = false}"
-								keyDown="{keyDownHandler(event)}"/>
-	
-			</s:VGroup>
-			
-			<s:VGroup gap="3" width="100%">
-				
-				<s:Label text="{ resourceManager.getString( 'LoginForm', 'username' ) }" width="100%"
-						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
-				
-				<s:TextInput id="user" text="{ username }" skinClass="net.vdombox.ide.common.view.skins.TextInputCornerSkin"
-							 width="100%" height="31"
-							 fontSize="18" fontFamily="Arial" 
-							 keyDown="{keyDownHandler(event)}"/>
-				
-			</s:VGroup>
-			
-			<s:VGroup gap="3" width="100%">
-				
-				<s:Label text="{ resourceManager.getString( 'LoginForm', 'password' ) }" width="100%"
-						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
-				 
-				<s:HGroup width="100%" gap="4">
-					<s:TextInput id="pass" text="{ password }" skinClass="net.vdombox.ide.common.view.skins.TextInputCornerSkin"
-								 width="100%" height="31" displayAsPassword="true" 
-								 fontSize="18" fontFamily="Arial" 
-								 keyDown="{keyDownHandler(event)}"/>
-					
-					<components:SaveButton id="saveButton" height="31" width="58" 
-										   click="saveButton_clickHandler(event)"/>
-					
-				</s:HGroup>
-				
-				
-			</s:VGroup>
-			
-			<s:VGroup gap="3" width="100%">
-				
-				<s:Label text="{ resourceManager.getString( 'LoginForm', 'language' ) }" width="100%"
-						 color="white" fontFamily="Arial" fontSize="14" textAlign="left"/>
-				
-				<components:ComboBoxLogin id="selectLang" editable="false" selecteble="false"
-							dataProvider="{ languages }" labelField="description" width="100%" height="31"
-							change="selectLang_changeHandler()" creationComplete="selectLang_creationCompleteHandler(event)"
-							fontSize="18" fontFamily="Arial"
-							selectedItem="@{ _selectedLanguage }"/>
-				
-			</s:VGroup>
-			
+	<s:VGroup gap="20"
+			  styleName="loginForm"
+			  height="100%"
+			  left="180"
+			  right="40"
+			  top="34">
+		<s:VGroup gap="3"
+				  width="100%">
+
+			<s:Label text="{ resourceManager.getString( 'LoginForm', 'hostname' ) }"
+					 width="100%"
+					 color="white"
+					 fontFamily="Arial"
+					 fontSize="14"
+					 textAlign="left"/>
+
+			<components:ComboBoxLogin id="host"
+									  openOnInput="false"
+									  labelField="host"
+									  width="100%"
+									  height="31"
+									  fontSize="18"
+									  fontFamily="Arial"
+									  focusIn="{deleteHost.visible = true}"
+									  focusOut="{deleteHost.visible = false}"
+									  keyDown="{keyDownHandler(event)}"/>
+
 		</s:VGroup>
-		
-		<mx:Image id="deleteHost" right="18" top="60"
-				  source="{VDOMImage.Delete}" visible="false" alpha="0.3" 
-				  mouseOver="{deleteHost.alpha = 1}" mouseOut="{deleteHost.alpha = 0.3}"
-				  click="{ dispatchEvent( new LoginViewEvent( LoginViewEvent.DELETE_CLICK ) ) }"/>
-	
+
+		<s:VGroup gap="3"
+				  width="100%">
+
+			<s:Label text="{ resourceManager.getString( 'LoginForm', 'username' ) }"
+					 width="100%"
+					 color="white"
+					 fontFamily="Arial"
+					 fontSize="14"
+					 textAlign="left"/>
+
+			<s:TextInput id="user"
+						 text="{ username }"
+						 skinClass="net.vdombox.ide.common.view.skins.TextInputCornerSkin"
+						 width="100%"
+						 height="31"
+						 fontSize="18"
+						 fontFamily="Arial"
+						 keyDown="{keyDownHandler(event)}"/>
+
+		</s:VGroup>
+
+		<s:VGroup gap="3"
+				  width="100%">
+
+			<s:Label text="{ resourceManager.getString( 'LoginForm', 'password' ) }"
+					 width="100%"
+					 color="white"
+					 fontFamily="Arial"
+					 fontSize="14"
+					 textAlign="left"/>
+
+			<s:HGroup width="100%"
+					  gap="4">
+				<s:TextInput id="pass"
+							 text="{ password }"
+							 skinClass="net.vdombox.ide.common.view.skins.TextInputCornerSkin"
+							 width="100%"
+							 height="31"
+							 displayAsPassword="true"
+							 fontSize="18"
+							 fontFamily="Arial"
+							 keyDown="{keyDownHandler(event)}"/>
+
+				<components:SaveButton id="saveButton"
+									   height="31"
+									   width="58"
+									   click="saveButton_clickHandler(event)"/>
+
+			</s:HGroup>
+
+
+		</s:VGroup>
+
+		<s:VGroup gap="3"
+				  width="100%">
+
+			<s:Label text="{ resourceManager.getString( 'LoginForm', 'language' ) }"
+					 width="100%"
+					 color="white"
+					 fontFamily="Arial"
+					 fontSize="14"
+					 textAlign="left"/>
+
+			<components:ComboBoxLogin id="selectLang"
+									  editable="false"
+									  selecteble="false"
+									  dataProvider="{ languages }"
+									  labelField="description"
+									  width="100%"
+									  height="31"
+									  change="selectLang_changeHandler()"
+									  creationComplete="selectLang_creationCompleteHandler(event)"
+									  fontSize="18"
+									  fontFamily="Arial"
+									  selectedItem="@{ _selectedLanguage }"/>
+
+		</s:VGroup>
+
+	</s:VGroup>
+
+	<mx:Image id="deleteHost"
+			  right="18"
+			  top="60"
+			  source="{VDOMImage.Delete}"
+			  visible="false"
+			  alpha="0.3"
+			  mouseOver="{deleteHost.alpha = 1}"
+			  mouseOut="{deleteHost.alpha = 0.3}"
+			  click="{ dispatchEvent( new LoginViewEvent( LoginViewEvent.DELETE_CLICK ) ) }"/>
+
 </s:Group>
 
 

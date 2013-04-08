@@ -5,7 +5,7 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.controller.names.PPMServerTargetNames;
 	import net.vdombox.ide.common.model._vo.ApplicationInformationVO;
 	import net.vdombox.ide.core.model.ServerProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -29,7 +29,7 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if ( operation == PPMOperationNames.CREATE )
 						serverProxy.createApplication( message.getBody() as ApplicationInformationVO );
-					
+
 					break;
 				}
 
@@ -37,7 +37,7 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if ( operation == PPMOperationNames.READ )
 						serverProxy.loadApplications();
-					
+
 					break;
 				}
 			}

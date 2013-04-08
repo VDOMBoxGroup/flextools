@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		  xmlns:s="library://ns.adobe.com/flex/spark" 
-		  xmlns:mx="library://ns.adobe.com/flex/mx" >
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.utils.ObjectUtil;
-			
+
 			import net.vdombox.ide.common.model._vo.ResourceVO;
-			
+
 			private var _resourceVO : ResourceVO;
 
-			public function get resourceVO():ResourceVO
+			public function get resourceVO() : ResourceVO
 			{
 				return _resourceVO;
 			}
 
-			public function set resourceVO(value:ResourceVO):void
+			public function set resourceVO( value : ResourceVO ) : void
 			{
 				_resourceVO = value;
 				BindingUtils.bindSetter( setIcon, _resourceVO, "data", false, true );
 			}
-			
+
 			private function setIcon( value : Object ) : void
 			{
-					icon.source = ObjectUtil.copy( value );
+				icon.source = ObjectUtil.copy( value );
 			}
-			
-			public function set source( object : Object):void
+
+			public function set source( object : Object ) : void
 			{
 				icon.source = object;
 			}
-			
-			public function get source( ) : Object
-			{
-				return icon.source ;
-			}
 
+			public function get source() : Object
+			{
+				return icon.source;
+			}
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
+
 	<s:states>
-		
-		<s:State name="default" />
-		
-		<s:State name="gallery" />
+
+		<s:State name="default"/>
+
+		<s:State name="gallery"/>
 	</s:states>
-	
+
 	<mx:Image id="icon"
-			  height="64" width="64" />
-	
+			  height="64"
+			  width="64"/>
+
 </s:VGroup>

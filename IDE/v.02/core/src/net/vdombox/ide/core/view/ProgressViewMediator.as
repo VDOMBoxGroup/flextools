@@ -4,7 +4,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.TypesProxy;
 	import net.vdombox.ide.core.view.components.ProgressView;
 	import net.vdombox.ide.core.view.components.Task;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -52,7 +52,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SERVER_LOGIN_START );
 			interests.push( ApplicationFacade.SERVER_LOGIN_SUCCESSFUL );
 			interests.push( ApplicationFacade.SERVER_LOGIN_ERROR );
-			
+
 			interests.push( ApplicationFacade.BACK_TO_INITIAL_WINDOW );
 
 			interests.push( TypesProxy.TYPES_LOADING );
@@ -151,11 +151,11 @@ package net.vdombox.ide.core.view
 
 					break;
 				}
-					
+
 				case ApplicationFacade.BACK_TO_INITIAL_WINDOW:
 				{
 					cleanup();
-					
+
 					break;
 				}
 
@@ -194,14 +194,14 @@ package net.vdombox.ide.core.view
 
 		private function addHandlers() : void
 		{
-//			progressView.addEventListener( Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true );
-//			progressView.addEventListener( Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true );
+			//			progressView.addEventListener( Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true );
+			//			progressView.addEventListener( Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
-//			progressView.removeEventListener( Event.ADDED_TO_STAGE, onAddedToStage );
-//			progressView.removeEventListener( Event.REMOVED_FROM_STAGE, onRemovedFromStage );
+			//			progressView.removeEventListener( Event.ADDED_TO_STAGE, onAddedToStage );
+			//			progressView.removeEventListener( Event.REMOVED_FROM_STAGE, onRemovedFromStage );
 		}
 	}
 }

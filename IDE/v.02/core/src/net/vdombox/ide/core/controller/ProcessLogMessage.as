@@ -1,14 +1,14 @@
 package net.vdombox.ide.core.controller
 {
 	import net.vdombox.ide.common.controller.messages.LogMessage;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
 	public class ProcessLogMessage extends SimpleCommand
 	{
 		private const MESSAGE_TEMPLATE : String = "[{0}] [{1}] [{2}] {3}";
-		
+
 		override public function execute( notification : INotification ) : void
 		{
 			var logMessage : LogMessage = notification.getBody() as LogMessage;

@@ -9,7 +9,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
@@ -49,7 +49,7 @@ package net.vdombox.ide.core.view
 
 			interests.push( ApplicationFacade.CONNECT_MODULE_TO_CORE );
 			interests.push( ApplicationFacade.DISCONNECT_MODULE_TO_CORE );
-			
+
 			interests.push( ApplicationFacade.SELECTED_MODULE_CHANGED );
 
 			interests.push( ApplicationFacade.MODULE_TO_PROXIES_CONNECTED );
@@ -91,7 +91,7 @@ package net.vdombox.ide.core.view
 
 					pipesProxy.savePipe( moduleVO.moduleID, PipeNames.STDIN, coreToModule );
 
-//					sendNotification( ApplicationFacade.MODULE_READY, moduleVO );
+					//					sendNotification( ApplicationFacade.MODULE_READY, moduleVO );
 					break;
 				}
 
@@ -106,7 +106,7 @@ package net.vdombox.ide.core.view
 					coreOut.disconnectFitting( pipe );
 
 					pipesProxy.removePipe( moduleVO.moduleID, PipeNames.STDIN );
-					
+
 					break;
 				}
 
@@ -114,8 +114,7 @@ package net.vdombox.ide.core.view
 				{
 					moduleVO = notification.getBody() as ModuleVO;
 
-					junction.sendMessage( PipeNames.STDOUT,
-										  new SimpleMessage( SimpleMessageHeaders.PROXIES_PIPE_CONNECTED, null, moduleVO.moduleID ) );
+					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( SimpleMessageHeaders.PROXIES_PIPE_CONNECTED, null, moduleVO.moduleID ) );
 					break;
 				}
 

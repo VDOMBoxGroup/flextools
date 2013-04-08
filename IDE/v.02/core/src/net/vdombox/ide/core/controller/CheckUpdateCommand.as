@@ -2,13 +2,13 @@ package net.vdombox.ide.core.controller
 {
 	import air.update.ApplicationUpdaterUI;
 	import air.update.events.UpdateEvent;
-	
+
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
-	
+
 	import net.vdombox.ide.common.view.components.button.AlertButton;
 	import net.vdombox.ide.common.view.components.windows.Alert;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -23,7 +23,7 @@ package net.vdombox.ide.core.controller
 
 			appUpdater.updateURL = "http://ehb.tomsk.ru/maks/update45SDK.xml"; // Server-side XML file describing update
 			appUpdater.isCheckForUpdateVisible = false; // We won't ask permission to check for an update
-			
+
 			appUpdater.addEventListener( UpdateEvent.INITIALIZED, onUpdate ); // Once initialized, run onUpdate
 			appUpdater.addEventListener( ErrorEvent.ERROR, onError ); // If something goes wrong, run onError
 
@@ -41,7 +41,7 @@ package net.vdombox.ide.core.controller
 			{
 				appUpdater.checkNow(); // Go check for an update now
 			}
-			
+
 			function onDeactive( event : Event ) : void
 			{
 				////trace("************* !  onDeactive  ************************");

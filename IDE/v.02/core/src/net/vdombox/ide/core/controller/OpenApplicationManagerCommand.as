@@ -14,13 +14,13 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.view.components.ApplicationManagerWindow;
 	import net.vdombox.ide.core.view.components.MainWindow;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
 	/**
-	 *  registred on ApplicationFacade.OPEN_APPLICATION_MANAGER command
-	 *  for show ApplicationManagerWindow 
+	 * registred on ApplicationFacade.OPEN_APPLICATION_MANAGER command
+	 * for show ApplicationManagerWindow
 	 * @author andreev ap
 	 */
 	public class OpenApplicationManagerCommand extends SimpleCommand
@@ -28,7 +28,7 @@ package net.vdombox.ide.core.controller
 		override public function execute( notification : INotification ) : void
 		{
 			facade.sendNotification( ApplicationFacade.CLOSE_INITIAL_WINDOW );
-			
+
 			var applicationManagerWindowMediator : ApplicationManagerWindowMediator = facade.retrieveMediator( ApplicationManagerWindowMediator.NAME ) as ApplicationManagerWindowMediator;
 			// if already opened do nothing
 			if ( applicationManagerWindowMediator )
@@ -38,13 +38,13 @@ package net.vdombox.ide.core.controller
 			var applicationManagerWindow : ApplicationManagerWindow = new ApplicationManagerWindow();
 			applicationManagerWindowMediator = new ApplicationManagerWindowMediator( applicationManagerWindow );
 			facade.registerMediator( applicationManagerWindowMediator );
-			
+
 			facade.registerProxy( new GalleryProxy() );
 
 			// popup Window
 			var mainWindow : MainWindow = notification.getBody() as MainWindow;
 			WindowManager.getInstance().addWindow( applicationManagerWindow, mainWindow, true );
-			
+
 		}
 	}
 }

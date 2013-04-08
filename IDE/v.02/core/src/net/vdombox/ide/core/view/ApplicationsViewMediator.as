@@ -10,9 +10,9 @@ package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import mx.collections.ArrayList;
-	
+
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ServerProxy;
@@ -20,29 +20,29 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.view.components.ApplicationListItemRenderer;
 	import net.vdombox.ide.core.view.components.ApplicationsView;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.List;
 
 	/**
 	 * <P>
-	 *   <b>Notification Interests:</b>
+	 * <b>Notification Interests:</b>
 	 * <UL>
-	 *   <LI>ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW
-	 *   <LI>ApplicationFacade.OPEN_APPLICATIONS_VIEW
-	 *   <LI>ApplicationFacade.SERVER_APPLICATIONS_GETTED
+	 * <LI>ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW
+	 * <LI>ApplicationFacade.OPEN_APPLICATIONS_VIEW
+	 * <LI>ApplicationFacade.SERVER_APPLICATIONS_GETTED
 	 * </UL></P>
 	 * <P>
-	 *  <b>Notification send:</b>
+	 * <b>Notification send:</b>
 	 * <UL>
-	 *   <LI>ApplicationFacade.CLOSE_APPLICATION_MANAGER
-	 *   <LI>ApplicationFacade.GET_APPLICATIONS_LIST
-	 *   <LI>ApplicationFacade.LOAD_RESOURCE
-	 *   <LI>ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW
-	 *   <LI>ApplicationFacade.SET_SELECTED_APPLICATION
+	 * <LI>ApplicationFacade.CLOSE_APPLICATION_MANAGER
+	 * <LI>ApplicationFacade.GET_APPLICATIONS_LIST
+	 * <LI>ApplicationFacade.LOAD_RESOURCE
+	 * <LI>ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW
+	 * <LI>ApplicationFacade.SET_SELECTED_APPLICATION
 	 * </UL>
 	 * </P>
 	 *
@@ -90,12 +90,12 @@ package net.vdombox.ide.core.view
 		{
 			return viewComponent as ApplicationsView;
 		}
-		
+
 		override public function onRegister() : void
 		{
 			addHandlers();
 		}
-		
+
 		override public function onRemove() : void
 		{
 			removeHandlers();
@@ -125,7 +125,7 @@ package net.vdombox.ide.core.view
 						applicationsView.changeApplication.enabled = true;
 						applicationsView.setSelectApplication.enabled = true;
 					}
-					
+
 					selectApplication();
 
 					break;
@@ -163,7 +163,7 @@ package net.vdombox.ide.core.view
 
 			return interests;
 		}
-		
+
 		/**
 		 *
 		 * @return
@@ -201,13 +201,13 @@ package net.vdombox.ide.core.view
 		private function addHandlers() : void
 		{
 			applicationList.addEventListener( Event.CHANGE, applicationList_changeHandler, false, 0, true );
-			
+
 			applicationList.addEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICK, applicationList_dubleClickHandler, true, 0, true );
 
 			applicationsView.addApplication.addEventListener( MouseEvent.CLICK, addApplicationClickHandler, false, 0, true );
-			
+
 			applicationsView.changeApplication.addEventListener( MouseEvent.CLICK, changeApplicationClikHandler, false, 0, true );
-			
+
 			applicationsView.setSelectApplication.addEventListener( MouseEvent.CLICK, setSelectApplication, false, 0, true );
 
 			applicationsView.addEventListener( ApplicationListItemRenderer.ICON_REQUEST, iconRequestHandler, true, 0, true );
@@ -244,8 +244,8 @@ package net.vdombox.ide.core.view
 				applicationsView.visible = false;
 
 				sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applicationListItemRenderer.applicationVO );
-				
-				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff : false, close : false } );
+
+				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff: false, close: false } );
 			}
 		}
 
@@ -266,7 +266,7 @@ package net.vdombox.ide.core.view
 			var settingsProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			var applicationID : String = settingsProxy.getSelectedApp( serverProxy.server );
-			
+
 			for ( var i : int = 0; i < applications.length; i++ )
 			{
 				if ( applications[ i ].id == applicationID )
@@ -279,13 +279,13 @@ package net.vdombox.ide.core.view
 		private function removeHandlers() : void
 		{
 			applicationList.removeEventListener( Event.CHANGE, applicationList_changeHandler );
-			
+
 			applicationList.removeEventListener( ApplicationListItemRenderer.RENDERER_DOUBLE_CLICK, applicationList_dubleClickHandler, true );
 
 			applicationsView.addApplication.removeEventListener( MouseEvent.CLICK, addApplicationClickHandler );
-			
+
 			applicationsView.changeApplication.removeEventListener( MouseEvent.CLICK, changeApplicationClikHandler );
-			
+
 			applicationsView.setSelectApplication.removeEventListener( MouseEvent.CLICK, setSelectApplication );
 
 			applicationsView.removeEventListener( ApplicationListItemRenderer.ICON_REQUEST, iconRequestHandler, true );
@@ -295,7 +295,7 @@ package net.vdombox.ide.core.view
 
 		/**
 		 *
-		 *  Set selected Application. It is a selectedApplication or last opened
+		 * Set selected Application. It is a selectedApplication or last opened
 		 * or first of existed.
 		 *
 		 */
@@ -316,8 +316,8 @@ package net.vdombox.ide.core.view
 		private function setSelectApplication( event : MouseEvent ) : void
 		{
 			sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
-			
-			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff : false, close : false } );
+
+			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff: false, close: false } );
 		}
 	}
 }

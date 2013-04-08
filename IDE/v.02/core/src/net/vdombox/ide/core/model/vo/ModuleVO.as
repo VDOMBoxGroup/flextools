@@ -8,9 +8,10 @@ package net.vdombox.ide.core.model.vo
 	public class ModuleVO
 	{
 		private var _module : VIModule;
+
 		private var _path : String;
-		
-		public function ModuleVO(  path : String )
+
+		public function ModuleVO( path : String )
 		{
 			_path = path;
 		}
@@ -28,7 +29,7 @@ package net.vdombox.ide.core.model.vo
 			else
 				return "";
 		}
-		
+
 		public function get moduleName() : String
 		{
 			if ( _module )
@@ -36,7 +37,7 @@ package net.vdombox.ide.core.model.vo
 			else
 				return "";
 		}
-		
+
 		public function get path() : String
 		{
 			return _path;

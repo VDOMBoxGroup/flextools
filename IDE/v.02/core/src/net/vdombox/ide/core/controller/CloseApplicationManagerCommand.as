@@ -1,6 +1,6 @@
 package net.vdombox.ide.core.controller
 {
-	
+
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.GalleryProxy;
 	import net.vdombox.ide.core.view.ApplicationManagerWindowMediator;
@@ -8,10 +8,10 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.view.ApplicationsViewMediator;
 	import net.vdombox.ide.core.view.MainWindowMediator;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
-	
+
 
 	public class CloseApplicationManagerCommand extends SimpleCommand
 	{
@@ -19,32 +19,32 @@ package net.vdombox.ide.core.controller
 		{
 			if ( facade.hasMediator( ApplicationsViewMediator.NAME ) )
 				facade.removeMediator( ApplicationsViewMediator.NAME );
-			
+
 			if ( facade.hasMediator( ApplicationPropertiesViewMediator.NAME ) )
 				facade.removeMediator( ApplicationPropertiesViewMediator.NAME );
-			
+
 			if ( facade.hasProxy( GalleryProxy.NAME ) )
 				facade.removeProxy( GalleryProxy.NAME );
-			
+
 			var windowManager : WindowManager = WindowManager.getInstance();
 
 			if ( facade.hasMediator( ApplicationManagerWindowMediator.NAME ) )
-			{				
-				var applicationManagerWindowMediator : ApplicationManagerWindowMediator = facade.retrieveMediator( ApplicationManagerWindowMediator.NAME) as ApplicationManagerWindowMediator;
-				
+			{
+				var applicationManagerWindowMediator : ApplicationManagerWindowMediator = facade.retrieveMediator( ApplicationManagerWindowMediator.NAME ) as ApplicationManagerWindowMediator;
+
 				facade.removeMediator( ApplicationManagerWindowMediator.NAME );
-				windowManager.removeWindow(applicationManagerWindowMediator.applicationManagerWindow);
+				windowManager.removeWindow( applicationManagerWindowMediator.applicationManagerWindow );
 			}
-			
+
 			var logOff : Boolean = notification.getBody().logOff as Boolean;
 			var close : Boolean = notification.getBody().close as Boolean;
-		
+
 			if ( !logOff )
 			{
 				if ( !close || facade.hasMediator( MainWindowMediator.NAME ) )
-					sendNotification(ApplicationFacade.OPEN_MAIN_WINDOW);
+					sendNotification( ApplicationFacade.OPEN_MAIN_WINDOW );
 				else
-					sendNotification(ApplicationFacade.CLOSE_IDE);
+					sendNotification( ApplicationFacade.CLOSE_IDE );
 			}
 			else
 			{
@@ -53,8 +53,8 @@ package net.vdombox.ide.core.controller
 				else
 					sendNotification( ApplicationFacade.REQUEST_FOR_SIGNOUT );
 			}
-			
-			
+
+
 		}
 	}
 }

@@ -8,7 +8,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.TypesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
@@ -23,7 +23,7 @@ package net.vdombox.ide.core.view
 	 * @flowerModelElementId _DHGdYEomEeC-JfVEe_-0Aw
 	 * adasdas
 	 */
-	
+
 	public class ProxiesJunctionMediator extends JunctionMediator
 	{
 		public static const NAME : String = "ProxiesJunctionMediator";
@@ -69,7 +69,7 @@ package net.vdombox.ide.core.view
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var moduleID : String
-			
+
 			var proxiesOut : TeeSplit;
 			var proxiesIn : TeeMerge;
 
@@ -87,18 +87,18 @@ package net.vdombox.ide.core.view
 
 					// Connect the core's PROXYIN to the module's PROXYOUT
 					var moduleToCoreProxies : Pipe = pipesProxy.getPipe( moduleID, PipeNames.PROXIESOUT ) as Pipe;
-					
+
 					if ( !moduleToCoreProxies )
 					{
 						moduleToCoreProxies = new Pipe();
 						module.acceptOutputPipe( PipeNames.PROXIESOUT, moduleToCoreProxies );
-						
+
 						proxiesIn = junction.retrievePipe( PipeNames.PROXIESIN ) as TeeMerge;
 						proxiesIn.connectInput( moduleToCoreProxies );
-						
+
 						pipesProxy.savePipe( moduleID, PipeNames.PROXIESOUT, moduleToCoreProxies );
 					}
-					
+
 					// Connect the core's PROXYOUT to the module's PROXYIN
 					var coreToModuleProxies : Pipe = pipesProxy.getPipe( moduleID, PipeNames.PROXIESIN ) as Pipe;
 
@@ -130,8 +130,8 @@ package net.vdombox.ide.core.view
 					proxiesIn = junction.retrievePipe( PipeNames.PROXIESIN ) as TeeMerge;
 
 					proxiesOut.disconnectFitting( inPipe );
-//					proxiesIn.disconnect()
-					
+					//					proxiesIn.disconnect()
+
 
 					pipesProxy.removePipe( moduleID, PipeNames.PROXIESIN );
 					pipesProxy.removePipe( moduleID, PipeNames.PROXIESOUT );
@@ -166,7 +166,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.RESOURCES_PROXY_RESPONSE:
 				{
 					junction.sendMessage( PipeNames.PROXIESOUT, body as ProxyMessage );
-					
+
 					break;
 				}
 			}
@@ -175,7 +175,7 @@ package net.vdombox.ide.core.view
 		override public function handlePipeMessage( message : IPipeMessage ) : void
 		{
 			var ppMessage : ProxyMessage = message as ProxyMessage;
-			var now:Date = new Date();
+			var now : Date = new Date();
 			//trace("                                       " +now.toLocaleTimeString()+"  ->>  "+  ppMessage.proxy.toLocaleUpperCase() + "  " + ppMessage.operation.toLocaleUpperCase() +"  "+ppMessage.target.toLocaleUpperCase());
 			switch ( ppMessage.proxy )
 			{
@@ -210,7 +210,7 @@ package net.vdombox.ide.core.view
 				case PPMPlaceNames.APPLICATION:
 				{
 					sendNotification( ApplicationFacade.APPLICATION_PROXY_REQUEST, ppMessage );
-					
+
 					break;
 				}
 

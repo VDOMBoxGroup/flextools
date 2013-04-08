@@ -9,26 +9,26 @@
 package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
-	
+
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.ApplicationManagerEvent;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.view.components.ApplicationManagerWindow;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
 	/**
-	 *  <P>
-	 *  <b>Notification send:</b>
+	 * <P>
+	 * <b>Notification send:</b>
 	 * <UL>
-	 *   <LI>ApplicationFacade.CLOSE_APPLICATION_MANAGER
-	 *   <LI>ApplicationFacade.OPEN_APPLICATIONS_VIEW
-	 *   <LI>ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW
+	 * <LI>ApplicationFacade.CLOSE_APPLICATION_MANAGER
+	 * <LI>ApplicationFacade.OPEN_APPLICATIONS_VIEW
+	 * <LI>ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW
 	 * </UL>
 	 * </P>
 	 *
@@ -90,14 +90,14 @@ package net.vdombox.ide.core.view
 		private function addHandlers() : void
 		{
 			applicationManagerWindow.addEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHandler );
-		
+
 			applicationManagerWindow.addEventListener( FlexEvent.REMOVE, removeHandler );
-			
+
 			applicationManagerWindow.addEventListener( Event.CLOSE, closeHandler );
-			
+
 			applicationManagerWindow.addEventListener( ApplicationManagerEvent.LOGOUT, logoutHandler );
 		}
-		
+
 		private function removeHandler( event : FlexEvent ) : void
 		{
 			closeWindow( false, true );
@@ -107,17 +107,17 @@ package net.vdombox.ide.core.view
 		{
 			closeWindow();
 		}
-		
+
 		private function logoutHandler( event : ApplicationManagerEvent ) : void
 		{
-			closeWindow(true);
+			closeWindow( true );
 		}
 
 
 		private function closeWindow( logOff : Boolean = false, close : Boolean = false ) : void
 		{
-			if (serverProxy.applications && serverProxy.applications.length > 0 )
-				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff : logOff, close : close } );
+			if ( serverProxy.applications && serverProxy.applications.length > 0 )
+				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff: logOff, close: close } );
 			else
 				sendNotification( ApplicationFacade.CLOSE_IDE );
 		}
@@ -125,9 +125,9 @@ package net.vdombox.ide.core.view
 		private function createCompleteHandler( event : FlexEvent ) : void
 		{
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
-			
-			applicationManagerWindow.title += "  |  " + serverProxy.authInfo.hostname; 
-			
+
+			applicationManagerWindow.title += "  |  " + serverProxy.authInfo.hostname;
+
 			registerMediators();
 			openNecessaryView();
 		}
@@ -135,26 +135,28 @@ package net.vdombox.ide.core.view
 		private function openNecessaryView() : void
 		{
 			//if ( serverProxy.applications && serverProxy.applications.length > 0 )
-				sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
-			/*else
-				sendNotification( ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW );*/
+			sendNotification( ApplicationFacade.OPEN_APPLICATIONS_VIEW );
+		/*
+		   else
+		   sendNotification( ApplicationFacade.OPEN_APPLICATION_PROPERTY_VIEW );
+		 */
 		}
 
 		private function registerMediators() : void
 		{
 			facade.registerMediator( new ApplicationsViewMediator( applicationManagerWindow.applicationsView ) );
-			
+
 			facade.registerMediator( new ApplicationPropertiesViewMediator( applicationManagerWindow.applicationPropertiesView ) );
 		}
 
 		private function removeHandlers() : void
 		{
 			applicationManagerWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, createCompleteHandler );
-			
+
 			applicationManagerWindow.removeEventListener( FlexEvent.REMOVE, removeHandler );
-			
+
 			applicationManagerWindow.removeEventListener( Event.CLOSE, closeHandler );
-			
+
 			applicationManagerWindow.removeEventListener( ApplicationManagerEvent.LOGOUT, logoutHandler );
 		}
 

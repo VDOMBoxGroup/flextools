@@ -30,8 +30,10 @@
 		<s:HorizontalLayout/>
 	</s:layout>
 
-	<s:Label text="{ _description }" width="100%"/>
+	<s:Label text="{ _description }"
+			 width="100%"/>
 
-	<s:Label text="{ _status }" width="50"/>
+	<s:Label text="{ _status }"
+			 width="50"/>
 
 </s:ItemRenderer>

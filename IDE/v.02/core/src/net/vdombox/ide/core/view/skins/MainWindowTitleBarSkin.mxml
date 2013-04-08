@@ -29,7 +29,9 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="32" width="100%" xmlns:mx1="library://ns.adobe.com/flex/mx">
+			 minHeight="32"
+			 width="100%"
+			 xmlns:mx1="library://ns.adobe.com/flex/mx">
 
 	<fx:Metadata>
 		/**
@@ -42,16 +44,16 @@
 		<![CDATA[
 			import net.vdombox.ide.core.events.MainWindowEvent;
 			import net.vdombox.utils.VersionUtils;
+
 			static private const exclusions : Array = [ "titleIconImage", "titleText" ];
 
 			/**
-			 *  @inheritDoc
+			 * @inheritDoc
 			 */
 			override public function get colorizeExclusions() : Array
 			{
 				return exclusions;
 			}
-		
 		]]>
 
 	</fx:Script>
@@ -62,24 +64,36 @@
 
 		<s:State name="disabled"/>
 
-		<s:State name="normalAndMaximized" stateGroups="maximizedGroup"/>
+		<s:State name="normalAndMaximized"
+				 stateGroups="maximizedGroup"/>
 
-		<s:State name="disabledAndMaximized" stateGroups="maximizedGroup"/>
+		<s:State name="disabledAndMaximized"
+				 stateGroups="maximizedGroup"/>
 	</s:states>
 	<!-- fill -->
 	<!--- Defines the background color of the skin. -->
 
 	<s:Rect id="background"
-			bottom="0" left="0" right="0" top="0"
-			radiusX="2" radiusY="2">
+			bottom="0"
+			left="0"
+			right="0"
+			top="0"
+			radiusX="2"
+			radiusY="2">
 
 		<s:fill>
-			<s:SolidColor color="0x000000" />
+			<s:SolidColor color="0x000000"/>
 		</s:fill>
 	</s:Rect>
 
-	<s:Group height="100%" minHeight="32" width.disabled="100%" width.disabledAndMaximized="100%" width.normalAndMaximized="100%"
-			 left="0" right="0" top="0">
+	<s:Group height="100%"
+			 minHeight="32"
+			 width.disabled="100%"
+			 width.disabledAndMaximized="100%"
+			 width.normalAndMaximized="100%"
+			 left="0"
+			 right="0"
+			 top="0">
 
 		<s:layout>
 			<s:HorizontalLayout gap="5"
@@ -93,52 +107,67 @@
 		<!-- title -->
 		<!--- Defines the Label control for displaying the title text in the title bar. -->
 
-		<s:HGroup gap="5" paddingTop="15" paddingLeft="20">
+		<s:HGroup gap="5"
+				  paddingTop="15"
+				  paddingLeft="20">
 			<s:RichText height="100%"
-						text="VDOM" color="#FFFFFF"
+						text="VDOM"
+						color="#FFFFFF"
 						fontSize="10"/>
-			
-			<s:RichText height="100%" 
-						text="IDE" color="#FF0000"
+
+			<s:RichText height="100%"
+						text="IDE"
+						color="#FF0000"
 						fontSize="10"/>
-			
-			<s:RichText height="100%" 
-						text="{VersionUtils.getApplicationVersion()}" color="#CBCBCB"
+
+			<s:RichText height="100%"
+						text="{VersionUtils.getApplicationVersion()}"
+						color="#CBCBCB"
 						fontSize="10"/>
-			
-			<s:RichText id="titleText" 
-					 	height="100%" color="#FFFFFF" fontSize="10"/>
+
+			<s:RichText id="titleText"
+						height="100%"
+						color="#FFFFFF"
+						fontSize="10"/>
 		</s:HGroup>
-				
+
 	</s:Group>
-	
-	
-			   
-	
-	<s:HGroup right="16" top="12" height="100%" minWidth="40" minHeight="20" gap="10">
+
+
+
+
+	<s:HGroup right="16"
+			  top="12"
+			  height="100%"
+			  minWidth="40"
+			  minHeight="20"
+			  gap="10">
 		<!-- minimize button -->
 		<s:Button id="minimizeButton"
-				  bottom="2" 
-				  skinClass="net.vdombox.ide.common.view.skins.button.MainMinimizeBtnSkin" verticalCenter="0"/>
-		
+				  bottom="2"
+				  skinClass="net.vdombox.ide.common.view.skins.button.MainMinimizeBtnSkin"
+				  verticalCenter="0"/>
+
 		<!-- close button -->
-		<s:Button id="logoutButton" 
-				  skinClass="net.vdombox.ide.common.view.skins.button.MainLogoutBtnSkin" verticalCenter="0"
-				  mouseDown="dispatchEvent( new MainWindowEvent( MainWindowEvent.LOGOUT ) )"/>	
-		
+		<s:Button id="logoutButton"
+				  skinClass="net.vdombox.ide.common.view.skins.button.MainLogoutBtnSkin"
+				  verticalCenter="0"
+				  mouseDown="dispatchEvent( new MainWindowEvent( MainWindowEvent.LOGOUT ) )"/>
+
 		<!-- maximize button -->
 		<s:Button id="maximizeButton"
-				  skinClass="net.vdombox.ide.common.view.skins.button.MainMaximizeBtnSkin" 
+				  skinClass="net.vdombox.ide.common.view.skins.button.MainMaximizeBtnSkin"
 				  skinClass.maximizedGroup="net.vdombox.ide.common.view.skins.button.MainRestoreBtnSkin"
 				  verticalCenter="0"/>
-		
+
 		<!-- close button -->
 		<s:Button id="closeButton"
-				  skinClass="net.vdombox.ide.common.view.skins.button.MainCloseBtnSkin" verticalCenter="0"
-				  mouseDown="dispatchEvent( new MainWindowEvent( MainWindowEvent.CLOSE ) )"/>	
+				  skinClass="net.vdombox.ide.common.view.skins.button.MainCloseBtnSkin"
+				  verticalCenter="0"
+				  mouseDown="dispatchEvent( new MainWindowEvent( MainWindowEvent.CLOSE ) )"/>
 	</s:HGroup>
-	
-	
-	
-	
+
+
+
+
 </s:SparkSkin>

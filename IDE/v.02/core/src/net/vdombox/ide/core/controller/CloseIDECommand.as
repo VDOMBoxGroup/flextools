@@ -3,7 +3,7 @@ package net.vdombox.ide.core.controller
 	import flash.desktop.NativeApplication;
 	import flash.display.NativeWindow;
 	import flash.events.Event;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -14,32 +14,32 @@ package net.vdombox.ide.core.controller
 			var exitingEvent : Event = new Event( Event.EXITING, false, true );
 			NativeApplication.nativeApplication.autoExit = true;
 			NativeApplication.nativeApplication.addEventListener( Event.EXITING, exitingHandler );
-			
-			NativeApplication.nativeApplication.dispatchEvent(exitingEvent);
-			
-			if (!exitingEvent.isDefaultPrevented()) 
+
+			NativeApplication.nativeApplication.dispatchEvent( exitingEvent );
+
+			if ( !exitingEvent.isDefaultPrevented() )
 				NativeApplication.nativeApplication.exit();
 		}
-		
+
 		private function exitingHandler( event : Event ) : void
 		{
 			NativeApplication.nativeApplication.removeEventListener( Event.EXITING, exitingHandler );
-			
-			var winClosingEvent:Event;
+
+			var winClosingEvent : Event;
 			var opened : Array = NativeApplication.nativeApplication.openedWindows;
-			
-			for each (var win : NativeWindow in opened ) 
+
+			for each ( var win : NativeWindow in opened )
 			{
-				winClosingEvent = new Event(Event.CLOSING,false,true);
-				win.dispatchEvent(winClosingEvent);
-				
-				if (!winClosingEvent.isDefaultPrevented()) 
+				winClosingEvent = new Event( Event.CLOSING, false, true );
+				win.dispatchEvent( winClosingEvent );
+
+				if ( !winClosingEvent.isDefaultPrevented() )
 					win.close();
-				else 
+				else
 					event.preventDefault();
 			}
-			
-			if (!event.isDefaultPrevented()) 
+
+			if ( !event.isDefaultPrevented() )
 			{
 				//perform cleanup
 			}

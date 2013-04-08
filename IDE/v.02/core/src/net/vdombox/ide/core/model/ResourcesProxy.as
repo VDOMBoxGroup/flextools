@@ -6,7 +6,7 @@ package net.vdombox.ide.core.model
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
-	
+
 	import mx.collections.ArrayCollection;
 	import mx.resources.ResourceManager;
 	import mx.rpc.AsyncToken;
@@ -14,7 +14,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.soap.Operation;
 	import mx.utils.Base64Decoder;
 	import mx.utils.Base64Encoder;
-	
+
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -22,7 +22,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.managers.CacheManager;
 	import net.vdombox.ide.core.model.managers.IconManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -43,13 +43,14 @@ package net.vdombox.ide.core.model
 		public static const NAME : String = "ResourcesProxy";
 
 		private var soap : SOAP;
-		
+
 		private var cacheManager : CacheManager;
-		
+
 		private var upLoadQue : Array;
+
 		private var loadQue : Dictionary = new Dictionary();
-		
-		
+
+
 		public function ResourcesProxy()
 		{
 			super( NAME, data );
@@ -59,7 +60,7 @@ package net.vdombox.ide.core.model
 		{
 			soap = SOAP.getInstance();
 			cacheManager = CacheManager.getInstance();
-			
+
 			if ( soap.ready )
 				addHandlers();
 			else
@@ -75,7 +76,7 @@ package net.vdombox.ide.core.model
 			removeHandlers();
 		}
 
-		
+
 
 		/**
 		 *
@@ -84,7 +85,7 @@ package net.vdombox.ide.core.model
 		 */
 		public function deleteResource( applicationVO : ApplicationVO, resourceVO : ResourceVO ) : void
 		{
-			
+
 			var token : AsyncToken = soap.delete_resource( applicationVO.id, resourceVO.id );
 
 			token.recipientName = proxyName;
@@ -97,7 +98,7 @@ package net.vdombox.ide.core.model
 		 */
 		public function getListResources( applicationVO : ApplicationVO ) : void
 		{
-			
+
 			var token : AsyncToken = soap.list_resources( applicationVO.id );
 
 			token.recipientName = proxyName;
@@ -131,7 +132,7 @@ package net.vdombox.ide.core.model
 			}
 		}
 
-//		private var timeoutGetResource : uint;
+		//		private var timeoutGetResource : uint;
 		private function loadResourceFromServer( resourceVO : ResourceVO ) : void
 		{
 			resourceVO.setStatus( ResourceVO.LOAD_PROGRESS );
@@ -141,13 +142,13 @@ package net.vdombox.ide.core.model
 
 		private function getResourceFromServer( resourceVO : ResourceVO ) : void
 		{
-			if ( loadQue[ resourceVO ] )	
+			if ( loadQue[ resourceVO ] )
 				return;
-			
+
 			loadQue[ resourceVO ] = true;
-			
+
 			var token : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
-			
+
 			token.recipientName = proxyName;
 			token.resourceVO = resourceVO;
 		}
@@ -228,7 +229,7 @@ package net.vdombox.ide.core.model
 		public function getIcon( resourceVO : ResourceVO ) : void
 		{
 			var iconManager : IconManager = new IconManager( resourceVO );
-			
+
 			// todo: "loadResourceRequest" 
 			iconManager.addEventListener( "loadResourceRequest", loadResourceRequestHandler )
 			iconManager.setIconForResourceVO();
@@ -237,9 +238,9 @@ package net.vdombox.ide.core.model
 			{
 				var rIconManager : IconManager = event.target as IconManager;
 				var resourceVO : ResourceVO = rIconManager.resourceVO;
-				
-				resourceVO.setStatus(ResourceVO.LOAD_ICON);
-				
+
+				resourceVO.setStatus( ResourceVO.LOAD_ICON );
+
 				getResourceFromServer( rIconManager.resourceVO );
 			}
 
@@ -261,7 +262,7 @@ package net.vdombox.ide.core.model
 
 			soap.modify_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.modify_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
-			
+
 		}
 
 		private function removeHandlers() : void
@@ -280,7 +281,7 @@ package net.vdombox.ide.core.model
 
 			soap.modify_resource.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.modify_resource.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
-			
+
 		}
 
 		private function soap_connectedHandler( event : SOAPEvent ) : void
@@ -303,7 +304,7 @@ package net.vdombox.ide.core.model
 				resource = new ResourceVO( applicationVO.id );
 				resource.setXMLDescription( resourceDescription );
 
-//				choseIcon( resource );   здесь есть только описание, нет самих ресурсов
+				//				choseIcon( resource );   здесь есть только описание, нет самих ресурсов
 
 				resources.push( resource );
 			}
@@ -323,8 +324,8 @@ package net.vdombox.ide.core.model
 				return;
 
 			resourceVO.icon = file;
-//			resourceVO.iconId 	= resourceVO.id + "_icon";
-			resourceVO.setData( null);
+			//			resourceVO.iconId 	= resourceVO.id + "_icon";
+			resourceVO.setData( null );
 			sendNotification( ApplicationFacade.ICON_GETTED, resourceVO );
 		}
 
@@ -343,7 +344,7 @@ package net.vdombox.ide.core.model
 			}
 			else
 			{
-//				loadableResources.addItem( resourceVO.id );
+				//				loadableResources.addItem( resourceVO.id );
 				loadResourceFromServer( resourceVO );
 			}
 
@@ -387,12 +388,12 @@ package net.vdombox.ide.core.model
 
 			if ( !data || data.bytesAvailable == 0 )
 			{
-				sendNotification( ApplicationFacade.WRITE_ERROR, { text : ResourceManager.getInstance().getString( 'Core_General', 'error_0_bytes' ) } );
+				sendNotification( ApplicationFacade.WRITE_ERROR, { text: ResourceManager.getInstance().getString( 'Core_General', 'error_0_bytes' ) } );
 				resourceVO.setStatus( ResourceVO.LOAD_ERROR );
 				sendNotification( ApplicationFacade.RESOURCE_SETTED_ERROR, resourceVO );
 				return;
 			}
-				
+
 			data.compress();
 
 			data.position = 0;
@@ -402,7 +403,7 @@ package net.vdombox.ide.core.model
 			base64Data.encodeBytes( data );
 
 			resourceVO.setStatus( ResourceVO.UPLOAD_PROGRESS );
-			
+
 			var token : AsyncToken = soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString() );
 
 			token.recipientName = proxyName;
@@ -424,12 +425,12 @@ package net.vdombox.ide.core.model
 
 			if ( !operation || !result )
 				return;
-			
+
 			if ( result.hasOwnProperty( "Error" ) )
 			{
-				sendNotification( ApplicationFacade.WRITE_ERROR, { text : result.Error.toString() } );
-				
-				resourceVO = new ResourceVO("");
+				sendNotification( ApplicationFacade.WRITE_ERROR, { text: result.Error.toString() } );
+
+				resourceVO = new ResourceVO( "" );
 				resourceVO.setStatus( ResourceVO.LOAD_ERROR );
 				sendNotification( ApplicationFacade.RESOURCE_SETTED_ERROR, resourceVO );
 				return;
@@ -447,9 +448,9 @@ package net.vdombox.ide.core.model
 					resourceVO = event.token.resourceVO as ResourceVO;
 
 					var data : String = event.result.Resource;
-					
-					processIncomingData( data, resourceVO);
-					
+
+					processIncomingData( data, resourceVO );
+
 					break;
 				}
 
@@ -461,7 +462,7 @@ package net.vdombox.ide.core.model
 					resourceVO.setStatus( ResourceVO.UPLOADED );
 
 					sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
-				
+
 					soap_setResource();
 
 					break;
@@ -500,31 +501,31 @@ package net.vdombox.ide.core.model
 				}
 			}
 		}
-		
-		
-		private function processIncomingData( data : String, resourceVO : ResourceVO): void
+
+
+		private function processIncomingData( data : String, resourceVO : ResourceVO ) : void
 		{
 			var decoder : Base64Decoder = new Base64Decoder();
 			decoder.decode( data );
-			
+
 			var imageSource : ByteArray = decoder.toByteArray();
-			
+
 			imageSource.uncompress();
 			// TODO: resourceVO.icon = img
 			cacheManager.cacheFile( resourceVO.id, imageSource );
-			
+
 			resourceVO.setData( imageSource );
-			
-			if (resourceVO.status == ResourceVO.LOAD_ICON)
+
+			if ( resourceVO.status == ResourceVO.LOAD_ICON )
 			{
-				var iconManager : IconManager = new IconManager(resourceVO);
+				var iconManager : IconManager = new IconManager( resourceVO );
 				iconManager.setIconForResourceVO();
 			}
-			
+
 			resourceVO.setStatus( ResourceVO.LOADED );
-			
-			delete loadQue[ resourceVO ] ;
-			
+
+			delete loadQue[ resourceVO ];
+
 			sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
 
 		}
@@ -532,26 +533,28 @@ package net.vdombox.ide.core.model
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{
 			var token : AsyncToken = event.token;
-			
+
 			if ( !token.hasOwnProperty( "recipientName" ) || token.recipientName != proxyName )
 				return;
-			
-			var operation : Operation = event.currentTarget as Operation;
-			
-			
-			var operationName : String = operation.name;
-			/*var resourceVO : ResourceVO;
 
-			switch ( operationName )
-			{
-				case "get_resource":
-				{
-					resourceVO = event.token.resourceVO as ResourceVO;
-//					resourceVO.setData( null ); 
-//					soap_setResource();
-					break;
-				}
-			}*/
+			var operation : Operation = event.currentTarget as Operation;
+
+
+			var operationName : String = operation.name;
+			/*
+			   var resourceVO : ResourceVO;
+
+			   switch ( operationName )
+			   {
+			   case "get_resource":
+			   {
+			   resourceVO = event.token.resourceVO as ResourceVO;
+			   //					resourceVO.setData( null );
+			   //					soap_setResource();
+			   break;
+			   }
+			   }
+			 */
 
 			sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxy | soap_faultHandler | " + event.currentTarget.name );
 			//sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );

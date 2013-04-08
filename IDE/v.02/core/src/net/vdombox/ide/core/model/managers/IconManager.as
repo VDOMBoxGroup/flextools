@@ -12,10 +12,10 @@ package net.vdombox.ide.core.model.managers
 	import flash.filesystem.FileStream;
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
-	
+
 	import mx.charts.CategoryAxis;
 	import mx.graphics.codec.PNGEncoder;
-	
+
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 
 	public class IconManager extends EventDispatcher
@@ -36,10 +36,7 @@ package net.vdombox.ide.core.model.managers
 		 *
 		 * @default
 		 */
-		public var icon : Object = { avi: avi_Icon, bin: bin_Icon, blank: bmp_Icon, bmp: bmp_Icon, c: c_Icon, cfg: cfg_Icon, cpp: cpp_Icon, css: css_Icon, dll: dll_Icon, doc: doc_Icon, docx: doc_Icon
-				, dvi: dvi_Icon
-				, gif: gif_Icon, jv: java_Icon, htm: htm_Icon, html: htm_Icon, mht: htm_Icon, mid: htm_Icon, None: blank_Icon, pdf: pdf_Icon, swf: swf_Icon, txt: txt_Icon, wav: wav_Icon, xls: xls_Icon
-				, xlsx: xls_Icon };
+		public var icon : Object = { avi: avi_Icon, bin: bin_Icon, blank: bmp_Icon, bmp: bmp_Icon, c: c_Icon, cfg: cfg_Icon, cpp: cpp_Icon, css: css_Icon, dll: dll_Icon, doc: doc_Icon, docx: doc_Icon, dvi: dvi_Icon, gif: gif_Icon, jv: java_Icon, htm: htm_Icon, html: htm_Icon, mht: htm_Icon, mid: htm_Icon, None: blank_Icon, pdf: pdf_Icon, swf: swf_Icon, txt: txt_Icon, wav: wav_Icon, xls: xls_Icon, xlsx: xls_Icon };
 
 
 		private static const avi_Icon : String = "resourceBrowserIcons/resourceType/avi.png";
@@ -169,7 +166,7 @@ package net.vdombox.ide.core.model.managers
 				if ( !fileExists( file ) )
 				{
 					createIcon();
-					
+
 				}
 			}
 			else if ( !fileExists( file ) )
@@ -262,10 +259,10 @@ package net.vdombox.ide.core.model.managers
 			cacheManager.cacheFile( _resourceVO.iconId, icon );
 
 		}
-		
-		private function onBytesLoaded(event:Event):void
+
+		private function onBytesLoaded( event : Event ) : void
 		{
-			trace("ttt");
+			trace( "ttt" );
 		}
 
 		//convert to bitmapData 
