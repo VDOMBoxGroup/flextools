@@ -1,96 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 xmlns:components="net.vdombox.ide.modules.dataBase.view.components.*" 
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:components="net.vdombox.ide.modules.dataBase.view.components.*"
 		 xmlns:toolBoxComponents="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.*"
-		 creationComplete="group1_creationCompleteHandler(event)" xmlns:components1="net.vdombox.ide.common.view.components.*">
+		 creationComplete="group1_creationCompleteHandler(event)"
+		 xmlns:components1="net.vdombox.ide.common.view.components.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;
-			
+
 			private var _sortQuery : String;
-			
+
 			private var _queryString : String;
-			
+
 			[Bindable]
 			private var dataTable : VDOMAdvancedDataGrid;
-			
-			public function set dataProvider(value:VDOMAdvancedDataGrid):void
+
+			public function set dataProvider( value : VDOMAdvancedDataGrid ) : void
 			{
 				dataTable = value;
 			}
-			
-			public function get sortQuery():String
+
+			public function get sortQuery() : String
 			{
 				return _sortQuery;
 			}
-			
-			public function get queryString():String
+
+			public function get queryString() : String
 			{
 				return _queryString;
 			}
 
-			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			protected function group1_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				addEventListener( ToolBoxPanelEvent.SORT_ELEMENT_CHANGE, sortChangeHandler, true );
-				
+
 				addEventListener( ToolBoxPanelEvent.SEND_QUERY_SIMPLE_CLICK, querySimpleChangeHandler, true );
 			}
-			
+
 			private function sortChangeHandler( event : ToolBoxPanelEvent ) : void
 			{
 				if ( sortQueryBox.selectedColumn == "" )
 					_sortQuery = "";
 				else
 					_sortQuery = "<orderby sort=" + sortQueryBox.orderBy + ">" + sortQueryBox.selectedColumn + "</orderby>";
-				
+
 				dispatchEvent( new ToolBoxPanelEvent( ToolBoxPanelEvent.SORT_CHANGE ) );
 			}
-			
+
 			private function querySimpleChangeHandler( event : ToolBoxPanelEvent ) : void
 			{
 				_queryString = querySimpleBuilderBox.queryString;
-				
+
 				dispatchEvent( new ToolBoxPanelEvent( ToolBoxPanelEvent.QUERY_SIMPLE_CHANGE ) );
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<s:states>
-		<s:State name="SearchBox" />
-		<s:State name="SortQueryBox" />
-		<s:State name="QuerySimpleBuildBox" />
+		<s:State name="SearchBox"/>
+		<s:State name="SortQueryBox"/>
+		<s:State name="QuerySimpleBuildBox"/>
 	</s:states>
-	
-	<s:Rect width="100%" height="100%">
+
+	<s:Rect width="100%"
+			height="100%">
 		<s:fill>
 			<s:SolidColor color="#B8D9F7"/>
 		</s:fill>
 	</s:Rect>
-	
-	<s:VGroup width="100%" height="100%">
-		
-		<s:Label color="#FF0000" text="Не забудь нажать прежде commit" includeIn="QuerySimpleBuildBox, SortQueryBox"/>
-		
-		<s:HGroup width="100%" height="100%">
-			
-			<s:Group width="100%" height="100%">
-				
-				<toolBoxComponents:SearchBox target="{dataTable}" height="35" width="250" includeIn="SearchBox"/>
-				
-				<toolBoxComponents:SortQueryBox id="sortQueryBox" dataProvider="{dataTable}" includeIn="SortQueryBox"/>
-				
-				<toolBoxComponents:QuerySimpleBuildBox id="querySimpleBuilderBox" dataProvider="{dataTable}" includeIn="QuerySimpleBuildBox"/>
-				
+
+	<s:VGroup width="100%"
+			  height="100%">
+
+		<s:Label color="#FF0000"
+				 text="Не забудь нажать прежде commit"
+				 includeIn="QuerySimpleBuildBox, SortQueryBox"/>
+
+		<s:HGroup width="100%"
+				  height="100%">
+
+			<s:Group width="100%"
+					 height="100%">
+
+				<toolBoxComponents:SearchBox target="{dataTable}"
+											 height="35"
+											 width="250"
+											 includeIn="SearchBox"/>
+
+				<toolBoxComponents:SortQueryBox id="sortQueryBox"
+												dataProvider="{dataTable}"
+												includeIn="SortQueryBox"/>
+
+				<toolBoxComponents:QuerySimpleBuildBox id="querySimpleBuilderBox"
+													   dataProvider="{dataTable}"
+													   includeIn="QuerySimpleBuildBox"/>
+
 			</s:Group>
-			
+
 		</s:HGroup>
-		
+
 	</s:VGroup>
 
 </s:Group>

@@ -1,56 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:MXAdvancedDataGridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-								  xmlns:s="library://ns.adobe.com/flex/spark" 
-								  xmlns:mx="library://ns.adobe.com/flex/mx" 
+<s:MXAdvancedDataGridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+								  xmlns:s="library://ns.adobe.com/flex/spark"
+								  xmlns:mx="library://ns.adobe.com/flex/mx"
 								  focusEnabled="true">
-	
+
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.dataGridClasses.DataGridListData;
-			
+
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.utils.WindowManager;
-			
+
 			override public function set data( value : Object ) : void
 			{
 				if ( !value )
 					return;
-					
+
 				super.data = value;
-					
-				textArea.text = value[DataGridListData(listData).dataField];
+
+				textArea.text = value[ DataGridListData( listData ).dataField ];
 			}
-				
-				
-			protected function lblData_doubleClickHandler(event:MouseEvent):void
+
+
+			protected function lblData_doubleClickHandler( event : MouseEvent ) : void
 			{
-					// TODO Auto-generated method stub
+				// TODO Auto-generated method stub
 				event.stopImmediatePropagation();
 				var stringAttributeEditWindow : StringAttributeEditWindow = new StringAttributeEditWindow();
 				stringAttributeEditWindow.value = textArea.text;
 				stringAttributeEditWindow.editable = false;
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.APPLY, applyHandler );
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.CANCEL, cancelHandler );
-					
-				WindowManager.getInstance().addWindow(stringAttributeEditWindow, this, true);
-					
+
+				WindowManager.getInstance().addWindow( stringAttributeEditWindow, this, true );
+
 				function applyHandler( event : StringAttributeEditWindowEvent ) : void
 				{
 					textArea.text = event.value;
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
 				}
-				
+
 				function cancelHandler( event : StringAttributeEditWindowEvent ) : void
 				{
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
 				}
 			}
-				
 		]]>
 	</fx:Script>
-	
-	<s:TextInput id="textArea" top="0" left="0" right="0" bottom="0" text="{listData.label}" doubleClick="lblData_doubleClickHandler(event)"
-				 contentBackgroundAlpha="0" borderVisible="false" borderAlpha="0" maxHeight="18" paddingTop="4" editable="false"
-				 focusIn="{textArea.setStyle( 'contentBackgroundAlpha', '1' ) }" focusOut="{textArea.setStyle( 'contentBackgroundAlpha', '0' ) }"/>
+
+	<s:TextInput id="textArea"
+				 top="0"
+				 left="0"
+				 right="0"
+				 bottom="0"
+				 text="{listData.label}"
+				 doubleClick="lblData_doubleClickHandler(event)"
+				 contentBackgroundAlpha="0"
+				 borderVisible="false"
+				 borderAlpha="0"
+				 maxHeight="18"
+				 paddingTop="4"
+				 editable="false"
+				 focusIn="{textArea.setStyle( 'contentBackgroundAlpha', '1' ) }"
+				 focusOut="{textArea.setStyle( 'contentBackgroundAlpha', '0' ) }"/>
 </s:MXAdvancedDataGridItemRenderer>

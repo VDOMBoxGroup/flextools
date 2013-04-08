@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
-		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
-		 xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="400"
+		 height="300"
+		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor"
+		 xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*"
+		 xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.ListEvent;
 			import mx.utils.UIDUtil;
-			
+
 			import net.vdombox.ide.common.events.PopUpWindowEvent;
 			import net.vdombox.ide.common.model._vo.ObjectVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
@@ -17,24 +20,29 @@
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;
-			
+
 			private var _objectVO : ObjectVO;
-			
+
 			private var manager : *;
+
 			private var queue : QueueManager;
-			private var _tableStructure:XML;			/* XML got by vdom IDE (of existing table) */
-			private var tableID:String;
-			private var tableName:String;
-			
+
+			private var _tableStructure : XML; /* XML got by vdom IDE (of existing table) */
+
+			private var tableID : String;
+
+			private var tableName : String;
+
 			[Bindable]
-			private var columnsProvider:Array = [];	/* of Object */
-			private var columnsProviderOld:Array = [];	/* of Object */
-			
+			private var columnsProvider : Array = []; /* of Object */
+
+			private var columnsProviderOld : Array = []; /* of Object */
+
 			private var selectedItem : StructureVO;
-			
+
 			private var numberErrors : int = 0;
-			
-			public function get tableStructure():XML
+
+			public function get tableStructure() : XML
 			{
 				return _tableStructure;
 			}
@@ -43,75 +51,75 @@
 			{
 				return _objectVO ? _objectVO.id : "";
 			}
-			
+
 			public function get editorName() : String
 			{
 				return _objectVO ? _objectVO.name : "";
 			}
-			
+
 			public function get objectVO() : Object
 			{
 				return _objectVO ? _objectVO : null;
 			}
-			
+
 			public function set objectVO( value : Object ) : void
 			{
 				_objectVO = value as ObjectVO;
 			}
-			
-			public function set externalManager( ref: * ) : void 
+
+			public function set externalManager( ref : * ) : void
 			{
 				manager = ref;
-				
+
 				requestTableStructure();
 			}
-			
-			private function requestTableStructure()  :void 
+
+			private function requestTableStructure() : void
 			{
 				/* Init getting data from External Manager */
 				queue = new QueueManager( manager );
 				queue.reset();
-				
-				queue.addRequest(UIDUtil.createUID(), 'get_structure', '', getTableStructureHandler, null);
-				
+
+				queue.addRequest( UIDUtil.createUID(), 'get_structure', '', getTableStructureHandler, null );
+
 				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueOKHandler );
 				queue.execute();
-				
+
 				currentState = "Progress";
 			}
-			
-			private function queueOKHandler( message : String ) : void 
+
+			private function queueOKHandler( message : String ) : void
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOKHandler );
 				currentState = "Result";
 			}
-			
-			private function getTableStructureHandler( event : * ) : void 
+
+			private function getTableStructureHandler( event : * ) : void
 			{
 				var queryResult : XML = new XML( event.Result );
-				_tableStructure = new XML( queryResult.tablestructure );		
-				
+				_tableStructure = new XML( queryResult.tablestructure );
+
 				columnsProvider = []; /* Array of Object */
 				tableID = tableStructure.table.@id;
 				tableName = tableStructure.table.@name;
-				
+
 				var columnDef : XML;
 				columnsProviderOld = [];
-				
-				for each ( columnDef in tableStructure.table.header.column ) 
+
+				for each ( columnDef in tableStructure.table.header.column )
 				{
 					var column : StructureVO = new StructureVO( columnDef );
-						
-					columnsProvider.push( column );	
+
+					columnsProvider.push( column );
 					columnsProviderOld.push( column.copy() );
 				}
-				
+
 				dataTable.dataProvider = columnsProvider;
-				
+
 				commit.enabled = true;
 				numberErrors = 0;
 			}
-			
+
 			private function findRecordInOldDataProvider( structureID : String ) : StructureVO
 			{
 				var structureVO : StructureVO;
@@ -122,114 +130,96 @@
 				}
 				return null;
 			}
-			
-			private function applyBtnClickHandler() : void 
+
+			private function applyBtnClickHandler() : void
 			{
 				var newStructureVO : StructureVO;
 				var oldStructureVO : StructureVO;
 				var requestXML : XML;
-				
+
 				for each ( newStructureVO in columnsProvider )
 				{
-					if( newStructureVO.name.indexOf( " " ) != -1 )
+					if ( newStructureVO.name.indexOf( " " ) != -1 )
 					{
-						Alert.Show( resourceManager.getString( 'DataBase_General', 'data_table_structure_space_in_name_column_dialog_title' ), 
-									resourceManager.getString( 'DataBase_General', 'data_table_structure_space_in_name_column_dialog' ), 
-									AlertButton.OK, this, null );
+						Alert.Show( resourceManager.getString( 'DataBase_General', 'data_table_structure_space_in_name_column_dialog_title' ), resourceManager.getString( 'DataBase_General', 'data_table_structure_space_in_name_column_dialog' ), AlertButton.OK, this, null );
 						return;
 					}
-					
-					requestXML =
-						<tableStructure>
-							<column 
-								id={newStructureVO.id}
-								name={newStructureVO.name}
-								type={newStructureVO.type}
-								notnull={newStructureVO.notnull.toString()}
-								primary={newStructureVO.primary.toString()}
-								autoincrement={newStructureVO.aincrement.toString()}
-								unique={newStructureVO.unique.toString()}
-								default={newStructureVO.defvalue}
-							/>
-						</tableStructure>;
-					
+
+					requestXML = <tableStructure><column id={newStructureVO.id} name={newStructureVO.name} type={newStructureVO.type} notnull={newStructureVO.notnull.toString()} primary={newStructureVO.primary.toString()} autoincrement={newStructureVO.aincrement.toString()} unique={newStructureVO.unique.toString()} default={newStructureVO.defvalue}/></tableStructure>;
+
 					oldStructureVO = findRecordInOldDataProvider( newStructureVO.id );
-					
+
 					if ( oldStructureVO )
 					{
-						if ( newStructureVO.name != oldStructureVO.name || newStructureVO.type != oldStructureVO.type || newStructureVO.primary != oldStructureVO.primary || 
-							newStructureVO.aincrement != oldStructureVO.aincrement || newStructureVO.notnull != oldStructureVO.notnull || newStructureVO.unique != oldStructureVO.unique ||
-							newStructureVO.defvalue != oldStructureVO.defvalue )
+						if ( newStructureVO.name != oldStructureVO.name || newStructureVO.type != oldStructureVO.type || newStructureVO.primary != oldStructureVO.primary || newStructureVO.aincrement != oldStructureVO.aincrement || newStructureVO.notnull != oldStructureVO.notnull || newStructureVO.unique != oldStructureVO.unique || newStructureVO.defvalue != oldStructureVO.defvalue )
 						{
-							queue.addRequest( UIDUtil.createUID(), "update_column", requestXML.toXMLString(), null, null) ;
+							queue.addRequest( UIDUtil.createUID(), "update_column", requestXML.toXMLString(), null, null );
 						}
 					}
 					else
 					{
-						queue.addRequest( UIDUtil.createUID(), "add_column", requestXML.toXMLString(), null, null) ;
+						queue.addRequest( UIDUtil.createUID(), "add_column", requestXML.toXMLString(), null, null );
 					}
 				}
-				
+
 				if ( queue.length > 0 )
 				{
-				
+
 					queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
 					queue.execute();
-				
+
 					currentState = "Progress";
-				
+
 					deleteCol.enabled = true;
 					commitLabel.text = "";
 				}
 			}
-			
-			private function queueCommitCompleteHandler( event : QueueEvent ) : void 
+
+			private function queueCommitCompleteHandler( event : QueueEvent ) : void
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler );
 				updateTable();
 			}
-			
+
 			public function updateTable() : void
 			{
 				deleteCol.enabled = true;
 				commitLabel.text = "";
-				
+
 				queue.reset();
-				
-				queue.addRequest(UIDUtil.createUID(), 'get_structure', '', getTableStructureHandler, null);
+
+				queue.addRequest( UIDUtil.createUID(), 'get_structure', '', getTableStructureHandler, null );
 				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueOKHandler );
-				
+
 				queue.execute();
-				
+
 				currentState = "Progress";
 			}
-			
-			private function addBtnHandler() : void 
+
+			private function addBtnHandler() : void
 			{
 				columnsProvider.push( new StructureVO() );
-				
+
 				dataTable.dataProvider = columnsProvider;
 				dataTable.selectedIndex = columnsProvider.length - 1;
 				selectedItem = columnsProvider[ columnsProvider.length - 1 ];
 			}
-			
-			private function removeBtnHandler() : void 
+
+			private function removeBtnHandler() : void
 			{
-				
+
 				if ( selectedItem.name == "id" )
 					return;
-				
-				Alert.Show( resourceManager.getString( 'DataBase_General', 'data_table_structure_delete_dialog_title' ),
-					resourceManager.getString( 'DataBase_General', 'data_table_structure_delete_dialog' ), 
-					AlertButton.OK_No, this, removeSelectedColRequest );
+
+				Alert.Show( resourceManager.getString( 'DataBase_General', 'data_table_structure_delete_dialog_title' ), resourceManager.getString( 'DataBase_General', 'data_table_structure_delete_dialog' ), AlertButton.OK_No, this, removeSelectedColRequest );
 			}
-			
-			private function removeSelectedColRequest( event : PopUpWindowEvent ) : void 
+
+			private function removeSelectedColRequest( event : PopUpWindowEvent ) : void
 			{
 				/* Applying changes */
 				if ( event.detail == Alert.NO )
 					return;
-				
+
 				var oldStructureVO : StructureVO = findRecordInOldDataProvider( selectedItem.id );
 				if ( oldStructureVO )
 				{
@@ -237,162 +227,218 @@
 					deleteCol.enabled = false;
 					commitLabel.text = "Need push commit for enable button delete";
 				}
-				
-				var newColsProvider:Array = [];
-				for each ( var item:Object in columnsProvider ) 
+
+				var newColsProvider : Array = [];
+				for each ( var item : Object in columnsProvider )
 				{
-					if ( item != selectedItem ) 
+					if ( item != selectedItem )
 						newColsProvider.push( item );
 				}
 				columnsProvider = newColsProvider;
-				
+
 				dataTable.dataProvider = columnsProvider;
 			}
-			
-			private function queueDeleteCompleteHandler() : void 
+
+			private function queueDeleteCompleteHandler() : void
 			{
 				/* Remove the element */
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueDeleteCompleteHandler );
-				
-				var newColsProvider:Array = [];
-			
-				for each ( var item:Object in columnsProvider ) 
+
+				var newColsProvider : Array = [];
+
+				for each ( var item : Object in columnsProvider )
 				{
-					if ( item != selectedItem ) 
+					if ( item != selectedItem )
 						newColsProvider.push( item );
 				}
 				columnsProvider = newColsProvider;
-				
+
 				dataTable.dataProvider = columnsProvider;
 			}
-			
-			private function removeSelectedColOkHandler() : void 
+
+			private function removeSelectedColOkHandler() : void
 			{
 				/* Remove the element */
-				var newColsProvider:Array = [];
-				for each ( var item:Object in columnsProvider ) 
+				var newColsProvider : Array = [];
+				for each ( var item : Object in columnsProvider )
 				{
-					if ( item != selectedItem ) 
-						newColsProvider.push(item);
+					if ( item != selectedItem )
+						newColsProvider.push( item );
 				}
 				columnsProvider = newColsProvider;
-				
+
 				dataTable.dataProvider = columnsProvider;
 				//enablePropertiesPanel(false);
 				//__removeBtn.enabled = false;
 			}
-			
-			protected function dataTable_changeHandler(event:ListEvent):void
+
+			protected function dataTable_changeHandler( event : ListEvent ) : void
 			{
 				selectedItem = dataTable.selectedItem as StructureVO;
 			}
-			
-			private function discardChanges() : void 
+
+			private function discardChanges() : void
 			{
 				queue.reset();
-				queue.addRequest(UIDUtil.createUID(), 'get_structure', '', getTableStructureHandler, null);
+				queue.addRequest( UIDUtil.createUID(), 'get_structure', '', getTableStructureHandler, null );
 				queue.execute();
 			}
-			
-			protected function dataTable_doubleClickHandler(event:MouseEvent):void
+
+			protected function dataTable_doubleClickHandler( event : MouseEvent ) : void
 			{
 				addBtnHandler();
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
+
 	<s:states>
 		<s:State name="Progress"/>
 		<s:State name="Result"/>
 	</s:states>
-	
-	<s:VGroup width="100%" height="100%" gap="0">
-		
-		<s:Group width="100%" height="100%">
-		
-			<mx:DataGrid id="dataTable" width="100%" height="100%" dataProvider="{columnsProvider}" draggableColumns="false"
-					 	sortableColumns="false" change="dataTable_changeHandler(event)" editable="true"
-						alpha.Result="1" alpha.Progress="0.4" doubleClickEnabled="true" doubleClick="dataTable_doubleClickHandler(event)">
+
+	<s:VGroup width="100%"
+			  height="100%"
+			  gap="0">
+
+		<s:Group width="100%"
+				 height="100%">
+
+			<mx:DataGrid id="dataTable"
+						 width="100%"
+						 height="100%"
+						 dataProvider="{columnsProvider}"
+						 draggableColumns="false"
+						 sortableColumns="false"
+						 change="dataTable_changeHandler(event)"
+						 editable="true"
+						 alpha.Result="1"
+						 alpha.Progress="0.4"
+						 doubleClickEnabled="true"
+						 doubleClick="dataTable_doubleClickHandler(event)">
 				<mx:columns>
-					<mx:DataGridColumn dataField="name" headerText="Name"/>
-						
-					<mx:DataGridColumn dataField="type" headerText="Type" editable="false" width="120">
+					<mx:DataGridColumn dataField="name"
+									   headerText="Name"/>
+
+					<mx:DataGridColumn dataField="type"
+									   headerText="Type"
+									   editable="false"
+									   width="120">
 						<mx:itemRenderer>
 							<fx:Component>
-								<ItemRenderers:DropDownItemRenderers selectedType="{data.type}" change="{data.type = selectedType}" width="100%"/>
+								<ItemRenderers:DropDownItemRenderers selectedType="{data.type}"
+																	 change="{data.type = selectedType}"
+																	 width="100%"/>
 							</fx:Component>
 						</mx:itemRenderer>
 					</mx:DataGridColumn>
-				
-					<mx:DataGridColumn dataField="primary" headerText="Primary key" editable="false" width="80">
+
+					<mx:DataGridColumn dataField="primary"
+									   headerText="Primary key"
+									   editable="false"
+									   width="80">
 						<mx:itemRenderer>
 							<fx:Component>
-								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.primary}" change="{data.primary = selectedCheck}"/>
+								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.primary}"
+																	 change="{data.primary = selectedCheck}"/>
 							</fx:Component>
 						</mx:itemRenderer>
 					</mx:DataGridColumn>
-				
-					<mx:DataGridColumn dataField="aincrement" headerText="Auto increment" editable="false" width="80">
+
+					<mx:DataGridColumn dataField="aincrement"
+									   headerText="Auto increment"
+									   editable="false"
+									   width="80">
 						<mx:itemRenderer>
 							<fx:Component>
-								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.aincrement}" change="{data.aincrement = selectedCheck}"/>
+								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.aincrement}"
+																	 change="{data.aincrement = selectedCheck}"/>
 							</fx:Component>
 						</mx:itemRenderer>
 					</mx:DataGridColumn>
-				
-					<mx:DataGridColumn dataField="unique" headerText="Unique" editable="false" width="80">
+
+					<mx:DataGridColumn dataField="unique"
+									   headerText="Unique"
+									   editable="false"
+									   width="80">
 						<mx:itemRenderer>
 							<fx:Component>
-								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.unique}" change="{data.unique = selectedCheck}"/>
+								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.unique}"
+																	 change="{data.unique = selectedCheck}"/>
 							</fx:Component>
 						</mx:itemRenderer>
 					</mx:DataGridColumn>
-				
-					<mx:DataGridColumn dataField="notnull" headerText="Notnull" editable="false" width="80">
+
+					<mx:DataGridColumn dataField="notnull"
+									   headerText="Notnull"
+									   editable="false"
+									   width="80">
 						<mx:itemRenderer>
 							<fx:Component>
-								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.notnull}" change="{data.notnull = selectedCheck}"/>
+								<ItemRenderers:CheckBoxItemRenderers selectedCheck="{data.notnull}"
+																	 change="{data.notnull = selectedCheck}"/>
 							</fx:Component>
 						</mx:itemRenderer>
 					</mx:DataGridColumn>
-				
-					<mx:DataGridColumn dataField="defvalue" headerText="Default"/>
-				
+
+					<mx:DataGridColumn dataField="defvalue"
+									   headerText="Default"/>
+
 				</mx:columns>
 			</mx:DataGrid>
-			
-			<mx:Image source="@Embed('assets/spinner.swf')" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center"  includeIn="Progress" scaleContent="false" maintainAspectRatio="true"/>
-				
+
+			<mx:Image source="@Embed('assets/spinner.swf')"
+					  width="100%"
+					  height="100%"
+					  verticalAlign="middle"
+					  horizontalAlign="center"
+					  includeIn="Progress"
+					  scaleContent="false"
+					  maintainAspectRatio="true"/>
+
 		</s:Group>
-		
-		<s:Group width="100%" height="50">
-			<s:Rect width="100%" height="100%">
+
+		<s:Group width="100%"
+				 height="50">
+			<s:Rect width="100%"
+					height="100%">
 				<s:fill>
 					<s:SolidColor color="#F0F0F0"/>
 				</s:fill>
 			</s:Rect>
-			
-			<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="middle" paddingLeft="10">
-			
-				<button:WorkAreaButton id="commit" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_commit' ) }" 
-									   icon="{ VDOMImage.Commit }" click="applyBtnClickHandler()" />
-			
-				<button:WorkAreaButton id="addNew" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_add' ) }" 
-									   icon="{ VDOMImage.Add }" click="addBtnHandler()" />
-			
-				<button:WorkAreaButton id="deleteCol" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_delete' ) }" 
-									   icon="{ VDOMImage.DeleteBlack }" click="removeBtnHandler()" />
-				
-				<button:WorkAreaButton id="discard" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_discard' ) }" 
-									   icon="@Embed('assets/discard.png')" click="discardChanges()" />
-				
-				<s:Label id="commitLabel" color="#FF0000" />
+
+			<s:HGroup width="100%"
+					  height="100%"
+					  horizontalAlign="left"
+					  verticalAlign="middle"
+					  paddingLeft="10">
+
+				<button:WorkAreaButton id="commit"
+									   label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_commit' ) }"
+									   icon="{ VDOMImage.Commit }"
+									   click="applyBtnClickHandler()"/>
+
+				<button:WorkAreaButton id="addNew"
+									   label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_add' ) }"
+									   icon="{ VDOMImage.Add }"
+									   click="addBtnHandler()"/>
+
+				<button:WorkAreaButton id="deleteCol"
+									   label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_delete' ) }"
+									   icon="{ VDOMImage.DeleteBlack }"
+									   click="removeBtnHandler()"/>
+
+				<button:WorkAreaButton id="discard"
+									   label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_discard' ) }"
+									   icon="@Embed('assets/discard.png')"
+									   click="discardChanges()"/>
+
+				<s:Label id="commitLabel"
+						 color="#FF0000"/>
 			</s:HGroup>
 		</s:Group>
 	</s:VGroup>
-	
+
 </s:Group>

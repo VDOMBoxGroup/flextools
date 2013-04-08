@@ -1,40 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:MXDataGridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-						  xmlns:s="library://ns.adobe.com/flex/spark" 
-						  xmlns:mx="library://ns.adobe.com/flex/mx" 
+<s:MXDataGridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+						  xmlns:s="library://ns.adobe.com/flex/spark"
+						  xmlns:mx="library://ns.adobe.com/flex/mx"
 						  focusEnabled="true">
-	
+
 	<fx:Metadata>
 		[Event(name="change", type="flash.events.Event")]
 	</fx:Metadata>
-	
+
 	<fx:Script>
 		<![CDATA[
 			import spark.events.IndexChangeEvent;
-			
+
 			private var _selectedType : String;
-			
-			public function get selectedType():String
+
+			public function get selectedType() : String
 			{
 				return _selectedType;
 			}
 
-			public function set selectedType(value:String):void
+			public function set selectedType( value : String ) : void
 			{
 				_selectedType = value;
 				types.selectedItem = value;
-				dispatchEvent( new Event ( Event.CHANGE ) );
+				dispatchEvent( new Event( Event.CHANGE ) );
 			}
 
-			protected function types_changeHandler(event:IndexChangeEvent):void
+			protected function types_changeHandler( event : IndexChangeEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				selectedType = types.selectedItem as String;
 			}
-			
 		]]>
 	</fx:Script>
-	<s:DropDownList id="types" change="types_changeHandler(event)" minWidth="30" width="100%">
+	<s:DropDownList id="types"
+					change="types_changeHandler(event)"
+					minWidth="30"
+					width="100%">
 		<s:dataProvider>
 			<mx:ArrayList>
 				<fx:String>TEXT</fx:String>

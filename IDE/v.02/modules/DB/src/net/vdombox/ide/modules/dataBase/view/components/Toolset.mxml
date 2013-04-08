@@ -3,10 +3,9 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:components="net.vdombox.ide.modules.resourceBrowser.view.components.*"
-		 
 		 implements="net.vdombox.ide.common.interfaces.IToolset"
-		 
-		 height="100%" xmlns:components1="net.vdombox.ide.modules.dataBase.view.components.*">
+		 height="100%"
+		 xmlns:components1="net.vdombox.ide.modules.dataBase.view.components.*">
 
 	<fx:Metadata> 
 		[ResourceBundle("DataBase_General")] 
@@ -20,11 +19,11 @@
 
 	<s:layout>
 
-		<s:HorizontalLayout />
+		<s:HorizontalLayout/>
 	</s:layout>
 
 	<components1:ToolsetButton id="toolsetButton"
-							  height="100%"
-							  label="{ resourceManager.getString( 'DataBase_General', 'toolset_button_label' ) }"
-							  skinClass="net.vdombox.ide.common.view.skins.button.ToolsetButtonSkin" />
+							   height="100%"
+							   label="{ resourceManager.getString( 'DataBase_General', 'toolset_button_label' ) }"
+							   skinClass="net.vdombox.ide.common.view.skins.button.ToolsetButtonSkin"/>
 </s:Group>

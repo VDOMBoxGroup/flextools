@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 width="100%" height="25">
+		 width="100%"
+		 height="25">
 	<fx:Script>
 		<![CDATA[
-			
 			[Bindable]
 			public var columnXML : XML;
-			
+
 			private var _fon : Boolean = false;
-			
-			
-			
-			public function set fon(value:Boolean):void
+
+
+
+			public function set fon( value : Boolean ) : void
 			{
 				_fon = value;
 				if ( _fon )
@@ -21,35 +21,52 @@
 				else
 					colorRect.color = 0xFFFFFF;
 			}
-
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
-	
-	<s:Rect width="100%" height="100%">
+
+
+	<s:Rect width="100%"
+			height="100%">
 		<s:fill>
-			<s:SolidColor id="colorRect" color="#FFFFFF" />
+			<s:SolidColor id="colorRect"
+						  color="#FFFFFF"/>
 		</s:fill>
 	</s:Rect>
-		
-	<s:HGroup width="100%" height="100%" verticalAlign="middle">
-			
-		<s:HGroup width="60%" height="100%" gap="0" verticalAlign="middle">
-			<mx:Image width="10" height="10"/>
-				
-			<s:TextInput text="{columnXML.@name}" width="100%" fontSize="13"
-						 editable="false" selectable="false" contentBackgroundAlpha="0" borderVisible="false" />
+
+	<s:HGroup width="100%"
+			  height="100%"
+			  verticalAlign="middle">
+
+		<s:HGroup width="60%"
+				  height="100%"
+				  gap="0"
+				  verticalAlign="middle">
+			<mx:Image width="10"
+					  height="10"/>
+
+			<s:TextInput text="{columnXML.@name}"
+						 width="100%"
+						 fontSize="13"
+						 editable="false"
+						 selectable="false"
+						 contentBackgroundAlpha="0"
+						 borderVisible="false"/>
 		</s:HGroup>
-			
-		<s:TextInput text="{columnXML.@type}" width="40%" fontSize="13"
-					 editable="false" selectable="false" contentBackgroundAlpha="0" borderVisible="false" />
-			
-			
+
+		<s:TextInput text="{columnXML.@type}"
+					 width="40%"
+					 fontSize="13"
+					 editable="false"
+					 selectable="false"
+					 contentBackgroundAlpha="0"
+					 borderVisible="false"/>
+
+
 	</s:HGroup>
-	
-	
-	
+
+
+
 </s:Group>

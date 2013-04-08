@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.dataBase.view
 {
 	import flash.events.Event;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.DataBase;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.dataBase.view
 		override public function onRegister() : void
 		{
 			resourceBrowser.addEventListener( DataBase.TEAR_DOWN, tearDownHandler )
-			
+
 		}
 
 		// FIXME: чето я запутался, зачем DataBase нужен resourceBrowser?

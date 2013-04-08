@@ -1,48 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 xmlns:button="net.vdombox.ide.common.view.components.button.*"
-		 verticalAlign="middle" gap="0" paddingLeft="10">
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  xmlns:button="net.vdombox.ide.common.view.components.button.*"
+		  verticalAlign="middle"
+		  gap="0"
+		  paddingLeft="10">
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.interfaces.ISearchable;
-			
+
 			[Bindable]
-			public var target:ISearchable;
-			
-			protected function searchInput_focusInHandler(event:FocusEvent):void
+			public var target : ISearchable;
+
+			protected function searchInput_focusInHandler( event : FocusEvent ) : void
 			{
 				if ( searchInput.text == resourceManager.getString( 'DataBase_General', 'search_box_search' ) )
 					searchInput.text = "";
 			}
-			
-			protected function searchInput_focusOutHandler(event:FocusEvent):void
+
+			protected function searchInput_focusOutHandler( event : FocusEvent ) : void
 			{
 				if ( searchInput.text == "" )
 					searchInput.text = resourceManager.getString( 'DataBase_General', 'search_box_search' );
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
-	
-	<button:WorkAreaButton id="previousButton" icon="{VDOMImage.Arrow_Left}" height="{searchInput.height}" width="20"
-						   skinClass="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.SearchWorkAreaButtonSkin" 
-						   click="{target.findPrevious()}" toolTip="Previous" />
-	
-	<s:TextInput id="searchInput" width="100%" text="{resourceManager.getString( 'DataBase_General', 'search_box_search' )}"
-				  change="{target.find(searchInput.text)}" focusIn="searchInput_focusInHandler(event)" focusOut="searchInput_focusOutHandler(event)"
-				  contentBackgroundColor="{!target.searchString || target.found ? 0xffffff:0xff0000}" fontStyle="italic"
-				  enter="{target.findNext()}"
-				  toolTip="Live search" borderColor="#FF0000"
-				  skinClass="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.SearchTextInputSkin"/>
-	
-	<button:WorkAreaButton id="nextButton" icon="{VDOMImage.Arrow_Right}" height="{searchInput.height}" width="20"
+
+
+	<button:WorkAreaButton id="previousButton"
+						   icon="{VDOMImage.Arrow_Left}"
+						   height="{searchInput.height}"
+						   width="20"
 						   skinClass="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.SearchWorkAreaButtonSkin"
-						   click="{target.findNext()}" toolTip="Next" />
+						   click="{target.findPrevious()}"
+						   toolTip="Previous"/>
+
+	<s:TextInput id="searchInput"
+				 width="100%"
+				 text="{resourceManager.getString( 'DataBase_General', 'search_box_search' )}"
+				 change="{target.find(searchInput.text)}"
+				 focusIn="searchInput_focusInHandler(event)"
+				 focusOut="searchInput_focusOutHandler(event)"
+				 contentBackgroundColor="{!target.searchString || target.found ? 0xffffff:0xff0000}"
+				 fontStyle="italic"
+				 enter="{target.findNext()}"
+				 toolTip="Live search"
+				 borderColor="#FF0000"
+				 skinClass="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.SearchTextInputSkin"/>
+
+	<button:WorkAreaButton id="nextButton"
+						   icon="{VDOMImage.Arrow_Right}"
+						   height="{searchInput.height}"
+						   width="20"
+						   skinClass="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.SearchWorkAreaButtonSkin"
+						   click="{target.findNext()}"
+						   toolTip="Next"/>
 </s:HGroup>

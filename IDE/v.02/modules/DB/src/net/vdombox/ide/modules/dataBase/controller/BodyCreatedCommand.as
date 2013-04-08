@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.dataBase.controller
 	import net.vdombox.ide.modules.dataBase.view.ExternalManagerMediator;
 	import net.vdombox.ide.modules.dataBase.view.WorkAreaMediator;
 	import net.vdombox.ide.modules.dataBase.view.components.Body;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 

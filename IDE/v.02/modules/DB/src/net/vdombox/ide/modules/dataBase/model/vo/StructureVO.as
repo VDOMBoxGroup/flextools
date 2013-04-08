@@ -5,20 +5,27 @@ package net.vdombox.ide.modules.dataBase.model.vo
 	public class StructureVO
 	{
 		public var name : String;
+
 		public var type : String;
+
 		public var id : String;
+
 		public var primary : Boolean;
+
 		public var aincrement : Boolean;
+
 		public var notnull : Boolean;
+
 		public var unique : Boolean;
+
 		public var defvalue : String;
-		
-		
-		
+
+
+
 		public function StructureVO( source : XML = null )
 		{
 			if ( source )
-			{	
+			{
 				name = source.@name.toString();
 				type = source.@type.toString();
 				id = source.@id.toString();
@@ -40,11 +47,11 @@ package net.vdombox.ide.modules.dataBase.model.vo
 				defvalue = "";
 			}
 		}
-		
+
 		public function copy() : StructureVO
 		{
 			var structureVO : StructureVO = new StructureVO();
-			
+
 			structureVO.name = name;
 			structureVO.type = type;
 			structureVO.id = id;
@@ -53,7 +60,7 @@ package net.vdombox.ide.modules.dataBase.model.vo
 			structureVO.notnull = notnull;
 			structureVO.unique = unique;
 			structureVO.defvalue = defvalue;
-			
+
 			return structureVO;
 		}
 	}

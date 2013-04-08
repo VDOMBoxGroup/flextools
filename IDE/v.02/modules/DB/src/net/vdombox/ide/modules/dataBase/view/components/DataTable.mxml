@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
-		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="400"
+		 height="300"
+		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor"
 		 xmlns:components="net.vdombox.ide.modules.dataBase.view.components.*"
-		 xmlns:components1="net.vdombox.ide.common.components.*" 
-		 xmlns:components2="net.vdombox.ide.common.view.components.*" 
+		 xmlns:components1="net.vdombox.ide.common.components.*"
+		 xmlns:components2="net.vdombox.ide.common.view.components.*"
 		 xmlns:button="net.vdombox.ide.common.view.components.button.*"
-		 remove="group1_removedFromStageHandler(event)" 
+		 remove="group1_removedFromStageHandler(event)"
 		 creationComplete="group1_creationCompleteHandler(event)">
-	
+
 	<s:states>
 		<s:State name="tableEditor"/>
 		<s:State name="tableStructure"/>
@@ -19,34 +21,34 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.events.EditorEvent;
 			import net.vdombox.ide.common.model._vo.ObjectVO;
 			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.events.DataTablesEvents;
-			
+
 			[Bindable]
 			// FIXME: not Object mas by IVDOMObjectVO.
 			private var _objectVO : Object;
-			
+
 			private var structeClick : Boolean = false;
-			
+
 			public function get editorID() : String
 			{
 				return _objectVO ? _objectVO.id : "";
 			}
-			
+
 			public function get editorName() : String
 			{
 				return _objectVO ? _objectVO.name : "";
 			}
-			
+
 			public function get objectVO() : Object
 			{
 				return _objectVO ? _objectVO : null;
 			}
-			
+
 			public function set objectVO( value : Object ) : void
 			{
 				_objectVO = value;
@@ -54,116 +56,186 @@
 					currentState = "baseVisual";
 				else
 					currentState = "tableEditor";
-				/*if ( dataEditor )
-					dataEditor.objectVO = value;*/
+			/*
+			   if ( dataEditor )
+			   dataEditor.objectVO = value;
+			 */
 			}
-			
-			protected function group1_removedFromStageHandler(event:Event):void
+
+			protected function group1_removedFromStageHandler( event : Event ) : void
 			{
 				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
 			}
-			
-			protected function data_clickHandler(event:MouseEvent):void
+
+			protected function data_clickHandler( event : MouseEvent ) : void
 			{
 				currentState = "tableEditor";
-				dispatchEvent( new DataTablesEvents ( DataTablesEvents.UPDATE_DATA ) );
+				dispatchEvent( new DataTablesEvents( DataTablesEvents.UPDATE_DATA ) );
 			}
-			
-			protected function structure_clickHandler(event:MouseEvent):void
+
+			protected function structure_clickHandler( event : MouseEvent ) : void
 			{
 				currentState = "tableStructure";
 				if ( !structeClick )
 					structeClick = true
 				else
-					dispatchEvent( new DataTablesEvents ( DataTablesEvents.UPDATE_STRUCTURE ) );
+					dispatchEvent( new DataTablesEvents( DataTablesEvents.UPDATE_STRUCTURE ) );
 			}
-			
-			
-			protected function visual_clickHandler(event:MouseEvent):void
+
+
+			protected function visual_clickHandler( event : MouseEvent ) : void
 			{
 				currentState = "baseVisual";
 			}
-			
-			protected function query_clickHandler(event:MouseEvent):void
+
+			protected function query_clickHandler( event : MouseEvent ) : void
 			{
 				currentState = "baseQuery";
 			}
-			
-			protected function newBase_clickHandler(event:MouseEvent):void
+
+			protected function newBase_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new DataTablesEvents( DataTablesEvents.NEW_BASE ));
+				dispatchEvent( new DataTablesEvents( DataTablesEvents.NEW_BASE ) );
 			}
-			
-			protected function newTable_clickHandler(event:MouseEvent):void
-			{				
-				dispatchEvent( new DataTablesEvents( DataTablesEvents.NEW_TABLE ));
+
+			protected function newTable_clickHandler( event : MouseEvent ) : void
+			{
+				dispatchEvent( new DataTablesEvents( DataTablesEvents.NEW_TABLE ) );
 			}
-			
-			
-			protected function button1_clickHandler(event:MouseEvent):void
+
+
+			protected function button1_clickHandler( event : MouseEvent ) : void
 			{
 				dataEditor.applyClicked( amount.text )
 			}
-			
-			protected function group1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function group1_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				addEventListener( DataTablesEvents.CHANGE_ROWS_IN_PAGE, changeRowsInPageHandler, true, 0 , true );
+				addEventListener( DataTablesEvents.CHANGE_ROWS_IN_PAGE, changeRowsInPageHandler, true, 0, true );
 			}
-			
+
 			private function changeRowsInPageHandler( event : DataTablesEvents ) : void
 			{
 				amount.text = event.content.toString();
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
-	<s:Rect width="100%" height="100%">
+
+	<s:Rect width="100%"
+			height="100%">
 		<s:fill>
 			<s:SolidColor color="#EFEFEF"/>
 		</s:fill>
 	</s:Rect>
-	
-	<s:VGroup paddingTop="5" width="100%" height="100%" gap="5">
-		<s:HGroup width="100%" height="20" verticalAlign="middle" horizontalAlign="left" paddingLeft="10" paddingRight="10" >
-			
-			<button:WorkAreaButton id="data" label="{ resourceManager.getString( 'DataBase_General', 'data_table_data' ) }" height="20" click="data_clickHandler(event)" highlighted="false" highlighted.tableEditor="true" includeIn="tableEditor,tableStructure"/>
-			
-			<button:WorkAreaButton id="structure" label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure' ) }" height="20" click="structure_clickHandler(event)" highlighted="false" highlighted.tableStructure="true" includeIn="tableEditor,tableStructure"/>
-			
-			<button:WorkAreaButton id="visual" label="{ resourceManager.getString( 'DataBase_General', 'data_table_visual' ) }" height="20" click="visual_clickHandler(event)" highlighted="false" highlighted.baseVisual="true" includeIn="baseQuery,baseVisual"/>
-			
-			<button:WorkAreaButton id="query" label="{ resourceManager.getString( 'DataBase_General', 'data_table_sql_query' ) }" height="20" click="query_clickHandler(event)" highlighted="false" highlighted.baseQuery="true" includeIn="baseQuery,baseVisual"/>
-			
+
+	<s:VGroup paddingTop="5"
+			  width="100%"
+			  height="100%"
+			  gap="5">
+		<s:HGroup width="100%"
+				  height="20"
+				  verticalAlign="middle"
+				  horizontalAlign="left"
+				  paddingLeft="10"
+				  paddingRight="10">
+
+			<button:WorkAreaButton id="data"
+								   label="{ resourceManager.getString( 'DataBase_General', 'data_table_data' ) }"
+								   height="20"
+								   click="data_clickHandler(event)"
+								   highlighted="false"
+								   highlighted.tableEditor="true"
+								   includeIn="tableEditor,tableStructure"/>
+
+			<button:WorkAreaButton id="structure"
+								   label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure' ) }"
+								   height="20"
+								   click="structure_clickHandler(event)"
+								   highlighted="false"
+								   highlighted.tableStructure="true"
+								   includeIn="tableEditor,tableStructure"/>
+
+			<button:WorkAreaButton id="visual"
+								   label="{ resourceManager.getString( 'DataBase_General', 'data_table_visual' ) }"
+								   height="20"
+								   click="visual_clickHandler(event)"
+								   highlighted="false"
+								   highlighted.baseVisual="true"
+								   includeIn="baseQuery,baseVisual"/>
+
+			<button:WorkAreaButton id="query"
+								   label="{ resourceManager.getString( 'DataBase_General', 'data_table_sql_query' ) }"
+								   height="20"
+								   click="query_clickHandler(event)"
+								   highlighted="false"
+								   highlighted.baseQuery="true"
+								   includeIn="baseQuery,baseVisual"/>
+
 			<mx:Spacer width="100%"/>
-			
-			<button:WorkAreaButton id="newTable" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_table' ) }" icon="{ VDOMImage.Add }" height="20" click="newTable_clickHandler(event)" includeIn="baseVisual"/>
-			
+
+			<button:WorkAreaButton id="newTable"
+								   label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_table' ) }"
+								   icon="{ VDOMImage.Add }"
+								   height="20"
+								   click="newTable_clickHandler(event)"
+								   includeIn="baseVisual"/>
+
 			<!--<components1:WorkAreaButton id="newBase" label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_base' ) }" height="20" click="newBase_clickHandler(event)" includeIn="baseVisual"/>-->
-			
-			<s:HGroup includeIn="tableEditor" height="100%" verticalAlign="middle">
-				<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_records' ) }" fontSize="9" />
-				<s:TextInput id="amount" borderColor="#999999" fontWeight="bold" height="20" fontSize="9" width="45" />
-				<button:WorkAreaButton height="20" label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_apply' ) }" 
-									   icon="{ VDOMImage.Commit }" click="button1_clickHandler(event)"/>
-				
+
+			<s:HGroup includeIn="tableEditor"
+					  height="100%"
+					  verticalAlign="middle">
+				<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_records' ) }"
+						 fontSize="9"/>
+				<s:TextInput id="amount"
+							 borderColor="#999999"
+							 fontWeight="bold"
+							 height="20"
+							 fontSize="9"
+							 width="45"/>
+				<button:WorkAreaButton height="20"
+									   label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_apply' ) }"
+									   icon="{ VDOMImage.Commit }"
+									   click="button1_clickHandler(event)"/>
+
 			</s:HGroup>
 		</s:HGroup>
-		
-		<s:Group width="100%" height="100%">
-			
-			<components:DataTableEditor  id="dataEditor" width="100%" height="100%" objectVO="{_objectVO as ObjectVO}" visible="false" visible.tableEditor="true"/>
-			
-			<components:DataTableStructure id="DataStructure" width="100%" height="100%" objectVO="{_objectVO as ObjectVO}" visible="false" visible.tableStructure="true"/>
-			
-			<components:DataTableQuery id="baseQuery" width="100%" height="100%" objectVO="{ _objectVO as PageVO }" visible="false" visible.baseQuery="true" />
-			
-			<components:BaseVisualEditor id="baseVisual" width="100%" height="100%" objectVO="{ _objectVO as PageVO }" visible="false" visible.baseVisual="true" />
-			
+
+		<s:Group width="100%"
+				 height="100%">
+
+			<components:DataTableEditor id="dataEditor"
+										width="100%"
+										height="100%"
+										objectVO="{_objectVO as ObjectVO}"
+										visible="false"
+										visible.tableEditor="true"/>
+
+			<components:DataTableStructure id="DataStructure"
+										   width="100%"
+										   height="100%"
+										   objectVO="{_objectVO as ObjectVO}"
+										   visible="false"
+										   visible.tableStructure="true"/>
+
+			<components:DataTableQuery id="baseQuery"
+									   width="100%"
+									   height="100%"
+									   objectVO="{ _objectVO as PageVO }"
+									   visible="false"
+									   visible.baseQuery="true"/>
+
+			<components:BaseVisualEditor id="baseVisual"
+										 width="100%"
+										 height="100%"
+										 objectVO="{ _objectVO as PageVO }"
+										 visible="false"
+										 visible.baseVisual="true"/>
+
 		</s:Group>
-		
+
 	</s:VGroup>
 </s:Group>

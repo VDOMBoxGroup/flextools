@@ -19,7 +19,8 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="0" minWidth="0"
+			 minHeight="0"
+			 minWidth="0"
 			 alpha.disabled="0.5">
 	<!-- host component -->
 
@@ -34,8 +35,10 @@
 
 	<fx:Script>
 		<![CDATA[
-			/* Define the skin elements that should not be colorized.
-			 For button, the graphics are colorized but the label is not. */
+			/*
+			   Define the skin elements that should not be colorized.
+			   For button, the graphics are colorized but the label is not.
+			 */
 			static private const exclusions : Array = [ "labelDisplay" ];
 
 			/**
@@ -47,7 +50,7 @@
 			}
 
 			/**
-			 *  @private
+			 * @private
 			 */
 			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
 			{
@@ -80,35 +83,63 @@
 
 	<!-- layer 2: fill -->
 
-	<s:Rect bottom="0" left="0" right="0" top="0">
+	<s:Rect bottom="0"
+			left="0"
+			right="0"
+			top="0">
 
 		<s:fill>
 
 			<s:LinearGradient rotation="90">
 
-				<s:GradientEntry color.down="0x900000" color.downAndHighlighted="0x900000" color.over="0xBBBDBD" color.overAndHighlighted="0x900000"
-								 color.up="0xEAEAE8" color.upAndHighlighted="0x900000"
-								 alpha="0" alpha.over=".5" alpha.down="1" alpha.upAndHighlighted="1"
-								 alpha.overAndHighlighted=".5" alpha.downAndHighlighted="1"/>
+				<s:GradientEntry color.down="0x900000"
+								 color.downAndHighlighted="0x900000"
+								 color.over="0xBBBDBD"
+								 color.overAndHighlighted="0x900000"
+								 color.up="0xEAEAE8"
+								 color.upAndHighlighted="0x900000"
+								 alpha="0"
+								 alpha.over=".5"
+								 alpha.down="1"
+								 alpha.upAndHighlighted="1"
+								 alpha.overAndHighlighted=".5"
+								 alpha.downAndHighlighted="1"/>
 
-				<s:GradientEntry color.down="0xD20000" color.downAndHighlighted="0xD20000" color.over="0x9FA0A1" color.overAndHighlighted="0xD20000"
-								 color.up="0xCCCCCC" color.upAndHighlighted="0xD20000"
-								 alpha="0" alpha.over=".5" alpha.down="1" alpha.upAndHighlighted="1"
-								 alpha.overAndHighlighted=".5" alpha.downAndHighlighted="1"/>
+				<s:GradientEntry color.down="0xD20000"
+								 color.downAndHighlighted="0xD20000"
+								 color.over="0x9FA0A1"
+								 color.overAndHighlighted="0xD20000"
+								 color.up="0xCCCCCC"
+								 color.upAndHighlighted="0xD20000"
+								 alpha="0"
+								 alpha.over=".5"
+								 alpha.down="1"
+								 alpha.upAndHighlighted="1"
+								 alpha.overAndHighlighted=".5"
+								 alpha.downAndHighlighted="1"/>
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
 
 	<s:HGroup width="100%"
-			  paddingLeft="5" paddingRight="5" verticalAlign="middle" verticalCenter="0"
+			  paddingLeft="5"
+			  paddingRight="5"
+			  verticalAlign="middle"
+			  verticalCenter="0"
 			  gap="5">
 
 		<mx:Image id="buttonIcon"
-				  height="11" source="{ hostComponent.icon }" width="11"/>
+				  height="11"
+				  source="{ hostComponent.icon }"
+				  width="11"/>
 
 		<s:Label id="labelDisplay"
 				 width="100%"
-				 color.downAndHighlighted="white" color.down="white" color.overAndHighlighted="white" color.upAndHighlighted="white" textAlign="left"
+				 color.downAndHighlighted="white"
+				 color.down="white"
+				 color.overAndHighlighted="white"
+				 color.upAndHighlighted="white"
+				 textAlign="left"
 				 maxDisplayedLines="1"/>
 	</s:HGroup>
 </s:SparkSkin>

@@ -1,183 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor" 
-		 width="400" height="300">
-	
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor"
+		 width="400"
+		 height="300">
+
 	<s:states>
 		<s:State name="all"/>
 		<s:State name="short"/>
 	</s:states>
-	
+
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
 			import mx.utils.UIDUtil;
-			
+
 			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 			import net.vdombox.ide.modules.dataBase.model.vo.StructureVO;
 			import net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.LabelItemRenderers;
 			import net.vdombox.ide.modules.dataBase.view.components.Queue.QueueManager;
-			
+
 			import spark.events.TextOperationEvent;
-			
+
 			private var _objectVO : PageVO;
-			
+
 			private var manager : *;
+
 			private var queue : QueueManager;
-			private var queryResult:XML;
-			private var tableStructureXML:XML;
-			private var page:XML; /* of XML */
-			private var dataGridColumns:Array = [];
-			private var dataGridColumnsProps:Array = [];
-			
+
+			private var queryResult : XML;
+
+			private var tableStructureXML : XML;
+
+			private var page : XML; /* of XML */
+
+			private var dataGridColumns : Array = [];
+
+			private var dataGridColumnsProps : Array = [];
+
 			[Bindable]
-			private var dataGridProvider:ArrayCollection = new ArrayCollection();
-			
+			private var dataGridProvider : ArrayCollection = new ArrayCollection();
+
 			public function get editorID() : String
 			{
 				return _objectVO ? _objectVO.id : "";
 			}
-			
+
 			public function get editorName() : String
 			{
 				return _objectVO ? _objectVO.name : "";
 			}
-			
+
 			public function get objectVO() : Object
 			{
 				return _objectVO ? _objectVO : null;
 			}
-			
+
 			public function set objectVO( value : Object ) : void
 			{
 				_objectVO = value as PageVO;
 			}
-			
-			public function set externalManager( ref: * ) : void 
+
+			public function set externalManager( ref : * ) : void
 			{
 				manager = ref;
 				queue = new QueueManager( manager );
-				
+
 				/* Permanent event listener */
-				queue.addEventListener( QueueEvent.QUEUE_INTERRUPT, errorHandler );	
-				
+				queue.addEventListener( QueueEvent.QUEUE_INTERRUPT, errorHandler );
+
 				queue.reset();
 			}
-			
-			private function errorHandler( event : QueueEvent ) : void 
+
+			private function errorHandler( event : QueueEvent ) : void
 			{
 				//showMessage( event.message );
 			}
-			
-			protected function sendQuery_clickHandler(event:MouseEvent):void
+
+			protected function sendQuery_clickHandler( event : MouseEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				var textQuery : String = query.text;
-				queue.addRequest( UIDUtil.createUID(), "execute_query_xml",
-					'<query_sql>' + textQuery + '</query_sql>', writeQueryResultOnDataGrid, queueERRORHandler );
+				queue.addRequest( UIDUtil.createUID(), "execute_query_xml", '<query_sql>' + textQuery + '</query_sql>', writeQueryResultOnDataGrid, queueERRORHandler );
 				queue.addEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
 				queue.addEventListener( QueueEvent.UNKNOWN_ERROR, queueERRORHandler );
 				queue.execute();
-				
+
 				dataTable.alpha = 0.4;
 				imageProgress.visible = true;
 			}
-			
-			private function writeQueryResultOnDataGrid( message : String ) : void 
+
+			private function writeQueryResultOnDataGrid( message : String ) : void
 			{
-				try 
+				try
 				{
-					queryResult = new XML( message );	
+					queryResult = new XML( message );
 					tableStructureXML = new XML( queryResult.queryresult.table.header );
-					
+
 					setTableHeaders();
-					page = new XML(queryResult.queryresult.table.data );
-					
+					page = new XML( queryResult.queryresult.table.data );
+
 					showPageData();
 				}
-				catch ( err : Error ) 
-				{ 
-					return;	
+				catch ( err : Error )
+				{
+					return;
 				}
 			}
-			
-			private function setTableHeaders():void 
+
+			private function setTableHeaders() : void
 			{
-				
+
 				dataGridColumns = [];
-				for each (var xmlHeader:XML in tableStructureXML.column) 
+				for each ( var xmlHeader : XML in tableStructureXML.column )
 				{
-					var _header:AdvancedDataGridColumn = new AdvancedDataGridColumn();
+					var _header : AdvancedDataGridColumn = new AdvancedDataGridColumn();
 					var columnProps : StructureVO = new StructureVO( xmlHeader );
-					
+
 					dataGridColumnsProps.push( columnProps );
 					_header.dataField = xmlHeader.@name;
 					_header.sortable = true;
 					_header.itemRenderer = new ClassFactory( LabelItemRenderers );
-					
+
 					dataGridColumns.push( _header );
-					
+
 				}
 				dataTable.columns = dataGridColumns;
-				
+
 			}
-			
-			private function showPageData() : void 
+
+			private function showPageData() : void
 			{
-				
+
 				/* Show current page */
 				dataGridProvider = new ArrayCollection();
-				for each ( var xmlRow:XML in page.row ) 
+				for each ( var xmlRow : XML in page.row )
 				{
 					/* Create tableRow object */
-					var tableRow:Object = new Object();
-					var cellIndex:int = 0;
-					for each ( var xmlCell:XML in xmlRow.cell ) 
+					var tableRow : Object = new Object();
+					var cellIndex : int = 0;
+					for each ( var xmlCell : XML in xmlRow.cell )
 					{
 						tableRow[ dataGridColumns[ cellIndex ].dataField ] = xmlCell.toString();
 						cellIndex++;
 					}
-					
-					tableRow["fnew"] = false;
-					tableRow["changed"] = false;
-					tableRow["GUID"] = UIDUtil.createUID(); 
+
+					tableRow[ "fnew" ] = false;
+					tableRow[ "changed" ] = false;
+					tableRow[ "GUID" ] = UIDUtil.createUID();
 					dataGridProvider.addItem( tableRow );
 				}
-				
+
 			}
-			
-			private function queueOnLoadCompleteHandler( message : String ) : void 
+
+			private function queueOnLoadCompleteHandler( message : String ) : void
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
 				queue.removeEventListener( QueueEvent.UNKNOWN_ERROR, queueERRORHandler );
 				errorWriter.text = "No error";
-				
+
 				dataTable.alpha = 1;
 				imageProgress.visible = false;
 			}
-			
-			private function queueERRORHandler( event : QueueEvent ) : void 
+
+			private function queueERRORHandler( event : QueueEvent ) : void
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler );
 				queue.removeEventListener( QueueEvent.UNKNOWN_ERROR, queueERRORHandler );
-				
+
 				if ( event.message == "execute_query_xml" )
 					errorWriter.text = "This server does not support this feature!!!";
 				else
-					errorWriter.text = event.message;	
+					errorWriter.text = event.message;
 				queue.reset();
 				dataGridProvider = null;
-				
+
 				dataTable.alpha = 1;
 				imageProgress.visible = false;;
 			}
-			
-			protected function query_changeHandler(event:TextOperationEvent):void
+
+			protected function query_changeHandler( event : TextOperationEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				errorWriter.text = "";
@@ -188,59 +194,88 @@
 				else
 					query.height = query.scroller.viewport.contentHeight + 2;
 			}
-			
-			protected function image1_clickHandler(event:MouseEvent):void
+
+			protected function image1_clickHandler( event : MouseEvent ) : void
 			{
 				currentState = currentState == "all" ? "short" : "all";
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 
-	
-	<s:VGroup width="100%" height="100%" paddingLeft="5" paddingRight="5">
-		
-		<s:Group id="queryGroup" width="100%">
-			
-			<s:VGroup width="100%" height="100%">
-				
-				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
-					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_query_sql_string' ) }" includeIn="all"/>
+
+	<s:VGroup width="100%"
+			  height="100%"
+			  paddingLeft="5"
+			  paddingRight="5">
+
+		<s:Group id="queryGroup"
+				 width="100%">
+
+			<s:VGroup width="100%"
+					  height="100%">
+
+				<s:HGroup width="100%"
+						  horizontalAlign="center"
+						  verticalAlign="middle">
+					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_query_sql_string' ) }"
+							 includeIn="all"/>
 					<mx:Spacer width="100%"/>
-					<mx:Image source.all="{ VDOMImage.ArrClose }" source.short="{ VDOMImage.ArrOpen }" click="image1_clickHandler(event)"/>
-					<mx:Spacer width="8"/> 
-				</s:HGroup>		
-				
-				<s:VGroup width="100%" height="{query.height + 65}" gap="3" paddingBottom="4" horizontalAlign="left" 
-						 paddingTop="3" includeIn="all">
-					
-					<s:TextArea id="query" width="100%" height="63" change="query_changeHandler(event)"/>
-					<s:Button id="sendQuery" label="{ resourceManager.getString( 'DataBase_General', 'data_table_query_send_query' ) }" click="sendQuery_clickHandler(event)"/>
-					
-					<mx:Spacer height="2" />
-					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_query_error' ) }" />
-					<s:TextInput id="errorWriter" width="100%" editable="false" />
-					
+					<mx:Image source.all="{ VDOMImage.ArrClose }"
+							  source.short="{ VDOMImage.ArrOpen }"
+							  click="image1_clickHandler(event)"/>
+					<mx:Spacer width="8"/>
+				</s:HGroup>
+
+				<s:VGroup width="100%"
+						  height="{query.height + 65}"
+						  gap="3"
+						  paddingBottom="4"
+						  horizontalAlign="left"
+						  paddingTop="3"
+						  includeIn="all">
+
+					<s:TextArea id="query"
+								width="100%"
+								height="63"
+								change="query_changeHandler(event)"/>
+					<s:Button id="sendQuery"
+							  label="{ resourceManager.getString( 'DataBase_General', 'data_table_query_send_query' ) }"
+							  click="sendQuery_clickHandler(event)"/>
+
+					<mx:Spacer height="2"/>
+					<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_query_error' ) }"/>
+					<s:TextInput id="errorWriter"
+								 width="100%"
+								 editable="false"/>
+
 				</s:VGroup>
-				
+
 			</s:VGroup>
 
 		</s:Group>
-		
-		<mx:Spacer height="7" includeIn="all"/>
-		
-		<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_query_data_returned' ) }" />
-		
-		<s:Group width="100%" height="100%">
-			
-			
-			<mx:AdvancedDataGrid id="dataTable" dataProvider="{dataGridProvider}" alternatingItemColors="[#EFF3FA, #FFFFFF]"
-								 width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
-								 editable="false" sortableColumns="true"
+
+		<mx:Spacer height="7"
+				   includeIn="all"/>
+
+		<s:Label text="{ resourceManager.getString( 'DataBase_General', 'data_table_query_data_returned' ) }"/>
+
+		<s:Group width="100%"
+				 height="100%">
+
+
+			<mx:AdvancedDataGrid id="dataTable"
+								 dataProvider="{dataGridProvider}"
+								 alternatingItemColors="[#EFF3FA, #FFFFFF]"
+								 width="100%"
+								 height="100%"
+								 horizontalScrollPolicy="auto"
+								 verticalScrollPolicy="auto"
+								 editable="false"
+								 sortableColumns="true"
 								 headerSeparatorSkin="mx.skins.halo.DataGridHeaderSeparator"
 								 headerHorizontalSeparatorSkin="mx.skins.halo.AdvancedDataGridHeaderHorizontalSeparator"
 								 headerBackgroundSkin="mx.skins.halo.DataGridHeaderBackgroundSkin"
@@ -250,15 +285,23 @@
 								 stretchCursor="@Embed('assets/cursor_width.png')"
 								 headerStyleName="advancedDataGridStyles"
 								 headerDragProxyStyleName="headerDragProxyStyle"/>
-			
-			<mx:Image id="imageProgress" source="@Embed('assets/spinner.swf')" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center"  visible="false" scaleContent="false" maintainAspectRatio="true"/>
-			
+
+			<mx:Image id="imageProgress"
+					  source="@Embed('assets/spinner.swf')"
+					  width="100%"
+					  height="100%"
+					  verticalAlign="middle"
+					  horizontalAlign="center"
+					  visible="false"
+					  scaleContent="false"
+					  maintainAspectRatio="true"/>
+
 		</s:Group>
-		
-		
-		
-		
-		
+
+
+
+
+
 	</s:VGroup>
-	
+
 </s:Group>

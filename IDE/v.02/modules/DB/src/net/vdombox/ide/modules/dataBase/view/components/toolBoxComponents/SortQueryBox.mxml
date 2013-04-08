@@ -1,70 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" >
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
-			
+
 			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;
 			import net.vdombox.ide.modules.dataBase.view.components.VDOMAdvancedDataGrid;
-			
+
 			import spark.events.IndexChangeEvent;
-			
+
 			[Bindable]
 			private var columns : ArrayList;
 
-			public function set dataProvider(value:VDOMAdvancedDataGrid):void
+			public function set dataProvider( value : VDOMAdvancedDataGrid ) : void
 			{
 				columns = new ArrayList();
-				
+
 				columns.addItem( "" );
-				
+
 				for each ( var column : AdvancedDataGridColumn in value.columns )
 				{
 					columns.addItem( column.headerText );
 				}
 			}
-			
-			public function get orderBy():String
+
+			public function get orderBy() : String
 			{
 				return chkBoxOrderBy.selected ? "'desc'" : "'asc'";
 			}
-			
+
 			public function get selectedColumn() : String
 			{
 				return cmbColumns.selectedItem as String;
 			}
 
-			protected function chkBoxOrderBy_changeHandler(event:Event):void
+			protected function chkBoxOrderBy_changeHandler( event : Event ) : void
 			{
 				if ( cmbColumns.selectedItem && selectedColumn != "" )
-					dispatchEvent( new ToolBoxPanelEvent ( ToolBoxPanelEvent.SORT_ELEMENT_CHANGE ) );
+					dispatchEvent( new ToolBoxPanelEvent( ToolBoxPanelEvent.SORT_ELEMENT_CHANGE ) );
 			}
-			
-			protected function cmbColumns_changeHandler(event:IndexChangeEvent):void
+
+			protected function cmbColumns_changeHandler( event : IndexChangeEvent ) : void
 			{
-				var newEvent : ToolBoxPanelEvent = new ToolBoxPanelEvent ( ToolBoxPanelEvent.SORT_ELEMENT_CHANGE );
-				
+				var newEvent : ToolBoxPanelEvent = new ToolBoxPanelEvent( ToolBoxPanelEvent.SORT_ELEMENT_CHANGE );
+
 				if ( event.newIndex == -1 )
 					newEvent.value = "";
 				else
-					newEvent.value = columns.source[event.newIndex];
-				
+					newEvent.value = columns.source[ event.newIndex ];
+
 				dispatchEvent( newEvent );
 			}
-			
 		]]>
 	</fx:Script>
-	
-	<s:HGroup width="100%" height="100%" verticalAlign="middle" paddingLeft="10">
-		<s:Label text="Sort " />
-		
-		<s:ComboBox id="cmbColumns" dataProvider="{columns}" change="cmbColumns_changeHandler(event)"/>
-		
-		<s:CheckBox id="chkBoxOrderBy" label="desc" change="chkBoxOrderBy_changeHandler(event)"/>
+
+	<s:HGroup width="100%"
+			  height="100%"
+			  verticalAlign="middle"
+			  paddingLeft="10">
+		<s:Label text="Sort "/>
+
+		<s:ComboBox id="cmbColumns"
+					dataProvider="{columns}"
+					change="cmbColumns_changeHandler(event)"/>
+
+		<s:CheckBox id="chkBoxOrderBy"
+					label="desc"
+					change="chkBoxOrderBy_changeHandler(event)"/>
 	</s:HGroup>
-	
-	
+
+
 </s:Group>

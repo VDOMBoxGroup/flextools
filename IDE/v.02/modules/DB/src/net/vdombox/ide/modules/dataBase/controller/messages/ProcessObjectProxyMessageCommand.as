@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMObjectTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -26,25 +26,25 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 				{
 					if ( operation == PPMOperationNames.READ )
 					{
-						if ( body.hasOwnProperty("result") )
+						if ( body.hasOwnProperty( "result" ) )
 							sendNotification( Notifications.REMOTE_CALL_RESPONSE, body );
 						else
 							sendNotification( Notifications.REMOTE_CALL_RESPONSE_ERROR, body );
 					}
-					
+
 					break;
 				}
-					
+
 				case PPMObjectTargetNames.ATTRIBUTES:
 				{
 					var vdomObjectAttributesVO : VdomObjectAttributesVO = body.vdomObjectAttributesVO as VdomObjectAttributesVO;
-					
+
 					sendNotification( Notifications.OBJECT_ATTRIBUTES_GETTED, body );
-					
-					
+
+
 					break;
 				}
-				
+
 				case PPMObjectTargetNames.NAME:
 				{
 					if ( operation == PPMOperationNames.UPDATE )

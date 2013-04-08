@@ -1,129 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 xmlns:components="net.vdombox.ide.common.view.components.*" 
+		 xmlns:components="net.vdombox.ide.common.view.components.*"
 		 xmlns:ItemRenderers="net.vdombox.ide.modules.dataBase.view.components.ItemRenderers.*"
-		 creationComplete="group1_creationCompleteHandler(event)" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+		 creationComplete="group1_creationCompleteHandler(event)"
+		 xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;
 			import net.vdombox.ide.modules.dataBase.view.components.VDOMAdvancedDataGrid;
-			
+
 			[Bindable]
 			private var columns : ArrayList;
-			
+
 			private var _queryString : String;
-			
-			public function get queryString():String
+
+			public function get queryString() : String
 			{
 				return _queryString;
 			}
 
-			public function set dataProvider(value:VDOMAdvancedDataGrid):void
+			public function set dataProvider( value : VDOMAdvancedDataGrid ) : void
 			{
 				columns = new ArrayList();
-				
+
 				for each ( var column : AdvancedDataGridColumn in value.columns )
 				{
 					columns.addItem( column.headerText );
 				}
 			}
-			
-			protected function group1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function group1_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				addEventListener( ToolBoxPanelEvent.REMOVE_QUERY_SIMPLE, removeQuerySimple, true, 0 , true );
-				addEventListener( ToolBoxPanelEvent.UP_QUERY_SIMPLE, upQuerySimple, true, 0 , true );
-				addEventListener( ToolBoxPanelEvent.DOWN_QUERY_SIMPLE, downQuerySimple, true, 0 , true );
+				addEventListener( ToolBoxPanelEvent.REMOVE_QUERY_SIMPLE, removeQuerySimple, true, 0, true );
+				addEventListener( ToolBoxPanelEvent.UP_QUERY_SIMPLE, upQuerySimple, true, 0, true );
+				addEventListener( ToolBoxPanelEvent.DOWN_QUERY_SIMPLE, downQuerySimple, true, 0, true );
 			}
-			
+
 			private function addQuerySimple( event : MouseEvent ) : void
 			{
 				var querySimpleBuildBoxItemRenderer : QuerySimpleBuildBoxItemRenderer = new QuerySimpleBuildBoxItemRenderer();
 				querySimpleBuildBoxItemRenderer.dataProvider = columns;
-				
-				dataGroup.addElement( querySimpleBuildBoxItemRenderer);
-				
-				for( var i : int = 0; i < dataGroup.numElements; i++ )
+
+				dataGroup.addElement( querySimpleBuildBoxItemRenderer );
+
+				for ( var i : int = 0; i < dataGroup.numElements; i++ )
 				{
-					( dataGroup.getElementAt(0) as QuerySimpleBuildBoxItemRenderer ).removeDisplay = true;
+					( dataGroup.getElementAt( 0 ) as QuerySimpleBuildBoxItemRenderer ).removeDisplay = true;
 				}
-				
+
 				setUpAndDownVisible();
 			}
-			
+
 			private function removeQuerySimple( event : ToolBoxPanelEvent ) : void
 			{
 				var querySimpleBuildBoxItemRenderer : QuerySimpleBuildBoxItemRenderer = new QuerySimpleBuildBoxItemRenderer();
 				querySimpleBuildBoxItemRenderer.dataProvider = columns;
-				
+
 				var positionItemRenderer : int = dataGroup.getElementIndex( event.target as QuerySimpleBuildBoxItemRenderer );
-				
+
 				dataGroup.removeElementAt( positionItemRenderer );
-				
+
 				if ( dataGroup.numElements == 1 )
 				{
-					( dataGroup.getElementAt(0) as QuerySimpleBuildBoxItemRenderer ).removeDisplay = false;
+					( dataGroup.getElementAt( 0 ) as QuerySimpleBuildBoxItemRenderer ).removeDisplay = false;
 				}
-				
+
 				setUpAndDownVisible();
 			}
-			
+
 			private function upQuerySimple( event : ToolBoxPanelEvent ) : void
 			{
 				var positionItemRenderer : int = dataGroup.getElementIndex( event.target as QuerySimpleBuildBoxItemRenderer );
-				
+
 				var querySimpleBuildBoxItemRenderer : QuerySimpleBuildBoxItemRenderer = dataGroup.removeElementAt( positionItemRenderer ) as QuerySimpleBuildBoxItemRenderer;
-				
+
 				dataGroup.addElementAt( querySimpleBuildBoxItemRenderer, positionItemRenderer - 1 );
-				
+
 				setUpAndDownVisible();
 			}
-			
+
 			private function downQuerySimple( event : ToolBoxPanelEvent ) : void
 			{
 				var positionItemRenderer : int = dataGroup.getElementIndex( event.target as QuerySimpleBuildBoxItemRenderer );
-				
+
 				var querySimpleBuildBoxItemRenderer : QuerySimpleBuildBoxItemRenderer = dataGroup.removeElementAt( positionItemRenderer ) as QuerySimpleBuildBoxItemRenderer;
-				
+
 				dataGroup.addElementAt( querySimpleBuildBoxItemRenderer, positionItemRenderer + 1 );
-				
+
 				setUpAndDownVisible();
 			}
-			
-			protected function apply_clickHandler(event:MouseEvent):void
+
+			protected function apply_clickHandler( event : MouseEvent ) : void
 			{
-				_queryString = "<where><![CDATA"+'[';
-				
+				_queryString = "<where><![CDATA" + '[';
+
 				var querySimpleBuildBoxItemRenderer : QuerySimpleBuildBoxItemRenderer;
-				
+
 				for ( var i : int = 0; i < dataGroup.numElements; i++ )
 				{
 					querySimpleBuildBoxItemRenderer = dataGroup.getElementAt( i ) as QuerySimpleBuildBoxItemRenderer;
-					
-					if ( _queryString == "<where><![CDATA"+'[' )
+
+					if ( _queryString == "<where><![CDATA" + '[' )
 						_queryString += querySimpleBuildBoxItemRenderer.queryShort;
 					else
 						_queryString += querySimpleBuildBoxItemRenderer.query;
 				}
-				
-				if ( _queryString == "<where><![CDATA"+'[' )
+
+				if ( _queryString == "<where><![CDATA" + '[' )
 					_queryString = "";
 				else
-					_queryString += ']'+']></where>';
-				
+					_queryString += ']' + ']></where>';
+
 				dispatchEvent( new ToolBoxPanelEvent( ToolBoxPanelEvent.SEND_QUERY_SIMPLE_CLICK ) );
 			}
-			
+
 			private function setUpAndDownVisible() : void
 			{
 				var querySimpleBuildBoxItemRenderer : QuerySimpleBuildBoxItemRenderer;
-				
+
 				if ( dataGroup.numElements == 1 )
 				{
 					querySimpleBuildBoxItemRenderer = dataGroup.getElementAt( 0 ) as QuerySimpleBuildBoxItemRenderer;
@@ -132,7 +133,7 @@
 					querySimpleBuildBoxItemRenderer.betweenDisplay = false;
 					return;
 				}
-				
+
 				for ( var i : int = 1; i < dataGroup.numElements - 1; i++ )
 				{
 					querySimpleBuildBoxItemRenderer = dataGroup.getElementAt( i ) as QuerySimpleBuildBoxItemRenderer;
@@ -140,40 +141,53 @@
 					querySimpleBuildBoxItemRenderer.downDisplay = true;
 					querySimpleBuildBoxItemRenderer.betweenDisplay = true;
 				}
-				
+
 				querySimpleBuildBoxItemRenderer = dataGroup.getElementAt( 0 ) as QuerySimpleBuildBoxItemRenderer;
 				querySimpleBuildBoxItemRenderer.upDisplay = false;
 				querySimpleBuildBoxItemRenderer.downDisplay = true;
 				querySimpleBuildBoxItemRenderer.betweenDisplay = false;
-				
+
 				querySimpleBuildBoxItemRenderer = dataGroup.getElementAt( dataGroup.numElements - 1 ) as QuerySimpleBuildBoxItemRenderer;
 				querySimpleBuildBoxItemRenderer.upDisplay = true;
 				querySimpleBuildBoxItemRenderer.downDisplay = false;
 				querySimpleBuildBoxItemRenderer.betweenDisplay = true;
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
-	<s:VGroup  width="100%" gap="5" paddingLeft="10">
-	
-		<components:VDOMScroller id="scroller" width="100%" maxHeight="150">
-		
-			<s:VGroup id="dataGroup" width="100%" gap="0">
-				
-				<ItemRenderers:QuerySimpleBuildBoxItemRenderer dataProvider="{columns}" removeDisplay="false" upDisplay="false" downDisplay="false" />
-				
+
+	<s:VGroup width="100%"
+			  gap="5"
+			  paddingLeft="10">
+
+		<components:VDOMScroller id="scroller"
+								 width="100%"
+								 maxHeight="150">
+
+			<s:VGroup id="dataGroup"
+					  width="100%"
+					  gap="0">
+
+				<ItemRenderers:QuerySimpleBuildBoxItemRenderer dataProvider="{columns}"
+															   removeDisplay="false"
+															   upDisplay="false"
+															   downDisplay="false"/>
+
 			</s:VGroup>
-		
+
 		</components:VDOMScroller>
-		
-		<s:HGroup width="100%" verticalAlign="middle">
-			<s:Button id="apply" label="Apply" click="apply_clickHandler(event)"/>
-			
-			<button:WorkAreaButton id="addNew" width="20" icon="{ VDOMImage.Add }"
+
+		<s:HGroup width="100%"
+				  verticalAlign="middle">
+			<s:Button id="apply"
+					  label="Apply"
+					  click="apply_clickHandler(event)"/>
+
+			<button:WorkAreaButton id="addNew"
+								   width="20"
+								   icon="{ VDOMImage.Add }"
 								   click="addQuerySimple(event)"/>
 		</s:HGroup>
 	</s:VGroup>

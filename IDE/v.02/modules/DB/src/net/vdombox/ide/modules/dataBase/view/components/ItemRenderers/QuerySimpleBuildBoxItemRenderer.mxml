@@ -1,60 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 creationComplete="group1_creationCompleteHandler(event)" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+		 creationComplete="group1_creationCompleteHandler(event)"
+		 xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.dataBase.events.ToolBoxPanelEvent;
-			
+
 			[Bindable]
 			private var columns : ArrayList;
-			
+
 			[Bindable]
 			private var operators : ArrayList;
-			
+
 			[Bindable]
 			private var between : ArrayList;
-			
-			public function set dataProvider(value:ArrayList):void
+
+			public function set dataProvider( value : ArrayList ) : void
 			{
 				columns = value;
 			}
-			
+
 			public function set removeDisplay( value : Boolean ) : void
 			{
 				delOld.visible = value;
 				cmbBetween.visible = value;
 			}
-			
+
 			public function set upDisplay( value : Boolean ) : void
 			{
 				up.visible = value;
 			}
-			
+
 			public function set downDisplay( value : Boolean ) : void
 			{
 				down.visible = value;
 			}
-			
+
 			public function set betweenDisplay( value : Boolean ) : void
 			{
 				cmbBetween.visible = value;
 			}
-			
-			protected function delOld_clickHandler(event:MouseEvent):void
+
+			protected function delOld_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new ToolBoxPanelEvent ( ToolBoxPanelEvent.REMOVE_QUERY_SIMPLE ) );
+				dispatchEvent( new ToolBoxPanelEvent( ToolBoxPanelEvent.REMOVE_QUERY_SIMPLE ) );
 			}
-			
-			protected function group1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function group1_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				operators = new ArrayList();
-				
+
 				operators.addItem( "==" );
 				operators.addItem( "LIKE" );
 				operators.addItem( ">" );
@@ -62,74 +63,88 @@
 				operators.addItem( "<" );
 				operators.addItem( "<=" );
 				operators.addItem( "!=" );
-				
+
 				cmbOperators.selectedItem = "==";
-				
+
 				between = new ArrayList();
-				
+
 				between.addItem( "AND" );
 				between.addItem( "OR" );
-				
+
 				cmbBetween.selectedItem = "AND";
-				
-				cmbColumns.selectedItem= columns.source[0];
+
+				cmbColumns.selectedItem = columns.source[ 0 ];
 			}
-			
+
 			public function get queryShort() : String
 			{
 				if ( !chkBoxEnable.selected )
 					return "";
-				
-				return (cmbColumns.selectedItem as String)  + ' ' + ( cmbOperators.selectedItem as String ) + ' ' + '"' + txtValue.text + '"';
+
+				return ( cmbColumns.selectedItem as String ) + ' ' + ( cmbOperators.selectedItem as String ) + ' ' + '"' + txtValue.text + '"';
 			}
-			
+
 			public function get query() : String
 			{
 				if ( !chkBoxEnable.selected )
 					return "";
-				
-				var str : String = (cmbColumns.selectedItem as String) + ' ' + ( cmbOperators.selectedItem as String ) + ' ' + '"' + txtValue.text + '"';
-				
+
+				var str : String = ( cmbColumns.selectedItem as String ) + ' ' + ( cmbOperators.selectedItem as String ) + ' ' + '"' + txtValue.text + '"';
+
 				if ( cmbBetween.visible )
-					str = " " + (cmbBetween.selectedItem as String) + " " + str;
-				
+					str = " " + ( cmbBetween.selectedItem as String ) + " " + str;
+
 				return str;
 			}
-			
-			protected function up_clickHandler(event:MouseEvent):void
+
+			protected function up_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new ToolBoxPanelEvent ( ToolBoxPanelEvent.UP_QUERY_SIMPLE ) );
+				dispatchEvent( new ToolBoxPanelEvent( ToolBoxPanelEvent.UP_QUERY_SIMPLE ) );
 			}
-			
-			protected function down_clickHandler(event:MouseEvent):void
+
+			protected function down_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new ToolBoxPanelEvent ( ToolBoxPanelEvent.DOWN_QUERY_SIMPLE ) );
+				dispatchEvent( new ToolBoxPanelEvent( ToolBoxPanelEvent.DOWN_QUERY_SIMPLE ) );
 			}
-			
 		]]>
 	</fx:Script>
 
-	<s:HGroup width="100%" height="100%" verticalAlign="middle">
-		
-		<s:CheckBox id="chkBoxEnable" selected="true"/>
-		
-		<s:DropDownList id="cmbBetween" dataProvider="{between}" width="70"/>
-		
-		<s:DropDownList id="cmbColumns" dataProvider="{columns}" width="150"/>
-		
-		<s:DropDownList id="cmbOperators" dataProvider="{operators}" width="60"/>
-		
-		<s:TextInput id="txtValue" />
-		
-		<button:WorkAreaButton id="up" width="20" icon="@Embed('assets/Arrow_Up.png')"
+	<s:HGroup width="100%"
+			  height="100%"
+			  verticalAlign="middle">
+
+		<s:CheckBox id="chkBoxEnable"
+					selected="true"/>
+
+		<s:DropDownList id="cmbBetween"
+						dataProvider="{between}"
+						width="70"/>
+
+		<s:DropDownList id="cmbColumns"
+						dataProvider="{columns}"
+						width="150"/>
+
+		<s:DropDownList id="cmbOperators"
+						dataProvider="{operators}"
+						width="60"/>
+
+		<s:TextInput id="txtValue"/>
+
+		<button:WorkAreaButton id="up"
+							   width="20"
+							   icon="@Embed('assets/Arrow_Up.png')"
 							   click="up_clickHandler(event)"/>
-		
-		<button:WorkAreaButton id="down" width="20" icon="@Embed('assets/Arrow_Down.png')"
+
+		<button:WorkAreaButton id="down"
+							   width="20"
+							   icon="@Embed('assets/Arrow_Down.png')"
 							   click="down_clickHandler(event)"/>
-		
-		<button:WorkAreaButton id="delOld" width="20" icon="{ VDOMImage.DeleteBlack }"
+
+		<button:WorkAreaButton id="delOld"
+							   width="20"
+							   icon="{ VDOMImage.DeleteBlack }"
 							   click="delOld_clickHandler(event)"/>
-		
+
 	</s:HGroup>
-	
+
 </s:Group>

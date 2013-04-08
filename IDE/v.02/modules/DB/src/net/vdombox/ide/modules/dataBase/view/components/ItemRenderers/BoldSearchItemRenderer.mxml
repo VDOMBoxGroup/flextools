@@ -1,47 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:MXAdvancedDataGridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-								  xmlns:s="library://ns.adobe.com/flex/spark" 
-								  xmlns:mx="library://ns.adobe.com/flex/mx" 
-								  focusEnabled="true" 
-								  doubleClick="textArea_doubleClickHandler(event)"
-								  >
+<s:MXAdvancedDataGridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+								  xmlns:s="library://ns.adobe.com/flex/spark"
+								  xmlns:mx="library://ns.adobe.com/flex/mx"
+								  focusEnabled="true"
+								  doubleClick="textArea_doubleClickHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.dataGridClasses.DataGridListData;
-			
+
 			import net.vdombox.ide.common.events.StringAttributeEditWindowEvent;
 			import net.vdombox.ide.common.view.components.windows.StringAttributeEditWindow;
 			import net.vdombox.utils.StringUtils;
 			import net.vdombox.utils.WindowManager;
-			
-			
+
+
 			override public function set data( value : Object ) : void
 			{
 				if ( !value )
 					return;
-				
+
 				super.data = value;
-				
-				textArea.text = value[DataGridListData(listData).dataField];
+
+				textArea.text = value[ DataGridListData( listData ).dataField ];
 			}
-			
-			override public function validateProperties():void
+
+			override public function validateProperties() : void
 			{
 				super.validateProperties();
-				
+
 				// if owner is searchable and searchExpression si set we highlight all matches of searchExpression
-				/*if (listData && listData.owner is ISearchable)
-				{
-					var dg:ISearchable = ISearchable(listData.owner);
-					
-					textArea.htmlText = StringUtils.htmlEnc( data[DataGridListData(listData).dataField] );
-					
-					if (dg.searchExpression)
-						textArea.htmlText = textArea.htmlText.replace( dg.searchExpression, "<b><font size='13'>$&</font></b>" );
-				}*/
+			/*
+			   if (listData && listData.owner is ISearchable)
+			   {
+			   var dg:ISearchable = ISearchable(listData.owner);
+
+			   textArea.htmlText = StringUtils.htmlEnc( data[DataGridListData(listData).dataField] );
+
+			   if (dg.searchExpression)
+			   textArea.htmlText = textArea.htmlText.replace( dg.searchExpression, "<b><font size='13'>$&</font></b>" );
+			   }
+			 */
 			}
-			
-			protected function textArea_doubleClickHandler(event:MouseEvent):void
+
+			protected function textArea_doubleClickHandler( event : MouseEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				event.stopImmediatePropagation();
@@ -50,31 +51,43 @@
 				stringAttributeEditWindow.title = "Edit attribute";
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.APPLY, applyHandler );
 				stringAttributeEditWindow.addEventListener( StringAttributeEditWindowEvent.CANCEL, cancelHandler );
-				
-				WindowManager.getInstance().addWindow(stringAttributeEditWindow, this, true);
-				
+
+				WindowManager.getInstance().addWindow( stringAttributeEditWindow, this, true );
+
 				function applyHandler( event : StringAttributeEditWindowEvent ) : void
 				{
 					textArea.text = event.value;
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
-					data[DataGridListData(listData).dataField] = textArea.text;
+					data[ DataGridListData( listData ).dataField ] = textArea.text;
 					invalidateProperties();
 				}
-				
+
 				function cancelHandler( event : StringAttributeEditWindowEvent ) : void
 				{
 					WindowManager.getInstance().removeWindow( stringAttributeEditWindow );
 				}
 			}
-			
-			protected function textArea_changeHandler(event:Event):void
+
+			protected function textArea_changeHandler( event : Event ) : void
 			{
-				data[DataGridListData(listData).dataField] = textArea.text;
+				data[ DataGridListData( listData ).dataField ] = textArea.text;
 			}
-			
 		]]>
 	</fx:Script>
-	<mx:TextInput id="textArea" top="0" left="0" right="0" bottom="0" text="{listData.label}" doubleClickEnabled="true" doubleClick="textArea_doubleClickHandler(event)"
-				 contentBackgroundAlpha="0" borderVisible="false" minHeight="24" maxHeight="24"  change="textArea_changeHandler(event)" paddingTop="2"
-				 focusIn="{textArea.setStyle( 'contentBackgroundAlpha', '1' ) }" focusOut="{textArea.setStyle( 'contentBackgroundAlpha', '0' ) }"/>
+	<mx:TextInput id="textArea"
+				  top="0"
+				  left="0"
+				  right="0"
+				  bottom="0"
+				  text="{listData.label}"
+				  doubleClickEnabled="true"
+				  doubleClick="textArea_doubleClickHandler(event)"
+				  contentBackgroundAlpha="0"
+				  borderVisible="false"
+				  minHeight="24"
+				  maxHeight="24"
+				  change="textArea_changeHandler(event)"
+				  paddingTop="2"
+				  focusIn="{textArea.setStyle( 'contentBackgroundAlpha', '1' ) }"
+				  focusOut="{textArea.setStyle( 'contentBackgroundAlpha', '0' ) }"/>
 </s:MXAdvancedDataGridItemRenderer>

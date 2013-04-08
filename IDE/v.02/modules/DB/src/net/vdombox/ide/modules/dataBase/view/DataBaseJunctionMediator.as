@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.dataBase.view
 {
 	import flash.utils.Dictionary;
-	
+
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
@@ -28,7 +28,7 @@ package net.vdombox.ide.modules.dataBase.view
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -69,30 +69,30 @@ package net.vdombox.ide.modules.dataBase.view
 			interests.push( StatesProxy.SET_ALL_STATES );
 			interests.push( Notifications.GET_DATA_BASES );
 			interests.push( Notifications.GET_DATA_BASE_TABLES );
-			
+
 			interests.push( Notifications.GET_TABLE );
 			interests.push( Notifications.REMOTE_CALL_REQUEST );
-			
+
 			interests.push( Notifications.GET_OBJECTS );
-			
+
 			interests.push( TypesProxy.GET_TOP_LEVEL_TYPES );
 			interests.push( Notifications.CREATE_PAGE );
-			
+
 			interests.push( TypesProxy.GET_TYPES );
 			interests.push( Notifications.GET_PAGE );
-			
+
 			interests.push( Notifications.CREATE_OBJECT );
-			
+
 			interests.push( Notifications.SET_OBJECT_NAME );
-			
+
 			interests.push( Notifications.LOAD_RESOURCE );
-			
+
 			interests.push( Notifications.GET_OBJECT_ATTRIBUTES );
 			interests.push( Notifications.UPDATE_ATTRIBUTES );
-			
+
 			interests.push( Notifications.DELETE_OBJECT );
 			interests.push( Notifications.DELETE_PAGE );
-			
+
 			return interests;
 		}
 
@@ -122,8 +122,7 @@ package net.vdombox.ide.modules.dataBase.view
 
 				case Notifications.EXPORT_TOOLSET:
 				{
-					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ),
-						multitonKey );
+					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -132,8 +131,7 @@ package net.vdombox.ide.modules.dataBase.view
 
 				case Notifications.EXPORT_SETTINGS_SCREEN:
 				{
-					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ),
-						multitonKey );
+					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -151,8 +149,7 @@ package net.vdombox.ide.modules.dataBase.view
 
 				case SettingsProxy.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
-					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE,
-						null, multitonKey );
+					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE, null, multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -161,8 +158,7 @@ package net.vdombox.ide.modules.dataBase.view
 
 				case SettingsProxy.SAVE_SETTINGS_TO_STORAGE:
 				{
-					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body,
-						multitonKey );
+					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body, multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -198,52 +194,52 @@ package net.vdombox.ide.modules.dataBase.view
 
 				case Notifications.GET_DATA_BASES:
 				{
-					
+
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_PAGE:
 				{
-					
+
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_DATA_BASE_TABLES:
 				{
-					
+
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_TABLE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECT, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_OBJECTS:
 				{
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECTS, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.REMOTE_CALL_REQUEST:
 				{
 					if ( body.hasOwnProperty( "objectVO" ) )
@@ -252,108 +248,108 @@ package net.vdombox.ide.modules.dataBase.view
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.REMOTE_CALL, body );
 					else if ( body.hasOwnProperty( "applicationVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.REMOTE_CALL, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case TypesProxy.GET_TOP_LEVEL_TYPES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TOP_LEVEL_TYPES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.CREATE_PAGE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case TypesProxy.GET_TYPES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.CREATE_OBJECT:
 				{
 					if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.OBJECT, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.SET_OBJECT_NAME:
 				{
 					if ( body is PageVO )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.NAME, body );
 					else if ( body is ObjectVO )
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.NAME, body );
-					
+
 					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.LOAD_RESOURCE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_OBJECT_ATTRIBUTES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.ATTRIBUTES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.UPDATE_ATTRIBUTES:
 				{
 					if ( VdomObjectAttributesVO( body ).vdomObjectVO is PageVO )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
 					else if ( VdomObjectAttributesVO( body ).vdomObjectVO is ObjectVO )
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.ATTRIBUTES, body );
-					
+
 					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.DELETE_OBJECT:
 				{
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.DELETE, PPMPageTargetNames.OBJECT, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
 
 				case Notifications.DELETE_PAGE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.PAGE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
 
@@ -375,14 +371,12 @@ package net.vdombox.ide.modules.dataBase.view
 					if ( recipientKey == multitonKey )
 					{
 						sendNotification( Notifications.MODULE_SELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE,
-							null, multitonKey ) );
+						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 					}
 					else
 					{
 						sendNotification( Notifications.MODULE_DESELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE,
-							null, multitonKey ) );
+						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
 					}
 
 					break;
@@ -393,8 +387,7 @@ package net.vdombox.ide.modules.dataBase.view
 					if ( recipientKey != multitonKey )
 						return;
 
-					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module",
-						SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module", SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( Notifications.PIPES_READY );
 					break;
@@ -489,42 +482,42 @@ package net.vdombox.ide.modules.dataBase.view
 				case PPMPlaceNames.PAGE:
 				{
 					sendNotification( Notifications.PROCESS_PAGE_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
 
 				case PPMPlaceNames.TYPES:
 				{
 					sendNotification( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
 
 				case PPMPlaceNames.RESOURCES:
 				{
 					sendNotification( Notifications.PROCESS_RESOURCES_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
 
 				case PPMPlaceNames.STATES:
 				{
 					sendNotification( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
 
 				case PPMPlaceNames.APPLICATION:
 				{
 					sendNotification( Notifications.PROCESS_APPLICATION_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
-					
+
 				case PPMPlaceNames.OBJECT:
 				{
 					sendNotification( Notifications.PROCESS_OBJECT_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
 			}

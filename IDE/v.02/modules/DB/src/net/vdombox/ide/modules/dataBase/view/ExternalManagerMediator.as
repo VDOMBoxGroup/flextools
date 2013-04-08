@@ -3,12 +3,12 @@ package net.vdombox.ide.modules.dataBase.view
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.ExternalManagerEvent;
 	import net.vdombox.ide.common.interfaces.IExternalManager;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -23,6 +23,7 @@ package net.vdombox.ide.modules.dataBase.view
 		}
 
 		private var dispatcher : EventDispatcher;
+
 		private var statesProxy : StatesProxy;
 
 		override public function onRegister() : void
@@ -57,10 +58,10 @@ package net.vdombox.ide.modules.dataBase.view
 				{
 					var event : ExternalManagerEvent = new ExternalManagerEvent( ExternalManagerEvent.CALL_COMPLETE );
 					event.result = body;
-					
+
 					// FIXME: медиатор может посылать оповещения но не Евенты.
 					dispatchEvent( event );
-					
+
 					break;
 				}
 			}
@@ -71,14 +72,12 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			var objectID : String = statesProxy.selectedObject ? statesProxy.selectedObject.id : statesProxy.selectedPage.id;
 
-			sendNotification( Notifications.REMOTE_CALL_REQUEST,
-							  { applicationVO: statesProxy.selectedApplication, objectID: objectID, functionName: functionName, value: value } );
+			sendNotification( Notifications.REMOTE_CALL_REQUEST, { applicationVO: statesProxy.selectedApplication, objectID: objectID, functionName: functionName, value: value } );
 			return null;
 		}
 
 		// FIXME: неправильное поведение медиатора, ведет себя как Визуальный Обьект
-		public function addEventListener( type : String, listener : Function, useCapture : Boolean = false, priority : int = 0,
-										  useWeakReference : Boolean = false ) : void
+		public function addEventListener( type : String, listener : Function, useCapture : Boolean = false, priority : int = 0, useWeakReference : Boolean = false ) : void
 		{
 			dispatcher.addEventListener( type, listener, useCapture, priority, useWeakReference );
 		}
@@ -100,7 +99,7 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			return dispatcher.hasEventListener( type );
 		}
-		
+
 		// FIXME: неправильное поведение медиатора, ведет себя как Визуальный Обьект
 		public function willTrigger( type : String ) : Boolean
 		{

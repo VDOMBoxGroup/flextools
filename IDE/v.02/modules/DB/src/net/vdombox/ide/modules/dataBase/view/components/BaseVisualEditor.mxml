@@ -1,64 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" xmlns:components="net.vdombox.components.*" xmlns:components1="net.vdombox.ide.common.view.components.*">
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="400"
+		 height="300"
+		 xmlns:components="net.vdombox.components.*"
+		 xmlns:components1="net.vdombox.ide.common.view.components.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.model._vo.PageVO;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
-			
+
 			private var _objectVO : PageVO;
-			
+
 			public function get editorID() : String
 			{
 				return _objectVO ? _objectVO.id : "";
 			}
-			
+
 			public function get editorName() : String
 			{
 				return _objectVO ? _objectVO.name : "";
 			}
-			
+
 			public function get objectVO() : Object
 			{
 				return _objectVO ? _objectVO : null;
 			}
-			
+
 			public function set objectVO( value : Object ) : void
 			{
 				_objectVO = value as PageVO;
 			}
-			
-			protected function scroller_creationCompleteHandler(event:FlexEvent):void
+
+			protected function scroller_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				scroller.verticalScrollBar.setStyle( "skinClass", VDOMWorkAreaVScrollBarSkin );
 				scroller.horizontalScrollBar.setStyle( "skinClass", VDOMWorkAreaHScrollBarSkin );
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
+
 	<s:Group id="workLayers"
-			 bottom="0" left="0" right="0" top="0">
-		<s:Rect height="100%" width="100%">
+			 bottom="0"
+			 left="0"
+			 right="0"
+			 top="0">
+		<s:Rect height="100%"
+				width="100%">
 			<s:fill>
-				<s:BitmapFill source = "{VDOMImage.BG_WorkArea]" smooth="true" fillMode="repeat"/>
+				<s:BitmapFill source="{VDOMImage.BG_WorkArea]"
+							  smooth="true"
+							  fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
-		
-		<components1:VDOMScroller id="scroller" height="100%" width="100%" creationComplete="scroller_creationCompleteHandler(event)">
+
+		<components1:VDOMScroller id="scroller"
+								  height="100%"
+								  width="100%"
+								  creationComplete="scroller_creationCompleteHandler(event)">
 			<s:Group>
 				<s:Group id="linkagesLayer"/>
 				<s:Group id="contentGroup"/>
 			</s:Group>
 		</components1:VDOMScroller>
 	</s:Group>
-	
+
 </s:Group>

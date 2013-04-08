@@ -1,14 +1,14 @@
 package net.vdombox.ide.modules.dataBase.view
 {
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
 	import net.vdombox.ide.modules.dataBase.view.components.Body;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -23,9 +23,11 @@ package net.vdombox.ide.modules.dataBase.view
 		}
 
 		private var isReady : Boolean;
+
 		private var isAllStatesGetted : Boolean;
+
 		private var isTypesChanged : Boolean;
-		
+
 		public var selectedResource : ResourceVO;
 
 		public var selectedApplication : ApplicationVO;
@@ -40,27 +42,27 @@ package net.vdombox.ide.modules.dataBase.view
 			isReady = false;
 			isAllStatesGetted = false;
 			isTypesChanged = false;
-			
+
 			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
 			isReady = false;
-			
+
 			removeHandlers();
 		}
-		
+
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( StatesProxy.ALL_STATES_GETTED );
 			interests.push( TypesProxy.TYPES_CHANGED );
-			
+
 			interests.push( Notifications.PIPES_READY );
 			interests.push( Notifications.MODULE_DESELECTED );
-			
+
 			return interests;
 		}
 
@@ -74,34 +76,34 @@ package net.vdombox.ide.modules.dataBase.view
 				{
 					sendNotification( StatesProxy.GET_ALL_STATES );
 					sendNotification( TypesProxy.GET_TYPES );
-					
+
 					break;
 				}
-					
+
 				case StatesProxy.ALL_STATES_GETTED:
 				{
 					isAllStatesGetted = true;
-					
+
 					checkConditions();
-					
+
 					break;
 				}
-					
+
 				case TypesProxy.TYPES_CHANGED:
 				{
 					isTypesChanged = true;
-					
+
 					checkConditions();
-					
+
 					break;
 				}
-					
+
 				case Notifications.MODULE_DESELECTED:
 				{
 					isReady = false;
-					
+
 					sendNotification( Notifications.BODY_STOP );
-					
+
 					break;
 				}
 			}
@@ -116,7 +118,7 @@ package net.vdombox.ide.modules.dataBase.view
 		{
 			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
-		
+
 		private function checkConditions() : void
 		{
 			if ( isTypesChanged && isAllStatesGetted && body.initialized )
@@ -129,7 +131,7 @@ package net.vdombox.ide.modules.dataBase.view
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			sendNotification( Notifications.BODY_CREATED, body );
-			
+
 			checkConditions();
 		}
 	}

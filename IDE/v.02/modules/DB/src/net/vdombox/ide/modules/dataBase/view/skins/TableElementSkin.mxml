@@ -1,140 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:mx="library://ns.adobe.com/flex/mx"
-		creationComplete="sparkskin1_creationCompleteHandler(event)"
-		removedFromStage="sparkskin1_removedFromStageHandler(event)"
-		doubleClick="sparkskin1_doubleClickHandler(event)" doubleClickEnabled="true" xmlns:components="net.vdombox.components.*" xmlns:components1="net.vdombox.ide.common.view.components.*">
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 xmlns:mx="library://ns.adobe.com/flex/mx"
+			 creationComplete="sparkskin1_creationCompleteHandler(event)"
+			 removedFromStage="sparkskin1_removedFromStageHandler(event)"
+			 doubleClick="sparkskin1_doubleClickHandler(event)"
+			 doubleClickEnabled="true"
+			 xmlns:components="net.vdombox.components.*"
+			 xmlns:components1="net.vdombox.ide.common.view.components.*">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.dataBase.view.components.TableElement")]
 	</fx:Metadata>
-	
+
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			
+
 			import spark.components.Button;
-			
-			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function sparkskin1_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				hostComponent.sendCreationCompleteTable();
 				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, true );
 				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 			}
-			
+
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
 				if ( event.target is Image )
 					return;
-					
+
 				if ( event.target is Button )
 					return;
-				
+
 				hostComponent.mouseDownHandler();
 			}
-			
-			protected function sparkskin1_removedFromStageHandler(event:Event):void
+
+			protected function sparkskin1_removedFromStageHandler( event : Event ) : void
 			{
 				removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, true );
 				removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 			}
-			
-			protected function angle_mouseDownHandler(event:MouseEvent):void
+
+			protected function angle_mouseDownHandler( event : MouseEvent ) : void
 			{
 				hostComponent.mouseDownAngleHandler( event );
 			}
-			
-			protected function textinput1_doubleClickHandler(event:MouseEvent):void
+
+			protected function textinput1_doubleClickHandler( event : MouseEvent ) : void
 			{
 				hostComponent.openRenameWindow();
 			}
-			
-			protected function sparkskin1_doubleClickHandler(event:MouseEvent):void
+
+			protected function sparkskin1_doubleClickHandler( event : MouseEvent ) : void
 			{
 				if ( event.target is Label )
 					return;
-				
+
 				hostComponent.sendGoToTable();
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<!-- states -->
 	<s:states>
-		<s:State name="disabled" />
-		<s:State name="normal" />
+		<s:State name="disabled"/>
+		<s:State name="normal"/>
 	</s:states>
-	
-	<s:Rect id="backgraund" bottom="0" left="0" right="0" top="0">
+
+	<s:Rect id="backgraund"
+			bottom="0"
+			left="0"
+			right="0"
+			top="0">
 		<s:fill>
-			<s:SolidColor color="#505050" />
+			<s:SolidColor color="#505050"/>
 		</s:fill>
 	</s:Rect>
-	
+
 	<s:RectangularDropShadow id="dropShadow"
-							 bottom="0" color="#505050" left="0" right="0"
+							 bottom="0"
+							 color="#505050"
+							 left="0"
+							 right="0"
 							 top="0"
-							 alpha="0.63" angle="45" blRadius="0" blurX="12"
-							 blurY="12" brRadius="0" distance="0" tlRadius="0"
+							 alpha="0.63"
+							 angle="45"
+							 blRadius="0"
+							 blurX="12"
+							 blurY="12"
+							 brRadius="0"
+							 distance="0"
+							 tlRadius="0"
 							 trRadius="0"/>
-	
-	
-	
-	<s:VGroup width="100%" height="100%" 
-			  left="5" right="5" top="5" bottom="5" gap="0">
+
+
+
+	<s:VGroup width="100%"
+			  height="100%"
+			  left="5"
+			  right="5"
+			  top="5"
+			  bottom="5"
+			  gap="0">
 		<s:Group>
-			<s:Rect bottom="0" left="0" right="0" top="0">
+			<s:Rect bottom="0"
+					left="0"
+					right="0"
+					top="0">
 				<s:fill>
-					<s:SolidColor color="#FFFFFF" />
+					<s:SolidColor color="#FFFFFF"/>
 				</s:fill>
 			</s:Rect>
-			
-			<s:RectangularDropShadow bottom="0" color="#000000" left="0" right="0"
+
+			<s:RectangularDropShadow bottom="0"
+									 color="#000000"
+									 left="0"
+									 right="0"
 									 top="0"
-									 alpha="0.75" angle="45" blRadius="0" blurX="6"
-									 blurY="6" brRadius="0" distance="0" tlRadius="0"
+									 alpha="0.75"
+									 angle="45"
+									 blRadius="0"
+									 blurX="6"
+									 blurY="6"
+									 brRadius="0"
+									 distance="0"
+									 tlRadius="0"
 									 trRadius="0"/>
-			
-			<s:Label id="nameTable" text="{ hostComponent.objectVO.name }" verticalCenter="0" 
-					 paddingLeft="15" paddingRight="15" paddingTop="5" paddingBottom="5" width="100%" maxWidth="{backgraund.width - 10}"
-					 maxDisplayedLines="1" fontWeight="bold" fontSize="12"
-					 doubleClick="textinput1_doubleClickHandler(event)" doubleClickEnabled="true"/>
+
+			<s:Label id="nameTable"
+					 text="{ hostComponent.objectVO.name }"
+					 verticalCenter="0"
+					 paddingLeft="15"
+					 paddingRight="15"
+					 paddingTop="5"
+					 paddingBottom="5"
+					 width="100%"
+					 maxWidth="{backgraund.width - 10}"
+					 maxDisplayedLines="1"
+					 fontWeight="bold"
+					 fontSize="12"
+					 doubleClick="textinput1_doubleClickHandler(event)"
+					 doubleClickEnabled="true"/>
 		</s:Group>
-		
-		
-		<s:Group width="100%" height="100%">
-			<s:Rect  bottom="0" left="0" right="0" top="0">
+
+
+		<s:Group width="100%"
+				 height="100%">
+			<s:Rect bottom="0"
+					left="0"
+					right="0"
+					top="0">
 				<s:fill>
-					<s:BitmapFill source = "@Embed('assets/backgroundtable.png')" smooth="true" fillMode="repeat"/>
+					<s:BitmapFill source="@Embed('assets/backgroundtable.png')"
+								  smooth="true"
+								  fillMode="repeat"/>
 				</s:fill>
 			</s:Rect>
-			
-			<s:RectangularDropShadow bottom="0" color="#000000" left="0" right="0"
+
+			<s:RectangularDropShadow bottom="0"
+									 color="#000000"
+									 left="0"
+									 right="0"
 									 top="0"
-									 alpha="0.75" angle="45" blRadius="0" blurX="6"
-									 blurY="6" brRadius="0" distance="0" tlRadius="0"
+									 alpha="0.75"
+									 angle="45"
+									 blRadius="0"
+									 blurX="6"
+									 blurY="6"
+									 brRadius="0"
+									 distance="0"
+									 tlRadius="0"
 									 trRadius="0"/>
-			
-			<components1:VDOMScroller id="scroller" width="100%" height="100%">
-				
-				<s:VGroup id="attributes" width="100%" height="100%" gap="0"/>
-				
+
+			<components1:VDOMScroller id="scroller"
+									  width="100%"
+									  height="100%">
+
+				<s:VGroup id="attributes"
+						  width="100%"
+						  height="100%"
+						  gap="0"/>
+
 			</components1:VDOMScroller>
-			
-			<s:Rect  top="0" left="0" right="0" height="6">
+
+			<s:Rect top="0"
+					left="0"
+					right="0"
+					height="6">
 				<s:fill>
-					<s:BitmapFill source = "{VDOMImage.ShadowLineWhite}" smooth="true" fillMode="repeat"/>
+					<s:BitmapFill source="{VDOMImage.ShadowLineWhite}"
+								  smooth="true"
+								  fillMode="repeat"/>
 				</s:fill>
 			</s:Rect>
-			
+
 		</s:Group>
 	</s:VGroup>
-	
-	<mx:Image id="angle" bottom="7" right="7" width="8" height="8"
-			  source="{ VDOMImage.Cornertable }" mouseDown="angle_mouseDownHandler(event)" />
-	 
+
+	<mx:Image id="angle"
+			  bottom="7"
+			  right="7"
+			  width="8"
+			  height="8"
+			  source="{ VDOMImage.Cornertable }"
+			  mouseDown="angle_mouseDownHandler(event)"/>
+
 </s:SparkSkin>

@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.dataBase.view.components.Queue
 {
 	import flash.events.EventDispatcher;
-	
+
 	import net.vdombox.ide.modules.dataBase.events.QueueEvent;
 
 	public class QueueManager extends EventDispatcher
@@ -27,10 +27,7 @@ package net.vdombox.ide.modules.dataBase.view.components.Queue
 			return queue.length;
 		}
 
-		public function addRequest(
-			GUID : String, methodName : String,
-			methodParams : String = '', /* XML String */
-			functionOnSuccess : Function = null, functionOnFault : Function = null ) : void
+		public function addRequest( GUID : String, methodName : String, methodParams : String = '', /* XML String */ functionOnSuccess : Function = null, functionOnFault : Function = null ) : void
 		{
 
 			var request : Object = new Object;
@@ -44,10 +41,7 @@ package net.vdombox.ide.modules.dataBase.view.components.Queue
 			queue.push( request );
 		}
 
-		public function updateRequest(
-			GUID : String, methodName : String,
-			methodParams : String = '', /* XML String */
-			functionOnSuccess : Function = null, functionOnFault : Function = null ) : void
+		public function updateRequest( GUID : String, methodName : String, methodParams : String = '', /* XML String */ functionOnSuccess : Function = null, functionOnFault : Function = null ) : void
 		{
 
 			/* Search for record in Array */
@@ -123,9 +117,9 @@ package net.vdombox.ide.modules.dataBase.view.components.Queue
 			if ( currentRequestInQueue >= queue.length )
 			{
 				reset();
-				
+
 				dispatchEvent( new QueueEvent( QueueEvent.QUEUE_COMPLETE ) );
-				
+
 				inProgress = false;
 			}
 			else
@@ -146,10 +140,10 @@ package net.vdombox.ide.modules.dataBase.view.components.Queue
 		private function remoteMethodCallStandartMsgHandler( event : * ) : void
 		{
 			/*
-			There are may be 2 responses from server in this section: response that
-			everything is OK and standart error message (something wrong with remote
-			method parameters).
-			*/
+			   There are may be 2 responses from server in this section: response that
+			   everything is OK and standart error message (something wrong with remote
+			   method parameters).
+			 */
 
 			var xmlResult : XML;
 
@@ -197,9 +191,9 @@ package net.vdombox.ide.modules.dataBase.view.components.Queue
 		private function remoteMethodCallErrorMsgHandler( event : * ) : void
 		{
 			/*
-			This function handles responses displaying that method could not be executed
-			for some reason(s) (may be privilegies reason or method is absent?).
-			*/
+			   This function handles responses displaying that method could not be executed
+			   for some reason(s) (may be privilegies reason or method is absent?).
+			 */
 
 			var xmlResult : XML;
 

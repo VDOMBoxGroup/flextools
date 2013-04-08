@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.dataBase
 	import net.vdombox.ide.modules.dataBase.controller.messages.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.dataBase.controller.messages.ProcessTypesProxyMessageCommand;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 
@@ -49,7 +49,7 @@ package net.vdombox.ide.modules.dataBase
 		override protected function initializeController() : void
 		{
 			super.initializeController();
-			
+
 			registerCommand( Notifications.STARTUP, StartupCommand );
 
 			registerCommand( Notifications.CREATE_TOOLSET, CreateToolsetCommand );
@@ -68,14 +68,14 @@ package net.vdombox.ide.modules.dataBase
 			registerCommand( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 
 			registerCommand( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
-			
-			
+
+
 			registerCommand( Notifications.BODY_CREATED, BodyCreatedCommand );
 
 			registerCommand( Notifications.TEAR_DOWN, TearDownCommand );
 			registerCommand( Notifications.CHANGE_SELECTED_DATA_BASE_REQUEST, ChangeSelectedDataBaseRequestCommand );
 			registerCommand( Notifications.GET_RESOURCE_REQUEST, GetResourceRequestCommand );
-			
+
 		}
 	}
 }

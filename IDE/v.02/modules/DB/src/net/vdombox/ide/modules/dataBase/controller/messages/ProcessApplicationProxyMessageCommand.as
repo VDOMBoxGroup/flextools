@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 	import net.vdombox.ide.common.controller.names.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.modules.dataBase.model.StatesProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -26,10 +26,10 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 				{
 					if ( operation == PPMOperationNames.READ )
 						sendNotification( Notifications.DATA_BASES_GETTED, body.pages );
-					
+
 					break;
 				}
-					
+
 				case PPMApplicationTargetNames.PAGE:
 				{
 					if ( operation == PPMOperationNames.CREATE )
@@ -43,20 +43,20 @@ package net.vdombox.ide.modules.dataBase.controller.messages
 						statesProxy.selectedPage = null;
 						sendNotification( Notifications.PAGE_DELETED, body.pageVO );
 					}
-					
+
 					break;
 				}
-					
+
 				case PPMApplicationTargetNames.REMOTE_CALL:
 				{
 					if ( operation == PPMOperationNames.READ )
 					{
-						if ( body.hasOwnProperty("result") )
+						if ( body.hasOwnProperty( "result" ) )
 							sendNotification( Notifications.REMOTE_CALL_RESPONSE, body );
 						else
 							sendNotification( Notifications.REMOTE_CALL_RESPONSE_ERROR, body );
 					}
-					
+
 					break;
 				}
 			}
