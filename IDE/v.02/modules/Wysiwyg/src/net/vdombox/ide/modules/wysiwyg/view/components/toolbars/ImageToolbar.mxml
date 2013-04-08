@@ -8,7 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.utils.StringUtil;
-			
+
 			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ToolbarEvent;
@@ -55,13 +55,13 @@
 
 			public function refresh( item : IRenderer ) : void
 			{
-				
+
 			}
-			
+
 			public function close() : void
 			{
 			}
-			
+
 			public function saveValue() : String
 			{
 				return "";
@@ -91,7 +91,7 @@
 					attributesObject[ attributeName ] = null;
 				}
 
-				var content : XML = <content>{ item.renderVO.content }</content>;
+				var content : XML = <content>{item.renderVO.content}</content>;
 
 				var editableAttribute : XML = content..*.@editable[ 0 ];
 
@@ -115,12 +115,12 @@
 				return attributesObject;
 			}
 
-//
-//			public function get selfChanged() : Boolean
-//			{
-//
-//				return _selfChanged;
-//			}
+			//
+			//			public function get selfChanged() : Boolean
+			//			{
+			//
+			//				return _selfChanged;
+			//			}
 
 			private function rollback() : void
 			{
@@ -131,41 +131,25 @@
 			private function rotate( value : int ) : void
 			{
 
-				applyChanges( 'rotate',
-					<Attributes>
-						<Attribute Name="method">{value}</Attribute>
-					</Attributes>
-					);
+				applyChanges( 'rotate', <Attributes><Attribute Name="method">{value}</Attribute></Attributes> );
 			}
 
 			private function brightness( value : Number ) : void
 			{
 
-				applyChanges( 'brightness',
-					<Attributes>
-						<Attribute Name="factor">{value}</Attribute>
-					</Attributes>
-					);
+				applyChanges( 'brightness', <Attributes><Attribute Name="factor">{value}</Attribute></Attributes> );
 			}
 
 			private function contrast( value : Number ) : void
 			{
 
-				applyChanges( 'contrast',
-					<Attributes>
-						<Attribute Name="factor">{value}</Attribute>
-					</Attributes>
-					);
+				applyChanges( 'contrast', <Attributes><Attribute Name="factor">{value}</Attribute></Attributes> );
 			}
 
 			private function flip( value : int ) : void
 			{
 
-				applyChanges( 'flip',
-					<Attributes>
-						<Attribute Name="method">{value}</Attribute>
-					</Attributes>
-					);
+				applyChanges( 'flip', <Attributes><Attribute Name="method">{value}</Attribute></Attributes> );
 			}
 
 			private function greyscale() : void
@@ -178,61 +162,90 @@
 			{
 				dispatchEvent( new ToolbarEvent( ToolbarEvent.IMAGE_CHANGED, { operation: operation, attributes: attributes } ) );
 
-//				item.waitMode = true;
-//				dataManager.addEventListener( DataManagerEvent.MODIFY_RESOURCE_COMPLETE, resourceModifedHandler );
-//				dataManager.modifyResource( resourceId, operation, attributeName, attributes );
+				//				item.waitMode = true;
+				//				dataManager.addEventListener( DataManagerEvent.MODIFY_RESOURCE_COMPLETE, resourceModifedHandler );
+				//				dataManager.modifyResource( resourceId, operation, attributeName, attributes );
 			}
-			
+
 			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
 			{
-				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO(_item.vdomObjectVO);
+				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO( _item.vdomObjectVO );
 				var attributeVO : AttributeVO = new AttributeVO( "valie" );
-				
-//				attributeVO.value = tinyMCE.getContent();
-//				vdomObjectAttributesVO.attributes = [attributeVO];
-				
+
+				//				attributeVO.value = tinyMCE.getContent();
+				//				vdomObjectAttributesVO.attributes = [attributeVO];
+
 				return vdomObjectAttributesVO;
 			}
 
-//			private function resourceModifedHandler( event : DataManagerEvent ) : void
-//			{
-//
-//				var resId : String = event.result.Object.Attributes.Attribute.( @Name == "value" )[ 0 ];
-//
-//				var resRegExp : RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
-//
-//				resourceId = resId.match( resRegExp )[ 1 ]
-//			}
+			//			private function resourceModifedHandler( event : DataManagerEvent ) : void
+			//			{
+			//
+			//				var resId : String = event.result.Object.Attributes.Attribute.( @Name == "value" )[ 0 ];
+			//
+			//				var resRegExp : RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
+			//
+			//				resourceId = resId.match( resRegExp )[ 1 ]
+			//			}
 		]]>
 	</fx:Script>
 
-	<mx:Button height="20" icon="@Embed(source='../assets/toolbars/imageToolbar/reset_size.png')" width="20"
+	<mx:Button height="20"
+			   icon="@Embed(source='../assets/toolbars/imageToolbar/reset_size.png')"
+			   width="20"
 			   click="rollback()"/>
 
-	<mx:Button height="20" icon="@Embed(source='../assets/toolbars/imageToolbar/rotate_left.png')" styleName="toolbarButton" width="20"
+	<mx:Button height="20"
+			   icon="@Embed(source='../assets/toolbars/imageToolbar/rotate_left.png')"
+			   styleName="toolbarButton"
+			   width="20"
 			   click="rotate(0)"/>
 
-	<mx:Button height="20" icon="@Embed(source='../assets/toolbars/imageToolbar/rotate_right.png')" styleName="toolbarButton" width="20"
+	<mx:Button height="20"
+			   icon="@Embed(source='../assets/toolbars/imageToolbar/rotate_right.png')"
+			   styleName="toolbarButton"
+			   width="20"
 			   click="rotate(1)"/>
 
-	<mx:Button height="20" icon="@Embed(source='../assets/toolbars/imageToolbar/flip_vertical.png')" styleName="toolbarButton" width="20"
+	<mx:Button height="20"
+			   icon="@Embed(source='../assets/toolbars/imageToolbar/flip_vertical.png')"
+			   styleName="toolbarButton"
+			   width="20"
 			   click="flip(0)"/>
 
-	<mx:Button height="20" icon="@Embed(source='../assets/toolbars/imageToolbar/flip_horizontal.png')" styleName="toolbarButton" width="20"
+	<mx:Button height="20"
+			   icon="@Embed(source='../assets/toolbars/imageToolbar/flip_horizontal.png')"
+			   styleName="toolbarButton"
+			   width="20"
 			   click="flip(1)"/>
 
-	<mx:Button height="20" icon="@Embed(source='../assets/toolbars/imageToolbar/contrast_up.png')" styleName="toolbarButton" width="20"
+	<mx:Button height="20"
+			   icon="@Embed(source='../assets/toolbars/imageToolbar/contrast_up.png')"
+			   styleName="toolbarButton"
+			   width="20"
 			   click="contrast(.1)"/>
 
-	<mx:Button height="20" icon="@Embed(source='../assets/toolbars/imageToolbar/contrast_down.png')" styleName="toolbarButton" width="20"
+	<mx:Button height="20"
+			   icon="@Embed(source='../assets/toolbars/imageToolbar/contrast_down.png')"
+			   styleName="toolbarButton"
+			   width="20"
 			   click="contrast(-.1)"/>
 
-	<mx:Button height="20" icon="@Embed(source='../assets/toolbars/imageToolbar/brightness_up.png')" styleName="toolbarButton" width="20"
+	<mx:Button height="20"
+			   icon="@Embed(source='../assets/toolbars/imageToolbar/brightness_up.png')"
+			   styleName="toolbarButton"
+			   width="20"
 			   click="brightness(.1)"/>
 
-	<mx:Button height="20" icon="@Embed(source='../assets/toolbars/imageToolbar/brightness_down.png')" styleName="toolbarButton" width="20"
+	<mx:Button height="20"
+			   icon="@Embed(source='../assets/toolbars/imageToolbar/brightness_down.png')"
+			   styleName="toolbarButton"
+			   width="20"
 			   click="brightness(-.1)"/>
 
-	<mx:Button height="20" icon="@Embed(source='../assets/toolbars/imageToolbar/grayscale.png')" styleName="toolbarButton" width="20"
+	<mx:Button height="20"
+			   icon="@Embed(source='../assets/toolbars/imageToolbar/grayscale.png')"
+			   styleName="toolbarButton"
+			   width="20"
 			   click="greyscale()"/>
 </s:HGroup>

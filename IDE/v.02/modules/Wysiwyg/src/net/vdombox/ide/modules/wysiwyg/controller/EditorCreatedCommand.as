@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.VdomObjectEditorMediator;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -11,8 +11,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var editor : IEditor = notification.getBody() as IEditor;
-			
-			if( editor )
+
+			if ( editor )
 				facade.registerMediator( new VdomObjectEditorMediator( editor ) );
 		}
 	}

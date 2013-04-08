@@ -5,13 +5,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.collections.Sort;
 	import mx.collections.SortField;
 	import mx.containers.Accordion;
-	
+
 	import spark.components.NavigatorContent;
 
 	public class TypesAccordion extends Accordion
 	{
-		private const STANDART_CATEGORIES : Array = [ "usual", "standard", "form", "table", "database",
-													  "debug" ];
+		private const STANDART_CATEGORIES : Array = [ "usual", "standard", "form", "table", "database", "debug" ];
 
 		private const USUAL_ELEMENTS : Array = [ "button", "copy", "image", "richtext" ];
 
@@ -147,9 +146,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				aviableContainers = typeDescription.Information.Containers;
 
-				typesArrayCollection.addItem( { categoryName: categoryName, categoryNameLocalized: categoryNameLocalized,
-												  typeName: typeName, typeNameLocalized: typeNameLocalized,
-												  typeId: typeId, resourceId: resourceId, aviableContainers: aviableContainers } );
+				typesArrayCollection.addItem( { categoryName: categoryName, categoryNameLocalized: categoryNameLocalized, typeName: typeName, typeNameLocalized: typeNameLocalized, typeId: typeId, resourceId: resourceId, aviableContainers: aviableContainers } );
 			}
 
 			typesArrayCollection.sort = new Sort();

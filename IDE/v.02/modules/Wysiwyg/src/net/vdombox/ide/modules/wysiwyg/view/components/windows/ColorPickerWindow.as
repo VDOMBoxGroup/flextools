@@ -10,19 +10,19 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
-	
+
 	import mx.controls.SWFLoader;
 	import mx.core.UIComponent;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
-	
+
 	import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ColorHSB;
 	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ColorPickerCanvas;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ColorPickerWindowSkin;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import spark.components.NumericStepper;
 	import spark.components.RadioButton;
 	import spark.components.TextInput;
@@ -64,7 +64,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[Embed( source = 'assets/colorPicker/assets.swf', symbol = 'MarkerRight' )]
 		public var cc_r_marker : Class;
 
-		
+
 		[SkinPart( required = "true" )]
 		public var rb_r : RadioButton;
 
@@ -98,12 +98,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[SkinPart( required = "true" )]
 		public var ccrm : SWFLoader;
 
-		/*[SkinPart( required="true" )]
-		public var osi_view:SWFLoader;*/
-		
+		/*
+		   [SkinPart( required="true" )]
+		   public var osi_view:SWFLoader;
+		 */
+
 		[SkinPart( required = "true" )]
 		public var HSBGroup : VGroup;
-		
+
 		[SkinPart( required = "true" )]
 		public var RGBGroup : VGroup;
 
@@ -130,27 +132,27 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 		private static var wnd : ColorPickerWindow = null;
 
-		private var position : Object              = { x: 0, y: 0, p: 0 };
+		private var position : Object = { x: 0, y: 0, p: 0 };
 
 		public function ColorPickerWindow()
 		{
 			super();
-			
+
 			systemChrome = NativeWindowSystemChrome.NONE;
 			transparent = true;
-			
+
 			width = 460;
 			height = 380;
-			
+
 			minWidth = 460;
 			minHeight = 380;
-			
+
 			this.setFocus();
-			
+
 			addEventListener( Event.CLOSE, closeHandler, false, 0, true );
-			
+
 			on_initialize();
-			
+
 			addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
 		}
 
@@ -158,7 +160,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		{
 			var i : uint = 0; //uint(App.get_so_prop("color_picker_window_mode", ""));	
 
-			mode = 1;//( i >> 8 ) & 1;
+			mode = 1; //( i >> 8 ) & 1;
 
 			var sel : uint = i & 0xFF;
 
@@ -176,14 +178,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			super.stylesInitialized();
 			this.setStyle( "skinClass", ColorPickerWindowSkin );
 		}
-		
-		
+
+
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			start_init();
 		}
-		
+
 
 		public function start_init() : void
 		{
@@ -262,7 +264,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			return ( ( r & 0xFF ) << 16 ) | ( ( g & 0xFF ) << 8 ) | ( b & 0xFF );
 		}
 
-		private var ba : ByteArray                 = new ByteArray();
+		private var ba : ByteArray = new ByteArray();
 
 		private function change_rcx2_rgb( color : uint, n : uint ) : void
 		{
@@ -272,7 +274,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			var dy : uint = 0;
 			var clr : uint;
 
-			
+
 			if ( n == 0 )
 			{
 				clr = color & 0xFF0000 | 0x00FF00;
@@ -314,9 +316,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			if ( n > 3 )
 				return;
 
-			var r : uint  = ( color >> 16 ) & 0xFF;
-			var g : uint  = ( color >> 8 ) & 0xFF;
-			var b : uint  = color & 0xFF;
+			var r : uint = ( color >> 16 ) & 0xFF;
+			var g : uint = ( color >> 8 ) & 0xFF;
+			var b : uint = color & 0xFF;
 
 			var a : Array = [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0 ];
 
@@ -413,7 +415,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			if ( n > 3 )
 				return;
 			var o : ColorHSB = new ColorHSB( hsb.h, hsb.s, hsb.b );
-			var dc : Object  = { h: 360, s: 100, b: 100 };
+			var dc : Object = { h: 360, s: 100, b: 100 };
 			var cx : String, cy : String;
 
 			if ( n == 0 )
@@ -489,7 +491,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			if ( n > 3 )
 				return;
 			var dy : uint = 0x010101;
-			var c : uint  = 0;
+			var c : uint = 0;
 
 			for ( var y : int = 255; y >= 0; y--, c += dy )
 			{
@@ -506,9 +508,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			if ( n > 3 )
 				return;
 
-			var r : uint  = ( color >> 16 ) & 0xFF;
-			var g : uint  = ( color >> 8 ) & 0xFF;
-			var b : uint  = color & 0xFF;
+			var r : uint = ( color >> 16 ) & 0xFF;
+			var g : uint = ( color >> 8 ) & 0xFF;
+			var b : uint = color & 0xFF;
 
 			var a : Array = [ 0, 0, 0, 0, r, 0, 0, 0, 0, g, 0, 0, 0, 0, b, 0, 0, 0, 1, 0 ];
 
@@ -539,9 +541,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		{
 			if ( n > 3 )
 				return;
-			var d : uint     = 0;
+			var d : uint = 0;
 			var o : ColorHSB = new ColorHSB( hsb.h, hsb.s, hsb.b );
-			var m : String   = "";
+			var m : String = "";
 
 			if ( n == 0 )
 			{
@@ -578,8 +580,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 		private function set_cc_marker() : void
 		{
-			var x : uint ;
-			var y : uint ;
+			var x : uint;
+			var y : uint;
 
 			x = position.x;
 			y = position.y;
@@ -596,32 +598,32 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 
 		[Bindable]
-		public var _color : uint                   = 0;
-		
+		public var _color : uint = 0;
+
 		[Bindable]
 		public var colorValue : String;
 
 		[Bindable]
-		public var hsb : ColorHSB                  = new ColorHSB();
+		public var hsb : ColorHSB = new ColorHSB();
 
 		//[Bindable]
 		//private var ob_hsb:Object = hsb.to_object();
 
 
 		[Bindable]
-		private var mode : uint                    = 0;
+		private var mode : uint = 0;
 
 		[Bindable]
-		public var old_color : uint                = 0;
-		
+		public var old_color : uint = 0;
+
 		[Bindable]
 		public var oldColorValue : String;
 
 		[Bindable]
-		private var sel_rgb : uint                 = 0;
+		private var sel_rgb : uint = 0;
 
 		[Bindable]
-		private var sel_hsb : uint                 = 0;
+		private var sel_hsb : uint = 0;
 
 		private function set color( c : uint ) : void
 		{
@@ -654,7 +656,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 			//hexrgb.text = colorValue = d;
 			color = uint( d == '' ? 0 : '0x' + d );
-			
+
 			hsb = ColorHSB.rgb_to_hsb( color );
 
 			update_position();
@@ -688,7 +690,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			position = rgb_to_position( color, sel_rgb );
 			update_hex_rgb();
 			redraw_bars();
-			
+
 			HSBGroup.alpha = 0.25;
 			RGBGroup.alpha = 1;
 		}
@@ -720,7 +722,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			position = hsb_to_position( hsb, sel_hsb );
 			update_hex_rgb();
 			redraw_bars();
-			
+
 			HSBGroup.alpha = 1;
 			RGBGroup.alpha = 0.25;
 		}
@@ -729,9 +731,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function on_tx_rgb_change() : void
 		{
 			color = ( ( tx_r.value & 0xFF ) << 16 ) + ( ( tx_g.value & 0xFF ) << 8 ) + ( tx_b.value & 0xFF )
-			
+
 			hsb = ColorHSB.rgb_to_hsb( color );
-			
+
 			update_hex_rgb();
 			update_position();
 			redraw_bars();
@@ -740,9 +742,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function on_tx_hsb_change() : void
 		{
 			hsb = new ColorHSB( tx_H.value, tx_S.value, tx_B.value );
-			
+
 			color = ColorHSB.hsb_to_rgb( hsb );
-			
+
 			update_hex_rgb();
 			update_position();
 			redraw_bars();
@@ -777,13 +779,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		{
 			color = old_color;
 			colorValue = oldColorValue;
-			
+
 			start_init();
 		}
 
-		private var f_apply_flag : Boolean         = false;
+		private var f_apply_flag : Boolean = false;
 
-		
+
 		public function ok_close_window() : void
 		{
 			f_apply_flag = true;
@@ -816,11 +818,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			if ( _color != old_color )
 			{
 				_color = old_color;
-				
+
 				colorValue = oldColorValue;
 			}
 
-			
+
 			dispatchEvent( new ColorPickerEvent( "cancel", _color, hexrgb.text ) );
 		}
 
@@ -875,11 +877,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			}
 		}
 
-		private var m_timer_count_init : int       = 20;
+		private var m_timer_count_init : int = 20;
 
-		private var m_timer_count : int            = m_timer_count_init;
+		private var m_timer_count : int = m_timer_count_init;
 
-		private var m_timer : Timer                = null;
+		private var m_timer : Timer = null;
 
 		private function on_timer_redraw( fn : Function ) : void
 		{
@@ -1020,14 +1022,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 			return s;
 		}
-		
-		public function closeHandler(event:Event) : void
+
+		public function closeHandler( event : Event ) : void
 		{
 			removeEventListener( Event.CLOSE, closeHandler );
-			
+
 			with_last_preved();
-			
-			WindowManager.getInstance().removeWindow(this);
+
+			WindowManager.getInstance().removeWindow( this );
 		}
 	}
 }

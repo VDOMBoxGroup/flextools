@@ -5,15 +5,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components.panels
 
 	public class PanelBase extends Panel
 	{
-		[SkinPart( required="true" )]
+
+		[SkinPart( required = "true" )]
 		public var tbFill : Rect;
-		
+
 		public function PanelBase()
 		{
 			super();
 		}
 
-		public function set titleHeight(value:int):void
+		public function set titleHeight( value : int ) : void
 		{
 			tbFill.height = value;
 		}

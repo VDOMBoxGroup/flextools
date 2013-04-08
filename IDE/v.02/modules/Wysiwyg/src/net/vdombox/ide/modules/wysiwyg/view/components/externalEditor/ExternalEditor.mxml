@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
-		 
-		 height="20" width="100%"
-		 borderColor="#FFFFFF" borderStyle="solid" horizontalAlign="right" verticalAlign="middle">
+		 height="20"
+		 width="100%"
+		 borderColor="#FFFFFF"
+		 borderStyle="solid"
+		 horizontalAlign="right"
+		 verticalAlign="middle">
 
 	<mx:Script>
 		<![CDATA[
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 
 			private var _value : String;
+
 			private var _resourceID : String;
 
 			public function get resourceID() : String
@@ -41,9 +45,14 @@
 	</mx:Script>
 
 	<mx:Label id="lbl"
-			  text="External" textAlign="left" />
+			  text="External"
+			  textAlign="left"/>
 
-	<mx:Button height="19" label="..." width="22"
-			   cornerRadius="0" paddingLeft="2" paddingRight="2"
-			   click="dispatchEvent( new AttributeEvent( AttributeEvent.OPEN_EXTERNAL ) )" />
+	<mx:Button height="19"
+			   label="..."
+			   width="22"
+			   cornerRadius="0"
+			   paddingLeft="2"
+			   paddingRight="2"
+			   click="dispatchEvent( new AttributeEvent( AttributeEvent.OPEN_EXTERNAL ) )"/>
 </mx:HBox>

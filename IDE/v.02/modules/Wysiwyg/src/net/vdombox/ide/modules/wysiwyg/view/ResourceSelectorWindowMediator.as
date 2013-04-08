@@ -20,14 +20,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
-	
+
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
@@ -42,7 +42,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -58,7 +58,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 * @default
 		 */
 
-		public static const NAME : String               = "ResourceSelectorWindowMediator";
+		public static const NAME : String = "ResourceSelectorWindowMediator";
 
 		/**
 		 *
@@ -70,17 +70,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 			super( NAME, viewComponent );
 		}
 
-		private var _filters : ArrayCollection          = new ArrayCollection();
+		private var _filters : ArrayCollection = new ArrayCollection();
 
 		private var allResourcesList : ArrayList;
 
 		private var delResVO : ResourceVO;
 
-		private var noneIcon : ResourceVO               = new ResourceVO( ResourceVO.RESOURCE_NONE );
+		private var noneIcon : ResourceVO = new ResourceVO( ResourceVO.RESOURCE_NONE );
 
 		private var resourcePreviewWindow : ResourcePreviewWindow;
 
-		private var resourceVO : ResourceVO             = new ResourceVO( ResourceVO.RESOURCE_TEMP );
+		private var resourceVO : ResourceVO = new ResourceVO( ResourceVO.RESOURCE_TEMP );
 
 		private var showSpinnerOnListCreation : Boolean = true;
 
@@ -97,7 +97,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case Notifications.RESOURCES_GETTED:
 				{
-					resourceSelectorWindow.callLater(updateData, [body]);
+					resourceSelectorWindow.callLater( updateData, [ body ] );
 
 					break;
 				}
@@ -105,7 +105,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case Notifications.RESOURCE_SETTED:
 				{
 					var resVO : ResourceVO = body as ResourceVO;
-					
+
 					if ( resVO.status == ResourceVO.LOAD_ERROR )
 					{
 						removeSpinnerPopup();
@@ -114,7 +114,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					{
 						addNewResourceInList( resVO );
 					}
-			
+
 					break;
 				}
 			}
@@ -181,7 +181,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		 *
 		 * @param event
 		 */
-		public function onResourceWindowCreationComplete(event : Event) : void
+		public function onResourceWindowCreationComplete( event : Event ) : void
 		{
 			resourceSelectorWindow.removeEventListener( ResourceVOEvent.CREATION_COMPLETE, onResourceWindowCreationComplete );
 
@@ -194,14 +194,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_create_resources' );
 
-			createSpinnerPopup(spinnerTxt);
+			createSpinnerPopup( spinnerTxt );
 		}
 
 		/**
 		 *
 		 * @param event
 		 */
-		public function onResourceWindowListItemCreationComplete(event : Event) : void
+		public function onResourceWindowListItemCreationComplete( event : Event ) : void
 		{
 			resourceSelectorWindow.removeEventListener( ResourceVOEvent.LIST_ITEM_CREATION_COMPLETE, onResourceWindowListItemCreationComplete, true );
 			showSpinnerOnListCreation = false;
@@ -234,9 +234,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			//trace("Res: addHandlers()");
 			resourceSelectorWindow.addEventListener( FlexEvent.CREATION_COMPLETE, addHandlersForResourcesList );
 			resourceSelectorWindow.addEventListener( Event.CLOSE, closeHandler );
-//			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
+			//			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.APPLY, applyHandler );
 			resourceSelectorWindow.addEventListener( ResourceVOEvent.LOAD_RESOURCE, loadFileHandler );
-//			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true );
+			//			resourceSelectorWindow.addEventListener( ResourceSelectorWindowEvent.GET_RESOURCE,  loadResourceHandler, true );
 			resourceSelectorWindow.addEventListener( ResourceVOEvent.GET_RESOURCES, getResourcesRequestHandler );
 			resourceSelectorWindow.addEventListener( ResourceVOEvent.PREVIEW_RESOURCE, onResourcePreview );
 
@@ -251,16 +251,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			resourceSelectorWindow.nameFilter.addEventListener( Event.CHANGE, applyNameFilter );
 			resourceSelectorWindow.resourcesList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler, true, 0, true );
-			resourceSelectorWindow.resourcesList.addEventListener( ResourceVOEvent.GET_ICON, getIconRequestHendler, true, 0,true);
+			resourceSelectorWindow.resourcesList.addEventListener( ResourceVOEvent.GET_ICON, getIconRequestHendler, true, 0, true );
 		}
 
 		private function addNewResourceInList( resVO : ResourceVO ) : void
 		{
 			resourceVO = resVO;
 
-			addFilter( resourceVO.type);
+			addFilter( resourceVO.type );
 
-			resourceSelectorWindow.addResource(  resourceVO );
+			resourceSelectorWindow.addResource( resourceVO );
 
 			removeSpinnerPopup();
 		}
@@ -268,7 +268,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function applyNameFilter( event : Event ) : void
 		{
-			var nameFilter : String          = resourceSelectorWindow.nameFilter.text.toLowerCase();
+			var nameFilter : String = resourceSelectorWindow.nameFilter.text.toLowerCase();
 			var newResourcesList : ArrayList = new ArrayList();
 			var resVO : ResourceVO;
 
@@ -305,19 +305,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 			facade.removeMediator( mediatorName );
 		}
 
-		private function createSpinnerPopup(spinnerTxt : String) : void
+		private function createSpinnerPopup( spinnerTxt : String ) : void
 		{
 			if ( spinnerPopup )
 				return;
 
-			spinnerPopup = new SpinnerPopup(spinnerTxt);
+			spinnerPopup = new SpinnerPopup( spinnerTxt );
 			spinnerPopup.width = resourceSelectorWindow.width;
 			spinnerPopup.height = resourceSelectorWindow.height;
 
-			PopUpManager.addPopUp(spinnerPopup, DisplayObject(resourceSelectorWindow), true);
+			PopUpManager.addPopUp( spinnerPopup, DisplayObject( resourceSelectorWindow ), true );
 		}
 
-		private function deleteResourceCloseHandler(event : PopUpWindowEvent) : void
+		private function deleteResourceCloseHandler( event : PopUpWindowEvent ) : void
 		{
 			if ( event.detail == Alert.YES )
 			{
@@ -345,10 +345,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			Alert.setPatametrs( "Delete", "Cancel", VDOMImage.Delete );
 
-			Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Resource' ),
-						ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + "\n" + componentName + " ?", 
-						AlertButton.OK_No, 
-						resourceSelectorWindow, deleteResourceCloseHandler);
+			Alert.Show( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Resource' ), ResourceManager.getInstance().getString( 'Wysiwyg_General', 'delete_Renderer' ) + "\n" + componentName + " ?", AlertButton.OK_No, resourceSelectorWindow, deleteResourceCloseHandler );
 		}
 
 		private function deleteResourceInArray( idRes : String ) : void
@@ -365,7 +362,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 		}
 
-		private function getIconRequestHendler( event: ResourceVOEvent) : void
+		private function getIconRequestHendler( event : ResourceVOEvent ) : void
 		{
 			var listItem : ListItem = event.target.parent as ListItem;
 
@@ -376,19 +373,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var maxPisels : Number = 16777215;
 
-			var width : Number     = loaderInfo.width;
-			var height : Number    = loaderInfo.height;
+			var width : Number = loaderInfo.width;
+			var height : Number = loaderInfo.height;
 
 			if ( width * height > maxPisels )
 			{
-				var proportioWidth : Number  = 1 / height;
+				var proportioWidth : Number = 1 / height;
 				var proportioHeight : Number = 1 / width;
 
 				width = maxPisels * proportioWidth;
 				height = maxPisels * proportioHeight;
 			}
 
-			return new Rectangle(0, 0, width, height);
+			return new Rectangle( 0, 0, width, height );
 		}
 
 		private function getResourcesRequestHandler( event : Event ) : void
@@ -408,36 +405,36 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var openFile : File = new File();
 
-			openFile.addEventListener(Event.SELECT, fileSelected);
+			openFile.addEventListener( Event.SELECT, fileSelected );
 
 			var allFilesFilter : FileFilter = new FileFilter( "All Files (*.*)", "*.*" );
-			var imagesFilter : FileFilter   = new FileFilter( 'Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png' );
-			var docFilter : FileFilter      = new FileFilter( 'Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt' );
+			var imagesFilter : FileFilter = new FileFilter( 'Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png' );
+			var docFilter : FileFilter = new FileFilter( 'Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt' );
 
 			openFile.browseForOpen( "Choose file to upload", [ allFilesFilter, imagesFilter, docFilter ] );
 
-			function fileSelected( event:Event ) : void
+			function fileSelected( event : Event ) : void
 			{
 				var spinnerTxt : String = ResourceManager.getInstance().getString( 'Wysiwyg_General', 'spinner_new_resource' );
-				createSpinnerPopup(spinnerTxt);
-				
-				openFile.removeEventListener(Event.SELECT, fileSelected);
+				createSpinnerPopup( spinnerTxt );
 
-				openFile.addEventListener(Event.COMPLETE, fileDownloaded);
+				openFile.removeEventListener( Event.SELECT, fileSelected );
+
+				openFile.addEventListener( Event.COMPLETE, fileDownloaded );
 				openFile.load();
 
 			}
 
-			function fileDownloaded(event:Event) : void
+			function fileDownloaded( event : Event ) : void
 			{
 				// compress and encode to base64 in Server
-				openFile.removeEventListener(Event.COMPLETE, fileDownloaded);
+				openFile.removeEventListener( Event.COMPLETE, fileDownloaded );
 
 				var resourceVO : ResourceVO = new ResourceVO( statesProxy.selectedApplication.id );
 				resourceVO.setID( openFile.name ); //?
-				resourceVO.setData( openFile.data);
+				resourceVO.setData( openFile.data );
 				resourceVO.name = openFile.name;
-				resourceVO.type = openFile.type ? openFile.type.slice(1) : "";  // type has "."
+				resourceVO.type = openFile.type ? openFile.type.slice( 1 ) : ""; // type has "."
 
 				sendNotification( Notifications.SET_RESOURCE, resourceVO );
 			}
@@ -470,15 +467,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 				bitmapData = new BitmapData( rectangle.width, rectangle.height, false, 0xFFFFFF );
 				bitmapData.draw( loaderInfo.loader );
 
-				bitmap = new Bitmap(bitmapData, PixelSnapping.AUTO, true);
+				bitmap = new Bitmap( bitmapData, PixelSnapping.AUTO, true );
 				bitmap.cacheAsBitmap = true;
 
 
 				if ( resourcePreviewWindow )
 				{
 					// размер height пространства меньше height картинки
-					if ( resourcePreviewWindow.resourceImage.height < bitmap.height
-						|| resourcePreviewWindow.resourceImage.width < bitmap.width )
+					if ( resourcePreviewWindow.resourceImage.height < bitmap.height || resourcePreviewWindow.resourceImage.width < bitmap.width )
 					{
 						resourcePreviewWindow.resourceImage.maintainAspectRatio = true;
 						resourcePreviewWindow.resourceImage.scaleContent = true;
@@ -487,7 +483,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					resourcePreviewWindow.resourceImage.source = bitmap;
 
-					resourcePreviewWindow.setDimentions(loaderInfo.width, loaderInfo.height, resourceVO.mastHasPreview);
+					resourcePreviewWindow.setDimentions( loaderInfo.width, loaderInfo.height, resourceVO.mastHasPreview );
 					resourcePreviewWindow.loadingImage.visible = false;
 				}
 
@@ -509,7 +505,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceVO = resVO;
 
 			if ( resourcePreviewWindow != null )
-				onClosePreview(null);
+				onClosePreview( null );
 
 			resourcePreviewWindow = new ResourcePreviewWindow();
 			resourcePreviewWindow.addEventListener( Event.CLOSE, onClosePreview );
@@ -517,7 +513,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			WindowManager.getInstance().addWindow( resourcePreviewWindow, null, true );
 
-			BindingUtils.bindSetter( previewImage, resourceVO, "data", false, true  );
+			BindingUtils.bindSetter( previewImage, resourceVO, "data", false, true );
 
 			sendNotification( Notifications.LOAD_RESOURCE, resourceVO );
 		}
@@ -552,7 +548,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			resourceSelectorWindow.removeEventListener( ResourceVOEvent.LOAD_RESOURCE, loadFileHandler ); //коряво очень поменять местами
 			resourceSelectorWindow.removeEventListener( ResourceVOEvent.GET_RESOURCES, getResourcesRequestHandler );
 
-			resourceSelectorWindow.removeEventListener(ResourceVOEvent.PREVIEW_RESOURCE, onResourcePreview);
+			resourceSelectorWindow.removeEventListener( ResourceVOEvent.PREVIEW_RESOURCE, onResourcePreview );
 
 			resourceSelectorWindow.nameFilter.removeEventListener( Event.CHANGE, applyNameFilter );
 			resourceSelectorWindow.resourcesList.removeEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler );
@@ -577,7 +573,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 
 
-		private function updateData(resources: Array) : void
+		private function updateData( resources : Array ) : void
 		{
 			_filters.removeAll();
 			_filters.addItem( { label: 'NONE', data: '*' } );
@@ -587,7 +583,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			for each ( var resVO : ResourceVO in resources )
 			{
-				addFilter(resVO.type);
+				addFilter( resVO.type );
 			}
 
 			// set empty resource as null in ListItem

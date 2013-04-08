@@ -1,11 +1,11 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.Event;
-	
+
 	import mx.collections.ArrayCollection;
 	import mx.collections.IList;
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
@@ -20,11 +20,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectAttributesPanel;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.RichEditableText;
 
 	public class ObjectAttributesPanelMediator extends Mediator implements IMediator
@@ -37,12 +37,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		private var statesProxy : StatesProxy;
-		
+
 		private var renderProxy : RenderProxy;
 
 		private var isActive : Boolean;
-		
+
 		private var savedAttributesVO : VdomObjectAttributesVO;
+
 		private var isMultiSelect : Boolean = false;
 
 		public function get objectAttributesPanel() : ObjectAttributesPanel
@@ -53,7 +54,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
-			
+
 			renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 
 			isActive = false;
@@ -80,10 +81,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( Notifications.PAGE_ATTRIBUTES_GETTED );
 			interests.push( Notifications.OBJECT_ATTRIBUTES_GETTED );
-			
+
 			interests.push( Notifications.PAGE_NAME_SETTED );
 			interests.push( Notifications.OBJECT_NAME_SETTED );
-			
+
 			interests.push( ApplicationFacade.SET_NULL );
 			interests.push( ApplicationFacade.LOCKED_NULL );
 			interests.push( ApplicationFacade.UNLOCKED_NULL );
@@ -100,7 +101,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				return;
 
 			var vdomObjectAttributesVO : VdomObjectAttributesVO;
-			
+
 			var attributesRenderer : IList = new ArrayCollection();
 			var attributeBase : Object;
 
@@ -146,7 +147,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case StatesProxy.SELECTED_PAGE_CHANGED:
 				{
 					isMultiSelect = false;
-					if ( statesProxy.selectedPage  )
+					if ( statesProxy.selectedPage )
 						sendNotification( Notifications.GET_PAGE_ATTRIBUTES, statesProxy.selectedPage );
 					else
 						clearData();
@@ -158,14 +159,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					if ( isMultiSelect )
 						return;
-					
+
 					if ( statesProxy.selectedObject )
 						break;
-					
+
 					vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
-					if ( statesProxy.selectedPage && vdomObjectAttributesVO &&
-						statesProxy.selectedPage.id == vdomObjectAttributesVO.vdomObjectVO.id )
+					if ( statesProxy.selectedPage && vdomObjectAttributesVO && statesProxy.selectedPage.id == vdomObjectAttributesVO.vdomObjectVO.id )
 					{
 						objectAttributesPanel.attributesVO = vdomObjectAttributesVO;
 					}
@@ -177,49 +177,48 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					if ( isMultiSelect )
 						return;
-					
+
 					vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
-					if ( statesProxy.selectedObject && vdomObjectAttributesVO &&
-						statesProxy.selectedObject.id == vdomObjectAttributesVO.vdomObjectVO.id )
+					if ( statesProxy.selectedObject && vdomObjectAttributesVO && statesProxy.selectedObject.id == vdomObjectAttributesVO.vdomObjectVO.id )
 					{
 						objectAttributesPanel.attributesVO = vdomObjectAttributesVO;
 					}
 
 					break;
 				}
-					
+
 				case Notifications.PAGE_NAME_SETTED:
 				{
 					objectAttributesPanel.attributesVO = objectAttributesPanel.attributesVO;
 					break;
 				}
-					
+
 				case Notifications.OBJECT_NAME_SETTED:
 				{
 					objectAttributesPanel.attributesVO = objectAttributesPanel.attributesVO;
 					break;
 				}
-					
+
 				case ApplicationFacade.SET_NULL:
 				{
 					objectAttributesPanel.attributesVO = null;
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.LOCKED_NULL:
 				{
 					if ( objectAttributesPanel.attributesVO )
 					{
-					    savedAttributesVO = objectAttributesPanel.attributesVO.clone();
-					    objectAttributesPanel.attributesVO = null;
+						savedAttributesVO = objectAttributesPanel.attributesVO.clone();
+						objectAttributesPanel.attributesVO = null;
 					}
-					
+
 					isMultiSelect = true;
 					break;
 				}
-					
+
 				case ApplicationFacade.UNLOCKED_NULL:
 				{
 					//objectAttributesPanel.attributesVO = savedAttributesVO;
@@ -232,8 +231,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function addHandlers() : void
 		{
 			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.SAVE_REQUEST, saveRequestHandler, true, 0, true );
-			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler, true, 0,
-				true );
+			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler, true, 0, true );
 			objectAttributesPanel.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true, 0, true );
 			objectAttributesPanel.addEventListener( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE, getResourcesAndPagesHandler, true, 0, true );
 			objectAttributesPanel.addEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true, 0, true );
@@ -259,7 +257,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			//objectAttributesPanel.attributesVO;
 			var attributeRander : AttributeBase = event.target as AttributeBase;
-			
+
 			if ( objectAttributesPanel.attributesVO.vdomObjectVO )
 			{
 				var renderBase : RendererBase = renderProxy.getRendererByVO( objectAttributesPanel.attributesVO.vdomObjectVO );
@@ -302,7 +300,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sendNotification( Notifications.OPEN_EXTERNAL_EDITOR_REQUEST, event.target );
 		}
-		
+
 		private function errorHandler( event : AttributeEvent ) : void
 		{
 			sendNotification( Notifications.WRITE_ERROR, { applicationVO: statesProxy.selectedApplication, content: event.value } );
@@ -312,23 +310,23 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var resourceSelector : ResourceSelector = event.target as ResourceSelector;
 			var resourceSelectorWindow : ResourceSelectorWindow = new ResourceSelectorWindow();
-			
+
 			var resourceSelectorWindowMediator : ResourceSelectorWindowMediator = new ResourceSelectorWindowMediator( resourceSelectorWindow );
-			
+
 			facade.registerMediator( resourceSelectorWindowMediator );
-				
+
 			resourceSelectorWindow.value = resourceSelector.value;
-				
-			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler);
-				
-			WindowManager.getInstance().addWindow(resourceSelectorWindow, UIComponent(resourceSelector.parentApplication), true);
-				
-			function applyHandler (event: Event):void
+
+			resourceSelectorWindow.addEventListener( Event.CHANGE, applyHandler );
+
+			WindowManager.getInstance().addWindow( resourceSelectorWindow, UIComponent( resourceSelector.parentApplication ), true );
+
+			function applyHandler( event : Event ) : void
 			{
-				resourceSelector.value = (event.target as ResourceSelectorWindow).value;
-			}		
+				resourceSelector.value = ( event.target as ResourceSelectorWindow ).value;
+			}
 		}
-		
+
 		private function getResourcesAndPagesHandler( event : AttributeEvent ) : void
 		{
 			sendNotification( Notifications.GET_MULTILINE_RESOURCES, event.target );

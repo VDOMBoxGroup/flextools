@@ -1,104 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		   xmlns:s="library://ns.adobe.com/flex/spark" 
-		   xmlns:mx="library://ns.adobe.com/flex/mx" 
-		   click="mouseClickandler(event)"
-		   creationComplete="ColorPickerInit()"
-		   width="100%" height="20" verticalAlign="middle">
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  click="mouseClickandler(event)"
+		  creationComplete="ColorPickerInit()"
+		  width="100%"
+		  height="20"
+		  verticalAlign="middle">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
+
 	<fx:Metadata>
 		[Event(name="change", type="net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent")]
 	</fx:Metadata>
-	
+
 	<fx:Script>
 		<![CDATA[
 			import mx.core.UIComponent;
-			
+
 			import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.windows.ColorPickerWindow;
 			import net.vdombox.utils.WindowManager;
+
 			[Bindable]
 			private var _color : String = "0";
-			
+
 			[Bindable]
 			private var _colorInNumber : uint = 0;
-			private var colorPicker:ColorPicker;
-			
+
+			private var colorPicker : ColorPicker;
+
 			public var colorPickerWindow : ColorPickerWindow;
-			
-			public function ColorPickerInit():void
+
+			public function ColorPickerInit() : void
 			{
 				buttonMode = true;
 			}
-			
-			[Bindable( event="valueCommit" )]
+
+			[Bindable( event = "valueCommit" )]
 			public function get value() : String
 			{
 				return _color;
 			}
-			
+
 			public function set value( colorValue : String ) : void
 			{
 				rectColorPicker.visible = colorValue != "";
 				rectEmptyColor.visible = colorValue == "";
-					
+
 				var newColor : uint = uint( ( colorValue == "" ) ? "0" : "0x" + colorValue )
 				_color = colorValue;
 				_colorInNumber = newColor;
-				
+
 				dispatchEvent( new Event( "valueCommit" ) );
 			}
-			
+
 			public function mouseClickandler( event : MouseEvent ) : void
 			{
 				colorPickerWindow = new ColorPickerWindow();
-				
+
 				colorPickerWindow.colorValue = colorPickerWindow.oldColorValue = _color;
-				
+
 				var colorInNumber : uint = uint( ( _color == "" ) ? "0" : "0x" + _color );
 				colorPickerWindow._color = colorPickerWindow.old_color = colorInNumber;
-				
-				colorPickerWindow.title = resourceManager.getString( 'Wysiwyg_General', 'color_picker_window_title' );		
-				
+
+				colorPickerWindow.title = resourceManager.getString( 'Wysiwyg_General', 'color_picker_window_title' );
+
 				colorPickerWindow.addEventListener( ColorPickerEvent.APPLY, applyHandler, false, 0, true );
-				
-				WindowManager.getInstance().addWindow(colorPickerWindow, UIComponent( UIComponent(parent).parentApplication ), true);
+
+				WindowManager.getInstance().addWindow( colorPickerWindow, UIComponent( UIComponent( parent ).parentApplication ), true );
 			}
-			
-			private function change(event:ColorPickerEvent):void 
+
+			private function change( event : ColorPickerEvent ) : void
 			{
-				
+
 			}
-			
+
 			private function applyHandler( event : ColorPickerEvent ) : void
 			{
-					value = event.hexcolor;
-					dispatchEvent(new ColorPickerEvent(ColorPickerEvent.CHANGE, event.color, value));
-					
-					UIComponent( event.currentTarget ).removeEventListener( ColorPickerEvent.APPLY, applyHandler, false );		
+				value = event.hexcolor;
+				dispatchEvent( new ColorPickerEvent( ColorPickerEvent.CHANGE, event.color, value ) );
+
+				UIComponent( event.currentTarget ).removeEventListener( ColorPickerEvent.APPLY, applyHandler, false );
 			}
-			
 		]]>
 	</fx:Script>
-	<s:Group width="100%" height="100%" toolTip="{_color}">
-		
-		<s:Rect id="rectColorPicker" width="100%" height="100%">
+	<s:Group width="100%"
+			 height="100%"
+			 toolTip="{_color}">
+
+		<s:Rect id="rectColorPicker"
+				width="100%"
+				height="100%">
 			<s:fill>
 				<s:SolidColor color="{_colorInNumber}"/>
 			</s:fill>
 		</s:Rect>
-		
-		<s:Rect id="rectEmptyColor" left="0" right="0" top="0" bottom="0" visible="false">
+
+		<s:Rect id="rectEmptyColor"
+				left="0"
+				right="0"
+				top="0"
+				bottom="0"
+				visible="false">
 			<s:fill>
-				<s:BitmapFill source="@Embed('assets/empty.png')" fillMode="repeat" />
+				<s:BitmapFill source="@Embed('assets/empty.png')"
+							  fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>
 	</s:Group>
-	
-		
+
+
 	<s:Button skinClass="net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.ColorPickerButtonSkin"/>
 
 </s:HGroup>

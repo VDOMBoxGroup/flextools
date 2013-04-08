@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
 	import mx.core.DragSource;
 	import mx.core.IFlexDisplayObject;
 	import mx.core.IFlexModule;
@@ -17,7 +17,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 	import mx.styles.StyleManager;
 
 	/**
-	 *  @private
+	 * @private
 	 */
 	public class VdomDragManager
 	{
@@ -29,12 +29,12 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		private static var sm : ISystemManager;
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		private static var instance : VdomDragManager;
 
@@ -45,7 +45,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public static function getInstance() : VdomDragManager
 		{
@@ -58,18 +58,18 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			return instance;
 		}
 
-		static private function getStyleManager(dragInitiator:IUIComponent):IStyleManager2
+		static private function getStyleManager( dragInitiator : IUIComponent ) : IStyleManager2
 		{
 			// If the dragInitiator has a styleManager, use that one.
 			// In a situation where a main application that loads a module with drag initiator,
 			// the main application may not link in the DragManager and appropriate styles.
 			// We want to use the styles of the module of the dragInitiator. See SDK-24324.
-			if (dragInitiator is IFlexModule)
-				return StyleManager.getStyleManager(IFlexModule(dragInitiator).moduleFactory);
-			
-			return StyleManager.getStyleManager(sm as IFlexModuleFactory);
+			if ( dragInitiator is IFlexModule )
+				return StyleManager.getStyleManager( IFlexModule( dragInitiator ).moduleFactory );
+
+			return StyleManager.getStyleManager( sm as IFlexModuleFactory );
 		}
-		
+
 		//--------------------------------------------------------------------------
 		//
 		//  Constructor
@@ -77,7 +77,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public function VdomDragManager()
 		{
@@ -86,11 +86,13 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			if ( instance )
 				throw new Error( "Instance already exists." );
 
-		/*if (sm.isTopLevel())
+		/*
+		   if (sm.isTopLevel())
 		   {
 		   //sm.addEventListener(MouseEvent.MOUSE_DOWN, sm_mouseDownHandler);
 		   //sm.addEventListener(MouseEvent.MOUSE_UP, sm_mouseUpHandler);
-		 }*/
+		   }
+		 */
 		}
 
 		//--------------------------------------------------------------------------
@@ -100,24 +102,24 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  @private
-		 *  Object that initiated the drag.
+		 * @private
+		 * Object that initiated the drag.
 		 */
 		private var dragInitiator : IUIComponent;
 
 		/**
-		 *  @private
-		 *  Object being dragged around.
+		 * @private
+		 * Object being dragged around.
 		 */
 		public var dragProxy : VdomDragProxy;
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		private var bDoingDrag : Boolean = false;
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		private var mouseIsDown : Boolean = false;
 
@@ -128,14 +130,14 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		//--------------------------------------------------------------------------
 
 		public function doDrag( dragInitiator : IUIComponent, dragSource : DragSource, mouseEvent : MouseEvent, dragImage : IFlexDisplayObject = null,
-								// instance of dragged item(s)
+			// instance of dragged item(s)
 			xOffset : Number = 0, yOffset : Number = 0, imageAlpha : Number = 0.5, allowMove : Boolean = true ) : void
 		{
 			var proxyWidth : Number;
 			var proxyHeight : Number;
 
 			dragImage
-			
+
 			// Can't start a new drag if we're already in the middle of one...
 			if ( bDoingDrag )
 				return;
@@ -158,8 +160,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			if ( !dragImage )
 			{
 				// No drag image specified, use default
-				var dragManagerStyleDeclaration:CSSStyleDeclaration =
-					getStyleManager(dragInitiator).getMergedStyleDeclaration("mx.managers.DragManager");
+				var dragManagerStyleDeclaration : CSSStyleDeclaration = getStyleManager( dragInitiator ).getMergedStyleDeclaration( "mx.managers.DragManager" );
 				var dragImageClass : Class = dragManagerStyleDeclaration.getStyle( "defaultDragImageSkin" );
 				dragImage = new dragImageClass();
 				dragProxy.addChild( DisplayObject( dragImage ) );
@@ -228,7 +229,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 				dragProxy.target = target;
 			}
 		}
-		
+
 		public function hitTarget( target : IUIComponent ) : void
 		{
 			if ( dragProxy )

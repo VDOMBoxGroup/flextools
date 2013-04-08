@@ -13,14 +13,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
-	
+
 	import mx.collections.ArrayList;
-	
+
 	import net.vdombox.ide.common.events.ResourceVOEvent;
 	import net.vdombox.ide.common.model._vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ResourceSelectorWindowSkin;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import spark.components.List;
 	import spark.components.TextInput;
 	import spark.components.Window;
@@ -48,13 +48,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[Bindable]
 		public var _resources : ArrayList;
 
-		public var deleteResourceID : String   = null;
+		public var deleteResourceID : String = null;
 
 		[Bindable]
-		public var filteredResources : int     = 0;
+		public var filteredResources : int = 0;
 
 		[Bindable]
-		public var multiSelect : Boolean       = false;
+		public var multiSelect : Boolean = false;
 
 		[SkinPart( required = "true" )]
 		public var nameFilter : TextInput;
@@ -62,12 +62,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		[SkinPart( required = "true" )]
 		public var resourcesList : List;
 
-		public var scrollToIndex : int         = -1;
+		public var scrollToIndex : int = -1;
 
 		public var selectedResourceIndex : int = -1;
 
 		[Bindable]
-		public var totalResources : int        = 0;
+		public var totalResources : int = 0;
 
 		private var _value : String;
 
@@ -88,28 +88,28 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			invalidateProperties();
 		}
 
-		public function closeHandler(event:Event) : void
+		public function closeHandler( event : Event ) : void
 		{
 			removeEventListener( Event.CLOSE, closeHandler );
-			WindowManager.getInstance().removeWindow(this);
+			WindowManager.getInstance().removeWindow( this );
 		}
 
-		public function apply(event:Event = null) : void
+		public function apply( event : Event = null ) : void
 		{
 			dispatchEvent( new Event( Event.CHANGE ) );
 
 			close();
 		}
 
-		
 
-		public function previewResource(event:Event) : void
+
+		public function previewResource( event : Event ) : void
 		{
-			dispatchEvent(new Event(ResourceVOEvent.PREVIEW_RESOURCE));
+			dispatchEvent( new Event( ResourceVOEvent.PREVIEW_RESOURCE ) );
 		}
 
 
-		public function refreshFile(event:MouseEvent) : void
+		public function refreshFile( event : MouseEvent ) : void
 		{
 			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCES ) );
 		}
@@ -140,7 +140,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 
 
-		public function uploadFile(event:MouseEvent) : void
+		public function uploadFile( event : MouseEvent ) : void
 		{
 			dispatchEvent( new ResourceVOEvent( ResourceVOEvent.LOAD_RESOURCE ) );
 		}
@@ -158,7 +158,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			for each ( var item : ResourceVO in resourcesList.selectedItems )
 			{
 				if ( item != null )
-					resources.push( "#Res(" + item.id + ")");
+					resources.push( "#Res(" + item.id + ")" );
 			}
 
 			return resources.toString();
@@ -221,7 +221,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		 * close ResourceSelectorWindow if down ESCAPE or if down button "Apply"
 		 * and dispatchEvent Apply
 		 */
-		private function keyDownWindowHendler( event: KeyboardEvent ) : void
+		private function keyDownWindowHendler( event : KeyboardEvent ) : void
 		{
 			if ( event.charCode == Keyboard.ESCAPE )
 				close();
@@ -238,10 +238,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			//TODO: need regexp
 			requiredID = _value.substring( 5, _value.length - 1 );
 
-			var i : int       = -1;
+			var i : int = -1;
 
 			var array : Array = new Array();
-			var idd : String  = "";
+			var idd : String = "";
 
 			for each ( resourceVO in _resources.source )
 			{
@@ -253,7 +253,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 				if ( resourceVO.id == requiredID )
 				{
 					resourcesList.selectedItem = resourceVO;
-					array.push( resourceVO);
+					array.push( resourceVO );
 					idd = resourceVO.id;
 
 					break;
@@ -270,6 +270,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 
 		}
-//		public function set 
+		//		public function set 
 	}
 }

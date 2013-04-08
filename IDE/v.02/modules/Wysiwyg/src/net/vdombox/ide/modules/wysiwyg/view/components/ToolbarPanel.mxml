@@ -2,12 +2,13 @@
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
-					  color="white" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarPanelSkin">
+					  color="white"
+					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarPanelSkin">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.core.IVisualElement;
-			
+
 			import net.vdombox.ide.common.TypeInterface;
 			import net.vdombox.ide.common.model._vo.TypeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
@@ -19,6 +20,7 @@
 			import net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarPanelSkin;
 
 			private var _currentToolbar : IToolbar;
+
 			private var _selectedRenderer : IRenderer;
 
 			public var isSelectedRendererChanged : Boolean;
@@ -27,11 +29,11 @@
 			{
 				if ( _selectedRenderer == value )
 					return;
-				
+
 				_selectedRenderer = value;
 
 				isSelectedRendererChanged = true;
-				
+
 				closeToolBar();
 			}
 
@@ -58,109 +60,108 @@
 			override protected function commitProperties() : void
 			{
 				super.commitProperties();
-				
-				if( !isSelectedRendererChanged )
+
+				if ( !isSelectedRendererChanged )
 					return;
-				
+
 				isSelectedRendererChanged = false;
-				
-				if( !_selectedRenderer || !_selectedRenderer.editableComponent )
+
+				if ( !_selectedRenderer || !_selectedRenderer.editableComponent )
 					return;
-				
+
 				var typeVO : TypeVO = _selectedRenderer.typeVO;
-				
+
 				if ( !typeVO )
 				{
 					visible = false;
 					includeInLayout = false;
 					return;
 				}
-				
+
 				switch ( typeVO.interfaceType )
 				{
 					case TypeInterface.RICH_TEXT_EDITOR:
 					{
 						var richTextToolbar : RichTextToolbar = new RichTextToolbar();
-						
-						richTextToolbar.addEventListener(Event.CHANGE, toolbarChageHandle);
+
+						richTextToolbar.addEventListener( Event.CHANGE, toolbarChageHandle );
 						_currentToolbar = richTextToolbar;
 						addElement( richTextToolbar );
 						richTextToolbar.init( _selectedRenderer );
-						
+
 						break;
 					}
-						
+
 					case TypeInterface.TEXT_EDITOR:
 					{
 						var textToolbar : TextToolbar = new TextToolbar();
-						
-						textToolbar.addEventListener(Event.CHANGE, toolbarChageHandle);
+
+						textToolbar.addEventListener( Event.CHANGE, toolbarChageHandle );
 						_currentToolbar = textToolbar;
 						addElement( textToolbar );
 						textToolbar.init( _selectedRenderer );
-						
+
 						break;
 					}
-						
+
 					case TypeInterface.PICTURE:
 					{
 						break;
-						
+
 						// todo: dos not worked
 						var imageToolbar : ImageToolbar = new ImageToolbar();
-						
+
 						_currentToolbar = imageToolbar;
 						addElement( imageToolbar );
 						imageToolbar.init( _selectedRenderer );
-						
+
 						break;
 					}
 				}
-				
+
 				visible = currentToolbar ? true : false;
 				includeInLayout = currentToolbar ? true : false;
 			}
-			
+
 			private function closeToolBar() : void
 			{
 				if ( _currentToolbar )
 				{
 					_currentToolbar.close();
 					_currentToolbar = null;
-					
+
 					removeAllElements();
 				}
 			}
-			
+
 			public function setTransformMarket() : void
-			{			
+			{
 				invalidateProperties();
 			}
-			
+
 			private function toolbarChageHandle( event : Event ) : void
 			{
-					var toolBarPanel : IToolbar = event.target as IToolbar;
-					var editorEvent : EditorEvent = new EditorEvent(EditorEvent.ATTRIBUTES_CHANGED);
-					
-					editorEvent.vdomObjectAttributesVO = toolBarPanel.vdomObjectAttributesVO ;
-					
-					dispatchEvent( editorEvent );
+				var toolBarPanel : IToolbar = event.target as IToolbar;
+				var editorEvent : EditorEvent = new EditorEvent( EditorEvent.ATTRIBUTES_CHANGED );
+
+				editorEvent.vdomObjectAttributesVO = toolBarPanel.vdomObjectAttributesVO;
+
+				dispatchEvent( editorEvent );
 			}
-			
-			public function refresh( renderer : RendererBase ) : void 
+
+			public function refresh( renderer : RendererBase ) : void
 			{
 				//trace ('ToolbarPanel refresh: _currentToolbar = ' + _currentToolbar);
-				if (currentToolbar && _selectedRenderer && _selectedRenderer.vdomObjectVO && renderer.vdomObjectVO.id == _selectedRenderer.vdomObjectVO.id )
-					currentToolbar.refresh(_selectedRenderer);
+				if ( currentToolbar && _selectedRenderer && _selectedRenderer.vdomObjectVO && renderer.vdomObjectVO.id == _selectedRenderer.vdomObjectVO.id )
+					currentToolbar.refresh( _selectedRenderer );
 			}
-			
-			public function saveProperties():void
+
+			public function saveProperties() : void
 			{
 				//trace ('ToolbarPanel saveProperties');
-				if (currentToolbar)
+				if ( currentToolbar )
 					currentToolbar.saveValue();
 			}
-			
 		]]>
 	</fx:Script>
 </s:SkinnableContainer>

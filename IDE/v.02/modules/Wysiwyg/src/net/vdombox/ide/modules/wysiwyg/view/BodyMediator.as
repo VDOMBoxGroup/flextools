@@ -9,12 +9,12 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.main.Body;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -162,3 +162,5 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 	}
 }
+
+

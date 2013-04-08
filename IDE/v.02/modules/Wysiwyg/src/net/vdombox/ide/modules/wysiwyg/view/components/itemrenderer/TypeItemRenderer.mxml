@@ -2,7 +2,8 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				xmlns:s="library://ns.adobe.com/flex/spark"
-				width="100%" autoDrawBackground="false"
+				width="100%"
+				autoDrawBackground="false"
 				mouseDown="mouseDownHandler()"
 				includeInLayout.normal="false">
 	<s:layout>
@@ -12,7 +13,7 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.core.DragSource;
-			
+
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.common.model._vo.TypeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.TypeItemRendererEvent;
@@ -41,39 +42,39 @@
 			{
 				if ( !value )
 					return;
-				
+
 				if ( value == _typeVO )
 				{
 					invalidateDisplayList();
-					
+
 					return;
 				}
-				
+
 				_typeVO = value as TypeVO;
 
-				typeName = value ?  value.displayName : ""
+				typeName = value ? value.displayName : ""
 
 				super.data = value;
-				
+
 				if ( !contextMenu )
 					contextMenu = new ContextMenu();
-				
+
 				contextMenu.removeAllItems();
-				
+
 				if ( _typeVO.includedInUserCategory )
 				{
-					var delItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_del_in_user" ));
+					var delItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_del_in_user" ) );
 					delItem.addEventListener( Event.SELECT, delContextMenuHandler, false, 0, true );
 					contextMenu.addItem( delItem );
 				}
 				else
 				{
-					var addItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_add_in_user" ));
+					var addItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_add_in_user" ) );
 					addItem.addEventListener( Event.SELECT, addContextMenuHandler, false, 0, true );
 					contextMenu.addItem( addItem );
 				}
-				
-				dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.DATA_CHANGE ));
+
+				dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.DATA_CHANGE ) );
 			}
 
 			override public function set selected( value : Boolean ) : void
@@ -81,7 +82,7 @@
 				super.selected = value;
 
 				currentState = value ? "selected" : "normal"
-			} 
+			}
 
 			private function dragIt( event : MouseEvent ) : void
 			{
@@ -90,8 +91,7 @@
 				var dragInitiator : TypeItemRenderer = this;
 				var ds : DragSource = new DragSource();
 
-				var dataObject : Object = { typeId: data.id, aviableContainers: data.containers, offX: dragInitiator.mouseX,
-						offY: dragInitiator.mouseY };
+				var dataObject : Object = { typeId: data.id, aviableContainers: data.containers, offX: dragInitiator.mouseX, offY: dragInitiator.mouseY };
 
 				ds.addData( dataObject, 'typeDescription' );
 
@@ -104,8 +104,7 @@
 
 				var vdomDragManager : VdomDragManager = VdomDragManager.getInstance();
 
-				vdomDragManager.doDrag( dragInitiator, ds, event, proxy, proxy.width / 2 - dragInitiator.mouseX,
-					proxy.height / 2 - dragInitiator.mouseY );
+				vdomDragManager.doDrag( dragInitiator, ds, event, proxy, proxy.width / 2 - dragInitiator.mouseX, proxy.height / 2 - dragInitiator.mouseY );
 			}
 
 			private function mouseDownHandler() : void
@@ -119,25 +118,24 @@
 				removeEventListener( MouseEvent.MOUSE_MOVE, dragIt );
 				if ( !stage )
 					return;
-				
+
 				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 			}
-			
-			private function addContextMenuHandler ( event : Event ) : void
+
+			private function addContextMenuHandler( event : Event ) : void
 			{
 				dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.ADD_IN_USER_CATIGORY ) );
 			}
-			
-			private function delContextMenuHandler ( event : Event ) : void
+
+			private function delContextMenuHandler( event : Event ) : void
 			{
 				dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.DELET_IN_USER_CATIGORY ) );
 			}
-			
-			protected function group1_doubleClickHandler(event:MouseEvent):void
+
+			protected function group1_doubleClickHandler( event : MouseEvent ) : void
 			{
 				dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.DOUBLE_CLICK ) );
 			}
-			
 		]]>
 	</fx:Script>
 
@@ -146,28 +144,46 @@
 		<s:State name="selected"/>
 	</s:states>
 
-		<s:Group width="87" height="87" doubleClickEnabled="true" doubleClick="group1_doubleClickHandler(event)">
-			<s:Rect width="100%" height="100%" radiusX="10" radiusY="10" visible.selected="true" visible="false">
-				<s:fill>
-					<s:SolidColor color="#121212" alpha="0.5"/>
-				</s:fill>
-				<s:stroke>
-					<s:SolidColorStroke color="#6e6e6e"/>
-				</s:stroke>
-			</s:Rect>
-			
-			<s:VGroup width="100%" height="100%" paddingTop="5" gap="5" 
-					 verticalAlign="middle" horizontalAlign="center">
-				
-				<mx:Image id="typeIcon"
-						  source="{ _resourceVO.data }"
-						  horizontalCenter="0"
-						  smoothBitmapContent="true"/>
-				
-				<s:RichText text="{ typeName }" width="100%" fontSize="9"
-							color="white" fontFamily="Verdana" horizontalCenter="0" top="50"/>
-			</s:VGroup>
-		</s:Group>
-		
+	<s:Group width="87"
+			 height="87"
+			 doubleClickEnabled="true"
+			 doubleClick="group1_doubleClickHandler(event)">
+		<s:Rect width="100%"
+				height="100%"
+				radiusX="10"
+				radiusY="10"
+				visible.selected="true"
+				visible="false">
+			<s:fill>
+				<s:SolidColor color="#121212"
+							  alpha="0.5"/>
+			</s:fill>
+			<s:stroke>
+				<s:SolidColorStroke color="#6e6e6e"/>
+			</s:stroke>
+		</s:Rect>
+
+		<s:VGroup width="100%"
+				  height="100%"
+				  paddingTop="5"
+				  gap="5"
+				  verticalAlign="middle"
+				  horizontalAlign="center">
+
+			<mx:Image id="typeIcon"
+					  source="{ _resourceVO.data }"
+					  horizontalCenter="0"
+					  smoothBitmapContent="true"/>
+
+			<s:RichText text="{ typeName }"
+						width="100%"
+						fontSize="9"
+						color="white"
+						fontFamily="Verdana"
+						horizontalCenter="0"
+						top="50"/>
+		</s:VGroup>
+	</s:Group>
+
 
 </s:ItemRenderer>

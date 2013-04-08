@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view.components.controls
 {
 	import mx.controls.Image;
-	
+
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarButtonSkin;
-	
+
 	import spark.components.ToggleButton;
 
 	public class ToolbarButton extends ToggleButton
@@ -15,8 +15,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components.controls
 			super();
 			//setStyle( "skinClass", ToolbarButtonSkin );
 		}
-		
-		override public function stylesInitialized():void {
+
+		override public function stylesInitialized() : void
+		{
 			super.stylesInitialized();
 			this.setStyle( "skinClass", ToolbarButtonSkin );
 		}
@@ -24,7 +25,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.controls
 
 		private var _iconPart : Image;
 
-		[SkinPart( required="true" )]
+		[SkinPart( required = "true" )]
 		public function get iconPart() : Image
 		{
 			return _iconPart;
@@ -33,8 +34,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components.controls
 		public function set iconPart( value : Image ) : void
 		{
 			_iconPart = value;
-			
-			if( _icon )
+
+			if ( _icon )
 				_iconPart.source = _icon;
 		}
 

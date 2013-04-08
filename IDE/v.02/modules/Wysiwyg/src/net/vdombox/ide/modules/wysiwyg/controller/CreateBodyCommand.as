@@ -4,14 +4,14 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.view.BodyMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.WysiwygMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.components.main.Body;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
-	
+
 	/**
 	 * The CreateBodyCommand creating body of Wysiwyg
 	 * @author Alexey Andreev
-	 * 
+	 *
 	 */
 	public class CreateBodyCommand extends SimpleCommand
 	{
@@ -19,10 +19,10 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		{
 			var body : Body;
 			var bodyMediator : BodyMediator;
-			
+
 			var wysiwygMediator : WysiwygMediator = facade.retrieveMediator( WysiwygMediator.NAME ) as WysiwygMediator;
-			
-			if( facade.hasMediator( BodyMediator.NAME ) )
+
+			if ( facade.hasMediator( BodyMediator.NAME ) )
 			{
 				bodyMediator = facade.retrieveMediator( BodyMediator.NAME ) as BodyMediator;
 				body = bodyMediator.body;

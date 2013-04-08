@@ -1,107 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.LinkSelection")]
 	</fx:Metadata>
-	
+
 	<fx:Script>
 		<![CDATA[
-			protected function linkURLLable_clickHandler(event:MouseEvent):void
+			protected function linkURLLable_clickHandler( event : MouseEvent ) : void
 			{
 				linkURL.visible = true;
 				linkURL.includeInLayout = true;
 				linkURLLable.setStyle( "color", 0xffffff );
-				
+
 				pageURL.visible = false;
 				pageURL.includeInLayout = false;
 				pageURLLabel.setStyle( "color", 0xdda643 );
 			}
-			
-			protected function pagesListLable_clickHandler(event:MouseEvent):void
+
+			protected function pagesListLable_clickHandler( event : MouseEvent ) : void
 			{
 				linkURL.visible = false;
 				linkURL.includeInLayout = false;
 				linkURLLable.setStyle( "color", 0xdda643 );
-				
+
 				pageURL.visible = true;
 				pageURL.includeInLayout = true;
 				pageURLLabel.setStyle( "color", 0xffffff );
 			}
-			
 		]]>
 	</fx:Script>
-	
-	
+
+
 	<!-- states -->
 	<s:states>
-		<s:State name="disabledAndInactive" />
-		<s:State name="normalAndInactive" />
-		<s:State name="disabled" />
-		<s:State name="normal" />
+		<s:State name="disabledAndInactive"/>
+		<s:State name="normalAndInactive"/>
+		<s:State name="disabled"/>
+		<s:State name="normal"/>
 	</s:states>
-	
-	<s:Group width="100%" height="100%">
-		<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
+
+	<s:Group width="100%"
+			 height="100%">
+		<s:Rect width="100%"
+				height="100%"
+				radiusX="10"
+				radiusY="10">
 			<s:fill>
 				<s:SolidColor color="#424242"/>
 			</s:fill>
 		</s:Rect>
-		
-		<s:VGroup width="100%" height="100%" gap="0"
-				  top="9" bottom="9" left="9" right="9">
-			
-			<s:Group width="100%" height="32">
+
+		<s:VGroup width="100%"
+				  height="100%"
+				  gap="0"
+				  top="9"
+				  bottom="9"
+				  left="9"
+				  right="9">
+
+			<s:Group width="100%"
+					 height="32">
 				<s:TitleBar id="titleBar"
-							minHeight="32" width="100%"
+							minHeight="32"
+							width="100%"
 							skinClass="net.vdombox.ide.common.view.skins.PopupWindowTitleBarSkin"/>
-			</s:Group>	
-			
-			<s:Group width="100%" height="100%">
-				
-				<s:Rect width="100%" height="100%">
+			</s:Group>
+
+			<s:Group width="100%"
+					 height="100%">
+
+				<s:Rect width="100%"
+						height="100%">
 					<s:fill>
 						<s:SolidColor color="#2f2f2f"/>
 					</s:fill>
 				</s:Rect>
-				
-				<s:VGroup width="100%" height="100%" gap="10"
-						  paddingLeft="10" paddingRight="10" paddingTop="10" >
-					
-					<s:HGroup width="100%" gap="10">
-						
-						<s:Label id="linkURLLable" text="Link URL" fontWeight="bold"
+
+				<s:VGroup width="100%"
+						  height="100%"
+						  gap="10"
+						  paddingLeft="10"
+						  paddingRight="10"
+						  paddingTop="10">
+
+					<s:HGroup width="100%"
+							  gap="10">
+
+						<s:Label id="linkURLLable"
+								 text="Link URL"
+								 fontWeight="bold"
 								 color="0xFFFFFF"
 								 click="linkURLLable_clickHandler(event)"/>
-						
-						<s:Label id="pageURLLabel" text="Pages List" fontWeight="bold"
+
+						<s:Label id="pageURLLabel"
+								 text="Pages List"
+								 fontWeight="bold"
 								 color="0xdda643"
 								 click="pagesListLable_clickHandler(event)"/>
-						
+
 					</s:HGroup>
-					
-					<s:TextInput id="linkURL" text="{hostComponent.hostName}" width="100%" fontWeight="bold" enabled="true"
-								 color="0xFFFFFF" contentBackgroundColor="0x252525"/>
-					
-					<s:DropDownList id="pageURL" skinClass="spark.skins.spark.DropDownListSkin"
+
+					<s:TextInput id="linkURL"
+								 text="{hostComponent.hostName}"
+								 width="100%"
+								 fontWeight="bold"
+								 enabled="true"
+								 color="0xFFFFFF"
+								 contentBackgroundColor="0x252525"/>
+
+					<s:DropDownList id="pageURL"
+									skinClass="spark.skins.spark.DropDownListSkin"
 									labelField="name"
-									cornerRadius="0" width="100%" textAlign="left"
-									visible="false" includeInLayout="false"/>
-					
+									cornerRadius="0"
+									width="100%"
+									textAlign="left"
+									visible="false"
+									includeInLayout="false"/>
+
 				</s:VGroup>
-								
+
 			</s:Group>
-				
-			<s:HGroup horizontalAlign="right" width="100%">
-				<button:VDOMButton label="Insert" cornerRadius="0" 
-						  click="hostComponent.closeWithSave();"/>
-				<button:VDOMButton label="Cancel" cornerRadius="0" 
-						  click="hostComponent.closeHandler();"/>
+
+			<s:HGroup horizontalAlign="right"
+					  width="100%">
+				<button:VDOMButton label="Insert"
+								   cornerRadius="0"
+								   click="hostComponent.closeWithSave();"/>
+				<button:VDOMButton label="Cancel"
+								   cornerRadius="0"
+								   click="hostComponent.closeHandler();"/>
 			</s:HGroup>
 		</s:VGroup>
-		
+
 	</s:Group>
-	
+
 </s:Skin>

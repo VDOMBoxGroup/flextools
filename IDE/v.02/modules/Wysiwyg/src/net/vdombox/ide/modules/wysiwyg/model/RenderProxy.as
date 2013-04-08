@@ -10,9 +10,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 {
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
-	
+
 	import mx.core.IUIComponent;
-	
+
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model.TypesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
@@ -24,10 +24,10 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-	
+
 	import spark.components.IItemRenderer;
 
 	/**
@@ -41,8 +41,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 		 * @default
 		 */
 		public static const NAME : String = "RenderProxy";
-		
-		private var vdomObjectsName : Dictionary = new Dictionary(true);
+
+		private var vdomObjectsName : Dictionary = new Dictionary( true );
 
 		/**
 		 *
@@ -66,20 +66,20 @@ package net.vdombox.ide.modules.wysiwyg.model
 			IEventDispatcher( renderer ).addEventListener( RendererEvent.RENDER_CHANGING, renderer_renderchangingHandler, false, 0, true );
 
 			var visibleRendererProxy : VisibleRendererProxy = facade.retrieveProxy( VisibleRendererProxy.NAME ) as VisibleRendererProxy;
-			
-			
+
+
 			//TODO: rewrite
-			if ( !(renderer is PageRenderer) )
+			if ( !( renderer is PageRenderer ) )
 			{
-				var visible : Boolean = visibleRendererProxy.getVisible(  renderer.vdomObjectVO.id );
-				
-				RendererBase(renderer).visibleByEye = visible;
+				var visible : Boolean = visibleRendererProxy.getVisible( renderer.vdomObjectVO.id );
+
+				RendererBase( renderer ).visibleByEye = visible;
 			}
-			
+
 			var renderVO : RenderVO = renderer.renderVO;
 
 			if ( renderVO && renderVO.vdomObjectVO )
-			{ 
+			{
 				var objectID : String = renderVO.vdomObjectVO.id;
 
 				renderersIndex[ objectID ] = renderer;
@@ -116,9 +116,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 			}
 
 			itemID = rawRenderData.@id;
-			
+
 			renderVO = new RenderVO( vdomObjectVO );
-			
+
 			var rendererBase : RendererBase = getRendererByVO( vdomObjectVO );
 			if ( rendererBase )
 				renderVO.parent = rendererBase.renderVO.parent;
@@ -128,42 +128,42 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 			return renderVO;
 		}
-		
+
 		public function getRendererByVO( vdomObjectVO : IVDOMObjectVO ) : RendererBase
 		{
 			// ???
 			return getRendererByID( vdomObjectVO.id )
-			
+
 		}
-		
+
 		public function getRendererByID( ID : String ) : RendererBase
 		{
 			var rendererBase : RendererBase = null;
-			
-			if ( renderersIndex[ ID  ] )
-				rendererBase = renderersIndex[ID ];
-			
+
+			if ( renderersIndex[ ID ] )
+				rendererBase = renderersIndex[ ID ];
+
 			return rendererBase;
 		}
-		
+
 		public function setNormalScinToRenderers() : void
 		{
-			for each( var object : RendererBase in renderersIndex )
+			for each ( var object : RendererBase in renderersIndex )
 			{
 				if ( object )
 					object.setState = "normal";
 			}
 		}
-		
+
 		public function setVisibleRenderer( rendererID : String, flag : Boolean ) : void
 		{
-			
+
 			var _renderer : RendererBase = getRendererByID( rendererID );
-			
+
 			if ( _renderer )
 				_renderer.visibleByEye = flag;
 		}
-		
+
 
 		override public function onRegister() : void
 		{
@@ -182,7 +182,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 		 */
 		public function removeRenderer( renderer : IRenderer ) : void
 		{
-			
+
 			var renderVO : RenderVO = renderer.renderVO;
 
 			if ( renderVO && renderVO.vdomObjectVO && renderersIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
@@ -190,15 +190,15 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGED, renderer_renderchangedHandler );
 			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGING, renderer_renderchangingHandler );
-			
+
 		}
-		
+
 		public function removeRenderersByPage( pageVO : PageVO ) : void
 		{
 			var pageID : String = pageVO.id;
-			
-			for each( var rendererBase : RendererBase in renderersIndex )
-			{				
+
+			for each ( var rendererBase : RendererBase in renderersIndex )
+			{
 				if ( rendererBase.vdomObjectVO.id == pageID )
 					removeRenderer( rendererBase );
 				else if ( rendererBase.vdomObjectVO is ObjectVO )
@@ -209,14 +209,14 @@ package net.vdombox.ide.modules.wysiwyg.model
 				}
 			}
 		}
-		
+
 
 		/**
 		 *
 		 * @param renderVO
 		 * @param rawRenderData
 		 *
-		 *  Creating standart and selfs atributes
+		 * Creating standart and selfs atributes
 		 */
 		private function createAttributes( renderVO : RenderVO, rawRenderData /*is Wysiwyg*/ : XML ) : void
 		{
@@ -351,14 +351,14 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 			var index : int = -1;
 
-			if ( !rendererBase  )
+			if ( !rendererBase )
 				return;
 
 			delete renderersIndex[ renderer.vdomObjectVO.id ];
 
 		}
 
-//		var dic : Dictionary
+		//		var dic : Dictionary
 		private function get renderersIndex() : Object
 		{
 			if ( !_renderersIndex )
@@ -371,7 +371,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 		{
 			_renderersIndex = value;
 		}
-		
+
 		public function setToolTipRenderers( pageXMLTree : XML ) : void
 		{
 			var xmlList : XMLList = pageXMLTree..object;
@@ -381,12 +381,12 @@ package net.vdombox.ide.modules.wysiwyg.model
 			{
 				var objectID : String = xmlObject.@id;
 				var name : String = xmlObject.@name;
-				var renderer :RendererBase = getRendererByID(  objectID );
-				
-				if ( renderer ) 
+				var renderer : RendererBase = getRendererByID( objectID );
+
+				if ( renderer )
 					renderer.renderVO.vdomObjectVO.name = name;
 				else
-					vdomObjectsName[objectID] = name;
+					vdomObjectsName[ objectID ] = name;
 			}
 		}
 	}

@@ -9,21 +9,28 @@
 
 	<s:states>
 
-		<s:State name="normal" />
+		<s:State name="normal"/>
 
-		<s:State name="disabled" />
+		<s:State name="disabled"/>
 	</s:states>
 
-	<s:Rect bottom="0" left="0" right="0" top="0"
-			radiusX="3" radiusY="3">
+	<s:Rect bottom="0"
+			left="0"
+			right="0"
+			top="0"
+			radiusX="3"
+			radiusY="3">
 
 		<s:fill>
 
 			<s:SolidColor color="0x999999"
-						  alpha=".2" />
+						  alpha=".2"/>
 		</s:fill>
 	</s:Rect>
 
 	<s:Group id="contentGroup"
-			 bottom="3" left="3" right="3" top="3" />
+			 bottom="3"
+			 left="3"
+			 right="3"
+			 top="3"/>
 </s:SparkSkin>

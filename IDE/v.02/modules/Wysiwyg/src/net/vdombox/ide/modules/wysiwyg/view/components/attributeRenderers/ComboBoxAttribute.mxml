@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="20">
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%"
+		 height="20">
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
-			
-			private var _value: String;
-			
-			public function get value():String
+
+			private var _value : String;
+
+			public function get value() : String
 			{
 				return _value;
 			}
@@ -19,56 +21,60 @@
 			{
 				var comboBoxData : ArrayCollection = new ArrayCollection();
 				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
-				
+
 				var listValues : Array = [];
 				var selectedItem : Object;
-				
+
 				var listItem : Object = { label: "", data: "" };
 				//comboBoxData.addItem( listItem );
 
 				findElement();
-				
-				/*if ( !selectedItem )
-				{
-					tableFont();
-					
-					findElement();
-				}*/
-				
+
+				/*
+				   if ( !selectedItem )
+				   {
+				   tableFont();
+
+				   findElement();
+				   }
+				 */
+
 				comboBoxData.sort = new Sort();
 				comboBoxData.sort.fields = [ new SortField( "label", true ) ];
 				comboBoxData.refresh();
-				
-				
+
+
 				valueField.dataProvider = comboBoxData;
-				
+
 				if ( selectedItem )
 				{
 					valueField.selectedItem = selectedItem;
 					_value = selectedItem.data;
 				}
-				/*else
-				{
-					var errorEvent : AttributeEvent = new AttributeEvent( AttributeEvent.ERROR1 );
-					errorEvent.value = resourceManager.getString( 'Wysiwyg_General', 'attribut_error_in_attribute');
-					dispatchEvent( errorEvent );
-				}*/
-				
+				/*
+				   else
+				   {
+				   var errorEvent : AttributeEvent = new AttributeEvent( AttributeEvent.ERROR1 );
+				   errorEvent.value = resourceManager.getString( 'Wysiwyg_General', 'attribut_error_in_attribute');
+				   dispatchEvent( errorEvent );
+				   }
+				 */
+
 				function findElement() : void
 				{
 					comboBoxData = new ArrayCollection();
-					
-					while ( listValues = codeInterfaceValueRE.exec( String(_interface) ) )
+
+					while ( listValues = codeInterfaceValueRE.exec( String( _interface ) ) )
 					{
 						listItem = { label: listValues[ 1 ], data: listValues[ 2 ] };
-						
+
 						comboBoxData.addItem( listItem );
-						
+
 						if ( element == listValues[ 2 ] )
 							selectedItem = comboBoxData[ comboBoxData.length - 1 ];
 					}
 				}
-				
+
 				function tableFont() : void
 				{
 					switch ( element )
@@ -76,130 +82,133 @@
 						case "andale":
 						{
 							element = 'Tahoma, "Geneva CY", geneva, sans-serif';
-							
+
 							break;
 						}
-							
+
 						case "arial ":
 						{
 							element = 'Arial, "Helvetica CY", "Nimbus Sans L", helvetica, sans-serif';
-							
+
 							break;
 						}
-							
+
 						case "book":
 						{
 							element = '"Palatino Linotype", "Book Antiqua", Palatino, serif';
-							
+
 							break;
 						}
-							
+
 						case "comic":
 						{
 							element = 'Tahoma, "Geneva CY", geneva, sans-serif';
-							
+
 							break;
 						}
-							
+
 						case "courier":
 						{
 							element = '"Courier New", "Nimbus Mono L", monospace';
-							
+
 							break;
 						}
-							
+
 						case "georgia":
 						{
 							element = 'Georgia, "Century Schoolbook L", Serif';
-							
+
 							break;
 						}
-							
+
 						case "helvetica":
 						{
 							element = 'Tahoma, "Geneva CY", geneva, sans-serif';
-							
+
 							break;
 						}
-							
+
 						case "impact":
 						{
 							element = 'Impact, "Charcoal CY", sans-serif';
-							
+
 							break;
 						}
-							
+
 						case "symbol":
 						{
 							element = 'Tahoma, "Geneva CY", geneva, sans-serif';
-							
+
 							break;
 						}
-							
+
 						case "tahoma":
 						{
 							element = 'Tahoma, "Geneva CY", geneva, sans-serif';
-							
+
 							break;
 						}
-							
+
 						case "terminal":
 						{
 							element = 'Tahoma, "Geneva CY", geneva, sans-serif';
-							
+
 							break;
 						}
-							
+
 						case "times":
 						{
 							element = '"Times New Roman", "Times CY", times, "Nimbus Roman No9 L", serif';
-							
+
 							break;
 						}
-							
+
 						case "verdana":
 						{
 							element = 'Verdana, "Geneva CY", geneva, "DejaVu Sans", sans-serif';
-							
+
 							break;
 						}
-							
+
 						case "webdings":
 						{
 							element = 'Tahoma, "Geneva CY", geneva, sans-serif';
-							
+
 							break;
 						}
-							
+
 						case "wingdings":
 						{
 							element = 'wingdings, "zapf dingbats"';
-							
+
 							break;
 						}
 					}
 				}
 			}
-			
+
 			private function changeHandler() : void
 			{
 				_value = valueField.selectedItem.data;
 				dispatchEvent( new Event( Event.CHANGE ) );
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
-	<s:Rect width="100%" height="100%">
+
+	<s:Rect width="100%"
+			height="100%">
 		<s:fill>
 			<s:SolidColor color="#FFFFFF"/>
 		</s:fill>
 	</s:Rect>
-	<s:DropDownList id="valueField" width="100%" height="100%" textAlign="left"
-				change="changeHandler()"
-				skinClass="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.DropDownListSkin"/>
-	
+	<s:DropDownList id="valueField"
+					width="100%"
+					height="100%"
+					textAlign="left"
+					change="changeHandler()"
+					skinClass="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.DropDownListSkin"/>
+
 </s:Group>

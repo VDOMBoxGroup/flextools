@@ -1,44 +1,46 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
-{	
+{
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.PageRendererSkin;
-	
+
 	import spark.components.Group;
 
 	public class PageRenderer extends RendererBase
 	{
 
-		[SkinPart( required="true" )]
+		[SkinPart( required = "true" )]
 		public var transformMarker : TransformMarker;
-		
-		[SkinPart( required="true" )]
+
+		[SkinPart( required = "true" )]
 		public var linegroup : Group;
-		
-		[SkinPart( required="true" )]
+
+		[SkinPart( required = "true" )]
 		public var scaleGroup : Group;
-		
-	//	[SkinPart( required="true" )]
+
+		//	[SkinPart( required="true" )]
 		//public var scroll : VDOMScroller;
 
 		private var _selectedRenderer : IRenderer;
+
 		private var isSelectedRendererChanged : Boolean;
-		
-		
+
+
 
 		public function PageRenderer()
 		{
 			super();
-			addEventListener(FlexEvent.ADD, showHandler, false, 0, false);
+			addEventListener( FlexEvent.ADD, showHandler, false, 0, false );
 		}
-		
-		override public function stylesInitialized():void {
+
+		override public function stylesInitialized() : void
+		{
 			super.stylesInitialized();
-			setStyle("skinClass", Class(PageRendererSkin));
+			setStyle( "skinClass", Class( PageRendererSkin ) );
 		}
-		
+
 		override protected function partAdded( partName : String, instance : Object ) : void
 		{
 			super.partAdded( partName, instance );
@@ -57,13 +59,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				invalidateProperties();
 			}
 		}
-//		RESTRICTED AUTO QUERY - start 
-//		SESSION - sesso 
+
+		//		RESTRICTED AUTO QUERY - start 
+		//		SESSION - sesso 
 		override public function set renderVO( value : RenderVO ) : void
 		{
-			if( transformMarker )
+			if ( transformMarker )
 				transformMarker.renderer = null;
-			
+
 			super.renderVO = value;
 		}
 
@@ -86,35 +89,35 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					transformMarker.includeInLayout = true;
 				}
 			}
-			
-//			var lines:Group = new Group();
-//			lines.width = 200;
-//			lines.height = 200;
-//			
-//			lines.graphics.lineStyle(0);
-//			lines.graphics.beginFill(0);
-//			lines.graphics.drawCircle(50,50, 40);
-//			background.addElement(lines);
+
+			//			var lines:Group = new Group();
+			//			lines.width = 200;
+			//			lines.height = 200;
+			//			
+			//			lines.graphics.lineStyle(0);
+			//			lines.graphics.beginFill(0);
+			//			lines.graphics.drawCircle(50,50, 40);
+			//			background.addElement(lines);
 		}
-		
+
 		public function removeTransformMarket() : void
 		{
 			transformMarker.renderer = null;
 			transformMarker.visible = false;
 			transformMarker.includeInLayout = false;
 		}
-		
+
 		override protected function removeHandlers() : void
 		{
-			if ( !hasEventListener( FlexEvent.ADD))
-				addEventListener(FlexEvent.ADD, showHandler, false, 0, false);
+			if ( !hasEventListener( FlexEvent.ADD ) )
+				addEventListener( FlexEvent.ADD, showHandler, false, 0, false );
 		}
-		
-		private function showHandler(event : FlexEvent):void
+
+		private function showHandler( event : FlexEvent ) : void
 		{
 			super.addHandlers();
 		}
-		
-		
+
+
 	}
 }

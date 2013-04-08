@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditorWindow")]
@@ -11,82 +12,109 @@
 			import net.vdombox.ide.common.view.components.VDOMImage;
 		]]>
 	</fx:Script>
-	
+
 	<!-- states -->
 	<s:states>
-		<s:State name="disabledAndInactive" />
-		<s:State name="normalAndInactive" />
-		<s:State name="disabled" />
-		<s:State name="normal" />
+		<s:State name="disabledAndInactive"/>
+		<s:State name="normalAndInactive"/>
+		<s:State name="disabled"/>
+		<s:State name="normal"/>
 	</s:states>
-	
-	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
+
+	<s:Rect width="100%"
+			height="100%"
+			radiusX="10"
+			radiusY="10">
 		<s:fill>
 			<s:SolidColor color="#424242"/>
 		</s:fill>
 	</s:Rect>
-		
-	<s:VGroup width="100%" height="100%"
-			  top="9" bottom="9" left="9" right="9"
+
+	<s:VGroup width="100%"
+			  height="100%"
+			  top="9"
+			  bottom="9"
+			  left="9"
+			  right="9"
 			  gap="0">
-		
-		<s:Group width="100%" height="42">
+
+		<s:Group width="100%"
+				 height="42">
 			<s:TitleBar id="titleBar"
-						minHeight="32" width="100%"
+						minHeight="32"
+						width="100%"
 						skinClass="net.vdombox.ide.common.view.skins.PopupWindowTitleBarSkin"/>
-		</s:Group>	
-		
-		<s:Group width="100%" height="100%">
-			
-			<s:Rect width="100%" height="100%">
+		</s:Group>
+
+		<s:Group width="100%"
+				 height="100%">
+
+			<s:Rect width="100%"
+					height="100%">
 				<s:fill>
 					<s:SolidColor color="#2f2f2f"/>
 				</s:fill>
 			</s:Rect>
-			
-			<s:Label left="10" top="5"
-				text="{ resourceManager.getString( 'Wysiwyg_General', 'html_source_editor_code' ) }" color="0xFFFFFF"/>
-			
+
+			<s:Label left="10"
+					 top="5"
+					 text="{ resourceManager.getString( 'Wysiwyg_General', 'html_source_editor_code' ) }"
+					 color="0xFFFFFF"/>
+
 			<s:TextArea id="_code"
-						top="25" left="10" bottom="10" right="10"
-						focusEnabled="false" text="{hostComponent.codeText}" 
-						color="0xFFFFFF" contentBackgroundColor="0x252525"/>
-			
+						top="25"
+						left="10"
+						bottom="10"
+						right="10"
+						focusEnabled="false"
+						text="{hostComponent.codeText}"
+						color="0xFFFFFF"
+						contentBackgroundColor="0x252525"/>
+
 		</s:Group>
-		
-		<s:Group width="100%" height="50">
-			
-			<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
+
+		<s:Group width="100%"
+				 height="50">
+
+			<s:Rect width="100%"
+					height="100%"
+					radiusX="10"
+					radiusY="10">
 				<s:fill>
 					<s:SolidColor color="#3a3a3a"/>
 				</s:fill>
 			</s:Rect>
-			
-			<s:Line left="0" right="0" top="0">
+
+			<s:Line left="0"
+					right="0"
+					top="0">
 				<s:stroke>
-					<s:SolidColorStroke color="#555555" weight="1"/>
+					<s:SolidColorStroke color="#555555"
+										weight="1"/>
 				</s:stroke>
 			</s:Line>
-		
-			<s:HGroup width="100%" height="100%"
-					  paddingBottom="5" paddingLeft="8" paddingRight="8"
-					  verticalAlign="middle"
-					  >
-				
+
+			<s:HGroup width="100%"
+					  height="100%"
+					  paddingBottom="5"
+					  paddingLeft="8"
+					  paddingRight="8"
+					  verticalAlign="middle">
+
 				<button:VDOMButton label="Cancel"
 								   cornerRadius="0"
-								   click="hostComponent.closeWithoutSave();" />
-				
-			
-				<mx:Spacer width="100%" />
-				
+								   click="hostComponent.closeWithoutSave();"/>
+
+
+				<mx:Spacer width="100%"/>
+
 				<button:VDOMButton label="Update"
-						  icon="{ VDOMImage.Commit }"
-						  cornerRadius="0"
-						  click="hostComponent.closeWithSave();" />
-				
+								   icon="{ VDOMImage.Commit }"
+								   cornerRadius="0"
+								   click="hostComponent.closeWithSave();"/>
+
 			</s:HGroup>
 		</s:Group>
 	</s:VGroup>
-	
+
 </s:Skin>

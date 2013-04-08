@@ -21,13 +21,13 @@ package net.vdombox.ide.modules.wysiwyg.interfaces
 
 		function lock( isRemoveChildren : Boolean = false ) : void
 
-//		function set needRefresh( value : Boolean ) : void
+		//		function set needRefresh( value : Boolean ) : void
 		function get resourceID() : String
 
 		function get resourceVO() : ResourceVO
 		function set resourceVO( value : ResourceVO ) : void
 		function setFocus() : void
-			
+
 		function get selected() : Boolean;
 		function set selected( value : Boolean ) : void;
 	}

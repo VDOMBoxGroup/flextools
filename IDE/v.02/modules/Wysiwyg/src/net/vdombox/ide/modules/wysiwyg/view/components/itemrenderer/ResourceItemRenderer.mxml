@@ -15,45 +15,58 @@
 				super.data = value;
 				resourceVO = value as ResourceVO;
 			}
-			
 		]]>
 	</fx:Script>
 
 	<s:states>
 
-		<s:State name="normal" />
+		<s:State name="normal"/>
 
-		<s:State name="hovered" />
+		<s:State name="hovered"/>
 
-		<s:State name="selected" />
+		<s:State name="selected"/>
 	</s:states>
 
-	<s:Rect bottom="0" left="0" right="0" top="0">
+	<s:Rect bottom="0"
+			left="0"
+			right="0"
+			top="0">
 
 		<s:fill>
 
 			<s:SolidColor color="0x999999"
-						  alpha="0" alpha.hovered="0.2" alpha.selected="0.6" />
+						  alpha="0"
+						  alpha.hovered="0.2"
+						  alpha.selected="0.6"/>
 		</s:fill>
 
 		<s:stroke>
 
-			<s:SolidColorStroke color="black" />
+			<s:SolidColorStroke color="black"/>
 		</s:stroke>
 	</s:Rect>
 
-	<s:HGroup bottom="0" left="0" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" right="0"
+	<s:HGroup bottom="0"
+			  left="0"
+			  paddingBottom="5"
+			  paddingLeft="5"
+			  paddingRight="5"
+			  paddingTop="5"
+			  right="0"
 			  top="0">
 
-		<mx:Image height="64" source="{ resourceVO.data }" width="64" />
+		<mx:Image height="64"
+				  source="{ resourceVO.data }"
+				  width="64"/>
 
-		<s:VGroup height="100%" width="100%">
+		<s:VGroup height="100%"
+				  width="100%">
 
-			<mx:Spacer height="100%" />
+			<mx:Spacer height="100%"/>
 
-			<s:Label text="ID: { resourceVO.id }" />
+			<s:Label text="ID: { resourceVO.id }"/>
 
-			<s:Label text="Name: { resourceVO.name }" />
+			<s:Label text="Name: { resourceVO.name }"/>
 		</s:VGroup>
 	</s:HGroup>
 </s:ItemRenderer>

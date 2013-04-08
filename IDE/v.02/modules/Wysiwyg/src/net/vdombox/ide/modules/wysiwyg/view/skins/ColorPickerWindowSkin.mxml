@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:mx="library://ns.adobe.com/flex/mx"
-		xmlns:colorPicker="net.vdombox.ide.modules.wysiwyg.view.components.colorPicker.*" 
-		xmlns:attributeRenderers="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.*"
-		width="460" height="380" xmlns:components="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 xmlns:mx="library://ns.adobe.com/flex/mx"
+			 xmlns:colorPicker="net.vdombox.ide.modules.wysiwyg.view.components.colorPicker.*"
+			 xmlns:attributeRenderers="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.*"
+			 width="460"
+			 height="380"
+			 xmlns:components="net.vdombox.components.*"
+			 xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<!-- host component -->
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.windows.ColorPickerWindow")]
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
-			
 			import net.vdombox.ide.common.view.components.VDOMImage;
-			
-			
 		]]>
 	</fx:Script>
-	
+
 	<!-- states -->
 	<s:states>
-		<s:State name="inactiveWithControlBar" />
-		<s:State name="inactive" />
-		<s:State name="disabledWithControlBar" />
-		<s:State name="normalWithControlBar" />
-		<s:State name="disabled" />
-		<s:State name="normal" />
+		<s:State name="inactiveWithControlBar"/>
+		<s:State name="inactive"/>
+		<s:State name="disabledWithControlBar"/>
+		<s:State name="normalWithControlBar"/>
+		<s:State name="disabled"/>
+		<s:State name="normal"/>
 		<s:State name="normalAndInactive"/>
 		<s:State name="disabledAndInactive"/>
 	</s:states>
-	
+
 	<!-- SkinParts
 	name=contentGroup, type=spark.components.Group, required=false
 	name=moveArea, type=flash.display.InteractiveObject, required=false
@@ -37,232 +37,348 @@
 	name=titleDisplay, type=spark.core.IDisplayText, required=false
 	name=controlBarGroup, type=spark.components.Group, required=false
 	-->
-	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
+	<s:Rect width="100%"
+			height="100%"
+			radiusX="10"
+			radiusY="10">
 		<s:fill>
 			<s:SolidColor color="#424242"/>
 		</s:fill>
 	</s:Rect>
-	<s:VGroup left="9" right="9" top="9" bottom="9" gap="0">	
-		
-		<s:Group width="100%" height="42">
+	<s:VGroup left="9"
+			  right="9"
+			  top="9"
+			  bottom="9"
+			  gap="0">
+
+		<s:Group width="100%"
+				 height="42">
 			<s:TitleBar id="titleBar"
-						minHeight="32" width="100%"
+						minHeight="32"
+						width="100%"
 						skinClass="net.vdombox.ide.common.view.skins.PopupWindowTitleBarSkin"/>
-		</s:Group>	
-		
-		<s:Group width="100%" height="100%">
+		</s:Group>
+
+		<s:Group width="100%"
+				 height="100%">
 			<s:Rect>
 				<s:fill>
 					<s:SolidColor color="#2f2f2f"/>
 				</s:fill>
 			</s:Rect>
-			<s:HGroup  paddingBottom="0" paddingLeft="0" paddingRight="4" paddingTop="0">
-				
-				<s:HGroup height="272" gap="0" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
-					
-					<s:BorderContainer height="272" width="272">
-						
-						<s:BorderContainer height="258" width="258" x="7" y="7"
-								   backgroundColor="#000000">
-							
+			<s:HGroup paddingBottom="0"
+					  paddingLeft="0"
+					  paddingRight="4"
+					  paddingTop="0">
+
+				<s:HGroup height="272"
+						  gap="0"
+						  paddingBottom="0"
+						  paddingLeft="0"
+						  paddingRight="0"
+						  paddingTop="0">
+
+					<s:BorderContainer height="272"
+									   width="272">
+
+						<s:BorderContainer height="258"
+										   width="258"
+										   x="7"
+										   y="7"
+										   backgroundColor="#000000">
+
 							<attributeRenderers:ColorPickerCanvas id="ccc"
-																  height="256" maxHeight="256" maxWidth="256" minHeight="256"
-																  minWidth="256" width="256" x="1" y="1"
+																  height="256"
+																  maxHeight="256"
+																  maxWidth="256"
+																  minHeight="256"
+																  minWidth="256"
+																  width="256"
+																  x="1"
+																  y="1"
 																  mouseDown="{hostComponent.on_ccc_mouse_down(event);}"/>
 						</s:BorderContainer>
-						
+
 						<s:SWFLoader id="ccm"
-									  source="{hostComponent.cc_marker}" x="0" y="0" />
+									 source="{hostComponent.cc_marker}"
+									 x="0"
+									 y="0"/>
 					</s:BorderContainer>
-					
-					<mx:Canvas height="272" horizontalScrollPolicy="off" verticalScrollPolicy="off" width="36"
+
+					<mx:Canvas height="272"
+							   horizontalScrollPolicy="off"
+							   verticalScrollPolicy="off"
+							   width="36"
 							   mouseDown="hostComponent.on_ccb_mouse_down(event);">
-						
-						<mx:Canvas height="258" width="22" x="7" y="7"
+
+						<mx:Canvas height="258"
+								   width="22"
+								   x="7"
+								   y="7"
 								   backgroundColor="#000000">
-							
+
 							<attributeRenderers:ColorPickerCanvas id="ccb"
-																  height="256" maxHeight="256" maxWidth="20" minHeight="256"
-																  minWidth="20" width="20" x="1" y="1"
-																  mouseDown="hostComponent.on_ccb_mouse_down(event);" />
+																  height="256"
+																  maxHeight="256"
+																  maxWidth="20"
+																  minHeight="256"
+																  minWidth="20"
+																  width="20"
+																  x="1"
+																  y="1"
+																  mouseDown="hostComponent.on_ccb_mouse_down(event);"/>
 						</mx:Canvas>
-						
+
 						<s:SWFLoader id="ccrm"
-									  height="9" source="{hostComponent.cc_r_marker}" width="5" x="0" y="0"
-									  scaleContent="false" />
-						
+									 height="9"
+									 source="{hostComponent.cc_r_marker}"
+									 width="5"
+									 x="0"
+									 y="0"
+									 scaleContent="false"/>
+
 						<s:SWFLoader id="cclm"
-									  height="9" source="{hostComponent.cc_l_marker}" width="5" x="0" y="0"
-									  scaleContent="false" />
+									 height="9"
+									 source="{hostComponent.cc_l_marker}"
+									 width="5"
+									 x="0"
+									 y="0"
+									 scaleContent="false"/>
 					</mx:Canvas>
 				</s:HGroup>
-				
+
 				<s:VGroup height="100%"
-						  paddingBottom="8" paddingTop="8">
-					<s:HGroup styleName="bbbox" width="100%" height="24"
-							  gap="0" paddingRight="10" >
-						
-						<s:Group height="100%" width="100%">
-							<mx:Box height="100%" width="100%"
-									backgroundColor="{hostComponent._color}" />
-							
-							<s:Rect width="100%" height="100%"
+						  paddingBottom="8"
+						  paddingTop="8">
+					<s:HGroup styleName="bbbox"
+							  width="100%"
+							  height="24"
+							  gap="0"
+							  paddingRight="10">
+
+						<s:Group height="100%"
+								 width="100%">
+							<mx:Box height="100%"
+									width="100%"
+									backgroundColor="{hostComponent._color}"/>
+
+							<s:Rect width="100%"
+									height="100%"
 									visible="{hostComponent.colorValue == ''}">
 								<s:fill>
-									<s:BitmapFill source="@Embed('assets/empty.png')" fillMode="repeat" />
+									<s:BitmapFill source="@Embed('assets/empty.png')"
+												  fillMode="repeat"/>
 								</s:fill>
 							</s:Rect>
 						</s:Group>
-						
-						<s:Group height="100%" width="100%">
-							<mx:Box height="100%" width="100%"
+
+						<s:Group height="100%"
+								 width="100%">
+							<mx:Box height="100%"
+									width="100%"
 									backgroundColor="{hostComponent.old_color}"
 									click="hostComponent.on_restore_color()"/>
-							
-							<s:Rect width="100%" height="100%"
+
+							<s:Rect width="100%"
+									height="100%"
 									visible="{hostComponent.oldColorValue == ''}">
 								<s:fill>
-									<s:BitmapFill source="@Embed('assets/empty.png')" fillMode="repeat" />
+									<s:BitmapFill source="@Embed('assets/empty.png')"
+												  fillMode="repeat"/>
 								</s:fill>
 							</s:Rect>
-						</s:Group>	
-						
+						</s:Group>
+
 					</s:HGroup>
-					
-					<s:VGroup id="HSBGroup" width="100%" height="100%" gap="0">
-						
+
+					<s:VGroup id="HSBGroup"
+							  width="100%"
+							  height="100%"
+							  gap="0">
+
 						<s:HGroup>
-							
-							<s:RadioButton id="rb_H" color="0xFFFFFF" label="H" skinClass="spark.skins.spark.RadioButtonSkin"
-										   click="hostComponent.on_rb_hsb_change()" 
-											click.inactiveWithControlBar="hostComponent.on_rb_hsb_change()"/>
-							
+
+							<s:RadioButton id="rb_H"
+										   color="0xFFFFFF"
+										   label="H"
+										   skinClass="spark.skins.spark.RadioButtonSkin"
+										   click="hostComponent.on_rb_hsb_change()"
+										   click.inactiveWithControlBar="hostComponent.on_rb_hsb_change()"/>
+
 							<s:NumericStepper id="tx_H"
-											   maxChars="3" maximum="359" minimum="0" stepSize="1" value="{hostComponent.hsb.h}"
-											   change="hostComponent.on_tx_hsb_change()" 
-											   skinClass="spark.skins.spark.NumericStepperSkin"/>
-							
-							<s:Label text="°" />
+											  maxChars="3"
+											  maximum="359"
+											  minimum="0"
+											  stepSize="1"
+											  value="{hostComponent.hsb.h}"
+											  change="hostComponent.on_tx_hsb_change()"
+											  skinClass="spark.skins.spark.NumericStepperSkin"/>
+
+							<s:Label text="°"/>
 						</s:HGroup>
-						
+
 						<s:HGroup>
-							
-							<s:RadioButton id="rb_S" color="0xFFFFFF"
-											label="S" skinClass="spark.skins.spark.RadioButtonSkin"
-											click="hostComponent.on_rb_hsb_change()" />
-							
+
+							<s:RadioButton id="rb_S"
+										   color="0xFFFFFF"
+										   label="S"
+										   skinClass="spark.skins.spark.RadioButtonSkin"
+										   click="hostComponent.on_rb_hsb_change()"/>
+
 							<s:NumericStepper id="tx_S"
-											   maxChars="3" maximum="100" minimum="0" stepSize="1" value="{hostComponent.hsb.s}"
-											   change="hostComponent.on_tx_hsb_change()" 
-											   skinClass="spark.skins.spark.NumericStepperSkin"/>
-							
-							<s:Label text="%" />
+											  maxChars="3"
+											  maximum="100"
+											  minimum="0"
+											  stepSize="1"
+											  value="{hostComponent.hsb.s}"
+											  change="hostComponent.on_tx_hsb_change()"
+											  skinClass="spark.skins.spark.NumericStepperSkin"/>
+
+							<s:Label text="%"/>
 						</s:HGroup>
-						
+
 						<s:HGroup>
-							
-							<s:RadioButton id="rb_B" color="0xFFFFFF"
-											label="B" skinClass="spark.skins.spark.RadioButtonSkin"
-											click="hostComponent.on_rb_hsb_change()" />
-							
+
+							<s:RadioButton id="rb_B"
+										   color="0xFFFFFF"
+										   label="B"
+										   skinClass="spark.skins.spark.RadioButtonSkin"
+										   click="hostComponent.on_rb_hsb_change()"/>
+
 							<s:NumericStepper id="tx_B"
-											   maxChars="3" maximum="100" minimum="0" stepSize="1" value="{hostComponent.hsb.b}"
-											   change="hostComponent.on_tx_hsb_change()" 
-											   skinClass="spark.skins.spark.NumericStepperSkin"/>
-							
-							<s:Label text="%" />
+											  maxChars="3"
+											  maximum="100"
+											  minimum="0"
+											  stepSize="1"
+											  value="{hostComponent.hsb.b}"
+											  change="hostComponent.on_tx_hsb_change()"
+											  skinClass="spark.skins.spark.NumericStepperSkin"/>
+
+							<s:Label text="%"/>
 						</s:HGroup>
-					
+
 					</s:VGroup>
-						
-					<mx:Spacer height="4" />
-					
-					<s:VGroup id="RGBGroup" width="100%" height="100%" gap="0">
-					
+
+					<mx:Spacer height="4"/>
+
+					<s:VGroup id="RGBGroup"
+							  width="100%"
+							  height="100%"
+							  gap="0">
+
 						<s:HGroup>
-							
-							<s:RadioButton id="rb_r" color="0xFFFFFF"
-											label="R" skinClass="spark.skins.spark.RadioButtonSkin"
-											click="hostComponent.on_rb_rgb_change()" />
-							
+
+							<s:RadioButton id="rb_r"
+										   color="0xFFFFFF"
+										   label="R"
+										   skinClass="spark.skins.spark.RadioButtonSkin"
+										   click="hostComponent.on_rb_rgb_change()"/>
+
 							<s:NumericStepper id="tx_r"
-											   maxChars="3" maximum="255" minimum="0" stepSize="1"
-											   value="{(hostComponent._color >> 16) &amp; 0xFF}"
-											   change="hostComponent.on_tx_rgb_change()"
-											   skinClass="spark.skins.spark.NumericStepperSkin"/>
+											  maxChars="3"
+											  maximum="255"
+											  minimum="0"
+											  stepSize="1"
+											  value="{(hostComponent._color >> 16) &amp; 0xFF}"
+											  change="hostComponent.on_tx_rgb_change()"
+											  skinClass="spark.skins.spark.NumericStepperSkin"/>
 						</s:HGroup>
-						
+
 						<s:HGroup>
-							
-							<s:RadioButton id="rb_g" color="0xFFFFFF"
-											label="G" skinClass="spark.skins.spark.RadioButtonSkin"
-											click="hostComponent.on_rb_rgb_change()" />
-							
+
+							<s:RadioButton id="rb_g"
+										   color="0xFFFFFF"
+										   label="G"
+										   skinClass="spark.skins.spark.RadioButtonSkin"
+										   click="hostComponent.on_rb_rgb_change()"/>
+
 							<s:NumericStepper id="tx_g"
-											   maxChars="3" maximum="255" minimum="0" stepSize="1"
-											   value="{(hostComponent._color >> 8) &amp; 0xFF}"
-											   change="hostComponent.on_tx_rgb_change()" 
-											   skinClass="spark.skins.spark.NumericStepperSkin"/>
+											  maxChars="3"
+											  maximum="255"
+											  minimum="0"
+											  stepSize="1"
+											  value="{(hostComponent._color >> 8) &amp; 0xFF}"
+											  change="hostComponent.on_tx_rgb_change()"
+											  skinClass="spark.skins.spark.NumericStepperSkin"/>
 						</s:HGroup>
-						
+
 						<s:HGroup>
-							
-							<s:RadioButton id="rb_b" color="0xFFFFFF"
-											label="B" skinClass="spark.skins.spark.RadioButtonSkin"
-											click="hostComponent.on_rb_rgb_change()" />
-							
+
+							<s:RadioButton id="rb_b"
+										   color="0xFFFFFF"
+										   label="B"
+										   skinClass="spark.skins.spark.RadioButtonSkin"
+										   click="hostComponent.on_rb_rgb_change()"/>
+
 							<s:NumericStepper id="tx_b"
-											   maxChars="3" maximum="255" minimum="0" stepSize="1"
-											   value="{(hostComponent._color) &amp; 0xFF}"
-											   change="hostComponent.on_tx_rgb_change()"
-											   skinClass="spark.skins.spark.NumericStepperSkin"/>
+											  maxChars="3"
+											  maximum="255"
+											  minimum="0"
+											  stepSize="1"
+											  value="{(hostComponent._color) &amp; 0xFF}"
+											  change="hostComponent.on_tx_rgb_change()"
+											  skinClass="spark.skins.spark.NumericStepperSkin"/>
 						</s:HGroup>
-						
+
 					</s:VGroup>
-						
-					<s:HGroup width="100%" paddingRight="10"
-							  horizontalAlign="center"  gap="5" >
-						
-						<s:Label height="100%" 
+
+					<s:HGroup width="100%"
+							  paddingRight="10"
+							  horizontalAlign="center"
+							  gap="5">
+
+						<s:Label height="100%"
 								 verticalAlign="middle"
-								 color="0xFFFFFF" text="#" />
-						
-						<s:TextInput id="hexrgb" change="hostComponent.on_tx_hex_change()" maxChars="6"
-									 restrict="a-fA-F0-9" text="" width="80"/>
+								 color="0xFFFFFF"
+								 text="#"/>
+
+						<s:TextInput id="hexrgb"
+									 change="hostComponent.on_tx_hex_change()"
+									 maxChars="6"
+									 restrict="a-fA-F0-9"
+									 text=""
+									 width="80"/>
 					</s:HGroup>
 				</s:VGroup>
 			</s:HGroup>
 		</s:Group>
-		
+
 		<mx:Spacer height="1"/>
-	
-		<s:Group width="100%" height="100%">
-			
-			<s:Rect width="100%" height="100%">
+
+		<s:Group width="100%"
+				 height="100%">
+
+			<s:Rect width="100%"
+					height="100%">
 				<s:fill>
 					<s:SolidColor color="0x3a3a3a"/>
 				</s:fill>
 			</s:Rect>
-			
-			<s:Line left="0" right="0" top="0">
+
+			<s:Line left="0"
+					right="0"
+					top="0">
 				<s:stroke>
-					<s:SolidColorStroke color="#555555" weight="1"/>
+					<s:SolidColorStroke color="#555555"
+										weight="1"/>
 				</s:stroke>
 			</s:Line>
-		
-			<mx:ControlBar horizontalAlign="right" width="100%" height="60">
-			
-				<mx:Spacer width="100%" />
-			
+
+			<mx:ControlBar horizontalAlign="right"
+						   width="100%"
+						   height="60">
+
+				<mx:Spacer width="100%"/>
+
 				<button:VDOMButton width="48"
-						  icon="{ VDOMImage.DeleteBlack }"
-					  	  click="hostComponent.cancel_close_window()" />
-			
+								   icon="{ VDOMImage.DeleteBlack }"
+								   click="hostComponent.cancel_close_window()"/>
+
 				<button:VDOMButton label="{ resourceManager.getString( 'Wysiwyg_General', 'color_picker_window_use' ) }"
-					  	  click="hostComponent.ok_close_window()" />
-			</mx:ControlBar>	
-		
-		</s:Group>	
-		
+								   click="hostComponent.ok_close_window()"/>
+			</mx:ControlBar>
+
+		</s:Group>
+
 	</s:VGroup>
 </s:SparkSkin>

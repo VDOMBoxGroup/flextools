@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panels:PanelBase xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
-		 xmlns:panels="net.vdombox.ide.modules.wysiwyg.view.components.panels.*"
-		 xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 creationComplete="creationCompleteHandler(event)">
+				  xmlns:panels="net.vdombox.ide.modules.wysiwyg.view.components.panels.*"
+				  xmlns:fx="http://ns.adobe.com/mxml/2009"
+				  xmlns:mx="library://ns.adobe.com/flex/mx"
+				  xmlns:s="library://ns.adobe.com/flex/spark"
+				  creationComplete="creationCompleteHandler(event)">
 
 
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.common.model._vo.TypeVO;
@@ -22,15 +22,18 @@
 			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase;
 
 			private var _attributesVO : VdomObjectAttributesVO;
+
 			private var _typeVO : TypeVO;
 
 			private var attributes : ArrayCollection;
+
 			private var codeInterfaceRE : RegExp = /^(\w*)\((.*)\)/;
-			
+
 			private var verticalScrollPosition : Number = 0;
+
 			private var NeedSetVerticalScrollPosition : Boolean = false;
-			
-			
+
+
 			public function get attributesVO() : VdomObjectAttributesVO
 			{
 				return _attributesVO;
@@ -42,9 +45,9 @@
 					verticalScrollPosition = attributesList.scroller.verticalScrollBar.viewport.verticalScrollPosition;
 				else
 					verticalScrollPosition = 0;
-				
+
 				var oneObject : Boolean = false;
-				
+
 				if ( !value )
 				{
 					_attributesVO = value;
@@ -52,10 +55,10 @@
 					attributesList.dataProvider = null;
 					return;
 				}
-				
+
 				if ( _attributesVO && _attributesVO.vdomObjectVO == value.vdomObjectVO )
 					oneObject = true;
-					
+
 				//_attributesVO = value;
 
 				_typeVO = value.vdomObjectVO.typeVO;
@@ -65,50 +68,34 @@
 				var attributesArray : Array = [];
 				var attributeVO : AttributeVO;
 				var attributeDescriptionVO : AttributeDescriptionVO;
-				
-				attributesArray.push( { group: 0, 
-					name: 					"id", 
-					displayName: 			"id", 
-					objectVO: 			value.vdomObjectVO,
-					attributeDescriptionVO: null, 
-					objectsList:	 		null,
-					pageLinks: 				null } );
-				
-				attributesArray.push( { group: 0, 
-					name: 					resourceManager.getString( 'Wysiwyg_General', 'attribut_name'), 
-					displayName: 			"name",
-					objectVO: 			value.vdomObjectVO,
-					attributeDescriptionVO: null, 
-					objectsList:	 		null,
-					pageLinks: 				null } );
 
-				for each (var attrDescrVO : AttributeDescriptionVO in _typeVO.attributeDescriptions )
+				attributesArray.push( { group: 0, name: "id", displayName: "id", objectVO: value.vdomObjectVO, attributeDescriptionVO: null, objectsList: null, pageLinks: null } );
+
+				attributesArray.push( { group: 0, name: resourceManager.getString( 'Wysiwyg_General', 'attribut_name' ), displayName: "name", objectVO: value.vdomObjectVO, attributeDescriptionVO: null, objectsList: null, pageLinks: null } );
+
+				for each ( var attrDescrVO : AttributeDescriptionVO in _typeVO.attributeDescriptions )
 				{
 					if ( !attrDescrVO.visible )
 						continue;
-					
+
 					attributeVO = value.getAttributeVOByName( attrDescrVO.name );
-					 
+
 					// TODO: Why so many arguments? ( attrDescrVO.colorGroup,  attrDescrVO)
-					
-					attributesArray.push( { group: attrDescrVO.colorGroup, 
-						name: 					attrDescrVO.name, 
-						displayName: 			attrDescrVO.displayName, 
-						attributeVO: 			attributeVO,
-						attributeDescriptionVO: attrDescrVO, 
-						objectsList:	 		value.objectsList,
-						pageLinks: 				value.pageLinks } );
+
+					attributesArray.push( { group: attrDescrVO.colorGroup, name: attrDescrVO.name, displayName: attrDescrVO.displayName, attributeVO: attributeVO, attributeDescriptionVO: attrDescrVO, objectsList: value.objectsList, pageLinks: value.pageLinks } );
 				}
-				
-//				// TODO: need used "attributesList.dataProvider = attributesArray"
+
+				//				// TODO: need used "attributesList.dataProvider = attributesArray"
 				NeedSetVerticalScrollPosition = true;
-				
-				var dataProvider : ArrayCollection =  new ArrayCollection( attributesArray );
-				
-				/*dataProvider.sort = new Sort();
-				dataProvider.sort.fields = [ new SortField( "group" ), new SortField( "displayName" ) ];
-				dataProvider.refresh();*/
-				
+
+				var dataProvider : ArrayCollection = new ArrayCollection( attributesArray );
+
+				/*
+				   dataProvider.sort = new Sort();
+				   dataProvider.sort.fields = [ new SortField( "group" ), new SortField( "displayName" ) ];
+				   dataProvider.refresh();
+				 */
+
 				if ( !oneObject )
 				{
 					_attributesVO = value;
@@ -117,16 +104,16 @@
 				else
 				{
 					var attribute : AttributeVO;
-					
+
 					for each ( var object : Object in dataProvider.source )
 					{
 						if ( !object.hasOwnProperty( "attributeVO" ) )
 							continue;
-						
+
 						attributeVO = object.attributeVO;
-						
+
 						var objectTemp : Object = findAttribute( attributeVO );
-						
+
 						if ( !objectTemp )
 						{
 							_attributesVO = value;
@@ -134,7 +121,7 @@
 						}
 						else
 						{
-							
+
 							attribute = objectTemp.attributeVO;
 							if ( attributeVO.value != attribute.value || attributeVO.defaultValue != attribute.defaultValue )
 							{
@@ -143,15 +130,15 @@
 						}
 					}
 				}
-				
+
 			}
-			
-			private function setAttribute ( object : Object ) : void
+
+			private function setAttribute( object : Object ) : void
 			{
 				var attribute : AttributeVO = object.attributeVO;
-				
+
 				var newAttributes : Array = new Array();
-				
+
 				for each ( var attributeVO : AttributeVO in _attributesVO.attributes )
 				{
 					if ( attributeVO.name == attribute.name )
@@ -159,9 +146,9 @@
 					else
 						newAttributes.push( attributeVO );
 				}
-				
+
 				_attributesVO.attributes = newAttributes;
-				
+
 				var attrProvider : ArrayCollection = attributesList.dataProvider as ArrayCollection;
 				for each ( var object2 : Object in attrProvider.source )
 				{
@@ -173,21 +160,21 @@
 					}
 				}
 			}
-			
+
 			private function findAttribute( attribute : AttributeVO ) : Object
 			{
 				var attrProvider : ArrayCollection = attributesList.dataProvider as ArrayCollection;
-				
+
 				for each ( var object : Object in attrProvider.source )
 				{
 					if ( !object.hasOwnProperty( "attributeVO" ) )
 						continue;
-					
+
 					var attributeVO : AttributeVO = object.attributeVO;
 					if ( attributeVO.name == attribute.name )
 						return object;
 				}
-				
+
 				return attribute;
 			}
 
@@ -207,26 +194,26 @@
 
 				return result;
 			}
-			
-			protected function creationCompleteHandler(event:FlexEvent):void
+
+			protected function creationCompleteHandler( event : FlexEvent ) : void
 			{
 				tbFill.minHeight = 41;
 				addEventListener( ObjectAttributesPanelEvent.SELECTED_ATTRIBUTE_CHANGED, changeSelectedAttributeHandler, true, 0, true );
 			}
-			
+
 			private function changeSelectedAttributeHandler( event : ObjectAttributesPanelEvent ) : void
 			{
 				attributesList.selectedIndex++;
 				//var index : int = attributesList.selectedIndex;
 			}
-			
-			protected function attributesList_creationCompleteHandler(event:FlexEvent):void
+
+			protected function attributesList_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
+				addEventListener( MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true, 0, true );
 				attributesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 			}
-			
-			protected function attributesList_updateCompleteHandler(event:FlexEvent):void
+
+			protected function attributesList_updateCompleteHandler( event : FlexEvent ) : void
 			{
 				if ( NeedSetVerticalScrollPosition )
 				{
@@ -234,35 +221,52 @@
 					NeedSetVerticalScrollPosition = false;
 				}
 			}
-			
+
 			private function mouseWheelHandler( event : MouseEvent ) : void
 			{
 				event.delta = event.delta > 0 ? 1 : -1;
 			}
-			
 		]]>
 	</fx:Script>
-	
-	<s:Label id="typeNameLabel" y="-18" left="9" right="1" fontSize="8"
-			 color="#FFFFFF" paddingLeft="3" paddingTop="3" textAlign="left"
+
+	<s:Label id="typeNameLabel"
+			 y="-18"
+			 left="9"
+			 right="1"
+			 fontSize="8"
+			 color="#FFFFFF"
+			 paddingLeft="3"
+			 paddingTop="3"
+			 textAlign="left"
 			 verticalAlign="bottom"/>
-	
-	<s:Rect width="100%" height="100%">
+
+	<s:Rect width="100%"
+			height="100%">
 		<s:fill>
-			<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
+			<s:BitmapFill source="{VDOMImage.Fon_Texture}"
+						  smooth="true"
+						  fillMode="repeat"/>
 		</s:fill>
 	</s:Rect>
 
-	<s:HGroup height="100%" width="100%" gap="0">
-		<s:List id="attributesList" height="100%" width="100%"  borderVisible="false" updateComplete="attributesList_updateCompleteHandler(event)"
-				useVirtualLayout="false" itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase"
-				contentBackgroundAlpha="0" creationComplete="attributesList_creationCompleteHandler(event)"
+	<s:HGroup height="100%"
+			  width="100%"
+			  gap="0">
+		<s:List id="attributesList"
+				height="100%"
+				width="100%"
+				borderVisible="false"
+				updateComplete="attributesList_updateCompleteHandler(event)"
+				useVirtualLayout="false"
+				itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase"
+				contentBackgroundAlpha="0"
+				creationComplete="attributesList_creationCompleteHandler(event)"
 				hasFocusableChildren="true">
-			
+
 			<s:layout>
 				<s:VerticalLayout gap="0"
 								  variableRowHeight="true"/>
-			</s:layout>	
+			</s:layout>
 		</s:List>
 	</s:HGroup>
 

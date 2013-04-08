@@ -12,12 +12,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	
+
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.MultilineWindowSkin;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import spark.components.RichEditableText;
 	import spark.components.Window;
 
@@ -51,24 +51,24 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 
 		[SkinPart( required = "true" )]
 		public var textAreaContainer : RichEditableText;
-		
+
 		override public function stylesInitialized() : void
 		{
 			super.stylesInitialized();
 			this.setStyle( "skinClass", MultilineWindowSkin );
 		}
 
-		public function cancel_close_window( event: KeyboardEvent ) : void
+		public function cancel_close_window( event : KeyboardEvent ) : void
 		{
 			if ( event.charCode == Keyboard.ESCAPE )
 				close();
 		}
 
-		public function closeHandler(event:Event) : void
+		public function closeHandler( event : Event ) : void
 		{
 			removeEventListener( Event.CLOSE, closeHandler );
 
-			WindowManager.getInstance().removeWindow(this);
+			WindowManager.getInstance().removeWindow( this );
 		}
 
 		/**

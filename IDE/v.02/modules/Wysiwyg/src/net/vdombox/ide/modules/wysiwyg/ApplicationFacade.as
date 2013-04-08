@@ -44,7 +44,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.messages.ProcessResourcesProxyMessageCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.messages.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.messages.ProcessTypesProxyMessageCommand;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 
@@ -66,13 +66,17 @@ package net.vdombox.ide.modules.wysiwyg
 		{
 			sendNotification( Notifications.STARTUP, application );
 		}
-		
+
 		public static const SET_NULL : String = "setNull";
+
 		public static const LOCKED_NULL : String = "lockedNull";
+
 		public static const UNLOCKED_NULL : String = "unlockedNull";
+
 		public static const SET_MULTISELECTION_OBJECTS : String = "setMultiselectionObjects";
+
 		public static const DRAW_MULTISELECTION_OBJECTS : String = "drawMultiselectionObjects";
-		
+
 
 		override protected function initializeController() : void
 		{
@@ -84,7 +88,7 @@ package net.vdombox.ide.modules.wysiwyg
 
 			registerCommand( Notifications.CREATE_BODY, CreateBodyCommand );
 			registerCommand( Notifications.BODY_CREATED, BodyCreatedCommand );
-			
+
 			registerCommand( Notifications.BODY_STOP, BodyStopCommand );
 
 			registerCommand( SettingsProxy.INITIALIZE_SETTINGS, InitializeSettingsCommand );
@@ -108,33 +112,33 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( Notifications.RENDERER_REMOVED, RendererRemovedCommand );
 
 			registerCommand( Notifications.RENDERER_CLICKED, RendererClickedCommand );
-			
+
 			registerCommand( Notifications.WYSIWYG_GETTED, WysiwygGettedCommand );
 			registerCommand( Notifications.XML_PRESENTATION_GETTED, XmlPresentationGettedCommand );
-			
+
 			registerCommand( Notifications.RENDERER_TRANSFORMED, RendererTransformedCommand );
 			registerCommand( Notifications.SAVE_ATTRIBUTES_REQUEST, RendererTransformedCommand );
 			registerCommand( Notifications.OBJECT_VISIBLE, ObjectVisibleCommand );
-//			registerCommand( SELECT_ITEM_REQUEST, SelectItemRequestCommand );
+			//			registerCommand( SELECT_ITEM_REQUEST, SelectItemRequestCommand );
 
 			registerCommand( Notifications.GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 			registerCommand( Notifications.CREATE_OBJECT_REQUEST, CreateObjectRequestCommand );
-					
+
 			registerCommand( Notifications.EDITOR_CREATED, EditorCreatedCommand );
 			registerCommand( Notifications.EDITOR_REMOVED, EditorRemovedCommand );
 
 			registerCommand( Notifications.GET_MULTILINE_RESOURCES, GetMultiLineCommand );
-			
+
 			registerCommand( Notifications.TEAR_DOWN, TearDownCommand );
-			
+
 			registerCommand( Notifications.OBJECT_MOVED, CreateLineLinkingCommand );
-			
+
 			registerCommand( Notifications.PAGE_STRUCTURE_GETTED, SetToolTipCommand );
 			registerCommand( Notifications.OBJECT_NAME_SETTED, SetNewNameObjectCommand );
-			
+
 			registerCommand( Notifications.OPEN_CREATE_PAGE_WINDOW_REQUEST, OpenCreatePageWindowRequestCommand );
 			registerCommand( Notifications.PAGE_TYPE_ITEM_RENDERER_CREATED, PageTypeItemRendererCreatedCommand );
-			
+
 			registerCommand( Notifications.CREATE_PAGE_REQUEST, CreatePageRequestCommand );
 			registerCommand( Notifications.DELETE_OBJECT_REQUEST, DeleteObjectCommand );
 		}

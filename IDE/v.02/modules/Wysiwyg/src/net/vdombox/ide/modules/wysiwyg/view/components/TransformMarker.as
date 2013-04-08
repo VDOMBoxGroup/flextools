@@ -10,17 +10,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
+
 	import mx.core.IVisualElement;
 	import mx.core.UIComponent;
 	import mx.core.mx_internal;
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
-	
+
 	import spark.components.supportClasses.ScrollBarBase;
 
 	use namespace mx_internal;
@@ -28,11 +28,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	public class TransformMarker extends UIComponent
 	{
 		public static const RESIZE_NONE : uint = 0;
+
 		public static const RESIZE_WIDTH : uint = 1;
+
 		public static const RESIZE_HEIGHT : uint = 2;
+
 		public static const RESIZE_ALL : uint = 3;
 
 		public static const MOVE_TRUE : Boolean = true;
+
 		public static const MOVE_FALSE : Boolean = false;
 
 		public function TransformMarker()
@@ -40,21 +44,29 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			super();
 
 			visible = false;
-			
+
 			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
 			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
-			
+
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
 		}
 
 		private var tl_box : Sprite;
+
 		private var tc_box : Sprite;
+
 		private var tr_box : Sprite;
+
 		private var cl_box : Sprite;
+
 		private var cr_box : Sprite;
+
 		private var bl_box : Sprite;
+
 		private var bc_box : Sprite;
+
 		private var br_box : Sprite;
+
 		private var cc_box : Sprite;
 
 		private var CursorID : uint
@@ -62,6 +74,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var moving : DisplayObject;
 
 		private var _moveMode : Boolean;
+
 		private var _resizeMode : uint;
 
 		private var _selectedItem : RendererBase;
@@ -71,19 +84,25 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var mousePosition : Point;
 
 		private var modeChanged : Boolean;
+
 		private var boxStyleChanged : Boolean;
+
 		private var itemChanged : Boolean;
 
 		private var boxSize : int = 6;
+
 		private var borderColor : uint;
+
 		private var borderAlpha : Number;
+
 		private var backgroundColor : uint
+
 		private var backgroundAlpha : Number;
 
 		private var transformation : Boolean;
 
 		private var beforeTransform : Object;
-		
+
 		public function get resizeMode() : uint
 		{
 			return _resizeMode;
@@ -153,7 +172,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 
 			_selectedItem = item as RendererBase;
-			
+
 			if ( !_selectedItem )
 				return;
 
@@ -165,15 +184,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			moveMode = item.movable;
 
 			addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-			
+
 			if ( stage )
 			{
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 				stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
 			}
-			
+
 			_selectedItem.addEventListener( FlexEvent.UPDATE_COMPLETE, refreshCompleteHandler );
-			
+
 			beforeTransform = { x: _selectedItem.x, y: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
 
 			itemChanged = true;
@@ -196,7 +215,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			itemChanged = true;
 			invalidateSize();
 			invalidateDisplayList();
-			
+
 		}
 
 		override protected function createChildren() : void
@@ -226,7 +245,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			this.addChild( bl_box );
 			this.addChild( bc_box );
 			this.addChild( br_box );
-			
+
 		}
 
 		override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
@@ -335,14 +354,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				var transparentValue : Number = ( resizeMode ) ? .4 : .0;
 
-				/*if ( cc_box.visible )
-				{
-					var g : Graphics = cc_box.graphics;
-					g.clear();
-					g.lineStyle( 6, 0x333333, transparentValue, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER );
-					g.drawRect( 3, 3, realWidth - 6, realHeight - 6 );
-					g.endFill();
-				}*/
+				/*
+				   if ( cc_box.visible )
+				   {
+				   var g : Graphics = cc_box.graphics;
+				   g.clear();
+				   g.lineStyle( 6, 0x333333, transparentValue, false, LineScaleMode.NONE, CapsStyle.SQUARE,
+				   JointStyle.MITER );
+				   g.drawRect( 3, 3, realWidth - 6, realHeight - 6 );
+				   g.endFill();
+				   }
+				 */
 
 				graphics.clear();
 				graphics.lineStyle( 1, 0, 1, false, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.MITER );
@@ -362,19 +384,19 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( !_selectedItem )
 				return;
-			
+
 			if ( !_selectedItem.typeVO )
 				refresh();
-			
+
 			var editComponent : Object = _selectedItem.editableComponent;
-			if (  editComponent && ( _selectedItem.typeVO && _selectedItem.typeVO.name == "text" || _selectedItem.typeVO.name == "richtext" || _selectedItem.typeVO.name == "calendar" ))
+			if ( editComponent && ( _selectedItem.typeVO && _selectedItem.typeVO.name == "text" || _selectedItem.typeVO.name == "richtext" || _selectedItem.typeVO.name == "calendar" ) )
 			{
 				if ( measuredWidth != editComponent.width )
 				{
 					measuredWidth = editComponent.width;
 					_selectedItem.width = measuredWidth;
 				}
-			
+
 				if ( measuredHeight != editComponent.height )
 				{
 					measuredHeight = editComponent.height;
@@ -405,7 +427,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			graphics.clear();
 			graphics.beginFill( backgroundColor, backgroundAlpha );
 			graphics.lineStyle( .25, borderColor, 1, true, LineScaleMode.NONE );
-			graphics.drawRect( 0, 0,  measuredWidth, measuredHeight );
+			graphics.drawRect( 0, 0, measuredWidth, measuredHeight );
 			graphics.endFill();
 		}
 
@@ -442,11 +464,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		}
 
 		private function mouseDownHandler( event : MouseEvent ) : void
-		{			
+		{
 			beforeTransform = { x: _selectedItem.x, y: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
-			
-			(_selectedItem as RendererBase).beforeX = _selectedItem.x;
-			(_selectedItem as RendererBase).beforeY = _selectedItem.y;
+
+			( _selectedItem as RendererBase ).beforeX = _selectedItem.x;
+			( _selectedItem as RendererBase ).beforeY = _selectedItem.y;
 
 			moving = null;
 			mousePosition = new Point( mouseX, mouseY );
@@ -458,12 +480,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			transformation = true;
 
-			this.dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN));
-			
-			stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0 , true );
-			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0 , true );
+			this.dispatchEvent( new TransformMarkerEvent( TransformMarkerEvent.TRANSFORM_BEGIN ) );
 
-			stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0 , true );
+			stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
+			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0, true );
+
+			stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true, 0, true );
 		}
 
 		private function mouseOutHandler( event : MouseEvent ) : void
@@ -573,48 +595,48 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			rmEvent.renderer = _selectedItem as IRenderer;
 			event.stopImmediatePropagation();
 			dispatchEvent( rmEvent );
-			
+
 			dispatchEvent( new RendererEvent( RendererEvent.MOUSE_UP_MEDIATOR ) );
 		}
-		
+
 		public function equallyPoint( _x : Number, _y : Number ) : Boolean
 		{
 			if ( Math.abs( _x - beforeTransform.x ) < 1 && Math.abs( _y - beforeTransform.y ) < 1 )
 				return true;
 			return false;
 		}
-		
+
 		public function equallyX( _x : Number ) : Boolean
 		{
 			if ( Math.abs( _x - beforeTransform.x ) < 1 )
 				return true;
 			return false;
 		}
-		
+
 		public function equallyY( _y : Number ) : Boolean
 		{
 			if ( Math.abs( _y - beforeTransform.y ) < 1 )
 				return true;
 			return false;
 		}
-		
+
 		public function equallySize( _width : Number, _height : Number ) : Boolean
 		{
-			if ( _width == beforeTransform.width && _height == beforeTransform.height ) 
+			if ( _width == beforeTransform.width && _height == beforeTransform.height )
 				return true;
 			return false;
 		}
-		
+
 		public function equallyWidth( _width : Number ) : Boolean
 		{
-			if ( _width == beforeTransform.width ) 
+			if ( _width == beforeTransform.width )
 				return true;
 			return false;
 		}
-		
+
 		public function equallyHeight( _height : Number ) : Boolean
 		{
-			if ( _height == beforeTransform.height ) 
+			if ( _height == beforeTransform.height )
 				return true;
 			return false;
 		}
@@ -636,7 +658,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var allow : Boolean = true;
 
 			if ( moving && event.buttonDown )
-			{				
+			{
 				var mx : Number = mouseX;
 				var my : Number = mouseY;
 
@@ -775,7 +797,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					allow = false;
 
 				if ( rect )
-				{					
+				{
 					if ( rect.width > maxWidth )
 						rect.width = maxWidth;
 
@@ -816,11 +838,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				mouseUpHandler( null );
 			}
-			
-			if ( rect.width != beforeTransform.width || rect.height != beforeTransform.height || 
-				_selectedItem.x != beforeTransform.x || _selectedItem.y != beforeTransform.y )
+
+			if ( rect.width != beforeTransform.width || rect.height != beforeTransform.height || _selectedItem.x != beforeTransform.x || _selectedItem.y != beforeTransform.y )
 			{
-				var moveEvent : RendererEvent =  new RendererEvent( RendererEvent.MOVE_MEDIATOR ) ;
+				var moveEvent : RendererEvent = new RendererEvent( RendererEvent.MOVE_MEDIATOR );
 				moveEvent.ctrlKey = event.ctrlKey;
 				dispatchEvent( moveEvent );
 			}
@@ -830,51 +851,51 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			//trace ("-- stage_mouseClickHandler");
 			stage.removeEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
-			
+
 			event.stopImmediatePropagation();
 		}
-		
+
 		private function addedToStageHandler( event : Event ) : void
 		{
 			removeEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
-			
+
 			parent.addEventListener( Event.CHANGE, scrollHandler, true, 0, true );
 			parent.addEventListener( RendererEvent.MOVED, render_movedHandler, true, 0, true );
 		}
-		
-		private function scrollHandler( event : Event ) :void
-		{ 
-			if( event.target is ScrollBarBase )
+
+		private function scrollHandler( event : Event ) : void
+		{
+			if ( event.target is ScrollBarBase )
 				refresh();
 		}
-		
+
 		private function render_movedHandler( event : RendererEvent ) : void
 		{
 			var renderer : IRenderer = event.target as IRenderer;
-			
-			if( !_selectedItem || !renderer )
+
+			if ( !_selectedItem || !renderer )
 				return;
 
-			var inMovedObject:  Boolean = false;
+			var inMovedObject : Boolean = false;
 			var parentRenderer : DisplayObjectContainer;
-			
+
 			parentRenderer = _selectedItem as DisplayObjectContainer;
-			
-			while( parentRenderer )
+
+			while ( parentRenderer )
 			{
 				if ( parentRenderer == renderer )
 				{
 					inMovedObject = true;
 					break;
 				}
-				
-				if( parentRenderer == parent )
+
+				if ( parentRenderer == parent )
 					break;
-				
+
 				parentRenderer = parentRenderer.parent;
 			}
-			
-			if( inMovedObject )
+
+			if ( inMovedObject )
 				refresh();
 		}
 	}

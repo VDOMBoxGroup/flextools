@@ -13,14 +13,14 @@ package net.vdombox.ide.modules.wysiwyg.events
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  @private
-		 *  This event is dispatched during partAdded().
+		 * @private
+		 * This event is dispatched during partAdded().
 		 */
 		public static const PART_ADDED : String = "_partAdded";
 
 		/**
-		 *  @private
-		 *  This event is dispatched during partRemoved().
+		 * @private
+		 * This event is dispatched during partRemoved().
 		 */
 		public static const PART_REMOVED : String = "_partRemoved";
 
@@ -31,12 +31,9 @@ package net.vdombox.ide.modules.wysiwyg.events
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  Constructor.
+		 * Constructor.
 		 */
-		public function SkinPartEvent( type : String, bubbles : Boolean = false,
-			cancelable : Boolean = false,
-			partName : String = null,
-			instance : Object = null )
+		public function SkinPartEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false, partName : String = null, instance : Object = null )
 		{
 			super( type, bubbles, cancelable );
 
@@ -55,7 +52,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 		//----------------------------------
 
 		/**
-		 *  The skin part being added or removed.
+		 * The skin part being added or removed.
 		 */
 		public var instance : Object;
 
@@ -64,7 +61,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 		//----------------------------------
 
 		/**
-		 *  The name of the skin part being added or removed.
+		 * The name of the skin part being added or removed.
 		 */
 		public var partName : String;
 
@@ -75,12 +72,11 @@ package net.vdombox.ide.modules.wysiwyg.events
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		override public function clone() : Event
 		{
-			return new SkinPartEvent( type, bubbles, cancelable,
-				partName, instance );
+			return new SkinPartEvent( type, bubbles, cancelable, partName, instance );
 		}
 	}
 

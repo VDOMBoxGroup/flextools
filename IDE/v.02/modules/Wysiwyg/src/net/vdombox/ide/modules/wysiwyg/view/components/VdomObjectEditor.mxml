@@ -2,12 +2,14 @@
 <s:SkinnableContainer xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
 					  xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
-					  height="100%" width="100%"
+					  height="100%"
+					  width="100%"
 					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.EditorSkin"
 					  preinitialize="skinnablecontainer1_preinitializeHandler(event)"
 					  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IEditor"
 					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)"
-					  xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:vdomxml="net.vdombox.editors.parsers.vdomxml.*">
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:vdomxml="net.vdombox.editors.parsers.vdomxml.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
@@ -15,7 +17,7 @@
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.events.StateChangeEvent;
-			
+
 			import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 			import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
@@ -28,28 +30,32 @@
 			import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.EditorSkin;
-			
+
 			import spark.components.Label;
 
 			public static const STATUS_NULL : uint = 0;
+
 			public static const STATUS_SAVING : uint = 1;
+
 			public static const STATUS_SAVING_OK : uint = 2;
+
 			public static const STATUS_LOADING : uint = 3;
+
 			public static const STATUS_LOADING_OK : uint = 4;
 
-			[SkinPart( required="true" )]
+			[SkinPart( required = "true" )]
 			public var saveXMLButton : WorkAreaButton;
 
-			[SkinPart( required="true" )]
+			[SkinPart( required = "true" )]
 			public var statusLabel : Label;
-			
-			[SkinPart( required="true" )]
+
+			[SkinPart( required = "true" )]
 			public var strXWritten : Label;
-			
-			[SkinPart( required="true" )]
+
+			[SkinPart( required = "true" )]
 			public var strYWritten : Label;
-			
-			[SkinPart( required="true" )]
+
+			[SkinPart( required = "true" )]
 			public var spinner : Image;
 
 			private var _editorVO : EditorVO;
@@ -59,14 +65,15 @@
 			private var _status : uint;
 
 			private var isVdomObjectVOChanged : Boolean;
+
 			private var isStatusChanged : Boolean;
-			
+
 			[Bindable]
 			private var _value : VdomObjectXMLPresentationVO;
-			
+
 			[Bindable]
 			private var unsaved : Boolean = false;
-			
+
 			public function get editorVO() : EditorVO
 			{
 				if ( !_editorVO )
@@ -86,7 +93,7 @@
 			public function set selectedRenderer( value : IRenderer ) : void
 			{
 				_selectedRenderer = value;
-				
+
 			}
 
 			[Bindable]
@@ -101,35 +108,35 @@
 
 				isStatusChanged = true;
 			}
-			
-			public function get xmlPresentation(): VdomObjectXMLPresentationVO
+
+			public function get xmlPresentation() : VdomObjectXMLPresentationVO
 			{
-					return _value;
+				return _value;
 			}
-			
-			public function set xmlPresentation(value: VdomObjectXMLPresentationVO): void
+
+			public function set xmlPresentation( value : VdomObjectXMLPresentationVO ) : void
 			{
 				_value = value;
-				
-				trace(value.xmlPresentation);
-				
-				trace("convert");
-				
-				trace(convert( value.xmlPresentation ));
-				
+
+				trace( value.xmlPresentation );
+
+				trace( "convert" );
+
+				trace( convert( value.xmlPresentation ) );
+
 				if ( xmlScriptEditor )
 					xmlScriptEditor.scriptAreaComponent.text = convert( value.xmlPresentation );
 			}
-			
-			public function convert(data:String):String 
+
+			public function convert( data : String ) : String
 			{
-				var b:ByteArray = new ByteArray();
-				b.writeMultiByte(data,"unicode");
+				var b : ByteArray = new ByteArray();
+				b.writeMultiByte( data, "unicode" );
 				b.position = 0;
 				return b.readMultiByte( b.length, "unicode" );;
 			}
-			
-			public function get state(): String
+
+			public function get state() : String
 			{
 				return skin.currentState;
 			}
@@ -175,21 +182,21 @@
 
 				addEventListener( RendererEvent.MOVE, renderer_moveHandler, true, 0, true );
 				addEventListener( RendererEvent.HTML_ADDED, renderer_htmlAddedHandler, true, 0, true );
-				
+
 				addEventListener( TransformMarkerEvent.TRANSFORM_BEGIN, transformMarker_tansformBeginHandler, true, 0, true );
 				addEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformMarker_tansformCompleteHandler, true, 0, true );
-				
+
 				addEventListener( RendererEvent.EDITED, setTransformMarketHandler, true );
 			}
-			
+
 
 			private function removeHandlers() : void
 			{
 				removeEventListener( Event.REMOVED, removedFromStageHandler );
-				
+
 				removeEventListener( EditorEvent.UNDO, undo_fun );
 				removeEventListener( EditorEvent.REDO, redo_fun );
-				
+
 				removeEventListener( RendererEvent.EDITED, setTransformMarketHandler, true );
 
 				if ( skin )
@@ -208,7 +215,7 @@
 				newEditorVO = new EditorVO();
 
 				BindingUtils.bindSetter( vdomObjectChanged, newEditorVO, "vdomObjectVO", true, true );
-				BindingUtils.bindSetter( renderVOChanged, newEditorVO, "renderVO");
+				BindingUtils.bindSetter( renderVOChanged, newEditorVO, "renderVO" );
 				BindingUtils.bindSetter( xmlPresentationChanged, newEditorVO, "vdomObjectXMLPresentationVO", true, true );
 
 				return newEditorVO;
@@ -255,10 +262,10 @@
 
 			private function saveXMLButton_clickHandler( event : MouseEvent = null ) : void
 			{
-				if( xmlPresentation )
+				if ( xmlPresentation )
 				{
 					saveXMLButton.highlighted = false;
-					
+
 					_value.xmlPresentation = xmlScriptEditor.scriptAreaComponent.text;
 					dispatchEvent( new EditorEvent( EditorEvent.XML_SAVE ) );
 				}
@@ -267,15 +274,15 @@
 			private function renderer_moveHandler( event : RendererEvent ) : void
 			{
 				var object : Object = event.object;
-				
+
 				var ee : EditorEvent = new EditorEvent( EditorEvent.RENDERER_TRANSFORMED );
 				ee.renderer = event.target as IRenderer;
 				ee.attributes = { x: object.x, y: object.y };
 
 				dispatchEvent( ee );
 			}
-			
-			private function renderer_htmlAddedHandler(event : RendererEvent):void
+
+			private function renderer_htmlAddedHandler( event : RendererEvent ) : void
 			{
 				refreshToolbar( event.target as RendererBase );
 			}
@@ -285,7 +292,7 @@
 				//trace ("-- [VdomObjectEditor] transformMarker_tansformBegin");
 				toolbarPanel.saveProperties();
 			}
-			
+
 			private function transformMarker_tansformCompleteHandler( event : TransformMarkerEvent ) : void
 			{
 				var ee : EditorEvent = new EditorEvent( EditorEvent.RENDERER_TRANSFORMED );
@@ -295,92 +302,91 @@
 
 				dispatchEvent( ee );
 			}
-			
+
 			private function setTransformMarketHandler( event : RendererEvent ) : void
 			{
 				toolbarPanel.setTransformMarket();
 			}
-			
-			protected function skinnablecontainer1_preinitializeHandler(event:FlexEvent):void
+
+			protected function skinnablecontainer1_preinitializeHandler( event : FlexEvent ) : void
 			{
 				// TODO Auto-generated method stub
 				addHandlers();
 				dispatchEvent( new EditorEvent( EditorEvent.PREINITIALIZED ) );
 			}
-			
-			protected function skinnablecontainer1_creationCompleteHandler(event:FlexEvent):void
+
+			protected function skinnablecontainer1_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				skin.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler, false, 0, true );
-				skin.addEventListener( "nerrr", changeHandler ); 
-				
-				addEventListener( EditorEvent.UNDO, undo_fun, false, 0 , true );
-				addEventListener( EditorEvent.REDO, redo_fun, false, 0 , true );
+				skin.addEventListener( "nerrr", changeHandler );
+
+				addEventListener( EditorEvent.UNDO, undo_fun, false, 0, true );
+				addEventListener( EditorEvent.REDO, redo_fun, false, 0, true );
 			}
-			
+
 			private function undo_fun( event : EditorEvent ) : void
 			{
-				if ( xmlScriptEditor && skin.currentState == "xml" || skin.currentState == "xmlDisabled")
+				if ( xmlScriptEditor && skin.currentState == "xml" || skin.currentState == "xmlDisabled" )
 					xmlScriptEditor.scriptAreaComponent.undo_fun();
 			}
-			
+
 			private function redo_fun( event : EditorEvent ) : void
 			{
-				if ( xmlScriptEditor && skin.currentState == "xml" || skin.currentState == "xmlDisabled")
+				if ( xmlScriptEditor && skin.currentState == "xml" || skin.currentState == "xmlDisabled" )
 					xmlScriptEditor.scriptAreaComponent.redo_fun();
 			}
-			
+
 			private function changeHandler( event : Event ) : void
 			{
 				dispatchEvent( new Event( Event.CHANGE ) );
 			}
-			
+
 			private function mouseMoveOnPageRenderer( event : MouseEvent ) : void
 			{
-				var pt:Point = new Point(event.localX, event.localY);
-				pt = event.target.localToGlobal(pt);
-				
-				pt=renderer.dataGroup.globalToContent(pt);
-				
+				var pt : Point = new Point( event.localX, event.localY );
+				pt = event.target.localToGlobal( pt );
+
+				pt = renderer.dataGroup.globalToContent( pt );
+
 				strXWritten.text = "x: " + pt.x.toString() + "px";
 				strYWritten.text = "y: " + pt.y.toString() + "px";
 			}
-			
+
 			public function set showLinking( value : Boolean ) : void
 			{
 				var editor : EditorSkin = skin as EditorSkin;
 				editor.showLinking.selected = value;
 			}
-			
+
 			public function get showLinking() : Boolean
 			{
 				var editor : EditorSkin = skin as EditorSkin;
-				
+
 				return editor.showLinking.selected;
 			}
-			
+
 			public function set visibleSpinner( value : Boolean ) : void
 			{
 				var editor : EditorSkin = skin as EditorSkin;
-				
+
 				editor.spinner.visible = value;
 			}
-			
+
 			private function xmlScriptEditorKeyDownHandler( event : KeyboardEvent ) : void
 			{
 				if ( event.keyCode == Keyboard.S && event.ctrlKey )
 					saveXMLButton_clickHandler();
 			}
-			
-			protected function xmlScriptEditor_creationCompleteHandler(event:FlexEvent):void
+
+			protected function xmlScriptEditor_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				xmlScriptEditor.addEventListener(ScriptAreaComponenrEvent.TEXT_CHANGE, setStateInUnsave, true, 0, true );
+				xmlScriptEditor.addEventListener( ScriptAreaComponenrEvent.TEXT_CHANGE, setStateInUnsave, true, 0, true );
 			}
-			
+
 			private function setStateInUnsave( event : Event = null ) : void
-			{				
+			{
 				saveXMLButton.highlighted = true;
 			}
-			
 		]]>
 	</fx:Script>
 
@@ -397,14 +403,22 @@
 		<s:VerticalLayout/>
 	</s:layout>
 
-	<s:Group id="groupPageRenderer" height="100%" width="100%" clipAndEnableScrolling="false">
-		<components:PageRenderer id="renderer" 
-								 top="0" bottom="0" left="0" right="0"
-								 selectedRenderer="{ selectedRenderer }" includeIn="wysiwyg, wysiwygDisabled, normal, disabled" 
+	<s:Group id="groupPageRenderer"
+			 height="100%"
+			 width="100%"
+			 clipAndEnableScrolling="false">
+		<components:PageRenderer id="renderer"
+								 top="0"
+								 bottom="0"
+								 left="0"
+								 right="0"
+								 selectedRenderer="{ selectedRenderer }"
+								 includeIn="wysiwyg, wysiwygDisabled, normal, disabled"
 								 mouseMove="mouseMoveOnPageRenderer(event)"/>
 
 		<vdomxml:XMLScriptEditor id="xmlScriptEditor"
-								 height="100%" width="100%"
+								 height="100%"
+								 width="100%"
 								 includeIn="xml, xmlDisabled"
 								 keyDown="xmlScriptEditorKeyDownHandler(event)"
 								 creationComplete="xmlScriptEditor_creationCompleteHandler(event)"/>
@@ -412,7 +426,8 @@
 	</s:Group>
 
 	<components:ToolbarPanel id="toolbarPanel"
-							 includeInLayout="false" width="100%"
+							 includeInLayout="false"
+							 width="100%"
 							 selectedRenderer="{ selectedRenderer }"
 							 excludeFrom="xml, xmlDisabled"/>
 </s:SkinnableContainer>

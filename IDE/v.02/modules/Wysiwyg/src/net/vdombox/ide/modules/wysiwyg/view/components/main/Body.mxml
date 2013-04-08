@@ -3,69 +3,99 @@
 		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  height="100%" width="100%" gap="0" 
+		  height="100%"
+		  width="100%"
+		  gap="0"
 		  xmlns:panels="net.vdombox.ide.modules.wysiwyg.view.components.panels.*">
-	
+
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.modules.wysiwyg.view.components.TypesAccordionHeader;
 		]]>
 	</fx:Script>
-	
-	<panels:ToolBoxPanel id="toolbox" width="127" height="100%" />
-	
-	<s:Rect width="5" height="100%">
+
+	<panels:ToolBoxPanel id="toolbox"
+						 width="127"
+						 height="100%"/>
+
+	<s:Rect width="5"
+			height="100%">
 		<s:fill>
 			<s:SolidColor color="#424242"/>
 		</s:fill>
 	</s:Rect>
-	
+
 	<components:WorkArea id="workArea"
-						 height="100%" width="100%"/>
-	
-	<s:Rect width="8" height="100%">
+						 height="100%"
+						 width="100%"/>
+
+	<s:Rect width="8"
+			height="100%">
 		<s:fill>
 			<s:SolidColor color="#424242"/>
 		</s:fill>
 	</s:Rect>
-	
-	<s:Group height="100%" width="228">
-		<mx:VDividedBox height="100%" width="228"
+
+	<s:Group height="100%"
+			 width="228">
+		<mx:VDividedBox height="100%"
+						width="228"
 						dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
-			
+
 			<panels:ObjectAttributesPanel id="objectAttributesPanel"
-										  width="100%" height="50%"
-										  backgroundAlpha="0" cornerRadius="0" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
-										  title="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_title') }" borderAlpha="0" borderVisible="false"/>
-			
-			<mx:VDividedBox height="50%" width="228"
+										  width="100%"
+										  height="50%"
+										  backgroundAlpha="0"
+										  cornerRadius="0"
+										  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
+										  title="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_title') }"
+										  borderAlpha="0"
+										  borderVisible="false"/>
+
+			<mx:VDividedBox height="50%"
+							width="228"
 							dividerSkin="net.vdombox.ide.common.view.skins.DividerSkin">
-				
+
 				<panels:HelpPanel id="helpPanel"
 								  width="100%"
-								  backgroundAlpha="0" cornerRadius="5" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
-								  title="{ resourceManager.getString( 'Wysiwyg_General', 'help_panel_title') }" borderAlpha="0" borderVisible="false"/>
-				
-				
+								  backgroundAlpha="0"
+								  cornerRadius="5"
+								  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
+								  title="{ resourceManager.getString( 'Wysiwyg_General', 'help_panel_title') }"
+								  borderAlpha="0"
+								  borderVisible="false"/>
+
+
 				<panels:ObjectsTreePanel id="objectsTreePanel"
-										 width="100%" height="100%"
-										 backgroundAlpha="1" cornerRadius="0" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
-										 title="{ resourceManager.getString( 'Wysiwyg_General', 'pages_panel_title') }" borderAlpha="0" borderVisible="false"/>
-				
+										 width="100%"
+										 height="100%"
+										 backgroundAlpha="1"
+										 cornerRadius="0"
+										 skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
+										 title="{ resourceManager.getString( 'Wysiwyg_General', 'pages_panel_title') }"
+										 borderAlpha="0"
+										 borderVisible="false"/>
+
 			</mx:VDividedBox>
 		</mx:VDividedBox>
-		
-		<s:Line left="0" height="100%">
+
+		<s:Line left="0"
+				height="100%">
 			<s:stroke>
-				<s:SolidColorStroke color="#FFFFFF" alpha="0.2" weight="1"/>
+				<s:SolidColorStroke color="#FFFFFF"
+									alpha="0.2"
+									weight="1"/>
 			</s:stroke>
 		</s:Line>
-		
-		<s:Line right="0" height="100%">
+
+		<s:Line right="0"
+				height="100%">
 			<s:stroke>
-				<s:SolidColorStroke color="#000000" alpha="0.2" weight="1"/>
+				<s:SolidColorStroke color="#000000"
+									alpha="0.2"
+									weight="1"/>
 			</s:stroke>
 		</s:Line>
 	</s:Group>
-	
+
 </s:HGroup>

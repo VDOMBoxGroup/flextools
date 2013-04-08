@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
 	import mx.core.DragSource;
 	import mx.core.IUIComponent;
 	import mx.core.UIComponent;
@@ -15,8 +15,8 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 	import mx.managers.ISystemManager;
 
 	/**
-	 *  @private
-	 *  A helper class for DragManager that displays the drag image
+	 * @private
+	 * A helper class for DragManager that displays the drag image
 	 */
 	public class VdomDragProxy extends UIComponent
 	{
@@ -28,7 +28,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  Constructor.
+		 * Constructor.
 		 */
 		public function VdomDragProxy( dragInitiator : IUIComponent, dragSource : DragSource )
 		{
@@ -51,7 +51,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		override public function initialize() : void
 		{
@@ -75,8 +75,8 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  @private
-		 *  Last Mouse event received
+		 * @private
+		 * Last Mouse event received
 		 */
 		private var lastMouseEvent : MouseEvent;
 
@@ -87,51 +87,51 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public var dragInitiator : IUIComponent;
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public var dragSource : DragSource;
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public var xOffset : Number;
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public var yOffset : Number;
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public var startX : Number;
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public var startY : Number;
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public var _target : IUIComponent = null;
-		
+
 		public var _NotPackegeTarget : IUIComponent = null;
 
 		/**
-		 *  @private
-		 *  Current drag action - NONE, COPY, MOVE or LINK
+		 * @private
+		 * Current drag action - NONE, COPY, MOVE or LINK
 		 */
 		public var action : String;
 
 		/**
-		 *  @private
-		 *  whether move is allowed or not
+		 * @private
+		 * whether move is allowed or not
 		 */
 		public var allowMove : Boolean = true;
 
@@ -142,12 +142,12 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  @private
+		 * @private
 		 */
 
 
 		/**
-		 *  @private
+		 * @private
 		 */
 
 
@@ -158,24 +158,24 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		//--------------------------------------------------------------------------
 
 		/**
-		 *  @private
+		 * @private
 		 */
 
 
 		/**
-		 *  @private
+		 * @private
 		 */
 
 		public function get target() : IUIComponent
 		{
 			return _target;
 		}
-		
+
 		public function set target( value : IUIComponent ) : void
 		{
 			if ( _target != value )
 			{
-				if( _target )
+				if ( _target )
 				{
 					dispatchDragEvent( DragEvent.DRAG_EXIT, new MouseEvent( MouseEvent.MOUSE_MOVE ), _target );
 				}
@@ -183,7 +183,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 				_target = value;
 			}
 		}
-		
+
 		public function dispGragExit( value : IUIComponent ) : void
 		{
 			if ( _NotPackegeTarget != null )
@@ -191,14 +191,14 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 				if ( _NotPackegeTarget != value )
 				{
 					dispatchDragEvent( DragEvent.DRAG_EXIT, new MouseEvent( MouseEvent.MOUSE_MOVE ), _NotPackegeTarget );
-				
+
 					_NotPackegeTarget = value;
 				}
 			}
 			else
 				_NotPackegeTarget = value;
 		}
-		
+
 		//--------------------------------------------------------------------------
 		//
 		//  Event handlers
@@ -207,7 +207,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public function stage_mouseMoveHandler( event : MouseEvent ) : void
 		{
@@ -218,7 +218,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		private function dispatchDragEvent( type : String, mouseEvent : MouseEvent, eventTarget : Object ) : void
 		{
@@ -241,7 +241,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public function mouseMoveHandler( event : MouseEvent ) : void
 		{
@@ -253,13 +253,13 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 
 			var pt : Point = new Point();
 			var point : Point = new Point( event.localX, event.localY );
-			
+
 			point = DisplayObject( event.target ).localToGlobal( point );
 			point = DisplayObject( dragInitiator.systemManager.topLevelSystemManager ).globalToLocal( point );
-			
+
 			var mouseX : Number = point.x;
 			var mouseY : Number = point.y;
-			
+
 			x = mouseX - xOffset;
 			y = mouseY - yOffset;
 
@@ -267,8 +267,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			if ( !event )
 				return;
 
-			var targetList : Array /* of DisplayObject */ = DisplayObjectContainer( dragInitiator.systemManager.topLevelSystemManager ).getObjectsUnderPoint( new Point( mouseX,
-																																										 mouseY ) );
+			var targetList : Array /* of DisplayObject */ = DisplayObjectContainer( dragInitiator.systemManager.topLevelSystemManager ).getObjectsUnderPoint( new Point( mouseX, mouseY ) );
 			var newTarget : DisplayObject = null;
 
 			// targetList is in depth order, and we want the top of the list. However, we
@@ -277,13 +276,13 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			while ( targetIndex >= 0 )
 			{
 				newTarget = targetList[ targetIndex ];
-				
+
 				if ( newTarget != this && !contains( newTarget ) )
 					break;
-				
+
 				targetIndex--;
 			}
-			
+
 			if ( newTarget && newTarget != _NotPackegeTarget )
 				if ( _NotPackegeTarget )
 				{
@@ -332,12 +331,12 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 				{
 					// Dispatch a "dragExit" event on the old target.
 					dispatchDragEvent( DragEvent.DRAG_EXIT, event, oldTarget );
-					
+
 					if ( _target == oldTarget )
 						_target = null;
 				}
-				
-				
+
+
 			}
 
 			// If we don't have an existing target, go look for one.
@@ -365,7 +364,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public function mouseLeaveHandler( event : Event ) : void
 		{
@@ -373,7 +372,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 		}
 
 		/**
-		 *  @private
+		 * @private
 		 */
 		public function mouseUpHandler( event : MouseEvent ) : void
 		{

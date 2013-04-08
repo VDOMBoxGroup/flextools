@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import flash.geom.Point;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -36,13 +36,13 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				attributes.push( new AttributeVO( "left", point.x.toString() ) );
 				attributes.push( new AttributeVO( "top", point.y.toString() ) );
 			}
-			
+
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-			
+
 			var rendererBase : RendererBase = renderProxy.getRendererByVO( vdomObjectVO );
-			
+
 			var objectName : String = "";
-			
+
 			if ( rendererBase )
 			{
 				var typeName : String = typeVO.name;
@@ -50,12 +50,12 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				var leng : int = children ? children.length : 0;
 				var findName : Boolean = false;
 				var i : int;
-				
+
 				for ( i = 1; i <= leng; i++ )
 				{
 					findName = false;
 					objectName = typeName + i.toString();
-					
+
 					for each ( var renderVO : RenderVO in children )
 					{
 						if ( renderVO.vdomObjectVO.name == objectName )
@@ -64,11 +64,11 @@ package net.vdombox.ide.modules.wysiwyg.controller
 							break;
 						}
 					}
-					
+
 					if ( !findName )
 						break;
 				}
-				
+
 				objectName = typeName + i.toString();
 			}
 

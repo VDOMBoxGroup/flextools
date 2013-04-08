@@ -13,7 +13,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 		}
 
 		public var body : Object;
-		
+
 		override public function clone() : Event
 		{
 			return new ToolbarEvent( type, body, bubbles, cancelable );

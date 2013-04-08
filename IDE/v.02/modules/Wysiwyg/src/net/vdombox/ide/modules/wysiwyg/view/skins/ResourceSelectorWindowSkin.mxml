@@ -4,8 +4,13 @@
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
 			 xmlns:resourceBrowserWindow="net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.*"
-			 width="790" height="550" minWidth="700" minHeight="500"
-			 focusColor="#CCCCCC" xmlns:components="net.vdombox.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+			 width="790"
+			 height="550"
+			 minWidth="700"
+			 minHeight="500"
+			 focusColor="#CCCCCC"
+			 xmlns:components="net.vdombox.components.*"
+			 xmlns:button="net.vdombox.ide.common.view.components.button.*">
 	<fx:Metadata>
 		<![CDATA[ 
 		/** 
@@ -13,73 +18,92 @@
 		*/
 		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow")]
 		]]>
-	</fx:Metadata> 
+	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.events.ResourceVOEvent;
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItem;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMVScrollBarSkin;
-			
-			
-			protected function resourcesList_creationCompleteHandler(event:FlexEvent):void
+
+
+			protected function resourcesList_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				resourcesList.addEventListener(ResourceVOEvent.PREVIEW_RESOURCE, hostComponent.previewResource, true);
-				resourcesList.addEventListener(ListItem.ITEM_DOUBLE_CLICKED, hostComponent.apply, true);
+				resourcesList.addEventListener( ResourceVOEvent.PREVIEW_RESOURCE, hostComponent.previewResource, true );
+				resourcesList.addEventListener( ListItem.ITEM_DOUBLE_CLICKED, hostComponent.apply, true );
 				resourcesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 				resourcesList.scroller.horizontalScrollBar.setStyle( "skinClass", VDOMHScrollBarSkin );
 			}
-			
-			protected function nameFilter_focusInHandler(event:FocusEvent):void
+
+			protected function nameFilter_focusInHandler( event : FocusEvent ) : void
 			{
 				// TODO Auto-generated method stub
-				if ( nameFilter.text == resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_filter' )  )
+				if ( nameFilter.text == resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_filter' ) )
 					nameFilter.text = "";
 			}
-			
-			protected function resourcesList_mouseWheelHandler(event:MouseEvent):void
+
+			protected function resourcesList_mouseWheelHandler( event : MouseEvent ) : void
 			{
 				event.delta = event.delta > 0 ? 1 : -1;
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<s:states>
 		<s:State name="normal"/>
 		<s:State name="inactive"/>
-		<s:State name="disabled" stateGroups="disabledGroup"/>
-		<s:State name="closed" stateGroups="closedGroup"/>
-		<s:State name="disabledAndClosed" stateGroups="closedGroup, disabledGroup"/>
-		<s:State name="disabledWithControlBar" stateGroups="disabledGroup"/>
-		<s:State name="inactiveWithControlBar" stateGroups="disabledGroup"/>
+		<s:State name="disabled"
+				 stateGroups="disabledGroup"/>
+		<s:State name="closed"
+				 stateGroups="closedGroup"/>
+		<s:State name="disabledAndClosed"
+				 stateGroups="closedGroup, disabledGroup"/>
+		<s:State name="disabledWithControlBar"
+				 stateGroups="disabledGroup"/>
+		<s:State name="inactiveWithControlBar"
+				 stateGroups="disabledGroup"/>
 		<s:State name="normalWithControlBar"/>
 		<s:State name="normalAndInactive"/>
-		<s:State name="disabledAndInactive" stateGroups="disabledGroup"/>
+		<s:State name="disabledAndInactive"
+				 stateGroups="disabledGroup"/>
 	</s:states>
-	
+
 	<!-- Transitions for open and close -->
-	<s:Rect width="100%" height="100%" radiusX="10" radiusY="10">
+	<s:Rect width="100%"
+			height="100%"
+			radiusX="10"
+			radiusY="10">
 		<s:fill>
 			<s:SolidColor color="#424242"/>
 		</s:fill>
 	</s:Rect>
-	
-	<s:VGroup width="100%" height="100%" gap="0"
-			  left="9" top="9" right="9" bottom="9">
-		
-		<s:Group width="100%" height="42">
+
+	<s:VGroup width="100%"
+			  height="100%"
+			  gap="0"
+			  left="9"
+			  top="9"
+			  right="9"
+			  bottom="9">
+
+		<s:Group width="100%"
+				 height="42">
 			<s:TitleBar id="titleBar"
-						minHeight="32" width="100%"
+						minHeight="32"
+						width="100%"
 						skinClass="net.vdombox.ide.common.view.skins.PopupWindowTitleBarSkin"/>
 		</s:Group>
-		
-		<s:Group width="100%" height="39">
-			
-			<s:Rect bottom="0" left="0" right="0" top="0">
+
+		<s:Group width="100%"
+				 height="39">
+
+			<s:Rect bottom="0"
+					left="0"
+					right="0"
+					top="0">
 				<s:fill>
 					<s:LinearGradient rotation="90">
 						<s:GradientEntry color="#2f2f2f"/>
@@ -87,57 +111,86 @@
 					</s:LinearGradient>
 				</s:fill>
 			</s:Rect>
-			
-			<s:HGroup width="100%" verticalAlign="middle" paddingLeft="5" paddingRight="10" top="5">		 
-				<s:TextInput id="nameFilter" width="150" borderColor="#999999" color="#666666"
-							 fontFamily="Tahoma" fontStyle="italic" 
+
+			<s:HGroup width="100%"
+					  verticalAlign="middle"
+					  paddingLeft="5"
+					  paddingRight="10"
+					  top="5">
+				<s:TextInput id="nameFilter"
+							 width="150"
+							 borderColor="#999999"
+							 color="#666666"
+							 fontFamily="Tahoma"
+							 fontStyle="italic"
 							 text="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_filter' ) }"
-							 focusColor.normal="#CCCCCC" focusIn="nameFilter_focusInHandler(event)" />
-				
-				<mx:Image id="__spinner" height="18"  width="18" visible="false"/>
-				
+							 focusColor.normal="#CCCCCC"
+							 focusIn="nameFilter_focusInHandler(event)"/>
+
+				<mx:Image id="__spinner"
+						  height="18"
+						  width="18"
+						  visible="false"/>
+
 				<s:Label color="#FFFFFF"
-					text="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_total' ) }"/>
-				
+						 text="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_total' ) }"/>
+
 				<s:Label text="{hostComponent.totalResources}"
-						 color="#FFFFFF" fontWeight="bold"/>
-				
+						 color="#FFFFFF"
+						 fontWeight="bold"/>
+
 				<mx:Spacer width="100%"/>
-				
-				<button:VDOMButton label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_upload' ) }" 
-						   click="hostComponent.uploadFile(event)"
-						   icon="{VDOMImage.Add}"
-						   focusColor="#CCCCCC"/>	
+
+				<button:VDOMButton label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_upload' ) }"
+								   click="hostComponent.uploadFile(event)"
+								   icon="{VDOMImage.Add}"
+								   focusColor="#CCCCCC"/>
 			</s:HGroup>
 		</s:Group>
-		
-		<s:Line width="100%" height="1">
+
+		<s:Line width="100%"
+				height="1">
 			<s:stroke>
-				<s:SolidColorStroke color="#424242" alpha="1"/>
+				<s:SolidColorStroke color="#424242"
+									alpha="1"/>
 			</s:stroke>
 		</s:Line>
 		<!-- body -->
-		<s:Group width="100%" height="100%">
-			<s:Rect width="100%" height="100%">
+		<s:Group width="100%"
+				 height="100%">
+			<s:Rect width="100%"
+					height="100%">
 				<s:fill>
-					<s:BitmapFill source = "{VDOMImage.Fon_Texture}" smooth="true" fillMode="repeat"/>
+					<s:BitmapFill source="{VDOMImage.Fon_Texture}"
+								  smooth="true"
+								  fillMode="repeat"/>
 				</s:fill>
 			</s:Rect>
-			
-			<s:VGroup width="100%" height="100%">
-				
-				<s:Group width="100%" height="100%">
-					<s:Rect width="100%" height="100%">
+
+			<s:VGroup width="100%"
+					  height="100%">
+
+				<s:Group width="100%"
+						 height="100%">
+					<s:Rect width="100%"
+							height="100%">
 						<s:fill>
-							<s:SolidColor color="#000000" alpha="0.2"/>
+							<s:SolidColor color="#000000"
+										  alpha="0.2"/>
 						</s:fill>
 					</s:Rect>
-					
-					<s:List id="resourcesList" 
-							left="4" right="2" top="4" bottom="0" 
-							width="100%" height="100%" 
+
+					<s:List id="resourcesList"
+							left="4"
+							right="2"
+							top="4"
+							bottom="0"
+							width="100%"
+							height="100%"
 							allowMultipleSelection="{hostComponent.multiSelect}"
-							borderVisible="false" chromeColor="#777777" contentBackgroundAlpha="0"
+							borderVisible="false"
+							chromeColor="#777777"
+							contentBackgroundAlpha="0"
 							contentBackgroundColor="#383838"
 							selectionColor="#383838"
 							rollOverColor="#383838"
@@ -145,42 +198,52 @@
 							mouseWheel="resourcesList_mouseWheelHandler(event)"
 							creationComplete="resourcesList_creationCompleteHandler(event)"
 							dataProvider="{ hostComponent._resources }"
-							enabled="true" focusColor="#CCCCCC"
+							enabled="true"
+							focusColor="#CCCCCC"
 							itemRenderer="net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ListItem">
 						<s:layout>
-							<s:TileLayout horizontalGap="4" verticalGap="8" requestedColumnCount="-1"  requestedRowCount="-1"
-										  >
-								
+							<s:TileLayout horizontalGap="4"
+										  verticalGap="8"
+										  requestedColumnCount="-1"
+										  requestedRowCount="-1">
+
 							</s:TileLayout>
 						</s:layout>
 					</s:List>
 				</s:Group>
-				
+
 				<!--  futer  -->
-				<s:HGroup width="100%" height="55"
-						  paddingBottom="2" paddingLeft="10" paddingRight="10" paddingTop="2"
-						  verticalAlign="middle" horizontalAlign="right">
-					
-					<button:VDOMButton id="cancelButton" width="48"
-							  click="hostComponent.close()"
-							  icon="{ VDOMImage.DeleteBlack }"
-							  focusColor.normal="#CCCCCC"/>
-					
+				<s:HGroup width="100%"
+						  height="55"
+						  paddingBottom="2"
+						  paddingLeft="10"
+						  paddingRight="10"
+						  paddingTop="2"
+						  verticalAlign="middle"
+						  horizontalAlign="right">
+
+					<button:VDOMButton id="cancelButton"
+									   width="48"
+									   click="hostComponent.close()"
+									   icon="{ VDOMImage.DeleteBlack }"
+									   focusColor.normal="#CCCCCC"/>
+
 					<button:VDOMButton focusColor.normal="#CCCCCC"
-							  label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_insert' ) }"
-							  click="hostComponent.apply()" color="#B33535"
-							  />
-					
+									   label="{ resourceManager.getString( 'Wysiwyg_General', 'resource_selector_window_insert' ) }"
+									   click="hostComponent.apply()"
+									   color="#B33535"/>
+
 				</s:HGroup>
-				
+
 			</s:VGroup>
-			
-			<s:Button id="gripper" 
-					  right="0" bottom="0"
-					  skinClass="net.vdombox.ide.common.view.skins.PopupWindowGripperSkin" 
+
+			<s:Button id="gripper"
+					  right="0"
+					  bottom="0"
+					  skinClass="net.vdombox.ide.common.view.skins.PopupWindowGripperSkin"
 					  tabEnabled="false"
 					  alpha="0.9"/>
 		</s:Group>
 	</s:VGroup>
-	
+
 </s:SparkSkin>

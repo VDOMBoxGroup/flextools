@@ -2,95 +2,109 @@
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 maxHeight="150" minHeight="0">
-	
+		 maxHeight="150"
+		 minHeight="0">
+
 	<s:states>
 		<s:State name="all"/>
 		<s:State name="short"/>
 	</s:states>
-	
+
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.view.components.VDOMImage;
+
 			[Bindable]
 			public var text : String;
-			
+
 			public function get showHelp() : Boolean
 			{
 				return currentState == "all" ? true : false;
 			}
-			
+
 			public function set showHelp( value : Boolean ) : void
 			{
-				currentState = value? "all" : "short";
+				currentState = value ? "all" : "short";
 			}
-			
-			protected function maximizeButton_clickHandler(event:MouseEvent):void
+
+			protected function maximizeButton_clickHandler( event : MouseEvent ) : void
 			{
 				if ( currentState == "normal" )
 					currentState = "maximized";
 				else
 					currentState = "normal";
 			}
-			
-			protected function image1_clickHandler(event:MouseEvent):void
+
+			protected function image1_clickHandler( event : MouseEvent ) : void
 			{
 				if ( currentState == "short" )
 				{
 					currentState = "all";
-					dispatchEvent( new Event ( Event.CHANGE ) );
+					dispatchEvent( new Event( Event.CHANGE ) );
 				}
 			}
-			
-			protected function closePanel_clickHandler(event:MouseEvent):void
+
+			protected function closePanel_clickHandler( event : MouseEvent ) : void
 			{
 				if ( currentState == "all" )
 				{
 					currentState = "short";
 					closePanel.visible = false;
 					closePanel.includeInLayout = false;
-					dispatchEvent( new Event ( Event.CHANGE ) );
+					dispatchEvent( new Event( Event.CHANGE ) );
 				}
 			}
-			
-			protected function richtext1_mouseOverHandler(event:MouseEvent):void
+
+			protected function richtext1_mouseOverHandler( event : MouseEvent ) : void
 			{
 				closePanel.visible = true;
 				closePanel.includeInLayout = true;
 			}
-			
-			protected function richtext1_mouseOutHandler(event:MouseEvent):void
+
+			protected function richtext1_mouseOutHandler( event : MouseEvent ) : void
 			{
-				if ( ! (event.localX >= closePanel.x && event.localX <= closePanel.x + closePanel.width &&
-					event.localY >= closePanel.y && event.localY <= closePanel.y + closePanel.height ) )
+				if ( !( event.localX >= closePanel.x && event.localX <= closePanel.x + closePanel.width && event.localY >= closePanel.y && event.localY <= closePanel.y + closePanel.height ) )
 				{
 					closePanel.visible = false;
 					closePanel.includeInLayout = false;
 				}
 			}
-			
 		]]>
 	</fx:Script>
-	
+
 	<s:layout>
 		<s:BasicLayout/>
 	</s:layout>
-	
-	<s:Rect bottom="0" left="0" right="0" top="0"
+
+	<s:Rect bottom="0"
+			left="0"
+			right="0"
+			top="0"
 			includeIn="all">
 		<s:fill>
 			<s:SolidColor color="white"/>
 		</s:fill>
 	</s:Rect>
-	
-	<s:Scroller height="100%" width="100%" includeIn="all">
+
+	<s:Scroller height="100%"
+				width="100%"
+				includeIn="all">
 		<s:VGroup gap="0">
-			<s:RichText includeInLayout="{ text ? true : false }" text="{ text }" width="100%"
-						paddingBottom="7" paddingLeft="7" paddingRight="7" paddingTop="7"
+			<s:RichText includeInLayout="{ text ? true : false }"
+						text="{ text }"
+						width="100%"
+						paddingBottom="7"
+						paddingLeft="7"
+						paddingRight="7"
+						paddingTop="7"
 						mouseOver="richtext1_mouseOverHandler(event)"
 						mouseOut="richtext1_mouseOutHandler(event)"/>
-			
-			<s:HGroup id="closePanel" bottom="2" right="2" visible="false" includeInLayout="false"
+
+			<s:HGroup id="closePanel"
+					  bottom="2"
+					  right="2"
+					  visible="false"
+					  includeInLayout="false"
 					  verticalAlign="middle"
 					  click="closePanel_clickHandler(event)">
 				<mx:Image source="{ VDOMImage.DeleteBlack }"/>
@@ -98,11 +112,16 @@
 			</s:HGroup>
 		</s:VGroup>
 	</s:Scroller>
-	
-	<mx:Image  width="20" height="20" top="-23" right="10" includeIn="short"
-			   source="{ VDOMImage.ArrOpen }"  
-			  smoothBitmapContent="true" click="image1_clickHandler(event)"/>
-	
-	
-	
+
+	<mx:Image width="20"
+			  height="20"
+			  top="-23"
+			  right="10"
+			  includeIn="short"
+			  source="{ VDOMImage.ArrOpen }"
+			  smoothBitmapContent="true"
+			  click="image1_clickHandler(event)"/>
+
+
+
 </s:Panel>

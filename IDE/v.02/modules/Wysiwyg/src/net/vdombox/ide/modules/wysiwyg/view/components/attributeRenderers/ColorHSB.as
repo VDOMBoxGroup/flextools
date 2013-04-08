@@ -6,8 +6,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers
 	{
 
 		[Bindable]
+
 		public var h : uint = 0; // hue
 		[Bindable]
+
 		public var s : uint = 0; // saturation
 		[Bindable]
 		public var b : uint = 0; // brightness
@@ -19,10 +21,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers
 			b = brightness;
 		}
 
-		/* public function to_object():Object
+		/*
+		   public function to_object():Object
 		   {
 		   return {h:h, s:s, b:b };
-		 } */
+		   }
+		 */
 
 		public static function rgb_to_hsb( color : uint ) : ColorHSB
 		{
@@ -103,8 +107,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers
 					break;
 			}
 
-			return ( ( Math.round( r * 255 * brightness ) & 0xFF ) << 16 ) | ( ( Math.round( g * 255 * brightness ) & 0xFF ) << 8 ) |
-				( Math.round( b * 255 * brightness ) & 0xFF );
+			return ( ( Math.round( r * 255 * brightness ) & 0xFF ) << 16 ) | ( ( Math.round( g * 255 * brightness ) & 0xFF ) << 8 ) | ( Math.round( b * 255 * brightness ) & 0xFF );
 		}
 
 

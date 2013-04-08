@@ -1,81 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%"
+		 height="100%">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
 			import mx.events.ValidationResultEvent;
-			
+
 			import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
-			
+
 			[Bindable]
 			private var _value : String;
+
 			private var regExpValidator : AttributeValidator = new AttributeValidator();
+
 			private var permissionToSentNeed : Boolean = true;
+
 			private var regExpValidatorNeed : Boolean = false;
 
-			public function get value():String
+			public function get value() : String
 			{
 				return _value;
 			}
 
-			public function set value(value:String):void
+			public function set value( value : String ) : void
 			{
 				_value = value;
 				lbl.text = value;
-				dispatchEvent( new Event( Event.CHANGE ));
+				dispatchEvent( new Event( Event.CHANGE ) );
 			}
-			
-			public function initChars(_interface : uint, _attributeDescriptionVO : AttributeDescriptionVO) : void
+
+			public function initChars( _interface : uint, _attributeDescriptionVO : AttributeDescriptionVO ) : void
 			{
 				lbl.maxChars = _interface;
-				
+
 				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
 				regExpValidator.noMatchError = _attributeDescriptionVO.errorValidationMessage;
 				regExpValidator.validate();
-				
+
 				regExpValidatorNeed = true;
 			}
-			
-			private function eventCompleleHandler(event : Event) : void
+
+			private function eventCompleleHandler( event : Event ) : void
 			{
-				if (regExpValidatorNeed)
+				if ( regExpValidatorNeed )
 				{
 					regExpValidator.source = lbl;
 					regExpValidator.property = "text";
 					regExpValidator.required = false;
 					//regExpValidator.trigger = valueField;
-				
+
 					regExpValidator.triggerEvent = Event.CHANGE;
-				
-					regExpValidator.addEventListener(ValidationResultEvent.VALID, handleValid);
-					regExpValidator.addEventListener(ValidationResultEvent.INVALID, handleValid);
+
+					regExpValidator.addEventListener( ValidationResultEvent.VALID, handleValid );
+					regExpValidator.addEventListener( ValidationResultEvent.INVALID, handleValid );
 					regExpValidator.validate();
 				}
 				else
 					regExpValidator = null;
 			}
-			
-			private function handleValid( eventObj:ValidationResultEvent ) : void 
+
+			private function handleValid( eventObj : ValidationResultEvent ) : void
 			{
-				if(eventObj.type==ValidationResultEvent.VALID)    
+				if ( eventObj.type == ValidationResultEvent.VALID )
 					permissionToSentNeed = true;
 				else
 					permissionToSentNeed = false;
 			}
-			
+
 			private function changeHandler() : void
 			{
-				if (_value != lbl.text)
+				if ( _value != lbl.text )
 				{
-					if (permissionToSentNeed)
+					if ( permissionToSentNeed )
 					{
 						_value = lbl.text;
-						dispatchEvent( new Event( Event.CHANGE ));
+						dispatchEvent( new Event( Event.CHANGE ) );
 					}
 					else
 					{
@@ -85,25 +90,29 @@
 				}
 			}
 
-			protected function lbl_keyDownHandler(event:KeyboardEvent):void
+			protected function lbl_keyDownHandler( event : KeyboardEvent ) : void
 			{
 				if ( event.keyCode == Keyboard.ENTER )
 					changeHandler();
 			}
-			
 		]]>
 	</fx:Script>
 	<s:Group toolTip="{_value}">
-		<s:Rect width="100%" height="100%">
+		<s:Rect width="100%"
+				height="100%">
 			<s:fill>
 				<s:SolidColor color="#FFFFFF"/>
 			</s:fill>
 		</s:Rect>
-		
-		<s:TextInput id="lbl" textAlign="left"
-					 text="{_value}" width="100%" height="100%"
-					 keyDown="lbl_keyDownHandler(event)" focusOut="changeHandler()"
+
+		<s:TextInput id="lbl"
+					 textAlign="left"
+					 text="{_value}"
+					 width="100%"
+					 height="100%"
+					 keyDown="lbl_keyDownHandler(event)"
+					 focusOut="changeHandler()"
 					 creationComplete="eventCompleleHandler(event)"/>
 	</s:Group>
-	
+
 </s:Group>

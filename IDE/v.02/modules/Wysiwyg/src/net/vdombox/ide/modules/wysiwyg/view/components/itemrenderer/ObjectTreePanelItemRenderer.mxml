@@ -2,35 +2,35 @@
 <s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  xmlns:mx="library://ns.adobe.com/flex/mx"
-					  xmlns:view="net.vdombox.view.*" 
-					  xmlns:view1="net.vdombox.ide.common.view.*" 
+					  xmlns:view="net.vdombox.view.*"
+					  xmlns:view1="net.vdombox.ide.common.view.*"
 					  xmlns:components="net.vdombox.ide.common.view.components.*"
 					  height="25"
 					  minWidth="200"
-					  contentBackgroundAlpha="0" 
+					  contentBackgroundAlpha="0"
 					  contextMenu="mxtreeitemrenderer1_contextMenuHandler(event)"
 					  keyDown="mxtreeitemrenderer1_keyDownHandler(event)">
 
 	<s:states>
-		<s:State name="normal" />
-		<s:State name="hovered" />
-		<s:State name="selected" />
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
 	</s:states>
 
 	<fx:Script>
 		<![CDATA[
 			import flash.desktop.Clipboard;
 			import flash.desktop.ClipboardFormats;
-			
+
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.XMLListCollection;
 			import mx.controls.Tree;
-			
+
 			import net.vdombox.ide.common.events.ResourceVOEvent;
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 
-			private var _eyeOpened : Boolean  = true;
+			private var _eyeOpened : Boolean = true;
 
 			private var _rendererID : String;
 
@@ -43,11 +43,11 @@
 			private var loader : Loader;
 
 			/**
-			 *  Self data
-			 * 
-			 */ 
+			 * Self data
+			 *
+			 */
 			private var _data : XML;
-			
+
 			private var _contextMenu : ContextMenu = new ContextMenu();
 
 			override public function set data( value : Object ) : void
@@ -56,12 +56,12 @@
 
 				dataChanged = true
 				_data = value as XML;
-				
+
 				if ( _data )
 					createContextMenu();
 			}
-			
-			
+
+
 
 			public function get eyeOpened() : Boolean
 			{
@@ -80,7 +80,7 @@
 				return _resourceID;
 			}
 
-			public function set resourceVO(value:ResourceVO) : void
+			public function set resourceVO( value : ResourceVO ) : void
 			{
 				_resourceVO = value;
 
@@ -102,16 +102,16 @@
 
 				dataChanged = false;
 
-//				componentIcon.source = null;
+				//				componentIcon.source = null;
 
 				if ( !_data )
 					return
 
-				_resourceID = _data.@iconID;
+						_resourceID = _data.@iconID;
 				_rendererID = _data.@id;
-				
-				
-				
+
+
+
 
 				// if can content an eye
 				if ( _data.@visible[ 0 ] )
@@ -119,45 +119,45 @@
 					eyesGroup.visible = true;
 					groupContent.left = 20;
 
-					setEyeState( _data.@visible == "true");
+					setEyeState( _data.@visible == "true" );
 				}
 				else
 				{
 					eyesGroup.visible = false;
 					groupContent.left = -2;
 				}
-				
-				if ( !_resourceVO ||( _resourceVO && _resourceVO.id != _resourceID ) )
-					dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCE_REQUEST));
+
+				if ( !_resourceVO || ( _resourceVO && _resourceVO.id != _resourceID ) )
+					dispatchEvent( new ResourceVOEvent( ResourceVOEvent.GET_RESOURCE_REQUEST ) );
 			}
-			
+
 			private function createContextMenu() : void
 			{
 				_contextMenu.removeAllItems();
-				
+
 				if ( _data.name().localName == "page" )
 				{
-					var startItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_start' ));
+					var startItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', 'contextMenu_start' ) );
 					startItem.addEventListener( Event.SELECT, startContextMenuHandler, false, 0, true );
 					_contextMenu.addItem( startItem );
 				}
-				
-				var copyItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_copy' ));
+
+				var copyItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', 'contextMenu_copy' ) );
 				copyItem.addEventListener( Event.SELECT, copyContextMenuHandler, false, 0, true );
 				_contextMenu.addItem( copyItem );
-				
-				var pasteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_paste' ));
+
+				var pasteItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', 'contextMenu_paste' ) );
 				pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
 				_contextMenu.addItem( pasteItem );
-				
+
 				var bufferContent : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
-				
-				if ( bufferContent && ( bufferContent.slice(0, 13) != "Vlt+VDOMIDE2+" ) )
+
+				if ( bufferContent && ( bufferContent.slice( 0, 13 ) != "Vlt+VDOMIDE2+" ) )
 				{
 					pasteItem.enabled = false;
 				}
-				
-				var deleteItem : ContextMenuItem = new ContextMenuItem(resourceManager.getString( 'Wysiwyg_General', 'contextMenu_delete' ));
+
+				var deleteItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', 'contextMenu_delete' ) );
 				deleteItem.addEventListener( Event.SELECT, deleteContextMenuHandler, false, 0, true );
 				_contextMenu.addItem( deleteItem );
 			}
@@ -182,9 +182,9 @@
 			private function eyeClickHandler( event : Event ) : void
 			{
 				// invert state of eye
-				setEyeState(!_eyeOpened);
+				setEyeState( !_eyeOpened );
 
-				dispatchEvent(  new ObjectsTreePanelEvent( ObjectsTreePanelEvent.EYE_CHANGED ) );
+				dispatchEvent( new ObjectsTreePanelEvent( ObjectsTreePanelEvent.EYE_CHANGED ) );
 			}
 
 			private function onBytesLoaded( event : Event ) : void
@@ -207,19 +207,19 @@
 				if ( _data.@visible[ 0 ] )
 					_data.@visible = _eyeOpened
 			}
-			
-			protected function mxtreeitemrenderer1_contextMenuHandler(event:MouseEvent):void
+
+			protected function mxtreeitemrenderer1_contextMenuHandler( event : MouseEvent ) : void
 			{
 				createContextMenu();
 				_contextMenu.display( this.stage, event.stageX, event.stageY );
 			}
-			
+
 			private function deleteContextMenuHandler( event : Event ) : void
 			{
 				var deleteEvent : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.DELETE );
 				deleteEvent.objectID = _data.@id;
 				deleteEvent.name = _data.@name;
-				var xmlListCollection : XMLListCollection = (owner as Tree).dataProvider as XMLListCollection;
+				var xmlListCollection : XMLListCollection = ( owner as Tree ).dataProvider as XMLListCollection;
 				var xml : XML;
 				for each ( xml in xmlListCollection )
 				{
@@ -233,19 +233,19 @@
 				}
 				dispatchEvent( deleteEvent );
 			}
-			
+
 			private function startContextMenuHandler( event : Event ) : void
 			{
 				var startEvent : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.SET_START );
 				startEvent.pageID = _data.@id;
 				dispatchEvent( startEvent );
 			}
-			
+
 			private function copyContextMenuHandler( event : Event ) : void
 			{
 				var copyEvent : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.COPY );
 				copyEvent.objectID = _data.@id;
-				var xmlListCollection : XMLListCollection = (owner as Tree).dataProvider as XMLListCollection;
+				var xmlListCollection : XMLListCollection = ( owner as Tree ).dataProvider as XMLListCollection;
 				var xml : XML;
 				for each ( xml in xmlListCollection )
 				{
@@ -259,13 +259,13 @@
 				}
 				dispatchEvent( copyEvent );
 			}
-			
+
 			private function pasteContextMenuHandler( event : Event ) : void
 			{
 				var pasteEvent : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.PASTE );
 				pasteEvent.objectID = _data.@id;
-				
-				var xmlListCollection : XMLListCollection = (owner as Tree).dataProvider as XMLListCollection;
+
+				var xmlListCollection : XMLListCollection = ( owner as Tree ).dataProvider as XMLListCollection;
 				var xml : XML;
 				for each ( xml in xmlListCollection )
 				{
@@ -277,14 +277,14 @@
 							pasteEvent.pageID = xml.@id;
 					}
 				}
-				
+
 				if ( !pasteEvent.pageID )
 					pasteEvent.pageID = pasteEvent.objectID;
-				
+
 				dispatchEvent( pasteEvent );
 			}
-			
-			protected function mxtreeitemrenderer1_keyDownHandler(event:KeyboardEvent):void
+
+			protected function mxtreeitemrenderer1_keyDownHandler( event : KeyboardEvent ) : void
 			{
 				if ( event.ctrlKey && event.keyCode == Keyboard.C )
 				{
@@ -301,17 +301,19 @@
 					deleteContextMenuHandler( null );
 				}
 			}
-			
 		]]>
 	</fx:Script>
 
-	<s:Rect left="-2" width="100%" top="-2" bottom="-2">
+	<s:Rect left="-2"
+			width="100%"
+			top="-2"
+			bottom="-2">
 		<s:fill>
 			<s:SolidColor id="rectColor"
 						  color.normal="#3A3A3A"
 						  color.hovered="#00000A"
 						  alpha.hovered="0.8"
-						  color.selected="#00000A" />
+						  color.selected="#00000A"/>
 		</s:fill>
 	</s:Rect>
 
@@ -322,19 +324,24 @@
 			 minWidth="200"
 			 bottom="-2">
 
-		<s:HGroup  width="100%" height="100%" verticalAlign="middle">
+		<s:HGroup width="100%"
+				  height="100%"
+				  verticalAlign="middle">
 
-			<s:Rect id="indentationSpacer" width="{treeListData.indent}" percentHeight="100">
+			<s:Rect id="indentationSpacer"
+					width="{treeListData.indent}"
+					percentHeight="100">
 				<s:fill>
-					<s:SolidColor color="#585858" />
+					<s:SolidColor color="#585858"/>
 				</s:fill>
 			</s:Rect>
 
 			<s:Group id="disclosureGroup">
-				<s:BitmapImage source="{treeListData.disclosureIcon}" visible="{treeListData.hasChildren}" />
+				<s:BitmapImage source="{treeListData.disclosureIcon}"
+							   visible="{treeListData.hasChildren}"/>
 			</s:Group>
 
-			<s:BitmapImage id="componentIcon" />
+			<s:BitmapImage id="componentIcon"/>
 
 			<s:TextInput id="labelField"
 						 color="#FFFFFF"
@@ -342,7 +349,8 @@
 						 paddingTop="2"
 						 editable="false"
 						 width="100%"
-						 borderVisible="false" selectable="false"/>
+						 borderVisible="false"
+						 selectable="false"/>
 
 		</s:HGroup>
 
@@ -356,27 +364,43 @@
 			 height="100%"
 			 mouseDown="{ eyeClickHandler(event); event.stopImmediatePropagation() }">
 
-		<s:Rect width="100%" top="0" bottom="-2">
+		<s:Rect width="100%"
+				top="0"
+				bottom="-2">
 			<s:fill>
-				<s:SolidColor color="#585858" />
+				<s:SolidColor color="#585858"/>
 			</s:fill>
 		</s:Rect>
 
-		<s:VGroup left="9" width="22" height="100%" verticalAlign="middle" horizontalAlign="center">
-			<components:EyeImage id="eyes" width="16" height="16" />
+		<s:VGroup left="9"
+				  width="22"
+				  height="100%"
+				  verticalAlign="middle"
+				  horizontalAlign="center">
+			<components:EyeImage id="eyes"
+								 width="16"
+								 height="16"/>
 		</s:VGroup>
 
 	</s:Group>
 
-	<s:Line top="-2" left="-2" width="100%">
+	<s:Line top="-2"
+			left="-2"
+			width="100%">
 		<s:stroke>
-			<s:SolidColorStroke color="#FFFFFF" alpha="0.5" weight="1" />
+			<s:SolidColorStroke color="#FFFFFF"
+								alpha="0.5"
+								weight="1"/>
 		</s:stroke>
 	</s:Line>
 
-	<s:Line bottom="-2" left="-2" width="100%">
+	<s:Line bottom="-2"
+			left="-2"
+			width="100%">
 		<s:stroke>
-			<s:SolidColorStroke color="#000000" alpha="0.5" weight="1" />
+			<s:SolidColorStroke color="#000000"
+								alpha="0.5"
+								weight="1"/>
 		</s:stroke>
 	</s:Line>
 

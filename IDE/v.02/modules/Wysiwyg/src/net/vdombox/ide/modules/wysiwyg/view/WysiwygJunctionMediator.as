@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.utils.Dictionary;
-	
+
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
@@ -29,7 +29,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
 	import net.vdombox.ide.modules.wysiwyg.model.MessageProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -47,7 +47,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		private var recipients : Dictionary;
-		
+
 		private var messageProxy : MessageProxy;
 
 		override public function onRegister() : void
@@ -82,7 +82,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( Notifications.DELETE_RESOURCE );
 			interests.push( Notifications.LOAD_RESOURCE );
 			interests.push( Notifications.MODIFY_RESOURCE );
-			
+
 			interests.push( Notifications.GET_ICON );
 
 			interests.push( Notifications.GET_PAGES );
@@ -103,22 +103,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( Notifications.REMOTE_CALL_REQUEST );
 			interests.push( Notifications.UPDATE_ATTRIBUTES );
-		
+
 			interests.push( Notifications.BODY_STOP );
 			interests.push( StatesProxy.GET_SELECTED_PAGE );
-			
+
 			interests.push( Notifications.SET_OBJECT_NAME );
-			
+
 			interests.push( Notifications.COPY_REQUEST );
-			
+
 			interests.push( Notifications.WRITE_ERROR );
 			interests.push( Notifications.DELETE_PAGE );
 			interests.push( Notifications.GET_TOP_LEVEL_TYPES );
 			interests.push( Notifications.CREATE_PAGE );
-			
+
 			interests.push( Notifications.UNDO );
 			interests.push( Notifications.REDO );
-			
+
 			interests.push( Notifications.SET_APPLICATION_INFORMATION );
 
 			return interests;
@@ -171,7 +171,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					message = new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
-					
+
 					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 
 					break;
@@ -239,22 +239,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
-					
+
 				case Notifications.SET_RESOURCE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE, PPMResourcesTargetNames.RESOURCE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
 
 				case Notifications.DELETE_RESOURCE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE, PPMResourcesTargetNames.RESOURCE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
 
@@ -266,13 +266,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
-					
+
 				case Notifications.GET_ICON:
 				{
 					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.ICON, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
 
@@ -287,7 +287,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case Notifications.GET_PAGES:
 				{
-					
+
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -297,7 +297,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case Notifications.GET_PAGE_SRUCTURE:
 				{
-					
+
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -355,7 +355,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case Notifications.GET_XML_PRESENTATION:
 				{
-					
+
 					if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.XML_PRESENTATION, body );
 					else if ( body.hasOwnProperty( "objectVO" ) )
@@ -395,7 +395,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.DELETE, PPMPageTargetNames.OBJECT, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					messageProxy.removeAll( body.pageVO as PageVO );
 
 					break;
@@ -430,11 +430,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case Notifications.UPDATE_ATTRIBUTES:
 				{
-					if ( VdomObjectAttributesVO(body).vdomObjectVO is PageVO )
+					if ( VdomObjectAttributesVO( body ).vdomObjectVO is PageVO )
 					{
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
-						messageProxy.push( body.vdomObjectVO, message as ProxyMessage );				
-					} else if ( VdomObjectAttributesVO(body).vdomObjectVO is ObjectVO )
+						messageProxy.push( body.vdomObjectVO, message as ProxyMessage );
+					}
+					else if ( VdomObjectAttributesVO( body ).vdomObjectVO is ObjectVO )
 					{
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.ATTRIBUTES, body );
 						messageProxy.push( body.vdomObjectVO.pageVO, message as ProxyMessage );
@@ -445,25 +446,25 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
-					
+
 				case Notifications.SET_OBJECT_NAME:
 				{
 					if ( body is PageVO )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.NAME, body );
 					else if ( body is ObjectVO )
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.NAME, body );
-					
+
 					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
-				case Notifications.COPY_REQUEST :
+
+				case Notifications.COPY_REQUEST:
 				{
 					if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.COPY, body );
-					else if ( body.hasOwnProperty( "objectVO" ) )	
+					else if ( body.hasOwnProperty( "objectVO" ) )
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.COPY, body );
 					else
 						message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.COPY, body );
@@ -471,86 +472,85 @@ package net.vdombox.ide.modules.wysiwyg.view
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
 					break;
 				}
-					
-				case Notifications.BODY_STOP :
+
+				case Notifications.BODY_STOP:
 				{
-					junction.sendMessage( PipeNames.STDCORE,
-						new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
-					
+					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+
 					break;
 				}
-					
-				case Notifications.WRITE_ERROR :
+
+				case Notifications.WRITE_ERROR:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.ERROR, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
-				case StatesProxy.GET_SELECTED_PAGE :
+
+				case StatesProxy.GET_SELECTED_PAGE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_PAGE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					break;
 				}
-					
+
 				case Notifications.DELETE_PAGE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.PAGE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					messageProxy.removeAll( body.pageVO as PageVO );
-					
+
 					break;
 				}
-					
+
 				case Notifications.GET_TOP_LEVEL_TYPES:
 				{
 					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TOP_LEVEL_TYPES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.CREATE_PAGE:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.UNDO:
 				{
 					message = messageProxy.getUndo( body as PageVO );
-					
+
 					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.REDO:
 				{
 					message = messageProxy.getRedo( body as PageVO );
-					
+
 					if ( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case Notifications.SET_APPLICATION_INFORMATION:
 				{
 					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.INFORMATION, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
 			}
@@ -563,7 +563,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var simpleMessage : SimpleMessage = message as SimpleMessage;
 
 			var recipientKey : String = simpleMessage.getRecipientKey();
-			
+
 			if ( recipientKey != multitonKey )
 				return;
 
@@ -571,16 +571,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
-//					sendNotification( Notifications.MODULE_SELECTED );
-//					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
+					//					sendNotification( Notifications.MODULE_SELECTED );
+					//					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 
 					break;
 				}
 
 				case SimpleMessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
-					junction.sendMessage( PipeNames.STDLOG,
-						new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( Notifications.PIPES_READY );
 					break;
@@ -669,9 +668,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function handleProxyMessage( message : ProxyMessage ) : void
 		{
-			
+
 			var proxy : String = message.proxy;
-			var now:Date = new Date();
+			var now : Date = new Date();
 			//trace("                                       "+ now.toLocaleTimeString()+"   <<- "+message.proxy +"  "+message.operation +"  "+  message.target);
 
 			switch ( proxy )

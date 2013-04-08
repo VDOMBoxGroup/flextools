@@ -1,13 +1,13 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.MouseEvent;
-	
+
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.modules.wysiwyg.view.components.main.Toolset;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -46,29 +46,29 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function handleNotification( notification : INotification ) : void
 		{
-			switch ( notification.getName())
+			switch ( notification.getName() )
 			{
 				case Notifications.MODULE_SELECTED:
 				{
 					toolset.toolsetButton.selected = true;
-					
+
 					break;
 				}
-					
+
 				case Notifications.MODULE_DESELECTED:
 				{
 					toolset.toolsetButton.selected = false;
-					
+
 					break;
 				}
 			}
 		}
-		
+
 		private function addHandlers() : void
 		{
 			toolset.toolsetButton.addEventListener( MouseEvent.CLICK, toolsetButton_click )
 		}
-		
+
 		private function toolsetButton_click( event : MouseEvent ) : void
 		{
 			toolset.toolsetButton.selected = !toolset.toolsetButton.selected;

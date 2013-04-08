@@ -18,8 +18,11 @@
 -->
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minHeight="127" minWidth="131"
-			 alpha.disabled="0.5" blendMode="normal" mouseEnabled="false">
+			 minHeight="127"
+			 minWidth="131"
+			 alpha.disabled="0.5"
+			 blendMode="normal"
+			 mouseEnabled="false">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -31,8 +34,10 @@
 	</fx:Metadata>
 
 	<fx:Script>
-		/* Define the skin elements that should not be colorized.
-		 For panel, border and title backround are skinned, but the content area and title text are not. */
+		/*
+		   Define the skin elements that should not be colorized.
+		   For panel, border and title backround are skinned, but the content area and title text are not.
+		 */
 		static private const exclusions : Array = [ "background", "titleDisplay", "contentGroup" ];
 
 		/**
@@ -75,27 +80,52 @@
 	<s:states>
 		<s:State name="normal"/>
 		<s:State name="disabled"/>
-		<s:State name="normalWithControlBar" stateGroups="withControls"/>
-		<s:State name="disabledWithControlBar" stateGroups="withControls"/>
+		<s:State name="normalWithControlBar"
+				 stateGroups="withControls"/>
+		<s:State name="disabledWithControlBar"
+				 stateGroups="withControls"/>
 	</s:states>
-	
+
 	<!-- drop shadow can't be hittable so it stays sibling of other graphics -->
 	<s:RectangularDropShadow id="dropShadow"
-							 bottom="0" color="#000000" left="0" right="0"
+							 bottom="0"
+							 color="#000000"
+							 left="0"
+							 right="0"
 							 top="0"
-							 alpha="0.0" angle="90" blRadius="0" blRadius.withControls="{cornerRadius}"
-							 blurX="20" blurY="20" brRadius="0" brRadius.withControls="{cornerRadius}"
-							 distance="11" tlRadius="{cornerRadius}" trRadius="{cornerRadius}"/>
+							 alpha="0.0"
+							 angle="90"
+							 blRadius="0"
+							 blRadius.withControls="{cornerRadius}"
+							 blurX="20"
+							 blurY="20"
+							 brRadius="0"
+							 brRadius.withControls="{cornerRadius}"
+							 distance="11"
+							 tlRadius="{cornerRadius}"
+							 trRadius="{cornerRadius}"/>
 	<!-- drop shadow can't be hittable so all other graphics go in this group -->
 
-	<s:Group bottom="0" left="0" right="0" top="0">
+	<s:Group bottom="0"
+			 left="0"
+			 right="0"
+			 top="0">
 
 		<!-- top group mask -->
 		<s:Group id="topGroupMask"
-				 bottom="0" left="0" right="0" top="0">
+				 bottom="0"
+				 left="0"
+				 right="0"
+				 top="0">
 
-			<s:Rect bottom="0" left="0" right="0" top="0"
-					bottomLeftRadiusX="{cornerRadius}" bottomRightRadiusX="{cornerRadius}" topLeftRadiusX="{cornerRadius}" topRightRadiusX="{cornerRadius}">
+			<s:Rect bottom="0"
+					left="0"
+					right="0"
+					top="0"
+					bottomLeftRadiusX="{cornerRadius}"
+					bottomRightRadiusX="{cornerRadius}"
+					topLeftRadiusX="{cornerRadius}"
+					topRightRadiusX="{cornerRadius}">
 				<s:fill>
 					<s:SolidColor alpha="0"/>
 				</s:fill>
@@ -105,10 +135,19 @@
 
 		<!-- bottom group mask -->
 		<s:Group id="bottomGroupMask"
-				 bottom="0" left="0" right="0" top="0">
+				 bottom="0"
+				 left="0"
+				 right="0"
+				 top="0">
 
-			<s:Rect bottom="0" left="0" right="0" top="0"
-					bottomLeftRadiusX="{cornerRadius}" bottomRightRadiusX="{cornerRadius}" topLeftRadiusX="{cornerRadius}" topRightRadiusX="{cornerRadius}">
+			<s:Rect bottom="0"
+					left="0"
+					right="0"
+					top="0"
+					bottomLeftRadiusX="{cornerRadius}"
+					bottomRightRadiusX="{cornerRadius}"
+					topLeftRadiusX="{cornerRadius}"
+					topRightRadiusX="{cornerRadius}">
 				<s:fill>
 					<s:SolidColor alpha="0"/>
 				</s:fill>
@@ -118,20 +157,33 @@
 
 		<!-- layer 1: border -->
 		<s:Rect id="border"
-				bottom="0" left="0" right="0" top="0"
-				bottomLeftRadiusX.withControls="{cornerRadius}" bottomRightRadiusX.withControls="{cornerRadius}" topLeftRadiusX="{cornerRadius}" topRightRadiusX="{cornerRadius}">
+				bottom="0"
+				left="0"
+				right="0"
+				top="0"
+				bottomLeftRadiusX.withControls="{cornerRadius}"
+				bottomRightRadiusX.withControls="{cornerRadius}"
+				topLeftRadiusX="{cornerRadius}"
+				topRightRadiusX="{cornerRadius}">
 
 			<s:stroke>
 
 				<s:SolidColorStroke color="{getStyle('borderColor')}"
-									alpha="{getStyle('borderAlpha')}" weight="1"/>
+									alpha="{getStyle('borderAlpha')}"
+									weight="1"/>
 			</s:stroke>
 		</s:Rect>
 
 		<!-- layer 2: background fill -->
 		<s:Rect id="background"
-				bottom="0" left="0" right="0" top="0"
-				bottomLeftRadiusX.withControls="{cornerRadius}" bottomRightRadiusX.withControls="{cornerRadius}" topLeftRadiusX="{cornerRadius}" topRightRadiusX="{cornerRadius}">
+				bottom="0"
+				left="0"
+				right="0"
+				top="0"
+				bottomLeftRadiusX.withControls="{cornerRadius}"
+				bottomRightRadiusX.withControls="{cornerRadius}"
+				topLeftRadiusX="{cornerRadius}"
+				topRightRadiusX="{cornerRadius}">
 
 			<s:fill>
 				<!--<s:SolidColor color="{getStyle('backgroundColor')}"
@@ -141,8 +193,11 @@
 		</s:Rect>
 
 		<!-- layer 3: contents -->
-		<s:Group id="contents" 
-				 bottom="0" left="0" right="0" top="0">
+		<s:Group id="contents"
+				 bottom="0"
+				 left="0"
+				 right="0"
+				 top="0">
 
 			<s:layout>
 				<s:VerticalLayout horizontalAlign="justify"
@@ -153,10 +208,13 @@
 					 mask="{topGroupMask}">
 
 				<!-- layer 0: title bar fill -->
-				
-				
+
+
 				<s:Rect id="tbFill"
-						bottom="0" left="0" right="0" top="0">
+						bottom="0"
+						left="0"
+						right="0"
+						top="0">
 					<s:fill>
 						<s:LinearGradient rotation="90">
 							<s:GradientEntry color="#B70000"/>
@@ -166,27 +224,44 @@
 				</s:Rect>
 
 				<s:Label id="titleDisplay"
-						 top="7" color="white" left="3" right="3" paddingLeft="10"
-						 textAlign="left" verticalAlign="middle" paddingBottom="6"
-						 maxDisplayedLines="1" fontSize="15" fontWeight="bold">
+						 top="7"
+						 color="white"
+						 left="3"
+						 right="3"
+						 paddingLeft="10"
+						 textAlign="left"
+						 verticalAlign="middle"
+						 paddingBottom="6"
+						 maxDisplayedLines="1"
+						 fontSize="15"
+						 fontWeight="bold">
 				</s:Label>
-				
-				<s:Line top="0" width="100%">
+
+				<s:Line top="0"
+						width="100%">
 					<s:stroke>
-						<s:SolidColorStroke color="#FFFFFF" alpha="0.2" weight="1"/>
+						<s:SolidColorStroke color="#FFFFFF"
+											alpha="0.2"
+											weight="1"/>
 					</s:stroke>
 				</s:Line>
-				
-				<s:Line bottom="0" width="100%">
+
+				<s:Line bottom="0"
+						width="100%">
 					<s:stroke>
-						<s:SolidColorStroke color="#000000" alpha="0.2" weight="1"/>
+						<s:SolidColorStroke color="#000000"
+											alpha="0.2"
+											weight="1"/>
 					</s:stroke>
 				</s:Line>
 
 			</s:Group>
 
 			<s:Group id="contentGroup"
-					 height="100%" minHeight="0" minWidth="0" width="100%">
+					 height="100%"
+					 minHeight="0"
+					 minWidth="0"
+					 width="100%">
 			</s:Group>
 
 

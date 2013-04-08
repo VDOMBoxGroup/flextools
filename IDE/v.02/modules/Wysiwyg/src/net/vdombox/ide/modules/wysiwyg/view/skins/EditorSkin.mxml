@@ -5,8 +5,11 @@
 			 xmlns:libcomponents="net.vdombox.ide.common.components.*"
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 width="100%" height="100%"
-			 creationComplete="creationCompleteHandler()" xmlns:components1="net.vdombox.ide.common.view.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*">
+			 width="100%"
+			 height="100%"
+			 creationComplete="creationCompleteHandler()"
+			 xmlns:components1="net.vdombox.ide.common.view.components.*"
+			 xmlns:button="net.vdombox.ide.common.view.components.button.*">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -18,16 +21,16 @@
 		<![CDATA[
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
-			
+
 			private function creationCompleteHandler() : void
 			{
 				currentState = "wysiwyg";
 				showLinking.addEventListener( Event.CHANGE, changeHandler );
 			}
-			
-			private function changeHandler ( event : Event ) : void
+
+			private function changeHandler( event : Event ) : void
 			{
-				dispatchEvent( new Event( "nerrr" ));
+				dispatchEvent( new Event( "nerrr" ) );
 			}
 
 			override protected function commitProperties() : void
@@ -60,9 +63,11 @@
 		<s:State name="normal"/>
 		<s:State name="disabled"/>
 	</s:states>
-	
+
 	<s:Rect height="29"
-				left="0" right="0" top="0">
+			left="0"
+			right="0"
+			top="0">
 		<s:fill>
 			<s:LinearGradient rotation="90">
 				<s:GradientEntry color="0xFFFFFF"/>
@@ -70,137 +75,182 @@
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
-	
-	<s:Line width="100%" y="28">
-		<s:stroke>
-			<s:SolidColorStroke color="#e8ebeb" weight="1"/>
-		</s:stroke>
-	</s:Line>
-	
-	<s:Line width="100%" y="29">
-		<s:stroke>
-			<s:SolidColorStroke color="#cacece" weight="1"/>
-		</s:stroke>
-	</s:Line>
-	
-		<s:HGroup gap="0" height="25"
-				  left="1" right="1" top="1">
-			
-			<s:HGroup gap="13" 
-					  height="100%" width="50%"
-					  paddingRight="15"  paddingLeft="14"  
-					  verticalAlign="middle">
-				
-				<s:VGroup id="wysiwygButton" 
-						  enabled.wysiwyg="false" enabled.xml="true"
-						  height="100%"
-						  paddingTop="10"
-						  verticalAlign="middle" horizontalAlign="center"
-						  gap="0"
-						  click="currentState='wysiwyg'">
-					<s:Label color="#007cb6"
-							 fontWeight="bold" fontFamily="Tahoma" fontSize="12"
-							 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"/>
-					<mx:Spacer height="100%"/>
-					<s:HGroup>
-						<mx:Image source="@Embed('assets/triangle.png')" 
-								  smoothBitmapContent="true" 
-								  visible.xml="false" visible.wysiwyg="true"/>
-					</s:HGroup>
-				</s:VGroup>
-				
-				<s:VGroup id="xmlButton" 
-						  enabled.wysiwyg="true" enabled.xml="false" 
-						  height="100%"
-						  paddingTop="10"
-						  verticalAlign="middle" horizontalAlign="center" 
-						  gap="0"
-						  click="currentState='xml'">
-					<s:Label color="#007cb6" 
-							 fontWeight="bold" fontFamily="Tahoma" fontSize="12"
-							 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"/>
-					<mx:Spacer height="100%"/>
-					<s:HGroup>
-						<mx:Image source="@Embed('assets/triangle.png')"
-								  smoothBitmapContent="true" 
-								  visible.xml="true" visible.wysiwyg="false"/>
-					</s:HGroup>
-				</s:VGroup>
-				
-				<s:HGroup includeIn="xml, xmlDisabled" verticalAlign="middle">
-					<button:WorkAreaButton id="saveXMLButton" height="20" 
-										   icon="{VDOMImage.Save}" iconDown="{VDOMImage.Save_White}"
-										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_save_button_label' ) }"
-										   backgroundDownColor="#daa440" textDownColor="#F0F0F0"/>
-					
-					<mx:Spacer width="5"/>
-					
-					<s:Label id="statusLabel"
-							 height="25"
-							 color="gray" verticalAlign="middle"/>
-				</s:HGroup>
-				
-				<s:HGroup gap="2" verticalAlign="middle">
-					
-					<button:WorkAreaButton id="undoButton"
-										   height="20" icon="{VDOMImage.Undo}"
-										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_undo' ) }"
-										   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.UNDO ) )"/>
-					
-					<button:WorkAreaButton id="redoButton"
-										   height="20" icon="{VDOMImage.Redo}"
-										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_redo' ) }"
-										   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.REDO ) )"/>
-					
-					<button:WorkAreaButton id="refreshButton"
-										   height="20" icon="{VDOMImage.Refresh}"
-										   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_refresh' ) }"
-										   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.REFRESH ) )"/>
-					
-				</s:HGroup>
-				
-			</s:HGroup>
-			
-			<!--<s:Line height="25" width="1">
-				<s:stroke>
-					<s:SolidColorStroke color="#D9DCDC"/>
-				</s:stroke>
-			</s:Line>-->
-			
-			<s:Group width="50%" visible.wysiwyg="true" visible.xml="false">
-		
-				<s:HGroup height="25" width="100%"
-						  paddingRight="0" paddingLeft="15" paddingTop="2" 
-						  verticalAlign="middle" horizontalAlign="right"
-						  gap="13">
-					
-					<s:CheckBox id="showLinking" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_show_linking' ) }" 
-								color="#909b95"
-								fontFamily="Tahoma" fontSize="12"/>
-					
-					<s:HGroup height="25" verticalAlign="middle" gap="5" width="80">
-						<mx:Image source="@Embed('assets/Cursor.png')" smoothBitmapContent="true" />
-						<s:VGroup height="25" gap="0" verticalAlign="middle">
-							<s:Label height="12" 
-									 id="strXWritten" 
-									 text="x: 0px" 
-									 fontFamily="Tahoma" fontSize="10" 
-									 color="#909b95"/>
-							<s:Label height="12" 
-									 id="strYWritten" 
-									 text="y: 0px" 
-									 fontFamily="Tahoma" fontSize="10" 
-									 color="#909b95"/>
-						</s:VGroup>
-					</s:HGroup>			
-			
-				</s:HGroup>
-				
-			</s:Group>
-		</s:HGroup>
-	
 
-	<s:Rect height="100%" width="100%"
+	<s:Line width="100%"
+			y="28">
+		<s:stroke>
+			<s:SolidColorStroke color="#e8ebeb"
+								weight="1"/>
+		</s:stroke>
+	</s:Line>
+
+	<s:Line width="100%"
+			y="29">
+		<s:stroke>
+			<s:SolidColorStroke color="#cacece"
+								weight="1"/>
+		</s:stroke>
+	</s:Line>
+
+	<s:HGroup gap="0"
+			  height="25"
+			  left="1"
+			  right="1"
+			  top="1">
+
+		<s:HGroup gap="13"
+				  height="100%"
+				  width="50%"
+				  paddingRight="15"
+				  paddingLeft="14"
+				  verticalAlign="middle">
+
+			<s:VGroup id="wysiwygButton"
+					  enabled.wysiwyg="false"
+					  enabled.xml="true"
+					  height="100%"
+					  paddingTop="10"
+					  verticalAlign="middle"
+					  horizontalAlign="center"
+					  gap="0"
+					  click="currentState='wysiwyg'">
+				<s:Label color="#007cb6"
+						 fontWeight="bold"
+						 fontFamily="Tahoma"
+						 fontSize="12"
+						 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"/>
+				<mx:Spacer height="100%"/>
+				<s:HGroup>
+					<mx:Image source="@Embed('assets/triangle.png')"
+							  smoothBitmapContent="true"
+							  visible.xml="false"
+							  visible.wysiwyg="true"/>
+				</s:HGroup>
+			</s:VGroup>
+
+			<s:VGroup id="xmlButton"
+					  enabled.wysiwyg="true"
+					  enabled.xml="false"
+					  height="100%"
+					  paddingTop="10"
+					  verticalAlign="middle"
+					  horizontalAlign="center"
+					  gap="0"
+					  click="currentState='xml'">
+				<s:Label color="#007cb6"
+						 fontWeight="bold"
+						 fontFamily="Tahoma"
+						 fontSize="12"
+						 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"/>
+				<mx:Spacer height="100%"/>
+				<s:HGroup>
+					<mx:Image source="@Embed('assets/triangle.png')"
+							  smoothBitmapContent="true"
+							  visible.xml="true"
+							  visible.wysiwyg="false"/>
+				</s:HGroup>
+			</s:VGroup>
+
+			<s:HGroup includeIn="xml, xmlDisabled"
+					  verticalAlign="middle">
+				<button:WorkAreaButton id="saveXMLButton"
+									   height="20"
+									   icon="{VDOMImage.Save}"
+									   iconDown="{VDOMImage.Save_White}"
+									   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_save_button_label' ) }"
+									   backgroundDownColor="#daa440"
+									   textDownColor="#F0F0F0"/>
+
+				<mx:Spacer width="5"/>
+
+				<s:Label id="statusLabel"
+						 height="25"
+						 color="gray"
+						 verticalAlign="middle"/>
+			</s:HGroup>
+
+			<s:HGroup gap="2"
+					  verticalAlign="middle">
+
+				<button:WorkAreaButton id="undoButton"
+									   height="20"
+									   icon="{VDOMImage.Undo}"
+									   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_undo' ) }"
+									   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.UNDO ) )"/>
+
+				<button:WorkAreaButton id="redoButton"
+									   height="20"
+									   icon="{VDOMImage.Redo}"
+									   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_redo' ) }"
+									   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.REDO ) )"/>
+
+				<button:WorkAreaButton id="refreshButton"
+									   height="20"
+									   icon="{VDOMImage.Refresh}"
+									   label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_refresh' ) }"
+									   click="hostComponent.dispatchEvent( new EditorEvent ( EditorEvent.REFRESH ) )"/>
+
+			</s:HGroup>
+
+		</s:HGroup>
+
+		<!--<s:Line height="25" width="1">
+			<s:stroke>
+				<s:SolidColorStroke color="#D9DCDC"/>
+			</s:stroke>
+		</s:Line>-->
+
+		<s:Group width="50%"
+				 visible.wysiwyg="true"
+				 visible.xml="false">
+
+			<s:HGroup height="25"
+					  width="100%"
+					  paddingRight="0"
+					  paddingLeft="15"
+					  paddingTop="2"
+					  verticalAlign="middle"
+					  horizontalAlign="right"
+					  gap="13">
+
+				<s:CheckBox id="showLinking"
+							label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_show_linking' ) }"
+							color="#909b95"
+							fontFamily="Tahoma"
+							fontSize="12"/>
+
+				<s:HGroup height="25"
+						  verticalAlign="middle"
+						  gap="5"
+						  width="80">
+					<mx:Image source="@Embed('assets/Cursor.png')"
+							  smoothBitmapContent="true"/>
+					<s:VGroup height="25"
+							  gap="0"
+							  verticalAlign="middle">
+						<s:Label height="12"
+								 id="strXWritten"
+								 text="x: 0px"
+								 fontFamily="Tahoma"
+								 fontSize="10"
+								 color="#909b95"/>
+						<s:Label height="12"
+								 id="strYWritten"
+								 text="y: 0px"
+								 fontFamily="Tahoma"
+								 fontSize="10"
+								 color="#909b95"/>
+					</s:VGroup>
+				</s:HGroup>
+
+			</s:HGroup>
+
+		</s:Group>
+	</s:HGroup>
+
+
+	<s:Rect height="100%"
+			width="100%"
 			top="29">
 
 		<s:stroke>
@@ -216,13 +266,18 @@
 	</s:Rect>
 
 	<s:Group id="contentGroup"
-			 height="100%" width="100%"
+			 height="100%"
+			 width="100%"
 			 top="29"/>
-	
-	<mx:Image id="spinner" source="@Embed('assets/spinner.swf')" right="10" top="30"
-			  height="30" width="30"
-			  verticalAlign="middle" horizontalAlign="center"  
+
+	<mx:Image id="spinner"
+			  source="@Embed('assets/spinner.swf')"
+			  right="10"
+			  top="30"
+			  height="30"
+			  width="30"
+			  verticalAlign="middle"
+			  horizontalAlign="center"
 			  maintainAspectRatio="true"
-			  visible="false"
-			  />
+			  visible="false"/>
 </s:SparkSkin>

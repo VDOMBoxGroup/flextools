@@ -2,17 +2,19 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	
+
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
 
 	public class EditorVO extends EventDispatcher
 	{
 		private var _vdomObjectVO : IVDOMObjectVO;
+
 		private var _renderVO : RenderVO;
+
 		private var _vdomObjectXMLPresentationVO : VdomObjectXMLPresentationVO;
 
-		[Bindable( event="vdomObjectVOChanged" )]
+		[Bindable( event = "vdomObjectVOChanged" )]
 		public function get vdomObjectVO() : IVDOMObjectVO
 		{
 			return _vdomObjectVO;
@@ -27,11 +29,11 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 				vdomObjectXMLPresentationVO = null;
 
 			_vdomObjectVO = value;
-			
+
 			dispatchEvent( new Event( "vdomObjectVOChanged" ) );
 		}
 
-		[Bindable( event="renderVOChanged" )]
+		[Bindable( event = "renderVOChanged" )]
 		public function get renderVO() : RenderVO
 		{
 			return _renderVO;
@@ -47,7 +49,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 			dispatchEvent( new Event( "renderVOChanged" ) );
 		}
 
-		[Bindable( event="vdomObjectXMLPresentationVOChanged" )]
+		[Bindable( event = "vdomObjectXMLPresentationVOChanged" )]
 		public function get vdomObjectXMLPresentationVO() : VdomObjectXMLPresentationVO
 		{
 			return _vdomObjectXMLPresentationVO;
@@ -59,7 +61,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 				_vdomObjectXMLPresentationVO = value;
 			else
 				_vdomObjectXMLPresentationVO = null;
-			
+
 			dispatchEvent( new Event( "vdomObjectXMLPresentationVOChanged" ) );
 		}
 	}

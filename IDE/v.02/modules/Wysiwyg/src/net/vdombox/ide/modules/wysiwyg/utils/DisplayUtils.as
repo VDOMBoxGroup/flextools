@@ -5,21 +5,20 @@ package net.vdombox.ide.modules.wysiwyg.utils
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
-	
+
 	import mx.controls.scrollClasses.ScrollBar;
 	import mx.core.FlexGlobals;
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
-	
+
 	import spark.components.Application;
 
 	public class DisplayUtils
 	{
 
-		public static function getObjectsUnderMouse( rootContainer : DisplayObjectContainer, targetClassName : String,
-													 filterFunction : Function = null ) : Array
+		public static function getObjectsUnderMouse( rootContainer : DisplayObjectContainer, targetClassName : String, filterFunction : Function = null ) : Array
 		{
 			var rb : RendererBase = new RendererBase();
 			var app : Application = FlexGlobals.topLevelApplication as Application;
@@ -51,7 +50,7 @@ package net.vdombox.ide.modules.wysiwyg.utils
 						target = null;
 				}
 
-//			if (target && stack[stack.length - 1] != target) {
+				//			if (target && stack[stack.length - 1] != target) {
 				if ( target && !dict[ target ] )
 				{
 					var check : Boolean = true;

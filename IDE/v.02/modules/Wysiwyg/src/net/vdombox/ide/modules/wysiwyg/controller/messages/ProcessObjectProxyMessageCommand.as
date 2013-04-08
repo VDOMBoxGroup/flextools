@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.MultiObjectsManipulationProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -29,14 +29,14 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 			var body : Object = message.getBody();
 			var target : String = message.target;
 			var operation : String = message.operation;
-			
+
 			var objectVO : ObjectVO;
-			if (body is ObjectVO)
+			if ( body is ObjectVO )
 				objectVO = body as ObjectVO;
 			else
 				objectVO = body.objectVO as ObjectVO;
-			
-			
+
+
 			var renderer : *;
 
 			switch ( target )
@@ -48,14 +48,14 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						sendNotification( Notifications.OBJECT_CREATED, body.newObjectVO );
 						sendNotification( Notifications.GET_WYSIWYG, body.objectVO );
 						sendNotification( Notifications.GET_PAGE_SRUCTURE, statesProxy.selectedPage );
-						sendNotification( StatesProxy.SET_SELECTED_OBJECT,  body.newObjectVO );
+						sendNotification( StatesProxy.SET_SELECTED_OBJECT, body.newObjectVO );
 					}
 					else if ( operation == PPMOperationNames.DELETE )
 					{
 						sendNotification( Notifications.OBJECT_DELETED, body.objectVO );
 						sendNotification( Notifications.GET_WYSIWYG, statesProxy.selectedPage );
 						sendNotification( Notifications.GET_PAGE_SRUCTURE, statesProxy.selectedPage );
-						//sendNotification( StatesProxy.SET_SELECTED_OBJECT, statesProxy.selectedPage );
+							//sendNotification( StatesProxy.SET_SELECTED_OBJECT, statesProxy.selectedPage );
 					}
 
 					break;
@@ -72,11 +72,11 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
 						sendNotification( Notifications.OBJECT_ATTRIBUTES_GETTED, vdomObjectAttributesVO );
-						
+
 						var multiObjectsManipulationProxy : MultiObjectsManipulationProxy = facade.retrieveProxy( MultiObjectsManipulationProxy.NAME ) as MultiObjectsManipulationProxy;
 
 						multiObjectsManipulationProxy.saveNextObject();
-						
+
 						for ( renderer in needForUpdateObject )
 						{
 							var vdomObjectVO : IVDOMObjectVO = IRenderer( renderer ).vdomObjectVO;
@@ -130,7 +130,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 
 					break;
 				}
-					
+
 				case PPMObjectTargetNames.NAME:
 				{
 					if ( operation == PPMOperationNames.UPDATE )
@@ -140,11 +140,11 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					}
 					break;
 				}
-					
+
 				case PPMObjectTargetNames.COPY:
 				{
 					multiObjectsManipulationProxy = facade.retrieveProxy( MultiObjectsManipulationProxy.NAME ) as MultiObjectsManipulationProxy;
-					
+
 					if ( multiObjectsManipulationProxy.hasNextObjectForPaste() )
 						multiObjectsManipulationProxy.pasteNextObject();
 					else
@@ -153,7 +153,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						sendNotification( StatesProxy.CHANGE_SELECTED_OBJECT_REQUEST, body.newObject );
 					}
 					sendNotification( Notifications.GET_WYSIWYG, body.targetObject );
-					
+
 					break;
 				}
 			}

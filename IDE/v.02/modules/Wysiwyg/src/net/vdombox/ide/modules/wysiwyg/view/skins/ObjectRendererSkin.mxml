@@ -2,89 +2,118 @@
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:mx="library://ns.adobe.com/flex/halo">
-	
+
 	<!--<s:transitions>
 		<s:Transition autoReverse="true">
 			<s:Animate target="{strokeLine}">
-				<s:SimpleMotionPath property="alpha"/>                
+				<s:SimpleMotionPath property="alpha"/>
 			</s:Animate>
 		</s:Transition>
 	</s:transitions>-->
-	
+
 	<s:states>
-		<s:State name="normal" />
-		<s:State name="hovered" />
-		<s:State name="highlighted" />
-		<s:State name="notPackeg" />
-		<s:State name="locked" />
-		<s:State name="disabled" />
-		<s:State name="select" />
-		<s:State name="multiSelect" />
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="highlighted"/>
+		<s:State name="notPackeg"/>
+		<s:State name="locked"/>
+		<s:State name="disabled"/>
+		<s:State name="select"/>
+		<s:State name="multiSelect"/>
 	</s:states>
 
 	<s:Rect id="backgroundRect"
-			bottom="0" left="0" right="0" top="0">
+			bottom="0"
+			left="0"
+			right="0"
+			top="0">
 
 		<s:fill>
 
-			<s:SolidColor alpha=".0" /> 
+			<s:SolidColor alpha=".0"/>
 		</s:fill>
 
 		<s:stroke>
 
-			<s:SolidColorStroke alpha=".0" />
+			<s:SolidColorStroke alpha=".0"/>
 		</s:stroke>
 	</s:Rect>
 
-	<s:Group id="background" >
-		
+	<s:Group id="background">
+
 	</s:Group>
-	
+
 
 	<s:Scroller id="scroller"
 				focusEnabled="false"
-				bottom="0" left="0" right="0" top="0"
+				bottom="0"
+				left="0"
+				right="0"
+				top="0"
 				minViewportInset="0">
 
 		<s:Group>
-			
+
 			<s:DataGroup id="dataGroup">
 			</s:DataGroup>
-				
-			<s:Group id="upperLayer" />
+
+			<s:Group id="upperLayer"/>
 		</s:Group>
 	</s:Scroller>
 
 	<s:Group id="locker"
-			 bottom="0" left="0" right="0" top="0"
-			 visible="false" includeInLayout="false">
+			 bottom="0"
+			 left="0"
+			 right="0"
+			 top="0"
+			 visible="false"
+			 includeInLayout="false">
 
-		<s:Rect bottom="0" left="0" right="0" top="0">
+		<s:Rect bottom="0"
+				left="0"
+				right="0"
+				top="0">
 
 			<s:fill>
 
 				<s:SolidColor color="white"
-							  alpha="0" />
+							  alpha="0"/>
 			</s:fill>
 		</s:Rect>
 	</s:Group>
 
-	<s:Rect bottom="0" left="0" right="0" top="0"
+	<s:Rect bottom="0"
+			left="0"
+			right="0"
+			top="0"
 			includeIn="locked">
-		
+
 		<s:fill>
-			<s:SolidColor color="gray" />
+			<s:SolidColor color="gray"/>
 		</s:fill>
 	</s:Rect>
-	
-	<s:Rect  bottom="0" left="0" right="0" top="0">
+
+	<s:Rect bottom="0"
+			left="0"
+			right="0"
+			top="0">
 
 		<s:stroke>
 
 			<s:SolidColorStroke id="strokeLine"
-								color="gray" color.highlighted="green" color.notPackeg="red" color.hovered="gray" color.select="#0000FF" color.multiSelect="#A8C6EE"
-								weight="2" 
-								alpha="0" alpha.hovered="1" alpha.highlighted="1"  alpha.notPackeg="1" alpha.select="1" alpha.multiSelect="1"/>
+								color="gray"
+								color.highlighted="green"
+								color.notPackeg="red"
+								color.hovered="gray"
+								color.select="#0000FF"
+								color.multiSelect="#A8C6EE"
+								weight="2"
+								alpha="0"
+								alpha.hovered="1"
+								alpha.highlighted="1"
+								alpha.notPackeg="1"
+								alpha.select="1"
+								alpha.multiSelect="1"/>
 		</s:stroke>
 	</s:Rect>
 </s:SparkSkin>

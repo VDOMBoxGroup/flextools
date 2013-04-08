@@ -6,10 +6,10 @@ package net.vdombox.ide.modules.wysiwyg.events
 	public class TabEvent extends Event
 	{
 		public static const OBJECT_ADD : String = "objectAdd";
+
 		public static const OBJECT_REMOVE : String = "objectRemove";
 
-		public function TabEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, object : DisplayObject = null,
-			index : int = -1 )
+		public function TabEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, object : DisplayObject = null, index : int = -1 )
 		{
 			super( type, bubbles, cancelable );
 
@@ -23,8 +23,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 
 		override public function clone() : Event
 		{
-			return new TabEvent( type, bubbles, cancelable,
-				object, index );
+			return new TabEvent( type, bubbles, cancelable, object, index );
 		}
 	}
 }

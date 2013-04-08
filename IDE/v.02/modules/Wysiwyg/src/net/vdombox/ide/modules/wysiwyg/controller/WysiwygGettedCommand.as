@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.VdomObjectEditorMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -17,7 +17,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			//trace ('--- Wysiwyg: WysiwygGettedCommand');
 			var body : Object = notification.getBody();
 			var vdomObjectVO : IVDOMObjectVO = body.pageVO ? body.pageVO : body.objectVO;
-			
+
 			if ( !vdomObjectVO )
 				return;
 
@@ -25,37 +25,40 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 
 			var renderVO : RenderVO;
-			
-			/*if ( vdomObjectVO is ObjectVO )
-			{
-				renderVO = renderProxy.generateRenderVO( (vdomObjectVO as ObjectVO).pageVO, wysiwygXML );
-				renderer = renderProxy.getRendererByVO( (vdomObjectVO as ObjectVO).pageVO );
-				renderer.renderVO = renderVO;
-			}*/
-			
-			
+
+			/*
+			   if ( vdomObjectVO is ObjectVO )
+			   {
+			   renderVO = renderProxy.generateRenderVO( (vdomObjectVO as ObjectVO).pageVO, wysiwygXML );
+			   renderer = renderProxy.getRendererByVO( (vdomObjectVO as ObjectVO).pageVO );
+			   renderer.renderVO = renderVO;
+			   }
+			 */
+
+
 			renderVO = renderProxy.generateRenderVO( vdomObjectVO, wysiwygXML );
 
 			var rendererBase : RendererBase = renderProxy.getRendererByVO( vdomObjectVO );
-			
-			
-			if( rendererBase )
+
+
+			if ( rendererBase )
 				rendererBase.renderVO = renderVO;
-		
+
 			var mediator : VdomObjectEditorMediator;
 			var mediatorName : String;
-			
+
 			for ( mediatorName in VdomObjectEditorMediator.instancesNameList )
 			{
 				mediator = facade.retrieveMediator( mediatorName ) as VdomObjectEditorMediator;
 
 				try
 				{
-					if( mediator.editorVO.vdomObjectVO.id == vdomObjectVO.id )
+					if ( mediator.editorVO.vdomObjectVO.id == vdomObjectVO.id )
 						mediator.editorVO.renderVO = renderVO;
 				}
-				catch( error : Error )
-				{}
+				catch ( error : Error )
+				{
+				}
 			}
 		}
 	}

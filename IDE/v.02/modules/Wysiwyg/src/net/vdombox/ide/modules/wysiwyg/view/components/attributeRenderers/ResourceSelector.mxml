@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
-		 
-		 height="20" width="100%"
-		 borderStyle="solid" horizontalAlign="right" verticalAlign="middle" xmlns:s="library://ns.adobe.com/flex/spark">
+		 height="20"
+		 width="100%"
+		 borderStyle="solid"
+		 horizontalAlign="right"
+		 verticalAlign="middle"
+		 xmlns:s="library://ns.adobe.com/flex/spark">
 
 	<mx:Script>
 		<![CDATA[
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 
 			private var _value : String;
-			
+
 			[Bindable]
 			public function get value() : String
 			{
@@ -21,24 +24,33 @@
 				_value = value;
 				dispatchEvent( new Event( Event.CHANGE ) );
 			}
-			
-			
 		]]>
 	</mx:Script>
-	<s:Group width="100%" height="20" toolTip="{value}">
-		
-		<s:Rect width="100%" height="100%">
+	<s:Group width="100%"
+			 height="20"
+			 toolTip="{value}">
+
+		<s:Rect width="100%"
+				height="100%">
 			<s:fill>
 				<s:SolidColor color="#FFFFFF"/>
 			</s:fill>
 		</s:Rect>
-		 
-		<s:TextInput id="lbl" textAlign="left"
-					 text="Resources" editable="false" width="100%" height="100%"/>
-		
+
+		<s:TextInput id="lbl"
+					 textAlign="left"
+					 text="Resources"
+					 editable="false"
+					 width="100%"
+					 height="100%"/>
+
 	</s:Group>
 
-	<mx:Button height="19" label="..." width="22"
-			   cornerRadius="0" paddingLeft="2" paddingRight="2"
-			   click="dispatchEvent( new AttributeEvent( AttributeEvent.SELECT_RESOURCE ) )" />
+	<mx:Button height="19"
+			   label="..."
+			   width="22"
+			   cornerRadius="0"
+			   paddingLeft="2"
+			   paddingRight="2"
+			   click="dispatchEvent( new AttributeEvent( AttributeEvent.SELECT_RESOURCE ) )"/>
 </mx:HBox>

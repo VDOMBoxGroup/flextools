@@ -13,8 +13,9 @@ for the PopUpAnchor defined by the popUp property.</p>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
-			 alpha.disabled=".5" xmlns:components="net.vdombox.ide.common.view.components.*">
-	
+			 alpha.disabled=".5"
+			 xmlns:components="net.vdombox.ide.common.view.components.*">
+
 	<!-- host component -->
 	<fx:Metadata>
 		<![CDATA[ 
@@ -24,75 +25,83 @@ for the PopUpAnchor defined by the popUp property.</p>
 		[HostComponent("spark.components.DropDownList")]
 		]]>
 	</fx:Metadata>
-	
+
 	<fx:Script fb:purpose="styling">
 		<![CDATA[
 			/* Define the content fill items that should be colored by the "contentBackgroundColor" style. */
-			static private const contentFill:Array = ["bgFill"];
-			
+			static private const contentFill : Array = [ "bgFill" ];
+
 			/**
 			 * @private
 			 */
-			override public function get contentItems():Array {
+			override public function get contentItems() : Array
+			{
 				return contentFill
-			}
-			;
-			
+			};
+
 			/**
 			 * @private
 			 */
-			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-				if (getStyle("borderVisible") == false) {
-					if (border)
+			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
+			{
+				if ( getStyle( "borderVisible" ) == false )
+				{
+					if ( border )
 						border.visible = false;
-					if (background) {
+					if ( background )
+					{
 						background.left = background.top = background.right = background.bottom = 0;
 					}
-					if (scroller)
+					if ( scroller )
 						scroller.minViewportInset = 0;
-				} else {
-					if (border)
+				}
+				else
+				{
+					if ( border )
 						border.visible = true;
-					if (background) {
+					if ( background )
+					{
 						background.left = background.top = background.right = background.bottom = 1;
 					}
-					if (scroller)
+					if ( scroller )
 						scroller.minViewportInset = 1;
 				}
-				
-				if (dropShadow)
-					dropShadow.visible = getStyle("dropShadowVisible");
-				
-				openButton.setStyle("cornerRadius", getStyle("cornerRadius"));
-				
-				if (borderStroke) {
-					borderStroke.color = getStyle("borderColor");
-					borderStroke.alpha = getStyle("borderAlpha");
+
+				if ( dropShadow )
+					dropShadow.visible = getStyle( "dropShadowVisible" );
+
+				openButton.setStyle( "cornerRadius", getStyle( "cornerRadius" ) );
+
+				if ( borderStroke )
+				{
+					borderStroke.color = getStyle( "borderColor" );
+					borderStroke.alpha = getStyle( "borderAlpha" );
 				}
-				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				super.updateDisplayList( unscaledWidth, unscaledHeight );
 			}
-			
 		]]>
 	</fx:Script>
 	<fx:Script>
 		<![CDATA[
-			
 			import mx.events.FlexEvent;
 			import mx.events.ResizeEvent;
-			
+
 			import net.vdombox.ide.common.view.components.resize.ResizeManager;
-			
+
 			// When the drop down list is resized - save the values for when the popUp is next created
-			private var dropDownWidth:Number, dropDownHeight:Number;
-			
-			[Bindable]private var matchAnchorWidth:Boolean = true;
-			
-			private function dropDownInit(event:FlexEvent):void {
+			private var dropDownWidth : Number, dropDownHeight : Number;
+
+			[Bindable]
+			private var matchAnchorWidth : Boolean = true;
+
+			private function dropDownInit( event : FlexEvent ) : void
+			{
 				// listen for when resize events happen so we can save the drop down size
-				dropDown.addEventListener(ResizeManager.RESIZE_START, resizeSrarted, false, 0, true);
-				dropDown.addEventListener(ResizeManager.RESIZE_END, resizeFinished, false, 0, true);
-				
-				if (!isNaN(dropDownWidth)) {
+				dropDown.addEventListener( ResizeManager.RESIZE_START, resizeSrarted, false, 0, true );
+				dropDown.addEventListener( ResizeManager.RESIZE_END, resizeFinished, false, 0, true );
+
+				if ( !isNaN( dropDownWidth ) )
+				{
 					// have to turn this off since the width no-longer matches the anchor width
 					matchAnchorWidth = false;
 					// set the explicit width/height to what it was last resized to
@@ -100,35 +109,38 @@ for the PopUpAnchor defined by the popUp property.</p>
 					dropDown.explicitHeight = dropDownHeight;
 				}
 			}
-			
-			private function resizeSrarted(event:ResizeEvent):void {
+
+			private function resizeSrarted( event : ResizeEvent ) : void
+			{
 				dropDown.maxHeight = dataGroup.measuredHeight + 3;
 				dropDown.height = dropDown.height;
-					
+
 			}
-			
-			private function resizeFinished(event:ResizeEvent):void {
+
+			private function resizeFinished( event : ResizeEvent ) : void
+			{
 				// have to save the explicit width/height for when the popup is next opened
 				dropDownWidth = dropDown.width;
 				dropDownHeight = dropDown.height;
 			}
-			
-			private function exitStateOpen(event:Event):void {
-				dropDown.removeEventListener(ResizeManager.RESIZE_END, resizeFinished, false);
+
+			private function exitStateOpen( event : Event ) : void
+			{
+				dropDown.removeEventListener( ResizeManager.RESIZE_END, resizeFinished, false );
 			}
 		]]>
 	</fx:Script>
-	
+
 	<s:states>
 		<s:State name="normal"/>
 		<s:State exitState="exitStateOpen(event)"
 				 name="open"/>
 		<s:State name="disabled"/>
 	</s:states>
-	
+
 	<!---
 	The PopUpAnchor control that opens the drop-down list.
-	
+
 	<p>In a custom skin class that uses transitions, set the
 	<code>itemDestructionPolicy</code> property to <code>none</code>.</p>
 	-->
@@ -143,7 +155,7 @@ for the PopUpAnchor defined by the popUp property.</p>
 				   itemDestructionPolicy="auto"
 				   popUpPosition="below"
 				   popUpWidthMatchesAnchorWidth="{matchAnchorWidth}">
-		
+
 		<!---
 		This includes borders, background colors, scrollers, and filters.
 		@copy spark.components.supportClasses.DropDownListBase#dropDown
@@ -153,7 +165,7 @@ for the PopUpAnchor defined by the popUp property.</p>
 				 maxHeight="134"
 				 minWidth="40"
 				 initialize="dropDownInit(event)">
-			
+
 			<!--- @private -->
 			<s:RectangularDropShadow id="dropShadow"
 									 bottom="0"
@@ -166,7 +178,7 @@ for the PopUpAnchor defined by the popUp property.</p>
 									 blurX="20"
 									 blurY="20"
 									 distance="7"/>
-			
+
 			<!--- @private -->
 			<s:Rect id="border"
 					bottom="0"
@@ -179,7 +191,7 @@ for the PopUpAnchor defined by the popUp property.</p>
 										weight="1"/>
 				</s:stroke>
 			</s:Rect>
-			
+
 			<!-- fill -->
 			<!--- Defines the appearance of drop-down list's background fill. -->
 			<s:Rect id="background"
@@ -192,36 +204,37 @@ for the PopUpAnchor defined by the popUp property.</p>
 								  color="0xFFFFFF"/>
 				</s:fill>
 			</s:Rect>
-			
-			<s:Rect width="100%" height="100%">
+
+			<s:Rect width="100%"
+					height="100%">
 				<s:fill>
 					<s:SolidColor color="#FFFFFF"/>
 				</s:fill>
 			</s:Rect>
-			
+
 			<!--- @private -->
 			<components:VDOMScroller id="scroller"
-						bottom="0"
-						left="0"
-						right="0"
-						top="0"
-						hasFocusableChildren="false"
-						minViewportInset="1"
-						skinClass="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResizableScrollerSkin">
+									 bottom="0"
+									 left="0"
+									 right="0"
+									 top="0"
+									 hasFocusableChildren="false"
+									 minViewportInset="1"
+									 skinClass="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResizableScrollerSkin">
 				<!--- @copy spark.components.SkinnableDataContainer#dataGroup-->
-					
+
 				<s:DataGroup id="dataGroup"
-								 itemRenderer="spark.skins.spark.DefaultItemRenderer">
+							 itemRenderer="spark.skins.spark.DefaultItemRenderer">
 					<s:layout>
 						<s:VerticalLayout horizontalAlign="contentJustify"
-											 gap="0"/>
+										  gap="0"/>
 					</s:layout>
 				</s:DataGroup>
-				
+
 			</components:VDOMScroller>
 		</s:Group>
 	</s:PopUpAnchor>
-	
+
 	<!---  The default skin is DropDownListButtonSkin.
 	@copy spark.components.supportClasses.DropDownListBase#openButton
 	@see spark.skins.spark.DropDownListButtonSkin -->
@@ -232,7 +245,7 @@ for the PopUpAnchor defined by the popUp property.</p>
 			  right="0"
 			  top="0"
 			  skinClass="spark.skins.spark.DropDownListButtonSkin"/>
-	
+
 	<!--- @copy spark.components.DropDownList#labelDisplay -->
 	<s:Label id="labelDisplay"
 			 width="75"
@@ -245,6 +258,6 @@ for the PopUpAnchor defined by the popUp property.</p>
 			 maxDisplayedLines="1"
 			 mouseChildren="false"
 			 mouseEnabled="false"/>
-	
+
 </s:SparkSkin>
 
