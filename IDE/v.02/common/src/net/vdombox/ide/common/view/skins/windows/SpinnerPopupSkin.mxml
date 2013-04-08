@@ -39,6 +39,16 @@
 		
 		<s:Label id="spinnerLabel" text="" textAlign="center" color="white" 
 				 fontWeight="normal" fontFamily="Arial" fontSize="12" />
+		
+		<s:Label id="resourceName" color="white" 
+				 fontWeight="normal" fontFamily="Arial" fontSize="12"/>
+		
+		<s:Label id="resourceStatus" color="white" 
+				 fontWeight="normal" fontFamily="Arial" fontSize="12"/>
+		
+		<s:Label id="totalCountResource" color="white" 
+					 fontWeight="normal" fontFamily="Arial" fontSize="12"/>
+		
 	</s:VGroup>
 	
 </s:SparkSkin>

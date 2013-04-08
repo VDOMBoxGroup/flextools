@@ -23,7 +23,6 @@ package net.vdombox.ide.common.view.components.windows
 		{
 			value.sortOn( "name", Array.CASEINSENSITIVE );
 			_pagesDataProvider = new ArrayList( value );
-			
 		}
 		
 		

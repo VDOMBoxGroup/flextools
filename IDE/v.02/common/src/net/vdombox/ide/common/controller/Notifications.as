@@ -342,6 +342,9 @@ package net.vdombox.ide.common.controller
 		public static const START_LOADING_RESOURCES : String = "startLoadingResources";
 		public static const FINISH_LOADING_RESOURCES : String = "finishLoadingResources";
 		
+		public static const OPEN_RESOURCES_BY_LOADING : String = "openResourcesByLoading";
+		public static const LOADED_RESOURCES_BY_LOADING : String = "loadedResourcesByLoading";
+		
 		
 ///////////////////////////////////////////Preview////////////////////////////////////////////////////////////
 		

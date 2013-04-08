@@ -19,7 +19,13 @@ package net.vdombox.ide.common.view.components.windows
 		public var spinner : SpinningSmoothImage;
 		
 		[SkinPart( required="true" )]
-		public var spinnerLabel : Label;
+		public var resourceName : Label;
+		
+		[SkinPart( required="true" )]
+		public var resourceStatus : Label;
+		
+		[SkinPart( required="true" )]
+		public var totalCountResource : Label;
 		
 		private var spinnerText : String = "";
 		private var removePopup	: Boolean;
@@ -56,8 +62,7 @@ package net.vdombox.ide.common.view.components.windows
 		private function createComleatHandler(event : FlexEvent):void
 		{
 			PopUpManager.centerPopUp( this );
-			
-			spinnerLabel.text = spinnerText;
+	
 			spinner.rotateImage();
 		}
 		
