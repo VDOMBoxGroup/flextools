@@ -2,7 +2,10 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 height="100%" xmlns:components="net.vdombox.ide.common.components.*" xmlns:components1="net.vdombox.ide.common.view.components.*" xmlns:button="net.vdombox.ide.common.view.components.button.*" >
+		 height="100%"
+		 xmlns:components="net.vdombox.ide.common.components.*"
+		 xmlns:components1="net.vdombox.ide.common.view.components.*"
+		 xmlns:button="net.vdombox.ide.common.view.components.button.*">
 
 	<fx:Metadata> 
 		[ResourceBundle("Preview_General")] 
@@ -15,18 +18,26 @@
 
 	<s:layout>
 
-		<s:HorizontalLayout />
+		<s:HorizontalLayout/>
 	</s:layout>
 
-	<button:ToolsetButton id="toolsetButton" color="0xFFFF00"
-							  height="100%" click="{toolsetButton.selected = false}"
-							  label="{resourceManager.getString( 'Preview_General', 'toolset_button_label' ) }"
-							  skinClass="net.vdombox.ide.common.view.skins.button.ToolsetButtonSkin" />
-	
-	<s:HGroup height="100%" verticalAlign="middle" paddingBottom="13">
-		
-		<s:Image id="popUpImage" width="12" height="12" source="@Embed('src/icons/openHosts.png')" skinClass="spark.skins.spark.ImageSkin"/>
-		
+	<button:ToolsetButton id="toolsetButton"
+						  color="0xFFFF00"
+						  height="100%"
+						  click="{toolsetButton.selected = false}"
+						  label="{resourceManager.getString( 'Preview_General', 'toolset_button_label' ) }"
+						  skinClass="net.vdombox.ide.common.view.skins.button.ToolsetButtonSkin"/>
+
+	<s:HGroup height="100%"
+			  verticalAlign="middle"
+			  paddingBottom="13">
+
+		<s:Image id="popUpImage"
+				 width="12"
+				 height="12"
+				 source="@Embed('src/icons/openHosts.png')"
+				 skinClass="spark.skins.spark.ImageSkin"/>
+
 	</s:HGroup>
-	
+
 </s:Group>

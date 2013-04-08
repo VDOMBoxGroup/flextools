@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.preview.view
 {
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.controller.messages.LogMessage;
@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.preview.view
 	import net.vdombox.ide.common.controller.names.UIQueryMessageNames;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.view.LoggingJunctionMediator;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -79,21 +79,21 @@ package net.vdombox.ide.modules.preview.view
 				case Notifications.SELECT_MODULE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.OPEN_BROWSER, null, multitonKey );
-					
+
 					junction.sendMessage( PipeNames.STDCORE, message );
-					
+
 					break;
-				}	
-					
+				}
+
 				case StatesProxy.GET_ALL_STATES:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.GET_APPLICATIONS_HOSTS, body, multitonKey );
-					
+
 					junction.sendMessage( PipeNames.STDCORE, message );
-					
+
 					break;
 				}
-		
+
 			}
 
 			super.handleNotification( notification );
@@ -113,8 +113,7 @@ package net.vdombox.ide.modules.preview.view
 					if ( recipientKey != multitonKey )
 						return;
 
-					junction.sendMessage( PipeNames.STDLOG,
-										  new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( Notifications.PIPES_READY );
 					break;
@@ -122,48 +121,50 @@ package net.vdombox.ide.modules.preview.view
 
 			}
 		}
-		
+
 		public function handleProxyMessage( message : ProxyMessage ) : void
 		{
 			var place : String = message.proxy;
-			
-			/*switch ( place )
-			{
-				/*case PPMPlaceNames.STATES:
-				{
-					sendNotification( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, message );
-					
-					break;
-				}
-					
-				case PPMPlaceNames.TYPES:
-				{
-					sendNotification( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, message );
-					
-					break;
-				}
-					
-				case PPMPlaceNames.APPLICATION:
-				{
-					sendNotification( Notifications.PROCESS_APPLICATION_PROXY_MESSAGE, message );
-					
-					break;
-				}
-					
-				case PPMPlaceNames.PAGE:
-				{
-					sendNotification( Notifications.PROCESS_PAGE_PROXY_MESSAGE, message );
-					
-					break;
-				}
-					
-				case PPMPlaceNames.OBJECT:
-				{
-					sendNotification( Notifications.PROCESS_OBJECT_PROXY_MESSAGE, message );
-					
-					break;
-				}
-			}*/
+
+		/*
+		   switch ( place )
+		   {
+		   /*case PPMPlaceNames.STATES:
+		   {
+		   sendNotification( StatesProxy.PROCESS_STATES_PROXY_MESSAGE, message );
+
+		   break;
+		   }
+
+		   case PPMPlaceNames.TYPES:
+		   {
+		   sendNotification( TypesProxy.PROCESS_TYPES_PROXY_MESSAGE, message );
+
+		   break;
+		   }
+
+		   case PPMPlaceNames.APPLICATION:
+		   {
+		   sendNotification( Notifications.PROCESS_APPLICATION_PROXY_MESSAGE, message );
+
+		   break;
+		   }
+
+		   case PPMPlaceNames.PAGE:
+		   {
+		   sendNotification( Notifications.PROCESS_PAGE_PROXY_MESSAGE, message );
+
+		   break;
+		   }
+
+		   case PPMPlaceNames.OBJECT:
+		   {
+		   sendNotification( Notifications.PROCESS_OBJECT_PROXY_MESSAGE, message );
+
+		   break;
+		   }
+		   }
+		 */
 		}
 
 		public function tearDown() : void
