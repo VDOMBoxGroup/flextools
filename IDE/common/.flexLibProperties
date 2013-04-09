@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="net.vdombox.editors.parsers.ImportItemVO"/>
+    <classEntry path="net.vdombox.editors.parsers.LanguageVO"/>
+    <classEntry path="net.vdombox.editors.parsers.FactoryTokenizers"/>
+    <classEntry path="net.vdombox.ide.common.model.ProxyStorage"/>
+    <classEntry path="net.vdombox.editors.PopUpHelpAutocomplete"/>
+    <classEntry path="net.vdombox.editors.parsers.python.PythonWordsStorage"/>
+    <classEntry path="net.vdombox.editors.VDOMToolTip"/>
+    <classEntry path="net.vdombox.editors.parsers.vscript.VScriptWordsStorage"/>
+    <classEntry path="net.vdombox.editors.parsers.base.BlockPosition"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
