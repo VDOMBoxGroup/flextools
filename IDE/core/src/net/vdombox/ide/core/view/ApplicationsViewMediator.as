@@ -10,9 +10,10 @@ package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-
+	
 	import mx.collections.ArrayList;
-
+	import mx.resources.ResourceManager;
+	
 	import net.vdombox.ide.common.model._vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ServerProxy;
@@ -20,11 +21,11 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.StatesProxy;
 	import net.vdombox.ide.core.view.components.ApplicationListItemRenderer;
 	import net.vdombox.ide.core.view.components.ApplicationsView;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.List;
 
 	/**
@@ -241,11 +242,17 @@ package net.vdombox.ide.core.view
 
 			if ( applicationListItemRenderer )
 			{
-				applicationsView.visible = false;
-
-				sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applicationListItemRenderer.applicationVO );
-
-				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff: false, close: false } );
+				if ( selectedApplicationVO.protect )
+				{
+					sendNotification( ApplicationFacade.WRITE_ERROR, { text: ResourceManager.getInstance().getString( 'Core_General', 'error_protected' ) } );
+				}
+				else
+				{
+					applicationsView.visible = false;
+	
+					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applicationListItemRenderer.applicationVO );
+					sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff: false, close: false } );
+				}
 			}
 		}
 
@@ -315,9 +322,15 @@ package net.vdombox.ide.core.view
 
 		private function setSelectApplication( event : MouseEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
-
-			sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff: false, close: false } );
+			if ( selectedApplicationVO.protect )
+			{
+				sendNotification( ApplicationFacade.WRITE_ERROR, { text: ResourceManager.getInstance().getString( 'Core_General', 'error_protected' ) } );
+			}
+			else
+			{
+				sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
+				sendNotification( ApplicationFacade.CLOSE_APPLICATION_MANAGER, { logOff: false, close: false } );
+			}
 		}
 	}
 }

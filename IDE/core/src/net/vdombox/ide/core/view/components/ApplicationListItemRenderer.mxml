@@ -38,6 +38,11 @@
 			[Bindable]
 			[Embed( source = "assets/vscript.png" )]
 			public static var vscript : Class;
+			
+			[Bindable]
+			[Embed( source = 'assets/applocked.png' )]
+			public static var applocked : Class;
+			
 
 			private var _resourceVO : ResourceVO;
 
@@ -85,6 +90,17 @@
 					version.text = applicationVO.version != "" ? ( resourceManager.getString( 'Core_General', 'create_edit_application_version' ) + ": " + applicationVO.version ) : "";
 
 					toolTip = applicationVO.description;
+					
+					if ( applicationVO.protect )
+					{
+						lockedImage.visible = true;
+						lockedImage.includeInLayout = true;
+					}
+					else
+					{
+						lockedImage.visible = false;
+						lockedImage.includeInLayout = false;
+					}
 				}
 				else
 				{
@@ -101,6 +117,9 @@
 					version.text = ""
 
 					toolTip = "";
+					
+					lockedImage.visible = false;
+					lockedImage.includeInLayout = false;
 				}
 
 				validateResourceVO();
@@ -258,11 +277,15 @@
 						fontSize="10"
 						paddingLeft="0"/>
 		</s:VGroup>
+		
+		<s:Image id="lockedImage" visible="false" includeInLayout="false"
+				 width="16" height="16"
+				 smooth="true" source="{ applocked }"/>
 
-		<mx:Image id="imageLanguage"
+		<s:Image id="imageLanguage"
 				  width="16"
 				  height="16"
-				  smoothBitmapContent="true"/>
+				  smooth="true"/>
 
 		<s:Spacer width="6"/>
 

@@ -21,4 +21,10 @@
 		<nature>com.adobe.flexbuilder.project.flexnature</nature>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
+	<variableList>
+		<variable>
+			<name>airHome</name>
+			<value>file:/C:/Program%20Files/Adobe/Adobe%20Flash%20Builder%204.5/sdks/4.9.0</value>
+		</variable>
+	</variableList>
 </projectDescription>
