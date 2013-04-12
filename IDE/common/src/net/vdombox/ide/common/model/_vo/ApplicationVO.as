@@ -56,6 +56,8 @@ package net.vdombox.ide.common.model._vo
 		private var _version : String;
 
 		private var _hosts : Array;
+		
+		private var _protect : Boolean;
 
 		public function get hosts() : Array
 		{
@@ -131,6 +133,11 @@ package net.vdombox.ide.common.model._vo
 		{
 			return _version;
 		}
+		
+		public function get protect():Boolean
+		{
+			return _protect;
+		}
 
 		public function setInformation( information : XML ) : void
 		{
@@ -144,6 +151,7 @@ package net.vdombox.ide.common.model._vo
 			_scriptingLanguage = information.ScriptingLanguage[ 0 ];
 			_active = information.Active[ 0 ];
 			_version = information.Version[ 0 ];
+			_protect = information.Protected[0] && information.Protected[0] == "1" ? true : false; 
 
 			hosts = new Array();
 
