@@ -121,7 +121,7 @@
 						 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"/>
 				<mx:Spacer height="100%"/>
 				<s:HGroup>
-					<mx:Image source="@Embed('assets/triangle.png')"
+					<mx:Image source="@Embed('/assets/triangle.png')"
 							  smoothBitmapContent="true"
 							  visible.xml="false"
 							  visible.wysiwyg="true"/>
@@ -144,7 +144,7 @@
 						 text="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"/>
 				<mx:Spacer height="100%"/>
 				<s:HGroup>
-					<mx:Image source="@Embed('assets/triangle.png')"
+					<mx:Image source="@Embed('/assets/triangle.png')"
 							  smoothBitmapContent="true"
 							  visible.xml="true"
 							  visible.wysiwyg="false"/>
@@ -223,7 +223,7 @@
 						  verticalAlign="middle"
 						  gap="5"
 						  width="80">
-					<mx:Image source="@Embed('assets/Cursor.png')"
+					<mx:Image source="@Embed('/assets/Cursor.png')"
 							  smoothBitmapContent="true"/>
 					<s:VGroup height="25"
 							  gap="0"
@@ -271,7 +271,7 @@
 			 top="29"/>
 
 	<mx:Image id="spinner"
-			  source="@Embed('assets/spinner.swf')"
+			  source="@Embed('/assets/spinner.swf')"
 			  right="10"
 			  top="30"
 			  height="30"

@@ -14,6 +14,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ExternalEditorWindowSkin;
 
 	import spark.components.Window;
+
 	import spark.core.SpriteVisualElement;
 
 	public class ExternalEditorWindow extends Window

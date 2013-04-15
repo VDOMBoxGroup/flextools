@@ -437,7 +437,7 @@
 				if ( !contextMenu )
 					contextMenu = new ContextMenu();
 
-				contextMenu.removeAllItems();
+//				contextMenu.removeAllItems();
 
 				var bufferContent : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
 
@@ -459,7 +459,7 @@
 
 					var pasteItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', 'contextMenu_paste' ) );
 					pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
-					contextMenu.addItem( pasteItem );
+//					contextMenu.addItem( pasteItem );
 				}
 			}
 

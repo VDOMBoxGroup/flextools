@@ -59,19 +59,19 @@
 				if ( !contextMenu )
 					contextMenu = new ContextMenu();
 
-				contextMenu.removeAllItems();
+//				contextMenu.removeAllItems();
 
 				if ( _typeVO.includedInUserCategory )
 				{
 					var delItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_del_in_user" ) );
 					delItem.addEventListener( Event.SELECT, delContextMenuHandler, false, 0, true );
-					contextMenu.addItem( delItem );
+//					contextMenu.addItem( delItem );
 				}
 				else
 				{
 					var addItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_add_in_user" ) );
 					addItem.addEventListener( Event.SELECT, addContextMenuHandler, false, 0, true );
-					contextMenu.addItem( addItem );
+//					contextMenu.addItem( addItem );
 				}
 
 				dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.DATA_CHANGE ) );

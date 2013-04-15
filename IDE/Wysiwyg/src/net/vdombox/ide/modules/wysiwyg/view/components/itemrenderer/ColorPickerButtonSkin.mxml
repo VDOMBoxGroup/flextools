@@ -19,7 +19,7 @@
 	name=labelDisplay, type=spark.components.supportClasses.TextBase, required=false
 	-->
 
-	<mx:Image source="@Embed('assets/colorpicker.png')"
+	<mx:Image source="@Embed('/assets/colorpicker.png')"
 			  smoothBitmapContent="true"/>
 
 </s:SparkSkin>

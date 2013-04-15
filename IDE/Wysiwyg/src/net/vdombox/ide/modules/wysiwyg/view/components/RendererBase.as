@@ -102,7 +102,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		[SkinPart( required = "true" )]
 		public var backgroundRect : Rect;
 
-		[Embed( source = "assets/wysiwyg_icon.png" )]
+		[Embed( source = "/assets/wysiwyg_icon.png" )]
 		public var blank_Icon : Class;
 
 		[SkinPart( required = "true" )]

@@ -191,60 +191,60 @@
 	</fx:Script>
 
 	<mx:Button height="20"
-			   icon="@Embed(source='../assets/toolbars/imageToolbar/reset_size.png')"
+			   icon="@Embed(source='/assets/toolbars/imageToolbar/reset_size.png')"
 			   width="20"
 			   click="rollback()"/>
 
 	<mx:Button height="20"
-			   icon="@Embed(source='../assets/toolbars/imageToolbar/rotate_left.png')"
+			   icon="@Embed(source='/assets/toolbars/imageToolbar/rotate_left.png')"
 			   styleName="toolbarButton"
 			   width="20"
 			   click="rotate(0)"/>
 
 	<mx:Button height="20"
-			   icon="@Embed(source='../assets/toolbars/imageToolbar/rotate_right.png')"
+			   icon="@Embed(source='/assets/toolbars/imageToolbar/rotate_right.png')"
 			   styleName="toolbarButton"
 			   width="20"
 			   click="rotate(1)"/>
 
 	<mx:Button height="20"
-			   icon="@Embed(source='../assets/toolbars/imageToolbar/flip_vertical.png')"
+			   icon="@Embed(source='/assets/toolbars/imageToolbar/flip_vertical.png')"
 			   styleName="toolbarButton"
 			   width="20"
 			   click="flip(0)"/>
 
 	<mx:Button height="20"
-			   icon="@Embed(source='../assets/toolbars/imageToolbar/flip_horizontal.png')"
+			   icon="@Embed(source='/assets/toolbars/imageToolbar/flip_horizontal.png')"
 			   styleName="toolbarButton"
 			   width="20"
 			   click="flip(1)"/>
 
 	<mx:Button height="20"
-			   icon="@Embed(source='../assets/toolbars/imageToolbar/contrast_up.png')"
+			   icon="@Embed(source='/assets/toolbars/imageToolbar/contrast_up.png')"
 			   styleName="toolbarButton"
 			   width="20"
 			   click="contrast(.1)"/>
 
 	<mx:Button height="20"
-			   icon="@Embed(source='../assets/toolbars/imageToolbar/contrast_down.png')"
+			   icon="@Embed(source='/assets/toolbars/imageToolbar/contrast_down.png')"
 			   styleName="toolbarButton"
 			   width="20"
 			   click="contrast(-.1)"/>
 
 	<mx:Button height="20"
-			   icon="@Embed(source='../assets/toolbars/imageToolbar/brightness_up.png')"
+			   icon="@Embed(source='/assets/toolbars/imageToolbar/brightness_up.png')"
 			   styleName="toolbarButton"
 			   width="20"
 			   click="brightness(.1)"/>
 
 	<mx:Button height="20"
-			   icon="@Embed(source='../assets/toolbars/imageToolbar/brightness_down.png')"
+			   icon="@Embed(source='/assets/toolbars/imageToolbar/brightness_down.png')"
 			   styleName="toolbarButton"
 			   width="20"
 			   click="brightness(-.1)"/>
 
 	<mx:Button height="20"
-			   icon="@Embed(source='../assets/toolbars/imageToolbar/grayscale.png')"
+			   icon="@Embed(source='/assets/toolbars/imageToolbar/grayscale.png')"
 			   styleName="toolbarButton"
 			   width="20"
 			   click="greyscale()"/>

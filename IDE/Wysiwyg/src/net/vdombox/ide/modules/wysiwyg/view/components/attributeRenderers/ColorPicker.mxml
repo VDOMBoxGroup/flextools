@@ -105,7 +105,7 @@
 				bottom="0"
 				visible="false">
 			<s:fill>
-				<s:BitmapFill source="@Embed('assets/empty.png')"
+				<s:BitmapFill source="@Embed('/assets/empty.png')"
 							  fillMode="repeat"/>
 			</s:fill>
 		</s:Rect>

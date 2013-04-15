@@ -133,22 +133,22 @@
 
 			private function createContextMenu() : void
 			{
-				_contextMenu.removeAllItems();
+//				_contextMenu.removeAllItems();
 
 				if ( _data.name().localName == "page" )
 				{
 					var startItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', 'contextMenu_start' ) );
 					startItem.addEventListener( Event.SELECT, startContextMenuHandler, false, 0, true );
-					_contextMenu.addItem( startItem );
+//					_contextMenu.addItem( startItem );
 				}
 
 				var copyItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', 'contextMenu_copy' ) );
 				copyItem.addEventListener( Event.SELECT, copyContextMenuHandler, false, 0, true );
-				_contextMenu.addItem( copyItem );
+//				_contextMenu.addItem( copyItem );
 
 				var pasteItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', 'contextMenu_paste' ) );
 				pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
-				_contextMenu.addItem( pasteItem );
+//				_contextMenu.addItem( pasteItem );
 
 				var bufferContent : String = Clipboard.generalClipboard.getData( ClipboardFormats.TEXT_FORMAT ) as String;
 
@@ -159,7 +159,7 @@
 
 				var deleteItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', 'contextMenu_delete' ) );
 				deleteItem.addEventListener( Event.SELECT, deleteContextMenuHandler, false, 0, true );
-				_contextMenu.addItem( deleteItem );
+//				_contextMenu.addItem( deleteItem );
 			}
 
 			private function dataLoaded( object : Object = null ) : void
@@ -211,7 +211,7 @@
 			protected function mxtreeitemrenderer1_contextMenuHandler( event : MouseEvent ) : void
 			{
 				createContextMenu();
-				_contextMenu.display( this.stage, event.stageX, event.stageY );
+//				_contextMenu.display( this.stage, event.stageX, event.stageY );
 			}
 
 			private function deleteContextMenuHandler( event : Event ) : void

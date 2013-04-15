@@ -210,7 +210,7 @@
 					  verticalAlign="middle"
 					  right="4"
 					  visible="false"
-					  source="@Embed('assets/cross.png')"
+					  source="@Embed('/assets/cross.png')"
 					  mouseDown="cross_mouseDownHandler(event)"/>
 		</s:Group>
 

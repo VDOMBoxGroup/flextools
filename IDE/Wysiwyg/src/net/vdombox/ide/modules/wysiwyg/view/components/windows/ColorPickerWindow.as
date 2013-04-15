@@ -33,35 +33,35 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 	{
 
 
-		[Embed( source = "assets/colorPicker/assets.swf", symbol = "AxisHsbH" )]
+		[Embed( source = "/assets/colorPicker/assets.swf", symbol = "AxisHsbH" )]
 		internal var osi_hsb_h : Class;
 
-		[Embed( source = "assets/colorPicker/assets.swf", symbol = "AxisHsbS" )]
+		[Embed( source = "/assets/colorPicker/assets.swf", symbol = "AxisHsbS" )]
 		internal var osi_hsb_s : Class;
 
-		[Embed( source = "assets/colorPicker/assets.swf", symbol = "AxisHsbB" )]
+		[Embed( source = "/assets/colorPicker/assets.swf", symbol = "AxisHsbB" )]
 		internal var osi_hsb_b : Class;
 
-		[Embed( source = "assets/colorPicker/assets.swf", symbol = "AxisRgbR" )]
+		[Embed( source = "/assets/colorPicker/assets.swf", symbol = "AxisRgbR" )]
 		internal var osi_rgb_r : Class;
 
-		[Embed( source = "assets/colorPicker/assets.swf", symbol = "AxisRgbG" )]
+		[Embed( source = "/assets/colorPicker/assets.swf", symbol = "AxisRgbG" )]
 		internal var osi_rgb_g : Class;
 
-		[Embed( source = "assets/colorPicker/assets.swf", symbol = "AxisRgbB" )]
+		[Embed( source = "/assets/colorPicker/assets.swf", symbol = "AxisRgbB" )]
 		internal var osi_rgb_b : Class;
 
 
 		[Bindable]
-		[Embed( source = 'assets/colorPicker/assets.swf', symbol = 'ColorPickerMarker' )]
+		[Embed( source = '/assets/colorPicker/assets.swf', symbol = 'ColorPickerMarker' )]
 		public var cc_marker : Class;
 
 		[Bindable]
-		[Embed( source = 'assets/colorPicker/assets.swf', symbol = 'MarkerLeft' )]
+		[Embed( source = '/assets/colorPicker/assets.swf', symbol = 'MarkerLeft' )]
 		public var cc_l_marker : Class;
 
 		[Bindable]
-		[Embed( source = 'assets/colorPicker/assets.swf', symbol = 'MarkerRight' )]
+		[Embed( source = '/assets/colorPicker/assets.swf', symbol = 'MarkerRight' )]
 		public var cc_r_marker : Class;
 
 
