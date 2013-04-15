@@ -54,24 +54,24 @@
 		<components:WorkAreaButton id="deleteButton"
 								   enabled="false"
 								   height="20"
-								   icon="@Embed('assets/delete.png')"
+								   icon="@Embed('/assets/delete.png')"
 								   label="{ resourceManager.getString( 'ResourceBrowser_General', 'work_area_delete_resource' ) }"/>
 
 		<mx:Spacer width="100%"/>
 
 		<components:WorkAreaButton id="getResourceButton"
-								   icon="@Embed('assets/expand.png')"
+								   icon="@Embed('/assets/expand.png')"
 								   height="20"
 								   label="{ resourceManager.getString( 'ResourceBrowser_General', 'work_area_get_resource' ) }"/>
 
 		<components:WorkAreaButton id="showInfoButton"
 								   height="20"
-								   icon="@Embed('assets/expand.png')"
+								   icon="@Embed('/assets/expand.png')"
 								   label="{ hostComponent.isInfoShowed ? resourceManager.getString( 'ResourceBrowser_General', 'work_area_hide_info' ) : resourceManager.getString( 'ResourceBrowser_General', 'work_area_show_info' ) }"/>
 
 		<components:WorkAreaButton id="showAddResourcesButton"
 								   height="20"
-								   icon="@Embed('assets/expand.png')"
+								   icon="@Embed('/assets/expand.png')"
 								   label="{ resourceManager.getString( 'ResourceBrowser_General', 'work_area_add_resources' ) }"
 								   highlighted="{ hostComponent.isAddResourcesShowed }"/>
 	</s:HGroup>

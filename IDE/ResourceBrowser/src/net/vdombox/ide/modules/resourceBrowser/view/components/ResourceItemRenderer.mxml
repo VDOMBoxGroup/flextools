@@ -24,7 +24,7 @@
 			import net.vdombox.ide.common.model._vo.ResourceVO;
 			import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderItemRendererEvent;
 
-			[Embed( source = "assets/new_page.png" )]
+			[Embed( source = "/assets/new_page.png" )]
 			private var newFile : Class;
 
 			[Bindable]
@@ -175,7 +175,7 @@
 
 	<mx:Image id="deleteResource"
 			  height="16"
-			  source="@Embed('assets/delete_resource.png')"
+			  source="@Embed('/assets/delete_resource.png')"
 			  width="16"
 			  click="deleteResource_clickHandler()"
 			  smoothBitmapContent="true"
@@ -184,7 +184,7 @@
 
 	<mx:Image id="uploadResource"
 			  height="16"
-			  source="@Embed('assets/upload_resource.png')"
+			  source="@Embed('/assets/upload_resource.png')"
 			  width="16"
 			  smoothBitmapContent="true"
 			  buttonMode="true"
@@ -192,7 +192,7 @@
 
 	<mx:Image id="errorResource"
 			  height="16"
-			  source="@Embed('assets/block_resource.png')"
+			  source="@Embed('/assets/block_resource.png')"
 			  width="16"
 			  click="deleteResource_clickHandler()"
 			  smoothBitmapContent="true"
@@ -201,7 +201,7 @@
 
 	<mx:Image id="completeResource"
 			  height="16"
-			  source="@Embed('assets/accept_resource.png')"
+			  source="@Embed('/assets/accept_resource.png')"
 			  width="16"
 			  smoothBitmapContent="true"
 			  buttonMode="true"

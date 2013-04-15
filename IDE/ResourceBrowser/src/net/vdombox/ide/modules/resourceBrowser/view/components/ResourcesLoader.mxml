@@ -178,7 +178,7 @@
 			</s:Rect>
 
 			<mx:Image height="20"
-					  source="@Embed('assets/add_resource.png')"
+					  source="@Embed('/assets/add_resource.png')"
 					  width="20"
 					  horizontalCenter="0"
 					  verticalCenter="0"
