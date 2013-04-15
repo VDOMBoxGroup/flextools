@@ -23,7 +23,7 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="default">
-      <airSettings airCertificatePath="D:/flex/workspace/VdomIDE/VdomIDE/q.p12" airTimestamp="true" version="1">
+      <airSettings airCertificatePath="F:/Для работы/V-DOM/Flex/workspace/VdomIDE/q.p12" airTimestamp="true" version="1">
         <airExcludes/>
       </airSettings>
       <actionScriptSettings version="1"/>
