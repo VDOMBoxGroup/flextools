@@ -11,7 +11,7 @@
 			import net.vdombox.ide.common.model._vo.EventVO;
 
 
-			[Embed( source = 'assets/events.png' )]
+			[Embed( source = '/assets/events.png' )]
 			public var EventsIcon : Class;
 
 			override public function set data( value : Object ) : void

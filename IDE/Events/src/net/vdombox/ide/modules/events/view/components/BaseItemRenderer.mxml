@@ -84,7 +84,7 @@
 
 			<mx:Image height="14"
 					  width="5"
-					  source="@Embed('assets/divider_v.png')"/>
+					  source="@Embed('/assets/divider_v.png')"/>
 
 			<s:HGroup height="22"
 					  width="100%"

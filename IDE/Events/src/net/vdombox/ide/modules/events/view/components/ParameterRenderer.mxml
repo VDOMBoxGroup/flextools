@@ -36,7 +36,7 @@
 			  paddingRight="4"
 			  gap="9">
 
-		<mx:Image source="@Embed('assets/parameter.png')"
+		<mx:Image source="@Embed('/assets/parameter.png')"
 				  width="16"
 				  height="16"
 				  alpha="0.3"/>

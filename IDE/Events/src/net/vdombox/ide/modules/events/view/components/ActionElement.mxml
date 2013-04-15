@@ -123,7 +123,7 @@
 				 maxDisplayedLines="1"/>
 	</s:Group>
 
-	<!--<components:ParameterRenderer id="actionRenderer" icon="@Embed('assets/event.png')" width="100%"
+	<!--<components:ParameterRenderer id="actionRenderer" icon="@Embed('/assets/event.png')" width="100%"
 								  title="{ title }" includeInLayout="false"/>-->
 
 	<s:VGroup id="parametersContainer"

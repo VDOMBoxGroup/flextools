@@ -98,7 +98,7 @@
 			  gap="0">
 
 		<mx:Image height="16"
-				  source="@Embed('assets/parameter.png')"
+				  source="@Embed('/assets/parameter.png')"
 				  width="16"
 				  alpha="0.3"/>
 		<mx:Spacer width="9"/>

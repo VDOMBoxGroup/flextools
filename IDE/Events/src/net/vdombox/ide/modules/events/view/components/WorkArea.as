@@ -35,8 +35,6 @@ package net.vdombox.ide.modules.events.view.components
 	{
 		public function WorkArea()
 		{
-			setStyle( "skinClass", WorkAreaSkin );
-
 			addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
 
 			addEventListener( ElementEvent.CREATE_LINKAGE, element_createLinkageHandler, true, 0, true );
@@ -52,6 +50,12 @@ package net.vdombox.ide.modules.events.view.components
 			addEventListener( ElementEvent.MULTI_SELECT_MOVED, elementMultiSelectMovedHandler, true, 0, true );
 
 			addEventListener( KeyboardEvent.KEY_DOWN, keyboardHandler, true, 0, true );
+		}
+
+		override public function stylesInitialized() : void
+		{
+			super.stylesInitialized();
+			this.setStyle( "skinClass", WorkAreaSkin );
 		}
 
 		[SkinPart]

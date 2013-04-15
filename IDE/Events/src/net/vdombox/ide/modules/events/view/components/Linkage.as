@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.events.view.components
 			addEventListener( MouseEvent.CLICK, clickHandler, false, 0, true );
 		}
 
-		[Embed( source = "assets/delete_linkage.png" )]
+		[Embed( source = "/assets/delete_linkage.png" )]
 		private var deleteLinkageClass : Class;
 
 		private const BASE_COLOR : uint = 0x2FDD00;

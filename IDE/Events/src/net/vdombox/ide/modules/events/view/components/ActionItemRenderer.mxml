@@ -11,13 +11,13 @@
 			import net.vdombox.ide.common.model._vo.ClientActionVO;
 			import net.vdombox.ide.common.model._vo.ServerActionVO;
 
-			[Embed( source = 'assets/action.png' )]
+			[Embed( source = '/assets/action.png' )]
 			public var ActionIcon : Class;
 
-			[Embed( source = 'assets/python.png' )]
+			[Embed( source = '/assets/python.png' )]
 			public var PythonIcon : Class;
 
-			[Embed( source = 'assets/vbscript.png' )]
+			[Embed( source = '/assets/vbscript.png' )]
 			public var VbscriptIcon : Class;
 
 			override public function set data( value : Object ) : void

@@ -283,7 +283,7 @@
 					 verticalAlign="middle"
 					 color="#6215D6"/>
 
-			<s:TextInput id="pageName"
+			<s:TextInput id="pageName"      skinClass="spark.skins.spark.TextInputSkin"
 						 editable="false"
 						 selectable="false"
 						 contentBackgroundAlpha="0"
@@ -294,7 +294,7 @@
 		</s:HGroup>
 
 
-		<s:HSlider id="scaleSlider"
+		<s:HSlider id="scaleSlider"        skinClass="spark.skins.spark.HSliderSkin"
 				   width="100"
 				   visible="false"
 				   minimum=".1"
@@ -310,8 +310,8 @@
 
 		<mx1:Spacer width="5"/>
 
-		<s:DropDownList id="_showElementsView"
-						width="140"
+		<s:DropDownList id="_showElementsView"    skinClass="spark.skins.spark.DropDownListSkin"
+                        width="140"
 						height="20"
 						creationComplete="showElementsView_creationCompleteHandler(event)"
 						change="_showElementsView_changeHandler(event)"/>
