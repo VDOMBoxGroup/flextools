@@ -2,40 +2,101 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="8f9a5422-5edf-4986-b78b-45d5202af2ab" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/skins/AlertWindowSkin.mxml" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/skins/AlertWindowSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/components/ApplicationListItemRenderer.mxml" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/components/ApplicationListItemRenderer.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/components/ApplicationPropertiesView.mxml" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/components/ApplicationPropertiesView.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/components/ApplicationsView.mxml" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/components/ApplicationsView.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/skins/ComboBoxButtonSkin.mxml" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/skins/ComboBoxButtonSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/button/CopyResourceIdBtnSkin.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/button/CopyResourceIdBtnSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/button/DeleteResourceBtnSkin.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/button/DeleteResourceBtnSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/DividerSkin.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/DividerSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/components/EyeImage.as" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/components/EyeImage.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/managers/IconManager.as" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/managers/IconManager.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/components/InitialWindow.mxml" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/components/InitialWindow.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/skins/InitialWindowSkin.mxml" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/skins/InitialWindowSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/components/windows/resourceBrowserWindow/ListItemBigPreviewContent.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/components/windows/resourceBrowserWindow/ListItemBigPreviewContent.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/components/windows/resourceBrowserWindow/ListItemNotEmptyContent.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/components/windows/resourceBrowserWindow/ListItemNotEmptyContent.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/skins/MainWindowSkin.mxml" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/skins/MainWindowSkin.mxml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/DB/DB.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Events/Events.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Preview/Preview.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ResourceBrowser/ResourceBrowser.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Scripts/Scripts.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Tree/Tree.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Wysiwyg/Wysiwyg.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ActionElement.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ActionElement.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ActionItemRenderer.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ActionItemRenderer.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/utils/ArrayUtils.as" afterPath="$PROJECT_DIR$/common/src/net/vdombox/utils/ArrayUtils.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/BaseItemRenderer.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/BaseItemRenderer.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/BaseVisualEditorMediator.as" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/BaseVisualEditorMediator.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/attributeRenderers/ColorPicker.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/attributeRenderers/ColorPicker.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/ColorPickerButtonSkin.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/ColorPickerButtonSkin.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ColorPickerWindow.as" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ColorPickerWindow.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/skins/ColorPickerWindowSkin.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/skins/ColorPickerWindowSkin.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/skins/CopyofTreeElementSkin.mxml" afterPath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/skins/CopyofTreeElementSkin.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/DataTableEditor.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/DataTableEditor.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/DataTableMediator.as" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/DataTableMediator.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/DataTableQuery.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/DataTableQuery.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/DataTableStructure.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/DataTableStructure.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/DataTablesTree.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/DataTablesTree.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/DataTablesTreeMediator.as" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/DataTablesTreeMediator.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/EditableParameterRenderer.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/EditableParameterRenderer.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/skins/EditorSkin.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/skins/EditorSkin.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/EventElement.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/EventElement.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/EventItemRenderer.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/EventItemRenderer.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ExternalEditorWindow.as" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ExternalEditorWindow.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/GlobalScriptsPanel.mxml" afterPath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/GlobalScriptsPanel.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/ImageToolbar.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/ImageToolbar.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/components/LevelsFilterPanel.mxml" afterPath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/components/LevelsFilterPanel.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/LibrariesPanel.mxml" afterPath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/LibrariesPanel.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/Linkage.as" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/Linkage.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/components/Linkage.as" afterPath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/components/Linkage.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/ListItemRenderer.mxml" afterPath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/ListItemRenderer.mxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/PopupWindowGripperSkin.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/PopupWindowGripperSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/components/resize/ResizeManager.as" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/components/resize/ResizeManager.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/windows/ResourcePreviewWindowSkin.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/windows/ResourcePreviewWindowSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/components/SaveButton.mxml" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/components/SaveButton.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/windows/SpinnerPopupSkin.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/windows/SpinnerPopupSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/VDOMScrollBarSkin/VDOMScrollBarSkin/VDOMHScrollBarTrumbSkin.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/VDOMScrollBarSkin/VDOMScrollBarSkin/VDOMHScrollBarTrumbSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/components/VDOMImage.as" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/components/VDOMImage.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/VDOMScrollBarSkin/VDOMScrollBarSkin/VDOMVScrollBarThumbSkin.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/VDOMScrollBarSkin/VDOMScrollBarSkin/VDOMVScrollBarThumbSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/VDOMScrollBarSkin/VDOMWorkAreaScrollBarSkin/VDOMWorkAreaHScrollBarTrumbSkin.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/VDOMScrollBarSkin/VDOMWorkAreaScrollBarSkin/VDOMWorkAreaHScrollBarTrumbSkin.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/VDOMScrollBarSkin/VDOMWorkAreaScrollBarSkin/VDOMWorkAreaVScrollBarThumbSkin.mxml" afterPath="$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/VDOMScrollBarSkin/VDOMWorkAreaScrollBarSkin/VDOMWorkAreaVScrollBarThumbSkin.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/ItemRenderers/ObjectTreePanelItemRenderer.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/ItemRenderers/ObjectTreePanelItemRenderer.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/ObjectTreePanelItemRenderer.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/ObjectTreePanelItemRenderer.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectsTreePanel.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectsTreePanel.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ParameterRenderer.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ParameterRenderer.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/ItemRenderers/QuerySimpleBuildBoxItemRenderer.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/ItemRenderers/QuerySimpleBuildBoxItemRenderer.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/RendererBase.as" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/RendererBase.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/resourceBrowser/view/components/ResourceItemRenderer.mxml" afterPath="$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/resourceBrowser/view/components/ResourceItemRenderer.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/components/ResourceSelector.mxml" afterPath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/components/ResourceSelector.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/resourceBrowser/view/components/ResourcesLoader.mxml" afterPath="$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/resourceBrowser/view/components/ResourcesLoader.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/RichTextToolbar.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/RichTextToolbar.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/ServerScriptsPanel.mxml" afterPath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/ServerScriptsPanel.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/TableElement.as" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/TableElement.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/skins/TableElementSkin.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/skins/TableElementSkin.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/TabsPanelItemRenderer.mxml" afterPath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/TabsPanelItemRenderer.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/TextToolbar.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/TextToolbar.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/Thumbnail.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/Thumbnail.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/resourceBrowser/view/components/Thumbnail.mxml" afterPath="$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/resourceBrowser/view/components/Thumbnail.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ToolBoxPanel.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ToolBoxPanel.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/Toolset.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/Toolset.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Preview/src/net/vdombox/ide/modules/preview/view/components/Toolset.mxml" afterPath="$PROJECT_DIR$/Preview/src/net/vdombox/ide/modules/preview/view/components/Toolset.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/Toolset.mxml" afterPath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/Toolset.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/components/Toolset.mxml" afterPath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/components/Toolset.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/main/Toolset.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/main/Toolset.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/components/TreeElement.mxml" afterPath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/components/TreeElement.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/skins/TreeElementSkin.mxml" afterPath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/skins/TreeElementSkin.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/TypeItemRenderer.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/TypeItemRenderer.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/VDOMAdvancedDataGrid.as" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/VDOMAdvancedDataGrid.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/VdomIDE-app.xml" afterPath="$PROJECT_DIR$/core/src/VdomIDE-app.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/VdomIDE.iml" afterPath="$PROJECT_DIR$/core/VdomIDE.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/net/vdombox/utils/WindowManager.as" afterPath="$PROJECT_DIR$/common/src/net/vdombox/utils/WindowManager.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/WorkArea.as" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/WorkArea.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/resourceBrowser/view/skins/WorkAreaSkin.mxml" afterPath="$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/resourceBrowser/view/skins/WorkAreaSkin.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/skins/WorkAreaSkin.mxml" afterPath="$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/view/skins/WorkAreaSkin.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/ide_lib.iml" afterPath="$PROJECT_DIR$/common/ide_lib.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="VdomIDE.IDEA.SDK.4.9.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/fragment.js2" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366011131729" ignored="false" />
+    <file path="/fragment.js2" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366026921069" ignored="false" />
     <file path="/VdomIDE.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366008375749" ignored="false" />
-    <file path="/DummyFile.xpath" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366008388282" ignored="false" />
-    <file path="/a.dummy" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366010482701" ignored="false" />
+    <file path="/DummyFile.xpath" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366014819678" ignored="false" />
+    <file path="/a.dummy" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366023488892" ignored="false" />
     <file path="/ModulesProxy.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366011289022" ignored="false" />
+    <file path="/DataBase.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366012685280" ignored="false" />
+    <file path="/DataTableMediator.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366012931962" ignored="false" />
+    <file path="/DataTablesTreeMediator.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366013297076" ignored="false" />
+    <file path="/NameObjectWindow.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366013363746" ignored="false" />
+    <file path="/TableElement.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366014643958" ignored="false" />
+    <file path="/BaseVisualEditor.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366016858121" ignored="false" />
+    <file path="/Toolset.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366018521821" ignored="false" />
+    <file path="/WindowManager.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366020196327" ignored="false" />
+    <file path="/ExternalEditorWindow.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366022098801" ignored="false" />
+    <file path="/ResourceItemRenderer.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366022189638" ignored="false" />
+    <file path="/ToolBoxPanel.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366022248184" ignored="false" />
+    <file path="/RichTextToolbar.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366022861013" ignored="false" />
+    <file path="/WorkAreaSkin.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366024612879" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +111,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -87,6 +147,7 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -96,39 +157,105 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AutoCompleteItemRenderer.mxml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/common/src/net/vdombox/editors/AutoCompleteItemRenderer.mxml">
+      <file leaf-file-name="Group.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://D:/4.9.0/frameworks/projects/spark/src/spark/components/Group.as">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="51" selection-start="261" selection-end="261" vertical-scroll-proportion="-4.576923">
+            <state line="896" column="0" selection-start="27613" selection-end="27613" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UIComponent.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://D:/4.9.0/frameworks/projects/framework/src/mx/core/UIComponent.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7641" column="0" selection-start="237984" selection-end="237984" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WorkArea.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/WorkArea.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="57" column="48" selection-start="2491" selection-end="2491" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WorkAreaSkin.mxml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="214" column="52" selection-start="6412" selection-end="6412" vertical-scroll-proportion="0.35159817">
               <folding>
-                <marker date="1366011111789" expanded="false" signature="272:378" placeholder="..." />
-                <marker date="1366011111789" expanded="true" signature="489:721" placeholder="{...}" />
-                <marker date="1366011111789" expanded="true" signature="838:966" placeholder="{...}" />
-                <marker date="1366011111789" expanded="true" signature="878:960" placeholder="{...}" />
+                <marker date="1366024630940" expanded="false" signature="714:1267" placeholder="..." />
+                <marker date="1366024630940" expanded="true" signature="1558:2027" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="2123:2441" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="2535:2626" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="2697:2951" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="3020:3651" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="3202:3291" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="3329:3421" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="3722:4662" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="3814:4395" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="3849:3947" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="4742:4874" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="4947:5208" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="4978:5156" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="5298:5447" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="5520:5542" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="5622:5704" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="5781:5818" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="5904:6225" placeholder="{...}" />
+                <marker date="1366024630940" expanded="true" signature="5952:6220" placeholder="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainWindowSkin.mxml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/skins/MainWindowSkin.mxml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="233" column="67" selection-start="5154" selection-end="5154" vertical-scroll-proportion="-59.346153">
-              <folding>
-                <marker date="1366010494730" expanded="false" signature="447:583" placeholder="..." />
-                <marker date="1366010494730" expanded="true" signature="801:830" placeholder="{...}" />
-                <marker date="1366010494730" expanded="true" signature="920:964" placeholder="{...}" />
-                <marker date="1366010494730" expanded="true" signature="1045:1177" placeholder="{...}" />
-                <marker date="1366010494730" expanded="true" signature="1257:1319" placeholder="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ModulesProxy.as" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ModulesProxy.as" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="318" selection-start="1122" selection-end="1122" vertical-scroll-proportion="0.5133215">
+            <state line="190" column="50" selection-start="5065" selection-end="5065" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MultilineWindow.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/MultilineWindow.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="57" column="79" selection-start="1414" selection-end="1494" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Controller.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/common/src/org/puremvc/as3/multicore/core/Controller.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="119" column="0" selection-start="4031" selection-end="4031" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="View.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/common/src/org/puremvc/as3/multicore/core/View.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="134" column="0" selection-start="4477" selection-end="4477" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CoreJunctionMediator.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/CoreJunctionMediator.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="150" column="0" selection-start="5066" selection-end="5066" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -144,8 +271,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/common/src/net/vdombox/editors/AutoCompleteItemRenderer.mxml" />
+        <option value="$PROJECT_DIR$/common/src/net/vdombox/utils/WindowManager.as" />
+        <option value="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/GlobalScriptsPanel.mxml" />
+        <option value="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/ListItemRenderer.mxml" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ExternalEditorWindow.as" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ToolBoxPanel.mxml" />
+        <option value="$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/resourceBrowser/view/components/ResourceItemRenderer.mxml" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/ObjectTreePanelItemRenderer.mxml" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/TypeItemRenderer.mxml" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectsTreePanel.mxml" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/ImageToolbar.mxml" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/RichTextToolbar.mxml" />
         <option value="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as" />
+        <option value="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/Linkage.as" />
+        <option value="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ActionElement.mxml" />
+        <option value="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/WorkArea.as" />
+        <option value="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml" />
       </list>
     </option>
   </component>
@@ -164,7 +305,7 @@
     <OptionsSetting value="true" id="Edit" />
     <OptionsSetting value="true" id="Undo Check Out" />
     <OptionsSetting value="true" id="Get Latest Version" />
-    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="2" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
@@ -198,7 +339,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
+              <option name="myItemId" value="Wysiwyg" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -208,7 +349,171 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
+              <option name="myItemId" value="Wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="view" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="view" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="skins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="view" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wysiwyg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="view" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="windows" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -218,19 +523,46 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="243" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="244" />
     <property name="project.structure.last.edited" value="Modules" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="75" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="244" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="MemberChooser.sorted" value="false" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder5" value="5" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth2" value="191" />
     <property name="recentsLimit" value="5" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../VdomIDE.V.2.for4.6/Core" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth1" value="184" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder4" value="4" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth0" value="195" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/core/src/modules" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth5" value="870" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth4" value="196" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth3" value="195" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="107" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="918" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RestoreUpdateTree">
     <UpdateInfo date="Moments ago" ActionInfo="_Update">
@@ -254,15 +586,18 @@
             <option name="mySupportsDeletion" value="false" />
             <option name="myCanBeAbsent" value="false" />
             <option name="myId" value="CREATED" />
-            <PATH vcs="svn" revision="8896">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core\src\assets\main</PATH>
-            <PATH vcs="svn" revision="8896">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core\src\assets\main\logo.png</PATH>
-            <PATH vcs="svn" revision="8896">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core\src\assets\main\logout.png</PATH>
-            <PATH vcs="svn" revision="8896">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core\src\assets\login</PATH>
-            <PATH vcs="svn" revision="8896">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core\src\assets\login\logo_old.png</PATH>
-            <PATH vcs="svn" revision="8896">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core\src\assets\login\logo.png</PATH>
-            <PATH vcs="svn" revision="8896">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core\src\assets\login\logo_gray.png</PATH>
-            <PATH vcs="svn" revision="8896">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core\src\assets\login\vdom_name.png</PATH>
-            <PATH vcs="svn" revision="8896">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core\src\assets\login\vectorGraphic.swf</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets\delete_linkage.png</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets\events_icon.png</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets\vbscript.png</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets\action.png</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets\parameter.png</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets\show.png</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets\event.png</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets\python.png</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets\events.png</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets\hide.png</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\src\assets\divider_v.png</PATH>
           </FILE-GROUP>
           <FILE-GROUP>
             <option name="myUpdateName" value="Deleted" />
@@ -270,8 +605,7 @@
             <option name="mySupportsDeletion" value="false" />
             <option name="myCanBeAbsent" value="true" />
             <option name="myId" value="REMOVED_FROM_REPOSITORY" />
-            <PATH vcs="svn" revision="8896">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core\assets\main</PATH>
-            <PATH vcs="svn" revision="8896">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core\assets\login</PATH>
+            <PATH vcs="svn" revision="8904">D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events\assets</PATH>
           </FILE-GROUP>
           <FILE-GROUP>
             <option name="myUpdateName" value="Restored" />
@@ -382,19 +716,6 @@
       <option name="trusted" value="true" />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -421,6 +742,19 @@
       <envs />
       <properties />
       <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -529,8 +863,263 @@
       <ConfigurationWrapper RunnerId="FlexDebugRunner" />
       <method />
     </configuration>
-    <list size="1">
+    <configuration default="false" name="DataBase (DB)" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="DataBase" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browserFamily" value="FIREFOX" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="DB" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <RunnerSettings RunnerId="FlexDebugRunner" />
+      <RunnerSettings RunnerId="FlexRunner" />
+      <ConfigurationWrapper RunnerId="FlexDebugRunner" />
+      <ConfigurationWrapper RunnerId="FlexRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Tree" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="Tree" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browserFamily" value="FIREFOX" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="Tree" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <RunnerSettings RunnerId="FlexDebugRunner" />
+      <ConfigurationWrapper RunnerId="FlexDebugRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Preview2 (Preview)" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="Preview2" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browserFamily" value="FIREFOX" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="Preview" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <RunnerSettings RunnerId="FlexDebugRunner" />
+      <ConfigurationWrapper RunnerId="FlexDebugRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ResourceBrowser" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="ResourceBrowser" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browserFamily" value="FIREFOX" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="ResourceBrowser" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <RunnerSettings RunnerId="FlexDebugRunner" />
+      <ConfigurationWrapper RunnerId="FlexDebugRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Scripts" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="Scripts" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browserFamily" value="FIREFOX" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="Scripts" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Wysiwyg" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="Wysiwyg" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browserFamily" value="FIREFOX" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="Wysiwyg" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Events" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="Events" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browserFamily" value="FIREFOX" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="Events" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <method />
+    </configuration>
+    <list size="8">
       <item index="0" class="java.lang.String" itemvalue="Flash App.Core" />
+      <item index="1" class="java.lang.String" itemvalue="Flash App.DataBase (DB)" />
+      <item index="2" class="java.lang.String" itemvalue="Flash App.Tree" />
+      <item index="3" class="java.lang.String" itemvalue="Flash App.Preview2 (Preview)" />
+      <item index="4" class="java.lang.String" itemvalue="Flash App.ResourceBrowser" />
+      <item index="5" class="java.lang.String" itemvalue="Flash App.Scripts" />
+      <item index="6" class="java.lang.String" itemvalue="Flash App.Wysiwyg" />
+      <item index="7" class="java.lang.String" itemvalue="Flash App.Events" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -565,12 +1154,24 @@
           <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\.idea" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\.idea" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
           <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\common" />
           <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\common" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
           <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core" />
           <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\DB" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\DB" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Tree" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Tree" />
         </SvnCopyRootSimple>
       </list>
     </option>
@@ -592,32 +1193,32 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1272" y="-8" width="1936" height="1096" extended-state="6" />
-    <editor active="false" />
+    <frame x="1272" y="-8" width="1936" height="1096" extended-state="7" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35889244" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4547391" sideWeight="0.7801494" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.47816828" sideWeight="0.23265742" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977462" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35569754" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.47816828" sideWeight="0.76734257" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16435432" sideWeight="0.64110756" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16435432" sideWeight="0.52183175" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -684,60 +1285,162 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="flex">
           <url>file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as</url>
-          <line>193</line>
+          <line>203</line>
         </line-breakpoint>
       </breakpoints>
       <option name="time" value="1" />
     </breakpoint-manager>
+  </component>
+  <component name="XPathView.XPathProjectComponent">
+    <history />
+    <find-history />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../VdomIDE.V.2.for4.6/Core/Core.iml">
+    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/Linkage.as">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="29" column="25" selection-start="680" selection-end="680" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../VdomIDE.V.2.for4.6/Core/Core.iml">
+    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ActionElement.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="49" selection-start="666" selection-end="666" vertical-scroll-proportion="0.29528537">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/src/net/vdombox/editors/AutoCompleteItemRenderer.mxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="51" selection-start="261" selection-end="261" vertical-scroll-proportion="-4.576923">
+        <state line="127" column="80" selection-start="3612" selection-end="3612" vertical-scroll-proportion="-16.692308">
           <folding>
-            <marker date="1366011111789" expanded="false" signature="272:378" placeholder="..." />
-            <marker date="1366011111789" expanded="true" signature="489:721" placeholder="{...}" />
-            <marker date="1366011111789" expanded="true" signature="838:966" placeholder="{...}" />
-            <marker date="1366011111789" expanded="true" signature="878:960" placeholder="{...}" />
+            <marker date="1366023502174" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1366023502174" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="-1:-1" placeholder="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/skins/MainWindowSkin.mxml">
+    <entry file="file://$PROJECT_DIR$/common/src/org/puremvc/as3/multicore/patterns/observer/Observer.as">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="233" column="67" selection-start="5154" selection-end="5154" vertical-scroll-proportion="-59.346153">
+        <state line="100" column="0" selection-start="2959" selection-end="2959" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/src/org/puremvc/as3/multicore/patterns/facade/Facade.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="311" column="0" selection-start="10405" selection-end="10405" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/src/org/puremvc/as3/multicore/patterns/observer/Notifier.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="0" selection-start="2480" selection-end="2480" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/controller/ProcessUIQueryMessageCommand.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="0" selection-start="1205" selection-end="1205" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/src/org/puremvc/as3/multicore/core/Controller.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="119" column="0" selection-start="4031" selection-end="4031" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/src/org/puremvc/as3/multicore/core/View.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="134" column="0" selection-start="4477" selection-end="4477" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/CoreJunctionMediator.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="150" column="0" selection-start="5066" selection-end="5066" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/MultilineWindow.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="79" selection-start="1414" selection-end="1494" vertical-scroll-proportion="0.0">
           <folding>
-            <marker date="1366010494730" expanded="false" signature="447:583" placeholder="..." />
-            <marker date="1366010494730" expanded="true" signature="801:830" placeholder="{...}" />
-            <marker date="1366010494730" expanded="true" signature="920:964" placeholder="{...}" />
-            <marker date="1366010494730" expanded="true" signature="1045:1177" placeholder="{...}" />
-            <marker date="1366010494730" expanded="true" signature="1257:1319" placeholder="{...}" />
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="318" selection-start="1122" selection-end="1122" vertical-scroll-proportion="0.5133215">
+        <state line="190" column="50" selection-start="5065" selection-end="5065" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/WorkArea.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="48" selection-start="2491" selection-end="2491" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/4.9.0/frameworks/projects/framework/src/mx/core/UIComponent.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7641" column="0" selection-start="237984" selection-end="237984" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/4.9.0/frameworks/projects/spark/src/spark/components/supportClasses/SkinnableComponent.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="708" column="0" selection-start="21146" selection-end="21146" vertical-scroll-proportion="0.33333334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/4.9.0/frameworks/projects/spark/src/spark/components/Group.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="896" column="0" selection-start="27613" selection-end="27613" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="214" column="52" selection-start="6412" selection-end="6412" vertical-scroll-proportion="0.35159817">
+          <folding>
+            <marker date="1366024630940" expanded="false" signature="714:1267" placeholder="..." />
+            <marker date="1366024630940" expanded="true" signature="1558:2027" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="2123:2441" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="2535:2626" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="2697:2951" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="3020:3651" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="3202:3291" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="3329:3421" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="3722:4662" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="3814:4395" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="3849:3947" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="4742:4874" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="4947:5208" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="4978:5156" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="5298:5447" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="5520:5542" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="5622:5704" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="5781:5818" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="5904:6225" placeholder="{...}" />
+            <marker date="1366024630940" expanded="true" signature="5952:6220" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -770,6 +1473,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
+          <last-edited>src</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -781,7 +1485,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>4.5.1</last-edited>
+          <last-edited>4.9.0</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -793,7 +1497,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>Core|Core</last-edited>
+          <last-edited>VdomIDE|VdomIDE</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
