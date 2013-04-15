@@ -33,6 +33,7 @@
 package net.vdombox.utils
 {
 
+
 	/**
 	 * Class that contains static utility methods for manipulating and working
 	 * with Arrays.

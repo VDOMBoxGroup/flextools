@@ -222,7 +222,9 @@ package net.vdombox.utils
 
 			if ( isParentWindowLocked && windowData.isModal )
 			{
-				var parentHandlers : Array = [ { type: NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, handler: nativeWindow_displayStateChangingHandler }, { type: Event.CLOSING, handler: parent_closingHandler }, { type: Event.ACTIVATE, handler: nativeWindow_activateHandler } ];
+				var parentHandlers : Array = [ { type: NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, handler: nativeWindow_displayStateChangingHandler },
+					{ type: Event.CLOSING, handler: parent_closingHandler },
+					{ type: Event.ACTIVATE, handler: nativeWindow_activateHandler } ];
 
 				addHandlers( parentNativeWindow, parentHandlers );
 
