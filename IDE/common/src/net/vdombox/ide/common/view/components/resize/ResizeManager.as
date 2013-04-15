@@ -66,7 +66,7 @@ package net.vdombox.ide.common.view.components.resize
 
 		private var startHeight : Number;
 
-		[Embed( source = "assets/cursor_resize.png" )]
+		[Embed( source = "/assets/cursor_resize.png" )]
 		public var resizeCursorIcon : Class;
 
 		private var resizeCursorID : int;

@@ -5,10 +5,10 @@ package net.vdombox.ide.common.view.components
 	public class EyeImage extends Image
 	{
 
-		[Embed( source = "assets/eye_closed_black.png" )]
+		[Embed( source = "/assets/eye_closed_black.png" )]
 		public var EyeClosedBlack : Class;
 
-		[Embed( source = "assets/eye_opened.png" )]
+		[Embed( source = "/assets/eye_opened.png" )]
 		public var EyeOpened : Class;
 
 		public static const TYPE_BLACK : String = "black";

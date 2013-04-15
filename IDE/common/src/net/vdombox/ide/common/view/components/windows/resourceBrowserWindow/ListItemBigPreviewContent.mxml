@@ -240,7 +240,7 @@
 												   smoothBitmapContent="true"
 												   cachePolicy="on"
 												   cacheAsBitmap="true"
-												   source="@Embed('assets/spinner.png')"/>
+												   source="@Embed('/assets/spinner.png')"/>
 	</fx:Declarations>
 
 	<s:states>

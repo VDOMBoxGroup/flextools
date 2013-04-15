@@ -15,7 +15,7 @@
 		<s:State name="up"/>
 	</s:states>
 
-	<s:BitmapImage source="@Embed('assets/btn_delete.png')"
+	<s:BitmapImage source="@Embed('/assets/btn_delete.png')"
 				   left="0"
 				   right="0"
 				   top="0"

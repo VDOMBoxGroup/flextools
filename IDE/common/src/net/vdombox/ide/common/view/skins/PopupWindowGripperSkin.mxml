@@ -35,7 +35,7 @@
 
 	<!-- BitmapImage sets layoutDirection = "ltr". By setting it to null here, the gripper will assume the direction of its parent. -->
 	<s:BitmapImage layoutDirection="{null}"
-				   source="@Embed('assets/popup_gripper.png')"
+				   source="@Embed('/assets/popup_gripper.png')"
 				   right="0"
 				   bottom="0"
 				   verticalCenter="0"

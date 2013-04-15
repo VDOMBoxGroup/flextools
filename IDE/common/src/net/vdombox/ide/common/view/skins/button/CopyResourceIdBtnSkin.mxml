@@ -26,7 +26,7 @@
 			  horizontalAlign="center"
 			  verticalAlign="middle">
 
-		<s:BitmapImage source="@Embed('assets/btn_copy_id.png')"
+		<s:BitmapImage source="@Embed('/assets/btn_copy_id.png')"
 					   left="0"
 					   right="0"
 					   top="0"

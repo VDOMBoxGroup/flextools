@@ -42,7 +42,7 @@
 			  horizontalAlign="center">
 		<mx:Image width="30"
 				  height="7"
-				  source="@Embed('assets/divider_1.png')"
+				  source="@Embed('/assets/divider_1.png')"
 				  smoothBitmapContent="true"/>
 	</s:HGroup>
 

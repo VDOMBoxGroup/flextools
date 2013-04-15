@@ -40,7 +40,7 @@
 		<resourceBrowserWindow:SpinningSmoothImage id="spinner"
 												   width="20"
 												   height="20"
-												   source="@Embed('assets/spinner.png')"
+												   source="@Embed('/assets/spinner.png')"
 												   maintainAspectRatio="true"
 												   scaleContent="true"
 												   smoothBitmapContent="true"
