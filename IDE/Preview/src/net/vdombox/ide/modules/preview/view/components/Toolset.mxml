@@ -3,7 +3,7 @@
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 height="100%"
-		 xmlns:components="net.vdombox.ide.common.components.*"
+
 		 xmlns:components1="net.vdombox.ide.common.view.components.*"
 		 xmlns:button="net.vdombox.ide.common.view.components.button.*">
 
@@ -35,7 +35,7 @@
 		<s:Image id="popUpImage"
 				 width="12"
 				 height="12"
-				 source="@Embed('src/icons/openHosts.png')"
+				 source="@Embed('/icons/openHosts.png')"
 				 skinClass="spark.skins.spark.ImageSkin"/>
 
 	</s:HGroup>
