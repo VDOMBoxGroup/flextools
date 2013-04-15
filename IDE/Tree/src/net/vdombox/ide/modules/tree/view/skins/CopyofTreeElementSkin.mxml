@@ -52,7 +52,7 @@
 
 			<s:fill>
 
-				<s:BitmapFill source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='menu')"/>
+				<s:BitmapFill source="@Embed(source='/assets/treeEditor/treeEditor.swf', symbol='menu')"/>
 			</s:fill>
 		</s:Rect>
 
@@ -67,26 +67,26 @@
 			<mx:Image id="minimizeButton"
 					  buttonMode="true"
 					  height="10"
-					  source.minimizedGroup="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='plus')"
-					  source.normalGroup="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='minus')"
+					  source.minimizedGroup="@Embed(source='/assets/treeEditor/treeEditor.swf', symbol='plus')"
+					  source.normalGroup="@Embed(source='/assets/treeEditor/treeEditor.swf', symbol='minus')"
 					  width="10"/>
 
 			<mx:Image id="createLineButton"
 					  buttonMode="true"
 					  height="10"
-					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='line')"
+					  source="@Embed(source='/assets/treeEditor/treeEditor.swf', symbol='line')"
 					  width="10"/>
 
 			<mx:Image id="deleteButton"
 					  buttonMode="true"
 					  height="10"
-					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='delete')"
+					  source="@Embed(source='/assets/treeEditor/treeEditor.swf', symbol='delete')"
 					  width="10"/>
 
 			<mx:Image id="setStartPageButton"
 					  buttonMode="true"
 					  height="10"
-					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='start_page')"
+					  source="@Embed(source='/assets/treeEditor/treeEditor.swf', symbol='start_page')"
 					  width="10"/>
 		</s:Group>
 	</s:Group>

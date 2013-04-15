@@ -275,30 +275,30 @@
 
 		<button:WorkAreaButton id="setHome"
 							   height="20"
-							   icon="@Embed('assets/home.png')"
+							   icon="@Embed('/assets/home.png')"
 							   label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_start' ) }"
 							   click="hostComponent.dispatchEvent( new WorkAreaEvent ( WorkAreaEvent.SET_START ) )"/>
 
 		<button:WorkAreaButton id="newPageButton"
 							   height="20"
-							   icon="@Embed('assets/new.png')"
+							   icon="@Embed('/assets/new.png')"
 							   label="{ resourceManager.getString( 'Tree_General', 'work_area_new_page' ) }"
 							   click="hostComponent.dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CREATE_PAGE ) )"/>
 
 		<button:WorkAreaButton id="autoSpaceingButton"
 							   height="20"
-							   icon="@Embed('assets/spacing.png')"
+							   icon="@Embed('/assets/spacing.png')"
 							   label="{ resourceManager.getString( 'Tree_General', 'work_area_auto_spacing' ) }"
 							   click="hostComponent.dispatchEvent( new WorkAreaEvent( WorkAreaEvent.AUTO_SPACING ) )"/>
 
 		<button:WorkAreaButton id="expandAllButton"
 							   height="20"
-							   icon="@Embed('assets/expand.png')"
+							   icon="@Embed('/assets/expand.png')"
 							   click="expandAllButton_clickHandler()"/>
 
 		<button:WorkAreaButton id="showSignatureButton"
 							   height="20"
-							   icon="@Embed('assets/signature.png')"
+							   icon="@Embed('/assets/signature.png')"
 							   label="{ hostComponent.isSignatureShowed ? resourceManager.getString( 'Tree_General', 'work_area_hide_signature' ) : resourceManager.getString( 'Tree_General', 'work_area_show_signature' ) }"
 							   click="showSignatureButton_clickHandler()"/>
 	</s:HGroup>

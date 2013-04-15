@@ -66,7 +66,7 @@
 
 		</s:Ellipse>
 
-		<components:SmoothImage height="9" source="@Embed('assets/delete.png')" width="9"
+		<components:SmoothImage height="9" source="@Embed('/assets/delete.png')" width="9"
 								horizontalCenter="0" verticalCenter="0"/>
 
 	</s:Group>-->

@@ -344,18 +344,18 @@
 				</s:HGroup>
 
 				<!--<components:ElementButton id="hideButton"
-				height="17" icon.full="@Embed('assets/hide.png')" icon.short="@Embed('assets/show.png')" label.full="{ resourceManager.getString( 'Tree_General', 'tree_element_hide' ) }"
+				height="17" icon.full="@Embed('/assets/hide.png')" icon.short="@Embed('/assets/show.png')" label.full="{ resourceManager.getString( 'Tree_General', 'tree_element_hide' ) }"
 				label.short="{ resourceManager.getString( 'Tree_General', 'tree_element_show' ) }" minWidth="10" width="100%"
 				cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
 				click="hideButton_clickHandler( event )"/>
 
-				<components:ElementButton height="17" icon="@Embed('assets/arrow.png')" label="{ resourceManager.getString( 'Tree_General', 'tree_element_create_linkage' ) }" minWidth="10"
+				<components:ElementButton height="17" icon="@Embed('/assets/arrow.png')" label="{ resourceManager.getString( 'Tree_General', 'tree_element_create_linkage' ) }" minWidth="10"
 				width="100%"
 				cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
 				click="hostComponent.dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE ) )"/>
 
 				<components:ElementButton id="deleteButton"
-				height="17" icon="@Embed('assets/delete.png')" label="{ resourceManager.getString( 'Tree_General', 'tree_element_delete' ) }" minWidth="10"
+				height="17" icon="@Embed('/assets/delete.png')" label="{ resourceManager.getString( 'Tree_General', 'tree_element_delete' ) }" minWidth="10"
 				width="100%"
 				cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"/> -->
 

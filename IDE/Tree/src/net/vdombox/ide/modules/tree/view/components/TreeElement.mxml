@@ -73,7 +73,7 @@
 
 			private var moved : Boolean = false;
 
-			[Embed( source = "assets/arrow.png" )]
+			[Embed( source = "/assets/arrow.png" )]
 			public static var array : Class;
 
 			private var _vdomObjectAttributesVO : VdomObjectAttributesVO;

@@ -35,7 +35,7 @@ package net.vdombox.ide.modules.tree.view.components
 			addEventListener( IndexChangeEvent.CHANGE, chengIndex, true, 0, true );
 		}
 
-		[Embed( source = "assets/delete_linkage.png" )]
+		[Embed( source = "/assets/delete_linkage.png" )]
 		private var deleteLinkageClass : Class;
 
 		private const RTL : Number = 0;

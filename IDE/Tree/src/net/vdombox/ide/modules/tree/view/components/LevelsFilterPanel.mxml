@@ -114,7 +114,7 @@
 			  verticalAlign="middle"
 			  click="switchAll()">
 
-		<mx:Image source="@Embed(source='assets/treeEditor/colored_button_all_levels.png')"/>
+		<mx:Image source="@Embed(source='/assets/treeEditor/colored_button_all_levels.png')"/>
 
 		<s:Rect width="1"
 				bottom="3"

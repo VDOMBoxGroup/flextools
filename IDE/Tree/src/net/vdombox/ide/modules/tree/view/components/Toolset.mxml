@@ -16,7 +16,7 @@
 
 	<components:ToolsetButton id="toolsetButton"
 							  height="100%"
-							  icon="@Embed('assets/tree_icon.png')"
+							  icon="@Embed('/assets/tree_icon.png')"
 							  label="{ resourceManager.getString( 'Tree_General', 'toolset_button_label' ) }"
 							  skinClass="net.vdombox.ide.modules.tree.view.skins.ToolsetButtonSkin"/>
 </s:Group>
