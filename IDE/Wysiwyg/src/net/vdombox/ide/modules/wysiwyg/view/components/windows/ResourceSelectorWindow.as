@@ -74,7 +74,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		public function addHandlers() : void
 		{
 			addEventListener( KeyboardEvent.KEY_DOWN, keyDownWindowHendler );
-			addEventListener( Event.CLOSE, closeHandler );
 		}
 
 		public function addResource( resourceVO : ResourceVO ) : void
@@ -86,12 +85,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			selectedResourceIndex = scrollToIndex = resources.length - 1;
 
 			invalidateProperties();
-		}
-
-		public function closeHandler( event : Event ) : void
-		{
-			removeEventListener( Event.CLOSE, closeHandler );
-			WindowManager.getInstance().removeWindow( this );
 		}
 
 		public function apply( event : Event = null ) : void
@@ -136,7 +129,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			super.stylesInitialized();
 			this.setStyle( "skinClass", ResourceSelectorWindowSkin );
 		}
-
 
 
 

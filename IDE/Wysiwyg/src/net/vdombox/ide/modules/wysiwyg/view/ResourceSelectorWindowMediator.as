@@ -144,8 +144,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRegister() : void
 		{
-			//trace("Res: onRegister()");
-
 			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
 			addHandlers();
@@ -155,8 +153,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRemove() : void
 		{
-			//trace("Res: onRemove()");
-
 			removeHandlers();
 
 			statesProxy = null;
@@ -303,6 +299,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			allResourcesList = null;
 
 			facade.removeMediator( mediatorName );
+			
+			WindowManager.getInstance().removeWindow( resourceSelectorWindow );
 		}
 
 		private function createSpinnerPopup( spinnerTxt : String ) : void

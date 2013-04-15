@@ -40,39 +40,36 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var multilineWindow : MultilineWindow;
 
-		override public function handleNotification( notification : INotification ) : void
-		{
-
-		}
-
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-			return interests;
-		}
-
 		override public function onRegister() : void
 		{
-			multilineWindow.addEventListener( MultilineWindowEvent.APPLY, removeYourself, false, 0, true );
-			multilineWindow.addEventListener( MultilineWindowEvent.CLOSE, removeYourself, false, 0, true );
-			multilineWindow.addEventListener( Event.CLOSE, closeHandler, false, 0, true );
-			multilineWindow.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false, 0, true );
+			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
-			multilineWindow.removeEventListener( MultilineWindowEvent.APPLY, removeYourself, false );
-			multilineWindow.removeEventListener( MultilineWindowEvent.CLOSE, removeYourself, false );
+			removeHandlers();
+		}
+		
+		private function addHandlers() : void
+		{
+			multilineWindow.addEventListener( MultilineWindowEvent.APPLY, closeHandler, false, 0, true );
+			multilineWindow.addEventListener( MultilineWindowEvent.CLOSE, closeHandler, false, 0, true );
+			multilineWindow.addEventListener( Event.CLOSE, closeHandler, false, 0, true );
+			multilineWindow.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false, 0, true );
+		}
+		
+		private function removeHandlers() : void
+		{
+			multilineWindow.removeEventListener( MultilineWindowEvent.APPLY, closeHandler, false );
+			multilineWindow.removeEventListener( MultilineWindowEvent.CLOSE, closeHandler, false );
 			multilineWindow.removeEventListener( Event.CLOSE, closeHandler, false );
 			multilineWindow.removeEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, false );
-
 		}
 
 		private function applyHandler( event : Event ) : void
 		{
 			var resourceSelectorWindow : ResourceSelectorWindow = event.target as ResourceSelectorWindow;
-			var str1 : String = multilineWindow.textAreaContainer.text;
+			var oldString : String = multilineWindow.textAreaContainer.text;
 
 			if ( multilineWindow.focus )
 			{
@@ -82,70 +79,70 @@ package net.vdombox.ide.modules.wysiwyg.view
 			else
 				multilineWindow.textAreaContainer.text += resourceSelectorWindow.value;
 
-			var str2 : String = multilineWindow.textAreaContainer.text;
+			var newString : String = multilineWindow.textAreaContainer.text;
 
-			multilineWindow.attributeValue = autoPasteCommon( str1, str2 );
+			multilineWindow.attributeValue = autoPasteCommon( oldString, newString );
 		}
 
-		private function autoPasteCommon( str1 : String, str2 : String ) : String
+		private function autoPasteCommon( oldString : String, newString : String ) : String
 		{
 			var index : int;
 
-
-			for ( index = 0; index < str1.length; index++ )
+			// доходим до места где имеются отличия
+			for ( index = 0; index < oldString.length; index++ )
 			{
-				if ( str1.charAt( index ) != str2.charAt( index ) )
+				if ( oldString.charAt( index ) != newString.charAt( index ) )
 					break;
 			}
 
-			if ( str2.charAt( index ) == "|" )
-				str2 = str2.substr( 0, index ) + str2.substr( index + 2, str2.length - index );
-			else if ( str2.charAt( index ) == "%" )
+			// ищем специальный разделитель
+			if ( newString.charAt( index ) == "|" )
+				newString = newString.substr( 0, index ) + newString.substr( index + 2, newString.length - index );
+			else if ( newString.charAt( index ) == "%" )
 			{
-				str2 = str2.substr( 0, index - 1 ) + str2.substr( index + 1, str2.length - index );
+				newString = newString.substr( 0, index - 1 ) + newString.substr( index + 1, newString.length - index );
 				index--;
 			}
 
+			//Пропускаем пробелы
 			var index2 : int;
-
-			for ( index2 = index - 1; index2 > 0 && str1.charAt( index2 ) == " "; index2-- )
+			for ( index2 = index - 1; index2 > 0 && oldString.charAt( index2 ) == " "; index2-- )
 			{
 			};
 
+			//41 - длина записи со ссылкой на ресурс
+			// возможно мы вставляем ссылку на ресурс между двумя другимим ссылками на ресурсы
+			
+			//Проверка с левой стороны
 			if ( index2 >= 41 )
 			{
-				if ( str1.charAt( index2 ) == ")" && str1.substr( index2 - 41, 4 ) == "#Res" )
-					str2 = str2.substr( 0, index2 + 1 ) + ", " + str2.substr( index, str2.length - index );
+				if ( oldString.charAt( index2 ) == ")" && oldString.substr( index2 - 41, 4 ) == "#Res" )
+					newString = newString.substr( 0, index2 + 1 ) + ", " + newString.substr( index, newString.length - index );
 			}
 
-			if ( index < str1.length )
+			// Проверка с правой стороны
+			if ( index < oldString.length )
 			{
-				var interval : int = str2.length - str1.length;
+				var interval : int = newString.length - oldString.length;
 
-				for ( index2 = index; index2 < str1.length - 1 && str1.charAt( index2 ) == " "; index2++ )
+				for ( index2 = index; index2 < oldString.length - 1 && oldString.charAt( index2 ) == " "; index2++ )
 				{
 				};
 
-				if ( index2 + 41 < str2.length )
+				if ( index2 + 41 < newString.length )
 				{
-					if ( str1.substr( index2, 4 ) == "#Res" )
-						str2 = str2.substr( 0, index + interval ) + ", " + str2.substr( index2 + interval, str2.length );
+					if ( oldString.substr( index2, 4 ) == "#Res" )
+						newString = newString.substr( 0, index + interval ) + ", " + newString.substr( index2 + interval, newString.length );
 				}
 
-				if ( str2.charAt( index - 1 ) == "," )
-					str2 = str2.substr( 0, index ) + " " + str2.substr( index, str2.length - index );
+				if ( newString.charAt( index - 1 ) == "," )
+					newString = newString.substr( 0, index ) + " " + newString.substr( index, newString.length - index );
 			}
-			return str2;
+			
+			return newString;
 		}
-
-		private function closeHandler( event : Event ) : void
-		{
-			facade.removeMediator( NAME );
-
-			WindowManager.getInstance().removeWindow( multilineWindow );
-		}
-
-		private function removeYourself( event : MultilineWindowEvent ) : void
+		
+		private function closeHandler( event : * ) : void
 		{
 			facade.removeMediator( NAME );
 

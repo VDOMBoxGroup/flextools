@@ -40,7 +40,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 			this.setFocus();
 
 			addEventListener( KeyboardEvent.KEY_DOWN, cancel_close_window );
-			addEventListener( Event.CLOSE, closeHandler );
 		}
 
 		[Bindable]
@@ -62,13 +61,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components.windows
 		{
 			if ( event.charCode == Keyboard.ESCAPE )
 				close();
-		}
-
-		public function closeHandler( event : Event ) : void
-		{
-			removeEventListener( Event.CLOSE, closeHandler );
-
-			WindowManager.getInstance().removeWindow( this );
 		}
 
 		/**
