@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.dataBase.view.components
 	public class VDOMAdvancedDataGrid extends AdvancedDataGrid implements ISearchable
 	{
 
-		[Embed( source = "assets/cursor_width.png" )]
+		[Embed( source = "/assets/cursor_width.png" )]
 		private var stretchCursor : Class;
 
 		override public function stylesInitialized() : void

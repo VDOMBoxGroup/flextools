@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.dataBase.view
 
 	public class BaseVisualEditorMediator extends Mediator implements IMediator
 	{
+
 		public static const NAME : String = "BaseVisualEditorMediator";
 
 		public function BaseVisualEditorMediator( viewComponent : Object = null )

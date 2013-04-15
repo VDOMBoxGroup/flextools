@@ -118,15 +118,15 @@
 				if ( !data || data.name().localName != "page" )
 					return;
 				
-				contextMenu.removeAllItems();
+//				contextMenu.removeAllItems();
 				
 				var renameItem : ContextMenuItem = new ContextMenuItem( "Rename" );
 				renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );
-				contextMenu.addItem( renameItem );
+//				contextMenu.addItem( renameItem );
 				
 				var deleteItem : ContextMenuItem = new ContextMenuItem( "Delete" );
 				deleteItem.addEventListener( Event.SELECT, deleteContextMenuHandler, false, 0, true );
-				contextMenu.addItem( deleteItem );
+//				contextMenu.addItem( deleteItem );
 			}
 			
 			private function renameContextMenuHandler( event : Event ) : void

@@ -155,7 +155,7 @@
 					right="0"
 					top="0">
 				<s:fill>
-					<s:BitmapFill source="@Embed('assets/backgroundtable.png')"
+					<s:BitmapFill source="@Embed('/assets/backgroundtable.png')"
 								  smooth="true"
 								  fillMode="repeat"/>
 				</s:fill>

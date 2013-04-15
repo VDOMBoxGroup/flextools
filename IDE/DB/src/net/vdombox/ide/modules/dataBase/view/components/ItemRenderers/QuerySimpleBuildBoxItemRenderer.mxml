@@ -132,12 +132,12 @@
 
 		<button:WorkAreaButton id="up"
 							   width="20"
-							   icon="@Embed('assets/Arrow_Up.png')"
+							   icon="@Embed('/assets/Arrow_Up.png')"
 							   click="up_clickHandler(event)"/>
 
 		<button:WorkAreaButton id="down"
 							   width="20"
-							   icon="@Embed('assets/Arrow_Down.png')"
+							   icon="@Embed('/assets/Arrow_Down.png')"
 							   click="down_clickHandler(event)"/>
 
 		<button:WorkAreaButton id="delOld"

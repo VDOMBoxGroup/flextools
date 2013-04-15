@@ -823,7 +823,7 @@
 											  doubleClick="dataTable_doubleClickHandler(event)"
 											  borderVisible="false"/>
 
-			<mx:Image source="@Embed('assets/spinner.swf')"
+			<mx:Image source="@Embed('/assets/spinner.swf')"
 					  width="100%"
 					  height="100%"
 					  verticalAlign="middle"
@@ -887,7 +887,7 @@
 					<button:WorkAreaButton id="discard"
 										   height="20"
 										   label="{ resourceManager.getString( 'DataBase_General', 'data_table_editor_discard' ) }"
-										   icon="@Embed('assets/discard.png')"
+										   icon="@Embed('/assets/discard.png')"
 										   click="discard_clickHandler(event)"/>
 
 					<mx:Spacer width="100%"/>
@@ -904,7 +904,7 @@
 					<button:WorkAreaButton id="additional"
 										   height="20"
 										   label="Additional"
-										   icon="@Embed('assets/Additions.png')"
+										   icon="@Embed('/assets/Additions.png')"
 										   click="query_clickHandler(event)"
 										   includeIn="Result"/>
 
@@ -917,7 +917,7 @@
 					<button:WorkAreaButton id="sort"
 										   height="20"
 										   label="Sort"
-										   icon="@Embed('assets/sort.png')"
+										   icon="@Embed('/assets/sort.png')"
 										   click="sort_clickHandler(event)"
 										   includeIn="Query"/>
 

@@ -282,12 +282,12 @@
 								 headerColors="{[0xFFFFFF, 0xE6E6E6]}"
 								 columnDropIndicatorSkin="mx.skins.halo.DataGridColumnDropIndicator"
 								 columnResizeSkin="mx.skins.halo.DataGridColumnResizeSkin"
-								 stretchCursor="@Embed('assets/cursor_width.png')"
+								 stretchCursor="@Embed('/assets/cursor_width.png')"
 								 headerStyleName="advancedDataGridStyles"
 								 headerDragProxyStyleName="headerDragProxyStyle"/>
 
 			<mx:Image id="imageProgress"
-					  source="@Embed('assets/spinner.swf')"
+					  source="@Embed('/assets/spinner.swf')"
 					  width="100%"
 					  height="100%"
 					  verticalAlign="middle"

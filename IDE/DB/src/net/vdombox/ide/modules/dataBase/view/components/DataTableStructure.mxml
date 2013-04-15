@@ -389,7 +389,7 @@
 				</mx:columns>
 			</mx:DataGrid>
 
-			<mx:Image source="@Embed('assets/spinner.swf')"
+			<mx:Image source="@Embed('/assets/spinner.swf')"
 					  width="100%"
 					  height="100%"
 					  verticalAlign="middle"
@@ -432,7 +432,7 @@
 
 				<button:WorkAreaButton id="discard"
 									   label="{ resourceManager.getString( 'DataBase_General', 'data_table_structure_discard' ) }"
-									   icon="@Embed('assets/discard.png')"
+									   icon="@Embed('/assets/discard.png')"
 									   click="discardChanges()"/>
 
 				<s:Label id="commitLabel"

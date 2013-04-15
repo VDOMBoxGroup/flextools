@@ -234,10 +234,10 @@
 
 			public function createContextMenu() : void
 			{
-				if ( !contextMenu )
-					contextMenu = new ContextMenu();
-				else
-					contextMenu.removeAllItems();
+//				if ( !contextMenu )
+//					contextMenu = new ContextMenu();
+//				else
+//					contextMenu.removeAllItems();
 			}
 
 			public function setNewContextSubMenu( items : Array ) : void
@@ -251,26 +251,26 @@
 				for each ( item in items )
 				{
 					var newSubItem : ContextMenuItem = new ContextMenuItem( item.displayName );
-					newSubItem.data = item;
+//					newSubItem.data = item;
 
 					newSubItem.addEventListener( Event.SELECT, newSubItemSelectHandler, false, 0, true );
 
 					if ( item.container != 3 )
 					{
-						newMenu.addItem( newSubItem );
+//						newMenu.addItem( newSubItem );
 						if ( !typeTable )
 							typeTable = item;
 					}
 					else
 					{
-						newMenu.addItemAt( newSubItem, 0 );
+//						newMenu.addItemAt( newSubItem, 0 );
 						if ( !typeBase )
 							typeBase = item;
 					}
 				}
-				newItem.submenu = newMenu;
+//				newItem.submenu = newMenu;
 
-				contextMenu.addItem( newItem );
+//				contextMenu.addItem( newItem );
 			}
 
 			private function newSubItemSelectHandler( event : Event ) : void
@@ -314,7 +314,7 @@
 				  verticalAlign="middle"
 				  horizontalAlign="center">
 			<button:VDOMButton id="newBase"
-							   icon="@Embed('assets/add.png')"
+							   icon="@Embed('/assets/add.png')"
 							   label="{ resourceManager.getString( 'DataBase_General', 'data_table_new_base' ) }"
 							   click="newBase_clickHandler(event)"/>
 		</s:HGroup>
