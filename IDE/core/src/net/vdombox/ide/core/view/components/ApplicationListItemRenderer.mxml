@@ -32,15 +32,15 @@
 			public static const ICON_REQUEST : String = "iconRequest1";
 
 			[Bindable]
-			[Embed( source = "assets/python.png" )]
+			[Embed( source = "/assets/python.png" )]
 			public static var python : Class;
 
 			[Bindable]
-			[Embed( source = "assets/vscript.png" )]
+			[Embed( source = "/assets/vscript.png" )]
 			public static var vscript : Class;
 			
 			[Bindable]
-			[Embed( source = 'assets/applocked.png' )]
+			[Embed( source = '/assets/applocked.png' )]
 			public static var applocked : Class;
 			
 

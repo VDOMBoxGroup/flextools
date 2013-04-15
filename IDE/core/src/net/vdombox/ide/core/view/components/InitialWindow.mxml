@@ -107,7 +107,7 @@
 
 		<button:VDOMButton id="submitButton"
 						   includeIn="loginView"
-						   icon="@Embed('assets/connect.png')"
+						   icon="@Embed('/assets/connect.png')"
 						   label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }"
 						   minWidth="100"
 						   click="submitButton_clickHandler(event)"/>

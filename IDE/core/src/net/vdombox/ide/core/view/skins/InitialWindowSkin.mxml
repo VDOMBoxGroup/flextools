@@ -33,7 +33,7 @@
 			right="9"
 			bottom="9">
 		<s:fill>
-			<s:BitmapFill source="@Embed('assets/bg_logo.png')"
+			<s:BitmapFill source="@Embed('/assets/bg_logo.png')"
 						  smooth="true"
 						  fillMode="repeat"/>
 		</s:fill>

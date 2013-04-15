@@ -15,11 +15,11 @@
 			import net.vdombox.ide.core.events.ApplicationManagerEvent;
 
 			[Bindable]
-			[Embed( source = "assets/radio_Off.png" )]
+			[Embed( source = "/assets/radio_Off.png" )]
 			public static var radio_Off : Class;
 
 			[Bindable]
-			[Embed( source = "assets/radio_On.png" )]
+			[Embed( source = "/assets/radio_On.png" )]
 			public static var radio_On : Class;
 
 			private function getLocalesWord( word : String ) : String
@@ -203,7 +203,7 @@
 				  verticalAlign="middle">
 
 			<button:VDOMButton id="btnCancel"
-							   icon="@Embed('assets/back.png')"
+							   icon="@Embed('/assets/back.png')"
 							   label="{getLocalesWord('create_edit_application_back' )}"
 							   click="{dispatchEvent( new ApplicationManagerEvent( ApplicationManagerEvent.CANCEL ) ) }"/>
 

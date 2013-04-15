@@ -234,7 +234,7 @@
 			  x="30"
 			  y="57"
 			  smoothBitmapContent="true"
-			  source="@Embed('assets/login/logo.png')">
+			  source="@Embed('/assets/login/logo.png')">
 
 		<mx:filters>
 			<s:GlowFilter color="0x000000"/>

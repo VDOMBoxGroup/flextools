@@ -79,7 +79,7 @@ package net.vdombox.ide.core.model.managers
 
 		private static const xls_Icon : String = "resourceBrowserIcons/resourceType/xls.png";
 
-		private static const file_broken_Icon : String = "assets/resourceBrowserIcons/resourceType/file_broken.png";
+		private static const file_broken_Icon : String = "/assets/resourceBrowserIcons/resourceType/file_broken.png";
 
 
 		private var cacheManager : CacheManager = CacheManager.getInstance();

@@ -99,11 +99,11 @@
 				<mx:Spacer width="100%"/>
 
 				<button:VDOMButton id="changeApplication"
-								   icon="@Embed('assets/edit.png')"
+								   icon="@Embed('/assets/edit.png')"
 								   label="{getLocalesWord('change_application_edit')}"/>
 
 				<button:VDOMButton id="setSelectApplication"
-								   icon="@Embed('assets/open.png')"
+								   icon="@Embed('/assets/open.png')"
 								   label="{getLocalesWord('change_application_open_in_editor' )}"/>
 			</s:HGroup>
 		</s:Group>

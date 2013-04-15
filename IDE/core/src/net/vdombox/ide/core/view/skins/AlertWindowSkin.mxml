@@ -18,10 +18,10 @@
 			import net.vdombox.ide.common.view.components.windows.Alert;
 
 			[Bindable]
-			[Embed( source = "assets/Warning.png" )]
+			[Embed( source = "/assets/Warning.png" )]
 			public var wanted : Class;
 
-			[Embed( source = "assets/no_warning.png" )]
+			[Embed( source = "/assets/no_warning.png" )]
 			public var no_warning : Class;
 
 			protected function sparkskin1_creationCompleteHandler( event : FlexEvent ) : void

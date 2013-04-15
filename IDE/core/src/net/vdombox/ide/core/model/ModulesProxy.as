@@ -28,7 +28,7 @@ package net.vdombox.ide.core.model
 
 				<category name="Edition">
 
-					<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/><module name="Preview" path="app:/modules/Preview/Preview2.swf"/><module name="Events" path="app:/modules/Events/Events.swf"/><module name="Trees" path="app:/modules/Tree/Tree.swf"/><module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/><module name="DB" path="app:/modules/DataBase/DataBase.swf"/><module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/>
+					<!--module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/><module name="Preview" path="app:/modules/Preview/Preview2.swf"/><module name="Events" path="app:/modules/Events/Events.swf"/><module name="Trees" path="app:/modules/Tree/Tree.swf"/><module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/><module name="DB" path="app:/modules/DataBase/DataBase.swf"/><module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/-->
 
 				</category></modules>
 
@@ -150,6 +150,7 @@ package net.vdombox.ide.core.model
 
 		private function loadModuleFromQue() : void
 		{
+			trace("loadModuleFromQue");
 			if ( modulesForLoadQue.length == 0 )
 			{
 				sendNotification( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
@@ -173,6 +174,7 @@ package net.vdombox.ide.core.model
 
 		private function moduleReadyHandler( event : ModuleEvent ) : void
 		{
+			trace("moduleReadyHandler");
 			moduleInfo.removeEventListener( ModuleEvent.READY, moduleReadyHandler );
 			moduleInfo.removeEventListener( ModuleEvent.ERROR, moduleErrorHandler );
 
@@ -189,6 +191,7 @@ package net.vdombox.ide.core.model
 
 		private function moduleErrorHandler( event : ModuleEvent ) : void
 		{
+			trace("moduleErrorHandler");
 			var moduleVO : ModuleVO = event.module.data as ModuleVO;
 			sendNotification( ApplicationFacade.MODULES_LOADING_ERROR, moduleVO );
 		}
