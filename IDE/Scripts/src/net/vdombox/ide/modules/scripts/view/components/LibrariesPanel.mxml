@@ -157,7 +157,7 @@
 	</s:Rect>
 
 	<mx:Image id="icon"
-			  source="@Embed('assets/Libraries_white.png')"
+			  source="@Embed('/assets/Libraries_white.png')"
 			  height="16"
 			  width="16"
 			  left="10"

@@ -16,7 +16,7 @@
 
 	<components:ToolsetButton id="toolsetButton"
 							  height="100%"
-							  icon="@Embed('assets/scripts_icon.png')"
+							  icon="@Embed('/assets/scripts_icon.png')"
 							  label="{ resourceManager.getString( 'Scripts_General', 'toolset_button_label' ) }"
 							  skinClass="net.vdombox.ide.modules.scripts.view.skins.ToolsetButtonSkin"/>
 </s:Group>

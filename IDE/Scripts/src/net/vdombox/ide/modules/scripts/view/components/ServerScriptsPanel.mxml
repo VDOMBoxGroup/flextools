@@ -153,7 +153,7 @@
 	</s:Rect>
 
 	<mx:Image id="icon"
-			  source="@Embed('assets/ServerScripts_white.png')"
+			  source="@Embed('/assets/ServerScripts_white.png')"
 			  height="16"
 			  width="16"
 			  left="10"
