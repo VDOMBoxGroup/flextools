@@ -22,15 +22,25 @@ package net.vdombox.ide.core.model
 	{
 		public static const NAME : String = "ModulesProxy";
 
-		private static const MODULES_DIR : String = "app:/modules/";
-
 		private static const MODULES_XML : XML = <modules>
 
-				<category name="Edition">
+			<category name="Edition">
 
-					<!--module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/><module name="Preview" path="app:/modules/Preview/Preview2.swf"/><module name="Events" path="app:/modules/Events/Events.swf"/><module name="Trees" path="app:/modules/Tree/Tree.swf"/><module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/><module name="DB" path="app:/modules/DataBase/DataBase.swf"/><module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/-->
+				<!--module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/><module name="Preview" path="app:/modules/Preview/Preview2.swf"/>
+				<module name="Events" path="app:/modules/Events/Events.swf"/><module name="Trees" path="app:/modules/Tree/Tree.swf"/>
+				<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/><module name="DB" path="app:/modules/DataBase/DataBase.swf"/>
+				<module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/-->
+				<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
+				<module name="Preview" path="/modules/Preview/Preview2.swf"/>
+				<module name="Events" path="app:/modules/Events/Events.swf"/>
+				<module name="Trees" path="/modules/Tree/Tree.swf"/>
+				<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
+				<module name="DB" path="/modules/DataBase/DataBase.swf"/>
+				<module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/>
 
-				</category></modules>
+			</category></modules>
+
+		private static const MODULES_DIR : String = "app:/modules/";
 
 		public function ModulesProxy( data : Object = null )
 		{

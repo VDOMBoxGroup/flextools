@@ -9,7 +9,7 @@
               <dependency linkage="Merged" />
             </entry>
           </entries>
-          <sdk name="4.5.1" />
+          <sdk name="4.9.0" />
         </dependencies>
         <compiler-options>
           <map>
@@ -23,9 +23,9 @@
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/assets" path-in-package="assets" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/gallery" path-in-package="gallery" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/VdomIDE.css" path-in-package="VdomIDE.css" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/resourceBrowserIcons" path-in-package="resourceBrowserIcons" />
+            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/modules" path-in-package="modules" />
           </files-to-package>
-          <AirSigningOptions keystore-path="D:/flex/workspace/VdomIDE/VdomIDE/q.p12" use-temp-certificate="false" />
+          <AirSigningOptions keystore-path="$MODULE_DIR$/q.p12" use-temp-certificate="false" />
         </packaging-air-desktop>
         <packaging-android />
         <packaging-ios />
@@ -40,8 +40,9 @@
       <sourceFolder url="file://$MODULE_DIR$/locale/en_US" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/locale/fr_FR" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/locale/ru_RU" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/modules" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="4.5.1" jdkType="Flex SDK Type (new)" />
+    <orderEntry type="jdk" jdkName="4.9.0" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ide_lib" exported="" />
   </component>
