@@ -8,10 +8,7 @@
             <entry module-name="ide_lib" build-configuration-name="ide_lib">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-id="5b9995b0-ce48-4881-aea6-03b0ec257bc2">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-id="ed322328-236b-4e96-91af-7f37a2e0401f">
+            <entry library-name="air" library-level="application">
               <dependency linkage="Merged" />
             </entry>
           </entries>
@@ -21,6 +18,7 @@
           <map>
             <entry key="compiler.locale" value="en_US&#10;fr_FR&#10;ru_RU" />
           </map>
+          <option name="additionalOptions" value="-load-externs=report.xml" />
         </compiler-options>
         <packaging-air-desktop />
         <packaging-android />
@@ -40,27 +38,7 @@
     <orderEntry type="jdk" jdkName="4.9.0" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ide_lib" exported="" />
-    <orderEntry type="module-library" exported="">
-      <library type="flex">
-        <properties id="5b9995b0-ce48-4881-aea6-03b0ec257bc2" />
-        <CLASSES>
-          <root url="jar://D:/4.9.0/frameworks/libs/air/airglobal.swc!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library type="flex">
-        <properties id="ed322328-236b-4e96-91af-7f37a2e0401f" />
-        <CLASSES>
-          <root url="file://D:/4.9.0/frameworks/libs/air" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://D:/4.9.0/frameworks/libs/air" recursive="false" />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" exported="" name="air" level="application" />
   </component>
 </module>
 
