@@ -17,7 +17,6 @@ import mx.core.UIComponent;
 import mx.events.ChildExistenceChangedEvent;
 import mx.events.FlexEvent;
 
-import net.vdombox.powerpack.graph.Node;
 import net.vdombox.powerpack.graph.NodeEvent;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
 
