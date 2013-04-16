@@ -35,501 +35,529 @@
 
 	<mx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
-			import mx.core.Application;
-			import mx.events.CloseEvent;
-			import mx.events.EffectEvent;
-			import mx.events.FlexEvent;
-			import mx.events.IndexChangedEvent;
-			
-			import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
-			import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
-			import net.vdombox.powerpack.lib.player.gen.TemplateStruct;
-			import net.vdombox.powerpack.lib.player.managers.ContextManager;
-			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
-			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
-			import net.vdombox.powerpack.lib.player.template.Template;
-
-		private var vsLastChanged:DisplayObject;
-		private var appGenerated:Boolean;
-		private var appInstalled:Boolean;
-		private var timer:Number;
-
-		public var isDesktopApplication : Boolean = true;
-		
-		public var closable		: Boolean = false;
-		public var maximizable	: Boolean = false;
-		public var minimizable	: Boolean = false;
-			
-		private function init():void
-		{
-			var defaultCaptions:Object = {
-
-				app_title : "Power Pack Installer",
-				msg_input_template_key : "Please, input valid template key",
-				msg_exit_app : "Are you sure want to exit?",
-				msg_tpl_proceed_with_errs : "The template contains error(s).\nDo you want to proceed launching?",
-				msg_gen_welcome : "Lorem ipsum dolor sit amet",
-				msg_gen_finish : "Installation is complete",
-
-				msg_save_appxml_to_server : "Save application xml to server.",
-				msg_connecting_fault : "A fault occured contacting the server. Fault message is:",
-				msg_try_to_reconnect : "Try to reconnect.",
-				msg_save_appxml_to_file : "Save application xml to file.",
-				msg_saving_appxml_fault : "A fault occured saving application xml. Fault message is:",
-				msg_proceed_interrupt_app_installing : "Are you sure want to interrupt process?",
-				msg_creation_app_interrupted : "Application creation process has been interrupted by user.",
-
-				prgrs_gen_tpl : "Generating application xml. Progress %3%%",
-				prgrs_save_to_server_tpl : "Saving to server. Progress %3%%",
-				prgrs_save_to_file_tpl : "Saving to file. Progress %3%%",
-				prgrs_launch_app : "Launching %3%%",
-
-				errs_in_tpl : "Errors in template",
-				menu_run_template : "_Run",
-				gen_result : "Result",
-				virtual_host_name : "Virtual host name",
-				save_to_server : "Save to server",
-				save_to_file : "Save to file"
-			};
-
-			LanguageManager.setSentences ( defaultCaptions );
-
-
-		}
-
-
-		public function set  dataProvider( value : XML ):void
-		{
-			var template	: Template;
-			var templates	: ArrayCollection = ContextManager.templates;
-			
-			template = new Template ( value );
-			
-			if ( templates.length == 0 )
-				templates.addItemAt ( template, 0 );
-			else
-				templates[0] = template;
-			
-			showTemplateLogo();
-			updateAppLabelFormat();
-
-			if ( template.isEncoded )
-			{
-				processStep ( cKeyRequest );
-			}
-			else
-			{
-				openTemplate ();
-			}
-
-		}
-
-		public function showTemplateLogo () : void
-		{
-			var sourceLogo : String = getLogo();
-			
-			if ( tplPic.visible && tplPic.value == sourceLogo )
-				return;
-
-			tplPic.visible = false;
-
-			tplPic.addEventListener ( "sourceChanged", onLogoScaleContentChanged );
-
+        import mx.collections.ArrayCollection;
+        import mx.core.Application;
+        import mx.events.CloseEvent;
+        import mx.events.EffectEvent;
+        import mx.events.FlexEvent;
+        import mx.events.IndexChangedEvent;
+
+        import net.vdombox.powerpack.lib.extendedapi.utils.Utils;
+        import net.vdombox.powerpack.lib.player.customize.skins.CloseButtonSkin;
+        import net.vdombox.powerpack.lib.player.customize.skins.MaximizeButtonSkin;
+        import net.vdombox.powerpack.lib.player.customize.skins.MinimizeButtonSkin;
+        import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
+        import net.vdombox.powerpack.lib.player.gen.TemplateStruct;
+        import net.vdombox.powerpack.lib.player.managers.ContextManager;
+        import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+        import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+        import net.vdombox.powerpack.lib.player.template.Template;
+
+        private var vsLastChanged : DisplayObject;
+        private var appGenerated : Boolean;
+        private var appInstalled : Boolean;
+        private var timer : Number;
+
+        public var isDesktopApplication : Boolean = true;
+
+        public var closable : Boolean = false;
+        public var maximizable : Boolean = false;
+        public var minimizable : Boolean = false;
+
+        private function init() : void
+        {
+            var defaultCaptions : Object = {
+
+                app_title:                 "Power Pack Installer",
+                msg_input_template_key:    "Please, input valid template key",
+                msg_exit_app:              "Are you sure want to exit?",
+                msg_tpl_proceed_with_errs: "The template contains error(s).\nDo you want to proceed launching?",
+                msg_gen_welcome:           "Lorem ipsum dolor sit amet",
+                msg_gen_finish:            "Installation is complete",
+
+                msg_save_appxml_to_server:            "Save application xml to server.",
+                msg_connecting_fault:                 "A fault occured contacting the server. Fault message is:",
+                msg_try_to_reconnect:                 "Try to reconnect.",
+                msg_save_appxml_to_file:              "Save application xml to file.",
+                msg_saving_appxml_fault:              "A fault occured saving application xml. Fault message is:",
+                msg_proceed_interrupt_app_installing: "Are you sure want to interrupt process?",
+                msg_creation_app_interrupted:         "Application creation process has been interrupted by user.",
+
+                prgrs_gen_tpl:            "Generating application xml. Progress %3%%",
+                prgrs_save_to_server_tpl: "Saving to server. Progress %3%%",
+                prgrs_save_to_file_tpl:   "Saving to file. Progress %3%%",
+                prgrs_launch_app:         "Launching %3%%",
+
+                errs_in_tpl:       "Errors in template",
+                menu_run_template: "_Run",
+                gen_result:        "Result",
+                virtual_host_name: "Virtual host name",
+                save_to_server:    "Save to server",
+                save_to_file:      "Save to file"
+            };
+
+            LanguageManager.setSentences( defaultCaptions );
+
+
+        }
+
+
+        public function set  dataProvider( value : XML ) : void
+        {
+            var template : Template;
+            var templates : ArrayCollection = ContextManager.templates;
+
+            template = new Template( value );
+
+            if ( templates.length == 0 )
+            {
+                templates.addItemAt( template, 0 );
+            }
+            else
+            {
+                templates[0] = template;
+            }
+
+            showTemplateLogo();
+            updateAppLabelFormat();
+
+            if ( template.isEncoded )
+            {
+                processStep( cKeyRequest );
+            }
+            else
+            {
+                openTemplate();
+            }
+
+        }
+
+        public function showTemplateLogo() : void
+        {
+            var sourceLogo : String = getLogo();
+
+            if ( tplPic.visible && tplPic.value == sourceLogo )
+            {
+                return;
+            }
+
+            tplPic.visible = false;
+
+            tplPic.addEventListener( "sourceChanged", onLogoScaleContentChanged );
+
+
+            tplPic.percentHeight = 100;
+
+            tplPic.value = sourceLogo;
+            tplPic.visible = true;
 
-			tplPic.percentHeight = 100;
-
-			tplPic.value = sourceLogo;
-			tplPic.visible = true;
-			
-			function getLogo () : String
-			{
-				return currentTemplate.selectedProject.picture || resources.strLogo;
-			}
-		}
-
-		private function onLogoScaleContentChanged( evt:Event ):void
-		{
-			if ( tplPic.source && tplPic.source is Bitmap )
-			{
-				tplPic.removeEventListener ( "sourceChanged", onLogoScaleContentChanged );
-
-				var sourceBitmapData:BitmapData = tplPic.source.bitmapData;
-
-				if ( sourceBitmapData.width < tplPic.width && sourceBitmapData.height < tplPic.height )
-				{
-					tplPic.width = sourceBitmapData.width;
-					tplPic.height = sourceBitmapData.height;
-				}
-			}
-		}
-
-		private function get currentTemplate() : Template
-		{
-			return ContextManager.currentTemplate;
-		}
-			
-		private function onKeyAccept( event:Event ):void
-		{
-			currentTemplate.selectedProject.key = txtKey.text;
-			
-			openTemplate ();
-		}
-
-		public function openTemplate (showLogo : Boolean = false) : void
-		{
-			if (showLogo)
-				showTemplateLogo();
-			
-			updateAppLabelFormat();
-			
-			if ( currentTemplate.isEncoded )
-			{
-				currentTemplate.decode ();
-			}
-
-			if ( currentTemplate.xmlStructure )
-			{
-				processStep ( cGeneral );
-			}
-			else
-			{
-				AlertPopup.show ( LanguageManager.sentences['msg_cannot_open_tpl'], "", 4 );
-			}
-		}
-
-		public function get nativeWindow():Sprite
-		{
-			return Application.application as Sprite;
-		}
-
-		private function vsChange( event:IndexChangedEvent ):void
-		{
-			var child:DisplayObject;
-
-			if ( !vsLastChanged || vsLastChanged == event.target )
-			{
-				if ( event.target == vsProcess )
-				{
-					child = vsProcess.getChildAt ( event.newIndex );
-				}
-
-
-				if ( child )
-					child.addEventListener ( EffectEvent.EFFECT_END, onEffectEnd );
-
-				vsLastChanged = null;
-			}
-		}
-
-		private function onEffectEnd( event:Event ):void
-		{
-			event.target.removeEventListener ( EffectEvent.EFFECT_END, onEffectEnd );
-
-		}
-
-		private function processStep( step:* ):void
-		{
-
-			switch ( step )
-			{
-				case cKeyRequest:
-					
-					btnAcceptKey.enabled = true;
-					
-					vsProcess.selectedChild = cKeyRequest;
-					break;
-				
-				case cGeneral:
-					btnRun.enabled = true;
-					
-					vsProcess.selectedChild = cGeneral;
-					btnRun.setFocus ();
-					break;
-				
-				case cLicense:
-					btnLicenseContinue.enabled = licenseCheckBox.selected;
-					
-					var projectLicense : String = ContextManager.templates.getItemAt( 0 ).selectedProject.license;
-					if (!projectLicense)
-						runingTemplate();
-					else
-					{
-						vsProcess.selectedChild = cLicense;
-						btnLicenseContinue.setFocus ();
-					}
-					break;
-
-				case cProcess:
-					btnCancel.enabled = true;
-					
-					vsProcess.selectedChild = cProcess;
-					break;
-
-				case cFinal:
-					btnCancel.enabled = false;
-					
-					btnExit.enabled = isDesktopApplication;
-					btnExit.visible = isDesktopApplication;
-					
-					vsProcess.selectedChild = cFinal;
-					break;
-				
-				default:
-					vsProcess.selectedChild = cEmpty;
-					break;
-			}
-		}
-
-
-		private function clearTemplateDebug():void
-		{
-			var tpl:TemplateStruct = ContextManager.templateStruct;
-
-			if ( tpl )
-			{
-				tpl.removeEventListener ( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
-				tpl.removeEventListener ( TemplateStruct.EVENT_ERROR, debugErrorHandler );
-				ContextManager.templateStruct = null;
-			}
-		}
-
-		private function licenseAccepting () : void
-		{
-			if (licenseCheckBox.selected)
-				runingTemplate();
-			else
-				completeWithError("License agreement is not accepted.");
-		}
-			
-		private function runingTemplate():void
-		{
-			processStep(cProcess);
-
-			try
-			{
-				appGenerated = false;
-
-				ContextManager.templateStruct = new TemplateStruct ( currentTemplate.xmlStructure );
-
-				var validateArr:Array = ContextManager.templateStruct.validate ().array;
-
-				if ( validateArr && validateArr.filter ( isError ).length > 0 )
-					alertProceedRun ();
-				else
-					runTemplate ();
-
-				function isError( element:*, index:int, arr:Array ):Boolean
-				{
-					return (element.error.severity == BasicError.FATAL);
-				}
-			}
-			catch ( e:Error )
-			{
-				AlertPopup.show ( e.message, LanguageManager.sentences['warning'] );
-				clearTemplateDebug ();
-				processStep ( cGeneral );
-			}
-		}
-		
-		public function alertProceedRun():void
-		{
-			AlertPopup.show (
-					LanguageManager.sentences['msg_tpl_proceed_with_errs'],
-					LanguageManager.sentences['errs_in_tpl'],
-					AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
-
-			function alertProceedRunHandler( event:CloseEvent ):void
-			{
-				if ( event.detail == AlertPopup.YES )
-				{
-					runTemplate ();
-				}
-				else
-				{
-					completeWithError();
-				}
-			}
-		}
-
-		private function runTemplate():void
-		{
-			var templateStructure:TemplateStruct = ContextManager.templateStruct;
-			try
-			{
-				templateStructure.addEventListener ( TemplateStruct.EVENT_ERROR, debugErrorHandler, false, 0, true );
-				templateStructure.addEventListener ( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
-				templateStructure.addEventListener ( TemplateLibEvent.PROGRESS, setProgressHandler, false, 0, true );
-
-
-				timer = getTimer ();
-
-				templateStructure.generate ();
-			}
-			catch ( e:Error )
-			{
-				AlertPopup.show ( e.message, LanguageManager.sentences['warning'] );
-				
-				clearTemplateDebug ();
-				processStep ( cGeneral );
-			}
-		}
-			
-		public function terminateTemplate() : void
-		{
-			if (ContextManager.templateStruct)
-				ContextManager.templateStruct.terminated = true;
-		}
-
-		private function setProgressHandler( event:TemplateLibEvent ):void
-		{
-			var value:Number = event.result.value as Number;
-			var description:String = event.result["description"] as String;
-
-			progressBar.setProgress ( value, 100 );
-			progressBar.label = value + "% - " + description as String;
-
-			if ( value == 100 )
-				resultMessage.text = description;
-			
-			progressBar.validateDisplayList();
-			progressBar.validateNow();
-			validateDisplayList();
-			validateNow();
-			trace(progressBar.label)
-			
-		
-		}
-
-		private function debugErrorHandler( event:Event ):void
-		{
-			var error:* = event.target.error;
-			AlertPopup.show ( error.message, LanguageManager.sentences['error'], AlertPopup.OK, null, debugErrorCloseHandler );
-			
-			function debugErrorCloseHandler (error : CloseEvent) : void
-			{
-				completeWithError();
-			}
-		}
-
-		private function completeWithError(errorText : String = "") : void
-		{
-			if (!errorText)
-				errorText = "Error during execution. Impossible to complete the process."
-					
-			clearTemplateDebug ();
-			
-			resultMessage.text = errorText;
-			processStep ( cFinal );
-		}
-
-		private function generationComplete( event:Event ):void
-		{
-			timer = getTimer () - timer;
-
-			appGenerated = true;
-			ContextManager.templateStruct.removeEventListener ( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
-			ContextManager.templateStruct.removeEventListener ( TemplateStruct.EVENT_ERROR, debugErrorHandler );
-
-			processStep ( cFinal );
-		}
-
-		public function alertInterrupt():void
-		{
-			if (ContextManager.templateStruct)
-				ContextManager.templateStruct.runPaused = true;
-			
-			AlertPopup.show (
-					LanguageManager.sentences['msg_proceed_interrupt_app_installing'],
-					LanguageManager.sentences['question'],
-					AlertPopup.YES | AlertPopup.NO, null, alertProceedInterruptHandler, null, AlertPopup.NO );
-
-			function alertProceedInterruptHandler( event:CloseEvent ):void
-			{
-				if ( event.detail == AlertPopup.YES )
-				{
-					btnCancel.enabled = false;
-					
-					terminateTemplate();
-					processStep ( cFinal );
-				}
-				else if ( !appGenerated && ContextManager.templateStruct )
-				{
-					ContextManager.templateStruct.generate ( true );
-				}
-			}
-		}
-
-		public function exitApplication():void
-		{
-			dispatchEvent ( new Event ( Event.CLOSE ) );
-		}
-
-
-		protected function txtKey_keyDownHandler( event:KeyboardEvent ):void
-		{
-			if ( event.keyCode == Keyboard.ENTER )
-			{
-				currentTemplate.selectedProject.key = txtKey.text;
-				
-				openTemplate ();
-			}
-		}
-			
-		private function updateAppLabelFormat () : void
-		{
-			var appNameLen : Number = appNameLabel.text.length;
-			
-			if (appNameLen > 12)
-			{
-				if (appNameLen < 16)
-					appNameLabel.setStyle("fontSize", 40);
-				else if (appNameLen < 22)
-					appNameLabel.setStyle("fontSize", 30);
-				else
-					appNameLabel.setStyle("fontSize", 26);
-			}
-		}
-			
-		protected function btnRun_clickHandler(event:MouseEvent):void
-		{
-			btnRun.enabled = false;
-			processStep ( cLicense );
-		}
-			
-		protected function btnLicenseContinue_clickHandler(event:MouseEvent):void
-		{
-			btnLicenseContinue.enabled = false;
-			
-			licenseAccepting();
-		}
-			
-		protected function btnCancel_clickHandler(event:MouseEvent):void
-		{
-			//btnCancel.enabled = false;
-			
-			alertInterrupt();
-		}
-			
-		protected function btnExit_clickHandler(event:MouseEvent):void
-		{
-			btnExit.enabled = false;
-			
-			exitApplication();
-		}
-			
-		protected function btnAcceptKey_clickHandler(event:MouseEvent):void
-		{
-			btnAcceptKey.enabled = false;
-			
-			onKeyAccept(event);
-		}
-			
-		]]>
+            function getLogo() : String
+            {
+                return currentTemplate.selectedProject.picture || resources.strLogo;
+            }
+        }
+
+        private function onLogoScaleContentChanged( evt : Event ) : void
+        {
+            if ( tplPic.source && tplPic.source is Bitmap )
+            {
+                tplPic.removeEventListener( "sourceChanged", onLogoScaleContentChanged );
+
+                var sourceBitmapData : BitmapData = tplPic.source.bitmapData;
+
+                if ( sourceBitmapData.width < tplPic.width && sourceBitmapData.height < tplPic.height )
+                {
+                    tplPic.width = sourceBitmapData.width;
+                    tplPic.height = sourceBitmapData.height;
+                }
+            }
+        }
+
+        private function get currentTemplate() : Template
+        {
+            return ContextManager.currentTemplate;
+        }
+
+        private function onKeyAccept( event : Event ) : void
+        {
+            currentTemplate.selectedProject.key = txtKey.text;
+
+            openTemplate();
+        }
+
+        public function openTemplate( showLogo : Boolean = false ) : void
+        {
+            if ( showLogo )
+            {
+                showTemplateLogo();
+            }
+
+            updateAppLabelFormat();
+
+            if ( currentTemplate.isEncoded )
+            {
+                currentTemplate.decode();
+            }
+
+            if ( currentTemplate.xmlStructure )
+            {
+                processStep( cGeneral );
+            }
+            else
+            {
+                AlertPopup.show( LanguageManager.sentences['msg_cannot_open_tpl'], "", 4 );
+            }
+        }
+
+        public function get nativeWindow() : Sprite
+        {
+            return Application.application as Sprite;
+        }
+
+        private function vsChange( event : IndexChangedEvent ) : void
+        {
+            var child : DisplayObject;
+
+            if ( !vsLastChanged || vsLastChanged == event.target )
+            {
+                if ( event.target == vsProcess )
+                {
+                    child = vsProcess.getChildAt( event.newIndex );
+                }
+
+
+                if ( child )
+                {
+                    child.addEventListener( EffectEvent.EFFECT_END, onEffectEnd );
+                }
+
+                vsLastChanged = null;
+            }
+        }
+
+        private function onEffectEnd( event : Event ) : void
+        {
+            event.target.removeEventListener( EffectEvent.EFFECT_END, onEffectEnd );
+
+        }
+
+        private function processStep( step : * ) : void
+        {
+
+            switch ( step )
+            {
+                case cKeyRequest:
+
+                    btnAcceptKey.enabled = true;
+
+                    vsProcess.selectedChild = cKeyRequest;
+                    break;
+
+                case cGeneral:
+                    btnRun.enabled = true;
+
+                    vsProcess.selectedChild = cGeneral;
+                    btnRun.setFocus();
+                    break;
+
+                case cLicense:
+                    btnLicenseContinue.enabled = licenseCheckBox.selected;
+
+                    var projectLicense : String = ContextManager.templates.getItemAt( 0 ).selectedProject.license;
+                    if ( !projectLicense )
+                    {
+                        runingTemplate();
+                    }
+                    else
+                    {
+                        vsProcess.selectedChild = cLicense;
+                        btnLicenseContinue.setFocus();
+                    }
+                    break;
+
+                case cProcess:
+                    btnCancel.enabled = true;
+
+                    vsProcess.selectedChild = cProcess;
+                    break;
+
+                case cFinal:
+                    btnCancel.enabled = false;
+
+                    btnExit.enabled = isDesktopApplication;
+                    btnExit.visible = isDesktopApplication;
+
+                    vsProcess.selectedChild = cFinal;
+                    break;
+
+                default:
+                    vsProcess.selectedChild = cEmpty;
+                    break;
+            }
+        }
+
+
+        private function clearTemplateDebug() : void
+        {
+            var tpl : TemplateStruct = ContextManager.templateStruct;
+
+            if ( tpl )
+            {
+                tpl.removeEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+                tpl.removeEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
+                ContextManager.templateStruct = null;
+            }
+        }
+
+        private function licenseAccepting() : void
+        {
+            if ( licenseCheckBox.selected )
+            {
+                runingTemplate();
+            }
+            else
+            {
+                completeWithError( "License agreement is not accepted." );
+            }
+        }
+
+        private function runingTemplate() : void
+        {
+            processStep( cProcess );
+
+            try
+            {
+                appGenerated = false;
+
+                ContextManager.templateStruct = new TemplateStruct( currentTemplate.xmlStructure );
+
+                var validateArr : Array = ContextManager.templateStruct.validate().array;
+
+                if ( validateArr && validateArr.filter( isError ).length > 0 )
+                {
+                    alertProceedRun();
+                }
+                else
+                {
+                    runTemplate();
+                }
+
+                function isError( element : *, index : int, arr : Array ) : Boolean
+                {
+                    return (element.error.severity == BasicError.FATAL);
+                }
+            } catch ( e : Error )
+            {
+                AlertPopup.show( e.message, LanguageManager.sentences['warning'] );
+                clearTemplateDebug();
+                processStep( cGeneral );
+            }
+        }
+
+        public function alertProceedRun() : void
+        {
+            AlertPopup.show( LanguageManager.sentences['msg_tpl_proceed_with_errs'], LanguageManager.sentences['errs_in_tpl'], AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
+
+            function alertProceedRunHandler( event : CloseEvent ) : void
+            {
+                if ( event.detail == AlertPopup.YES )
+                {
+                    runTemplate();
+                }
+                else
+                {
+                    completeWithError();
+                }
+            }
+        }
+
+        private function runTemplate() : void
+        {
+            var templateStructure : TemplateStruct = ContextManager.templateStruct;
+            try
+            {
+                templateStructure.addEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler, false, 0, true );
+                templateStructure.addEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+                templateStructure.addEventListener( TemplateLibEvent.PROGRESS, setProgressHandler, false, 0, true );
+
+
+                timer = getTimer();
+
+                templateStructure.generate();
+            } catch ( e : Error )
+            {
+                AlertPopup.show( e.message, LanguageManager.sentences['warning'] );
+
+                clearTemplateDebug();
+                processStep( cGeneral );
+            }
+        }
+
+        public function terminateTemplate() : void
+        {
+            if ( ContextManager.templateStruct )
+            {
+                ContextManager.templateStruct.terminated = true;
+            }
+        }
+
+        private function setProgressHandler( event : TemplateLibEvent ) : void
+        {
+            var value : Number = event.result.value as Number;
+            var description : String = event.result["description"] as String;
+
+            progressBar.setProgress( value, 100 );
+            progressBar.label = value + "% - " + description as String;
+
+            if ( value == 100 )
+            {
+                resultMessage.text = description;
+            }
+
+            progressBar.validateDisplayList();
+            progressBar.validateNow();
+            validateDisplayList();
+            validateNow();
+            trace( progressBar.label )
+
+
+        }
+
+        private function debugErrorHandler( event : Event ) : void
+        {
+            var error : * = event.target.error;
+            AlertPopup.show( error.message, LanguageManager.sentences['error'], AlertPopup.OK, null, debugErrorCloseHandler );
+
+            function debugErrorCloseHandler( error : CloseEvent ) : void
+            {
+                completeWithError();
+            }
+        }
+
+        private function completeWithError( errorText : String = "" ) : void
+        {
+            if ( !errorText )
+            {
+                errorText = "Error during execution. Impossible to complete the process."
+            }
+
+            clearTemplateDebug();
+
+            resultMessage.text = errorText;
+            processStep( cFinal );
+        }
+
+        private function generationComplete( event : Event ) : void
+        {
+            timer = getTimer() - timer;
+
+            appGenerated = true;
+            ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+            ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
+
+            processStep( cFinal );
+        }
+
+        public function alertInterrupt() : void
+        {
+            if ( ContextManager.templateStruct )
+            {
+                ContextManager.templateStruct.runPaused = true;
+            }
+
+            AlertPopup.show( LanguageManager.sentences['msg_proceed_interrupt_app_installing'], LanguageManager.sentences['question'], AlertPopup.YES | AlertPopup.NO, null, alertProceedInterruptHandler, null, AlertPopup.NO );
+
+            function alertProceedInterruptHandler( event : CloseEvent ) : void
+            {
+                if ( event.detail == AlertPopup.YES )
+                {
+                    btnCancel.enabled = false;
+
+                    terminateTemplate();
+                    processStep( cFinal );
+                }
+                else if ( !appGenerated && ContextManager.templateStruct )
+                {
+                    ContextManager.templateStruct.generate( true );
+                }
+            }
+        }
+
+        public function exitApplication() : void
+        {
+            dispatchEvent( new Event( Event.CLOSE ) );
+        }
+
+
+        protected function txtKey_keyDownHandler( event : KeyboardEvent ) : void
+        {
+            if ( event.keyCode == Keyboard.ENTER )
+            {
+                currentTemplate.selectedProject.key = txtKey.text;
+
+                openTemplate();
+            }
+        }
+
+        private function updateAppLabelFormat() : void
+        {
+            var appNameLen : Number = appNameLabel.text.length;
+
+            if ( appNameLen > 12 )
+            {
+                if ( appNameLen < 16 )
+                {
+                    appNameLabel.setStyle( "fontSize", 40 );
+                }
+                else if ( appNameLen < 22 )
+                {
+                    appNameLabel.setStyle( "fontSize", 30 );
+                }
+                else
+                {
+                    appNameLabel.setStyle( "fontSize", 26 );
+                }
+            }
+        }
+
+        protected function btnRun_clickHandler( event : MouseEvent ) : void
+        {
+            btnRun.enabled = false;
+            processStep( cLicense );
+        }
+
+        protected function btnLicenseContinue_clickHandler( event : MouseEvent ) : void
+        {
+            btnLicenseContinue.enabled = false;
+
+            licenseAccepting();
+        }
+
+        protected function btnCancel_clickHandler( event : MouseEvent ) : void
+        {
+            //btnCancel.enabled = false;
+
+            alertInterrupt();
+        }
+
+        protected function btnExit_clickHandler( event : MouseEvent ) : void
+        {
+            btnExit.enabled = false;
+
+            exitApplication();
+        }
+
+        protected function btnAcceptKey_clickHandler( event : MouseEvent ) : void
+        {
+            btnAcceptKey.enabled = false;
+
+            onKeyAccept( event );
+        }
+        ]]>
 	</mx:Script>
 	
 	
-	<mx:Image id="bgImage" source="@Embed('assets/images/Background.png')"/>
+	<mx:Image id="bgImage" source="@Embed('/assets/images/Background.png')"/>
 
 	<mx:HBox right="14" y="17"
 			 height="10" width="100%"
