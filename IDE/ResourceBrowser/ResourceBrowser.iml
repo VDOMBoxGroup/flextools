@@ -3,12 +3,12 @@
   <component name="FlexBuildConfigurationManager" active="ResourceBrowser">
     <configurations>
       <configuration name="ResourceBrowser" main-class="net.vdombox.ide.modules.ResourceBrowser" output-file="ResourceBrowser.swf" output-folder="$MODULE_DIR$/../core/src/modules/ResourceBrowser">
-        <dependencies target-player="11.5">
+        <dependencies target-player="11.5" framework-linkage="Merged">
           <entries>
-            <entry module-name="ide_lib" build-configuration-name="ide_lib">
+            <entry library-name="air" library-level="application">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-id="78dd9e06-dd5b-4f31-ba4d-07bd79c2740d">
+            <entry module-name="ide_lib" build-configuration-name="ide_lib">
               <dependency linkage="Merged" />
             </entry>
           </entries>
@@ -18,6 +18,7 @@
           <map>
             <entry key="compiler.locale" value="en_US&#10;fr_FR&#10;ru_RU" />
           </map>
+          <option name="additionalOptions" value="-load-externs=report.xml" />
         </compiler-options>
         <packaging-air-desktop />
         <packaging-android />
@@ -36,17 +37,7 @@
     </content>
     <orderEntry type="jdk" jdkName="4.9.0" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
-      <library type="flex">
-        <properties id="78dd9e06-dd5b-4f31-ba4d-07bd79c2740d" />
-        <CLASSES>
-          <root url="file://D:/4.9.0/frameworks/libs/air" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://D:/4.9.0/frameworks/libs/air" recursive="false" />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" exported="" name="air" level="application" />
     <orderEntry type="module" module-name="ide_lib" exported="" />
   </component>
 </module>
