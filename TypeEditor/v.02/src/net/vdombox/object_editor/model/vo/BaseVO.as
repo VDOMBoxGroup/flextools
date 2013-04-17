@@ -5,6 +5,7 @@ package net.vdombox.object_editor.model.vo
 	public class BaseVO
 	{
 		public var help			: String = "";
+        public var laTexFilePath : String = "";
 		
 		public function BaseVO()
 		{

@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <Window xmlns:fx="http://ns.adobe.com/mxml/2009"
-          xmlns="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx"
+          xmlns="library://ns.adobe.com/flex/spark"
+          xmlns:mx="library://ns.adobe.com/flex/mx"
+          xmlns:ns="net.vdombox.object_editor.view.*"
           title="Update descriptions"
           width="600" height="500" minWidth="600" minHeight="500"
           resizable="false"
@@ -9,148 +11,79 @@
 
     <fx:Script>
         <![CDATA[
-        import mx.collections.ArrayCollection;
-        import mx.controls.Alert;
-        import mx.events.FlexEvent;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.object_editor.Utils.WindowManager;
+			import net.vdombox.object_editor.event.UpdateDescriptionEvent;
+			import net.vdombox.object_editor.model.vo.ActionsContainerVO;
+			import net.vdombox.object_editor.model.vo.DescriptionListItemVO;
+			import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 
-        import net.vdombox.object_editor.Utils.WindowManager;
-        import net.vdombox.object_editor.event.UpdateDescriptionEvent;
-        import net.vdombox.object_editor.model.vo.DescriptionListItemVO;
-        import net.vdombox.object_editor.model.vo.ObjectTypeVO;
-
-        import spark.events.IndexChangeEvent;
+//            TODO:
+//            сделать так, чтобы можно было отображать экшены из всех контейнеров, а не только из первого (htmlcontainer)
 
         public var typeVO:ObjectTypeVO;
 
-        private var _attributes:ArrayCollection = new ArrayCollection();
-
-        [Bindable]
-        public function get attributes():ArrayCollection {
-            return _attributes;
-        }
-
-        public function set attributes(value:ArrayCollection):void {
-            _attributes.removeAll();
-
-            for each (var attributeItem:Object in value) {
-                if (!attributeItem)
-                    continue;
-
-                var listItem:DescriptionListItemVO = new DescriptionListItemVO();
-                listItem.displayName = attributeItem.label;
-                listItem.data = attributeItem.data;
-                listItem.checked = false;
-
-                _attributes.addItem(listItem);
-            }
-        }
-
-        public function get checkedAttributes():ArrayCollection {
-            var _checkedAttributes:ArrayCollection = new ArrayCollection();
-
-            for each (var attributeItem:DescriptionListItemVO in attributes) {
-                if (!attributeItem)
-                    continue;
-
-                if (attributeItem.checked)
-                    _checkedAttributes.addItem(attributeItem);
-            }
-
-            return _checkedAttributes;
-        }
-
-        private function checkAllAttributes(value:Boolean):void {
-            for each (var attrItem:DescriptionListItemVO in attributes) {
-                attrItem.checked = value;
-            }
-        }
-
-        private function creationCompleteHandler(event:FlexEvent):void {
+        private function creationCompleteHandler(event:FlexEvent) : void
+        {
             WindowManager.getInstance().centerWindow(this);
 
             statusBar.visible = false;
-
-            addEventListener(Event.CLOSE, closeHandler);
         }
 
-        private function closeHandler(event:Event):void {
-            removeEventListener(Event.CLOSE, closeHandler);
-
+        private function closeHandler(event:Event) : void
+        {
             WindowManager.getInstance().removeWindow(this);
         }
 
-        private function attributesList_changeHandler(event:IndexChangeEvent):void {
-            dispatchEvent(new UpdateDescriptionEvent(UpdateDescriptionEvent.SELECTED_ATTRIBUTE_CHANGED));
-        }
-
-        private function attributesList_creationCompleteHandler(event:FlexEvent):void
+        public function get checkedAttributes() : ArrayCollection
         {
-            if (!attributes || attributes.length < 1)
-                return;
-
-            attributesList.selectedIndex = 0;
-            dispatchEvent(new UpdateDescriptionEvent(UpdateDescriptionEvent.SELECTED_ATTRIBUTE_CHANGED));
+            return attributesDescriptions.checkedProperties;
         }
 
-        private function btnSelectAll_clickHandler(event:MouseEvent):void {
-            checkAllAttributes(true);
+        public function get checkedEvents() : ArrayCollection
+        {
+            return eventsDescriptions.checkedProperties;
         }
 
-        private function btnDeselectAll_clickHandler(event:MouseEvent):void {
-            checkAllAttributes(false);
+        public function get checkedActions() : ArrayCollection
+        {
+            return actionsDescriptions.checkedProperties;
         }
 
-        private function btnUpdate_clickHandler(event:MouseEvent):void {
-            if (!checkedAttributes || checkedAttributes.length < 1)
-            {
-                Alert.show( "No selected items.", "Notification", Alert.OK, this );
-                return;
-            }
+        private function closeWindow() : void
+        {
+            WindowManager.getInstance().removeWindow(this);
 
-            dispatchEvent(new UpdateDescriptionEvent(UpdateDescriptionEvent.UPDATE_ATTRIBUTES_DESCRIPTIONS));
+            dispatchEvent( new Event(Event.CLOSE) );
         }
-
-        private function btnClose_clickHandler(event:MouseEvent):void {
-            close();
-        }
-
 
         ]]>
     </fx:Script>
 
-     <VGroup width="100%" height="100%"
-             paddingBottom="10" paddingTop="10" paddingLeft="10" paddingRight="10">
+     <mx:TabNavigator id="propertiesNavigator"  width="100%" height="100%">
+		 <ns:PropertiesDescriptionsUpdateComponent id="attributesDescriptions"
+                                                   label="Attributes"
+                                                   properties="{typeVO.attributes}"
+                                                   width="100%" height="100%"
+												   closeClick="{ closeWindow(); }"
+												   updateClick="{ dispatchEvent( new UpdateDescriptionEvent(UpdateDescriptionEvent.UPDATE_ATTRIBUTES_DESCRIPTIONS) ); }"/>
 
-         <HGroup width="100%" height="100%">
-             <VGroup width="180" height="100%">
-                 <Label text="Attributes: "/>
-                 <List id="attributesList"
-                       width="100%" height="100%"
-                       itemRenderer="net.vdombox.object_editor.view.renderer.DescriptionsListItemRenderer"
-                       dataProvider="{attributes}"
-                       labelField="displayName"
-                       allowMultipleSelection="false"
-                       change="attributesList_changeHandler(event)"
-                       creationComplete="attributesList_creationCompleteHandler(event)"/>
-             </VGroup>
+		 <ns:PropertiesDescriptionsUpdateComponent id="eventsDescriptions"
+                                                   label="Events"
+                                                   properties="{typeVO.events}"
+                                                   width="100%" height="100%"
+												   closeClick="{ closeWindow(); }"
+												   updateClick="{ dispatchEvent( new UpdateDescriptionEvent(UpdateDescriptionEvent.UPDATE_EVENTS_DESCRIPTIONS) ); }"/>
 
-             <mx:ViewStack id="descriptionsStack"
-                        width="100%" height="100%">
-
-             </mx:ViewStack>
-         </HGroup>
-
-         <mx:HRule width="100%"/>
-
-         <HGroup width="100%" height="30" verticalAlign="middle">
-             <mx:Button label="Select All" click="btnSelectAll_clickHandler(event)"/>
-             <mx:Button label="Deselect All" click="btnDeselectAll_clickHandler(event)"/>
-             <mx:Spacer width="100%"/>
-             <mx:Button label="Update" toolTip="Update selected items" click="btnUpdate_clickHandler(event)"/>
-             <mx:Button label="Close" click="btnClose_clickHandler(event)"/>
-         </HGroup>
-
-
-     </VGroup>
+		 <ns:PropertiesDescriptionsUpdateComponent id="actionsDescriptions"
+                                                   label="Actions"
+                                                   properties="{typeVO.firstContainerActions}"
+                                                   width="100%" height="100%"
+												   closeClick="{ closeWindow(); }"
+												   updateClick="{ dispatchEvent( new UpdateDescriptionEvent(UpdateDescriptionEvent.UPDATE_ACTIONS_DESCRIPTIONS) ); }"/>
+	 </mx:TabNavigator>
 
 </Window>

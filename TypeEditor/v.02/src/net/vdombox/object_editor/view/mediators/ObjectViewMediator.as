@@ -138,8 +138,11 @@ import org.puremvc.as3.interfaces.IMediator;
 
         private function updateDescriptions () : void
         {
-            objectTypeProxy.clearTypeAttributesLaTexPaths(objectTypeVO);
-            objectTypeProxy.setTypeAttributesLaTexPaths(objectTypeVO);
+            objectTypeProxy.clearTypePropertiesLaTexPaths(objectTypeVO);
+
+			objectTypeProxy.setAttributesLaTexPaths(objectTypeVO);
+			objectTypeProxy.setEventsLaTexPaths(objectTypeVO)
+			objectTypeProxy.setActionsLaTexPaths(objectTypeVO)
 
             openDescriptionsUpdateWindow ();
         }
@@ -169,7 +172,6 @@ import org.puremvc.as3.interfaces.IMediator;
             var descriptionsUpdateWindowMediator : DescriptionsUpdateWindowMediator = new DescriptionsUpdateWindowMediator( descriptionsUpdateWindow );
             facade.registerMediator( descriptionsUpdateWindowMediator );
 
-            descriptionsUpdateWindow.attributes = objectTypeVO.attributes;
             descriptionsUpdateWindow.typeVO = objectTypeVO;
 
             WindowManager.getInstance().addWindow(descriptionsUpdateWindow, UIComponent(view.parentApplication), true);

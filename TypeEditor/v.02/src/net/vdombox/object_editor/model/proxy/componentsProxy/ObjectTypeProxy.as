@@ -5,6 +5,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 {
 import flash.filesystem.File;
 
+import mx.collections.ArrayCollection;
+
+import mx.collections.ArrayCollection;
+
 import mx.controls.Alert;
 import mx.messaging.channels.StreamingAMFChannel;
 
@@ -15,6 +19,7 @@ import net.vdombox.object_editor.model.vo.ActionParameterVO;
 import net.vdombox.object_editor.model.vo.ActionVO;
 import net.vdombox.object_editor.model.vo.ActionsContainerVO;
 import net.vdombox.object_editor.model.vo.AttributeVO;
+import net.vdombox.object_editor.model.vo.BaseVO;
 import net.vdombox.object_editor.model.vo.EventParameterVO;
 import net.vdombox.object_editor.model.vo.EventVO;
 import net.vdombox.object_editor.model.vo.ObjectTypeVO;
@@ -458,7 +463,7 @@ import org.puremvc.as3.patterns.proxy.Proxy;
             return fileProxy.getCorrectFilePath( laTexProxy.typesDocPath + "/type/" + typeVO.name + ".tex" );
         }
 
-        public function setTypeAttributesLaTexPaths ( typeVO : ObjectTypeVO ) : void
+        public function setAttributesLaTexPaths( typeVO : ObjectTypeVO ) : void
         {
             if (!typeVO)
                 return;
@@ -466,40 +471,100 @@ import org.puremvc.as3.patterns.proxy.Proxy;
             var typeLaTexPath : String = getTypeLaTexPath (typeVO);
             var typeLaTexContent : String = fileProxy.readFile (typeLaTexPath);
 
-            var typeAttributesLaTexPaths : Array = laTexProxy.getTypeAttributesPaths(typeLaTexContent);
+			var attributesLaTexPaths : Array = laTexProxy.getSectionPaths( typeLaTexContent, "header_attributes" );
 
-            for each (var attributeLaTexPath : String in typeAttributesLaTexPaths)
-            {
-                var typeAttributeLaTexContent : String = fileProxy.readFile(attributeLaTexPath);
+			for each (var attributeLaTexPath : String in attributesLaTexPaths)
+			{
+				var attributeLaTexContent : String = fileProxy.readFile(attributeLaTexPath);
 
-                var attributeName : String = laTexProxy.getAttributeName(typeAttributeLaTexContent);
+				var attributeName : String = laTexProxy.getAttributeName(attributeLaTexContent);
 
-                var attributeVO : AttributeVO = getTypeAttributeByName(typeVO, attributeName);
+				var attributeVO : AttributeVO = getAttributeByName(typeVO, attributeName);
 
-                if (!attributeVO)
-                    continue;
+				if (!attributeVO)
+					continue;
 
-                attributeVO.laTexFilePath = attributeLaTexPath;
-            }
+				attributeVO.laTexFilePath = attributeLaTexPath;
+			}
 
         }
 
-        public function clearTypeAttributesLaTexPaths ( typeVO : ObjectTypeVO ) : void
+		public function setEventsLaTexPaths( typeVO : ObjectTypeVO ) : void
+		{
+			if (!typeVO)
+				return;
+
+			var typeLaTexPath : String = getTypeLaTexPath (typeVO);
+			var typeLaTexContent : String = fileProxy.readFile (typeLaTexPath);
+
+			var eventsLaTexPaths : Array = laTexProxy.getSectionPaths( typeLaTexContent, "header_events" );
+
+			for each (var eventLaTexPath : String in eventsLaTexPaths)
+			{
+				var eventLaTexContent : String = fileProxy.readFile(eventLaTexPath);
+
+				var eventName : String = laTexProxy.getEventName(eventLaTexContent);
+
+				var eventVO : EventVO = getEventByName(typeVO, eventName);
+
+				if (!eventVO)
+					continue;
+
+				eventVO.laTexFilePath = eventLaTexPath;
+			}
+
+		}
+
+		public function setActionsLaTexPaths( typeVO : ObjectTypeVO ) : void
+		{
+			if (!typeVO)
+				return;
+
+			var typeLaTexPath : String = getTypeLaTexPath (typeVO);
+			var typeLaTexContent : String = fileProxy.readFile (typeLaTexPath);
+
+			var actionsLaTexPaths : Array = laTexProxy.getSectionPaths( typeLaTexContent, "header_actions" );
+
+			for each (var actionLaTexPath : String in actionsLaTexPaths)
+			{
+				var actionLaTexContent : String = fileProxy.readFile(actionLaTexPath);
+
+				var actionName : String = laTexProxy.getActionName(actionLaTexContent);
+
+				var actionVO : ActionVO = getActionByName(typeVO, actionName);
+
+				if (!actionVO)
+					continue;
+
+				actionVO.laTexFilePath = actionLaTexPath;
+			}
+
+		}
+
+        public function clearTypePropertiesLaTexPaths ( typeVO : ObjectTypeVO ) : void
         {
             if (!typeVO)
                 return;
 
-            for each (var item : Object in typeVO.attributes)
-            {
-                if (!item || !item.data)
-                    continue;
+            clearLaTexPaths( typeVO.attributes );
+            clearLaTexPaths( typeVO.events );
+            clearLaTexPaths( typeVO.firstContainerActions );
 
-                var attrVO : AttributeVO = item.data as AttributeVO;
-                attrVO.laTexFilePath = "";
+            function clearLaTexPaths( properties : ArrayCollection ) : void
+            {
+                for each (var item : Object in properties)
+                {
+                    if (!item || !item.data)
+                        continue;
+
+                    var baseVO : BaseVO = item.data as BaseVO;
+                    baseVO.laTexFilePath = "";
+                }
             }
+
         }
 
-        private function getTypeAttributeByName (typeVO : ObjectTypeVO, attrName : String) : AttributeVO
+        private function getAttributeByName (typeVO : ObjectTypeVO, attrName : String) : AttributeVO
         {
             for each (var item : Object in typeVO.attributes)
             {
@@ -510,12 +575,34 @@ import org.puremvc.as3.patterns.proxy.Proxy;
             return null;
         }
 
-        public function updateAttributeDescription (attributeVO : AttributeVO, typeVO : ObjectTypeVO, descrValue : String) : void
+        private function getEventByName (typeVO : ObjectTypeVO, eventName : String) : EventVO
         {
-            if (!typeVO || !attributeVO)
+            for each (var item : Object in typeVO.events)
+            {
+                if (item && item.data && item.data is EventVO && item.data["name"] == eventName)
+                    return item.data as EventVO;
+            }
+
+            return null;
+        }
+
+        private function getActionByName (typeVO : ObjectTypeVO, actionName : String) : ActionVO
+        {
+            for each (var item : Object in typeVO.firstContainerActions)
+            {
+                if (item && item.data && item.data is ActionVO && item.data["methodName"] == actionName)
+                    return item.data as ActionVO;
+            }
+
+            return null;
+        }
+
+        public function updatePropertyDescription (propertyVO : BaseVO, typeVO : ObjectTypeVO, descrValue : String) : void
+        {
+            if (!typeVO || !propertyVO)
                 return;
 
-            var langID : String = languagesProxy.getRegExpID(attributeVO.help);
+            var langID : String = languagesProxy.getRegExpID(propertyVO.help);
 
             languagesProxy.updateWordValue(typeVO, langID, "en_US", descrValue)
         }

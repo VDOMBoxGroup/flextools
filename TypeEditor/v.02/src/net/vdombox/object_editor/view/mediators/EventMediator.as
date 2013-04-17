@@ -10,8 +10,10 @@ package net.vdombox.object_editor.view.mediators
 	import mx.collections.Sort;
 	import mx.collections.SortField;
 	import mx.events.FlexEvent;
-	
-	import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
+
+import net.vdombox.object_editor.event.UpdateDescriptionEvent;
+
+import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 	import net.vdombox.object_editor.model.vo.EventParameterVO;
 	import net.vdombox.object_editor.model.vo.EventVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
@@ -285,9 +287,16 @@ package net.vdombox.object_editor.view.mediators
 		 }*/
 
 		override public function listNotificationInterests():Array 
-		{			
-			return [ ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED, ApplicationFacade.CHANGE_CURRENT_LANGUAGE ];
-		}
+		{
+            var interests : Array = super.listNotificationInterests();
+
+            interests.push( ObjectViewMediator.OBJECT_TYPE_VIEW_SAVED );
+            interests.push( ApplicationFacade.CHANGE_CURRENT_LANGUAGE );
+            interests.push( UpdateDescriptionEvent.EVENTS_DESCRIPTIONS_UPDATE_COMPLETE );
+
+            return interests;
+
+        }
 
 		override public function handleNotification(note:INotification):void
 		{
@@ -306,6 +315,17 @@ package net.vdombox.object_editor.view.mediators
 						changeFildWithCurrentLanguage(note.getBody() as int);
 					break;
 				}
+
+                case UpdateDescriptionEvent.EVENTS_DESCRIPTIONS_UPDATE_COMPLETE :
+                {
+                    if (currentEventVO)
+                    {
+                        view.eventHelp.apdateFild();
+                    }
+                    addStar();
+
+                    break;
+                }
 			}
 		}
 		

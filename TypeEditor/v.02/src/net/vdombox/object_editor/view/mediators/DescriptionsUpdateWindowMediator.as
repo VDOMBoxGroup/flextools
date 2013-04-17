@@ -14,8 +14,11 @@ import net.vdombox.object_editor.model.proxy.FileProxy;
 import net.vdombox.object_editor.model.proxy.LaTexProxy;
 import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
 import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
+import net.vdombox.object_editor.model.vo.ActionVO;
 import net.vdombox.object_editor.model.vo.AttributeVO;
+import net.vdombox.object_editor.model.vo.BaseVO;
 import net.vdombox.object_editor.model.vo.DescriptionListItemVO;
+import net.vdombox.object_editor.model.vo.EventVO;
 import net.vdombox.object_editor.view.DescriptionUpdateView;
 
 import net.vdombox.object_editor.view.popups.DescriptionsUpdateWindow;
@@ -45,15 +48,21 @@ public class DescriptionsUpdateWindowMediator extends Mediator implements IMedia
         private function addHandlers() : void
         {
             view.addEventListener( Event.CLOSE, closeHandler );
+            view.addEventListener( UpdateDescriptionEvent.DESCRIPTIONS_GET_LATEX_VALUES, descriptionsGetLaTexValuesHandler, true );
+
             view.addEventListener( UpdateDescriptionEvent.UPDATE_ATTRIBUTES_DESCRIPTIONS, updateAttributesDescriptionsEventHandler );
-            view.addEventListener( UpdateDescriptionEvent.SELECTED_ATTRIBUTE_CHANGED, selectedAttributeChangedHandler );
+            view.addEventListener( UpdateDescriptionEvent.UPDATE_EVENTS_DESCRIPTIONS, updateEventsDescriptionsEventHandler );
+            view.addEventListener( UpdateDescriptionEvent.UPDATE_ACTIONS_DESCRIPTIONS, updateActionsDescriptionsEventHandler );
         }
 
         private function removeHandlers() : void
         {
             view.removeEventListener( Event.CLOSE, closeHandler );
+            view.removeEventListener( UpdateDescriptionEvent.DESCRIPTIONS_GET_LATEX_VALUES, descriptionsGetLaTexValuesHandler, true );
+
             view.removeEventListener( UpdateDescriptionEvent.UPDATE_ATTRIBUTES_DESCRIPTIONS, updateAttributesDescriptionsEventHandler );
-            view.removeEventListener( UpdateDescriptionEvent.SELECTED_ATTRIBUTE_CHANGED, selectedAttributeChangedHandler );
+            view.removeEventListener( UpdateDescriptionEvent.UPDATE_EVENTS_DESCRIPTIONS, updateEventsDescriptionsEventHandler );
+            view.removeEventListener( UpdateDescriptionEvent.UPDATE_ACTIONS_DESCRIPTIONS, updateActionsDescriptionsEventHandler );
         }
 
         private function closeHandler( event : Event ) : void
@@ -66,65 +75,36 @@ public class DescriptionsUpdateWindowMediator extends Mediator implements IMedia
             removeHandlers();
         }
 
-        private function selectedAttributeChangedHandler( event : UpdateDescriptionEvent ) : void
+        private function descriptionsGetLaTexValuesHandler( event : UpdateDescriptionEvent ) : void
         {
-            var selectedItem : DescriptionListItemVO = selectedAttributeItem;
+            var descriptionUpdateView : DescriptionUpdateView = event.descriptionUpdateView;
+            var propertyVO : BaseVO = event.propertyVO;
 
-            var descriptionView : DescriptionUpdateView = getDescriptionUpdateView( selectedAttributeItem );
-
-            if (!descriptionView) {
-                descriptionsStack.visible = false;
-                return;
-            }
-
-            descriptionsStack.visible = true;
-            descriptionsStack.selectedChild = descriptionView;
+            descriptionUpdateView.oldValue = getItemDescriptionWord( propertyVO );
+            descriptionUpdateView.newValue = getPropertyLaTexDescription( propertyVO );
         }
 
-        private function getDescriptionUpdateView(listItemVO:DescriptionListItemVO):DescriptionUpdateView {
-            if (!listItemVO)
-                return null;
-
-            return listItemVO.descriptionUpdateView || createNewDescriptionUpdateView(listItemVO);
-        }
-
-        private function createNewDescriptionUpdateView( listItemVO : DescriptionListItemVO ) : DescriptionUpdateView
+        private function getItemDescriptionWord( baseVO : BaseVO ) : String
         {
-            var descriptionUpdateView : DescriptionUpdateView = new DescriptionUpdateView();
+            if (!baseVO)
+                return "";
 
-            descriptionUpdateView.oldValue = getItemDescriptionWord( listItemVO );
-            descriptionUpdateView.newValue = getAttributeLaTexDescription( listItemVO.data as AttributeVO);
-
-            descriptionsStack.addChild(descriptionUpdateView);
-
-            listItemVO.descriptionUpdateView = descriptionUpdateView;
-
-            return descriptionUpdateView;
-        }
-
-        private function getItemDescriptionWord( listItemVO : DescriptionListItemVO ) : String
-        {
-            var langID : String = languagesProxy.getRegExpID(listItemVO.data.help);
+            var langID : String = languagesProxy.getRegExpID(baseVO.help);
 
             return languagesProxy.getWord( view.typeVO.languages, langID, "en_US" );
         }
 
-        private function getAttributeLaTexDescription( attributeVO : AttributeVO ) : String
+        private function getPropertyLaTexDescription( baseVO : BaseVO ) : String
         {
-            if (!attributeVO)
+            if (!baseVO)
                 return "";
 
-            if (!attributeVO.laTexFilePath)
+            if (!baseVO.laTexFilePath)
                 return "";
 
-            var attributeLaTexFileContent : String = fileProxy.readFile(attributeVO.laTexFilePath);
+            var propertyLaTexFileContent : String = fileProxy.readFile(baseVO.laTexFilePath);
 
-            return laTexProxy.getAttributeDescription( attributeLaTexFileContent );
-        }
-
-        private function get selectedAttributeItem() : DescriptionListItemVO
-        {
-             return view.attributesList.selectedItem;
+            return laTexProxy.getPropertyDescription( propertyLaTexFileContent );
         }
 
         private function updateAttributesDescriptionsEventHandler ( event : UpdateDescriptionEvent ) : void
@@ -134,22 +114,72 @@ public class DescriptionsUpdateWindowMediator extends Mediator implements IMedia
 
         private function updateCheckedAttributesDescriptions() : void
         {
-            for each ( var attributeItem : DescriptionListItemVO in view.checkedAttributes )
+            for each ( var item : DescriptionListItemVO in view.checkedAttributes )
             {
-                if (!attributeItem)
+                if (!item)
                     continue;
 
-                if ( !(attributeItem.data is AttributeVO) )
+                if ( !(item.data is AttributeVO) )
                     continue;
 
-                var attributeVO : AttributeVO = attributeItem.data as AttributeVO;
+                var attributeVO : AttributeVO = item.data as AttributeVO;
 
-                objectTypeProxy.updateAttributeDescription( attributeVO, view.typeVO, getItemDescription( attributeItem ) );
+                objectTypeProxy.updatePropertyDescription( attributeVO, view.typeVO, getItemDescription( item ) );
             }
 
             sendNotification(UpdateDescriptionEvent.ATTRIBUTES_DESCRIPTIONS_UPDATE_COMPLETE);
 
-            Alert.show( "Descriptions update complete.", "Update", Alert.OK, view );
+            Alert.show( "Attributes descriptions update complete.", "Update", Alert.OK, view );
+        }
+
+        private function updateEventsDescriptionsEventHandler ( event : UpdateDescriptionEvent ) : void
+        {
+            updateCheckedEventsDescriptions();
+        }
+
+        private function updateCheckedEventsDescriptions() : void
+        {
+            for each ( var item : DescriptionListItemVO in view.checkedEvents )
+            {
+                if (!item)
+                    continue;
+
+                if ( !(item.data is EventVO) )
+                    continue;
+
+                var eventVO : EventVO = item.data as EventVO;
+
+                objectTypeProxy.updatePropertyDescription( eventVO, view.typeVO, getItemDescription( item ) );
+            }
+
+            sendNotification(UpdateDescriptionEvent.EVENTS_DESCRIPTIONS_UPDATE_COMPLETE);
+
+            Alert.show( "Events descriptions update complete.", "Update", Alert.OK, view );
+        }
+
+        private function updateActionsDescriptionsEventHandler ( event : UpdateDescriptionEvent ) : void
+        {
+            updateCheckedActionsDescriptions();
+        }
+
+        private function updateCheckedActionsDescriptions() : void
+        {
+            for each ( var item : DescriptionListItemVO in view.checkedActions )
+            {
+                if (!item)
+                    continue;
+
+                if ( !(item.data is ActionVO) )
+                    continue;
+
+                var actionVO : ActionVO = item.data as ActionVO;
+
+                objectTypeProxy.updatePropertyDescription( actionVO, view.typeVO, getItemDescription( item ) );
+            }
+
+            sendNotification(UpdateDescriptionEvent.ACTIONS_DESCRIPTIONS_UPDATE_COMPLETE);
+
+            Alert.show( "Actions descriptions update complete.", "Update", Alert.OK, view );
         }
 
         private function getItemDescription( attributeItem : DescriptionListItemVO ) : String
@@ -158,7 +188,7 @@ public class DescriptionsUpdateWindowMediator extends Mediator implements IMedia
                 return "";
 
             if (!attributeItem.descriptionUpdateView)
-                return getAttributeLaTexDescription( attributeItem.data as AttributeVO);;
+                return getPropertyLaTexDescription( attributeItem.data as AttributeVO );
 
             return attributeItem.descriptionUpdateView.newValue;
         }
@@ -181,11 +211,6 @@ public class DescriptionsUpdateWindowMediator extends Mediator implements IMedia
         private function get languagesProxy () : LanguagesProxy
         {
             return facade.retrieveProxy(LanguagesProxy.NAME) as LanguagesProxy;
-        }
-
-        private function get descriptionsStack() : ViewStack
-        {
-            return view.descriptionsStack;
         }
 
 	}

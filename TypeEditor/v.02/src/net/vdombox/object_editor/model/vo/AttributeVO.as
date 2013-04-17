@@ -15,8 +15,6 @@ package net.vdombox.object_editor.model.vo
 		public var errorValidationMessage		:String = "";
 		public var regularExpressionValidation	:String = "";
 
-        public var laTexFilePath : String = "";
-
 		public function AttributeVO(attributeName:String = "")
 		{
             super();

@@ -9,8 +9,11 @@ import mx.collections.ArrayCollection;
 		public var filePath:String;
 		public var sourceCode:String;
 
-		private var _events     : ArrayCollection = new ArrayCollection();
-		[Bindable]
+        [Bindable]
+        public var events     : ArrayCollection = new ArrayCollection();
+
+
+        [Bindable]
 		public var actionContainers    : ArrayCollection = new ArrayCollection();
 
 		/**
@@ -76,18 +79,22 @@ import mx.collections.ArrayCollection;
 
 		public function ObjectTypeVO()
 		{
-		}		
-
-		[Bindable]
-		public function get events():ArrayCollection
-		{
-			return _events;
 		}
 
-		public function set events(value:ArrayCollection):void
-		{
-			_events = value;
-		}
+        public function get firstContainerActions() : ArrayCollection
+        {
+            if (!actionContainers)
+                return null;
+
+            var firstContainer : ActionsContainerVO = actionContainers[0]["data"];
+
+            if (!firstContainer)
+                return null;
+
+            return firstContainer.actionsCollection;
+        }
+
+
 
 	}
 }
