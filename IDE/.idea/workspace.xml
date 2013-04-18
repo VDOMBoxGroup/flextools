@@ -1,29 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="8f9a5422-5edf-4986-b78b-45d5202af2ab" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/DB.iml" afterPath="$PROJECT_DIR$/DB/DB.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/DataBase.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/DataBase.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/Events.iml" afterPath="$PROJECT_DIR$/Events/Events.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/Events.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/Events.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Preview/Preview.iml" afterPath="$PROJECT_DIR$/Preview/Preview.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Preview/src/net/vdombox/ide/modules/Preview2.mxml" afterPath="$PROJECT_DIR$/Preview/src/net/vdombox/ide/modules/Preview2.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ResourceBrowser/ResourceBrowser.iml" afterPath="$PROJECT_DIR$/ResourceBrowser/ResourceBrowser.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/Scripts.iml" afterPath="$PROJECT_DIR$/Scripts/Scripts.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/SettingsScreen.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/SettingsScreen.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/Toolset.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/Toolset.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/ToolsetButton.mxml" afterPath="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/ToolsetButton.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tree/Tree.iml" afterPath="$PROJECT_DIR$/Tree/Tree.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/Wysiwyg.iml" afterPath="$PROJECT_DIR$/Wysiwyg/Wysiwyg.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/ide_lib.iml" afterPath="$PROJECT_DIR$/common/ide_lib.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" readonly="true" id="8f9a5422-5edf-4986-b78b-45d5202af2ab" name="Default" comment="" />
     <ignored path="VdomIDE.IDEA.SDK.4.9.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/fragment.js2" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366099243725" ignored="false" />
+    <file path="/fragment.js2" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366196168860" ignored="false" />
     <file path="/VdomIDE.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366008375749" ignored="false" />
     <file path="/DummyFile.xpath" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366014819678" ignored="false" />
-    <file path="/a.dummy" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366096077342" ignored="false" />
+    <file path="/a.dummy" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366194937772" ignored="false" />
     <file path="/ModulesProxy.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366011289022" ignored="false" />
     <file path="/DataBase.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366012685280" ignored="false" />
     <file path="/DataTableMediator.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366012931962" ignored="false" />
@@ -48,6 +32,8 @@
     <file path="/CashManager.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366098549835" ignored="false" />
     <file path="$PROJECT_DIR$/../POWERPACK.IDEA/PowerPack/src/net/vdombox/powerpack/managers/CashManager.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366098545617" ignored="false" />
     <file path="$PROJECT_DIR$/../POWERPACK.IDEA/PowerPack/bin-debug/Builder-app.xml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366099322715" ignored="false" />
+    <file path="$PROJECT_DIR$/../SELF/StrToSQL/src/StrToSQL.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366182902112" ignored="false" />
+    <file path="/StrToSQL.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366182861499" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,118 +94,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Preview2.mxml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Preview/src/net/vdombox/ide/modules/Preview2.mxml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="24" selection-start="144" selection-end="144" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataGridHeader.as" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/mx/src/mx/controls/dataGridClasses/DataGridHeader.as">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="351" column="49" selection-start="11522" selection-end="11522" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataBase.mxml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/DataBase.mxml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="8" selection-start="282" selection-end="282" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1366092491841" expanded="true" signature="403:1072" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="1093:1223" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="1244:1374" placeholder="{...}" />
-                <marker date="1366092491841" expanded="false" signature="1427:1690" placeholder="..." />
-                <marker date="1366092491841" expanded="true" signature="1990:2041" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="2098:2126" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="2185:2215" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="2271:2301" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="2361:2384" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="2445:2469" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="2526:2549" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="2599:2712" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="2765:2832" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="2892:2967" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="3017:3143" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="3194:3264" placeholder="{...}" />
-                <marker date="1366092491841" expanded="true" signature="3325:3397" placeholder="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataTableQuery.mxml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/DataTableQuery.mxml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="285" column="95" selection-start="8235" selection-end="8235" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1366014732961" expanded="false" signature="393:977" placeholder="..." />
-                <marker date="1366014732961" expanded="true" signature="1185:1197" placeholder="/*...*/" />
-                <marker date="1366014732961" expanded="true" signature="1432:1480" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="1530:1580" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="1628:1675" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="1737:1776" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="1838:2032" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="1905:1935" placeholder="/*...*/" />
-                <marker date="1366014732961" expanded="true" signature="2099:2141" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="2220:2706" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="2785:3081" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="2799:3025" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="3056:3076" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="3131:3652" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="3229:3605" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="3699:4269" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="3706:3729" placeholder="/*...*/" />
-                <marker date="1366014732961" expanded="true" signature="3826:4263" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="3833:3861" placeholder="/*...*/" />
-                <marker date="1366014732961" expanded="true" signature="3991:4097" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="4348:4616" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="4688:5139" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="5223:5530" placeholder="{...}" />
-                <marker date="1366014732961" expanded="true" signature="5606:5672" placeholder="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SettingsScreen.mxml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/SettingsScreen.mxml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="8" selection-start="138" selection-end="138" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1366092530907" expanded="true" signature="365:418" placeholder="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Toolset.mxml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/Toolset.mxml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="9" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ToolsetButton.mxml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/ToolsetButton.mxml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="16" selection-start="148" selection-end="148" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Events.mxml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Events.mxml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/Events.mxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="44" selection-start="502" selection-end="502" vertical-scroll-proportion="0.035343036">
+            <state line="15" column="43" selection-start="466" selection-end="466" vertical-scroll-proportion="-2.0384614">
               <folding>
                 <marker date="1366092562442" expanded="true" signature="380:1049" placeholder="{...}" />
                 <marker date="1366092562442" expanded="true" signature="1070:1200" placeholder="{...}" />
@@ -245,20 +123,175 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OpenCreatePageWindowRequestCommand.as" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/controller/body/OpenCreatePageWindowRequestCommand.as">
+      <file leaf-file-name="ActionElement.mxml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ActionElement.mxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="58" selection-start="789" selection-end="789" vertical-scroll-proportion="0.0">
+            <state line="3" column="62" selection-start="222" selection-end="222" vertical-scroll-proportion="-1.9615384">
+              <folding>
+                <marker date="1366023502174" expanded="false" signature="487:737" placeholder="..." />
+                <marker date="1366023502174" expanded="true" signature="867:933" placeholder="{...}" />
+                <marker date="1366023502174" expanded="true" signature="1045:2299" placeholder="{...}" />
+                <marker date="1366023502174" expanded="true" signature="1193:2294" placeholder="{...}" />
+                <marker date="1366023502174" expanded="true" signature="1974:2201" placeholder="{...}" />
+                <marker date="1366023502174" expanded="true" signature="2230:2288" placeholder="{...}" />
+                <marker date="1366023502174" expanded="true" signature="2392:2578" placeholder="{...}" />
+                <marker date="1366023502174" expanded="true" signature="2673:2846" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Body.mxml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/Body.mxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2" column="47" selection-start="130" selection-end="130" vertical-scroll-proportion="-1.3076923">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ExternalEditorWindow.as" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ExternalEditorWindow.as">
+      <file leaf-file-name="EventElement.mxml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/EventElement.mxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="46" selection-start="663" selection-end="663" vertical-scroll-proportion="0.0">
+            <state line="63" column="45" selection-start="2049" selection-end="2049" vertical-scroll-proportion="-6.5">
+              <folding>
+                <marker date="1366023502143" expanded="false" signature="486:675" placeholder="..." />
+                <marker date="1366023502143" expanded="true" signature="930:2161" placeholder="{...}" />
+                <marker date="1366023502143" expanded="true" signature="1078:2042" placeholder="{...}" />
+                <marker date="1366023502143" expanded="true" signature="1803:2036" placeholder="{...}" />
+                <marker date="1366023502143" expanded="true" signature="2047:2156" placeholder="/*...*/" />
+                <marker date="1366023502143" expanded="true" signature="2254:2424" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PopupWindowGripperSkin.mxml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/PopupWindowGripperSkin.mxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="36" column="44" selection-start="881" selection-end="881" vertical-scroll-proportion="-12.0">
+              <folding>
+                <marker date="1366010494713" expanded="true" signature="222:289" placeholder="/** @copy spark.skins.spark.ApplicationSkin#hostComponent ...*/" />
+                <marker date="1366010494713" expanded="false" signature="492:535" placeholder="/**...*/" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SkinnableComponent.as" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/spark/src/spark/components/supportClasses/SkinnableComponent.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="668" column="43" selection-start="19804" selection-end="19804" vertical-scroll-proportion="0.4008097">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DataBase.mxml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/DataBase.mxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="61" selection-start="281" selection-end="281" vertical-scroll-proportion="-6.5384617">
+              <folding>
+                <marker date="1366092491841" expanded="true" signature="403:1072" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="1093:1223" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="1244:1374" placeholder="{...}" />
+                <marker date="1366092491841" expanded="false" signature="1427:1690" placeholder="..." />
+                <marker date="1366092491841" expanded="true" signature="1990:2041" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="2098:2126" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="2185:2215" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="2271:2301" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="2361:2384" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="2445:2469" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="2526:2549" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="2599:2712" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="2765:2832" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="2892:2967" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="3017:3143" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="3194:3264" placeholder="{...}" />
+                <marker date="1366092491841" expanded="true" signature="3325:3397" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Tree.mxml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/Tree.mxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="25" column="0" selection-start="625" selection-end="625" vertical-scroll-proportion="-4.8846154">
+              <folding>
+                <marker date="1366007033598" expanded="true" signature="547:580" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="602:1271" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="1292:1422" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="1443:1573" placeholder="{...}" />
+                <marker date="1366007033598" expanded="false" signature="1624:1784" placeholder="..." />
+                <marker date="1366007033598" expanded="true" signature="2076:2127" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="2184:2212" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="2271:2301" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="2357:2383" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="2443:2466" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="2527:2551" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="2608:2631" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="2681:2793" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="2846:2913" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="2973:3048" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="3102:3227" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="3279:3347" placeholder="{...}" />
+                <marker date="1366007033598" expanded="true" signature="3408:3480" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Scripts.mxml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/Scripts.mxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="20" column="0" selection-start="580" selection-end="580" vertical-scroll-proportion="-4.8846154">
+              <folding>
+                <marker date="1366007040995" expanded="true" signature="557:1226" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="1247:1377" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="1398:1528" placeholder="{...}" />
+                <marker date="1366007040995" expanded="false" signature="1578:1800" placeholder="..." />
+                <marker date="1366007040995" expanded="true" signature="2098:2149" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="2206:2234" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="2293:2323" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="2379:2409" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="2469:2492" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="2553:2577" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="2634:2657" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="2707:2819" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="2872:2939" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="2999:3074" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="3124:3248" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="3300:3368" placeholder="{...}" />
+                <marker date="1366007040995" expanded="true" signature="3429:3501" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ResourceBrowser.mxml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/ResourceBrowser.mxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="20" column="0" selection-start="589" selection-end="589" vertical-scroll-proportion="-4.8846154">
+              <folding>
+                <marker date="1366007064985" expanded="true" signature="566:1235" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="1256:1386" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="1407:1537" placeholder="{...}" />
+                <marker date="1366007064985" expanded="false" signature="1588:1864" placeholder="..." />
+                <marker date="1366007064985" expanded="true" signature="2191:2242" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="2302:2330" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="2392:2422" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="2481:2511" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="2574:2597" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="2661:2685" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="2745:2768" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="2821:2939" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="2995:3062" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="3125:3200" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="3253:3378" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="3430:3498" placeholder="{...}" />
+                <marker date="1366007064985" expanded="true" signature="3558:3630" placeholder="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -293,10 +326,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
+    <option name="x" value="1272" />
     <option name="y" value="-8" />
-    <option name="width" value="1296" />
-    <option name="height" value="1000" />
+    <option name="width" value="1936" />
+    <option name="height" value="1096" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -326,6 +359,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -334,21 +368,44 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="243" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="244" />
     <property name="project.structure.last.edited" value="Modules" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="244" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="75" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="244" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="244" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder0" value="0" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder2" value="2" />
@@ -359,28 +416,28 @@
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth1" value="184" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder4" value="4" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth0" value="195" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/common/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth5" value="870" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth4" value="196" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth3" value="195" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="107" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="918" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="918" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="options.lastSelected" value="project.propCompiler" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
-    <property name="project.structure.side.proportion" value="0.2" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="options.searchVisible" value="true" />
   </component>
   <component name="RunManager" selected="Flash App.Core">
@@ -411,6 +468,19 @@
       <option name="trusted" value="true" />
       <method />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -437,19 +507,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -555,7 +612,9 @@
       <option name="url" value="http://" />
       <option name="usbDebugPort" value="7936" />
       <RunnerSettings RunnerId="FlexDebugRunner" />
+      <RunnerSettings RunnerId="FlexRunner" />
       <ConfigurationWrapper RunnerId="FlexDebugRunner" />
+      <ConfigurationWrapper RunnerId="FlexRunner" />
       <method />
     </configuration>
     <configuration default="false" name="DataBase (DB)" type="FlashRunConfigurationType" factoryName="Flash App">
@@ -845,56 +904,56 @@
     <option name="myMappingRoots">
       <list>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\.idea" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\.idea" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE\.idea" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE\.idea" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\common" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\common" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE\common" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE\common" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\core" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE\core" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE\core" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\DB" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\DB" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE\DB" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE\DB" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Events" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE\Events" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE\Events" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Preview" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Preview" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE\Preview" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE\Preview" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\ResourceBrowser" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\ResourceBrowser" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE\ResourceBrowser" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE\ResourceBrowser" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Scripts" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Scripts" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE\Scripts" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE\Scripts" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Tree" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Tree" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE\Tree" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE\Tree" />
         </SvnCopyRootSimple>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Wysiwyg" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9\Wysiwyg" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE\Wysiwyg" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE\Wysiwyg" />
         </SvnCopyRootSimple>
       </list>
     </option>
     <option name="myMoreRealMappingRoots">
       <list>
         <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9" />
-          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE.IDEA.SDK.4.9" />
+          <option name="myVcsRoot" value="D:\FlexProjects\VdomIDE" />
+          <option name="myCopyRoot" value="D:\FlexProjects\VdomIDE" />
         </SvnCopyRootSimple>
       </list>
     </option>
@@ -908,34 +967,34 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
-    <editor active="false" />
+    <frame x="1272" y="-8" width="1936" height="1096" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5228967" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38525563" sideWeight="0.7795786" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.44621938" sideWeight="0.7790822" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32740214" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.44621938" sideWeight="0.22038421" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40903687" sideWeight="0.50162077" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.47603834" sideWeight="0.76627535" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21799028" sideWeight="0.6725979" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14354323" sideWeight="0.5537806" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6624068" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32818073" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.47681332" sideWeight="0.76661265" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1016,69 +1075,142 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/common/src/org/puremvc/as3/multicore/core/View.as">
+    <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/Toolset.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="134" column="0" selection-start="4477" selection-end="4477" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/CoreJunctionMediator.as">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="150" column="0" selection-start="5066" selection-end="5066" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/MultilineWindow.as">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="79" selection-start="1216" selection-end="1216" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="190" column="50" selection-start="5065" selection-end="5065" vertical-scroll-proportion="0.0">
+        <state line="3" column="9" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/WorkArea.as">
+    <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/ToolsetButton.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="48" selection-start="2491" selection-end="2491" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="214" column="52" selection-start="6412" selection-end="6412" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ExternalEditorWindow.as">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="46" selection-start="663" selection-end="663" vertical-scroll-proportion="0.0">
+        <state line="3" column="16" selection-start="148" selection-end="148" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/tree/controller/body/OpenCreatePageWindowRequestCommand.as">
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/Wysiwyg.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="58" selection-start="789" selection-end="789" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="69" column="0" selection-start="1902" selection-end="1902" vertical-scroll-proportion="1.0">
+          <folding>
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007037758" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Preview/src/net/vdombox/ide/modules/Preview2.mxml">
+    <entry file="file://$PROJECT_DIR$/core/src/VdomIDE.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="24" selection-start="144" selection-end="144" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="20" column="0" selection-start="603" selection-end="603" vertical-scroll-proportion="-4.8846154">
+          <folding>
+            <marker date="1366007058107" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007058107" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007058107" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1366007058107" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1366007058107" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/mx/src/mx/controls/dataGridClasses/DataGridHeader.as">
+    <entry file="file://$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/Tree.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="351" column="49" selection-start="11522" selection-end="11522" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="25" column="0" selection-start="625" selection-end="625" vertical-scroll-proportion="-4.8846154">
+          <folding>
+            <marker date="1366007033598" expanded="true" signature="547:580" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="602:1271" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="1292:1422" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="1443:1573" placeholder="{...}" />
+            <marker date="1366007033598" expanded="false" signature="1624:1784" placeholder="..." />
+            <marker date="1366007033598" expanded="true" signature="2076:2127" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="2184:2212" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="2271:2301" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="2357:2383" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="2443:2466" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="2527:2551" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="2608:2631" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="2681:2793" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="2846:2913" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="2973:3048" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="3102:3227" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="3279:3347" placeholder="{...}" />
+            <marker date="1366007033598" expanded="true" signature="3408:3480" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/Scripts.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="580" selection-end="580" vertical-scroll-proportion="-4.8846154">
+          <folding>
+            <marker date="1366007040995" expanded="true" signature="557:1226" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="1247:1377" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="1398:1528" placeholder="{...}" />
+            <marker date="1366007040995" expanded="false" signature="1578:1800" placeholder="..." />
+            <marker date="1366007040995" expanded="true" signature="2098:2149" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="2206:2234" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="2293:2323" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="2379:2409" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="2469:2492" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="2553:2577" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="2634:2657" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="2707:2819" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="2872:2939" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="2999:3074" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="3124:3248" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="3300:3368" placeholder="{...}" />
+            <marker date="1366007040995" expanded="true" signature="3429:3501" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/ResourceBrowser.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="589" selection-end="589" vertical-scroll-proportion="-4.8846154">
+          <folding>
+            <marker date="1366007064985" expanded="true" signature="566:1235" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="1256:1386" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="1407:1537" placeholder="{...}" />
+            <marker date="1366007064985" expanded="false" signature="1588:1864" placeholder="..." />
+            <marker date="1366007064985" expanded="true" signature="2191:2242" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="2302:2330" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="2392:2422" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="2481:2511" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="2574:2597" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="2661:2685" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="2745:2768" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="2821:2939" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="2995:3062" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="3125:3200" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="3253:3378" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="3430:3498" placeholder="{...}" />
+            <marker date="1366007064985" expanded="true" signature="3558:3630" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/DataBase.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="8" selection-start="282" selection-end="282" vertical-scroll-proportion="0.0">
+        <state line="10" column="61" selection-start="281" selection-end="281" vertical-scroll-proportion="-6.5384617">
           <folding>
             <marker date="1366092491841" expanded="true" signature="403:1072" placeholder="{...}" />
             <marker date="1366092491841" expanded="true" signature="1093:1223" placeholder="{...}" />
@@ -1101,64 +1233,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/DataTableQuery.mxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="285" column="95" selection-start="8235" selection-end="8235" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1366014732961" expanded="false" signature="393:977" placeholder="..." />
-            <marker date="1366014732961" expanded="true" signature="1185:1197" placeholder="/*...*/" />
-            <marker date="1366014732961" expanded="true" signature="1432:1480" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="1530:1580" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="1628:1675" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="1737:1776" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="1838:2032" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="1905:1935" placeholder="/*...*/" />
-            <marker date="1366014732961" expanded="true" signature="2099:2141" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="2220:2706" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="2785:3081" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="2799:3025" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="3056:3076" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="3131:3652" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="3229:3605" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="3699:4269" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="3706:3729" placeholder="/*...*/" />
-            <marker date="1366014732961" expanded="true" signature="3826:4263" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="3833:3861" placeholder="/*...*/" />
-            <marker date="1366014732961" expanded="true" signature="3991:4097" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="4348:4616" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="4688:5139" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="5223:5530" placeholder="{...}" />
-            <marker date="1366014732961" expanded="true" signature="5606:5672" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/SettingsScreen.mxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="8" selection-start="138" selection-end="138" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1366092530907" expanded="true" signature="365:418" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/Toolset.mxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="9" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/ToolsetButton.mxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="16" selection-start="148" selection-end="148" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/Events.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="44" selection-start="502" selection-end="502" vertical-scroll-proportion="0.035343036">
+        <state line="15" column="43" selection-start="466" selection-end="466" vertical-scroll-proportion="-2.0384614">
           <folding>
             <marker date="1366092562442" expanded="true" signature="380:1049" placeholder="{...}" />
             <marker date="1366092562442" expanded="true" signature="1070:1200" placeholder="{...}" />
@@ -1180,6 +1257,72 @@
             <marker date="1366092562442" expanded="true" signature="3220:3290" placeholder="{...}" />
             <marker date="1366092562442" expanded="true" signature="3351:3423" placeholder="{...}" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ActionElement.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="62" selection-start="222" selection-end="222" vertical-scroll-proportion="-1.9615384">
+          <folding>
+            <marker date="1366023502174" expanded="false" signature="487:737" placeholder="..." />
+            <marker date="1366023502174" expanded="true" signature="867:933" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="1045:2299" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="1193:2294" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="1974:2201" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="2230:2288" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="2392:2578" placeholder="{...}" />
+            <marker date="1366023502174" expanded="true" signature="2673:2846" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/Body.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="47" selection-start="130" selection-end="130" vertical-scroll-proportion="-1.3076923">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/EventElement.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="63" column="45" selection-start="2049" selection-end="2049" vertical-scroll-proportion="-6.5">
+          <folding>
+            <marker date="1366023502143" expanded="false" signature="486:675" placeholder="..." />
+            <marker date="1366023502143" expanded="true" signature="930:2161" placeholder="{...}" />
+            <marker date="1366023502143" expanded="true" signature="1078:2042" placeholder="{...}" />
+            <marker date="1366023502143" expanded="true" signature="1803:2036" placeholder="{...}" />
+            <marker date="1366023502143" expanded="true" signature="2047:2156" placeholder="/*...*/" />
+            <marker date="1366023502143" expanded="true" signature="2254:2424" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/src/assets/popup_gripper.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/airspark/src/spark/components/Window.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2475" column="53" selection-start="69193" selection-end="69209" vertical-scroll-proportion="0.98582995">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/PopupWindowGripperSkin.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="44" selection-start="881" selection-end="881" vertical-scroll-proportion="-12.0">
+          <folding>
+            <marker date="1366010494713" expanded="true" signature="222:289" placeholder="/** @copy spark.skins.spark.ApplicationSkin#hostComponent ...*/" />
+            <marker date="1366010494713" expanded="false" signature="492:535" placeholder="/**...*/" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/spark/src/spark/components/supportClasses/SkinnableComponent.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="668" column="43" selection-start="19804" selection-end="19804" vertical-scroll-proportion="0.4008097">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1236,12 +1379,11 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>Wysiwyg</last-edited>
+          <last-edited>Wysiwyg|Wysiwyg</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
-                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
