@@ -10,6 +10,8 @@ import mx.containers.ViewStack;
 import mx.controls.Alert;
 
 import net.vdombox.object_editor.event.UpdateDescriptionEvent;
+
+import net.vdombox.object_editor.event.UpdateDescriptionEvent;
 import net.vdombox.object_editor.model.proxy.FileProxy;
 import net.vdombox.object_editor.model.proxy.LaTexProxy;
 import net.vdombox.object_editor.model.proxy.componentsProxy.LanguagesProxy;
@@ -48,7 +50,7 @@ public class DescriptionsUpdateWindowMediator extends Mediator implements IMedia
         private function addHandlers() : void
         {
             view.addEventListener( Event.CLOSE, closeHandler );
-            view.addEventListener( UpdateDescriptionEvent.DESCRIPTIONS_GET_LATEX_VALUES, descriptionsGetLaTexValuesHandler, true );
+            view.addEventListener( UpdateDescriptionEvent.DESCRIPTIONS_FILL_VALUES, descriptionsFillValuesHandler, true );
 
             view.addEventListener( UpdateDescriptionEvent.UPDATE_ATTRIBUTES_DESCRIPTIONS, updateAttributesDescriptionsEventHandler );
             view.addEventListener( UpdateDescriptionEvent.UPDATE_EVENTS_DESCRIPTIONS, updateEventsDescriptionsEventHandler );
@@ -58,7 +60,7 @@ public class DescriptionsUpdateWindowMediator extends Mediator implements IMedia
         private function removeHandlers() : void
         {
             view.removeEventListener( Event.CLOSE, closeHandler );
-            view.removeEventListener( UpdateDescriptionEvent.DESCRIPTIONS_GET_LATEX_VALUES, descriptionsGetLaTexValuesHandler, true );
+            view.removeEventListener( UpdateDescriptionEvent.DESCRIPTIONS_FILL_VALUES, descriptionsFillValuesHandler, true );
 
             view.removeEventListener( UpdateDescriptionEvent.UPDATE_ATTRIBUTES_DESCRIPTIONS, updateAttributesDescriptionsEventHandler );
             view.removeEventListener( UpdateDescriptionEvent.UPDATE_EVENTS_DESCRIPTIONS, updateEventsDescriptionsEventHandler );
@@ -75,13 +77,13 @@ public class DescriptionsUpdateWindowMediator extends Mediator implements IMedia
             removeHandlers();
         }
 
-        private function descriptionsGetLaTexValuesHandler( event : UpdateDescriptionEvent ) : void
+        private function descriptionsFillValuesHandler( event : UpdateDescriptionEvent ) : void
         {
-            var descriptionUpdateView : DescriptionUpdateView = event.descriptionUpdateView;
-            var propertyVO : BaseVO = event.propertyVO;
+            var listItemVO : DescriptionListItemVO = event.listItemVO;
+			var propertyVO : BaseVO = listItemVO.data;
 
-            descriptionUpdateView.oldValue = getItemDescriptionWord( propertyVO );
-            descriptionUpdateView.newValue = getPropertyLaTexDescription( propertyVO );
+            listItemVO.oldValue = getItemDescriptionWord( propertyVO );
+            listItemVO.newValue =  getPropertyLaTexDescription( propertyVO );
         }
 
         private function getItemDescriptionWord( baseVO : BaseVO ) : String

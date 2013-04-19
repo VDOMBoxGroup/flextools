@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
                 xmlns:s="library://ns.adobe.com/flex/spark"
-                doubleClickEnabled="false">
+                doubleClickEnabled="false"
+                dataChange="dataChangeHandler(event)"
+                creationComplete="creationCompleteHandler(event)">
 
     <s:states>
         <s:State name="normal"/>
@@ -17,30 +19,79 @@
               paddingTop="2" paddingBottom="2" paddingRight="2" paddingLeft="2"
               doubleClickEnabled="false" >
         <s:CheckBox id="itemCheckBox" selected="{data.checked}" change="chBoxChangeHandler(event)"/>
-        <s:Label id="labelText" color.hovered="0x1313cd" color.selected="0x000000" verticalAlign="bottom"/>
+        <s:Label id="labelText" color="0x000000" verticalAlign="bottom"/>
     </s:HGroup>
 
     <fx:Script>
         <![CDATA[
-        public function get checked():Boolean {
+        import mx.events.FlexEvent;
+
+        import net.vdombox.object_editor.event.UpdateDescriptionEvent;
+        import net.vdombox.object_editor.model.vo.DescriptionListItemVO;
+
+        public function get checked() : Boolean
+        {
             return data.checked;
         }
 
-        public function set checked(value:Boolean):void {
+        public function set checked( value : Boolean ) : void
+        {
             data.checked = value;
         }
 
-        override public function set label(value:String):void {
+        override public function set label( value : String ) : void
+        {
             super.label = value;
 
             labelText.text = label;
         }
 
-        private function chBoxChangeHandler(event:Event):void
+        private function chBoxChangeHandler( event : Event ) : void
         {
             checked = itemCheckBox.selected;
         }
 
+        private function dataChangeHandler( event : FlexEvent ) : void
+        {
+            changeViewValues();
+            changeLabelColor();
+        }
+
+        private function changeViewValues() : void
+        {
+            if (!data || !data.descriptionUpdateView)
+                return;
+
+            data.descriptionUpdateView.oldValue = data.oldValue;
+            data.descriptionUpdateView.newValue = data.newValue;
+        }
+
+        private function changeLabelColor() : void
+        {
+            if (!data)
+                return;
+
+            if ( !data.newValue )
+            {
+                labelText.setStyle( "color", 0xff0000 );
+            }
+            else if ( data.oldValue == data.newValue )
+            {
+                labelText.setStyle( "color", 0x0000ff );
+            }
+            else
+            {
+                labelText.setStyle( "color", 0x000000 );
+            }
+        }
+
+        private function creationCompleteHandler( event : FlexEvent ) : void
+        {
+            var updateDescriptionEvent : UpdateDescriptionEvent = new UpdateDescriptionEvent( UpdateDescriptionEvent.DESCRIPTIONS_FILL_VALUES );
+            updateDescriptionEvent.listItemVO = data as DescriptionListItemVO;
+
+            dispatchEvent( updateDescriptionEvent );
+        }
         ]]>
     </fx:Script>
 </s:ItemRenderer>

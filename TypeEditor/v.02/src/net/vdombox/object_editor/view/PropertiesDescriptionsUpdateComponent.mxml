@@ -16,122 +16,139 @@
 
         import net.vdombox.object_editor.event.UpdateDescriptionEvent;
         import net.vdombox.object_editor.model.vo.DescriptionListItemVO;
+        import net.vdombox.object_editor.view.renderer.DescriptionsListItemRenderer;
 
         import spark.events.IndexChangeEvent;
 
-        private var _properties:ArrayCollection = new ArrayCollection();
+        private var _properties : ArrayCollection = new ArrayCollection();
 
         [Bindable]
-        public function get properties():ArrayCollection {
+        public function get properties() : ArrayCollection
+        {
             return _properties;
         }
 
-        public function set properties(value:ArrayCollection):void {
+        public function set properties( value : ArrayCollection ) : void
+        {
             _properties.removeAll();
 
-            for each (var attributeItem:Object in value) {
-                if (!attributeItem)
+            for each ( var attributeItem : Object in value )
+            {
+                if ( !attributeItem )
+                {
                     continue;
+                }
 
-                var listItem:DescriptionListItemVO = new DescriptionListItemVO();
+                var listItem : DescriptionListItemVO = new DescriptionListItemVO();
                 listItem.displayName = attributeItem.label;
                 listItem.data = attributeItem.data;
                 listItem.checked = false;
 
-                _properties.addItem(listItem);
+                _properties.addItem( listItem );
             }
         }
 
-        private function checkAllProperties(value:Boolean):void {
-            for each (var attrItem:DescriptionListItemVO in properties) {
+        private function checkAllProperties( value : Boolean ) : void
+        {
+            for each ( var attrItem : DescriptionListItemVO in properties )
+            {
                 attrItem.checked = value;
             }
         }
 
-        public function get checkedProperties():ArrayCollection {
-            var _checkedAttributes:ArrayCollection = new ArrayCollection();
+        public function get checkedProperties() : ArrayCollection
+        {
+            var _checkedAttributes : ArrayCollection = new ArrayCollection();
 
-            for each (var attributeItem:DescriptionListItemVO in properties) {
-                if (!attributeItem)
+            for each ( var attributeItem : DescriptionListItemVO in properties )
+            {
+                if ( !attributeItem )
+                {
                     continue;
+                }
 
-                if (attributeItem.checked)
-                    _checkedAttributes.addItem(attributeItem);
+                if ( attributeItem.checked )
+                {
+                    _checkedAttributes.addItem( attributeItem );
+                }
             }
 
             return _checkedAttributes;
         }
 
-        private function propertiesList_creationCompleteHandler(event:FlexEvent):void {
-            if (!properties || properties.length < 1)
+        private function propertiesList_creationCompleteHandler( event : FlexEvent ) : void
+        {
+            if ( !properties || properties.length < 1 )
+            {
                 return;
-
-            createDescriptionUpdateViews();
+            }
 
             propertiesList.selectedIndex = 0;
-            dispatchEvent(new Event("selectedItemChanged"));
+            propertiesList.dispatchEvent( new IndexChangeEvent(IndexChangeEvent.CHANGE) );
         }
 
-        private function createDescriptionUpdateViews():void {
-            for each (var item:DescriptionListItemVO in properties) {
-                createNewDescriptionUpdateView(item);
-            }
-        }
-
-        private function createNewDescriptionUpdateView(item:DescriptionListItemVO):void {
-            var descriptionUpdateView:DescriptionUpdateView = new DescriptionUpdateView();
+        private function createNewDescriptionUpdateView( item : DescriptionListItemVO ) : DescriptionUpdateView
+        {
+            var descriptionUpdateView : DescriptionUpdateView = new DescriptionUpdateView();
 
             item.descriptionUpdateView = descriptionUpdateView;
 
-            descriptionsStack.addChild(descriptionUpdateView);
+            descriptionsStack.addChild( descriptionUpdateView );
 
-            var updateDescriptionEvent:UpdateDescriptionEvent = new UpdateDescriptionEvent(UpdateDescriptionEvent.DESCRIPTIONS_GET_LATEX_VALUES);
-            updateDescriptionEvent.descriptionUpdateView = descriptionUpdateView;
-            updateDescriptionEvent.propertyVO = item.data;
-
-            dispatchEvent(updateDescriptionEvent);
+            return descriptionUpdateView;
         }
 
-        private function btnSelectAll_clickHandler(event:MouseEvent):void {
-            checkAllProperties(true);
+        private function btnSelectAll_clickHandler( event : MouseEvent ) : void
+        {
+            checkAllProperties( true );
         }
 
-        private function btnDeselectAll_clickHandler(event:MouseEvent):void {
-            checkAllProperties(false);
+        private function btnDeselectAll_clickHandler( event : MouseEvent ) : void
+        {
+            checkAllProperties( false );
         }
 
-        private function btnUpdate_clickHandler(event:MouseEvent):void {
-            if (!checkedProperties || checkedProperties.length < 1) {
-                Alert.show("No selected items.", "Notification", Alert.OK, this);
+        private function btnUpdate_clickHandler( event : MouseEvent ) : void
+        {
+            if ( !checkedProperties || checkedProperties.length < 1 )
+            {
+                Alert.show( "No selected items.", "Notification", Alert.OK, this );
                 return;
             }
 
-            dispatchEvent(new Event("updateClick"));
+            dispatchEvent( new Event( "updateClick" ) );
         }
 
-        private function propertiesList_changeHandler(event:IndexChangeEvent):void {
+        private function propertiesList_changeHandler( event : IndexChangeEvent ) : void
+        {
 
-            var selectedItem:DescriptionListItemVO = propertiesList.selectedItem;
+            var selectedItem : DescriptionListItemVO = propertiesList.selectedItem;
 
-            if (!selectedItem) {
+            if ( !selectedItem )
+            {
                 descriptionsStack.visible = false;
                 return;
             }
 
-            var descriptionView:DescriptionUpdateView = selectedItem.descriptionUpdateView;
+            var descriptionView : DescriptionUpdateView = selectedItem.descriptionUpdateView || createNewDescriptionUpdateView(selectedItem);
 
-            if (!descriptionView) {
+            if ( !descriptionView )
+            {
                 descriptionsStack.visible = false;
                 return;
             }
+
+            descriptionView.oldValue = selectedItem.oldValue;
+            descriptionView.newValue = selectedItem.newValue;
 
             descriptionsStack.visible = true;
             descriptionsStack.selectedChild = descriptionView;
 
         }
 
-        private function btnClose_clickHandler(event:MouseEvent):void {
-            dispatchEvent(new Event("closeClick"));
+        private function btnClose_clickHandler( event : MouseEvent ) : void
+        {
+            dispatchEvent( new Event( "closeClick" ) );
         }
         ]]>
 	</fx:Script>

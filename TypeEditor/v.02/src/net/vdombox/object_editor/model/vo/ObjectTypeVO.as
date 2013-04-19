@@ -83,10 +83,10 @@ import mx.collections.ArrayCollection;
 
         public function get firstContainerActions() : ArrayCollection
         {
-            if (!actionContainers)
+            if (!actionContainers || actionContainers.length < 1)
                 return null;
 
-            var firstContainer : ActionsContainerVO = actionContainers[0]["data"];
+			var firstContainer : ActionsContainerVO = actionContainers[0]["data"];
 
             if (!firstContainer)
                 return null;
