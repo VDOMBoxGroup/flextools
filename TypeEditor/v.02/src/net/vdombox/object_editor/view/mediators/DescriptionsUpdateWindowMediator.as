@@ -190,7 +190,7 @@ public class DescriptionsUpdateWindowMediator extends Mediator implements IMedia
                 return "";
 
             if (!attributeItem.descriptionUpdateView)
-                return getPropertyLaTexDescription( attributeItem.data as AttributeVO );
+                return getPropertyLaTexDescription( attributeItem.data as BaseVO );
 
             return attributeItem.descriptionUpdateView.newValue;
         }
