@@ -4,18 +4,12 @@
     <configurations>
       <configuration name="ide_lib" target-platform="Desktop" output-type="Library" output-file="ide_lib.swc" output-folder="$MODULE_DIR$/bin">
         <dependencies>
-          <entries>
-            <entry library-name="ide_lib" library-level="application">
-              <dependency linkage="Merged" />
-            </entry>
-          </entries>
           <sdk name="4.9.0" />
         </dependencies>
         <compiler-options>
           <map>
             <entry key="compiler.locale" value="en_US" />
           </map>
-          <option name="additionalOptions" value="-load-externs=report.xml" />
         </compiler-options>
         <packaging-air-desktop />
         <packaging-android />

@@ -8,7 +8,7 @@
             <entry library-id="e6400437-2d9d-4f01-9d83-9c5bd49670a0">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-id="a4b7aba1-f220-4437-957a-84c8450313f6">
+            <entry library-name="air" library-level="application">
               <dependency linkage="Merged" />
             </entry>
           </entries>
@@ -46,17 +46,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library type="flex">
-        <properties id="a4b7aba1-f220-4437-957a-84c8450313f6" />
-        <CLASSES>
-          <root url="file://C:/Program Files (x86)/Adobe/skds/4.9.0/frameworks/libs/air" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://C:/Program Files (x86)/Adobe/skds/4.9.0/frameworks/libs/air" recursive="false" />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" exported="" name="air" level="application" />
   </component>
 </module>
 

@@ -1,135 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <common:VIModule xmlns:fx="http://ns.adobe.com/mxml/2009"
-				 xmlns:common="net.vdombox.ide.common.*">
+                 xmlns:mx="library://ns.adobe.com/flex/halo"
+                 xmlns:s="library://ns.adobe.com/flex/spark"
+                 xmlns:common="net.vdombox.ide.common.*">
 
-	<fx:Style>
-		@namespace s "library://ns.adobe.com/flex/spark";
-		@namespace mx "library://ns.adobe.com/flex/halo";
-		@namespace common "net.vdombox.ide.common.*";
-		@namespace mx1 "library://ns.adobe.com/flex/mx";
-		
-		mx1|ScrollBar
-		{
-			cornerRadius : 4;
-			fillColors  : #707070, #909090;
-			gripColor  : #323232;
-			
-			downArrowUpSkin: ClassReference(null);
-			downArrowOverSkin: ClassReference(null);
-			downArrowDownSkin: ClassReference(null);
-			
-			upArrowUpSkin: ClassReference(null);
-			upArrowOverSkin: ClassReference(null);
-			upArrowDownSkin: ClassReference(null);
-			
-			up-arrow-skin: ClassReference(null);
-			down-arrow-skin: ClassReference(null);
-			
-			
-			
-			trackSkin: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMMXHScrollTrackSkin");  
-			
-			thumbSkin : ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMMXHScrollTrumbSkin");
-		}
-		
-		s|VScrollBar
-		{	
-			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMVScrollBarSkin");  
-		}
-		
-		s|HScrollBar
-		{	
-			skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMHScrollBarSkin");  
-		}
-		
-	</fx:Style>
+    <fx:Style>
+        @namespace s "library://ns.adobe.com/flex/spark";
+        @namespace mx "library://ns.adobe.com/flex/halo";
+        @namespace common "net.vdombox.ide.common.*";
+        @namespace mx1 "library://ns.adobe.com/flex/mx";
 
-	<fx:Script>
+        mx1|ScrollBar
+        {
+            cornerRadius : 4;
+            fillColors  : #707070, #909090;
+            gripColor  : #323232;
+
+            downArrowUpSkin: ClassReference(null);
+            downArrowOverSkin: ClassReference(null);
+            downArrowDownSkin: ClassReference(null);
+
+            upArrowUpSkin: ClassReference(null);
+            upArrowOverSkin: ClassReference(null);
+            upArrowDownSkin: ClassReference(null);
+
+            up-arrow-skin: ClassReference(null);
+            down-arrow-skin: ClassReference(null);
+
+
+
+            trackSkin: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMMXHScrollTrackSkin");
+
+            thumbSkin : ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMMXHScrollTrumbSkin");
+        }
+
+        s|VScrollBar
+        {
+            skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMVScrollBarSkin");
+        }
+
+        s|HScrollBar
+        {
+            skinClass: ClassReference("net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMHScrollBarSkin");
+        }
+
+    </fx:Style>
+
+    <fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.common.controller.Notifications;
-			import net.vdombox.ide.common.model.SettingsProxy;
-			import net.vdombox.ide.modules.events.ApplicationFacade;
+        import net.vdombox.ide.common.controller.Notifications;
+        import net.vdombox.ide.common.model.SettingsProxy;
+        import net.vdombox.ide.modules.events.ApplicationFacade;
 
-			public static const MODULE_ID : String = "net.vdombox.ide.modules.Events";
+        public static const MODULE_ID : String = "net.vdombox.ide.modules.Events";
 
-			public static const MODULE_NAME : String = "Events";
+        public static const MODULE_NAME : String = "Events";
 
-			public static const VERSION : String = "0.0.1";
+        public static const VERSION : String = "0.0.1";
 
-			public static const TEAR_DOWN : String = "tearDown";
+        public static const TEAR_DOWN : String = "tearDown";
 
-			override public function tearDown() : void
-			{
-				dispatchEvent( new Event( TEAR_DOWN ) );
-			}
+        override public function tearDown() : void
+        {
+            dispatchEvent( new Event( TEAR_DOWN ) );
+        }
 
-			override public function get moduleID() : String
-			{
-				return MODULE_ID;
-			}
+        override public function get moduleID() : String
+        {
+            return MODULE_ID;
+        }
 
-			override public function get moduleName() : String
-			{
-				return MODULE_NAME;
-			}
+        override public function get moduleName() : String
+        {
+            return MODULE_NAME;
+        }
 
-			override public function get version() : String
-			{
-				return MODULE_NAME;
-			}
+        override public function get version() : String
+        {
+            return MODULE_NAME;
+        }
 
-			override public function get hasToolset() : Boolean
-			{
-				return true;
-			}
+        override public function get hasToolset() : Boolean
+        {
+            return true;
+        }
 
-			override public function get hasSettings() : Boolean
-			{
-				return false;
-			}
+        override public function get hasSettings() : Boolean
+        {
+            return false;
+        }
 
-			override public function get hasBody() : Boolean
-			{
-				return true;
-			}
+        override public function get hasBody() : Boolean
+        {
+            return true;
+        }
 
-			/**
-			 * Called by the Core (VdomIDE) after initializing this module.
-			 */
-			override public function startup() : void
-			{
-				facade = ApplicationFacade.getInstance( MODULE_ID );
-				ApplicationFacade( facade ).startup( this );
-			}
+        /**
+         * Called by the Core (VdomIDE) after initializing this module.
+         */
+        override public function startup() : void
+        {
+            facade = ApplicationFacade.getInstance( MODULE_ID );
+            ApplicationFacade( facade ).startup( this );
+        }
 
-			override public function getToolset() : void
-			{
-				facade.sendNotification( Notifications.CREATE_TOOLSET );
-			}
+        override public function getToolset() : void
+        {
+            facade.sendNotification( Notifications.CREATE_TOOLSET );
+        }
 
-			override public function getSettingsScreen() : void
-			{
-				facade.sendNotification( Notifications.CREATE_SETTINGS_SCREEN );
-			}
+        override public function getSettingsScreen() : void
+        {
+            facade.sendNotification( Notifications.CREATE_SETTINGS_SCREEN );
+        }
 
-			/**
-			 * Called by the Core (VdomIDE) after select this module.
-			 */
-			override public function getBody() : void
-			{
-				facade.sendNotification( Notifications.CREATE_BODY );
-				facade.sendNotification( Notifications.MODULE_SELECTED )
-			}
+        /**
+         * Called by the Core (VdomIDE) after select this module.
+         */
+        override public function getBody() : void
+        {
+            facade.sendNotification( Notifications.CREATE_BODY );
+            facade.sendNotification( Notifications.MODULE_SELECTED )
+        }
 
-			override public function deSelect() : void
-			{
-				facade.sendNotification( Notifications.MODULE_DESELECTED );
-			}
+        override public function deSelect() : void
+        {
+            facade.sendNotification( Notifications.MODULE_DESELECTED );
+        }
 
-			override public function initializeSettings() : void
-			{
-				facade.sendNotification( SettingsProxy.INITIALIZE_SETTINGS );
-			}
-		]]>
+        override public function initializeSettings() : void
+        {
+            facade.sendNotification( SettingsProxy.INITIALIZE_SETTINGS );
+        }
+        ]]>
 	</fx:Script>
 </common:VIModule>
