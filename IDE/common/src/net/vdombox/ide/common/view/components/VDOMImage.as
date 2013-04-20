@@ -3,9 +3,13 @@ package net.vdombox.ide.common.view.components
 
 	public class VDOMImage
 	{
+        public function VDOMImage()
+        {
+
+        }
 
 		[Bindable]
-		[Embed( source = "/assets/vdomimage/Delete.png" )]
+		[Embed( source="/assets/vdomimage/delete.png" )]
 		public static var Delete : Class;
 
 		[Bindable]
