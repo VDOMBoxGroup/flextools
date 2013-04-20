@@ -30,7 +30,6 @@ package net.vdombox.ide.modules.dataBase.view.components
 			this.setStyle( "headerBackgroundSkin", DataGridHeaderBackgroundSkin );
 			this.setStyle( "columnDropIndicatorSkin", DataGridColumnDropIndicator );
 			this.setStyle( "columnResizeSkin", DataGridColumnResizeSkin );
-			this.setStyle( "headerSeparatorSkin", DataGridHeaderSeparator );
 
 			this.setStyle( "headerColors", [ 0xFFFFFF, 0xE6E6E6 ] );
 			this.setStyle( "stretchCursor", stretchCursor );

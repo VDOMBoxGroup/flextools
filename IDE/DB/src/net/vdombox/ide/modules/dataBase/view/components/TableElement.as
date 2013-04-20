@@ -43,20 +43,30 @@ package net.vdombox.ide.modules.dataBase.view.components
 			minHeight = 200;
 			minWidth = 150;
 
-			contextMenu = new ContextMenu();
+			contextMenu = createContextMenu();
 
-			var newItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'DataBase_General', 'table_element_rename' ) );
-			newItem.addEventListener( Event.SELECT, newSubItemSelectHandler, false, 0, true );
-//			contextMenu.addItem( newItem );
 
-			var gotoItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'DataBase_General', 'table_element_go_to_table' ) );
-			gotoItem.addEventListener( Event.SELECT, gotoItemSelectHandler, false, 0, true );
-//			contextMenu.addItem( gotoItem );
-
-			var delItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'DataBase_General', 'table_element_delete' ) );
-			delItem.addEventListener( Event.SELECT, delItemSelectHandler, false, 0, true );
-//			contextMenu.addItem( delItem );
 		}
+
+        private function createContextMenu():ContextMenu
+        {
+
+            var editContextMenu:ContextMenu = new ContextMenu();
+
+            var newItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'DataBase_General', 'table_element_rename' ) );
+            newItem.addEventListener( Event.SELECT, newSubItemSelectHandler, false, 0, true );
+            editContextMenu.customItems.push( newItem );
+
+            var gotoItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'DataBase_General', 'table_element_go_to_table' ) );
+            gotoItem.addEventListener( Event.SELECT, gotoItemSelectHandler, false, 0, true );
+            editContextMenu.customItems.push( gotoItem );
+
+            var delItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'DataBase_General', 'table_element_delete' ) );
+            delItem.addEventListener( Event.SELECT, delItemSelectHandler, false, 0, true );
+            editContextMenu.customItems.push( delItem );
+
+            return editContextMenu;
+        }
 
 		private function newSubItemSelectHandler( event : Event ) : void
 		{

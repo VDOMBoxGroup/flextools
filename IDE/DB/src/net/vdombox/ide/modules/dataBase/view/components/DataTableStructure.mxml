@@ -88,7 +88,7 @@
 				currentState = "Progress";
 			}
 
-			private function queueOKHandler( message : String ) : void
+			private function queueOKHandler() : void
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOKHandler );
 				currentState = "Result";
@@ -317,7 +317,10 @@
 						 alpha.Result="1"
 						 alpha.Progress="0.4"
 						 doubleClickEnabled="true"
-						 doubleClick="dataTable_doubleClickHandler(event)">
+						 doubleClick="dataTable_doubleClickHandler(event)"
+                    headerBackgroundSkin="mx.skins.spark.DataGridHeaderBackgroundSkin"
+                    headerSeparatorSkin="mx.skins.halo.DataGridHeaderSeparator"
+                    >
 				<mx:columns>
 					<mx:DataGridColumn dataField="name"
 									   headerText="Name"/>

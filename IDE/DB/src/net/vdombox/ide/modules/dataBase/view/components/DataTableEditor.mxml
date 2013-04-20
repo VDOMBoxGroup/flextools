@@ -5,10 +5,8 @@
 					  width="400"
 					  height="300"
 					  implements="net.vdombox.ide.modules.dataBase.interfaces.IEditor"
-					  xmlns:components="net.vdombox.components.*"
 					  xmlns:components1="net.vdombox.ide.modules.dataBase.view.components.*"
 					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)"
-					  xmlns:toolBoxComponents="net.vdombox.ide.modules.dataBase.view.components.toolBoxComponents.*"
 					  xmlns:button="net.vdombox.ide.common.view.components.button.*"
 					  skinClass="spark.skins.spark.SkinnableContainerSkin">
 
@@ -821,7 +819,8 @@
 											  alpha.Result="1"
 											  alpha.Progress="0.4"
 											  doubleClick="dataTable_doubleClickHandler(event)"
-											  borderVisible="false"/>
+											  borderVisible="false"
+                    />
 
 			<mx:Image source="@Embed('/assets/spinner.swf')"
 					  width="100%"

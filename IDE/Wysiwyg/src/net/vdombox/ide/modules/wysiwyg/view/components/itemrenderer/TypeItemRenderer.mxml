@@ -21,7 +21,7 @@
 
 
 			[Bindable]
-			private var typeName : String
+			private var typeName : String;
 
 			[Bindable]
 			private var _resourceVO : ResourceVO;
@@ -52,32 +52,38 @@
 
 				_typeVO = value as TypeVO;
 
-				typeName = value ? value.displayName : ""
+				typeName = value ? value.displayName : "";
 
 				super.data = value;
 
-				if ( !contextMenu )
-					contextMenu = new ContextMenu();
-
-//				contextMenu.removeAllItems();
-
-				if ( _typeVO.includedInUserCategory )
-				{
-					var delItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_del_in_user" ) );
-					delItem.addEventListener( Event.SELECT, delContextMenuHandler, false, 0, true );
-//					contextMenu.addItem( delItem );
-				}
-				else
-				{
-					var addItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_add_in_user" ) );
-					addItem.addEventListener( Event.SELECT, addContextMenuHandler, false, 0, true );
-//					contextMenu.addItem( addItem );
-				}
+				contextMenu = createContextMenu();
 
 				dispatchEvent( new TypeItemRendererEvent( TypeItemRendererEvent.DATA_CHANGE ) );
 			}
 
-			override public function set selected( value : Boolean ) : void
+            private function createContextMenu():ContextMenu
+            {
+
+                var editContextMenu:ContextMenu = new ContextMenu();
+
+                if ( _typeVO.includedInUserCategory )
+                {
+                    var delItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_del_in_user" ) );
+                    delItem.addEventListener( Event.SELECT, delContextMenuHandler, false, 0, true );
+					editContextMenu.customItems.push( delItem );
+                }
+                else
+                {
+                    var addItem : ContextMenuItem = new ContextMenuItem( resourceManager.getString( 'Wysiwyg_General', "toolbox_panel_add_in_user" ) );
+                    addItem.addEventListener( Event.SELECT, addContextMenuHandler, false, 0, true );
+					editContextMenu.customItems.push( addItem );
+                }
+
+                return editContextMenu;
+            }
+
+
+            override public function set selected( value : Boolean ) : void
 			{
 				super.selected = value;
 

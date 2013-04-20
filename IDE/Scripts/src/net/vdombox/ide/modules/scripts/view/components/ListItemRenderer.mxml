@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:s="library://ns.adobe.com/flex/spark"
-				xmlns:mx="library://ns.adobe.com/flex/mx"
 				autoDrawBackground="true"
 				minHeight="22"
 				width="100%"
@@ -22,33 +21,37 @@
 
 			private var renameItem : ContextMenuItem;
 
-			private var deleteItem : ContextMenuItem
+			private var deleteItem : ContextMenuItem;
 
 			override public function set data( value : Object ) : void
 			{
 				super.data = value;
 
-				if ( !contextMenu )
-					contextMenu = new ContextMenu();
-
-//				contextMenu.removeAllItems();
-
-				if ( value && value is ServerActionVO )
-				{
-					if ( value.script == "" )
-						itemName.setStyle( "color", 0x00FF00 );
-					else
-						itemName.setStyle( "color", 0xFFFFFF );
-
-					renameItem = new ContextMenuItem( "Rename" );
-					renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );
-//					contextMenu.addItem( renameItem );
-				}
-
-				deleteItem = new ContextMenuItem( "Delete" );
-				deleteItem.addEventListener( Event.SELECT, deleteContextMenuHandler, false, 0, true );
-//				contextMenu.addItem( deleteItem );
+                contextMenu = createContextMenu( value );
 			}
+
+            private function createContextMenu( value : Object ) : ContextMenu
+            {
+                var editContextMenu:ContextMenu = new ContextMenu();
+
+                if ( value && value is ServerActionVO )
+                {
+                    if ( value.script == "" )
+                        itemName.setStyle( "color", 0x00FF00 );
+                    else
+                        itemName.setStyle( "color", 0xFFFFFF );
+
+                    renameItem = new ContextMenuItem( "Rename" );
+                    renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );
+					editContextMenu.customItems.push( renameItem );
+                }
+
+                deleteItem = new ContextMenuItem( "Delete" );
+                deleteItem.addEventListener( Event.SELECT, deleteContextMenuHandler, false, 0, true );
+				editContextMenu.customItems.push( deleteItem );
+
+                return editContextMenu;
+            }
 
 			private function renameContextMenuHandler( event : Event ) : void
 			{

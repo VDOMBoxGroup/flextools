@@ -6,7 +6,6 @@
 			 removedFromStage="sparkskin1_removedFromStageHandler(event)"
 			 doubleClick="sparkskin1_doubleClickHandler(event)"
 			 doubleClickEnabled="true"
-			 xmlns:components="net.vdombox.components.*"
 			 xmlns:components1="net.vdombox.ide.common.view.components.*">
 	<!-- host component -->
 	<fx:Metadata>
@@ -85,7 +84,7 @@
 							 bottom="0"
 							 color="#505050"
 							 left="0"
-							 right="0"
+                             right="0"
 							 top="0"
 							 alpha="0.63"
 							 angle="45"

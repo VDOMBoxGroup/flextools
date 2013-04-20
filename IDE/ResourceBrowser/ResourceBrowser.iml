@@ -3,12 +3,12 @@
   <component name="FlexBuildConfigurationManager" active="ResourceBrowser">
     <configurations>
       <configuration name="ResourceBrowser" main-class="net.vdombox.ide.modules.ResourceBrowser" output-file="ResourceBrowser.swf" output-folder="$MODULE_DIR$/../core/src/modules/ResourceBrowser">
-        <dependencies target-player="11.5" framework-linkage="Merged">
+        <dependencies target-player="11.5">
           <entries>
-            <entry library-name="air" library-level="application">
+            <entry module-name="ide_lib" build-configuration-name="ide_lib">
               <dependency linkage="Merged" />
             </entry>
-            <entry module-name="ide_lib" build-configuration-name="ide_lib">
+            <entry library-id="061bf2e0-1fd9-496c-9947-cf35f83a5eed">
               <dependency linkage="Merged" />
             </entry>
           </entries>
@@ -18,7 +18,6 @@
           <map>
             <entry key="compiler.locale" value="en_US&#10;fr_FR&#10;ru_RU" />
           </map>
-          <option name="additionalOptions" value="-load-externs=report.xml" />
         </compiler-options>
         <packaging-air-desktop />
         <packaging-android />
@@ -37,8 +36,18 @@
     </content>
     <orderEntry type="jdk" jdkName="4.9.0" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="air" level="application" />
-    <orderEntry type="module" module-name="ide_lib" exported="" />
+    <orderEntry type="module" module-name="ide_lib" />
+    <orderEntry type="module-library">
+      <library type="flex">
+        <properties id="061bf2e0-1fd9-496c-9947-cf35f83a5eed" />
+        <CLASSES>
+          <root url="file://C:/Program Files (x86)/Adobe/skds/4.9.0/frameworks/libs/air" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://C:/Program Files (x86)/Adobe/skds/4.9.0/frameworks/libs/air" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
 
