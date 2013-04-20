@@ -38,6 +38,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="air" level="application" />
     <orderEntry type="module" module-name="ide_lib" exported="" />
+    <orderEntry type="module" module-name="ide_lib" />
   </component>
 </module>
 
