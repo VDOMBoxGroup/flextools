@@ -64,6 +64,7 @@
 		<s:Label text="Sort "/>
 
 		<s:ComboBox id="cmbColumns"
+                    skinClass="spark.skins.spark.ComboBoxSkin"
 					dataProvider="{columns}"
 					change="cmbColumns_changeHandler(event)"/>
 

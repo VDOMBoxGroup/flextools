@@ -35,6 +35,7 @@
 	</fx:Script>
 	<s:DropDownList id="types"
 					change="types_changeHandler(event)"
+                    skinClass="spark.skins.spark.DropDownListSkin"
 					minWidth="30"
 					width="100%">
 		<s:dataProvider>

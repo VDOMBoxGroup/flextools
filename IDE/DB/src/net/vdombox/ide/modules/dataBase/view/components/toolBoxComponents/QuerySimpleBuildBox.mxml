@@ -183,6 +183,7 @@
 				  verticalAlign="middle">
 			<s:Button id="apply"
 					  label="Apply"
+                      skinClass="spark.skins.spark.ButtonSkin"
 					  click="apply_clickHandler(event)"/>
 
 			<button:WorkAreaButton id="addNew"

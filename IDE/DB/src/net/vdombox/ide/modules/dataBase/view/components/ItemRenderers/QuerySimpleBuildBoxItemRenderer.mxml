@@ -117,18 +117,21 @@
 					selected="true"/>
 
 		<s:DropDownList id="cmbBetween"
+                        skinClass="spark.skins.spark.DropDownListSkin"
 						dataProvider="{between}"
 						width="70"/>
 
 		<s:DropDownList id="cmbColumns"
+                        skinClass="spark.skins.spark.DropDownListSkin"
 						dataProvider="{columns}"
 						width="150"/>
 
 		<s:DropDownList id="cmbOperators"
+                        skinClass="spark.skins.spark.DropDownListSkin"
 						dataProvider="{operators}"
 						width="60"/>
 
-		<s:TextInput id="txtValue"/>
+		<s:TextInput id="txtValue" skinClass="spark.skins.spark.TextInputSkin"/>
 
 		<button:WorkAreaButton id="up"
 							   width="20"

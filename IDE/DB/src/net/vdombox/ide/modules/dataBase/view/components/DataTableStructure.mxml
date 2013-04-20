@@ -88,7 +88,7 @@
 				currentState = "Progress";
 			}
 
-			private function queueOKHandler() : void
+			private function queueOKHandler( message : String ) : void
 			{
 				queue.removeEventListener( QueueEvent.QUEUE_COMPLETE, queueOKHandler );
 				currentState = "Result";
