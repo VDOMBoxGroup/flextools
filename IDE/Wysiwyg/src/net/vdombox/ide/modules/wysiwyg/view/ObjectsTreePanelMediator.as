@@ -328,7 +328,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					}
 
 					if ( elementsForSelection.length > 0 )
-						objectsTreePanel.objectsTree.selectedItems = elementsForSelection;
+						//objectsTreePanel.objectsTree.selectedItems = elementsForSelection;
 
 					break;
 				}

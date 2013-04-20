@@ -3,6 +3,7 @@
 				  xmlns:fx="http://ns.adobe.com/mxml/2009"
 				  xmlns:mx="library://ns.adobe.com/flex/mx"
 				  xmlns:s="library://ns.adobe.com/flex/spark"
+                  xmlns:sparkTree="com.sparkTree.*"
 				  creationComplete="creationCompleteHandler()">
 
 	<fx:Script>
@@ -11,6 +12,7 @@
         import flash.desktop.ClipboardFormats;
 
         import mx.collections.SortField;
+        import mx.collections.XMLListCollection;
         import mx.controls.listClasses.ListBaseContentHolder;
         import mx.events.FlexEvent;
         import mx.events.ListEvent;
@@ -22,17 +24,34 @@
 
         private var _pages:XMLList;
 
+        private var _pagesList:XMLListCollection;
+
+
         private var lastHighlightedItem:XML;
 
         private var isMiddleDown:Boolean;
 
         [Bindable]
-        public function get pages():XMLList {
+        public function get pages():XMLList
+        {
             return _pages;
         }
 
-        public function set pages(value:XMLList):void {
+        public function set pages(value:XMLList):void
+        {
             _pages = value;
+            pagesList = new XMLListCollection( value );
+        }
+
+        [Bindable]
+        public function get pagesList():XMLListCollection
+        {
+            return _pagesList;
+        }
+
+        public function set pagesList(value:XMLListCollection):void
+        {
+            _pagesList = value;
         }
 
         private function updateChildren(parent:XML, oldChild:XMLList, newChild:XMLList):void {
@@ -193,7 +212,7 @@
         }
 
         public function get selectedItems():Array {
-            return objectsTree.selectedItems;
+            return new Array()//objectsTree.selectedItems;
         }
 
         private var elementForSelection:XML;
@@ -271,7 +290,7 @@
             var index:int = objectsTree.selectedIndex;
             var newVPos:int;
 
-            objectsTree.scrollToIndex(index);
+           // objectsTree.scrollToIndex(index);
 
             // claculate new index scroll to
             /*
@@ -305,8 +324,8 @@
             objectsTree.addEventListener(ListEvent.ITEM_ROLL_OVER, objectsTree_highlightChangeHandler, false, 0, true);
             objectsTree.addEventListener(ListEvent.ITEM_ROLL_OUT, objectsTree_highlightChangeHandler, false, 0, true);
 
-            objectsTree.setStyle("disclosureOpenIcon", VDOMImage.Opened_Tree_Icon);
-            objectsTree.setStyle("disclosureClosedIcon", VDOMImage.Closed_Tree_Icon);
+           /* objectsTree.setStyle("disclosureOpenIcon", VDOMImage.Opened_Tree_Icon);
+            objectsTree.setStyle("disclosureClosedIcon", VDOMImage.Closed_Tree_Icon);  */
 
             tbFill.height = 30;
             //objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_UP, objectsTree_mouseHandler, false, 0, true );
@@ -433,26 +452,26 @@
 		</s:fill>
 	</s:Rect>
 
-	<mx:Image source="{VDOMImage.Plus}"
+	<s:Image source="{VDOMImage.Plus}"
 			  width="20"
 			  height="20"
 			  top="-23"
 			  right="10"
-			  smoothBitmapContent="true"
+              skinClass="spark.skins.spark.ImageSkin"
+			  smooth="true"
 			  click="image1_clickHandler(event)"/>
 
-	<mx:Tree id="objectsTree"
+	<sparkTree:Tree id="objectsTree"
 			 borderVisible="false"
-			 maxHorizontalScrollPosition="140"
 			 horizontalScrollPolicy="auto"
-			 dataProvider="{ pages }"
+			 dataProvider="{ pagesList }"
 			 doubleClickEnabled="true"
 			 height="100%"
 			 labelField="@name"
-			 showRoot="true"
 			 width="100%"
 			 allowMultipleSelection="true"
 			 contentBackgroundAlpha="0"
+             skinClass="spark.skins.spark.ListSkin"
 			 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.itemrenderer.ObjectTreePanelItemRenderer"
 			 contextMenu="objectsTree_contextMenuHandler(event)"/>
 

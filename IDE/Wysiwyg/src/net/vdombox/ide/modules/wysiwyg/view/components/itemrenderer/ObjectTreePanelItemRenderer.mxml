@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:MXTreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+<sparkTree:TreeItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  xmlns:components="net.vdombox.ide.common.view.components.*"
+                      xmlns:sparkTree="com.sparkTree.*"
 					  height="25"
 					  minWidth="200"
 					  contentBackgroundAlpha="0"
 					  keyDown="mxtreeitemrenderer1_keyDownHandler(event)">
-
-	<s:states>
-		<s:State name="normal"/>
-		<s:State name="hovered"/>
-		<s:State name="selected"/>
-	</s:states>
 
 	<fx:Script>
 		<![CDATA[
@@ -303,11 +298,7 @@
 			top="-2"
 			bottom="-2">
 		<s:fill>
-			<s:SolidColor id="rectColor"
-						  color.normal="#3A3A3A"
-						  color.hovered="#00000A"
-						  alpha.hovered="0.8"
-						  color.selected="#00000A"/>
+			<s:SolidColor id="rectColor"/>
 		</s:fill>
 	</s:Rect>
 
@@ -323,23 +314,21 @@
 				  verticalAlign="middle">
 
 			<s:Rect id="indentationSpacer"
-					width="{treeListData.indent}"
 					percentHeight="100">
 				<s:fill>
 					<s:SolidColor color="#585858"/>
 				</s:fill>
 			</s:Rect>
 
-			<s:Group id="disclosureGroup">
+			<!--<s:Group id="disclosureGroup">
 				<s:BitmapImage source="{treeListData.disclosureIcon}"
 							   visible="{treeListData.hasChildren}"/>
-			</s:Group>
+			</s:Group>  -->
 
 			<s:BitmapImage id="componentIcon"/>
 
 			<s:TextInput id="labelField"
 						 color="#FFFFFF"
-						 text="{treeListData.label}"
 						 paddingTop="2"
 						 editable="false"
 						 width="100%"
@@ -398,4 +387,4 @@
 		</s:stroke>
 	</s:Line>
 
-</s:MXTreeItemRenderer>
+</sparkTree:TreeItemRenderer>
