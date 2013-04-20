@@ -161,6 +161,9 @@
 
 			protected function group1_creationCompleteHandler( event : FlexEvent ) : void
 			{
+                findResultTree.setStyle( "disclosureOpenIcon", VDOMImage.Opened_Tree_Icon );
+                findResultTree.setStyle( "disclosureClosedIcon", VDOMImage.Closed_Tree_Icon );
+
 				dispatchEvent( new FindBoxEvent( FindBoxEvent.CREATION_COMPLETE ) );
 			}
 
