@@ -2,23 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="8f9a5422-5edf-4986-b78b-45d5202af2ab" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/DB.iml" afterPath="$PROJECT_DIR$/DB/DB.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/Events.iml" afterPath="$PROJECT_DIR$/Events/Events.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/Events.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/Events.mxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Preview/Preview.iml" afterPath="$PROJECT_DIR$/Preview/Preview.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ResourceBrowser/ResourceBrowser.iml" afterPath="$PROJECT_DIR$/ResourceBrowser/ResourceBrowser.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/Scripts.iml" afterPath="$PROJECT_DIR$/Scripts/Scripts.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/VdomIDE.iml" afterPath="$PROJECT_DIR$/core/VdomIDE.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/ide_lib.iml" afterPath="$PROJECT_DIR$/common/ide_lib.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectsTreePanel.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectsTreePanel.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report.xml" afterPath="$PROJECT_DIR$/report.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="VdomIDE.IDEA.SDK.4.9.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/fragment.js2" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366443900019" ignored="false" />
+    <file path="/fragment.js2" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366450521568" ignored="false" />
     <file path="/VdomIDE.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366008375749" ignored="false" />
-    <file path="/DummyFile.xpath" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366014819678" ignored="false" />
-    <file path="/a.dummy" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366194937772" ignored="false" />
+    <file path="/DummyFile.xpath" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366451084689" ignored="false" />
+    <file path="/a.dummy" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366445888558" ignored="false" />
     <file path="/ModulesProxy.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366011289022" ignored="false" />
     <file path="/DataBase.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366012685280" ignored="false" />
     <file path="/DataTableMediator.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366012931962" ignored="false" />
@@ -33,7 +27,7 @@
     <file path="/ToolBoxPanel.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366022248184" ignored="false" />
     <file path="/RichTextToolbar.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366022861013" ignored="false" />
     <file path="/WorkAreaSkin.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366024612879" ignored="false" />
-    <file path="/a.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366028313692" ignored="false" />
+    <file path="/a.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366450710782" ignored="false" />
     <file path="/Preview2.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366045183240" ignored="false" />
     <file path="$PROJECT_DIR$/../POWERPACK.IDEA/PowerPack_lib/src/net/vdombox/powerpack/lib/player/Player.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366095839622" ignored="false" />
     <file path="$PROJECT_DIR$/../POWERPACK.IDEA/Singularity/src/Singularity/demos/PV3D/SimpleSphere.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366096185808" ignored="false" />
@@ -47,6 +41,7 @@
     <file path="/StrToSQL.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366182861499" ignored="false" />
     <file path="$USER_HOME$/IdeaProjects/Krisiki/line to SQL/src/LinetoSQL.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366265143287" ignored="false" />
     <file path="/LinetoSQL.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366264914730" ignored="false" />
+    <file path="/ObjectsTreePanel.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366445947447" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +49,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CompilerWorkspaceConfiguration">
+    <option name="MAKE_PROJECT_ON_SAVE" value="true" />
+  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
@@ -110,7 +108,7 @@
       <file leaf-file-name="Events.mxml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/Events.mxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="35" selection-start="1321" selection-end="1321" vertical-scroll-proportion="0.0">
+            <state line="35" column="0" selection-start="1321" selection-end="1321" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -119,7 +117,7 @@
       <file leaf-file-name="BindingUtils.as" pinned="false" current="false" current-in-tab="false">
         <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/framework/src/mx/binding/utils/BindingUtils.as">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="200" column="39" selection-start="8371" selection-end="8371" vertical-scroll-proportion="0.0">
+            <state line="200" column="5" selection-start="8371" selection-end="8371" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -128,8 +126,9 @@
       <file leaf-file-name="ObjectTreePanelItemRenderer.mxml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/ObjectTreePanelItemRenderer.mxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="83" column="76" selection-start="1873" selection-end="1873" vertical-scroll-proportion="0.0">
+            <state line="83" column="29" selection-start="1873" selection-end="1873" vertical-scroll-proportion="0.0">
               <folding>
+                <marker date="1366443490303" expanded="false" signature="453:818" placeholder="..." />
                 <marker date="1366443490303" expanded="true" signature="1066:1098" placeholder="/** Self data ...*/" />
                 <marker date="1366443490303" expanded="true" signature="1257:1396" placeholder="{...}" />
                 <marker date="1366443490303" expanded="true" signature="1448:1477" placeholder="{...}" />
@@ -168,11 +167,115 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ExternalEditorWindow.as" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ExternalEditorWindow.as" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ExternalEditorWindow.as">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="50" selection-start="609" selection-end="609" vertical-scroll-proportion="0.1461318">
+            <state line="126" column="0" selection-start="3052" selection-end="3052" vertical-scroll-proportion="0.0">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UIComponent.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/framework/src/mx/core/UIComponent.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13159" column="0" selection-start="428893" selection-end="428893" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ListBase.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/spark/src/spark/components/supportClasses/ListBase.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1643" column="52" selection-start="56517" selection-end="56529" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModulesProxy.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="205" column="48" selection-start="5560" selection-end="5560" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ObjectsTreePanel.mxml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectsTreePanel.mxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="270" column="71" selection-start="7375" selection-end="7375" vertical-scroll-proportion="0.40356082">
+              <folding>
+                <marker date="1366451021227" expanded="true" signature="470:1016" placeholder="..." />
+                <marker date="1366451021227" expanded="true" signature="1277:1315" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="1385:1480" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="1569:1611" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="1695:1738" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="1851:3275" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="2046:2122" placeholder="/*...*/" />
+                <marker date="1366451021227" expanded="true" signature="2189:2351" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="2364:2369" placeholder="/*...*/" />
+                <marker date="1366451021227" expanded="true" signature="2383:2459" placeholder="/*...*/" />
+                <marker date="1366451021227" expanded="true" signature="2526:2873" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="2647:2859" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="2886:2891" placeholder="/*...*/" />
+                <marker date="1366451021227" expanded="true" signature="2905:2981" placeholder="/*...*/" />
+                <marker date="1366451021227" expanded="true" signature="3048:3245" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="3258:3263" placeholder="/*...*/" />
+                <marker date="1366451021227" expanded="true" signature="3354:4023" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="3782:4013" placeholder="/*...*/" />
+                <marker date="1366451021227" expanded="true" signature="4089:4344" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="4424:4838" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="4542:4615" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="4652:4667" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="4902:5709" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="5087:5102" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="5169:5227" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="5296:5671" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="5404:5657" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="5481:5584" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="5787:6221" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="5905:5978" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="6015:6030" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="6280:6343" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="6405:6475" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="6659:7107" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="6689:6889" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="6926:6942" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="6995:7097" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="7186:7602" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="7289:7453" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="7502:7518" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="7673:8128" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="7769:8117" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="8266:9144" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="8746:9134" placeholder="/*...*/" />
+                <marker date="1366451021227" expanded="true" signature="9211:9448" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="9316:9438" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="9517:10423" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="9981:10146" placeholder="/*...*/" />
+                <marker date="1366451021227" expanded="true" signature="10192:10413" placeholder="//..." />
+                <marker date="1366451021227" expanded="true" signature="10507:10604" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="10693:11004" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="10818:10905" placeholder="//..." />
+                <marker date="1366451021227" expanded="true" signature="11102:11302" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="11391:12550" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="11486:11651" placeholder="/*...*/" />
+                <marker date="1366451021227" expanded="true" signature="11879:11949" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="12025:12469" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="12197:12455" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="12274:12382" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="12636:12745" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="12833:12892" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="12989:13949" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="13251:13266" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="13296:13939" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="13495:13873" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="14018:14428" placeholder="{...}" />
+                <marker date="1366451021227" expanded="true" signature="14512:14610" placeholder="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -189,7 +292,6 @@
       <list>
         <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/ObjectTreePanelItemRenderer.mxml" />
         <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/TypeItemRenderer.mxml" />
-        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectsTreePanel.mxml" />
         <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/ImageToolbar.mxml" />
         <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/RichTextToolbar.mxml" />
         <option value="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as" />
@@ -203,6 +305,7 @@
         <option value="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/Toolset.mxml" />
         <option value="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/ToolsetButton.mxml" />
         <option value="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/Events.mxml" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectsTreePanel.mxml" />
       </list>
     </option>
   </component>
@@ -241,6 +344,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -251,13 +356,11 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="88" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="SDKs" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="88" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="34" />
     <property name="project.structure.proportion" value="0.15" />
@@ -287,7 +390,7 @@
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="304" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="options.lastSelected" value="project.propCompiler" />
+    <property name="options.lastSelected" value="preferences.sourceCode.ActionScript" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
@@ -820,38 +923,58 @@
     </task>
     <servers />
   </component>
+  <component name="TodoView" selected-index="0">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32914925" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32914925" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44072524" sideWeight="0.7790531" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.43933055" sideWeight="0.7790531" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="UML Diagrams" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.47698745" sideWeight="0.23385939" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.43933055" sideWeight="0.22094691" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.40864715" sideWeight="0.50143474" order="7" side_tool="false" content_ui="tabs" x="412" y="180" width="699" height="445" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.47698745" sideWeight="0.7661406" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.47698745" sideWeight="0.7661406" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32914925" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="PlantUML" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14275466" sideWeight="0.5230126" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6610879" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14275466" sideWeight="0.5606695" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42677826" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Graphical Navigator" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5228967" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.52022314" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -932,26 +1055,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/src/VdomIDE.mxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="603" selection-end="603" vertical-scroll-proportion="-4.8846154" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ActionElement.mxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="62" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/src/assets/popup_gripper.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/airspark/src/spark/components/Window.as">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2475" column="53" selection-start="69193" selection-end="69209" vertical-scroll-proportion="0.98582995" />
-      </provider>
-    </entry>
     <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/spark/src/spark/components/supportClasses/SkinnableComponent.as">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1219" column="93" selection-start="37457" selection-end="37457" vertical-scroll-proportion="0.59882003" />
@@ -994,15 +1097,51 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/Events.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="35" selection-start="1321" selection-end="1321" vertical-scroll-proportion="0.0">
+        <state line="35" column="0" selection-start="1321" selection-end="1321" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/framework/src/mx/binding/utils/BindingUtils.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="200" column="5" selection-start="8371" selection-end="8371" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ExternalEditorWindow.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="126" column="0" selection-start="3052" selection-end="3052" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/framework/src/mx/core/UIComponent.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13159" column="0" selection-start="428893" selection-end="428893" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/spark/src/spark/components/supportClasses/ListBase.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1643" column="52" selection-start="56517" selection-end="56529" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="205" column="48" selection-start="5560" selection-end="5560" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/ObjectTreePanelItemRenderer.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="76" selection-start="1873" selection-end="1873" vertical-scroll-proportion="0.0">
+        <state line="83" column="29" selection-start="1873" selection-end="1873" vertical-scroll-proportion="0.0">
           <folding>
+            <marker date="1366443490303" expanded="false" signature="453:818" placeholder="..." />
             <marker date="1366443490303" expanded="true" signature="1066:1098" placeholder="/** Self data ...*/" />
             <marker date="1366443490303" expanded="true" signature="1257:1396" placeholder="{...}" />
             <marker date="1366443490303" expanded="true" signature="1448:1477" placeholder="{...}" />
@@ -1040,17 +1179,78 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/framework/src/mx/binding/utils/BindingUtils.as">
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectsTreePanel.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="200" column="39" selection-start="8371" selection-end="8371" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ExternalEditorWindow.as">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="50" selection-start="609" selection-end="609" vertical-scroll-proportion="0.1461318">
-          <folding />
+        <state line="270" column="71" selection-start="7375" selection-end="7375" vertical-scroll-proportion="0.40356082">
+          <folding>
+            <marker date="1366451021227" expanded="true" signature="470:1016" placeholder="..." />
+            <marker date="1366451021227" expanded="true" signature="1277:1315" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="1385:1480" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="1569:1611" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="1695:1738" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="1851:3275" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="2046:2122" placeholder="/*...*/" />
+            <marker date="1366451021227" expanded="true" signature="2189:2351" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="2364:2369" placeholder="/*...*/" />
+            <marker date="1366451021227" expanded="true" signature="2383:2459" placeholder="/*...*/" />
+            <marker date="1366451021227" expanded="true" signature="2526:2873" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="2647:2859" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="2886:2891" placeholder="/*...*/" />
+            <marker date="1366451021227" expanded="true" signature="2905:2981" placeholder="/*...*/" />
+            <marker date="1366451021227" expanded="true" signature="3048:3245" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="3258:3263" placeholder="/*...*/" />
+            <marker date="1366451021227" expanded="true" signature="3354:4023" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="3782:4013" placeholder="/*...*/" />
+            <marker date="1366451021227" expanded="true" signature="4089:4344" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="4424:4838" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="4542:4615" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="4652:4667" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="4902:5709" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="5087:5102" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="5169:5227" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="5296:5671" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="5404:5657" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="5481:5584" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="5787:6221" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="5905:5978" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="6015:6030" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="6280:6343" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="6405:6475" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="6659:7107" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="6689:6889" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="6926:6942" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="6995:7097" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="7186:7602" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="7289:7453" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="7502:7518" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="7673:8128" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="7769:8117" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="8266:9144" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="8746:9134" placeholder="/*...*/" />
+            <marker date="1366451021227" expanded="true" signature="9211:9448" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="9316:9438" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="9517:10423" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="9981:10146" placeholder="/*...*/" />
+            <marker date="1366451021227" expanded="true" signature="10192:10413" placeholder="//..." />
+            <marker date="1366451021227" expanded="true" signature="10507:10604" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="10693:11004" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="10818:10905" placeholder="//..." />
+            <marker date="1366451021227" expanded="true" signature="11102:11302" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="11391:12550" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="11486:11651" placeholder="/*...*/" />
+            <marker date="1366451021227" expanded="true" signature="11879:11949" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="12025:12469" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="12197:12455" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="12274:12382" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="12636:12745" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="12833:12892" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="12989:13949" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="13251:13266" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="13296:13939" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="13495:13873" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="14018:14428" placeholder="{...}" />
+            <marker date="1366451021227" expanded="true" signature="14512:14610" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1083,7 +1283,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
-          <last-edited>air</last-edited>
+          <last-edited>src</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1107,7 +1307,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>Scripts|Scripts</last-edited>
+          <last-edited>Wysiwyg|Wysiwyg</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
