@@ -404,7 +404,8 @@
             }
         }
 
-        private function createContextMenu():ContextMenu {
+        private function createContextMenu():ContextMenu
+        {
             var editContextMenu:ContextMenu = new ContextMenu();
 
             var pasteItem:ContextMenuItem = new ContextMenuItem(resourceManager.getString('Wysiwyg_General', 'contextMenu_paste'));

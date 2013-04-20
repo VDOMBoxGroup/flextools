@@ -150,54 +150,59 @@ package ro.victordramba.scriptarea
 			contextY = event.localY;
 
 			if ( !contextMenu )
-				contextMenu = new ContextMenu();
-
-			contextMenu.removeAllItems();
-
-			var copyItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_copy' ) );
-			copyItem.addEventListener( Event.SELECT, copyContextMenuHandler, false, 0, true );
-			contextMenu.addItem( copyItem );
-
-			var cutItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_cut' ) );
-			cutItem.addEventListener( Event.SELECT, cutContextMenuHandler, false, 0, true );
-			contextMenu.addItem( cutItem );
-
-			if ( _selStart == _selEnd )
-			{
-				copyItem.enabled = false;
-				cutItem.enabled = false;
-			}
-
-			var pasteItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_paste' ) );
-			pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
-			contextMenu.addItem( pasteItem );
-
-			str = text.substring( _selStart, _selEnd );
-			str = controller.getRegisterWord( str );
-			token = controller.getTokenByPos( _selStart );
-
-			if ( token.hasMember( str ) )
-			{
-				var renameItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_rename' ) );
-				renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );
-				contextMenu.addItem( renameItem );
-
-				if ( ( controller.actionVO is LibraryVO ) && !token.scope.parent || ( token.scope.parent.name == "top" && token.string == token.scope.name ) )
-				{
-					var globalRenameItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_global_rename' ) );
-					globalRenameItem.addEventListener( Event.SELECT, globalRenameContextMenuHandler, false, 0, true );
-					contextMenu.addItem( globalRenameItem );
-				}
-			}
-
-			if ( controller.lang == LanguageVO.python )
-			{
-				var getSetItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_get_set' ) );
-				getSetItem.addEventListener( Event.SELECT, getSetContextMenuHandler, false, 0, true );
-				contextMenu.addItem( getSetItem );
-			}
-
+				contextMenu = createContextMenu();
 		}
+
+        private function createContextMenu():ContextMenu
+        {
+            var editContextMenu:ContextMenu = new ContextMenu();
+
+
+            var copyItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( "Wysiwyg_General", 'contextMenu_copy' ) );
+            copyItem.addEventListener( Event.SELECT, copyContextMenuHandler, false, 0, true );
+            editContextMenu.customItems.push( copyItem );
+
+            var cutItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_cut' ) );
+            cutItem.addEventListener( Event.SELECT, cutContextMenuHandler, false, 0, true );
+            editContextMenu.customItems.push( cutItem );
+
+            if ( _selStart == _selEnd )
+            {
+                copyItem.enabled = false;
+                cutItem.enabled = false;
+            }
+
+            var pasteItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_paste' ) );
+            pasteItem.addEventListener( Event.SELECT, pasteContextMenuHandler, false, 0, true );
+            editContextMenu.customItems.push( pasteItem );
+
+            str = text.substring( _selStart, _selEnd );
+            str = controller.getRegisterWord( str );
+            token = controller.getTokenByPos( _selStart );
+
+            if ( token.hasMember( str ) )
+            {
+                var renameItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_rename' ) );
+                renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );
+                editContextMenu.customItems.push( renameItem );
+
+                if ( ( controller.actionVO is LibraryVO ) && !token.scope.parent || ( token.scope.parent.name == "top" && token.string == token.scope.name ) )
+                {
+                    var globalRenameItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_global_rename' ) );
+                    globalRenameItem.addEventListener( Event.SELECT, globalRenameContextMenuHandler, false, 0, true );
+                    editContextMenu.customItems.push( globalRenameItem );
+                }
+            }
+
+            if ( controller.lang == LanguageVO.python )
+            {
+                var getSetItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_get_set' ) );
+                getSetItem.addEventListener( Event.SELECT, getSetContextMenuHandler, false, 0, true );
+                editContextMenu.customItems.push( getSetItem );
+            }
+
+            return editContextMenu;
+        }
 
 		private function copyContextMenuHandler( event : Event ) : void
 		{

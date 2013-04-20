@@ -162,7 +162,7 @@
                 return editContextMenu;
             }
 
-			private function dataLoaded() : void
+			private function dataLoaded(object : Object = null) : void
 			{
 				loader = new Loader();
 				loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
