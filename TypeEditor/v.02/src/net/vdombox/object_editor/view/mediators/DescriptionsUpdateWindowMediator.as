@@ -24,8 +24,9 @@ import net.vdombox.object_editor.model.vo.EventVO;
 import net.vdombox.object_editor.view.DescriptionUpdateView;
 
 import net.vdombox.object_editor.view.popups.DescriptionsUpdateWindow;
+import net.vdombox.object_editor.view.renderer.DescriptionsListItemRenderer;
 
-    import org.puremvc.as3.interfaces.IMediator;
+import org.puremvc.as3.interfaces.IMediator;
     import org.puremvc.as3.patterns.mediator.Mediator;
 
 public class DescriptionsUpdateWindowMediator extends Mediator implements IMediator
@@ -79,11 +80,15 @@ public class DescriptionsUpdateWindowMediator extends Mediator implements IMedia
 
         private function descriptionsFillValuesHandler( event : UpdateDescriptionEvent ) : void
         {
-            var listItemVO : DescriptionListItemVO = event.listItemVO;
+            var listItemRenderer : DescriptionsListItemRenderer = event.target as DescriptionsListItemRenderer;
+
+			var listItemVO : DescriptionListItemVO = listItemRenderer.data as DescriptionListItemVO;
 			var propertyVO : BaseVO = listItemVO.data;
 
             listItemVO.oldValue = getItemDescriptionWord( propertyVO );
             listItemVO.newValue =  getPropertyLaTexDescription( propertyVO );
+
+			listItemRenderer.changeLabelColor();
         }
 
         private function getItemDescriptionWord( baseVO : BaseVO ) : String

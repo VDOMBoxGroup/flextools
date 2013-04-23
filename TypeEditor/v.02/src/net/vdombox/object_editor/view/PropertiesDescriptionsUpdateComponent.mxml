@@ -130,20 +130,18 @@
                 return;
             }
 
-            var descriptionView : DescriptionUpdateView = selectedItem.descriptionUpdateView || createNewDescriptionUpdateView(selectedItem);
+            var descriptionView : DescriptionUpdateView = selectedItem.descriptionUpdateView;
 
-            if ( !descriptionView )
+            if (!descriptionView)
             {
-                descriptionsStack.visible = false;
-                return;
-            }
+                descriptionView = createNewDescriptionUpdateView(selectedItem);
 
-            descriptionView.oldValue = selectedItem.oldValue;
-            descriptionView.newValue = selectedItem.newValue;
+                descriptionView.oldValue = selectedItem.oldValue;
+                descriptionView.newValue = selectedItem.newValue;
+            }
 
             descriptionsStack.visible = true;
             descriptionsStack.selectedChild = descriptionView;
-
         }
 
         private function btnClose_clickHandler( event : MouseEvent ) : void

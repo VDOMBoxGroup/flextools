@@ -2,7 +2,6 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
                 xmlns:s="library://ns.adobe.com/flex/spark"
                 doubleClickEnabled="false"
-                dataChange="dataChangeHandler(event)"
                 creationComplete="creationCompleteHandler(event)">
 
     <s:states>
@@ -27,7 +26,6 @@
         import mx.events.FlexEvent;
 
         import net.vdombox.object_editor.event.UpdateDescriptionEvent;
-        import net.vdombox.object_editor.model.vo.DescriptionListItemVO;
 
         public function get checked() : Boolean
         {
@@ -51,22 +49,7 @@
             checked = itemCheckBox.selected;
         }
 
-        private function dataChangeHandler( event : FlexEvent ) : void
-        {
-            changeViewValues();
-            changeLabelColor();
-        }
-
-        private function changeViewValues() : void
-        {
-            if (!data || !data.descriptionUpdateView)
-                return;
-
-            data.descriptionUpdateView.oldValue = data.oldValue;
-            data.descriptionUpdateView.newValue = data.newValue;
-        }
-
-        private function changeLabelColor() : void
+        public function changeLabelColor() : void
         {
             if (!data)
                 return;
@@ -88,10 +71,11 @@
         private function creationCompleteHandler( event : FlexEvent ) : void
         {
             var updateDescriptionEvent : UpdateDescriptionEvent = new UpdateDescriptionEvent( UpdateDescriptionEvent.DESCRIPTIONS_FILL_VALUES );
-            updateDescriptionEvent.listItemVO = data as DescriptionListItemVO;
 
             dispatchEvent( updateDescriptionEvent );
         }
+
+
         ]]>
     </fx:Script>
 </s:ItemRenderer>
