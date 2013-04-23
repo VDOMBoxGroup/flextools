@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
                 xmlns:s="library://ns.adobe.com/flex/spark"
-                doubleClickEnabled="false">
+                doubleClickEnabled="false"
+                creationComplete="creationCompleteHandler(event)">
 
     <s:states>
         <s:State name="normal"/>
@@ -25,6 +26,10 @@
         import mx.events.FlexEvent;
 
         import net.vdombox.object_editor.event.UpdateDescriptionEvent;
+
+
+        private var creationComplete : Boolean = false;
+        private var changeColor : Boolean = false;
 
         public function get checked() : Boolean
         {
@@ -50,6 +55,14 @@
 
         public function changeLabelColor() : void
         {
+            if (!creationComplete)
+            {
+                changeColor = true;
+                return;
+            }
+
+            changeColor = false;
+
             if ( !data )
                 return;
 
@@ -74,6 +87,14 @@
             var updateDescriptionEvent : UpdateDescriptionEvent = new UpdateDescriptionEvent( UpdateDescriptionEvent.DESCRIPTIONS_FILL_VALUES );
 
             dispatchEvent( updateDescriptionEvent );
+        }
+
+        private function creationCompleteHandler( event : FlexEvent ) : void
+        {
+            creationComplete = true;
+
+            if (changeColor)
+                changeLabelColor();
         }
         ]]>
     </fx:Script>
