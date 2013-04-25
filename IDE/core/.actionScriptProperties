@@ -25,7 +25,7 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="default" platformId="default">
-      <airSettings airCertificatePath="F:/Для работы/V-DOM/Flex/workspace/VdomIDE/q.p12" airTimestamp="true" anePathSet="true" version="1">
+      <airSettings airCertificatePath="F:/Для работы/V-DOM/Flex/vdomide/VdomIDE/q.p12" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes/>
         <anePaths/>
         <newLaunchParams/>
