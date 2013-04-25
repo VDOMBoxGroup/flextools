@@ -314,10 +314,7 @@
 												   scaleContent="true"
 												   smoothBitmapContent="true"
 												   cacheAsBitmap="true"
-                                                   mouseOver="mouseOverHandler(event)"
-                                                   mouseOut="mouseOutHandler(event)"
-                                                   click="smoothImage_clickHandler(event)"
-                                                   rollOut="smoothImage_rollOutHandler(event)"/>
+                                                   />
 
 				<s:Group id="imageMagnifier"
 						 visible="false"
@@ -363,7 +360,11 @@
 				<mx:Canvas height="100%"
 						   width="100%"
 						   backgroundColor="#000000"
-						   backgroundAlpha="0.01">
+						   backgroundAlpha="0.01"
+						   mouseOver="mouseOverHandler(event)"
+						   mouseOut="mouseOutHandler(event)"
+						   click="smoothImage_clickHandler(event)"
+						   rollOut="smoothImage_rollOutHandler(event)">
 				</mx:Canvas>
 
 			</s:Group>
