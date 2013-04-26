@@ -1507,9 +1507,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( !( editableComponent && editableComponent is RichEditableText && !( event.target is Group ) && stage.focus == editableComponent ) )
 			{
 				setFocus();
-				var isScroller : Boolean = isScroller( event.target as DisplayObjectContainer );
+				var _isScroller : Boolean = isScroller( event.target as DisplayObjectContainer );
 
-				if ( movable && !isScroller )
+				if ( movable && !_isScroller )
 				{
 					stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true, 0, true );
 					stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true, 0, true );
