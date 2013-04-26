@@ -9,7 +9,7 @@ package net.vdombox.editors.parsers.vscript
 	import net.vdombox.editors.parsers.base.Multiname;
 	import net.vdombox.editors.parsers.base.Token;
 	import net.vdombox.editors.parsers.base.Tokenizer;
-
+	
 	import ro.victordramba.util.HashMap;
 
 
@@ -339,6 +339,13 @@ package net.vdombox.editors.parsers.vscript
 		private var scope : Field;
 
 		private var isStatic : Boolean = false;
+		
+		private var descriptionZone : Boolean = false;
+		
+		private var endDescriptionZone : Boolean = false;
+		
+		private var endLineWaiting : Boolean = false;
+		private var endLine : Boolean = false;
 
 		private var access : String;
 
@@ -391,8 +398,43 @@ package net.vdombox.editors.parsers.vscript
 			var position : int = pos - 1;
 
 			t.parent = currentBlock;
-
 			currentBlock.children.push( t );
+			
+			var tString : String = t.string.toLowerCase();
+			
+			if ( !descriptionZone && endDescriptionZone )
+			{
+				if ( !endLineWaiting )
+				{
+					if ( t.type == Token.NAMECLASS || t.type == Token.NAMEFUNCTION )
+						endLineWaiting = true;
+				}
+				
+				if ( endLineWaiting && t.type == Token.COMMENT ) 
+				{
+					endLineWaiting = false;
+					endLine = true;
+				}
+				
+				if ( endLine )
+				{
+					endLine = false;
+					endDescriptionZone = false;
+					if ( t.type == Token.COMMENT )
+					{
+						if ( tString.substr( 0, 1 ) == "'" )
+						{
+							scope.description = tString.substring( 1, tString.length - 3 );
+						}
+					}
+				}
+				
+				if ( t.type == Token.ENDLINE && endLineWaiting )
+				{
+					endLineWaiting = false;
+					endLine = true;
+				}
+			}
 
 			t.scope = scope;
 
@@ -401,7 +443,6 @@ package net.vdombox.editors.parsers.vscript
 			tp2 = tokens[ tokensLength - 2 ];
 			tp3 = tokens[ tokensLength - 3 ];
 
-			var tString : String = t.string.toLowerCase();
 			var tpString : String = tp ? tp.string.toLowerCase() : "";
 			var tp2String : String = tp2 ? tp2.string.toLowerCase() : "";
 
@@ -514,6 +555,9 @@ package net.vdombox.editors.parsers.vscript
 
 					//this is so members will have the parent set to the scope
 					field.parent = scope;
+					
+					if ( !endLineWaiting )
+						descriptionZone = true;
 				}
 				if ( _scope && ( tpString == "class" ) )
 				{
@@ -615,6 +659,9 @@ package net.vdombox.editors.parsers.vscript
 			if ( checkNewBlock( tString, tpString ) )
 			{
 				newBlock = true;
+				
+				descriptionZone = false;
+				endDescriptionZone = true;
 
 				if ( tString == "elseif" || tString == "else" )
 				{
