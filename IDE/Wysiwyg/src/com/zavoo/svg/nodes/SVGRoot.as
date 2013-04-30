@@ -1,8 +1,37 @@
+/*
+Copyright (c) 2008 James Hight
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+*/
+
 package com.zavoo.svg.nodes
 {
+	import com.zavoo.svg.SVGViewer;
 	import com.zavoo.svg.data.SVGColors;
+	import com.zavoo.svg.events.SVGEvent;
+	import com.zavoo.svg.events.SVGUIEvent;
 	
 	import flash.display.Shape;
+	import flash.events.Event;
 	import flash.utils.getTimer;
 	
 	/**
@@ -15,7 +44,6 @@ package com.zavoo.svg.nodes
 		 **/
 		public var _elementById:Object;
 		
-		public var editableElements:Array = [];
 		/**
 		 * Title of SVG
 		 **/
@@ -25,17 +53,32 @@ package com.zavoo.svg.nodes
 		 * Used to synchronize tweens
 		 **/
 		private var _loadTime:int;
+		
+		private var _width:Number;
+		private var _height:Number;
+		
+		/**
+		 * Used to track number of nodes that need to be rendered
+		 **/
+		private var _invalidNodeCount:uint = 0;
+		
+		private var _currentNode:SVGNode = null;
+
+		public var editableElements:Array = [];
 				
-		public function SVGRoot(xml:XML = null):void {						
-			super(XML(xml)); 					
+		public function SVGRoot(xml:XML = null):void {
+			super(XML(xml));
+			this.addEventListener(Event.REMOVED, onRemoved);
 		}	
 		
 		/**
 		 * @private
 		 **/
 		public function set scale(value:Number):void {
-			this.scaleX = value;
-			this.scaleY = value;
+			super.scaleX = value;
+			super.scaleY = value;
+			
+			this.dispatchEvent(new Event(Event.RESIZE));
 		}
 		
 		/**
@@ -46,24 +89,45 @@ package com.zavoo.svg.nodes
 		}
 		
 		/**
+		 * @private
+		 **/
+		override public function set scaleX(value:Number):void {
+			super.scaleX = value;
+			this.dispatchEvent(new Event(Event.RESIZE));
+		}
+		
+		/**
+		 * @private
+		 **/
+		override public function set scaleY(value:Number):void {
+			super.scaleY = value;
+			this.dispatchEvent(new Event(Event.RESIZE));
+		}
+		
+		
+		/**
 		 * Set super._xml
 		 * Create new _elementById object
 		 **/
-		public override function set xml(value:XML):void {			
-			
+		public override function set xml(value:XML):void {		
+			this._width = 0;
+			this._height = 0;
 			default xml namespace = svg;
 			this._elementById = new Object();	
 			this.clearChildren();		
+			this._invalidNodeCount = 0;
 			super.xml = value;	
 			
 			this._loadTime = getTimer();
 			
-		} 	
+			this.dispatchEvent(new Event(Event.RESIZE));
+					
+		}
 		
 		/**
 		 * Register a node
 		 * 
-		 * @param id id to register node under
+		 * @param id to register node under
 		 * 
 		 * @param node node to be registered
 		 **/
@@ -71,6 +135,19 @@ package com.zavoo.svg.nodes
 			if (this._elementById[id] == undefined) {						
 				this._elementById[id] = node;
 			}			
+		}
+		
+		/**
+		 * Unregister a node
+		 * 
+		 * @param id to unregister
+		 * 
+		 **/
+		 
+		public function unregisterElement(id:String):void {
+ 			if (this._elementById[id] != undefined) {
+				delete this._elementById[id];				
+			}
 		}
 		
 		/**
@@ -129,7 +206,10 @@ package com.zavoo.svg.nodes
 			var viewBox:String = this.getAttribute('viewBox');
 			if (viewBox != null) {
 				var points:Array = viewBox.split(/\s+/);
-				this.addRootMask(points[0], points[1], points[2], points[3]);				
+				this.addRootMask(points[0], points[1], points[2], points[3]);		
+				
+				this._width = points[2];
+				this._height = points[3]; 
 			}
 			else {
 				var w:String = this.getAttribute('width');
@@ -139,8 +219,16 @@ package com.zavoo.svg.nodes
 					if (w.match('%') || h.match('%')) {
 						return;
 					}
-					this.addRootMask(0, 0, SVGColors.cleanNumber(w), SVGColors.cleanNumber(h));
+					this._width = SVGColors.cleanNumber(w);
+					this._height = SVGColors.cleanNumber(h);
+					this.addRootMask(0, 0, this._width, this._height);
 				}
+			}
+			
+			var bgColor:String = this.getStyle('background-color');
+			if ((bgColor != null)
+				&& (this.parent is SVGViewer)) {
+				SVGViewer(this.parent).backgroundColor = SVGColors.getColor(bgColor);
 			}
 		}		
 		
@@ -161,7 +249,15 @@ package com.zavoo.svg.nodes
 				Shape(this.mask).graphics.beginFill(0x000000);
 				Shape(this.mask).graphics.drawRect(xVal, yVal, widthVal, heightVal);
 				Shape(this.mask).graphics.endFill();
+				
+				//Move SVGRoot for non zero x & y masks
+				this.x = -xVal;
+				this.y = -yVal;
 			}
+		}
+		
+		private function onRemoved(event:Event):void {
+			this.dispatchEvent(new SVGEvent(SVGEvent.SVG_UNLOAD));
 		}
 		
 		public function get title():String {
@@ -170,7 +266,7 @@ package com.zavoo.svg.nodes
 		
 		public function set title(value:String):void {
 			this._title = value;
-		}
+		} 
 		
 		/**
 		 * Used to synchronize tweens
@@ -178,5 +274,79 @@ package com.zavoo.svg.nodes
 		public function get loadTime():int {
 			return this._loadTime;
 		}
+		
+		
+		/**
+		 * return width of SVG
+		 **/
+		override public function get width():Number {
+			if (this._width > 0) {
+				return this._width * this.scaleX;
+			}
+			else {
+				return super.width;
+			}
+		}
+		
+		/**
+		 * @private
+		 **/
+		override public function set width(value:Number):void {
+			//Do nothing
+		}
+		
+		/**
+		 * return height of SVG
+		 **/
+		override public function get height():Number {
+			if (this._height > 0) {
+				return this._height * this.scaleY;
+			}
+			else {
+				return super.height;
+			}
+		}
+		
+		/**
+		 * @private
+		 **/
+		override public function set height(value:Number):void {
+			//Do nothing
+		}
+		
+		override protected function setupEvents():void {
+			//Do nothing
+		}
+		
+		
+		public function set invalidNodeCount(value:int):void {
+			if (value < 0) {
+				trace('Something is wrong with the invalid node counter! It has a value of ' + value.toString() + '!');
+			} 
+			this._invalidNodeCount = value;
+			if (value == 0) {
+				this.dispatchEvent(new SVGEvent(SVGEvent.SVG_LOAD));
+			}
+			
+			
+		}
+		
+		public function get invalidNodeCount():int {
+			return this._invalidNodeCount;
+		}		
+		
+		public function set currentNode(node:SVGNode):void {
+			if (this._currentNode != null) {
+				this.dispatchEvent(new SVGUIEvent(this._currentNode, SVGUIEvent.FOCUS_OUT));
+			}
+			this._currentNode = node;
+			this.dispatchEvent(new SVGUIEvent(this._currentNode, SVGUIEvent.FOCUS_IN));
+			this.dispatchEvent(new SVGUIEvent(this._currentNode, SVGUIEvent.ACTIVATE));
+		}
+		
+		public function get currentNode():SVGNode {
+			return this._currentNode;
+		}
+		
 	}
 }

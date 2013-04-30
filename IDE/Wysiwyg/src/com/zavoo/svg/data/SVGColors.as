@@ -1,3 +1,29 @@
+/*
+Copyright (c) 2008 James Hight
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+
 package com.zavoo.svg.data
 {	
 	public class SVGColors
@@ -179,6 +205,10 @@ package com.zavoo.svg.data
 			return {r:red, g:green, b:blue};
 		}
 		
+		static public function rgbToNumber (r:uint, g:uint, b:uint):Number {
+			return (r << 16) | (g << 8) | (b);
+		}
+		
 		/**
 		 * Get the number value of a color string
 		 * 
@@ -187,10 +217,52 @@ package com.zavoo.svg.data
 		 * @return Numeric value of color
 		 **/
 		static public function getColor(color:String):Number {
+			color = trim(color);
+			
 			if (color != null) {			
-				if(color.match(/^#/)) {
+				if(color.match(/^#\S{6,}/s)) {
 					color = color.replace('#', '0x');
 					return parseInt(color);
+				}
+				else if(color.match(/^#\S{3,}/s)) {
+					var colorHex:Array = color.match(/^#(\S)(\S)(\S)/s);
+					color = '0x' + colorHex[1] + colorHex[1] + colorHex[2] + colorHex[2] + colorHex[3] + colorHex[3];
+					return parseInt(color);
+				}
+				else if(color.indexOf("rgb") != -1){
+					//Copyright (c) 2008 Richard R. Masters
+					//http://code.google.com/p/sgweb/
+					var r:Number;
+					var g:Number;
+					var b:Number;
+					
+					var str:Array = color.replace(/\s|rgb\(|\)/g, "").split(",");
+					if (str[0].match(/%/)) {
+						str[0]=str[0].replace(/%/g, "");
+						r = str[0];
+						r = r * 256 / 100;
+					}
+					else {
+						r = str[0];
+					}
+					if (str[1].match(/%/)) {
+						str[1]=str[1].replace(/%/g, "");
+						g = str[1];
+						g = g * 256 / 100;
+					}
+					else {
+						g = str[1];
+					}
+					if (str[2].match(/%/)) {
+						str[2]=str[2].replace(/%/g, "");
+						b = str[2];
+						b = b * 256 / 100;
+					}
+					else {
+						b = str[2];
+					}
+					return rgbToNumber(r, g, b);
+				   
 				}
 				else if (colors.hasOwnProperty(color)) {
 					return colors[color];
@@ -226,9 +298,15 @@ package com.zavoo.svg.data
 		 * @return Numeric value of string will all characters removed except '0-9', '.', and '-'
 		 **/
 		static public function cleanNumber(num:*):Number {
-			var numString:String = String(num);
+			var numString:String = trim(String(num));
+			var numArray:Array = numString.split(' ');			
+			numString = numArray[0];
 			numString = numString.replace(/[^0-9\.-]+/sig,'');
 			return Number(numString);
+		}
+		
+		static public function trim(string:String):String {
+			return string.replace(/^\s+/s, '').replace(/\s+$/s, '');			
 		}
 	}
 }

@@ -784,6 +784,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( editableAttributes.length > 0 )
 				_editableComponent = editableAttributes[ 0 ].sourceObject;
+
 			svg.addEventListener( RendererEvent.GET_RESOURCE, svgGetResourseHendler, false, 0, true );
 			svg.addEventListener( RendererEvent.TRANSLATE_SVG_TEXT, svgTranslateTextHandler, false, 0, true );
 

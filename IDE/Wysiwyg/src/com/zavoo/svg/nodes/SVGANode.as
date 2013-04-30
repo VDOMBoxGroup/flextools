@@ -23,16 +23,37 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package com.zavoo.svg.nodes
-{
+package com.zavoo.svg.nodes {
+	import flash.events.MouseEvent;
+	import flash.net.URLRequest;	
+	
+	public class SVGANode extends SVGNode {
 		
-	/**
-	 * Acts as a container for other nodes
-	 **/
-	public class SVGGroupNode extends SVGNode
-	{
-		public function SVGGroupNode(xml:XML):void {
+		public var url:String; 
+		public var target:String;
+		
+		public function SVGANode(xml:XML = null) {
 			super(xml);
-		}	
+		}
+		
+		override protected function generateGraphicsCommands():void {
+			url = this._xml.@xlink::href;
+			target = this._xml.@target;
+			if (!target) {
+				target = '_self';
+			}
+		}
+		
+		override protected function draw():void {
+			if (this.parent is SVGNode) {
+				SVGNode(this.parent).addEventListener(MouseEvent.CLICK, onParentMouseClick);
+			}
+		}
+		
+		private function onParentMouseClick(event:MouseEvent):void {
+			var urlRequest:URLRequest = new URLRequest(url);
+			flash.net.navigateToURL(urlRequest, target);
+		}
+		
 	}
 }

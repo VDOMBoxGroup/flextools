@@ -1,16 +1,47 @@
+/*
+Copyright (c) 2008 James Hight
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+*/
+
 package com.zavoo.svg.nodes
 {
 	import com.zavoo.svg.data.SVGColors;
+	import com.zavoo.svg.events.SVGEvent;
+	import com.zavoo.svg.events.SVGMouseEvent;
+	import com.zavoo.svg.events.SVGMutationEvent;
+	import com.zavoo.svg.nodes.fills.SVGGradientFill;
 	import com.zavoo.svg.nodes.mask.SVGMask;
 	
 	import flash.display.CapsStyle;
+	import flash.display.DisplayObject;
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
+	import flash.utils.describeType;
 	
-	import mx.utils.StringUtil;
 		
 	/** Base node extended by all other SVG Nodes **/
 	public class SVGNode extends Sprite
@@ -28,7 +59,34 @@ package com.zavoo.svg.nodes
 		 * Set by svgRoot() to cache the value of the root node
 		 **/ 
 		private var _svgRoot:SVGRoot = null;
+		
+		
+		/**
+		 * Used to calculate width for gradients
+		 **/
+		private var _minX:Number = 0;
+		
+		/**
+		 * Used to calculate width for gradients
+		 **/
+		private var _maxX:Number = 0;
+		
+		/**
+		 * Used to calculate height for gradients
+		 **/
+		private var _minY:Number = 0;
+		
+		/**
+		 * Used to calculate height for gradients
+		 **/
+		private var _maxY:Number = 0;
 			
+		/**
+		 * Flag set if a node is a copy of another node. 
+		 * Example: children of a Use node
+		 */
+		protected var _isCopy:Boolean = false;
+		
 		/**
 		 * SVG XML for this node
 		 **/	
@@ -53,8 +111,21 @@ package com.zavoo.svg.nodes
 		 **/
 		protected var _invalidDisplay:Boolean = false;
 		
+		protected var _firstRendering:Boolean = true;
 		
-		public var owner:Sprite;
+		/**
+		 * The ID of this node. Used so we can detect if the ID has changed.
+		 */
+		protected var _id:String = null;
+		
+		public function nodeType():String {
+			
+			var type:XML = describeType(this);
+			return type.@name;
+			
+		}
+			
+				
 		/**
 		 * Constructor
 		 *
@@ -62,10 +133,13 @@ package com.zavoo.svg.nodes
 		 *
 		 * @return void.		
 		 */
-		public function SVGNode(xml:XML = null):void {			
-//			this.xml = xml;			
-			this.addEventListener(Event.ADDED, registerId);			
-		}			
+		public function SVGNode(xml:XML = null):void {	
+			this._xml = xml;		
+			this.xml = xml;			
+				
+			
+			setupEvents();		
+		}					
 		
 		/** 
 		 * Called to generate AS3 graphics commands from the SVG instructions		    
@@ -83,13 +157,17 @@ package com.zavoo.svg.nodes
 			
 			var xmlList:XMLList;
 			
+			var parentIsCopy:Boolean = false;
+			
+			this.registerNode();
+
 			this._style = new Object();
 			
 			//Get styling from XML attribute list
 			for each (var attribute:String in SVGNode.attributeList) {
 				xmlList = this._xml.attribute(attribute);
 				if (xmlList.length() > 0) {
-					this._style[attribute] = xmlList[0].toString();
+					this._style[attribute] = SVGColors.trim(xmlList[0].toString());
 				}
 			}
 			
@@ -97,12 +175,11 @@ package com.zavoo.svg.nodes
 			xmlList = this._xml.attribute('style');
 			if (xmlList.length() > 0) {
 				var styleString:String = xmlList[0].toString();
-				styleString = StringUtil.trimArrayElements(styleString, ";");
 				var styles:Array = styleString.split(';');
 				for each(var style:String in styles) {
 					var styleSet:Array = style.split(':');
 					if (styleSet.length == 2) {
-						this._style[styleSet[0]] = styleSet[1];
+						this._style[SVGColors.trim(styleSet[0])] = SVGColors.trim(styleSet[1]);
 					}
 				}
 			}
@@ -110,24 +187,32 @@ package com.zavoo.svg.nodes
 			//Setup ClipPath
 			xmlList = this._xml.attribute('clip-path');
 			if (xmlList.length() > 0) {
+				var clipPathNode:SVGClipPathNode;
+				
 				var clipPath:String = xmlList[0].toString();
 				clipPath = clipPath.replace(/url\(#(.*?)\)/si,"$1");
-				var clipPathNode:SVGClipPathNode = this.svgRoot.getElement(clipPath);
+				var cNode:SVGNode = this.svgRoot.getElement(clipPath);
+				if (cNode is SVGDefsNode) {
+					var defNode:SVGDefsNode = SVGDefsNode(cNode);
+					
+					clipPathNode = new SVGClipPathNode(defNode.getDef(clipPath));
+					this.addChild(clipPathNode);
+				}
+				else {
+					clipPathNode = SVGClipPathNode(cNode);
+				}
+				
 				if (clipPathNode != null) {					
 					this.addMask(clipPathNode);
 				}				
 			}
+					
+			this.loadAttribute('x');	
+			this.loadAttribute('y');
+			this.loadAttribute('rotate', 'rotation');				
 			
-			//If there is not a transform attribute see if we can load the placement values,
-			//Don't load both transform and placement values
-			if (this.getAttribute('transform') == null) {				
-				this.loadAttribute('x');	
-				this.loadAttribute('y');
-				this.loadAttribute('rotate', 'rotation');
-			}	
+			this.loadStyle('opacity', 'alpha');
 			
-			this.loadStyle('opacity', 'alpha');			
-								
 		}
 		
 		/**
@@ -164,29 +249,36 @@ package com.zavoo.svg.nodes
 						var command:String = String(tranArray[0]);
 						var args:String = String(tranArray[1]);
 						args = args.replace(')','');
+						args = args.replace(/\s*,\s*/g, ','); 
 						var argsArray:Array = args.split(/[, ]/);
 						
 						switch (command) {
 							case "matrix":
 								if (argsArray.length == 6) {
-									var nodeMatrix:Matrix = this.transform.matrix;
+									var nodeMatrix:Matrix = new Matrix();
 									nodeMatrix.a = argsArray[0];
 									nodeMatrix.b = argsArray[1];
 									nodeMatrix.c = argsArray[2];
 									nodeMatrix.d = argsArray[3];
 									nodeMatrix.tx = argsArray[4];
 									nodeMatrix.ty = argsArray[5];
-									this.transform.matrix = nodeMatrix;
+									
+									var matrix:Matrix = this.transform.matrix.clone();
+									matrix.concat(nodeMatrix);
+									
+									this.transform.matrix = matrix;
+									
 								}
 								break;
 								
 							case "translate":
+															
 								if (argsArray.length == 1) {
-									this.x = argsArray[0];
+									this.x = SVGColors.cleanNumber(argsArray[0]) + SVGColors.cleanNumber(this.getAttribute('x'));									
 								}
 								else if (argsArray.length == 2) {
-									this.x = argsArray[0];
-									this.y = argsArray[1];
+									this.x = SVGColors.cleanNumber(argsArray[0]) + SVGColors.cleanNumber(this.getAttribute('x'));
+									this.y = SVGColors.cleanNumber(argsArray[1]) + SVGColors.cleanNumber(this.getAttribute('y'));
 								}
 								break;
 								
@@ -214,7 +306,7 @@ package com.zavoo.svg.nodes
 								break;
 								
 							default:
-								//trace('Unknown Transformation: ' + command);
+								trace('Unknown Transformation: ' + command);
 						}
 					}
 				}				
@@ -258,8 +350,9 @@ package com.zavoo.svg.nodes
 		 * Clear current graphics and call runGraphicsCommands to render SVG element 
 		 **/
 		protected function draw():void {
-//			this.graphics.clear();			
+			this.graphics.clear();			
 			this.runGraphicsCommands();
+			
 		}
 				
 				
@@ -273,16 +366,33 @@ package com.zavoo.svg.nodes
 			var fill_color:Number
 			
 			var fill:String = this.getStyle('fill');
+			
+			var gradient:Array = fill.match(/^\s*url\(#(\S+)\)/si);
+			var name:String;
+			
+			fill_alpha = SVGColors.cleanNumber(this.getStyle('fill-opacity'));
+			
 			if ((fill == 'none') || (fill == '')) {
 				fill_alpha = 0;
-				fill_color = 0;
+				fill_color = 0; 
 			}			
-			else {
-				var fo:String = this.getStyle('fill-opacity');
-				if(fo !== null)
-					fill_alpha = Number(this.getStyle('fill-opacity'));
-				else
-					fill_alpha = 1;
+			else if( gradient && gradient.length ) {
+				var fillNode:SVGNode = this.svgRoot.getElement(gradient[1]);	
+				if (fillNode is SVGDefsNode) {
+					//Check for secondary color					
+					/* var secondColor:String = StringUtil.trim(fill.replace(/^\s*url\(#(\S+)\)/si, ''));
+					if (secondColor) {
+						this.graphics.beginFill(SVGColors.getColor(secondColor), fill_alpha);
+					} */
+					var nodeXML:XML = SVGDefsNode(fillNode).getDef(gradient[1]);
+					name = nodeXML.localName().toString().toLowerCase();
+					if ((name == 'lineargradient') || (name == 'radialgradient')) {
+						SVGGradientFill.gradientFill(this, SVGDefsNode(fillNode).getDef(gradient[1]));
+					}
+					
+				}	
+			}
+			else {		
 				fill_color = SVGColors.getColor((fill));
 				this.graphics.beginFill(fill_color, fill_alpha);
 			}
@@ -295,19 +405,15 @@ package com.zavoo.svg.nodes
 			var line_width:Number;
 			
 			var stroke:String = this.getStyle('stroke');
-			if ((stroke == 'none') || (stroke == '') || stroke == null) {
+			if ((stroke == 'none') || (stroke == '')) {
 				line_alpha = 0;
 				line_color = 0;
 				line_width = 0;
 			}
 			else {
-				line_color = Number(SVGColors.getColor(stroke));
-				if(this.getStyle('stroke-opacity') !== null)
-					line_alpha = Number(this.getStyle('stroke-opacity'));
-				else
-					line_alpha = 1;
-				
-				line_width = Number(this.getStyle('stroke-width'));
+				line_color = SVGColors.cleanNumber(SVGColors.getColor(stroke));
+				line_alpha = SVGColors.cleanNumber(this.getStyle('stroke-opacity'));
+				line_width = SVGColors.cleanNumber(this.getStyle('stroke-width'));
 				if (isNaN(line_width) || line_width == 0)
 					line_alpha = 0;
 			}
@@ -339,7 +445,7 @@ package com.zavoo.svg.nodes
 				miterLimit = '4';
 			}
 			
-			this.graphics.lineStyle(line_width, line_color, line_alpha, false, LineScaleMode.NORMAL, capsStyle, jointStyle, Number(miterLimit));
+			this.graphics.lineStyle(line_width, line_color, line_alpha, false, LineScaleMode.NORMAL, capsStyle, jointStyle, SVGColors.cleanNumber(miterLimit));
 					
 		}
 		
@@ -360,9 +466,15 @@ package com.zavoo.svg.nodes
 					
 			for each (var command:Array in this._graphicsCommands) {
 				switch(command[0]) {
+					case "SF":
+						this.nodeBeginFill();
+						break;
+					case "EF":
+						this.nodeEndFill();
+						break;
 					case "M":
 						this.graphics.moveTo(command[1], command[2]);
-						this.nodeBeginFill();
+						//this.nodeBeginFill();
 						firstX = command[1];
 						firstY = command[2];
 						break;
@@ -374,7 +486,7 @@ package com.zavoo.svg.nodes
 						break;
 					case "Z":
 						this.graphics.lineTo(firstX, firstY);
-						this.nodeEndFill();
+						//this.nodeEndFill();
 						break;
 					case "LINE":
 						this.nodeBeginFill();
@@ -384,24 +496,13 @@ package com.zavoo.svg.nodes
 						break;
 					case "RECT":
 						this.nodeBeginFill();
-						
-//						command[1] = command[1] ? command[1] : 0;
-//						command[2] = command[2] ? command[2] : 0;
-//						command[3] = command[3] ? command[3] : 0;
-//						command[4] = command[4] ? command[4] : 0;
-						
-						if (command.length == 5)
-						{
+						if (command.length == 5) {
 							this.graphics.drawRect(command[1], command[2],command[3], command[4]);
 						}
-						else
-						{
-//							command[5] = command[5] ? command[5] : 0;
-//							command[6] = command[6] ? command[6] : 0;
-//							
+						else {
 							this.graphics.drawRoundRect(command[1], command[2],command[3], command[4], command[5], command[6]);
 						}
-						this.nodeEndFill();
+						this.nodeEndFill();				
 						break;		
 					case "CIRCLE":
 						this.nodeBeginFill();
@@ -417,16 +518,47 @@ package com.zavoo.svg.nodes
 			}
 		}
 		
+		protected function registerNode():void {
+			//We need to account for Use nodes nested inside of other Use nodes / Symbols
+			var parentIsCopy:Boolean = false;
+			if (this.parent is SVGNode) {
+				parentIsCopy = SVGNode(this.parent).isCopy;
+			}			
+			if (parentIsCopy) {
+				this._isCopy = true;
+			}
+			else {
+				//Unregister and re-register the node's ID if it has changed
+				var newID:String = this._xml.@id;
+				if (newID == '' || newID == null) {
+					newID = null;
+				}
+	 			
+				if (newID != null && newID != this._id) {
+					this.svgRoot.unregisterElement(this._id);
+					this._id = newID;
+					this.svgRoot.registerElement(this._id, this);
+				}
+			}
+		}
+		
 		/**
 		 * If node has an "id" attribute, register it with the root node
 		 **/
-		protected function registerId(event:Event):void {
-			this.removeEventListener(Event.ADDED, registerId);		
-				if(this._xml && this._xml.@id)
-					var id:String = this._xml.@id;
-			if (id != "" && id != null) {
-				this.svgRoot.registerElement(id, this);
+		protected function onNodeAdded(event:Event):void {
+			if (this.svgRoot) {	
+				
+				this.registerNode();
+							
+				this.svgRoot.dispatchEvent(new SVGMutationEvent(this, SVGMutationEvent.DOM_NODE_INSERTED)); 
 			}
+						
+		}
+		
+		protected function onNodeRemoved(event:Event):void {
+			if (this.svgRoot) {			
+				this.svgRoot.dispatchEvent(new SVGMutationEvent(this, SVGMutationEvent.DOM_NODE_REMOVED));
+			} 
 						
 		}
 		
@@ -443,50 +575,54 @@ package com.zavoo.svg.nodes
 				if (childXML.nodeKind() == 'element') {
 					
 					nodeName = nodeName.toLowerCase();
-					var child:SVGNode;
-					switch(nodeName)
-					{
+					
+					var validNode:Boolean = true;
+					
+					switch(nodeName) {
+						case "a":
+							this.addChild(new SVGANode(childXML));
+							break;
 						case "animate":
-							child = new SVGAnimateNode(childXML);
+							this.addChild(new SVGAnimateNode(childXML));
 							break;	
 						case "animatemotion":
-							child = new SVGAnimateMotionNode(childXML);
+							this.addChild(new SVGAnimateMotionNode(childXML));
 							break;	
 						case "animatecolor":
-							child = new SVGAnimateColorNode(childXML);
+							this.addChild(new SVGAnimateColorNode(childXML));
 							break;	
 						case "animatetransform":
-							child = new SVGAnimateTransformNode(childXML);
+							this.addChild(new SVGAnimateTransformNode(childXML));
 							break;	
 						case "circle":
-							child = new SVGCircleNode(childXML);
+							this.addChild(new SVGCircleNode(childXML));
 							break;		
 						case "clippath":
-							child = new SVGClipPathNode(childXML);
+							this.addChild(new SVGClipPathNode(childXML));
 							break;
 						case "desc":
 							//Do Nothing
 							break;
 						case "defs":
-							child = new SVGDefsNode(childXML);
+							this.addChild(new SVGDefsNode(childXML));
 							break;
 						case "ellipse":
-							child = new SVGEllipseNode(childXML);
+							this.addChild(new SVGEllipseNode(childXML));
 							break;
 						case "filter":
-							child = new SVGFilterNode(childXML);
+							this.addChild(new SVGFilterNode(childXML));
 							break;
 						case "g":						
-							child = new SVGGroupNode(childXML);
+							this.addChild(new SVGGroupNode(childXML));
 							break;
 						case "image":						
-							child = new SVGImageNode(childXML);
+							this.addChild(new SVGImageNode(childXML));
 							break;
 						case "line": 
-							child = new SVGLineNode(childXML);
+							this.addChild(new SVGLineNode(childXML));
 							break;	
 						case "mask":
-							child = new SVGMaskNode(childXML);
+							this.addChild(new SVGMaskNode(childXML));
 							break;						
 						case "metadata":
 							//Do Nothing
@@ -495,52 +631,46 @@ package com.zavoo.svg.nodes
 							//Add Handling 
 							break;							
 						case "polygon":
-							child = new SVGPolygonNode(childXML);
+							this.addChild(new SVGPolygonNode(childXML));
 							break;
 						case "polyline":
-							child = new SVGPolylineNode(childXML);
+							this.addChild(new SVGPolylineNode(childXML));
 							break;
 						case "path":						
-							child = new SVGPathNode(childXML);
+							this.addChild(new SVGPathNode(childXML));
 							break;
 						case "rect":
-							child = new SVGRectNode(childXML);
+							this.addChild(new SVGRectNode(childXML));
 							break;
 						case "set":
-							child = new SVGSetNode(childXML);
+							this.addChild(new SVGSetNode(childXML));
 							break;
 						case "symbol":
-							child = new SVGSymbolNode(childXML);
+							this.addChild(new SVGSymbolNode(childXML));
 							break;						
 						case "text":	
-							child = new SVGTextNode(childXML);
+							this.addChild(new SVGTextNode(childXML));
 							break; 
 						case "title":	
-							child = new SVGTitleNode(childXML);
+							this.addChild(new SVGTitleNode(childXML));
 							break; 
 						case "tspan":						
-							child = new SVGTspanNode(childXML);
+							this.addChild(new SVGTspanNode(childXML));
 							break; 
 						case "use":
-							child = new SVGUseNode(childXML);
+							this.addChild(new SVGUseNode(childXML));
 							break;
 							
 						case "null":
 							break;
 							
 						default:
-							//trace("Unknown Element: " + nodeName);
+							trace("Unknown Element: " + nodeName);
 							break;	
-					}
+					}	
 					
-					if(!child)
-						continue;
-					
-					child.owner = this;
-					addChild(child);
-					child.xml = childXML;
-				}
-			}
+				}				
+			}			
 		}
 		
 		/**
@@ -552,7 +682,7 @@ package com.zavoo.svg.nodes
 		 * @return Value of style or null if it is not found
 		 **/
 		public function getStyle(name:String):String{
-			if (this._style.hasOwnProperty(name)) {
+			if (this._style && this._style.hasOwnProperty(name)) {
 				return this._style[name];
 			}
 			
@@ -565,8 +695,8 @@ package com.zavoo.svg.nodes
 			else if (name == 'opacity') {
 				return '1';
 			}
-			else if (this.owner is SVGNode) {
-				return SVGNode(this.owner).getStyle(name);
+			else if (this.parent is SVGNode) {
+				return SVGNode(this.parent).getStyle(name);
 			}
 			return null;
 		}
@@ -578,13 +708,38 @@ package com.zavoo.svg.nodes
 		 * 
 		 * @return Returns the value of defaultValue
 		 **/
-		protected function getAttribute(attribute:*, defaultValue:* = null):* {
+		public function getAttribute(attribute:*, defaultValue:* = null):* {
 			var xmlList:XMLList = this._xml.attribute(attribute);
 			if (xmlList.length() > 0) {
 				return xmlList[0].toString();
 			}			
 			return defaultValue;
 			
+		}
+		
+		/**
+		 * @param attribute Attribute to set in SVG XML
+		 * 
+		 * @param attrValue to set		
+		 **/
+		public function setAttribute(attribute:String, attrValue:*):void {
+			var xmlList:XMLList = this._xml.attribute(attribute);
+			xmlList[0] = attrValue;
+
+			this.invalidateDisplay();
+		}
+		
+		/**
+		 * Append a node
+		 * 
+		 * @param xml XML of new node
+		 * 
+		 * @param parentId ?
+		 **/
+		public function appendDomChild(xml:XML, parentId:String):void {
+			this.clearChildren();
+			this._xml.appendChild(xml);
+			this.invalidateDisplay();
 		}
 		
 		/**
@@ -603,7 +758,17 @@ package com.zavoo.svg.nodes
 		public function invalidateDisplay():void {
 			if (this._invalidDisplay == false) {
 				this._invalidDisplay = true;
-				this.addEventListener(Event.ENTER_FRAME, redrawNode);
+				this.addEventListener(Event.ENTER_FRAME, redrawNode);	
+				if (this.svgRoot != null 
+					&& !(this is SVGRoot)) {
+					this.svgRoot.invalidNodeCount++;
+				}
+				for (var i:int = 0; i < this.numChildren; i++) {
+					var child:DisplayObject = this.getChildAt(i);
+					if (child is SVGNode) {
+						SVGNode(child).invalidateDisplay();
+					}
+				}
 			}			
 		}
 		
@@ -612,35 +777,70 @@ package com.zavoo.svg.nodes
 		 * Redraws node graphics if _invalidDisplay == true
 		 **/
 		protected function redrawNode(event:Event):void {
-//			if (this.parent == null) {
-//				return;
-//			}		
+			if (this.parent == null) {
+				return;
+			}		
 			
-			if (this._invalidDisplay) {
-				
-				this._invalidDisplay = false;
-				this.removeEventListener(Event.ENTER_FRAME, redrawNode);
-				
+			if (this._invalidDisplay) {				
 				if (this._xml != null) {	
 				
 					//this.clearChildren();
-//					this.graphics.clear();		
-					
-					this.setAttributes();
+					this.graphics.clear();		
 					
 					if (this.numChildren == 0) {
 						this.parse();						
 					}
 					
-											
+					this.x = 0;
+					this.y = 0;
+					
+					this.setAttributes();						
 					this.generateGraphicsCommands();	
 					this.transformNode();		
 					this.draw();	
 					
 					this.setupFilters();								
-				}	
+				}
+				
+				this._invalidDisplay = false;
+				this.removeEventListener(Event.ENTER_FRAME, redrawNode);		
+				
+				
+				if (!(this is SVGRoot)) {
+					this.svgRoot.invalidNodeCount--;
+				}
+				else if (this is SVGRoot) {
+					var hasChildren:Boolean = false;
+					for (var i:int = 0; i < this.numChildren; i++) {
+						var child:DisplayObject = this.getChildAt(i);
+						if (child is SVGNode) {
+							hasChildren = true;
+							break;
+						}
+					}
+					if (!hasChildren) { 
+						this.dispatchEvent(new SVGEvent(SVGEvent.SVG_LOAD));
+					}
+ 				}
+									
 			}
 		}
+		
+		/**
+		 * Track nodes as they are added so we know when to send the RENDER_DONE event
+		 **/
+		override public function addChild(child:DisplayObject):DisplayObject {
+			if (child is SVGRoot) {
+				trace ("wtf?");
+			}
+			if (child is SVGNode) {				
+				this.svgRoot.invalidNodeCount++;
+			}
+			
+			super.addChild(child);	
+			return child;
+		}
+		
 		
 		/**
 		 * Add any assigned filters to node
@@ -658,6 +858,46 @@ package com.zavoo.svg.nodes
 					}
 				}
 			}
+		}
+		
+		/**
+		 * Check value of x against _minX and _maxX, 
+		 * Update values when appropriate
+		 **/
+		protected function setXMinMax(value:Number):void {
+			if (value < this._minX) {
+				this._minX = value;
+			}
+			if (value > this._maxX) {
+				this._maxX = value;
+			}
+		}
+		
+		/**
+		 * Check value of y against _minY and _maxY, 
+		 * Update values when appropriate
+		 **/
+		protected function setYMinMax(value:Number):void {
+			if (value < this._minY) {
+				this._minY = value;
+			}
+			if (value > this._maxY) {
+				this._maxY = value;
+			}
+		}
+		
+		/**
+		 * Get width calculated from _minX and _maxX
+		 **/
+		public function getRoughWidth():Number {
+			return this._maxX - this._minX;
+		}
+		
+		/**
+		 * Get height calculated from _minY and _maxY
+		 **/
+		public function getRoughHeight():Number {
+			return this._maxY - this._minY;
 		}
 				
 		//Getters / Setters
@@ -687,13 +927,14 @@ package com.zavoo.svg.nodes
 		/** 
 		 * @private 
 		**/		
-		public function set xml(xml:XML):void {
-			if(!xml.toXMLString())
-				return;		
+		public function set xml(xml:XML):void {		
 			this._xml = xml;
-			this._invalidDisplay = true;
-			redrawNode(new Event('event'));
-//			this.invalidateDisplay();
+			this.clearChildren();
+			this.invalidateDisplay();
+			
+			if (this.svgRoot) { //if !null then already added
+				this.svgRoot.dispatchEvent(new SVGMutationEvent(this, SVGMutationEvent.DOM_CHARACTER_DATA_MODIFIED));
+			}
 		}
 		
 		/**
@@ -722,6 +963,11 @@ package com.zavoo.svg.nodes
 		public function get graphicsCommands():Array {
 			return this._graphicsCommands;
 		}
+		
+		
+		public function get isCopy():Boolean {
+			return this._isCopy;
+		}	
 			
 		
 		/**
@@ -774,5 +1020,81 @@ package com.zavoo.svg.nodes
 			
 		}
 		
+		/*
+		 **** EVENTS ****
+		 */
+		
+		protected function setupEvents():void {
+			this.addEventListener(Event.ADDED, onNodeAdded);
+			this.addEventListener(Event.REMOVED, onNodeRemoved);
+			
+			this.addEventListener(MouseEvent.CLICK, onMouseClick);
+			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			this.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+		}
+		
+		protected function onMouseClick(event:MouseEvent):void {
+			if (this.svgRoot) {	
+				var svgMouseEvent:SVGMouseEvent = new SVGMouseEvent(this, SVGMouseEvent.CLICK, event.bubbles, 
+					event.cancelable, event.localX, event.localY, event.relatedObject, event.ctrlKey, 
+					event.altKey, event.shiftKey, event.bubbles, event.delta);
+					
+				this.svgRoot.dispatchEvent(svgMouseEvent);
+				this.svgRoot.currentNode = this;
+			}
+		}
+		
+		protected function onMouseDown(event:MouseEvent):void {
+			if (this.svgRoot) {	
+				var svgMouseEvent:SVGMouseEvent = new SVGMouseEvent(this, SVGMouseEvent.MOUSE_DOWN, event.bubbles, 
+					event.cancelable, event.localX, event.localY, event.relatedObject, event.ctrlKey, 
+					event.altKey, event.shiftKey, event.bubbles, event.delta);
+				
+				this.svgRoot.dispatchEvent(svgMouseEvent);
+			}
+		}
+		
+		protected function onMouseMove(event:MouseEvent):void {
+			if (this.svgRoot) {	
+				var svgMouseEvent:SVGMouseEvent = new SVGMouseEvent(this, SVGMouseEvent.MOUSE_MOVE, event.bubbles, 
+					event.cancelable, event.localX, event.localY, event.relatedObject, event.ctrlKey, 
+					event.altKey, event.shiftKey, event.bubbles, event.delta);				
+			
+				this.svgRoot.dispatchEvent(svgMouseEvent);
+			}
+		}
+		
+		protected function onMouseOut(event:MouseEvent):void {
+			if (this.svgRoot) {	
+				var svgMouseEvent:SVGMouseEvent = new SVGMouseEvent(this, SVGMouseEvent.MOUSE_OUT, event.bubbles, 
+					event.cancelable, event.localX, event.localY, event.relatedObject, event.ctrlKey, 
+					event.altKey, event.shiftKey, event.bubbles, event.delta);
+				
+				this.svgRoot.dispatchEvent(svgMouseEvent);
+			}
+		}
+		
+		protected function onMouseOver(event:MouseEvent):void {
+			if (this.svgRoot) {	
+				var svgMouseEvent:SVGMouseEvent = new SVGMouseEvent(this, SVGMouseEvent.MOUSE_OVER, event.bubbles, 
+					event.cancelable, event.localX, event.localY, event.relatedObject, event.ctrlKey, 
+					event.altKey, event.shiftKey, event.bubbles, event.delta);
+					
+				this.svgRoot.dispatchEvent(svgMouseEvent);
+			}
+		}
+		
+		protected function onMouseUp(event:MouseEvent):void {
+			if (this.svgRoot) {	
+				var svgMouseEvent:SVGMouseEvent = new SVGMouseEvent(this, SVGMouseEvent.MOUSE_UP, event.bubbles, 
+					event.cancelable, event.localX, event.localY, event.relatedObject, event.ctrlKey, 
+					event.altKey, event.shiftKey, event.bubbles, event.delta);
+					
+				this.svgRoot.dispatchEvent(svgMouseEvent);
+			}
+		}
 	}
 }

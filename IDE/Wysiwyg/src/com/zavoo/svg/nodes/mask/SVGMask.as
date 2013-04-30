@@ -1,5 +1,6 @@
 package com.zavoo.svg.nodes.mask
 {
+	import com.zavoo.svg.events.SVGMutationEvent;
 	import com.zavoo.svg.nodes.SVGClipPathNode;
 	import com.zavoo.svg.nodes.SVGNode;
 	
@@ -70,8 +71,10 @@ package com.zavoo.svg.nodes.mask
 		/**
 		 * SVGMask is a copy, do not register
 		 **/
-		override protected function registerId(event:Event):void {
-			//Do Nothing		
+		override protected function onNodeAdded(event:Event):void {
+			if (this.svgRoot) {
+				this.svgRoot.dispatchEvent(new SVGMutationEvent(this, SVGMutationEvent.DOM_NODE_INSERTED));
+			}
 		}
 	}
 }

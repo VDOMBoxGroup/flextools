@@ -1,3 +1,28 @@
+/*
+Copyright (c) 2008 James Hight
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+*/
+
 package com.zavoo.svg.nodes
 {
 	import com.zavoo.svg.utils.EllipticalArc;
@@ -17,7 +42,7 @@ package com.zavoo.svg.nodes
 		}	
 		
 		protected override function draw():void {
-			this.graphics.lineStyle(1);
+			//this.graphics.lineStyle(1);
 			this.runGraphicsCommands();			
 		}
 		
@@ -61,6 +86,8 @@ package com.zavoo.svg.nodes
 			var pathData:String = this.normalizeSVGData(this._xml.@d);			
 
 			var szSegs:Array = pathData.split(',');
+			
+			this._graphicsCommands.push(['SF']);
 						
 			for(var pos:int = 0; pos < szSegs.length; ) {
 				var command:String = szSegs[pos++];				
@@ -138,10 +165,11 @@ package com.zavoo.svg.nodes
 						break;			
 								
 					default:
-						//trace("Unknown Segment Type: " + command);
+						trace("Unknown Segment Type: " + command);
 						break;
 				}			
-			}			
+			}		
+			this._graphicsCommands.push(['EF']);	
 		}
 		
 		private function closePath():void {
@@ -152,6 +180,9 @@ package com.zavoo.svg.nodes
 			this._graphicsCommands.push(['M', x, y]);
 			this.currentX = x;
 			this.currentY = y;
+			
+			this.setXMinMax(x);
+			this.setYMinMax(y);
 		}
 		
 		private function lineHorizontal(x:Number, isAbs:Boolean):void {
@@ -160,7 +191,7 @@ package com.zavoo.svg.nodes
 				x += this.currentX;
 				isAbs = true;
 			}
-			this.line(x,y,isAbs);			
+			this.line(x,y,isAbs);	
 		}
 		
 		private function lineVertical(y:Number, isAbs:Boolean):void {
@@ -169,7 +200,7 @@ package com.zavoo.svg.nodes
 				y += this.currentY;
 				isAbs = true;
 			}
-			this.line(x,y,isAbs);			
+			this.line(x,y,isAbs);	
 		}
 		
 		private function line(x:Number, y:Number, isAbs:Boolean):void {
@@ -181,7 +212,10 @@ package com.zavoo.svg.nodes
 				this.currentX += x;
 				this.currentY += y;				
 			}			
-			this._graphicsCommands.push(['L', this.currentX, this.currentY]);			
+			this._graphicsCommands.push(['L', this.currentX, this.currentY]);		
+			
+			this.setXMinMax(x);
+			this.setYMinMax(y);	
 		}
 		
 		private function ellipticalArc(rx:Number, ry:Number, xAxisRotation:Number, largeArcFlag:Number, 
@@ -190,14 +224,16 @@ package com.zavoo.svg.nodes
 				x += this.currentX;
 				y += this.currentY;
 			}
-			
-			
-			y -= ry * 2; //y is off by the diameter of the ellipse, Why?!?
-			
-			EllipticalArc.drawArc(rx, ry, xAxisRotation, Boolean(largeArcFlag), Boolean(sweepFlag), x, y, this.currentX, this.currentY, this._graphicsCommands);
+						
+			EllipticalArc.drawArc(rx, ry, xAxisRotation, Boolean(largeArcFlag), Boolean(sweepFlag), x, y, this.currentX, this.currentY, this._graphicsCommands);			
 			
 			this.currentX = x;
 			this.currentY = y;
+			
+			this.setXMinMax(rx);
+			this.setYMinMax(ry);
+			this.setXMinMax(x);
+			this.setYMinMax(y);
 			
 		}
 		
@@ -216,6 +252,11 @@ package com.zavoo.svg.nodes
 			}
 			
 			this.quadraticBezier(x1, y1, x, y, isAbs);
+			
+			this.setXMinMax(x);
+			this.setYMinMax(y);
+			this.setXMinMax(x1);
+			this.setYMinMax(y1);
 		}
 		
 		private function quadraticBezier(x1:Number, y1:Number, x:Number, y:Number, isAbs:Boolean):void {
@@ -234,6 +275,11 @@ package com.zavoo.svg.nodes
 			
 			this.lastCurveControlX = x1;
 			this.lastCurveControlY = y1;
+			
+			this.setXMinMax(x);
+			this.setYMinMax(y);
+			this.setXMinMax(x1);
+			this.setYMinMax(y1);
 		}
 		
 		private function cubicBezierSmooth(x2:Number, y2:Number, x:Number, y:Number, isAbs:Boolean):void {
@@ -307,7 +353,29 @@ package com.zavoo.svg.nodes
 			this.currentY = y;
 			
 			this.lastCurveControlX = x2;
-			this.lastCurveControlY = y2;			
+			this.lastCurveControlY = y2;		
+			
+			//Width/height calculations for gradients
+			this.setXMinMax(Pc_1.x);
+			this.setYMinMax(Pc_1.y);
+			this.setXMinMax(Pa_1.x);
+			this.setYMinMax(Pa_1.y);
+			
+			this.setXMinMax(Pc_2.x);
+			this.setYMinMax(Pc_2.y);
+			this.setXMinMax(Pa_2.x);
+			this.setYMinMax(Pa_2.y);
+			
+			this.setXMinMax(Pc_3.x);
+			this.setYMinMax(Pc_3.y);
+			this.setXMinMax(Pa_3.x);
+			this.setYMinMax(Pa_3.y);
+			
+			this.setXMinMax(Pc_4.x);
+			this.setYMinMax(Pc_4.y);
+			this.setXMinMax(P3.x);
+			this.setYMinMax(P3.y);
+				
 		}	
 		
 		private function getMiddle(P0:Object, P1:Object):Object
