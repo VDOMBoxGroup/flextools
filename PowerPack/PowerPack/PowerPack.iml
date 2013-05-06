@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="Flex" version="4">
+  <component name="FlexBuildConfigurationManager" active="Installer">
+    <configurations>
+      <configuration name="Installer" target-platform="Desktop" main-class="Installer" output-file="Installer.swf" output-folder="$MODULE_DIR$/bin-debug">
+        <dependencies>
+          <entries>
+            <entry library-id="a35e4ee4-d54a-4bb0-81e7-8999e0799e5d">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry module-name="PowerPack_lib" build-configuration-name="PowerPack_lib">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-id="873a3872-5e09-479f-af68-3ce528296396">
+              <dependency linkage="Merged" />
+            </entry>
+          </entries>
+          <sdk name="3.6.0" />
+        </dependencies>
+        <compiler-options>
+          <map>
+            <entry key="compiler.locale" value="en_US" />
+          </map>
+        </compiler-options>
+        <packaging-air-desktop use-generated-descriptor="false" custom-descriptor-path="$MODULE_DIR$/src/Installer-app.xml" package-file-name="Installer">
+          <files-to-package>
+            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/net/vdombox/powerpack/dialog/soap" path-in-package="net/vdombox/powerpack/dialog/soap" />
+            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/vdom" path-in-package="vdom" />
+            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/assets" path-in-package="assets" />
+          </files-to-package>
+          <AirSigningOptions use-temp-certificate="false" />
+        </packaging-air-desktop>
+        <packaging-android />
+        <packaging-ios />
+      </configuration>
+      <configuration name="Builder" target-platform="Desktop" main-class="Builder" output-file="Builder.swf" output-folder="$MODULE_DIR$/bin-debug">
+        <dependencies>
+          <entries>
+            <entry library-id="fae9b438-9da2-4db5-a1b2-74ed06b96366">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-id="7690cd7c-507f-458c-942f-dbb58c1b2e05">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry module-name="PowerPack_lib" build-configuration-name="PowerPack_lib">
+              <dependency linkage="Merged" />
+            </entry>
+          </entries>
+          <sdk name="3.6.0" />
+        </dependencies>
+        <compiler-options>
+          <map>
+            <entry key="compiler.debug.swf" value="false" />
+            <entry key="compiler.keep-generated-actionscript" value="true" />
+            <entry key="compiler.locale" value="en_US" />
+          </map>
+        </compiler-options>
+        <packaging-air-desktop use-generated-descriptor="false" custom-descriptor-path="$MODULE_DIR$/src/Builder-app.xml" package-file-name="Builder">
+          <files-to-package>
+            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/net/vdombox/powerpack/dialog/soap" path-in-package="net/vdombox/powerpack/dialog/soap" />
+            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/vdom" path-in-package="vdom" />
+            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/assets" path-in-package="assets" />
+          </files-to-package>
+          <AirSigningOptions use-temp-certificate="false" />
+        </packaging-air-desktop>
+        <packaging-android />
+        <packaging-ios />
+      </configuration>
+    </configurations>
+    <compiler-options />
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="jdk" jdkName="3.6.0" jdkType="Flex SDK Type (new)" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library" exported="">
+      <library type="flex">
+        <properties id="fae9b438-9da2-4db5-a1b2-74ed06b96366" />
+        <CLASSES>
+          <root url="jar://C:/Program Files (x86)/Adobe/Adobe Flash Builder 4.6/sdks/4.1.0/frameworks/libs/air/airglobal.swc!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library type="flex">
+        <properties id="a35e4ee4-d54a-4bb0-81e7-8999e0799e5d" />
+        <CLASSES>
+          <root url="jar://C:/Program Files/Adobe/sdks/4.9.0/frameworks/libs/air/airglobal.swc!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library type="flex">
+        <properties id="7690cd7c-507f-458c-942f-dbb58c1b2e05" />
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../PowerPack_lib/libs" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../PowerPack_lib/libs" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="PowerPack_lib" exported="" />
+    <orderEntry type="module-library" exported="">
+      <library type="flex">
+        <properties id="873a3872-5e09-479f-af68-3ce528296396" />
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../PowerPack_lib/libs" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../PowerPack_lib/libs" recursive="false" />
+      </library>
+    </orderEntry>
+  </component>
+</module>
+
