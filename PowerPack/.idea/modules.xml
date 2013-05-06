@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/PowerPack/PowerPack.iml" filepath="$PROJECT_DIR$/PowerPack/PowerPack.iml" />
       <module fileurl="file://$PROJECT_DIR$/PowerPack_lib/PowerPack_lib.iml" filepath="$PROJECT_DIR$/PowerPack_lib/PowerPack_lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/Singularity/Singularity.iml" filepath="$PROJECT_DIR$/Singularity/Singularity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Test/Test.iml" filepath="$PROJECT_DIR$/Test/Test.iml" />
       <module fileurl="file://$PROJECT_DIR$/WebInstaller/WebInstaller.iml" filepath="$PROJECT_DIR$/WebInstaller/WebInstaller.iml" />
     </modules>
   </component>

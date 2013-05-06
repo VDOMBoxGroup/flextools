@@ -7,7 +7,7 @@
 				width="739" height="388"
 				creationComplete="application1_creationCompleteHandler(event)">
 	
-	<mx:Style source="assets/style/style.css"/>
+	<mx:Style source="/assets/style/style.css"/>
 	
 	<mx:Script>
 		<![CDATA[

@@ -58,10 +58,13 @@
         private var appInstalled : Boolean;
         private var timer : Number;
 
+        [Bindable]
         public var isDesktopApplication : Boolean = true;
-
+        [Bindable]
         public var closable : Boolean = false;
+        [Bindable]
         public var maximizable : Boolean = false;
+        [Bindable]
         public var minimizable : Boolean = false;
 
         private function init() : void
