@@ -60,7 +60,7 @@
 		<mx:Text maxHeight="450" maxWidth="450"
 				 htmlText="{data.toString()}"
 				 textAlign="left"
-				 selectable="true" focusEnabled="false"/>
+				 selectable="true"/>
 		
 	</mx:VBox>
 
