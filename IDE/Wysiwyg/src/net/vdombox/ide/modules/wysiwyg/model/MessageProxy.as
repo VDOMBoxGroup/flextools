@@ -1,7 +1,8 @@
 package net.vdombox.ide.modules.wysiwyg.model
 {
+	import mx.collections.VectorCollection;
 	import mx.core.UIComponent;
-
+	
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
@@ -9,7 +10,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -25,6 +26,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 		private var renderProxy : RenderProxy;
 
 		private var statesProxy : StatesProxy;
+		
+		private var storeMessageStackProxy : VectorCollection = new VectorCollection();
 
 		public function MessageProxy()
 		{
@@ -34,7 +37,10 @@ package net.vdombox.ide.modules.wysiwyg.model
 		public function push( pageVO : PageVO, message : ProxyMessage ) : void
 		{
 			if ( !facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) )
+			{
 				facade.registerProxy( new MessageStackProxy( pageVO ) );
+				storeMessageStackProxy.addItem( MessageStackProxy.NAME + pageVO.id );
+			}
 
 			messageStackProxy = facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) as MessageStackProxy;
 
@@ -77,14 +83,44 @@ package net.vdombox.ide.modules.wysiwyg.model
 			return message;
 		}
 
-		public function removeAll( pageVO : PageVO ) : void
+		public function removeByPageVO( pageVO : PageVO ) : void
 		{
-			if ( !facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) )
+			var proxyName : String = MessageStackProxy.NAME + pageVO.id;
+			
+			if ( !facade.retrieveProxy( proxyName ) )
 				return;
 
-			messageStackProxy = facade.retrieveProxy( MessageStackProxy.NAME + pageVO.id ) as MessageStackProxy;
+			messageStackProxy = facade.retrieveProxy( proxyName ) as MessageStackProxy;
 
-			messageStackProxy.removeAll();
+			messageStackProxy.clearData();
+			
+			facade.removeProxy( proxyName );
+			
+			for ( var i : int = 0; i < storeMessageStackProxy.length; i++ )
+			{
+				if ( storeMessageStackProxy[i] == proxyName )
+				{
+					storeMessageStackProxy.removeItemAt( i );
+					break;
+				}
+			}
+		}
+		
+		public function removeAll() : void
+		{
+			for each( var proxyName : String in storeMessageStackProxy )
+			{
+				if ( !facade.retrieveProxy( proxyName ) )
+					continue;
+				
+				messageStackProxy = facade.retrieveProxy( proxyName ) as MessageStackProxy;
+				
+				messageStackProxy.clearData();
+				
+				facade.removeProxy( proxyName );
+			}
+			
+			storeMessageStackProxy.removeAll();
 		}
 
 		private function setNeedForUpdate() : void

@@ -59,5 +59,11 @@ package net.vdombox.ide.modules.wysiwyg.model
 			_stack.splice( 0, _stack.length );
 			_index = -1;
 		}
+		
+		public function clearData() : void
+		{
+			removeAll();
+			_pageVO = null;
+		}
 	}
 }

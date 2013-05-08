@@ -396,7 +396,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
-					messageProxy.removeAll( body.pageVO as PageVO );
+					messageProxy.removeByPageVO( body.pageVO as PageVO );
 
 					break;
 				}
@@ -476,6 +476,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case Notifications.BODY_STOP:
 				{
 					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+					messageProxy.removeAll();
 
 					break;
 				}
@@ -502,7 +503,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
-					messageProxy.removeAll( body.pageVO as PageVO );
+					messageProxy.removeByPageVO( body.pageVO as PageVO );
 
 					break;
 				}
