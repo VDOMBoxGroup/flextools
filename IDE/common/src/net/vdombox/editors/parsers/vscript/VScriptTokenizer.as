@@ -130,7 +130,7 @@ package net.vdombox.editors.parsers.vscript
 					type = Token.KEYWORD;
 				else if ( isKeyword2( str ) )
 					type = Token.KEYWORD2;
-				else if ( prevStr && prevStr.toLowerCase() == "function" )
+				else if ( prevStr && ( prevStr.toLowerCase() == "function" || prevStr.toLowerCase() == "sub" ) )
 					type = Token.NAMEFUNCTION;
 				else if ( prevStr && prevStr.toLowerCase() == "class" )
 					type = Token.NAMECLASS;
@@ -418,14 +418,17 @@ package net.vdombox.editors.parsers.vscript
 				
 				if ( endLine )
 				{
-					endLine = false;
-					endDescriptionZone = false;
 					if ( t.type == Token.COMMENT )
 					{
 						if ( tString.substr( 0, 1 ) == "'" )
 						{
-							scope.description = tString.substring( 1, tString.length - 3 );
+							scope.description += tString.substring( 1, tString.length - 1 ) + '\r';
 						}
+					}
+					else
+					{
+						endLine = false;
+						endDescriptionZone = false;
 					}
 				}
 				
