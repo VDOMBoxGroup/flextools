@@ -115,14 +115,15 @@
 							folderOpenIcon="{null}"
 							folderClosedIcon="{null}"
                             dataProvider="{resourcesManager.allResources}"
-                            mouseOver="grid_mouseOverHandler(event)">
+                            mouseOver="grid_mouseOverHandler(event)"
+                            dragEnabled="true">
 		
 		<controls:columns>
 			<mx:AdvancedDataGridColumn
 				headerText="ID"
 				dataField="@ID"
 				dataTipField="@ID"
-				showDataTips="true" />
+				showDataTips="true"/>
 
             <mx:AdvancedDataGridColumn
                     headerText="Name"
@@ -134,12 +135,6 @@
                     headerText="Type"
                     dataField="@type"
                     dataTipField="@type"
-                    showDataTips="true" />
-
-            <mx:AdvancedDataGridColumn
-                    headerText="Category"
-                    dataField="@category"
-                    dataTipField="@category"
                     showDataTips="true" />
 
 		</controls:columns>

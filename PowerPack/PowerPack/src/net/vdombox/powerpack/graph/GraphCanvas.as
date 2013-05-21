@@ -561,9 +561,13 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		return newCanvas;
 	}
 
-	public function createNode( category : String = NodeCategory.NORMAL, x : Number = NaN, y : Number = NaN, focused : Boolean = true ) : Node
+	public function createNode( category : String = NodeCategory.NORMAL,
+								x : Number = NaN, y : Number = NaN,
+								focused : Boolean = true,
+								edit : Boolean = true,
+								text = "") : Node
 	{
-		var newNode : Node = new Node(category);
+		var newNode : Node = new Node(category, NodeType.NORMAL, text);
 
 		addChild( newNode );
 
@@ -580,13 +584,16 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 		dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
 
-		newNode.edit();
-		
-		newNode.preventValidation = true;
-		
-		if (category == NodeCategory.SUBGRAPH)
-			newNode.triggerAssistMenu();
-		
+		if ( edit )
+		{
+			newNode.edit();
+
+			newNode.preventValidation = true;
+
+			if (category == NodeCategory.SUBGRAPH)
+				newNode.triggerAssistMenu();
+		}
+
 		return newNode;
 	}
 
@@ -891,16 +898,22 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 				case ResourcesEvent.COMPLETE :
 				{
-					var newNode : Node;
-
-					newNode = createNode(NodeCategory.RESOURCE);
-					newNode.text = event.resourceID;
+					addResourceNode(event.resourceID);
 
 					break;
 				}
 			}
 		}
 	}
+
+	private function addResourceNode( resourceID : String ) : void
+	{
+		var newNode : Node;
+
+		newNode = createNode(NodeCategory.RESOURCE);
+		newNode.text = resourceID;
+	}
+
 	
 	private function get resourcesManager() : ResourcesManager
 	{
@@ -1191,32 +1204,33 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 	private function dragEnterHandler( event : DragEvent ) : void
 	{
-		if ( event.dragSource.hasFormat( "items" ) &&
-				event.dragSource.dataForFormat( "items" ) &&
-				(event.dragSource.dataForFormat( "items" ) as Array).length > 0 &&
-				(event.dragSource.dataForFormat( "items" ) as Array)[0] is GraphCanvas )
-		{
-			DragManager.acceptDragDrop( UIComponent( event.target ) );
-			DragManager.showFeedback( DragManager.MOVE );
-		}
+		DragManager.acceptDragDrop( UIComponent( event.target ) );
+		DragManager.showFeedback( DragManager.MOVE );
 	}
 
 	private function dragDropHandler( event : DragEvent ) : void
 	{
-		var items : Array =
-				event.dragSource.dataForFormat( "items" ) as Array;
+		var items : Array = event.dragSource.dataForFormat( "items" ) as Array;
 
-		var graph : GraphCanvas = items[0] as GraphCanvas;
+		if ( !items || items.length <= 0 )
+			return;
 
-		var newNode : Node = new Node( NodeCategory.SUBGRAPH, NodeType.NORMAL, graph.name );
-		addChild( newNode );
+		if ( items[0] is XML )
+		{
+			var resourceXML : XML = items[0] as XML;
 
-		newNode.move( event.localX + horizontalScrollPosition,
-				event.localY + verticalScrollPosition );
+			addResourceNode(resourceXML.@ID);
+		}
+		else if ( items[0] is GraphCanvas )
+		{
+			var graph : GraphCanvas = items[0] as GraphCanvas;
 
-		newNode.setFocus();
+			var nodeX : Number = event.localX + horizontalScrollPosition;
+			var nodeY : Number = event.localY + verticalScrollPosition;
 
-		dispatchEvent( new GraphCanvasEvent( GraphCanvasEvent.GRAPH_CHANGED ) );
+			createNode(NodeCategory.SUBGRAPH, nodeX, nodeY, true, false, graph.name);
+		}
+
 	}
 
 	private function childRemoveHandler( event : ChildExistenceChangedEvent ) : void

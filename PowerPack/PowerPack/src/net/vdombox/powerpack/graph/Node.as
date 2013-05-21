@@ -1008,8 +1008,6 @@ public class Node extends Canvas implements IFocusManagerComponent
 
 	private function updateResourcesList() : void
 	{
-		trace("[Node] updateResourcesList");
-
 		var curTplIndex : int = 0;
 		var tpl : BuilderTemplate = ContextManager.templates[curTplIndex] as BuilderTemplate;
 
@@ -2272,8 +2270,6 @@ public class Node extends Canvas implements IFocusManagerComponent
 
 	private function resourcesManager_changedHandler( event : ResourcesEvent ) : void
 	{
-		trace("[Node] resourcesManager_changedHandler");
-
 		if (category == NodeCategory.RESOURCE)
 		{
 			_categoryChanged = true;

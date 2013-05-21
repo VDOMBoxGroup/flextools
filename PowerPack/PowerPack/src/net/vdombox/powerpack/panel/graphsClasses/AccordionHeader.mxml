@@ -315,7 +315,7 @@
 
 		private function dragEnterHandler( event : DragEvent ) : void
 		{
-			if ( event.dragSource.hasFormat( "items" ) &&
+            if ( event.dragSource.hasFormat( "items" ) &&
 						 event.dragSource.dataForFormat( "items" ) &&
 						 (event.dragSource.dataForFormat( "items" ) as Array).length > 0 )
 			{
