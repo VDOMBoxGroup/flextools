@@ -622,6 +622,53 @@ public class CashManager extends EventDispatcher
 		return newEntry;
 	}
 
+	public static function removeObject( ID : String, objID : String ) : void
+	{
+		initialize();
+
+		var mainIndex : XML = getMainIndex();
+		var entry : XML = getMainIndexEntry( mainIndex, ID );
+		if ( !entry )
+			return;
+
+		updateMainIndexEntry( mainIndex, ID, 'lastUpdate', UTCNow().getTime().toString() );
+		updateMainIndexEntry( mainIndex, ID, 'lastRequest', UTCNow().getTime().toString() );
+
+		var folder : File = cashFolder.resolvePath( entry.@folder );
+
+		if ( !folder.exists )
+			folder.createDirectory();
+
+		var index : XML = getIndex( ID, mainIndex );
+		if ( !index )
+			return;
+
+		var objEntry : XML = getIndexEntry( index, objID );
+		if ( !objEntry )
+			return;
+
+		try
+		{
+			var dataFile : File = folder.resolvePath( objEntry.@filename );
+			if (dataFile && dataFile.exists)
+				dataFile.deleteFile();
+		}
+		catch (e:*){}
+
+		try
+		{
+			var thumbFile : File = folder.resolvePath( objEntry.@thumb );
+			if (thumbFile && thumbFile.exists)
+				thumbFile.deleteFile();
+		}
+		catch (e:*){}
+
+		delete index.resource.(hasOwnProperty( '@ID' ) && @ID == objID)[0];
+		setIndex( index );
+
+		setMainIndex( mainIndex );
+	}
+
 	private function createThumb( entry : XML, folder : File, b64Data : ByteArray ) : void
 	{
 		if ( entry.@category != 'image' &&

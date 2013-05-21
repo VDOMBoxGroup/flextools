@@ -1622,6 +1622,7 @@
 	
 										<panel:NodeValue id="pnl_node_value" />
 										<panel:LogPanel id="pnl_log" />
+                                        <panel:ResourcesPanel id="pnl_resources" />
 	
 									</containers:SuperTabNavigator>
 	

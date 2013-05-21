@@ -48,6 +48,8 @@ import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
 import mx.utils.NameUtil;
 
+import net.vdombox.powerpack.events.ResourcesEvent;
+
 import net.vdombox.powerpack.lib.extendedapi.controls.SuperTextArea;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
@@ -62,6 +64,7 @@ import net.vdombox.powerpack.lib.player.managers.LanguageManager;
 import net.vdombox.powerpack.lib.player.popup.AlertPopup;
 import net.vdombox.powerpack.lib.player.template.Template;
 import net.vdombox.powerpack.managers.CashManager;
+import net.vdombox.powerpack.managers.ResourcesManager;
 import net.vdombox.powerpack.powerpackscript.AssistMenu;
 import net.vdombox.powerpack.template.BuilderTemplate;
 import net.vdombox.powerpack.utils.GeneralUtils;
@@ -218,7 +221,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 		{
 			isUnique = true;
 			
-			for (var prop:Node in nodes) 
+			for each (var prop:Node in nodes)
 			{
 				if (prop.name == name)
 				{
@@ -368,7 +371,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 	[Bindable]
 	public var arrTrans : Array = [];
 
-	[ArrayElementType("ToolTip")]
+	[ArrayElementType("mx.core.IToolTip")]
 	public var arrToolTip : Array = [];
 
 	public var canvas : GraphCanvas;
@@ -502,7 +505,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 	private var _categoryChanged : Boolean = false;
 
 	[Bindable("categoryChanged")]
-	[Inspectable(category="General", defaultValue=GraphNodeCategory.NORMAL, enumeration="Normal,Subgraph,Command,Resource")]
+	[Inspectable(category="General", defaultValue="Normal", enumeration="Normal,Subgraph,Command,Resource")]
 
 	/**
 	 *  Node category.
@@ -540,7 +543,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 	private var _typeChanged : Boolean = false;
 
 	[Bindable("typeChanged")]
-	[Inspectable(category="General", defaultValue=GraphNodeType.NORMAL, enumeration="Normal,Initial,Terminal")]
+	[Inspectable(category="General", defaultValue="Normal", enumeration="Normal,Initial,Terminal")]
 
 	/**
 	 *  Node type.
@@ -890,31 +893,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 					nodeCB.visible = true;
 					nodeCB.includeInLayout = true;
 
-					var curTplIndex : int = 0;
-					var tpl : BuilderTemplate = ContextManager.templates[curTplIndex] as BuilderTemplate;
-					var objIndex : XML = CashManager.getIndex( tpl.fullID );
-					var objList : XMLList = new XMLList();
-
-					if ( objIndex )
-						objList = objIndex.resource.(hasOwnProperty( '@category' ) && @category == 'image' || @category == 'database');
-
-					nodeCB.dataProvider = objList;
-					nodeCB.selectedIndex = 0;
-
-					if ( objList && objList.length() > 0 )
-					{
-						for each( var item : XML in objList )
-						{
-							if ( item.@ID == text )
-							{
-								nodeCB.selectedItem = item;
-								break;
-							}
-						}
-
-						if ( nodeCB.selectedIndex >= 0 )
-							text = nodeCB.selectedItem.@ID;
-					}
+					updateResourcesList();
 
 					if ( contextMenu )
 						contextMenu.getItemByName( "resource" ).checked = true;
@@ -1026,6 +1005,39 @@ public class Node extends Canvas implements IFocusManagerComponent
 
 		_needRefreshStyles = false;
 	}
+
+	private function updateResourcesList() : void
+	{
+		trace("[Node] updateResourcesList");
+
+		var curTplIndex : int = 0;
+		var tpl : BuilderTemplate = ContextManager.templates[curTplIndex] as BuilderTemplate;
+
+		var objList : XMLList = ResourcesManager.getInstance().allResources || new XMLList();
+
+		if ( objList && objList.length() > 0 )
+			objList = <resource/> + objList;
+
+		nodeCB.dataProvider = objList;
+		nodeCB.selectedIndex = 0;
+
+		if ( !objList || objList.length() <= 0 )
+			return;
+
+		for each( var item : XML in objList )
+		{
+			if ( item.@ID == text )
+			{
+				nodeCB.selectedItem = item;
+				break;
+			}
+		}
+
+		if ( nodeCB.selectedIndex > 0 )
+			text = nodeCB.selectedItem.@ID;
+
+	}
+
 
 	override protected function measure() : void
 	{
@@ -1646,6 +1658,13 @@ public class Node extends Canvas implements IFocusManagerComponent
 				}
 			}
 		}
+
+		resourcesManager.addEventListener( ResourcesEvent.CHANGED, resourcesManager_changedHandler );
+	}
+
+	private function get resourcesManager() : ResourcesManager
+	{
+		return ResourcesManager.getInstance();
 	}
 
 	private function typeChangedHandler( event : Event ) : void
@@ -2197,7 +2216,7 @@ public class Node extends Canvas implements IFocusManagerComponent
 		else
 		{
 			nodeTextArea.setStyle( "borderColor", getStyle( "errorColor" ) );
-			nodeCB.setStyle( "borderColor", getStyle( "errorColor" ) );
+//			nodeCB.setStyle( "borderColor", getStyle( "errorColor" ) );
 			_isValidText = false;
 		}
 	}
@@ -2241,15 +2260,27 @@ public class Node extends Canvas implements IFocusManagerComponent
 			var subCommandText : String = text.match(subCommandRegExp)[0];
 			
 			var lastSpaceIndex : int = subCommandText.lastIndexOf(" ");
-			
+
 			var subGraphName : String = subCommandText.substring(lastSpaceIndex+1);
 			
 			return subGraphName;
 		}
-		
+
 		return "";
 	}
-	
-	
+
+
+	private function resourcesManager_changedHandler( event : ResourcesEvent ) : void
+	{
+		trace("[Node] resourcesManager_changedHandler");
+
+		if (category == NodeCategory.RESOURCE)
+		{
+			_categoryChanged = true;
+
+			invalidateProperties();
+			invalidateDisplayList();
+		}
+	}
 }
 }

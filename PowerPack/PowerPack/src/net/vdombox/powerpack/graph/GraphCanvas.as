@@ -26,6 +26,7 @@ import mx.events.ChildExistenceChangedEvent;
 import mx.events.CloseEvent;
 import mx.events.DragEvent;
 import mx.events.FlexEvent;
+import mx.events.ResourceEvent;
 import mx.graphics.codec.PNGEncoder;
 import mx.managers.CursorManager;
 import mx.managers.DragManager;
@@ -38,6 +39,9 @@ import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
 import net.vdombox.powerpack.control.controlbar.GraphEditorControlBar;
+
+import net.vdombox.powerpack.control.controlbar.GraphEditorControlBar;
+import net.vdombox.powerpack.events.ResourcesEvent;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenu;
 import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
 import net.vdombox.powerpack.lib.extendedapi.utils.ObjectUtils;
@@ -55,6 +59,7 @@ import net.vdombox.powerpack.managers.SelectionManager;
 import net.vdombox.powerpack.sdkcompiler.SDKCompiler;
 import net.vdombox.powerpack.template.BuilderTemplate;
 import net.vdombox.powerpack.utils.GeneralUtils;
+import net.vdombox.powerpack.managers.ResourcesManager;
 
 public class GraphCanvas extends Canvas implements IFocusManagerComponent
 {
@@ -840,8 +845,8 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 				var data : ByteArray = new ByteArray();
 				data.writeUTFBytes( b64Data );
 				
-				createNewResource("", "png", data);
-				
+				resourcesManager.createResource("", "png", data);
+
 				CursorManager.removeBusyCursor();
 				ProgressManager.complete();
 
@@ -854,114 +859,52 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 		}
 	}
 	
-	private function addResource () : void
+	private function addResource() : void
 	{
-		var folder : File = new File (File.desktopDirectory.nativePath);
-		var selectedResource : File;
-		
-		selectResource();
-		
-		function selectResource () : void
+		CursorManager.setBusyCursor();
+
+		ProgressManager.complete();
+		ProgressManager.show( ProgressManager.DIALOG_MODE, false );
+
+		resourcesManager.addEventListener( ResourcesEvent.COMPLETE, addResourceCompleteHandler);
+		resourcesManager.addEventListener( ResourcesEvent.CANCEL, addResourceCompleteHandler);
+		resourcesManager.addEventListener( ResourcesEvent.ERROR, addResourceCompleteHandler);
+
+		resourcesManager.addResource();
+
+		function addResourceCompleteHandler( event : ResourcesEvent ) : void
 		{
-			folder.addEventListener(Event.SELECT, resourceSelectHandler);
-			folder.addEventListener(Event.CANCEL, resourceCancelHandler);
-			
-			folder.browseForOpen("Select resource");
-		}
-		
-		function resourceSelectHandler (event : Event) : void
-		{
-			folder.removeEventListener(Event.SELECT, resourceSelectHandler);
-			folder.removeEventListener(Event.CANCEL, resourceCancelHandler);
-			
-			selectedResource = event.target as File;
-			
-			selectedResource.addEventListener(Event.COMPLETE, loadCompleteHandler);
-			selectedResource.addEventListener(IOErrorEvent.IO_ERROR, loadErrorHandler);
-			selectedResource.addEventListener(SecurityErrorEvent.SECURITY_ERROR, loadErrorHandler);
-			
-			CursorManager.setBusyCursor();
-			
-			ProgressManager.complete();
-			ProgressManager.show( ProgressManager.DIALOG_MODE, false );
-			
-			selectedResource.load();
-		}
-		
-		function resourceCancelHandler (event : Event) : void
-		{
-			folder.removeEventListener(Event.CANCEL, resourceCancelHandler);
-			
-			if (!selectedResource)
-				return;
-			
-			selectedResource.removeEventListener(Event.COMPLETE, loadCompleteHandler);
-			selectedResource.removeEventListener(IOErrorEvent.IO_ERROR, loadErrorHandler);
-			selectedResource.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, loadErrorHandler);
-			
+			resourcesManager.removeEventListener( ResourcesEvent.COMPLETE, addResourceCompleteHandler);
+			resourcesManager.removeEventListener( ResourcesEvent.CANCEL, addResourceCompleteHandler);
+			resourcesManager.removeEventListener( ResourcesEvent.ERROR, addResourceCompleteHandler);
+
 			CursorManager.removeBusyCursor();
 			ProgressManager.complete();
+
+			switch (event.type)
+			{
+				case ResourcesEvent.ERROR :
+				{
+					AlertPopup.show(event.errorMsg, "Error");
+					break;
+				}
+
+				case ResourcesEvent.COMPLETE :
+				{
+					var newNode : Node;
+
+					newNode = createNode(NodeCategory.RESOURCE);
+					newNode.text = event.resourceID;
+
+					break;
+				}
+			}
 		}
-		
-		function loadErrorHandler (event : Event) : void
-		{
-			folder.removeEventListener(Event.CANCEL, resourceCancelHandler);
-			
-			selectedResource.removeEventListener(Event.COMPLETE, loadCompleteHandler);
-			selectedResource.removeEventListener(IOErrorEvent.IO_ERROR, loadErrorHandler);
-			selectedResource.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, loadErrorHandler);
-			
-			CursorManager.removeBusyCursor();
-			ProgressManager.complete();
-			
-			AlertPopup.show("Error loading resource.", "Error");
-		}
-		
-		function loadCompleteHandler (event : Event) : void
-		{
-			folder.removeEventListener(Event.CANCEL, resourceCancelHandler);
-			
-			selectedResource.removeEventListener(Event.COMPLETE, loadCompleteHandler);
-			selectedResource.removeEventListener(IOErrorEvent.IO_ERROR, loadErrorHandler);
-			selectedResource.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, loadErrorHandler);
-			
-			var resourceData : ByteArray = selectedResource.data;
-			resourceData.position = 0;
-			
-			var encoder : Base64Encoder = new Base64Encoder();
-			encoder.insertNewLines = false;
-			encoder.encodeBytes( resourceData );
-			var b64Data : String = encoder.flush();
-			
-			var data : ByteArray = new ByteArray();
-			data.writeUTFBytes( b64Data );
-			
-			createNewResource(selectedResource.name, selectedResource.extension, data);
-			
-			CursorManager.removeBusyCursor();
-			ProgressManager.complete();
-		}
-		
-		
 	}
 	
-	private function createNewResource (name: String, type : String, data : ByteArray) : void
+	private function get resourcesManager() : ResourcesManager
 	{
-		var newNode : Node;
-		
-		var ID : String = UIDUtil.createUID();
-		var name : String = !name ? ID + "." + type : name;
-		
-		if (!type)
-			type = "";
-		
-		var category : String = CashManager.typeCategoryMap.hasOwnProperty(type) ? CashManager.typeCategoryMap[type] : CashManager.typeCategoryMap["other"];
-			
-		if (currentTemplate)
-			CashManager.setObject( currentTemplate.fullID, <object category={category} ID={ID} name={name} type={type} />, data );
-		
-		newNode = createNode(NodeCategory.RESOURCE);
-		newNode.text = ID;
+		return ResourcesManager.getInstance();
 	}
 
 	public function doSelectAll() : void
@@ -1403,7 +1346,6 @@ public class GraphCanvas extends Canvas implements IFocusManagerComponent
 
 		return resultVariablesArray;
 	}
-	
-	
+
 }
 }

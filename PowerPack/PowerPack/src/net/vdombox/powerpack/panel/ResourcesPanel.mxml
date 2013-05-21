@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         xmlns:controls="net.vdombox.powerpack.lib.extendedapi.controls.*"
+         paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5"
+         width="100%" height="100%"
+         label="Resources"
+         initialize="initializeHandler(event)"
+         show="{updateResourcesList();}">
+	
+	<mx:Script>
+		<![CDATA[
+        import mx.events.FlexEvent;
+        import mx.managers.CursorManager;
+
+        import net.vdombox.powerpack.events.ResourcesEvent;
+        import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+        import net.vdombox.powerpack.managers.ProgressManager;
+
+        import net.vdombox.powerpack.managers.ResourcesManager;
+
+        private function updateResourcesList() : void
+        {
+            grid.dataProvider = resourcesManager.allResources;
+            grid.invalidateList();
+        }
+
+        private function get resourcesManager() : ResourcesManager
+        {
+            return ResourcesManager.getInstance();
+        }
+
+        private function addResource() : void
+        {
+            CursorManager.setBusyCursor();
+
+            ProgressManager.complete();
+            ProgressManager.show( ProgressManager.DIALOG_MODE, false );
+
+            resourcesManager.addEventListener( ResourcesEvent.COMPLETE, addResourceCompleteHandler );
+            resourcesManager.addEventListener( ResourcesEvent.CANCEL, addResourceCompleteHandler );
+            resourcesManager.addEventListener( ResourcesEvent.ERROR, addResourceCompleteHandler );
+
+            resourcesManager.addResource();
+
+            function addResourceCompleteHandler( event : ResourcesEvent ) : void
+            {
+                resourcesManager.removeEventListener( ResourcesEvent.COMPLETE, addResourceCompleteHandler );
+                resourcesManager.removeEventListener( ResourcesEvent.CANCEL, addResourceCompleteHandler );
+                resourcesManager.removeEventListener( ResourcesEvent.ERROR, addResourceCompleteHandler );
+
+                CursorManager.removeBusyCursor();
+                ProgressManager.complete();
+
+                switch ( event.type )
+                {
+                    case ResourcesEvent.ERROR :
+                    {
+                        AlertPopup.show( event.errorMsg, "Error" );
+                        break;
+                    }
+                }
+            }
+        }
+
+        private function removeResource() : void
+        {
+            var resourceXML : XML = grid.selectedItem as XML;
+
+            if ( !resourceXML )
+                return;
+
+            CursorManager.setBusyCursor();
+
+            ProgressManager.complete();
+            ProgressManager.show( ProgressManager.DIALOG_MODE, false );
+
+            resourcesManager.removeResource( resourceXML.@ID );
+
+            CursorManager.removeBusyCursor();
+            ProgressManager.complete();
+        }
+
+
+        private function resourcesChangedHandler( event : ResourcesEvent ) : void
+        {
+            updateResourcesList();
+        }
+
+        private function initializeHandler( event : FlexEvent ) : void
+        {
+            resourcesManager.addEventListener( ResourcesEvent.CHANGED, resourcesChangedHandler );
+        }
+
+        private function grid_mouseOverHandler( event : MouseEvent ) : void
+        {
+            //            if ( event.target is AdvancedDataGridItemRenderer )
+            //            {
+            //                trace( "OVER: " + event.target );
+            //                // TODO: image preview
+            //            }
+        }
+
+        ]]>
+	</mx:Script>
+	
+	<mx:HBox horizontalAlign="right" width="100%">
+		<mx:Button label="Add" click="addResource();"/>
+		<mx:Button label="Remove" click="removeResource();" enabled="{grid.selectedIndex >= 0}"/>
+	</mx:HBox>
+	
+	<controls:SuperDataGrid id="grid"
+                            designViewDataType="flat"
+							width="100%" height="100%"
+							defaultLeafIcon="{null}"
+							folderOpenIcon="{null}"
+							folderClosedIcon="{null}"
+                            dataProvider="{resourcesManager.allResources}"
+                            mouseOver="grid_mouseOverHandler(event)">
+		
+		<controls:columns>
+			<mx:AdvancedDataGridColumn
+				headerText="ID"
+				dataField="@ID"
+				dataTipField="@ID"
+				showDataTips="true" />
+
+            <mx:AdvancedDataGridColumn
+                    headerText="Name"
+                    dataField="@name"
+                    dataTipField="@name"
+                    showDataTips="true" />
+
+            <mx:AdvancedDataGridColumn
+                    headerText="Type"
+                    dataField="@type"
+                    dataTipField="@type"
+                    showDataTips="true" />
+
+            <mx:AdvancedDataGridColumn
+                    headerText="Category"
+                    dataField="@category"
+                    dataTipField="@category"
+                    showDataTips="true" />
+
+		</controls:columns>
+
+	</controls:SuperDataGrid>
+
+</mx:VBox>

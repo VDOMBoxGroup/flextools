@@ -47,15 +47,15 @@ import net.vdombox.powerpack.utils.GeneralUtils;
 //  Events
 //--------------------------------------	
 
-[Event(name="enabledChanged", type="flash.events.ConnectorEvent")]
-[Event(name="dataChanged", type="flash.events.ConnectorEvent")]
-[Event(name="labelChanged", type="flash.events.ConnectorEvent")]
-[Event(name="highlightedChanged", type="flash.events.ConnectorEvent")]
-
-[Event(name="fromObjectChanged", type="flash.events.ConnectorEvent")]
-[Event(name="toObjectChanged", type="flash.events.ConnectorEvent")]
-
-[Event(name="disposed", type="flash.events.ConnectorEvent")]
+//[Event(name="enabledChanged", type="flash.events.ConnectorEvent")]
+//[Event(name="dataChanged", type="flash.events.ConnectorEvent")]
+//[Event(name="labelChanged", type="flash.events.ConnectorEvent")]
+//[Event(name="highlightedChanged", type="flash.events.ConnectorEvent")]
+//
+//[Event(name="fromObjectChanged", type="flash.events.ConnectorEvent")]
+//[Event(name="toObjectChanged", type="flash.events.ConnectorEvent")]
+//
+//[Event(name="disposed", type="flash.events.ConnectorEvent")]
 
 //--------------------------------------
 //  Styles
@@ -205,7 +205,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		{
 			isUnique = true;
 			
-			for (var prop:Node in connectors) 
+			for each (var prop:Node in connectors)
 			{
 				if (prop.name == name)
 				{
@@ -309,7 +309,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	private var _created : Boolean;
 	private var _dataWatcher : ChangeWatcher;
 
-	[ArrayElementType("Point")]
+	[ArrayElementType("flash.geom.Point")]
 	private var _connectorPoly : Array = [];
 
 	public var canvas : GraphCanvas;

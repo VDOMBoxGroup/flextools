@@ -19,8 +19,9 @@ package net.vdombox.powerpack.template
 	import net.vdombox.powerpack.managers.BuilderContextManager;
 	import net.vdombox.powerpack.managers.CashManager;
 	import net.vdombox.powerpack.managers.ProgressManager;
-	
-	public class BuilderTemplate extends Template
+import net.vdombox.powerpack.managers.ResourcesManager;
+
+public class BuilderTemplate extends Template
 	{
 		private static const BROWSE_TYPE_OPEN	: String = "browseForOpen";
 		private static const BROWSE_TYPE_SAVE	: String = "browseForSave";
@@ -347,27 +348,32 @@ package net.vdombox.powerpack.template
 			// get resources		
 			delete xmlStructure.resources;
 			
-			var index : XML = CashManager.getIndex( fullID );
-			if ( index )
+			var resources : XMLList = ResourcesManager.getInstance().allResources;
+				
+			xmlStructure.appendChild( <resources/> );
+
+			if (!resources)
+				return;
+
+			for each ( var res : XML in resources )
 			{
-				var resources : XMLList = index.resource.(hasOwnProperty( '@category' ) && (@category == 'image' || @category == 'database'));
-				
-				xmlStructure.appendChild( <resources/> );
-				
-				for each ( var res : XML in resources )
+				var resObj : Object = CashManager.getObject( fullID, res.@ID );
+				if (!resObj)
 				{
-					var resObj : Object = CashManager.getObject( fullID, res.@ID );
-					var resData : ByteArray = ByteArray( resObj.data );
-					var content : String = resData.readUTFBytes( resData.bytesAvailable );
-					
-					var resXML : XML = XML( '<resource><![CDATA[' + content + ']]></resource>' );
-					resXML.@category = resObj.entry.@category;
-					resXML.@ID = resObj.entry.@ID;
-					resXML.@type = resObj.entry.@type;
-					resXML.@name = resObj.entry.@name;
-					
-					xmlStructure.resources.appendChild( resXML );
+					showError("Can't save template.\nResource '"+res.@ID+"' is not in the cache.");
+					return;
 				}
+
+				var resData : ByteArray = ByteArray( resObj.data );
+				var content : String = resData.readUTFBytes( resData.bytesAvailable );
+
+				var resXML : XML = XML( '<resource><![CDATA[' + content + ']]></resource>' );
+				resXML.@category = resObj.entry.@category;
+				resXML.@ID = resObj.entry.@ID;
+				resXML.@type = resObj.entry.@type;
+				resXML.@name = resObj.entry.@name;
+
+				xmlStructure.resources.appendChild( resXML );
 			}
 		}
 		

@@ -22,7 +22,7 @@
 			import mx.events.IndexChangedEvent;
 			import mx.events.ListEvent;
 			import mx.utils.StringUtil;
-			
+
 			import net.vdombox.powerpack.control.ProjectPropertiesBox;
 			import net.vdombox.powerpack.graph.GraphCanvas;
 			import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
@@ -35,53 +35,53 @@
 			import net.vdombox.powerpack.managers.BuilderContextManager;
 			import net.vdombox.powerpack.template.BuilderTemplate;
 			import net.vdombox.powerpack.template.BuilderTemplateProject;
-			
+
 			private static var _dialog	: ProjectsSettingsDialog;
-			
+
 			[Bindable]
 			public var graphs : ArrayCollection;
-			
+
 			static public function show( templateGraphs : ArrayCollection, closeHandler : Function = null ) : ProjectsSettingsDialog
 			{
-				
+
 				if ( !_dialog || _dialog.closed )
 				{
 					_dialog = new ProjectsSettingsDialog();
 					_dialog.graphs = templateGraphs;
-					
+
 					_dialog.open();
 					_dialog.show( OK | CANCEL, closeHandler, null, OK );
-					
+
 					var defaultCaptions : Object = {
 						template_properties : "Properties",
 						alert_delete_project_title : "Confirmation"
 					};
-					
+
 					LanguageManager.setSentences( defaultCaptions );
 				}
 				else
 				{
 					_dialog.activate();
 				}
-				
+
 				return _dialog;
 			}
-			
+
 			protected override function removeDialog( buttonPressed : String ) : void
 			{
 				switch ( buttonPressed )
 				{
-					
+
 					case BUTTON_NAME_OK:
 					{
 						saveSettings();
-												
+
 						_dialog.closeDetail = ModalDialog.OK;
 						_dialog.close();
-						
+
 						break;
 					}
-						
+
 					case BUTTON_NAME_CANCEL:
 					default:
 					{
@@ -89,43 +89,43 @@
 						_dialog.close();
 						break;
 					}
-					
+
 				}
 			}
-			
+
 			protected function projectsList_creationCompleteHandler(event:FlexEvent):void
 			{
 				for each (var project : BuilderTemplateProject in projects)
 				{
 					addNewProjectProperties(project);
 				}
-				
+
 				updatePropertiesView ();
 			}
-			
+
 			protected function projectsList_changeHandler(event:ListEvent):void
 			{
 				updatePropertiesView ();
 			}
-			
+
 			protected function buttonNewProject_clickHandler(event:MouseEvent):void
 			{
 				addNewProject();
 			}
-			
+
 			private function addNewProject():void
 			{
 				currentTemplate.createNewProject();
-				
+
 				var newProjectIndex : Number = projects.length-1;
-				
+
 				addNewProjectProperties(projects[newProjectIndex] as BuilderTemplateProject);
-				
+
 				projectsList.selectedIndex = newProjectIndex;
-				
+
 				updatePropertiesView();
 			}
-			
+
 			protected function buttonRemoveProject_clickHandler(event:MouseEvent):void
 			{
 				if (projectsList.selectedIndex < 0 || projects.length <= 1)
@@ -133,15 +133,15 @@
 					AlertPopup.show("You can not remove the last project.", "", AlertPopup.OK, _dialog);
 					return;
 				}
-				
+
 				var projectName : String = BuilderTemplateProject(projectsList.selectedItem).name;
 				var removeProjectConfirmationMsg : String = "Are you sure you want to remove '"+ projectName +"' project?";
-				
+
 				AlertPopup.show(
 					removeProjectConfirmationMsg,
 					LanguageManager.sentences['alert_delete_project_title'],
 					AlertPopup.YES | AlertPopup.NO, _dialog, deleteProjectAlertCloseHandler, null, AlertPopup.YES );
-				
+
 				function deleteProjectAlertCloseHandler (event : CloseEvent) : void
 				{
 					if ( event.detail == AlertPopup.YES )
@@ -149,30 +149,30 @@
 						removeCurrentProject();
 					}
 				}
-				
-				
+
+
 			}
-			
+
 			private function removeCurrentProject():void
 			{
 				removeProjectPropertiesAt (projectsList.selectedIndex);
-				
+
 				currentTemplate.deleteProject ( projectsList.selectedItem as BuilderTemplateProject );
-				
+
 				projectsList.validateNow();
-				
+
 				projectsList.selectedIndex = currentTemplate.selectedProjectIndex;
-				
+
 				updatePropertiesView();
 			}
-			
+
 			private function updatePropertiesView () : void
 			{
 				vsProperties.selectedIndex = projectsList.selectedIndex;
-				
+
 				vsProperties.selectedChild.setFocus();
 			}
-			
+
 			private function saveSettings (project : ProjectPropertiesBox = null) : void
 			{
 				if (project)
@@ -180,90 +180,90 @@
 					project.saveSettings();
 					return;
 				}
-					
+
 				for each (var projectProperties : ProjectPropertiesBox in vsProperties.getChildren())
 				{
 					projectProperties.saveSettings();
 				}
 			}
-			
+
 			private function get currentTemplate () : BuilderTemplate
 			{
 				return BuilderContextManager.currentTemplate;
 			}
-			
+
 			private function get projects () : Array
 			{
 				return ArrayCollection(projectsList.dataProvider).source;
 			}
-			
+
 			private function addNewProjectProperties (project : BuilderTemplateProject) : void
 			{
 				var projectPropertiesControl : ProjectPropertiesBox;
-				
+
 				projectPropertiesControl = new ProjectPropertiesBox();
 				projectPropertiesControl.project = project;
 				projectPropertiesControl.graphs = graphs;
-				
+
 				projectPropertiesControl.addEventListener(ProjectPropertiesBox.EVENT_INITIAL_GRAPH_CHANGED, projectInitialGraphChangedHandler);
 				projectPropertiesControl.addEventListener(ProjectPropertiesBox.EVENT_PROJECT_SETTINGS_CHANGED, projectSettingsSavesHandler);
-				
+
 				vsProperties.addChild(projectPropertiesControl);
-				
+
 				projectPropertiesControl.addEventListener(FlexEvent.CREATION_COMPLETE, projectPropertiesCreationCompleteHandler);
-			
+
 			}
-			
+
 			private function projectInitialGraphChangedHandler (event : Event ) : void
 			{
 				for each (var graph : GraphCanvas in graphs)
 				{
 					var newInitialValue : Boolean = currentTemplate.isInitialGraphForAnyProject(graph.name);
-					
+
 					if (newInitialValue && graph.initial)
 						graph.initial = false;
-					
+
 					graph.initial = newInitialValue;
 				}
 			}
-			
+
 			private function projectSettingsSavesHandler (event : Event) : void
 			{
 				var target : ProjectPropertiesBox = event.target as ProjectPropertiesBox;
 				var targetProject : BuilderTemplateProject = target.project;
-				
+
 				if (targetProject.modified)
 					currentTemplate.modified = true;
-				
+
 			}
-			
+
 			private function projectPropertiesCreationCompleteHandler (event : FlexEvent) : void
 			{
 				var projectPropertiesControl : ProjectPropertiesBox = event.target as ProjectPropertiesBox;
-				
+
 				projectPropertiesControl.removeEventListener(FlexEvent.CREATION_COMPLETE, projectPropertiesCreationCompleteHandler);
-				
+
 				if (projectPropertiesControl == vsProperties.selectedChild)
 				{
 					projectPropertiesControl.setFocus();
 				}
 			}
-			
+
 			private function removeProjectPropertiesAt (index : int) : void
 			{
 				var projectProperties : ProjectPropertiesBox = vsProperties.getChildAt(index) as ProjectPropertiesBox;
-				
+
 				projectProperties.removeEventListener(ProjectPropertiesBox.EVENT_INITIAL_GRAPH_CHANGED, projectInitialGraphChangedHandler);
 				projectProperties.removeEventListener(ProjectPropertiesBox.EVENT_PROJECT_SETTINGS_CHANGED, projectSettingsSavesHandler);
-				
+
 				vsProperties.removeChildAt(index);
 			}
-			
+
 			protected function buttonApply_clickHandler(event:MouseEvent):void
 			{
 				saveSettings(vsProperties.selectedChild as ProjectPropertiesBox);
 			}
-			
+
 		]]>
 	</mx:Script>
 	
