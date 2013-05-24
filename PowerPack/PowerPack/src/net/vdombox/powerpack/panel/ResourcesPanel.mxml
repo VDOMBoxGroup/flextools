@@ -18,7 +18,7 @@
 
         import net.vdombox.powerpack.managers.ResourcesManager;
 
-        private function updateResourcesList() : void
+        public function updateResourcesList() : void
         {
             grid.dataProvider = resourcesManager.allResources;
             grid.invalidateList();

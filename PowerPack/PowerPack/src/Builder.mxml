@@ -503,6 +503,8 @@
 			workStage.includeInLayout = true;
 			workStage.validateNow();
 
+            pnl_resources.updateResourcesList();
+
 			pnl_graphs.addEventListener(Graphs.TPL_POPULATE_COMPLETE, graphsPopulateCompleteHandler);
 			pnl_graphs.templateXML = currentTemplate.xmlStructure;
 			
@@ -514,7 +516,7 @@
 
 			MenuManager.getInstance().updateLastFilesMenu();
 			MenuManager.getInstance().openedTemplate();
-			
+
 			function graphsPopulateCompleteHandler (event : Event) : void
 			{
 				pnl_graphs.removeEventListener(Graphs.TPL_POPULATE_COMPLETE, graphsPopulateCompleteHandler);
@@ -547,6 +549,7 @@
 			if ( currentTemplate )
 			{
 				pnl_graphs.templateXML = currentTemplate.xmlStructure;
+
 				currentTemplate.selectedProject.modified = false;
 				currentTemplate.modified = false;
 			}
@@ -554,6 +557,8 @@
 			ContextManager.instance.lastFile = false;
 
 			MenuManager.getInstance().newTemplate();
+
+            pnl_resources.updateResourcesList();
 		}
 
 		//--------------------------------------------------------------------------

@@ -135,11 +135,12 @@ package net.vdombox.powerpack.sdkcompiler
 			
 			var appXml : XML;
 			
-			try 
+			try
 			{
 				fileStream.open(file, FileMode.READ);
 				
-				appXml = new XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
+				var fileString : String = fileStream.readUTFBytes( fileStream.bytesAvailable );
+				appXml = new XML( fileString );
 				
 				fileStream.close();
 				
@@ -151,6 +152,7 @@ package net.vdombox.powerpack.sdkcompiler
 			catch (e:Error)
 			{
 				fileStream.close();
+
 				return false;
 			}
 			
