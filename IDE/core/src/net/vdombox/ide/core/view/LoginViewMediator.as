@@ -1,11 +1,11 @@
 package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
-
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.LoginViewEvent;
 	import net.vdombox.ide.core.model.LocalesProxy;
@@ -14,7 +14,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.vo.HostVO;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
 	import net.vdombox.ide.core.view.components.LoginView;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;

@@ -138,7 +138,7 @@ package net.vdombox.ide.core.model
 				attributesXML = <Attributes/>;
 
 				var attributeVO : AttributeVO;
-				var attr : Array = pageAttributesVO.attributes;
+				var attr : Vector.<AttributeVO> = pageAttributesVO.attributes;
 
 				for each ( attributeVO in attr )
 				{

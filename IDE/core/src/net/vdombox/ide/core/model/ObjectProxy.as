@@ -4,7 +4,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
 	import mx.rpc.soap.SOAPFault;
-
+	
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.ServerActionVO;
@@ -14,7 +14,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	/**
@@ -102,6 +102,7 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken;
 
+			trace( ( new Date() ).time );
 			token = soap.get_one_object( objectVO.pageVO.applicationVO.id, objectVO.id );
 			token.recipientName = proxyName;
 
@@ -633,6 +634,7 @@ package net.vdombox.ide.core.model
 
 				case "get_one_object":
 				{
+					trace( ( new Date() ).time );
 					vdomObjectAttributesVO = new VdomObjectAttributesVO( objectVO );
 					vdomObjectAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
 					objectVO.name = result.Objects.Object[ 0 ].@Name;

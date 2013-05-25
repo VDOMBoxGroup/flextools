@@ -5,11 +5,11 @@ package net.vdombox.ide.core.model.managers
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
-
-	import mx.collections.ArrayCollection;
+	
 	import mx.collections.IViewCursor;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
+	import mx.collections.VectorCollection;
 
 	public class CacheManager
 	{
@@ -48,7 +48,7 @@ package net.vdombox.ide.core.model.managers
 
 		private var cacheSize : int;
 
-		private var cachedFiles : ArrayCollection = new ArrayCollection();
+		private var cachedFiles : VectorCollection = new VectorCollection();
 
 		private var cursor : IViewCursor;
 

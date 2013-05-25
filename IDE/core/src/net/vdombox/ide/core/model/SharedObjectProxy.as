@@ -1,12 +1,12 @@
 package net.vdombox.ide.core.model
 {
 	import flash.net.SharedObject;
-
+	
 	import mx.collections.ArrayCollection;
-
+	
 	import net.vdombox.ide.core.model.vo.HostVO;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 

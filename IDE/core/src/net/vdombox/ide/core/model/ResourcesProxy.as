@@ -7,7 +7,6 @@ package net.vdombox.ide.core.model
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 
-	import mx.collections.ArrayCollection;
 	import mx.resources.ResourceManager;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
@@ -411,8 +410,6 @@ package net.vdombox.ide.core.model
 
 		}
 
-		private var loadableResources : ArrayCollection = new ArrayCollection();
-
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
 			var token : AsyncToken = event.token;
@@ -558,17 +555,6 @@ package net.vdombox.ide.core.model
 
 			sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxy | soap_faultHandler | " + event.currentTarget.name );
 			//sendNotification( ApplicationFacade.WRITE_ERROR, event.fault.faultString );
-		}
-
-		private function resourceForIcon( resourceId : String ) : Boolean
-		{
-			for each ( var iconID : String in loadableResources )
-			{
-				if ( iconID == resourceId )
-					return true
-			}
-
-			return false;
 		}
 	}
 }

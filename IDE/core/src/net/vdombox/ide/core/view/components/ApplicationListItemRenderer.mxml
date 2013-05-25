@@ -229,7 +229,7 @@
 			  x="10"
 			  paddingTop="12"
 			  paddingBottom="12"
-			  gap="10">
+			  gap="5">
 		<mx:Image id="imageHolder"
 				  width="40"
 				  height="40"
@@ -240,15 +240,18 @@
 				  gap="0">
 
 			<s:Label id="nameLabel"
-					 width="260"
+					 width="100%"
 					 fontSize="15"
-					 color="#fffafc"/>
+					 color="#fffafc"
+					 maxDisplayedLines="1"/>
 
 			<mx:Spacer height="100%"/>
 
 			<s:Label id="version"
+					 width="100%"
 					 color="#8b8787"
-					 color.selected="#fffafc"/>
+					 color.selected="#fffafc"
+					 maxDisplayedLines="1"/>
 
 		</s:VGroup>
 
