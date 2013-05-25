@@ -180,7 +180,7 @@ package ro.victordramba.scriptarea
             str = controller.getRegisterWord( str );
             token = controller.getTokenByPos( _selStart );
 
-            if ( token.hasMember( str ) )
+            if ( token && token.hasMember( str ) )
             {
                 var renameItem : ContextMenuItem = new ContextMenuItem( ResourceManager.getInstance().getString( 'Wysiwyg_General', 'contextMenu_rename' ) );
                 renameItem.addEventListener( Event.SELECT, renameContextMenuHandler, false, 0, true );

@@ -11,33 +11,29 @@ package net.vdombox.ide.common.model._vo
 		public function VdomObjectAttributesVO( vdomObjectVO : IVDOMObjectVO )
 		{
 			_objectVO = vdomObjectVO;
-
-			_attributes = [];
-			_pageLinks = [];
-			_objectsList = [];
 		}
 
 		private var _objectVO : IVDOMObjectVO;
 
-		private var _attributes : Array;
+		private var _attributes : Vector.<AttributeVO>;
 
 		private var _attributesObject : Object;
 
-		private var _pageLinks : Array;
+		private var _pageLinks : Vector.<ObjectListVO>;
 
-		private var _objectsList : Array;
+		private var _objectsList : Vector.<ObjectListVO>;
 
 		public function get vdomObjectVO() : IVDOMObjectVO
 		{
 			return _objectVO;
 		}
 
-		public function get attributes() : Array
+		public function get attributes() : Vector.<AttributeVO>
 		{
 			return _attributes;
 		}
 
-		public function set attributes( value : Array ) : void
+		public function set attributes( value : Vector.<AttributeVO> ) : void
 		{
 			_attributes = value;
 			_attributesObject = {};
@@ -53,12 +49,12 @@ package net.vdombox.ide.common.model._vo
 			return _attributesObject[ name ];
 		}
 
-		public function get pageLinks() : Array
+		public function get pageLinks() : Vector.<ObjectListVO>
 		{
 			return _pageLinks;
 		}
 
-		public function get objectsList() : Array
+		public function get objectsList() : Vector.<ObjectListVO>
 		{
 			return _objectsList;
 		}
@@ -101,10 +97,11 @@ package net.vdombox.ide.common.model._vo
 
 		public function clone( getUndo : Boolean = false ) : VdomObjectAttributesVO
 		{
-			var result : Array = [];
+			var result : Vector.<AttributeVO> = new Vector.<AttributeVO>( attributes.length );
 
 			var attributeVO : AttributeVO;
 			var attributeVONew : AttributeVO;
+			var i : int = 0;
 			for each ( attributeVO in attributes )
 			{
 				attributeVONew = attributeVO.clone();
@@ -112,7 +109,7 @@ package net.vdombox.ide.common.model._vo
 				if ( getUndo )
 					attributeVONew.replaceValue();
 
-				result.push( attributeVONew );
+				result[i++] = attributeVONew;
 			}
 
 			var undoAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO( _objectVO );
@@ -123,39 +120,52 @@ package net.vdombox.ide.common.model._vo
 
 		private function processAttributes( attributesXML : XML ) : void
 		{
-			var attributeVO : AttributeVO;
+			var attributesXMLList : XMLList = attributesXML.*;
+			
+			_attributes = new Vector.<AttributeVO>( attributesXML.length() );
 			_attributesObject = {};
-			for each ( var attributeXML : XML in attributesXML.* )
+			
+			var i : int = 0;
+			var attributeVO : AttributeVO;
+			for each ( var attributeXML : XML in attributesXMLList )
 			{
 				attributeVO = new AttributeVO( attributeXML.@Name, attributeXML[ 0 ] );
-				_attributes.push( attributeVO );
+				_attributes[ i++ ] = attributeVO;
 				_attributesObject[ attributeVO.name ] = attributeVO
 			}
 		}
 
 		private function processPageLink( pageLinksXML : XML ) : void
 		{
+			var pageLinksXMLList : XMLList = pageLinksXML.*;
+			
+			_pageLinks = new Vector.<ObjectListVO>( pageLinksXMLList.length() );
+			
+			var i : int = 0;
 			var objectListVO : ObjectListVO;
-
-			for each ( var pageLinkXML : XML in pageLinksXML.* )
+			for each ( var pageLinkXML : XML in pageLinksXMLList )
 			{
 				objectListVO = new ObjectListVO();
 				objectListVO.id = pageLinkXML.@ID;
 				objectListVO.name = pageLinkXML.@Name;
-				_pageLinks.push( objectListVO );
+				_pageLinks[ i++ ] = objectListVO;
 			}
 		}
 
 		private function processObjectList( objectsListXML : XML ) : void
 		{
+			var objectsListXMLList : XMLList = objectsListXML.*;
+			
+			_objectsList = new Vector.<ObjectListVO>( objectsListXMLList.length() );
+			
+			var i : int = 0;
 			var objectListVO : ObjectListVO;
-
-			for each ( var objectListXML : XML in objectsListXML.* )
+			for each ( var objectListXML : XML in objectsListXMLList )
 			{
 				objectListVO = new ObjectListVO();
 				objectListVO.id = objectListXML.@ID;
 				objectListVO.name = objectListXML.@Name;
-				_objectsList.push( objectListVO );
+				_objectsList[ i++ ] = objectListVO;
 			}
 		}
 	}

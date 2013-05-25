@@ -422,6 +422,9 @@ package net.vdombox.editors.parsers.vscript
 					{
 						if ( tString.substr( 0, 1 ) == "'" )
 						{
+							if ( !scope.description )
+								scope.description = "";
+							
 							scope.description += tString.substring( 1, tString.length - 1 ) + '\r';
 						}
 					}

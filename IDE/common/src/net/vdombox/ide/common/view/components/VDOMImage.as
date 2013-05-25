@@ -180,5 +180,9 @@ package net.vdombox.ide.common.view.components
 		[Embed( source = "/assets/vdomimage/commit.png" )]
 		public static var Commit : Class;
 
+		[Bindable]
+		[Embed( source = "/assets/vdomimage/spinner.swf" )]
+		public static var Spinner : Class;
+		
 	}
 }

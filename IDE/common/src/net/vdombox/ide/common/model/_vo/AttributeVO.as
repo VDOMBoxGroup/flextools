@@ -15,6 +15,10 @@ package net.vdombox.ide.common.model._vo
 		private var _defaultValue : String;
 
 		private var _value : String = "";
+		
+		private var _index : int = -1;
+		
+		private var _itemRenderer : Object;
 
 		public function get value() : String
 		{
@@ -34,6 +38,21 @@ package net.vdombox.ide.common.model._vo
 		public function get defaultValue() : String
 		{
 			return _defaultValue;
+		}
+		
+		public function set defaultValue( value : String ) : void
+		{
+			_defaultValue = value;
+		}
+		
+		public function get index():int
+		{
+			return _index;
+		}
+		
+		public function set index(value:int):void
+		{
+			_index = value;
 		}
 
 		public function toXML() : XML
@@ -70,6 +89,16 @@ package net.vdombox.ide.common.model._vo
 			var strTemp : String = _defaultValue;
 			_defaultValue = _value;
 			_value = strTemp;
+		}
+
+		public function get itemRenderer():Object
+		{
+			return _itemRenderer;
+		}
+
+		public function set itemRenderer(value:Object):void
+		{
+			_itemRenderer = value;
 		}
 
 
