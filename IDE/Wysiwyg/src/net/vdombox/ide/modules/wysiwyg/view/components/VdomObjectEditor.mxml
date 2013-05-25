@@ -17,7 +17,9 @@
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.events.StateChangeEvent;
-
+			
+			import spark.components.Label;
+			
 			import net.vdombox.ide.common.events.ScriptAreaComponenrEvent;
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 			import net.vdombox.ide.common.model._vo.VdomObjectXMLPresentationVO;
@@ -29,9 +31,8 @@
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+			import net.vdombox.ide.modules.wysiwyg.model.vo.RendererCoordinateAndSizeVO;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.EditorSkin;
-
-			import spark.components.Label;
 
 			public static const STATUS_NULL : uint = 0;
 
@@ -277,7 +278,8 @@
 
 				var ee : EditorEvent = new EditorEvent( EditorEvent.RENDERER_TRANSFORMED );
 				ee.renderer = event.target as IRenderer;
-				ee.attributes = { x: object.x, y: object.y };
+				ee.attributes = new RendererCoordinateAndSizeVO;
+				ee.attributes.setData( object.x, object.y, -10, -10 );
 
 				dispatchEvent( ee );
 			}

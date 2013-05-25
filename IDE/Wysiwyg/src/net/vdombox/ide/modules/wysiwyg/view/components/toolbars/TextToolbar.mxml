@@ -18,12 +18,12 @@
 			import mx.events.ColorPickerEvent;
 			import mx.managers.IFocusManagerComponent;
 			import mx.utils.StringUtil;
-
+			
+			import spark.components.RichEditableText;
+			
 			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
-
-			import spark.components.RichEditableText;
 
 			private var fonts : ArrayCollection = new ArrayCollection( [ { label: "Andale Mono", data: "andale" }, { label: "Arial", data: "arial" }, { label: "Arial Black", data: "arial" }, { label: "Book Antiqua", data: "book" }, { label: "Comic Sans MS", data: "comic" }, { label: "Courier New", data: "courier" }, { label: "Georgia", data: "georgia" }, { label: "Helvetica", data: "helvetica" }, { label: "Impact", data: "impact" }, { label: "Symbol", data: "symbol" }, { label: "Tahoma", data: "tahoma" }, { label: "Terminal", data: "terminal" }, { label: "Times New Roman", data: "times" }, { label: "Times", data: "times" }, { label: "Verdana", data: "verdana" }, { label: "Webdings", data: "webdings" }, { label: "Wingdings", data: "wingdings" } ] );
 
@@ -485,7 +485,7 @@
 			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
 			{
 				var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO( _item.vdomObjectVO );
-				var attributesVO : Array = [];
+				var attributesVO : Vector.<AttributeVO> = new Vector.<AttributeVO>();
 
 				var attributeVO : AttributeVO;
 				if ( attributeName == "value" )

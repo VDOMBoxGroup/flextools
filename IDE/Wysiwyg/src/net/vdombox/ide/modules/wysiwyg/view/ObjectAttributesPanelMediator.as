@@ -264,7 +264,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				if ( renderBase && renderBase.editableComponent && renderBase.editableComponent is RichEditableText && renderBase.typeVO.name == "text" )
 				{
 					var attributeVO : AttributeVO;
-					var attr : Array = objectAttributesPanel.attributesVO.attributes;
+					var attr : Vector.<AttributeVO> = objectAttributesPanel.attributesVO.attributes;
 					for each ( attributeVO in attr )
 					{
 						if ( attributeVO.name == "value" )

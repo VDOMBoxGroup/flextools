@@ -1,9 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.events
 {
 	import flash.events.Event;
-
+	
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
+	import net.vdombox.ide.modules.wysiwyg.model.vo.RendererCoordinateAndSizeVO;
 
 	public class EditorEvent extends Event
 	{
@@ -29,7 +30,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 
 		public static var RENDERER_TRANSFORMED : String = "editorRendererTransformed";
 
-		public function EditorEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, renderer : IRenderer = null, attributes : Object = null )
+		public function EditorEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, renderer : IRenderer = null, attributes : RendererCoordinateAndSizeVO = null )
 		{
 			super( type, bubbles, cancelable );
 
@@ -39,7 +40,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 
 		public var renderer : IRenderer;
 
-		public var attributes : Object;
+		public var attributes : RendererCoordinateAndSizeVO;
 
 		public var vdomObjectAttributesVO : VdomObjectAttributesVO;
 

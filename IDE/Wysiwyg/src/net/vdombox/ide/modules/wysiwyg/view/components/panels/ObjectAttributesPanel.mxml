@@ -10,8 +10,9 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.collections.VectorCollection;
 			import mx.events.FlexEvent;
-
+			
 			import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.common.model._vo.TypeVO;
@@ -19,7 +20,12 @@
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin.VDOMVScrollBarSkin;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
+			import net.vdombox.ide.modules.wysiwyg.model.business.AttributeItemRendererManager;
+			import net.vdombox.ide.modules.wysiwyg.model.business.AttributeItemsManager;
+			import net.vdombox.ide.modules.wysiwyg.model.vo.AttributeItemVO;
 			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ComboBoxAttribute;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ComboBoxObjectAttribute;
 
 			private var _attributesVO : VdomObjectAttributesVO;
 
@@ -28,10 +34,11 @@
 			private var attributes : ArrayCollection;
 
 			private var codeInterfaceRE : RegExp = /^(\w*)\((.*)\)/;
-
-			private var verticalScrollPosition : Number = 0;
-
-			private var NeedSetVerticalScrollPosition : Boolean = false;
+			
+			private var attributeItemsManager : AttributeItemsManager = AttributeItemsManager.getInstance();
+			
+			[Bindable]
+			private var attributesArray : VectorCollection;
 
 
 			public function get attributesVO() : VdomObjectAttributesVO
@@ -41,83 +48,42 @@
 
 			public function set attributesVO( value : VdomObjectAttributesVO ) : void
 			{
-				if ( _attributesVO && value && _attributesVO.vdomObjectVO.id == value.vdomObjectVO.id )
-					verticalScrollPosition = attributesList.scroller.verticalScrollBar.viewport.verticalScrollPosition;
-				else
-					verticalScrollPosition = 0;
-
-				var oneObject : Boolean = false;
-
 				if ( !value )
 				{
 					_attributesVO = value;
 					typeNameLabel.text = "";
-					attributesList.dataProvider = null;
+					attributesArray = null;
 					return;
 				}
-
+				
+				var oneObject : Boolean = false;
 				if ( _attributesVO && _attributesVO.vdomObjectVO == value.vdomObjectVO )
 					oneObject = true;
-
-				//_attributesVO = value;
 
 				_typeVO = value.vdomObjectVO.typeVO;
 
 				typeNameLabel.text = _typeVO.displayName;
-
-				var attributesArray : Array = [];
-				var attributeVO : AttributeVO;
+				
 				var attributeDescriptionVO : AttributeDescriptionVO;
-
-				attributesArray.push( { group: 0, name: "id", displayName: "id", objectVO: value.vdomObjectVO, attributeDescriptionVO: null, objectsList: null, pageLinks: null } );
-
-				attributesArray.push( { group: 0, name: resourceManager.getString( 'Wysiwyg_General', 'attribut_name' ), displayName: "name", objectVO: value.vdomObjectVO, attributeDescriptionVO: null, objectsList: null, pageLinks: null } );
-
-				for each ( var attrDescrVO : AttributeDescriptionVO in _typeVO.attributeDescriptions )
-				{
-					if ( !attrDescrVO.visible )
-						continue;
-
-					attributeVO = value.getAttributeVOByName( attrDescrVO.name );
-
-					// TODO: Why so many arguments? ( attrDescrVO.colorGroup,  attrDescrVO)
-
-					attributesArray.push( { group: attrDescrVO.colorGroup, name: attrDescrVO.name, displayName: attrDescrVO.displayName, attributeVO: attributeVO, attributeDescriptionVO: attrDescrVO, objectsList: value.objectsList, pageLinks: value.pageLinks } );
-				}
-
-				//				// TODO: need used "attributesList.dataProvider = attributesArray"
-				NeedSetVerticalScrollPosition = true;
-
-				var dataProvider : ArrayCollection = new ArrayCollection( attributesArray );
-
-				/*
-				   dataProvider.sort = new Sort();
-				   dataProvider.sort.fields = [ new SortField( "group" ), new SortField( "displayName" ) ];
-				   dataProvider.refresh();
-				 */
-
+				
 				if ( !oneObject )
 				{
-					_attributesVO = value;
-					attributesList.dataProvider = dataProvider;
+					setAttributesArray( value );
 				}
 				else
 				{
 					var attribute : AttributeVO;
+					var objectTemp : AttributeItemVO;
+					var attributes : Vector.<AttributeVO> = value.attributes;
+					var attributeItemVO : AttributeItemVO;
 
-					for each ( var object : Object in dataProvider.source )
+					for each ( var attributeVO : AttributeVO in attributes )
 					{
-						if ( !object.hasOwnProperty( "attributeVO" ) )
-							continue;
-
-						attributeVO = object.attributeVO;
-
-						var objectTemp : Object = findAttribute( attributeVO );
+						objectTemp = findAttribute( attributeVO );
 
 						if ( !objectTemp )
 						{
-							_attributesVO = value;
-							attributesList.dataProvider = dataProvider;
+							continue;
 						}
 						else
 						{
@@ -125,57 +91,96 @@
 							attribute = objectTemp.attributeVO;
 							if ( attributeVO.value != attribute.value || attributeVO.defaultValue != attribute.defaultValue )
 							{
-								setAttribute( object );
+								for each ( attributeItemVO in attributesArray )  
+								{
+									if ( attributeItemVO.attributeVO && attributeItemVO.attributeVO.name == attributeVO.name )
+									{
+										attributeItemVO.attributeVO.value = attributeVO.value;
+										attributeItemVO.attributeVO.defaultValue = attributeVO.defaultValue;
+										
+										var itemRenderer : Object = attributeItemVO.attributeVO.itemRenderer;
+										
+										if( itemRenderer && ( itemRenderer is ComboBoxAttribute || itemRenderer is ComboBoxObjectAttribute ))
+											itemRenderer.refresh();
+										break;
+									}
+								}
+								
 							}
 						}
 					}
 				}
 
 			}
-
-			private function setAttribute( object : Object ) : void
+			
+			private function setAttributesArray( value : VdomObjectAttributesVO ) : void
 			{
-				var attribute : AttributeVO = object.attributeVO;
-
-				var newAttributes : Array = new Array();
-
-				for each ( var attributeVO : AttributeVO in _attributesVO.attributes )
+				attributesList.scroller.verticalScrollBar.viewport.verticalScrollPosition = 0;
+				
+				if ( !attributesArray )
+					attributesArray = new VectorCollection();
+				
+				var attributeItemRendererManager : AttributeItemRendererManager = AttributeItemRendererManager.getInstance();
+				attributeItemRendererManager.resetIndexes();
+				
+				var attributesCount : int = attributesArray.length;
+				
+				attributeItemsManager.resetIndex();
+				
+				var attributeItemVO : AttributeItemVO = attributeItemsManager.getAttributeItemVO( 0, "id", "id", value.vdomObjectVO, null, null, null, null );
+				if (attributesCount > 0)
+					attributesArray[0] = attributeItemVO;
+				else
+					attributesArray.addItem( attributeItemVO );
+				
+				attributeItemVO = attributeItemsManager.getAttributeItemVO( 0, resourceManager.getString( 'Wysiwyg_General', 'attribut_name' ), "name", value.vdomObjectVO, null, null, null, null );
+				if (attributesCount > 1)
+					attributesArray[1] = attributeItemVO;
+				else
+					attributesArray.addItem( attributeItemVO );
+				
+				var i : int = 0;
+				var attributeDescriptions : Array = _typeVO.attributeDescriptions;
+				for each ( var attrDescrVO : AttributeDescriptionVO in attributeDescriptions )
 				{
-					if ( attributeVO.name == attribute.name )
-						newAttributes.push( attribute );
+					if ( !attrDescrVO.visible )
+						continue;
+					
+					var attributeVO : AttributeVO = value.getAttributeVOByName( attrDescrVO.name );
+					
+					attributeItemVO = attributeItemsManager.getAttributeItemVO( attrDescrVO.colorGroup, attrDescrVO.name, attrDescrVO.displayName, null, attributeVO, attrDescrVO, value.objectsList, value.pageLinks );
+					
+					if (attributesCount > i + 2)
+						attributesArray[i + 2] = attributeItemVO;
 					else
-						newAttributes.push( attributeVO );
+						attributesArray.addItem( attributeItemVO );
+					
+					i++;
 				}
-
-				_attributesVO.attributes = newAttributes;
-
-				var attrProvider : ArrayCollection = attributesList.dataProvider as ArrayCollection;
-				for each ( var object2 : Object in attrProvider.source )
+				
+				i += 2;
+				
+				while (attributesArray.length > i)
 				{
-					if ( object2.name == object.name )
-					{
-						var index : int = attrProvider.getItemIndex( object2 );
-						attrProvider.removeItemAt( index );
-						attrProvider.addItemAt( object, index );
-					}
+					attributesArray.removeItemAt( i );
 				}
+				
+				_attributesVO = value;
 			}
 
-			private function findAttribute( attribute : AttributeVO ) : Object
+			private function findAttribute( attribute : AttributeVO ) : AttributeItemVO
 			{
-				var attrProvider : ArrayCollection = attributesList.dataProvider as ArrayCollection;
-
-				for each ( var object : Object in attrProvider.source )
+				var attributesArraySource : Vector.<*> = attributesArray.source;
+				for each ( var attributeItemVO : AttributeItemVO in attributesArraySource )
 				{
-					if ( !object.hasOwnProperty( "attributeVO" ) )
+					if ( !attributeItemVO.attributeVO )
 						continue;
 
-					var attributeVO : AttributeVO = object.attributeVO;
-					if ( attributeVO.name == attribute.name )
-						return object;
+					if ( attributeItemVO.attributeVO.name == attribute.name )
+						return attributeItemVO;
 				}
 
-				return attribute;
+				return null;
 			}
 
 			private function getAttributeDesctriptionVOByName( name : String ) : AttributeDescriptionVO
@@ -213,15 +218,6 @@
 				attributesList.scroller.verticalScrollBar.setStyle( "skinClass", VDOMVScrollBarSkin );
 			}
 
-			protected function attributesList_updateCompleteHandler( event : FlexEvent ) : void
-			{
-				if ( NeedSetVerticalScrollPosition )
-				{
-					attributesList.scroller.verticalScrollBar.viewport.verticalScrollPosition = verticalScrollPosition;
-					NeedSetVerticalScrollPosition = false;
-				}
-			}
-
 			private function mouseWheelHandler( event : MouseEvent ) : void
 			{
 				event.delta = event.delta > 0 ? 1 : -1;
@@ -255,8 +251,8 @@
 		<s:List id="attributesList"
 				height="100%"
 				width="100%"
+				dataProvider="{ attributesArray }"
 				borderVisible="false"
-				updateComplete="attributesList_updateCompleteHandler(event)"
 				useVirtualLayout="false"
 				itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase"
 				contentBackgroundAlpha="0"

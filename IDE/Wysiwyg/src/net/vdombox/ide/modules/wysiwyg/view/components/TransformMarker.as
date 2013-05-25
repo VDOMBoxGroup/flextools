@@ -10,18 +10,19 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-
+	
 	import mx.core.IVisualElement;
 	import mx.core.UIComponent;
 	import mx.core.mx_internal;
 	import mx.events.FlexEvent;
-
+	
+	import spark.components.supportClasses.ScrollBarBase;
+	
 	import net.vdombox.ide.common.view.components.VDOMImage;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
-
-	import spark.components.supportClasses.ScrollBarBase;
+	import net.vdombox.ide.modules.wysiwyg.model.vo.RendererCoordinateAndSizeVO;
 
 	use namespace mx_internal;
 
@@ -101,7 +102,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private var transformation : Boolean;
 
-		private var beforeTransform : Object;
+		private var beforeTransform : RendererCoordinateAndSizeVO = new RendererCoordinateAndSizeVO();;
 
 		public function get resizeMode() : uint
 		{
@@ -193,7 +194,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			_selectedItem.addEventListener( FlexEvent.UPDATE_COMPLETE, refreshCompleteHandler );
 
-			beforeTransform = { x: _selectedItem.x, y: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
+			beforeTransform.setData( _selectedItem.x, _selectedItem.y, _selectedItem.width, _selectedItem.height );
 
 			itemChanged = true;
 			invalidateSize();
@@ -389,7 +390,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				refresh();
 
 			var editComponent : Object = _selectedItem.editableComponent;
-			if ( editComponent && ( _selectedItem.typeVO && _selectedItem.typeVO.name == "text" || _selectedItem.typeVO.name == "richtext" || _selectedItem.typeVO.name == "calendar" ) )
+			if ( editComponent && ( _selectedItem.typeVO && ( _selectedItem.typeVO.name == "text" || _selectedItem.typeVO.name == "richtext" || _selectedItem.typeVO.name == "calendar" ) ) )
 			{
 				if ( measuredWidth != editComponent.width )
 				{
@@ -465,7 +466,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
-			beforeTransform = { x: _selectedItem.x, y: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
+			beforeTransform.setData( _selectedItem.x, _selectedItem.y, _selectedItem.width, _selectedItem.height );
 
 			( _selectedItem as RendererBase ).beforeX = _selectedItem.x;
 			( _selectedItem as RendererBase ).beforeY = _selectedItem.y;
@@ -548,6 +549,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 
+		private var prop : RendererCoordinateAndSizeVO = new RendererCoordinateAndSizeVO;;
 		private function mouseUpHandler( event : MouseEvent ) : void
 		{
 			//trace ("-- mouseUpHandler");
@@ -570,22 +572,38 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var rmEvent : TransformMarkerEvent = new TransformMarkerEvent( TransformMarkerEvent.TRANSFORM_COMPLETE );
 
 			var changeFlag : Boolean = false;
-			var prop : Object = {};
-
+			
 			if ( !rectangle )
 			{
 				rmEvent.properties = prop;
 				dispatchEvent( rmEvent );
 				return;
 			}
-
-			for ( var name : String in beforeTransform )
+			
+			prop.setData( -10, -10, -10, -10 );
+			
+			if ( rectangle.x != beforeTransform.x )
 			{
-				if ( rectangle[ name ] != beforeTransform[ name ] )
-				{
-					prop[ name ] = int( rectangle[ name ] );
-					changeFlag = true;
-				}
+				prop.x = rectangle.x;
+				changeFlag = true;
+			}
+			
+			if ( rectangle.y != beforeTransform.y )
+			{
+				prop.y = rectangle.y;
+				changeFlag = true;
+			}
+			
+			if ( rectangle.width != beforeTransform.width )
+			{
+				prop.width = rectangle.width;
+				changeFlag = true;
+			}
+			
+			if ( rectangle.height != beforeTransform.height )
+			{
+				prop.height = rectangle.height;
+				changeFlag = true;
 			}
 
 			if ( !changeFlag )

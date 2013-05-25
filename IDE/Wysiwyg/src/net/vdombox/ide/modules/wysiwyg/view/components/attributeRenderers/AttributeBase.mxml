@@ -13,15 +13,16 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.core.UIComponent;
-
+			
+			import spark.components.TextInput;
+			
 			import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
+			import net.vdombox.ide.modules.wysiwyg.model.business.AttributeItemRendererManager;
+			import net.vdombox.ide.modules.wysiwyg.model.vo.AttributeItemVO;
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
-			import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
-
-			import spark.components.TextInput;
 
 			[Bindable]
 			private var _attributeVO : AttributeVO;
@@ -40,6 +41,10 @@
 			private var _objectVO : Object;
 
 			private var codeInterface : Object = {};
+			
+			private var attributeItemVO : AttributeItemVO;
+			
+			private var attributeItemRendererManager : AttributeItemRendererManager = AttributeItemRendererManager.getInstance();
 
 			public function get objectVO() : Object
 			{
@@ -60,15 +65,17 @@
 
 				if ( !value )
 					return;
+				
+				attributeItemVO = value as AttributeItemVO;
 
 				addEventListener( AttributeEvent.ERROR1, errorHandler2, true, 0, true );
 
-				if ( value.hasOwnProperty( "objectVO" ) )
+				if ( attributeItemVO.objectVO )
 				{
-					_objectVO = value.objectVO;
-					nameLabel = value.name;
+					_objectVO = attributeItemVO.objectVO;
+					nameLabel = attributeItemVO.name;
 
-					if ( value.name == "id" )
+					if ( attributeItemVO.name == "id" )
 					{
 						valueField = new TextInput;
 						valueField.editable = false;
@@ -82,7 +89,7 @@
 					}
 					else
 					{
-						valueField = new TextInputAttribute;
+						valueField = new NameInputAttribute;
 						valueField.value = _objectVO.name;
 						valueField.width = 128;
 						valueField.height = 21;
@@ -93,8 +100,8 @@
 				}
 				else
 				{
-					_attributeVO = value.attributeVO;
-					_attributeDescriptionVO = value.attributeDescriptionVO;
+					_attributeVO = attributeItemVO.attributeVO;
+					_attributeDescriptionVO = attributeItemVO.attributeDescriptionVO;
 					nameLabel = _attributeDescriptionVO.displayName;
 					help = _attributeDescriptionVO.help;
 
@@ -153,13 +160,13 @@
 
 						case "objectlist":
 						{
-							newObjectList( value );
+							newObjectList( attributeItemVO );
 							break;
 						}
 
 						case "pagelink":
 						{
-							newPageLink( value );
+							newPageLink( attributeItemVO );
 							break;
 						}
 
@@ -176,93 +183,127 @@
 
 			private function newMultiline() : void
 			{
-				valueField = new Multiline();
-				valueField.value = _attributeVO.value;
-				valueField.width = 128;
-				valueField.height = 21;
-				secondElement = valueField as UIComponent;
-
+				valueField = attributeItemRendererManager.getMultiline( _attributeVO.index );
+				valueField.attributeVO = _attributeVO;
+				
+				if ( _attributeVO.index == -1 )
+				{
+					valueField.width = 128;
+					valueField.height = 21;
+				
+					_attributeVO.index = attributeItemRendererManager.multilineIndex - 1;
+				}
+				
 				valueField.addEventListener( Event.CHANGE, changeHandler, false, 0, true );
+				secondElement = valueField as UIComponent;
 			}
 
 			private function newColorPicker() : void
 			{
-				valueField = new ColorPicker;
-				valueField.value = _attributeVO.value;
-				valueField.width = 128;
-				valueField.height = 21;
-				secondElement = valueField as UIComponent;
-
+				valueField = attributeItemRendererManager.getColorPicker( _attributeVO.index );
+				valueField.attributeVO = _attributeVO;
+				if ( _attributeVO.index == -1 )
+				{
+					valueField.width = 128;
+					valueField.height = 21;
+					
+					_attributeVO.index = attributeItemRendererManager.colorPickerIndex - 1;
+				}
+				
 				valueField.addEventListener( Event.CHANGE, changeHandler, false, 0, true );
+				secondElement = valueField as UIComponent;
 			}
 
 			private function newDropdown() : void
 			{
-				valueField = new ComboBoxAttribute;
-				valueField.toolTip = help;
-				valueField.width = 128;
-				valueField.height = 21;
-				secondElement = valueField as UIComponent;
-
-				valueField.init( codeInterface[ "value" ], _attributeVO.value );
+				valueField = attributeItemRendererManager.getComboBox( _attributeVO.index );
+				if ( _attributeVO.index == -1 )
+				{
+					valueField.toolTip = help;
+					valueField.width = 128;
+					valueField.height = 21;
+					
+					_attributeVO.index = attributeItemRendererManager.comboBoxIndex - 1;
+				}
 
 				valueField.addEventListener( Event.CHANGE, changeHandler, false, 0, true );
+				_attributeVO.itemRenderer = valueField;
+				valueField.init( codeInterface[ "value" ], _attributeVO );
+				secondElement = valueField as UIComponent;
 			}
 
 			private function newFont() : void
 			{
-				valueField = new ComboBoxAttribute;
-				valueField.toolTip = help;
-				valueField.width = 128;
-				valueField.height = 21;
-				secondElement = valueField as UIComponent;
-
-				var strFont : String = '(Arial|Arial, "Helvetica CY", "Nimbus Sans L", helvetica, sans-serif)|' + '(Arial Black|"Arial Black", "Helvetica CY", "avant garde", "Nimbus Sans L", sans-serif)|' + '(Book Antiqua|"Palatino Linotype", "Book Antiqua", Palatino, serif)|' + '(Courier New|"Courier New", "Nimbus Mono L", monospace)|' + '(Georgia|Georgia, "Century Schoolbook L", Serif)|' + '(Impact|Impact, "Charcoal CY", sans-serif)|' + '(Lucida Console|"Lucida Console", Monaco, monospace)|' + '(Lucida Sans Unicode|"Lucida Sans Unicode", "Lucida Grande", sans-serif)|' + '(Tahoma|Tahoma, "Geneva CY", geneva, sans-serif)|' + '(Times New Roman|"Times New Roman", "Times CY", times, "Nimbus Roman No9 L", serif)|' + '(Trebuchet MS|"Trebuchet MS", "Helvetica CY", helvetica, sans-serif)|' + '(Verdana|Verdana, "Geneva CY", geneva, "DejaVu Sans", sans-serif)' + '(Wingdings|wingdings, "zapf dingbats")';
-
-				valueField.init( strFont, _attributeVO.value );
-
+				valueField = attributeItemRendererManager.getComboBox( _attributeVO.index );
+				if ( _attributeVO.index == -1 )
+				{
+					valueField.toolTip = help;
+					valueField.width = 128;
+					valueField.height = 21;
+				
+					_attributeVO.index = attributeItemRendererManager.comboBoxIndex - 1;
+				}
+				
 				valueField.addEventListener( Event.CHANGE, changeHandler, false, 0, true );
+				_attributeVO.itemRenderer = valueField;
+				var strFont : String = '(Arial|Arial, "Helvetica CY", "Nimbus Sans L", helvetica, sans-serif)|' + '(Arial Black|"Arial Black", "Helvetica CY", "avant garde", "Nimbus Sans L", sans-serif)|' + '(Book Antiqua|"Palatino Linotype", "Book Antiqua", Palatino, serif)|' + '(Courier New|"Courier New", "Nimbus Mono L", monospace)|' + '(Georgia|Georgia, "Century Schoolbook L", Serif)|' + '(Impact|Impact, "Charcoal CY", sans-serif)|' + '(Lucida Console|"Lucida Console", Monaco, monospace)|' + '(Lucida Sans Unicode|"Lucida Sans Unicode", "Lucida Grande", sans-serif)|' + '(Tahoma|Tahoma, "Geneva CY", geneva, sans-serif)|' + '(Times New Roman|"Times New Roman", "Times CY", times, "Nimbus Roman No9 L", serif)|' + '(Trebuchet MS|"Trebuchet MS", "Helvetica CY", helvetica, sans-serif)|' + '(Verdana|Verdana, "Geneva CY", geneva, "DejaVu Sans", sans-serif)' + '(Wingdings|wingdings, "zapf dingbats")';
+				valueField.init( strFont, _attributeVO );
+				secondElement = valueField as UIComponent;
 			}
 
 			private function newExternalEdition() : void //
 			{
-				valueField = new ExternalEditor;
-				valueField.value = _attributeVO.value;
-				valueField.toolTip = help;
-				valueField.width = 128;
-				valueField.height = 21;
-				secondElement = valueField as UIComponent;
-
+				valueField = attributeItemRendererManager.getExternalEditor( _attributeVO.index );
+				valueField.attributeVO = _attributeVO;
+				if ( _attributeVO.index == -1 )
+				{
+					valueField.toolTip = help;
+					valueField.width = 128;
+					valueField.height = 21;
+				
+					_attributeVO.index = attributeItemRendererManager.externalEditorIndex - 1;
+				}
+				
 				valueField.addEventListener( Event.CHANGE, changeHandler, false, 0, true );
-
 				var resourceID : String = codeInterface[ "value" ];
 				resourceID = resourceID.substr( resourceID.indexOf( "," ) + 1 );
 				valueField.value = _attributeVO.value;
 				valueField.resourceID = resourceID;
+				
+				secondElement = valueField as UIComponent;
 			}
 
 			private function newFile() : void
 			{
-				valueField = new ResourceSelector;
-				valueField.value = _attributeVO.value;
-				valueField.width = 128;
-				valueField.height = 21;
-				secondElement = valueField as UIComponent;
-
+				valueField = attributeItemRendererManager.getResourceSelector( _attributeVO.index );
+				valueField.attributeVO = _attributeVO;
+				if ( _attributeVO.index == -1 )
+				{
+					valueField.width = 128;
+					valueField.height = 21;
+					
+					_attributeVO.index = attributeItemRendererManager.resourceSelectorIndex - 1;
+				}
+				
 				valueField.addEventListener( Event.CHANGE, changeHandler, false, 0, true );
+				secondElement = valueField as UIComponent;
 			}
 
 			private function newNumber() : void
 			{
-				valueField = new TextInputAttribute;
-				valueField.value = _attributeVO.value;
-				valueField.width = 128;
-				valueField.height = 21;
-				secondElement = valueField as UIComponent;
-
-				valueField.initChars( uint( codeInterface[ "value" ] ), _attributeDescriptionVO );
-
+				valueField = attributeItemRendererManager.getTextInput( _attributeVO.index );
+				valueField.attributeVO = _attributeVO;
+				if ( _attributeVO.index == -1 )
+				{
+					valueField.width = 128;
+					valueField.height = 21;
+				
+					_attributeVO.index = attributeItemRendererManager.textInputIndex - 1;
+				}
+				
 				valueField.addEventListener( Event.CHANGE, changeHandler, false, 0, true );
+				valueField.initChars( uint( codeInterface[ "value" ] ), _attributeDescriptionVO );
+				secondElement = valueField as UIComponent;
 			}
 
 			private function eventCompleleHandler( event : Event ) : void
@@ -277,48 +318,57 @@
 				regExpValidator.validate();
 			}
 
-			private function newObjectList( value : Object ) : void
+			private function newObjectList( value : AttributeItemVO ) : void
 			{
-				valueField = new ComboBoxObjectAttribute;
-				valueField.toolTip = help;
-				valueField.width = 128;
-				valueField.height = 21;
-				valueField.labelField = "name";
-				secondElement = valueField as UIComponent;
-
-				valueField.init( value.objectsList, _attributeVO.value );
-
+				valueField = attributeItemRendererManager.getComboBoxObject( _attributeVO.index );
+				if ( _attributeVO.index == -1 )
+				{
+					valueField.toolTip = help;
+					valueField.width = 128;
+					valueField.height = 21;
+					valueField.labelField = "name";
+				
+					_attributeVO.index = attributeItemRendererManager.comboBoxObjectIndex - 1;
+				}
 
 				valueField.addEventListener( Event.CHANGE, changeHandler, false, 0, true );
+				valueField.init( value.objectsList, _attributeVO );
+				secondElement = valueField as UIComponent;
 			}
 
-			private function newPageLink( value : Object ) : void
+			private function newPageLink( value : AttributeItemVO ) : void
 			{
-				valueField = new ComboBoxObjectAttribute;
-				valueField.toolTip = help;
-				valueField.width = 128;
-				valueField.height = 21;
-				valueField.labelField = "name"
-				secondElement = valueField as UIComponent;
-
-				valueField.init( value.pageLinks, _attributeVO.value );
-
+				valueField = attributeItemRendererManager.getComboBoxObject( _attributeVO.index );
+				if ( _attributeVO.index == -1 )
+				{
+					valueField.toolTip = help;
+					valueField.width = 128;
+					valueField.height = 21;
+					valueField.labelField = "name";
+				
+					_attributeVO.index = attributeItemRendererManager.comboBoxObjectIndex - 1;
+				}
+				
 				valueField.addEventListener( Event.CHANGE, changeHandler, false, 0, true );
+				valueField.init( value.pageLinks, _attributeVO );
+				secondElement = valueField as UIComponent;
 			}
 
 			private function newTextField() : void
 			{
-				valueField = new TextInputAttribute;
-				valueField.value = _attributeVO.value;
-				valueField.width = 128;
-				valueField.height = 21;
-				secondElement = valueField as UIComponent;
-
-				valueField.initChars( uint( codeInterface[ "value" ] ), _attributeDescriptionVO );
-				//				valueField.text = _attributeVO.value;
-
+				valueField = attributeItemRendererManager.getTextInput( _attributeVO.index );
+				valueField.attributeVO = _attributeVO;
+				if ( _attributeVO.index == -1 )
+				{
+					valueField.width = 128;
+					valueField.height = 21;
+				
+					_attributeVO.index = attributeItemRendererManager.textInputIndex - 1;
+				}
 
 				valueField.addEventListener( Event.CHANGE, changeHandler, false, 0, true );
+				valueField.initChars( uint( codeInterface[ "value" ] ), _attributeDescriptionVO );
+				secondElement = valueField as UIComponent;
 			}
 
 			private function changeHandler( event : Event ) : void

@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.model.vo
 {
-	import mx.collections.ArrayCollection;
-
+	import mx.collections.VectorCollection;
+	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 
@@ -101,19 +101,23 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 			_content = value;
 		}
 
-		public function get sortedChildren() : ArrayCollection
+		public function get sortedChildren() : VectorCollection
 		{
-			var childrenDataProvider : Array = new Array();
+			if ( !children )
+				return new VectorCollection();
+			
+			var childrenDataProvider : Vector.<RenderVO> = new Vector.<RenderVO>(children.length);
 
+			var i : int = 0;
 			for each ( var r : RenderVO in children )
 			{
-				childrenDataProvider.push( r );
+				childrenDataProvider[ i++ ] =  r;
 			}
 
 			var leng : int = childrenDataProvider.length;
 			var temp : RenderVO;
 
-			for ( var i : int = 0; i < leng; i++ )
+			for ( i = 0; i < leng; i++ )
 			{
 				for ( var j : int = i + 1; j < leng; j++ )
 				{
@@ -163,7 +167,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 			   childrenDataProvider.refresh();
 			 */
 
-			return new ArrayCollection( childrenDataProvider );
+			return new VectorCollection( childrenDataProvider );
 
 		}
 	}

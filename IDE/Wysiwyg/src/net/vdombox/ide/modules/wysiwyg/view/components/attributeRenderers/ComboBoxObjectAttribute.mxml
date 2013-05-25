@@ -9,63 +9,80 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
-
+			import mx.collections.VectorCollection;
+			
+			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.common.model._vo.ObjectListVO;
 
-			private var _value : String;
+			
+			private var _attributeVO : AttributeVO;
+			
+			[Bindable]
+			public function get attributeVO():AttributeVO
+			{
+				return _attributeVO;
+			}
+			
+			public function set attributeVO(value:AttributeVO):void
+			{
+				_attributeVO = value;
+			}
 
 			public function get value() : String
 			{
-				return _value;
+				return _attributeVO.value;
 			}
 
 			public function set labelField( label : String ) : void
 			{
 				valueField.labelField = label;
 			}
-
-			private var comboBoxData : ArrayCollection = new ArrayCollection();
-
-			public function init( _interface : Object, element : String ) : void
+			
+			public function refresh() : void
 			{
+				valueField.selectedIndex = -1;
+				
+				var leng : int = valueField.dataProvider.length;;
+				for( var i : int = 0; i < leng; i++ )
+				{
+					if ( valueField.dataProvider[i].id == attributeVO.value )
+					{
+						valueField.selectedIndex = i;
+						break;
+					}
+				}
+			}
 
+			private var comboBoxData : VectorCollection;
+
+			public function init( _interface : Vector.<ObjectListVO>, attributeVO : AttributeVO ) : void
+			{
+				this.attributeVO = attributeVO;
 				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
 
 				var listValues : Array = [];
+				
+				comboBoxData = new VectorCollection(_interface);
 
 				var objectListVO : ObjectListVO = new ObjectListVO();
 				objectListVO.id = "";
 				objectListVO.name = "";
-				comboBoxData.addItem( objectListVO );
-				var selectedItem : Object = objectListVO;
-
-				for each ( objectListVO in _interface )
-				{
-					comboBoxData.addItem( objectListVO );
-
-					if ( element == objectListVO.id )
-						selectedItem = objectListVO;
-				}
-
-				if ( comboBoxData )
-				{
-					comboBoxData.sort = new Sort();
-					comboBoxData.sort.fields = [ new SortField( "name", true ) ];
-					comboBoxData.refresh();
-				}
+				comboBoxData.addItemAt( objectListVO, 0 );
+				
+					
+				comboBoxData.sort = new Sort();
+				comboBoxData.sort.fields = [ new SortField( "name", true ) ];
+				comboBoxData.refresh();
 
 				valueField.dataProvider = comboBoxData;
-				valueField.selectedItem = selectedItem;
-				_value = selectedItem.id;
-
+				refresh();
 			}
 
 			private function changeHandler() : void
 			{
-				_value = valueField.selectedItem.id;
+				attributeVO.value = valueField.selectedItem.id;
 				dispatchEvent( new Event( Event.CHANGE ) );
 			}
 		]]>

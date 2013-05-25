@@ -9,12 +9,14 @@
 
 	<mx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 
 			private var _value : String;
 
 			private var _resourceID : String;
-
+			private var _attributeVO : AttributeVO;
+			
 			public function get resourceID() : String
 			{
 				return _resourceID;
@@ -28,7 +30,7 @@
 			[Bindable]
 			public function get value() : String
 			{
-				return _value;
+				return _attributeVO.value;
 			}
 
 			public function set value( value : String ) : void
@@ -40,6 +42,17 @@
 				}
 				else
 					_value = value;
+			}
+			
+			[Bindable]
+			public function get attributeVO():AttributeVO
+			{
+				return _attributeVO;
+			}
+			
+			public function set attributeVO(value:AttributeVO):void
+			{
+				_attributeVO = value;
 			}
 		]]>
 	</mx:Script>

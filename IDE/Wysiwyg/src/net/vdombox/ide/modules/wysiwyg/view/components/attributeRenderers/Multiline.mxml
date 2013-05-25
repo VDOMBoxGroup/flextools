@@ -15,7 +15,8 @@
 		<![CDATA[
 			import mx.core.UIComponent;
 			import mx.events.ValidationResultEvent;
-
+			
+			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.windows.MultilineWindow;
@@ -27,15 +28,29 @@
 
 			[Bindable]
 			private var _toolTipValue : String;
+			
+			private var _attributeVO : AttributeVO;
 
-			private var _value : String;
+			[Bindable]
+			public function get attributeVO():AttributeVO
+			{
+				return _attributeVO;
+			}
+
+			public function set attributeVO(value:AttributeVO):void
+			{
+				_attributeVO = value;
+			}
+			
+			public function get value() : String
+			{
+				return _attributeVO.value;
+			}
 
 			public function set title( attrValue : String ) : void
 			{
 				_title = attrValue;
 			}
-
-
 
 			override public function validationResultHandler( event : ValidationResultEvent ) : void
 			{
@@ -46,19 +61,12 @@
 					setStyle( "borderColor", "red" );
 			}
 
-			[Bindable]
-			public function get value() : String
+			public function refresh() : void
 			{
-				return _value;
-			}
-
-			public function set value( value : String ) : void
-			{
-				_value = value;
-				if ( value.length > 50 )
-					_toolTipValue = value.substr( 0, 50 );
+				if ( attributeVO.value.length > 50 )
+					_toolTipValue = attributeVO.value.substr( 0, 50 );
 				else
-					_toolTipValue = value;
+					_toolTipValue = attributeVO.value;
 			}
 
 			private function applyMultiLinaWindow( event : MultilineWindowEvent ) : void
@@ -69,9 +77,9 @@
 				{
 					if ( event.type == MultilineWindowEvent.APPLY )
 					{
-						if ( value != event.value )
+						if ( attributeVO.value != event.value )
 						{
-							value = event.value;
+							attributeVO.value = event.value;
 							dispatchEvent( new Event( Event.CHANGE ) );
 						}
 					}
@@ -84,7 +92,7 @@
 			{
 				multilineWindow = new MultilineWindow();
 
-				multilineWindow.attributeValue = _value;
+				multilineWindow.attributeValue = attributeVO.value;
 				multilineWindow.title = resourceManager.getString( 'Wysiwyg_General', 'multiline_window_title' );
 
 				dispatchEvent( new AttributeEvent( AttributeEvent.CHOSE_RESOURCES_IN_MULTILINE ) ); // ?

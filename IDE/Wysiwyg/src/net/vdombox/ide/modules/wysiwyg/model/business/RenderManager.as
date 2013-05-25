@@ -1,12 +1,14 @@
 package net.vdombox.ide.modules.wysiwyg.model.business
 {
+	import com.zavoo.svg.SVGViewer;
+	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-
-	import mx.collections.ArrayCollection;
+	
 	import mx.collections.IViewCursor;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
+	import mx.collections.VectorCollection;
 	import mx.core.Container;
 	import mx.core.UIComponent;
 	import mx.rpc.events.FaultEvent;
@@ -36,7 +38,7 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 
 		private var rootContainer : Container;
 
-		private var items : ArrayCollection = new ArrayCollection();
+		private var items : VectorCollection = new VectorCollection();
 
 		private var cursor : IViewCursor;
 

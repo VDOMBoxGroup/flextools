@@ -57,7 +57,8 @@
             var attributeVO : AttributeVO = new AttributeVO( "value", "%тамnfb%3#" );
 
             attributeVO.value = StringUtils.spaceToNbsp( activeEditor.getContent() );
-            vdomObjectAttributesVO.attributes = [ attributeVO ];
+            vdomObjectAttributesVO.attributes = new Vector.<AttributeVO>();
+			vdomObjectAttributesVO.attributes.push( attributeVO );
 
             return vdomObjectAttributesVO;
         }

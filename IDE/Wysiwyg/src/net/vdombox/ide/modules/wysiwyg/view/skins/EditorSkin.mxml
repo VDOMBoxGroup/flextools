@@ -271,7 +271,7 @@
 			 top="29"/>
 
 	<mx:Image id="spinner"
-			  source="@Embed('/assets/spinner.swf')"
+			  source="{VDOMImage.Spinner}"
 			  right="10"
 			  top="30"
 			  height="30"

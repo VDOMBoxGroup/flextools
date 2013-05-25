@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 width="100%"
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%"
 		 height="100%">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
@@ -12,47 +11,41 @@
 			import mx.events.ValidationResultEvent;
 			
 			import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
-			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
-
+			
 			
 			//private var _value : String;
-
+			
 			private var regExpValidator : AttributeValidator = new AttributeValidator();
-
+			
 			private var permissionToSentNeed : Boolean = true;
-
+			
 			private var regExpValidatorNeed : Boolean = false;
-
-			private var _attributeVO : AttributeVO;
+			
+			private var _value : String;
 			
 			[Bindable]
-			public function get attributeVO():AttributeVO
-			{
-				return _attributeVO;
-			}
-			
-			public function set attributeVO(value:AttributeVO):void
-			{
-				_attributeVO = value;
-			}
-			
 			public function get value() : String
 			{
-				return _attributeVO.value;
+				return _value;
 			}
-
+			
+			public function set value( value : String) : void
+			{
+				_value = value;
+			}
+			
 			public function initChars( _interface : uint, _attributeDescriptionVO : AttributeDescriptionVO ) : void
 			{
 				lbl.maxChars = _interface;
-
+				
 				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
 				regExpValidator.noMatchError = _attributeDescriptionVO.errorValidationMessage;
 				regExpValidator.validate();
-
+				
 				regExpValidatorNeed = true;
 			}
-
+			
 			private function eventCompleleHandler( event : Event ) : void
 			{
 				if ( regExpValidatorNeed )
@@ -61,9 +54,9 @@
 					regExpValidator.property = "text";
 					regExpValidator.required = false;
 					//regExpValidator.trigger = valueField;
-
+					
 					regExpValidator.triggerEvent = Event.CHANGE;
-
+					
 					regExpValidator.addEventListener( ValidationResultEvent.VALID, handleValid );
 					regExpValidator.addEventListener( ValidationResultEvent.INVALID, handleValid );
 					regExpValidator.validate();
@@ -71,7 +64,7 @@
 				else
 					regExpValidator = null;
 			}
-
+			
 			private function handleValid( eventObj : ValidationResultEvent ) : void
 			{
 				if ( eventObj.type == ValidationResultEvent.VALID )
@@ -79,24 +72,24 @@
 				else
 					permissionToSentNeed = false;
 			}
-
+			
 			private function changeHandler() : void
 			{
-				if ( _attributeVO.value != lbl.text )
+				if ( _value != lbl.text )
 				{
 					if ( permissionToSentNeed )
 					{
-						_attributeVO.value = lbl.text;
+						_value = lbl.text;
 						dispatchEvent( new Event( Event.CHANGE ) );
 					}
 					else
 					{
-						lbl.text = _attributeVO.value;
+						lbl.text = _value;
 						regExpValidator.validate();
 					}
 				}
 			}
-
+			
 			protected function lbl_keyDownHandler( event : KeyboardEvent ) : void
 			{
 				if ( event.keyCode == Keyboard.ENTER )
@@ -104,22 +97,23 @@
 			}
 		]]>
 	</fx:Script>
-	<s:Group toolTip="{attributeVO.value}">
+	<s:Group toolTip="{value}">
 		<s:Rect width="100%"
 				height="100%">
 			<s:fill>
 				<s:SolidColor color="#FFFFFF"/>
 			</s:fill>
 		</s:Rect>
-
+		
 		<s:TextInput id="lbl"
 					 textAlign="left"
-					 text="{attributeVO.value}"
+					 text="{value}"
 					 width="100%"
 					 height="100%"
 					 keyDown="lbl_keyDownHandler(event)"
 					 focusOut="changeHandler()"
 					 creationComplete="eventCompleleHandler(event)"/>
 	</s:Group>
-
+	
 </s:Group>
+

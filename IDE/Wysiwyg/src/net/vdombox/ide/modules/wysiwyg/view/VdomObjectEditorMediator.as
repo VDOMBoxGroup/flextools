@@ -9,12 +9,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
-
+	
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColorStroke;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
@@ -40,12 +40,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.LineVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+	import net.vdombox.ide.modules.wysiwyg.model.vo.RendererCoordinateAndSizeVO;
 	import net.vdombox.ide.modules.wysiwyg.utils.DisplayUtils;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
 	import net.vdombox.ide.modules.wysiwyg.view.components.VdomObjectEditor;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -880,7 +881,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var maxRight : Number = 0;
 
-			if ( !element || !parentRenderer )
+			if ( !element || !parentRenderer || !parentRenderer.renderVO)
 				return maxRight;
 
 			for each ( var child : RenderVO in parentRenderer.renderVO.children )
@@ -889,6 +890,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 					continue;
 
 				var childElement : RendererBase = rendProxy.getRendererByVO( child.vdomObjectVO );
+				
+				if ( !childElement )
+					continue;
 
 				var childRightPosition : Number = childElement.x + childElement.width;
 
@@ -1276,7 +1280,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var attributeName : String;
 			var attributeValue : String;
 
-			var attributes : Array = [];
+			var attributes : Vector.<AttributeVO> = new Vector.<AttributeVO>();
 			var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO( event.renderer.vdomObjectVO );
 
 			var obj : Object = event.renderer.vdomObjectVO;
@@ -1287,41 +1291,66 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			var attributesRender : Array = renderer.renderVO.attributes;
 
-			for ( attributeName in event.attributes )
+			var eventAttributes : RendererCoordinateAndSizeVO = event.attributes;
+			
+			if ( eventAttributes.x != RendererCoordinateAndSizeVO.nullValue )
 			{
-				if ( attributeName == "x" )
-				{
-					attributeValue = event.attributes[ attributeName ];
-					attributeName = "left";
-
-					attributeVO = new AttributeVO( attributeName, renderer.beforeX.toString() );
-				}
-				else if ( attributeName == "y" )
-				{
-					attributeValue = event.attributes[ attributeName ];
-					attributeName = "top";
-
-					attributeVO = new AttributeVO( attributeName, renderer.beforeY.toString() );
-				}
-				else
-				{
-					for each ( var attrVO : AttributeVO in attributesRender )
-					{
-						if ( attrVO.name == attributeName )
-						{
-							attributeVO = attrVO;
-						}
-					}
-
-					attributeValue = event.attributes[ attributeName ];
-				}
-
-				if ( !attributeVO )
-					continue;
-
+				attributeValue = event.attributes.x.toString();
+				attributeName = "left";
+				
+				attributeVO = new AttributeVO( attributeName, renderer.beforeX.toString() );
+				
 				attributeVO.value = attributeValue;
-
 				attributes.push( attributeVO );
+			}
+			
+			if ( eventAttributes.y != RendererCoordinateAndSizeVO.nullValue )
+			{
+				attributeValue = event.attributes.y.toString();
+				attributeName = "top";
+				
+				attributeVO = new AttributeVO( attributeName, renderer.beforeY.toString() );
+				
+				attributeVO.value = attributeValue;
+				attributes.push( attributeVO );
+			}
+			
+			if ( eventAttributes.width != RendererCoordinateAndSizeVO.nullValue )
+			{
+				for each ( var attrVO : AttributeVO in attributesRender )
+				{
+					if ( attrVO.name == "width" )
+					{
+						attributeVO = attrVO;
+					}
+				}
+				
+				attributeValue = event.attributes.width.toString();
+				
+				if ( attributeVO )
+				{
+					attributeVO.value = attributeValue;
+					attributes.push( attributeVO );
+				}
+			}
+			
+			if ( eventAttributes.height != RendererCoordinateAndSizeVO.nullValue )
+			{
+				for each ( attrVO in attributesRender )
+				{
+					if ( attrVO.name == "height" )
+					{
+						attributeVO = attrVO;
+					}
+				}
+				
+				attributeValue = event.attributes.height.toString();
+				
+				if ( attributeVO )
+				{
+					attributeVO.value = attributeValue;
+					attributes.push( attributeVO );
+				}
 			}
 
 			vdomObjectAttributesVO.attributes = attributes;

@@ -32,7 +32,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			if ( getChangedAttributes( vdomObjectAttributesVO ) == 0 )
 				return;
 
-			var attributes : Array = vdomObjectAttributesVO.attributes;
+			var attributes : Vector.<AttributeVO> = vdomObjectAttributesVO.attributes;
 
 			rendererBase = renderProxy.getRendererByVO( vdomObjectAttributesVO.vdomObjectVO );
 

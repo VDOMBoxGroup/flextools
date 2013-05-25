@@ -9,26 +9,37 @@
 
 	<mx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.model._vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 
-			private var _value : String;
-
-			[Bindable]
+			private var _attributeVO : AttributeVO;
+			
 			public function get value() : String
 			{
-				return _value;
+				return _attributeVO.value;
 			}
 
 			public function set value( value : String ) : void
 			{
-				_value = value;
+				_attributeVO.value = value;
 				dispatchEvent( new Event( Event.CHANGE ) );
+			}
+			
+			[Bindable]
+			public function get attributeVO():AttributeVO
+			{
+				return _attributeVO;
+			}
+			
+			public function set attributeVO(value:AttributeVO):void
+			{
+				_attributeVO = value;
 			}
 		]]>
 	</mx:Script>
 	<s:Group width="100%"
 			 height="20"
-			 toolTip="{value}">
+			 toolTip="{attributeVO.value}">
 
 		<s:Rect width="100%"
 				height="100%">

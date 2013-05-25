@@ -20,14 +20,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
-
+	
 	import mx.binding.utils.BindingUtils;
-	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
+	import mx.collections.VectorCollection;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.common.controller.Notifications;
 	import net.vdombox.ide.common.events.PopUpWindowEvent;
 	import net.vdombox.ide.common.events.ResourceVOEvent;
@@ -42,7 +42,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.utils.WindowManager;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -70,7 +70,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			super( NAME, viewComponent );
 		}
 
-		private var _filters : ArrayCollection = new ArrayCollection();
+		private var _filters : VectorCollection = new VectorCollection();
 
 		private var allResourcesList : ArrayList;
 

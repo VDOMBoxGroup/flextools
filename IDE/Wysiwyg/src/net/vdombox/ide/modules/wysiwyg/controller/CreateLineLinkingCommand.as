@@ -77,7 +77,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			for each ( renderVO in listComponents )
 			{
 				renderer = renderProxy.getRendererByVO( renderVO.vdomObjectVO ) as RendererBase;
-				if ( !renderer.visible )
+				if ( !renderer || !renderer.visible )
 					continue;
 				if ( rendererBase.vdomObjectVO.id != renderer.vdomObjectVO.id )
 				{
