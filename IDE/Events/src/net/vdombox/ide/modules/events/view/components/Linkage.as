@@ -402,11 +402,6 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			alpha = 1;
 			visible = showHidden || target.visible && source.visible;
-
-			// FIXME
-			// для того чтобы линки стали видны необходимо передвинуть компанент. НАдо бы пофмксить
-			source.x += 1;
-			source.x -= 1;
 		}
 
 	}

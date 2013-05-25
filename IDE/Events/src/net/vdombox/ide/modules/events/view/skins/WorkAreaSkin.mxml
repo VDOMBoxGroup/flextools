@@ -17,16 +17,17 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.collections.VectorCollection;
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
-
+			
+			import spark.events.IndexChangeEvent;
+			
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaHScrollBarSkin;
 			import net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMWorkAreaScrollBarSkin.VDOMWorkAreaVScrollBarSkin;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 			import net.vdombox.ide.modules.events.events.WorkAreaEvent;
-
-			import spark.events.IndexChangeEvent;
 
 			[Bindable]
 			private var scale : Number = 1;
@@ -52,8 +53,7 @@
 
 			protected function showElementsView_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				// TODO Auto-generated method stub
-				var sourceDropDownList : ArrayCollection = new ArrayCollection();
+				var sourceDropDownList : VectorCollection = new VectorCollection();
 				sourceDropDownList.addItem( 'Full view' );
 				sourceDropDownList.addItem( 'Active + embedded' );
 				sourceDropDownList.addItem( 'Active' );
@@ -346,4 +346,15 @@
 			</s:Group>
 		</components1:VDOMScroller>
 	</s:Group>
+	
+	<mx1:Image id="spinner"
+			  source="{VDOMImage.Spinner}"
+			  right="10"
+			  top="30"
+			  height="30"
+			  width="30"
+			  verticalAlign="middle"
+			  horizontalAlign="center"
+			  maintainAspectRatio="true"
+			  visible="false"/>
 </s:SparkSkin>

@@ -6,13 +6,21 @@ package net.vdombox.ide.modules.events.view.components
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
-
+	
+	import mx.controls.Image;
 	import mx.core.DragSource;
 	import mx.events.DragEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.DragManager;
 	import mx.utils.NameUtil;
-
+	
+	import spark.components.CheckBox;
+	import spark.components.DropDownList;
+	import spark.components.Group;
+	import spark.components.RichEditableText;
+	import spark.components.SkinnableContainer;
+	import spark.components.TextInput;
+	
 	import net.vdombox.ide.common.interfaces.IEventBaseVO;
 	import net.vdombox.ide.common.model._vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.model._vo.ClientActionVO;
@@ -23,13 +31,6 @@ package net.vdombox.ide.modules.events.view.components
 	import net.vdombox.ide.modules.events.events.ElementEvent;
 	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.events.view.skins.WorkAreaSkin;
-
-	import spark.components.CheckBox;
-	import spark.components.DropDownList;
-	import spark.components.Group;
-	import spark.components.RichEditableText;
-	import spark.components.SkinnableContainer;
-	import spark.components.TextInput;
 
 	public class WorkArea extends SkinnableContainer
 	{
@@ -87,6 +88,9 @@ package net.vdombox.ide.modules.events.view.components
 
 		[SkinPart]
 		public var scroller : VDOMScroller;
+		
+		[SkinPart]
+		public var spinner : Image;
 
 
 		private var applicationEventsVO : ApplicationEventsVO;
@@ -140,6 +144,11 @@ package net.vdombox.ide.modules.events.view.components
 			addEvents();
 
 			//changeActions();
+		}
+		
+		public function set visibleSpinner( value : Boolean ) : void
+		{			
+			spinner.visible = value;
 		}
 
 		override protected function partAdded( partName : String, instance : Object ) : void

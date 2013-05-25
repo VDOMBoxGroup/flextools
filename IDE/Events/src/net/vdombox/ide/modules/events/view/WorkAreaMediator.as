@@ -128,6 +128,7 @@ package net.vdombox.ide.modules.events.view
 						workArea.removeAllElements();
 						workArea.linkagesLayer.removeAllElements();
 						workArea.pageName.text = body.name;
+						workArea.visibleSpinner = true;
 						sendNotification( Notifications.GET_APPLICATION_EVENTS, { applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 
 						workArea.skin.currentState = "normal";
@@ -137,6 +138,8 @@ package net.vdombox.ide.modules.events.view
 
 				case Notifications.APPLICATION_EVENTS_GETTED:
 				{
+					workArea.visibleSpinner = false;
+					
 					workArea.dataProvider = body as ApplicationEventsVO;
 					showElementsView = visibleElementProxy.showCurrent;
 					setElementsCurrentVisibleState();
@@ -151,6 +154,7 @@ package net.vdombox.ide.modules.events.view
 
 				case Notifications.APPLICATION_EVENTS_SETTED:
 				{
+					workArea.visibleSpinner = false;
 					workArea.skin.currentState = "normal"; //TODO: добавить public свойство для изменения внутреннего state
 
 					break;
@@ -204,6 +208,8 @@ package net.vdombox.ide.modules.events.view
 				{
 					workArea.dataProvider = body as ApplicationEventsVO;
 
+					workArea.visibleSpinner = false;
+					
 					workArea.skin.currentState = "unsaved";
 
 					break;
@@ -351,6 +357,7 @@ package net.vdombox.ide.modules.events.view
 
 		private function saveHandler( event : WorkAreaEvent = null ) : void
 		{
+			workArea.visibleSpinner = true;
 			sendNotification( Notifications.SET_APPLICATION_EVENTS, { applicationEventsVO: workArea.dataProvider, needForUpdate: false } );
 		}
 
@@ -420,6 +427,7 @@ package net.vdombox.ide.modules.events.view
 				}
 				else
 				{
+					workArea.visibleSpinner = true;
 					sendNotification( Notifications.GET_APPLICATION_EVENTS, { applicationVO: statesProxy.selectedApplication, pageVO: statesProxy.selectedPage } );
 				}
 			}
