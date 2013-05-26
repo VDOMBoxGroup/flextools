@@ -10,6 +10,7 @@
     <classEntry path="net.vdombox.editors.VDOMToolTip"/>
     <classEntry path="net.vdombox.editors.parsers.vscript.VScriptWordsStorage"/>
     <classEntry path="net.vdombox.editors.parsers.base.BlockPosition"/>
+    <classEntry path="net.vdombox.ide.common.model.LogProxy"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
