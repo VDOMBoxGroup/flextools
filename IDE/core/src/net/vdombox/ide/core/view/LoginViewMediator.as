@@ -9,7 +9,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.LoginViewEvent;
 	import net.vdombox.ide.core.model.LocalesProxy;
-	import net.vdombox.ide.core.model.LogProxy;
+	import net.vdombox.ide.common.model.LogProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	import net.vdombox.ide.core.model.vo.HostVO;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
@@ -58,7 +58,6 @@ package net.vdombox.ide.core.view
 
 		override public function onRegister() : void
 		{
-			LogProxy.addLog( "LoginViewMediator onRegister" );
 			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
 			localeProxy = facade.retrieveProxy( LocalesProxy.NAME ) as LocalesProxy;
 
@@ -145,7 +144,6 @@ package net.vdombox.ide.core.view
 
 		private function showHandler( event : FlexEvent ) : void
 		{
-			LogProxy.addLog( "show" );
 			validateProperties();
 		}
 
@@ -213,8 +211,6 @@ package net.vdombox.ide.core.view
 
 		private function validateProperties() : void
 		{
-			LogProxy.addLog( "validateProperties" );
-
 			var hostVO : HostVO;
 
 			if ( !sharedObjectProxy.hosts )
@@ -222,8 +218,6 @@ package net.vdombox.ide.core.view
 
 			loginView.host.dataProvider = sharedObjectProxy.hosts;
 			selectedHost = null;
-
-			LogProxy.addLog( "validateProperties2" );
 
 			var data : ArrayCollection = loginView.host.dataProvider as ArrayCollection;
 

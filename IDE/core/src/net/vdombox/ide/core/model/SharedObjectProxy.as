@@ -9,6 +9,7 @@ package net.vdombox.ide.core.model
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
+	import net.vdombox.ide.common.model.LogProxy;
 
 	/**
 	 * ResourcesProxy is wrapper on SharedObject.
@@ -64,12 +65,10 @@ package net.vdombox.ide.core.model
 
 		public function get hosts() : ArrayCollection
 		{
-			LogProxy.addLog( "hosts" );
 			var hostList : Array = new Array();
 			i = 0;
 			while ( shObjData.data[ "host" + i.toString() ] )
 			{
-				LogProxy.addLog( "host" + i.toString() );
 				hostVO = buildHost();
 				hostList.push( hostVO );
 

@@ -1,5 +1,6 @@
 package net.vdombox.ide.core
 {
+	import net.vdombox.ide.common.model.LogProxy;
 	import net.vdombox.ide.core.controller.AlertSystemCommand;
 	import net.vdombox.ide.core.controller.ChangeLocaleCommand;
 	import net.vdombox.ide.core.controller.CheckIndexPageCommand;
@@ -53,7 +54,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.responses.ResourcesProxyResponseCommand;
 	import net.vdombox.ide.core.controller.responses.ServerProxyResponseCommand;
 	import net.vdombox.ide.core.model.TypesProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 
@@ -504,6 +505,7 @@ package net.vdombox.ide.core
 
 		public function startup( application : VdomIDE ) : void
 		{
+			LogProxy.clear();
 			sendNotification( STARTUP, application );
 		}
 

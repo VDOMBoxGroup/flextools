@@ -1,6 +1,5 @@
 package net.vdombox.ide.core.controller
 {
-	import net.vdombox.ide.core.model.LogProxy;
 	import net.vdombox.ide.core.view.CoreJunctionMediator;
 	import net.vdombox.ide.core.view.ProxiesJunctionMediator;
 	import net.vdombox.ide.core.view.VdomIDEMediator;
@@ -18,8 +17,6 @@ package net.vdombox.ide.core.controller
 			facade.registerMediator( new ProxiesJunctionMediator() );
 
 			facade.registerMediator( new VdomIDEMediator( application ) );
-
-			LogProxy.addLog( "ViewPrepCommand  " );
 		}
 	}
 }

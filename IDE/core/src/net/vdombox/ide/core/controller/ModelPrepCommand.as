@@ -2,7 +2,6 @@ package net.vdombox.ide.core.controller
 {
 	import net.vdombox.ide.core.model.ApplicationsHostsProxy;
 	import net.vdombox.ide.core.model.LocalesProxy;
-	import net.vdombox.ide.core.model.LogProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.ResourcesProxy;
@@ -34,8 +33,6 @@ package net.vdombox.ide.core.controller
 
 			facade.registerProxy( new ServerProxy() );
 			facade.registerProxy( new SettingsProxy() );
-
-			LogProxy.addLog( "ModelPrepCommand  " );
 		}
 	}
 }

@@ -3,7 +3,6 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:components="net.vdombox.ide.core.view.components.*"
 		 creationComplete="group1_creationCompleteHandler(event)"
-		 addedToStage="group1_addedToStageHandler(event)"
 		 show="group1_showHandler(event)"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:skins="net.vdombox.ide.core.view.skins.*">
@@ -15,7 +14,6 @@
 
 			import net.vdombox.ide.common.view.components.VDOMImage;
 			import net.vdombox.ide.core.events.LoginViewEvent;
-			import net.vdombox.ide.core.model.LogProxy;
 			import net.vdombox.ide.core.model.vo.LocaleVO;
 
 			[Bindable]
@@ -92,7 +90,6 @@
 
 			protected function group1_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				LogProxy.addLog( "group1_creationCompleteHandler" );
 				host.setFocus();
 
 			}
@@ -105,7 +102,6 @@
 
 			protected function saveButton_clickHandler( event : MouseEvent ) : void
 			{
-				LogProxy.addLog( "saveButton_clickHandler" );
 				if ( saveButton.currentState == "save" )
 					saveButton.currentState = "notsave";
 				else
@@ -116,12 +112,6 @@
 			{
 				// TODO Auto-generated method stub
 				selectLang.selectedItem = selectedLanguage;
-			}
-
-			protected function group1_addedToStageHandler( event : Event ) : void
-			{
-				// TODO Auto-generated method stub
-				LogProxy.addLog( "group1_addedToStageHandler" );
 			}
 		]]>
 	</fx:Script>

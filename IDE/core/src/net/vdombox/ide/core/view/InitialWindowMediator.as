@@ -15,7 +15,7 @@ package net.vdombox.ide.core.view
 
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.InitialWindowEvent;
-	import net.vdombox.ide.core.model.LogProxy;
+	import net.vdombox.ide.common.model.LogProxy;
 	import net.vdombox.ide.core.model.SessionProxy;
 	import net.vdombox.ide.core.view.components.InitialWindow;
 	import net.vdombox.utils.VersionUtils;
@@ -157,7 +157,6 @@ package net.vdombox.ide.core.view
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			LogProxy.addLog( "creationCompleteHandler" );
 			sendNotification( ApplicationFacade.INITIAL_WINDOW_CREATED, initialWindow );
 			initTitle();
 		}

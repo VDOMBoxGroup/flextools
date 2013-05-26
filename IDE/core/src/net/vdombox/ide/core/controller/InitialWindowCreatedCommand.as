@@ -1,6 +1,5 @@
 package net.vdombox.ide.core.controller
 {
-	import net.vdombox.ide.core.model.LogProxy;
 	import net.vdombox.ide.core.view.ErrorViewMediator;
 	import net.vdombox.ide.core.view.LoginViewMediator;
 	import net.vdombox.ide.core.view.ProgressViewMediator;
@@ -15,8 +14,6 @@ package net.vdombox.ide.core.controller
 		{
 			var initialWindow : InitialWindow = notification.getBody() as InitialWindow;
 
-			LogProxy.addLog( "InitialWindowCreatedCommand execute" );
-
 			if ( !facade.hasMediator( ProgressViewMediator.NAME ) )
 			{
 				var progressViewMediator : ProgressViewMediator = new ProgressViewMediator( initialWindow.progressView )
@@ -25,12 +22,9 @@ package net.vdombox.ide.core.controller
 
 			if ( !facade.hasMediator( LoginViewMediator.NAME ) )
 			{
-				LogProxy.addLog( "!facade.hasMediator( LoginViewMediator.NAME )" );
 				var loginViewMediator : LoginViewMediator = new LoginViewMediator( initialWindow.loginView );
 				facade.registerMediator( loginViewMediator );
 			}
-			else
-				LogProxy.addLog( "Facade.hasMediator( LoginViewMediator.NAME )" );
 
 			if ( !facade.hasMediator( ErrorViewMediator.NAME ) )
 			{

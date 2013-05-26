@@ -5,7 +5,8 @@ package net.vdombox.ide.core.model
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
 	import mx.rpc.soap.SOAPFault;
-
+	
+	import net.vdombox.ide.common.model.LogProxy;
 	import net.vdombox.ide.common.model.ProxyStorage;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
@@ -19,7 +20,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.vo.ErrorVO;
 	import net.vdombox.utils.XMLUtils;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	/**
@@ -381,6 +382,7 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken;
 
+			LogProxy.addLog( "deleteObject" );
 			token = soap.delete_object( pageVO.applicationVO.id, objectVO.id );
 
 			token.recipientName = proxyName;
@@ -943,6 +945,7 @@ package net.vdombox.ide.core.model
 
 				case "delete_object":
 				{
+					LogProxy.addLog( "deletedObject" );
 					if ( multiLength > 0 )
 					{
 						multiLength--;
@@ -952,12 +955,15 @@ package net.vdombox.ide.core.model
 							getStructure();
 							getAttributes();
 						}
+						
+						LogProxy.addLog( "deleteObject_multiLength" );
 					}
 					else
 					{
 						objectVO = token.objectVO;
 
 						sendNotification( ApplicationFacade.PAGE_OBJECT_DELETED, { pageVO: pageVO, objectVO: objectVO } );
+						LogProxy.addLog( "deleteObjectEnd" );
 					}
 
 					break;
@@ -1069,6 +1075,7 @@ package net.vdombox.ide.core.model
 
 				case "delete_object":
 				{
+					LogProxy.addLog( "errordeleteObjectEnd" );
 					if ( multiLength > 0 )
 					{
 						multiLength--;
