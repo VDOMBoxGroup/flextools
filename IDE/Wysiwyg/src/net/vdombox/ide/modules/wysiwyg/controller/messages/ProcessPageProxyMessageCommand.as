@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
 	import net.vdombox.ide.common.controller.names.PPMOperationNames;
 	import net.vdombox.ide.common.controller.names.PPMPageTargetNames;
+	import net.vdombox.ide.common.model.LogProxy;
 	import net.vdombox.ide.common.model.StatesProxy;
 	import net.vdombox.ide.common.model._vo.ObjectVO;
 	import net.vdombox.ide.common.model._vo.PageVO;
@@ -14,7 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -56,9 +57,11 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						sendNotification( Notifications.OBJECT_GETTED, body.objectVO );
 					else if ( operation == PPMOperationNames.DELETE )
 					{
+						LogProxy.addLog( "ProcessPageProxyMessageCommand" );
 						sendNotification( ApplicationFacade.UNLOCKED_NULL );
 						if ( statesProxy.selectedObject && body.objectVO.id == statesProxy.selectedObject.id )
 						{
+							LogProxy.addLog( "if(statesProxy.selectedObject)" );
 							sendNotification( ApplicationFacade.SET_NULL );
 							var rendererBase : RendererBase = renderProxy.getRendererByID( body.objectVO.pageVO.id );
 							if ( rendererBase )
@@ -69,6 +72,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						rendererBase = renderProxy.getRendererByID( body.objectVO.id );
 						if ( rendererBase && rendererBase.renderVO.parent && rendererBase.renderVO.parent.vdomObjectVO is ObjectVO )
 						{
+							LogProxy.addLog( "if(rendererBase&&" );
 							var objectVO : ObjectVO = rendererBase.renderVO.parent.vdomObjectVO as ObjectVO;
 							sendNotification( Notifications.GET_WYSIWYG, objectVO );
 						}
@@ -76,6 +80,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						{
 							sendNotification( Notifications.GET_WYSIWYG, pageVO );
 						}
+						
+						LogProxy.addLog( "ProcessPageProxyMessageCommandend;" );
 						sendNotification( Notifications.GET_PAGE_SRUCTURE, pageVO );
 							//sendNotification( StatesProxy.SET_SELECTED_OBJECT, pageVO );
 
