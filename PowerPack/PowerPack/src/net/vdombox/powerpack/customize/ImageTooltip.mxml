@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Image xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="100" height="100">
+    <mx:Script>
+		<![CDATA[
+        import mx.managers.PopUpManager;
+
+        public var isShowing : Boolean;
+
+        public var defaultX : Number;
+        public var defaultY : Number;
+
+        public function show( owner : DisplayObjectContainer, x : int, y : int, file : File ) : void
+        {
+            this.owner = owner;
+
+            this.x = x;
+            this.y = y;
+
+            PopUpManager.addPopUp( this, owner );
+
+            isShowing = true;
+
+            source = file  ? file.nativePath : null;
+        }
+
+        public function dispose() : void
+        {
+            PopUpManager.removePopUp( this );
+
+            isShowing = false;
+        }
+
+        override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
+        {
+            super.updateDisplayList( unscaledWidth, unscaledHeight );
+
+            if (!isNaN(defaultX))
+                this.x = defaultX;
+
+            if (!isNaN(defaultY))
+                this.y = defaultY;
+
+            if ( x + width > screen.width )
+            {
+                x -= width;
+            }
+
+            if ( y + height > screen.height )
+            {
+                var yDistance : Number = y + height - screen.height + 10;
+
+                y -= yDistance;
+            }
+        }
+
+        ]]>
+	</mx:Script>
+
+</mx:Image>

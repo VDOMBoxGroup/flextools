@@ -9,14 +9,20 @@
 	
 	<mx:Script>
 		<![CDATA[
+        import mx.controls.advancedDataGridClasses.AdvancedDataGridItemRenderer;
         import mx.events.FlexEvent;
         import mx.managers.CursorManager;
 
+        import net.vdombox.powerpack.customize.ImageTooltip;
+
         import net.vdombox.powerpack.events.ResourcesEvent;
+        import net.vdombox.powerpack.lib.player.managers.ContextManager;
         import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+        import net.vdombox.powerpack.managers.CashManager;
         import net.vdombox.powerpack.managers.ProgressManager;
 
         import net.vdombox.powerpack.managers.ResourcesManager;
+        import net.vdombox.powerpack.template.BuilderTemplate;
 
         public function updateResourcesList() : void
         {
@@ -67,7 +73,9 @@
             var resourceXML : XML = grid.selectedItem as XML;
 
             if ( !resourceXML )
+            {
                 return;
+            }
 
             CursorManager.setBusyCursor();
 
@@ -91,15 +99,71 @@
             resourcesManager.addEventListener( ResourcesEvent.CHANGED, resourcesChangedHandler );
         }
 
-        private function grid_mouseOverHandler( event : MouseEvent ) : void
+        private function previewImage( resourceXML : XML ) : void
         {
-            //            if ( event.target is AdvancedDataGridItemRenderer )
-            //            {
-            //                trace( "OVER: " + event.target );
-            //                // TODO: image preview
-            //            }
+            var curTpl : BuilderTemplate = ContextManager.templates[0];
+            var index : XML = CashManager.getIndex( curTpl.fullID );
+            var thumbFile : File = CashManager.cashFolder.resolvePath( index.@folder ).resolvePath( resourceXML.@thumb );
+
+            showImageTooltip( thumbFile );
         }
 
+        private var assistTooltip : ImageTooltip = new ImageTooltip();
+
+        public function showImageTooltip( imageFile : File ) : void
+        {
+            hideImageTooltip();
+
+            var distance : int = 5;
+            var point : Point = localToGlobal( new Point( mouseX, mouseY ) );
+
+            var defX : Number = point.x + distance;
+            var defY : Number = point.y + distance;
+
+            if ( assistTooltip.isShowing )
+            {
+                assistTooltip.defaultX = defX;
+                assistTooltip.defaultY = defY;
+
+                assistTooltip.invalidateDisplayList();
+                return;
+            }
+
+            assistTooltip.show( this, defX, defY, imageFile );
+        }
+
+        public function hideImageTooltip() : void
+        {
+            if ( !assistTooltip )
+                return;
+
+            if ( !assistTooltip.isShowing )
+                return;
+
+            assistTooltip.dispose();
+        }
+
+        private function grid_mouseOverHandler( event : MouseEvent ) : void
+        {
+            if ( event.target is AdvancedDataGridItemRenderer )
+            {
+                var resourceXML : XML = event.target.data as XML;
+
+                if ( resourceXML.@category == "image" )
+                {
+                    previewImage( resourceXML );
+                }
+
+            }
+        }
+
+        private function grid_mouseOutHandler( event : MouseEvent ) : void
+        {
+            if ( event.target is AdvancedDataGridItemRenderer )
+            {
+                hideImageTooltip();
+            }
+        }
         ]]>
 	</mx:Script>
 	
@@ -116,6 +180,7 @@
 							folderClosedIcon="{null}"
                             dataProvider="{resourcesManager.allResources}"
                             mouseOver="grid_mouseOverHandler(event)"
+                            mouseOut="grid_mouseOutHandler(event)"
                             dragEnabled="true">
 		
 		<controls:columns>
