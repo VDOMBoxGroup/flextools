@@ -11,6 +11,7 @@
 		<![CDATA[
         import mx.controls.advancedDataGridClasses.AdvancedDataGridItemRenderer;
         import mx.events.FlexEvent;
+        import mx.events.ListEvent;
         import mx.managers.CursorManager;
 
         import net.vdombox.powerpack.customize.ImageTooltip;
@@ -24,7 +25,13 @@
         import net.vdombox.powerpack.managers.ResourcesManager;
         import net.vdombox.powerpack.template.BuilderTemplate;
 
-        public function updateResourcesList() : void
+        public function refresh() : void
+        {
+            updateResourcesList();
+            clearSearch();
+        }
+
+        private function updateResourcesList() : void
         {
             grid.dataProvider = resourcesManager.allResources;
             grid.invalidateList();
@@ -135,10 +142,14 @@
         public function hideImageTooltip() : void
         {
             if ( !assistTooltip )
+            {
                 return;
+            }
 
             if ( !assistTooltip.isShowing )
+            {
                 return;
+            }
 
             assistTooltip.dispose();
         }
@@ -164,11 +175,74 @@
                 hideImageTooltip();
             }
         }
+
+        private function nameFilter() : void
+        {
+            grid.dataProvider.filterFunction = nameSearch;
+            grid.dataProvider.refresh();
+        }
+
+        private function nameSearch( item : Object ) : Boolean
+        {
+            var isMatch : Boolean = false;
+
+            if ( item.@name.toString().toLowerCase().search( searchTextBox.text.toString().toLowerCase() ) != -1 )
+            {
+                isMatch = true;
+            }
+
+            return isMatch;
+        }
+
+        private function idFilter() : void
+        {
+            grid.dataProvider.filterFunction = idSearch;
+            grid.dataProvider.refresh();
+        }
+
+        private function idSearch( item : Object ) : Boolean
+        {
+            var isMatch : Boolean = false;
+
+            if ( item.@ID.toString().toLowerCase().search( searchTextBox.text.toString().toLowerCase() ) != -1 )
+            {
+                isMatch = true;
+            }
+
+            return isMatch;
+        }
+
+        private function filterValues() : void
+        {
+            if (searchByComboBox.selectedLabel == "ID")
+                idFilter();
+            else if (searchByComboBox.selectedLabel == "Name")
+                nameFilter();
+        }
+
+        private function clearSearch() : void
+        {
+            searchTextBox.text='';
+            filterValues();
+        }
+
+
         ]]>
 	</mx:Script>
 	
-	<mx:HBox horizontalAlign="right" width="100%">
-		<mx:Button label="Add" click="addResource();"/>
+	<mx:HBox horizontalAlign="right" width="100%" verticalAlign="middle">
+        <mx:Label text="Search by:"/>
+        <mx:ComboBox id="searchByComboBox" change="filterValues()">
+            <mx:dataProvider>
+                <mx:String>Name</mx:String>
+                <mx:String>ID</mx:String>
+            </mx:dataProvider>
+        </mx:ComboBox>
+        <mx:TextInput id="searchTextBox" width="100" change="filterValues()"/>
+        <mx:Image source="{ContextManager.deleteClass}" click="clearSearch()"/>
+
+        <mx:Spacer width="100%"/>
+        <mx:Button label="Add" click="addResource();"/>
 		<mx:Button label="Remove" click="removeResource();" enabled="{grid.selectedIndex >= 0}"/>
 	</mx:HBox>
 	

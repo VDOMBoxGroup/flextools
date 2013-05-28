@@ -503,7 +503,7 @@
 			workStage.includeInLayout = true;
 			workStage.validateNow();
 
-            pnl_resources.updateResourcesList();
+            pnl_resources.refresh();
 
 			pnl_graphs.addEventListener(Graphs.TPL_POPULATE_COMPLETE, graphsPopulateCompleteHandler);
 			pnl_graphs.templateXML = currentTemplate.xmlStructure;
@@ -558,7 +558,7 @@
 
 			MenuManager.getInstance().newTemplate();
 
-            pnl_resources.updateResourcesList();
+            pnl_resources.refresh();
 		}
 
 		//--------------------------------------------------------------------------
