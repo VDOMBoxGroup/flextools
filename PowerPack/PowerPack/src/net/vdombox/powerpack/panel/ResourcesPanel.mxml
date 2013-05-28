@@ -178,6 +178,9 @@
 
         private function nameFilter() : void
         {
+            if (!grid.dataProvider)
+                return;
+
             grid.dataProvider.filterFunction = nameSearch;
             grid.dataProvider.refresh();
         }
@@ -196,6 +199,9 @@
 
         private function idFilter() : void
         {
+            if (!grid.dataProvider)
+                return;
+
             grid.dataProvider.filterFunction = idSearch;
             grid.dataProvider.refresh();
         }

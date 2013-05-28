@@ -7,53 +7,99 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mx.collections.HierarchicalData;
-			import mx.events.FlexEvent;
-			
-			import net.vdombox.powerpack.utils.Log;
-			
-			public function clearLog() : void
-			{
-				grid.dataProvider = null;
-				grid.invalidateList();
-			}
-			
-			public function showLog() : void
-			{
-				grid.dataProvider = new HierarchicalData( logArr );
-				grid.invalidateList();
-			}
-			
-			private function get logArr() : Array
-			{
-				var logObjectsArray : Array = [];
-				var logContent : String = Log.getInstance().content;
-				
-				var logNotes : Array = logContent.split("\n");
-				if (!logNotes)
-					return [];
-				
-				var noteValues:Array;
-				for each (var note:String in logNotes)
-				{
-					noteValues = note.split("\t");
-					if (!noteValues || noteValues.length != 3)
-						continue;
-					
-					if (noteValues[0].indexOf(":") == -1)
-						continue;
-					
-					logObjectsArray.push({"Time":noteValues[0], "Command":noteValues[1], "Delta":noteValues[2]});
-				}
-				
-				return logObjectsArray;
-			}
-			
-		]]>
+        import mx.collections.HierarchicalData;
+        import mx.events.FlexEvent;
+
+        import net.vdombox.powerpack.lib.player.managers.ContextManager;
+
+        import net.vdombox.powerpack.utils.Log;
+
+        public function clearLog() : void
+        {
+            grid.dataProvider = null;
+            grid.invalidateList();
+
+            clearSearch();
+        }
+
+        public function showLog() : void
+        {
+            grid.dataProvider = new HierarchicalData( logArr );
+            grid.invalidateList();
+
+            clearSearch();
+        }
+
+        private function get logArr() : Array
+        {
+            var logObjectsArray : Array = [];
+            var logContent : String = Log.getInstance().content;
+
+            var logNotes : Array = logContent.split( "\n" );
+            if ( !logNotes )
+            {
+                return [];
+            }
+
+            var noteValues : Array;
+            for each ( var note : String in logNotes )
+            {
+                noteValues = note.split( "\t" );
+                if ( !noteValues || noteValues.length != 3 )
+                {
+                    continue;
+                }
+
+                if ( noteValues[0].indexOf( ":" ) == -1 )
+                {
+                    continue;
+                }
+
+                logObjectsArray.push( {"Time": noteValues[0], "Command": noteValues[1], "Delta": noteValues[2]} );
+            }
+
+            return logObjectsArray;
+        }
+
+        private function commandFilter() : void
+        {
+            if ( !grid.dataProvider )
+            {
+                return;
+            }
+
+            grid.dataProvider.filterFunction = commandSearch;
+            grid.dataProvider.refresh();
+        }
+
+        private function commandSearch( item : Object ) : Boolean
+        {
+            var isMatch : Boolean = false;
+
+            if ( item.Command.toString().toLowerCase().search( searchTextBox.text.toString().toLowerCase() ) != -1 )
+            {
+                isMatch = true;
+            }
+
+            return isMatch;
+        }
+
+        private function clearSearch() : void
+        {
+            searchTextBox.text = '';
+            commandFilter();
+        }
+        ]]>
 	</mx:Script>
 	
-	<mx:HBox horizontalAlign="right" width="100%">
-		<mx:Button label="Clear" click="{clearLog()}"/>
+	<mx:HBox horizontalAlign="right" width="100%" verticalAlign="middle">
+        <mx:Label text="Search (by command field):"/>
+        <mx:TextInput id="searchTextBox" width="100" change="commandFilter()"/>
+        <mx:Image source="{ContextManager.deleteClass}" click="clearSearch()"/>
+
+        <mx:Spacer width="100%"/>
+
+        <mx:Button label="Clear" click="{clearLog()}"/>
 		<mx:Button label="Refresh" click="{showLog()}"/>
 	</mx:HBox>
 	
