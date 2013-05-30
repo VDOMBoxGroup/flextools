@@ -11,133 +11,167 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mx.binding.utils.BindingUtils;
-			import mx.collections.ArrayCollection;
-			import mx.collections.HierarchicalData;
-			import mx.utils.StringUtil;
-			
-			import net.vdombox.powerpack.graph.Node;
-			import net.vdombox.powerpack.lib.player.managers.ContextManager;
-			
-			public static const SEARCH		: String = "search";
+        import mx.binding.utils.BindingUtils;
+        import mx.collections.ArrayCollection;
+        import mx.collections.HierarchicalData;
+        import mx.managers.CursorManager;
 
-			private function init() : void
-			{
-				BindingUtils.bindSetter( populateSearchResults, this, "searchResultsArray" );
-			}
-			
-			private function populateSearchResults( array : Array ) : void
-			{
-				clearResults();
-				
-				grid.dataProvider = new HierarchicalData( parseResult );
-			}
-			
-			private function get parseResult () : Array
-			{
-				var newLineRegExp : RegExp = /\r\n{0,1}/g;
-				var graph : Object;
-				var node : Object;
-				
-				var nodes : Array = [];
-				var graphs : Array = [];
-				
-				if ( !searchResultsArray || searchResultsArray.length <= 0 )
-					return null;
-				
-				for each ( var item : Object in searchResultsArray )
-				{
-					nodes = [];
-					
-					for each (var state : Object in item["states"])
-					{
-						node = new Object();
-						node["description"]		= "(" + state["category"] + "): " +state["text"].replace(newLineRegExp, "");
-						node["toolTip"]			= state["text"];
-						node["data"]			= state["text"];
-						node["name"]			= state["name"];
-						node["parentGraphName"]	= state["parentGraphName"];
-						
-						nodes.push(node);
-					}
-					
-					graph = new Object();
-					graph["description"]	= item["graph"].name;
-					graph["data"]			= item["graph"];
-					graph["children"]		= nodes;
-					
-					graphs.push(graph);
-				}
-				
-				return graphs;
-			}
-			
-			protected function btnSearch_clickHandler(event:MouseEvent):void
-			{
-				startSearch();
-			}
-			
-			protected function searchValue_keyDownHandler(event:KeyboardEvent):void
-			{
-				if (event.keyCode == Keyboard.ENTER)
-				{
-					event.preventDefault();
-					event.stopPropagation();
-					
-					startSearch();
-				}
-			}
-			
-			public var graphs : ArrayCollection;
-			
-			private function startSearch () : void
-			{
-				if (searchValue.length == 0)
-					return;
-					
-				clearResults();
-				
-				dispatchEvent(new Event(SEARCH));
-			}
-			
-			public function get searchValue () : String
-			{
-				return searchValue_TextInput.text;
-			}
-			
-			public function get searchWholeWordOnly () : Boolean
-			{
-				return wholeWord_CheckBox.selected;
-			}
-			
-			protected function btnClear_clickHandler(event:MouseEvent):void
-			{
-				clearResults();
-			}
-			
-			private function clearResults () : void
-			{
-				grid.dataProvider = null;
-			}
-			
-			public function clear () : void
-			{
-				searchValue_TextInput.text = "";
-				
-				clearResults();
-			}
+        import net.vdombox.powerpack.lib.player.managers.ContextManager;
 
-            override public function setFocus() : void
+        public static const SEARCH : String = "search";
+
+        private function init() : void
+        {
+            BindingUtils.bindSetter( populateSearchResults, this, "searchResultsArray" );
+        }
+
+        private var locked : Boolean = false;
+
+        private function lock() : void
+        {
+            locked = true;
+            CursorManager.setBusyCursor();
+
+            btnClear.enabled = false;
+            btnSearch.enabled = false;
+        }
+
+        private function unlock() : void
+        {
+            locked = false;
+            CursorManager.removeBusyCursor();
+
+            btnClear.enabled = true;
+            btnSearch.enabled = true;
+        }
+
+        private function populateSearchResults( array : Array ) : void
+        {
+            clearResults();
+
+            grid.dataProvider = new HierarchicalData( parseResult );
+
+            unlock();
+        }
+
+        private function get parseResult() : Array
+        {
+            var newLineRegExp : RegExp = /\r\n{0,1}/g;
+            var graph : Object;
+            var node : Object;
+
+            var nodes : Array = [];
+            var graphs : Array = [];
+
+            if ( !searchResultsArray || searchResultsArray.length <= 0 )
             {
-                if (!searchValue_TextInput)
-                    return;
-
-                searchValue_TextInput.setFocus();
-
-                clear();
+                return null;
             }
-			
-		]]>
+
+            for each ( var item : Object in searchResultsArray )
+            {
+                nodes = [];
+
+                for each ( var state : Object in item["states"] )
+                {
+                    node = new Object();
+                    node["description"] = "(" + state["category"] + "): " + state["text"].replace( newLineRegExp, "" );
+                    node["toolTip"] = state["text"];
+                    node["data"] = state["text"];
+                    node["name"] = state["name"];
+                    node["parentGraphName"] = state["parentGraphName"];
+
+                    nodes.push( node );
+                }
+
+                graph = new Object();
+                graph["description"] = item["graph"].name;
+                graph["data"] = item["graph"];
+                graph["children"] = nodes;
+
+                graphs.push( graph );
+            }
+
+            return graphs;
+        }
+
+        protected function btnSearch_clickHandler( event : MouseEvent ) : void
+        {
+            startSearch();
+        }
+
+        protected function searchValue_keyDownHandler( event : KeyboardEvent ) : void
+        {
+            if ( event.keyCode == Keyboard.ENTER )
+            {
+                event.preventDefault();
+                event.stopPropagation();
+
+                startSearch();
+            }
+        }
+
+        public var graphs : ArrayCollection;
+
+        private function startSearch() : void
+        {
+            if ( searchValue.length == 0 )
+            {
+                return;
+            }
+
+            if ( locked )
+            {
+                return;
+            }
+
+            lock();
+
+            clearResults();
+
+            dispatchEvent( new Event( SEARCH ) );
+        }
+
+        public function get searchValue() : String
+        {
+            return searchValue_TextInput.text;
+        }
+
+        public function get searchWholeWordOnly() : Boolean
+        {
+            return wholeWord_CheckBox.selected;
+        }
+
+        protected function btnClear_clickHandler( event : MouseEvent ) : void
+        {
+            clearResults();
+        }
+
+        private function clearResults() : void
+        {
+            if ( locked )
+                return;
+
+            grid.dataProvider = null;
+        }
+
+        public function clear() : void
+        {
+            searchValue_TextInput.text = "";
+
+            clearResults();
+        }
+
+        override public function setFocus() : void
+        {
+            if ( !searchValue_TextInput )
+                return;
+
+            searchValue_TextInput.setFocus();
+
+            clear();
+        }
+        ]]>
 	</mx:Script>
 	
 	
