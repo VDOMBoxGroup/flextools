@@ -3,11 +3,12 @@ package net.vdombox.powerpack.template
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.OutputProgressEvent;
-	import flash.filesystem.File;
+import flash.filesystem.File;
+import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
-	
+
 	import mx.utils.UIDUtil;
 	
 	import net.vdombox.powerpack.lib.extendedapi.utils.FileToBase64;
@@ -185,9 +186,12 @@ public class BuilderTemplate extends Template
 			fileStream.openAsync( file, FileMode.READ );
 		}
 		
-		public function browseForSave ( type:String = BROWSE_TYPE_SAVE ) : void
+		public function browseForSave ( type:String = BROWSE_TYPE_SAVE, defaultFileName : String = "" ) : void
 		{
-			var folder : File = BuilderContextManager.instance.lastDir;
+			var folder : File = BuilderContextManager.instance.lastDir || File.desktopDirectory;
+
+			if (defaultFileName != "")
+				folder = new File (folder.nativePath + "/" + defaultFileName);
 			
 			folder.addEventListener( Event.SELECT, fileBrowseHandler );
 			
@@ -211,8 +215,11 @@ public class BuilderTemplate extends Template
 		{
 			if (!file)
 				return;
-			
-			browseForSave (BROWSE_TYPE_EXPORT);
+
+			var project : BuilderTemplateProject = selectedProject as BuilderTemplateProject;
+			var exportFileName : String = project.outputFileName + ".v." + version + ".xml";
+
+			browseForSave( BROWSE_TYPE_EXPORT,  exportFileName);
 		}
 		
 		public function exportGraph (graphXML : XML) : void
