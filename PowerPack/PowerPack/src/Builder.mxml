@@ -9,16 +9,17 @@
 		creationComplete="creationCompleteHandler(event)"
 		minWidth="800" minHeight="600"
 		xmlns:mx="http://www.adobe.com/2006/mxml"
-		xmlns:graph="net.vdombox.powerpack.graph.*"
 		xmlns:ui="net.vdombox.powerpack.lib.extendedapi.ui.*"
 		xmlns:panel="net.vdombox.powerpack.panel.*"
-		xmlns:customize="net.vdombox.powerpack.customize.*"
 		xmlns:containers="net.vdombox.powerpack.lib.extendedapi.containers.*"
 		closing="closingApplicationHandler(event)"
 		styleName="builderWindowStyle"
 		showStatusBar="true"
 		statusTextStyleName="statusTxtStyle"
-		xmlns:customize1="net.vdombox.powerpack.lib.player.customize.*" xmlns:control="net.vdombox.powerpack.control.*" xmlns:tabnavigator="net.vdombox.powerpack.lib.extendedapi.containers.tabnavigator.*" xmlns:controlbar="net.vdombox.powerpack.control.controlbar.*">
+		xmlns:customize1="net.vdombox.powerpack.lib.player.customize.*" xmlns:control="net.vdombox.powerpack.control.*"
+        xmlns:tabnavigator="net.vdombox.powerpack.lib.extendedapi.containers.tabnavigator.*"
+        xmlns:controlbar="net.vdombox.powerpack.control.controlbar.*"
+        keyDown="builderKeyDownHandler(event)">
 
 	<mx:Style source="assets/style/style.css" />
 	
@@ -87,1476 +88,1473 @@
 
 	<mx:Script>
 		<![CDATA[
-			import mx.binding.utils.BindingUtils;
-			import mx.collections.HierarchicalData;
-			import mx.collections.XMLListCollection;
-			import mx.controls.Tree;
-			import mx.controls.scrollClasses.ScrollBar;
-			import mx.controls.scrollClasses.ScrollThumb;
-			import mx.core.Application;
-			import mx.core.windowClasses.StatusBar;
-			import mx.events.CloseEvent;
-			import mx.events.FlexEvent;
-			import mx.events.FlexNativeMenuEvent;
-			import mx.managers.PopUpManager;
-			import mx.utils.StringUtil;
-			
-			import net.vdombox.powerpack.*;
-			import net.vdombox.powerpack.control.controlbar.ControlBarEvent;
-			import net.vdombox.powerpack.dialog.AboutProgramDialog;
-			import net.vdombox.powerpack.dialog.AirBuildDialog;
-			import net.vdombox.powerpack.dialog.ImportFromTpl;
-			import net.vdombox.powerpack.dialog.ModalDialog;
-			import net.vdombox.powerpack.dialog.ProjectsSettingsDialog;
-			import net.vdombox.powerpack.dialog.TemplateKey;
-			import net.vdombox.powerpack.dialog.ValidateDialog;
-			import net.vdombox.powerpack.graph.Connector;
-			import net.vdombox.powerpack.graph.GraphCanvas;
-			import net.vdombox.powerpack.graph.Node;
-			import net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
-			import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
-			import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
-			import net.vdombox.powerpack.lib.player.BasicError;
-			import net.vdombox.powerpack.lib.player.Player;
-			import net.vdombox.powerpack.lib.player.events.CodeParserEvent;
-			import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
-			import net.vdombox.powerpack.lib.player.gen.Dynamic;
-			import net.vdombox.powerpack.lib.player.gen.GraphContext;
-			import net.vdombox.powerpack.lib.player.gen.NodeContext;
-			import net.vdombox.powerpack.lib.player.gen.TemplateLib;
-			import net.vdombox.powerpack.lib.player.gen.TemplateStruct;
-			import net.vdombox.powerpack.lib.player.gen.TemplateValidateOptions;
-			import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
-			import net.vdombox.powerpack.lib.player.gen.structs.NodeStruct;
-			import net.vdombox.powerpack.lib.player.graph.NodeCategory;
-			import net.vdombox.powerpack.lib.player.managers.ContextManager;
-			import net.vdombox.powerpack.lib.player.managers.LanguageManager;
-			import net.vdombox.powerpack.lib.player.popup.AlertPopup;
-			import net.vdombox.powerpack.lib.player.utils.RuntimeUtils;
-			import net.vdombox.powerpack.managers.BuilderContextManager;
-			import net.vdombox.powerpack.managers.CashManager;
-			import net.vdombox.powerpack.managers.ProgressManager;
-			import net.vdombox.powerpack.menu.MenuManager;
-			import net.vdombox.powerpack.panel.Console;
-			import net.vdombox.powerpack.panel.graphsClasses.AccordionChild;
-			import net.vdombox.powerpack.panel.graphsClasses.GraphsAccordionEvent;
-			import net.vdombox.powerpack.template.BuilderTemplate;
-			import net.vdombox.powerpack.template.BuilderTemplateProject;
-			import net.vdombox.powerpack.updater.BuilderUpdater;
-			import net.vdombox.powerpack.utils.LibLoader;
-			import net.vdombox.powerpack.utils.Log;
+        import mx.binding.utils.BindingUtils;
+        import mx.collections.HierarchicalData;
+        import mx.collections.XMLListCollection;
+        import mx.controls.Tree;
+        import mx.controls.scrollClasses.ScrollBar;
+        import mx.controls.scrollClasses.ScrollThumb;
+        import mx.core.Application;
+        import mx.core.windowClasses.StatusBar;
+        import mx.events.CloseEvent;
+        import mx.events.FlexEvent;
+        import mx.events.FlexNativeMenuEvent;
+        import mx.managers.PopUpManager;
+        import mx.utils.StringUtil;
 
-		//--------------------------------------------------------------------------
-		//
-		//  Class methods
-		//
-		//--------------------------------------------------------------------------
+        import net.vdombox.powerpack.*;
+        import net.vdombox.powerpack.control.controlbar.ControlBarEvent;
+        import net.vdombox.powerpack.dialog.AboutProgramDialog;
+        import net.vdombox.powerpack.dialog.AirBuildDialog;
+        import net.vdombox.powerpack.dialog.ImportFromTpl;
+        import net.vdombox.powerpack.dialog.ModalDialog;
+        import net.vdombox.powerpack.dialog.ProjectsSettingsDialog;
+        import net.vdombox.powerpack.dialog.TemplateKey;
+        import net.vdombox.powerpack.dialog.ValidateDialog;
+        import net.vdombox.powerpack.graph.Connector;
+        import net.vdombox.powerpack.graph.GraphCanvas;
+        import net.vdombox.powerpack.graph.Node;
+        import net.vdombox.powerpack.lib.extendedapi.controls.SuperDataGrid;
+        import net.vdombox.powerpack.lib.extendedapi.controls.tabBarClasses.SuperTab;
+        import net.vdombox.powerpack.lib.extendedapi.ui.SuperNativeMenuItem;
+        import net.vdombox.powerpack.lib.player.BasicError;
+        import net.vdombox.powerpack.lib.player.Player;
+        import net.vdombox.powerpack.lib.player.events.CodeParserEvent;
+        import net.vdombox.powerpack.lib.player.events.TemplateLibEvent;
+        import net.vdombox.powerpack.lib.player.gen.Dynamic;
+        import net.vdombox.powerpack.lib.player.gen.GraphContext;
+        import net.vdombox.powerpack.lib.player.gen.NodeContext;
+        import net.vdombox.powerpack.lib.player.gen.TemplateLib;
+        import net.vdombox.powerpack.lib.player.gen.TemplateStruct;
+        import net.vdombox.powerpack.lib.player.gen.TemplateValidateOptions;
+        import net.vdombox.powerpack.lib.player.gen.parse.parseClasses.CodeFragment;
+        import net.vdombox.powerpack.lib.player.gen.structs.NodeStruct;
+        import net.vdombox.powerpack.lib.player.graph.NodeCategory;
+        import net.vdombox.powerpack.lib.player.managers.ContextManager;
+        import net.vdombox.powerpack.lib.player.managers.LanguageManager;
+        import net.vdombox.powerpack.lib.player.popup.AlertPopup;
+        import net.vdombox.powerpack.lib.player.utils.RuntimeUtils;
+        import net.vdombox.powerpack.managers.BuilderContextManager;
+        import net.vdombox.powerpack.managers.CashManager;
+        import net.vdombox.powerpack.managers.ProgressManager;
+        import net.vdombox.powerpack.menu.MenuManager;
+        import net.vdombox.powerpack.panel.Console;
+        import net.vdombox.powerpack.panel.graphsClasses.AccordionChild;
+        import net.vdombox.powerpack.panel.graphsClasses.GraphsAccordionEvent;
+        import net.vdombox.powerpack.template.BuilderTemplate;
+        import net.vdombox.powerpack.template.BuilderTemplateProject;
+        import net.vdombox.powerpack.updater.BuilderUpdater;
+        import net.vdombox.powerpack.utils.LibLoader;
+        import net.vdombox.powerpack.utils.Log;
 
-		public var bbb : Boolean = false;	
-			
-		private var curDebugNode : Node = null;
-		private var curDebugBufLen : int = 0;
+        //--------------------------------------------------------------------------
+        //
+        //  Class methods
+        //
+        //--------------------------------------------------------------------------
 
-		private function preinit() : void
-		{
-			maximize();
+        public var bbb : Boolean = false;
 
-			Connector.classConstructed;
-			Node.classConstructed;
-			GraphCanvas.classConstructed;
+        private var curDebugNode : Node = null;
+        private var curDebugBufLen : int = 0;
 
-			Connector.connectMode = Connector.CM_CENTER;
+        private function preinit() : void
+        {
+            maximize();
 
-			var defaultCaptions : Object = {
+            Connector.classConstructed;
+            Node.classConstructed;
+            GraphCanvas.classConstructed;
 
-				app_title : "Power Pack Builder",
+            Connector.connectMode = Connector.CM_CENTER;
 
-				menu_run : "_Run",
-				menu_run_template : "_Run",
-				menu_debug : "_Debug",
-				menu_step_by_step : "_Step By Step",
-				menu_resume : "Resu_me",
-				menu_step_into : "Step _Into",
-				menu_step_over : "Step _Over",
-				menu_step_return : "Step _Return",
-				menu_break : "_Break"
-			};
+            var defaultCaptions : Object = {
 
-			LanguageManager.setSentences( defaultCaptions );
+                app_title: "Power Pack Builder",
 
-			if ( File.applicationDirectory.resolvePath( 'style/builder.swf' ).exists )
-				StyleManager.loadStyleDeclarations( "style/builder.swf" );
-		}
-		
-		private function init() : void
-		{
-			MenuManager.getInstance().menu = flexNativeMenu;
-		}
-			
-		private function show() : void
-		{
-			pnl_problems.grid.addEventListener( MouseEvent.DOUBLE_CLICK, problemsDoubleClickHandler );
+                menu_run:          "_Run",
+                menu_run_template: "_Run",
+                menu_debug:        "_Debug",
+                menu_step_by_step: "_Step By Step",
+                menu_resume:       "Resu_me",
+                menu_step_into:    "Step _Into",
+                menu_step_over:    "Step _Over",
+                menu_step_return:  "Step _Return",
+                menu_break:        "_Break"
+            };
 
-			configureSearchPanel();
-			
-			var langFile : File;
-			var langFolder : File;
-			var fileStream : FileStream;
+            LanguageManager.setSentences( defaultCaptions );
 
-			for each ( langFile in [BuilderContextManager.instance.dataStorage, BuilderContextManager.instance.settingStorage] )
-			{
-				if ( !langFile.exists )
-					langFile.createDirectory();
-			}
+            if ( File.applicationDirectory.resolvePath( 'style/builder.swf' ).exists )
+                StyleManager.loadStyleDeclarations( "style/builder.swf" );
+        }
 
-			Application.application.setStyle( "modalTransparencyBlur", 0 );
-			Application.application.setStyle( "modalTransparency", 0 );
+        private function init() : void
+        {
+            MenuManager.getInstance().menu = flexNativeMenu;
+        }
 
-			CashManager.clear();
+        private function show() : void
+        {
+            pnl_problems.grid.addEventListener( MouseEvent.DOUBLE_CLICK, problemsDoubleClickHandler );
 
-			LibLoader.loadLib();
+            configureSearchPanel();
 
-			// Load application settings
-			BuilderContextManager.loadSettings();
+            var langFile : File;
+            var langFolder : File;
+            var fileStream : FileStream;
 
-			MenuManager.getInstance().bindItems();
-			MenuManager.getInstance().noTemplate();
-			MenuManager.getInstance().updateLangMenu();
-			MenuManager.getInstance().updateLastFilesMenu();
+            for each ( langFile in [BuilderContextManager.instance.dataStorage, BuilderContextManager.instance.settingStorage] )
+            {
+                if ( !langFile.exists )
+                    langFile.createDirectory();
+            }
 
-			// Load language file
-			langFolder = File.applicationDirectory.resolvePath( MenuManager.LANG_FOLDER );
-			langFile = langFolder.resolvePath( ContextManager.instance.lang.file );
+            Application.application.setStyle( "modalTransparencyBlur", 0 );
+            Application.application.setStyle( "modalTransparency", 0 );
 
-			if ( langFile && langFile.exists )
-			{
-				fileStream = new FileStream();
+            CashManager.clear();
 
-				fileStream.addEventListener( Event.COMPLETE, completeLangHandler );
-				fileStream.openAsync( langFile, FileMode.READ );
-			}
+            LibLoader.loadLib();
 
-			openTemplate();
-		}
-			
-		private function configureSearchPanel () : void
-		{
-			pnl_search.addEventListener(Search.SEARCH, searchValueHandler);
-			pnl_search.grid.addEventListener(MouseEvent.DOUBLE_CLICK, searchResultsItemClickHandler);
-			
-			function searchValueHandler (event : Event) : void
-			{
-				pnl_search.searchResultsArray = pnl_graphs.findValue(pnl_search.searchValue, pnl_search.searchWholeWordOnly);
-			}
-		
-			function searchResultsItemClickHandler (event : MouseEvent) : void
-			{
-				var object : Object = event.target;
-				while ( object.parent )
-				{
-					if ( object is SuperDataGrid )
-						break;
-					
-					object = object.parent;
-				}
-				
-				var grid : SuperDataGrid = object as SuperDataGrid;
-				
-				if ( !grid || !grid.selectedItem || !grid.selectedItem.data )
-					return;
-				
-				var item : Object = grid.selectedItem;
-				
-				if ( item.data is GraphCanvas)
-					pnl_graphs.selectGraph(item.data as GraphCanvas);
-				else
-				{
-					var node: Node = pnl_graphs.showNodeByName(item["name"], item["parentGraphName"]);
-					if (node)
-					{
-						node.setFocus();
-						node.edit();
-					}
-				}
-			}
-		}
+            // Load application settings
+            BuilderContextManager.loadSettings();
 
-		private function openTemplate() : void
-		{
-			if ( lastTemplateSaved )
-			{
-				openLastTemplate();
-			}
-			else
-			{
-				newTpl();
-			}
+            MenuManager.getInstance().bindItems();
+            MenuManager.getInstance().noTemplate();
+            MenuManager.getInstance().updateLangMenu();
+            MenuManager.getInstance().updateLastFilesMenu();
 
-		}
+            // Load language file
+            langFolder = File.applicationDirectory.resolvePath( MenuManager.LANG_FOLDER );
+            langFile = langFolder.resolvePath( ContextManager.instance.lang.file );
 
-		private function get lastTemplateSaved() : Boolean
-		{
-			return ContextManager.instance.lastFile && ContextManager.instance.files[0];
-		}
+            if ( langFile && langFile.exists )
+            {
+                fileStream = new FileStream();
 
-		private function openLastTemplate() : void
-		{
-			var tpl : BuilderTemplate = new BuilderTemplate();
+                fileStream.addEventListener( Event.COMPLETE, completeLangHandler );
+                fileStream.openAsync( langFile, FileMode.READ );
+            }
 
-			tpl.file = ContextManager.instance.files[0];
-			tpl.addEventListener( Event.COMPLETE, completeTemplateHandler );
+            openTemplate();
+        }
 
-			tpl.open();
-		}
+        private function configureSearchPanel() : void
+        {
+            pnl_search.addEventListener( Search.SEARCH, searchValueHandler );
+            pnl_search.grid.addEventListener( MouseEvent.DOUBLE_CLICK, searchResultsItemClickHandler );
 
-		private function closingApplicationHandler( event : Event ) : void
-		{
-			event.preventDefault();
-			exitApplication();
-		}
-			
-		private function closeWithoutSaveHandler(event : Event):void
-		{
-			exitApplication(null, false);
-		}
+            function searchValueHandler( event : Event ) : void
+            {
+                pnl_search.searchResultsArray = pnl_graphs.findValue( pnl_search.searchValue, pnl_search.searchWholeWordOnly );
+            }
 
-		public function exitApplication( event : Event = null, askForSave : Boolean = true ) : void
-		{
-			if ( currentTemplate && currentTemplate.modified && askForSave)
-			{
-				AlertPopup.show("Do you want to save file before exit?", 
-					LanguageManager.sentences['confirmation'], 
-					AlertPopup.YES | AlertPopup.NO | AlertPopup.CANCEL, 
-					Sprite(Application.application), 
-					alertSaveBeforeExitHandler, null, AlertPopup.NO);
-			}
-			else
-			{
-				BuilderContextManager.saveSettings();
-				exit();
-			}
+            function searchResultsItemClickHandler( event : MouseEvent ) : void
+            {
+                var object : Object = event.target;
+                while ( object.parent )
+                {
+                    if ( object is SuperDataGrid )
+                        break;
 
-			function alertSaveBeforeExitHandler( event : CloseEvent ) : void
-			{
-				if ( event.detail == AlertPopup.YES )
-				{
-					saveTpl(templateSaveAndExitHandler);
-				}
-				else if ( event.detail == AlertPopup.NO )
-				{
-					BuilderContextManager.saveSettings();
-					exit();
-				}
-			}
-			
-			function templateSaveAndExitHandler( event : Event ) : void
-			{
-				templateSaveHandler(event);
-				
-				var tpl : BuilderTemplate = event.target as BuilderTemplate;
-				tpl.removeEventListener( Event.COMPLETE, templateSaveAndExitHandler );
-				
-				processSavedTpl();
-				
-				BuilderContextManager.saveSettings();
-				exit();
-			}
+                    object = object.parent;
+                }
 
-		}
+                var grid : SuperDataGrid = object as SuperDataGrid;
 
-		public function closeTpl( askForSave : Boolean = true, action : Function = null, args : Array = null ) : void
-		{
-			if ( currentTemplate && currentTemplate.modified && askForSave)
-			{
-				alertSaveAndCloseTemplate( action, args );
-				return;
-			}
+                if ( !grid || !grid.selectedItem || !grid.selectedItem.data )
+                    return;
 
-			if ( currentTemplate )
-			{
-				currentTemplate.dispose();
-	
-				ContextManager.templates.removeItemAt( 0 );
-			}
+                var item : Object = grid.selectedItem;
 
-			ContextManager.instance.lastFile = false;
+                if ( item.data is GraphCanvas )
+                    pnl_graphs.selectGraph( item.data as GraphCanvas );
+                else
+                {
+                    var node : Node = pnl_graphs.showNodeByName( item["name"], item["parentGraphName"] );
+                    if ( node )
+                    {
+                        node.setFocus();
+                        node.edit();
+                    }
+                }
+            }
+        }
 
-			pnl_graphs.clear();
-			pnl_search.clear();
+        private function openTemplate() : void
+        {
+            if ( lastTemplateSaved )
+            {
+                openLastTemplate();
+            }
+            else
+            {
+                newTpl();
+            }
 
-			MenuManager.getInstance().noTemplate();
+        }
 
-			workStage.visible = false;
-			workStage.includeInLayout = false;
+        private function get lastTemplateSaved() : Boolean
+        {
+            return ContextManager.instance.lastFile && ContextManager.instance.files[0];
+        }
 
-			if ( action != null )
-				action.apply( this, args );
-		}
-			
-		public function saveTpl( afterSaveHandler : Function, browseForSave : Boolean = false ) : void
-		{
-			if ( currentTemplate )
-			{
-				currentTemplate.addEventListener( Event.COMPLETE, afterSaveHandler );
-				currentTemplate.xmlStructure = pnl_graphs.toXML();
-				
-				if (browseForSave)
-					currentTemplate.browseForSave();
-				else
-					currentTemplate.save();
-			}
-			
-		}
-			
-		public function exportTpl() : void
-		{
-			if (currentTemplate)
-			{
-				if (currentTemplate.modified)
-				{
-					currentTemplate.addEventListener( Event.COMPLETE, afterExportHandler );
-					currentTemplate.xmlStructure = pnl_graphs.toXML();
-				}
-				
-				currentTemplate.export();
-			}
-			
-			function afterExportHandler (event : Event) : void
-			{
-				currentTemplate.removeEventListener( Event.COMPLETE, afterExportHandler );
-				
-				processSavedTpl();
-			}
-				
-		}
+        private function openLastTemplate() : void
+        {
+            var tpl : BuilderTemplate = new BuilderTemplate();
 
-		public function alertSaveAndCloseTemplate( action : Function = null, args : Array = null ) : void
-		{
-			AlertPopup.show(
-					"Do you want to save template?",
-					LanguageManager.sentences['confirmation'],
-					AlertPopup.YES | AlertPopup.NO | AlertPopup.CANCEL, this.nativeWindow as Sprite, alertSaveAndCloseHandler, null, AlertPopup.YES );
+            tpl.file = ContextManager.instance.files[0];
+            tpl.addEventListener( Event.COMPLETE, completeTemplateHandler );
 
-			function alertSaveAndCloseHandler( event : CloseEvent ) : void
-			{
-				if ( event.detail == AlertPopup.YES )
-				{
-					saveTpl(templateSaveAndCloseHandler);
-				}
-				else if ( event.detail == AlertPopup.NO )
-				{
-					closeTpl( false, action, args );
-				}
-			}
-			
-			function templateSaveAndCloseHandler( event : Event ) : void
-			{
-				var tpl : BuilderTemplate = event.target as BuilderTemplate;
-				tpl.removeEventListener( Event.COMPLETE, templateSaveAndCloseHandler );
-				
-				processSavedTpl();
-				
-				closeTpl( false, action, args );
-			}
+            tpl.open();
+        }
 
-		}
+        private function closingApplicationHandler( event : Event ) : void
+        {
+            event.preventDefault();
+            exitApplication();
+        }
 
-		public function alertSaveAndExportReleaseBuild( ) : void
-		{
-			if (currentTemplate && currentTemplate.modified)
-			{
-				AlertPopup.show(
-					"You must save template before building.\nDo you want to save template and launch building now?",
-					LanguageManager.sentences['confirmation'],
-					AlertPopup.YES | AlertPopup.NO, this.nativeWindow as Sprite, alertSaveAndCloseHandler, null, AlertPopup.YES );
-			} 
-			else
-			{
-				AirBuildDialog.show();
-			}
-				
-			
-			function alertSaveAndCloseHandler( event : CloseEvent ) : void
-			{
-				if ( event.detail == AlertPopup.YES )
-				{
-					saveTpl(templateSaveAndBuildHandler);
-				}
-			}
-			
-			function templateSaveAndBuildHandler( event : Event ) : void
-			{
-				var tpl : BuilderTemplate = event.target as BuilderTemplate;
-				tpl.removeEventListener( Event.COMPLETE, templateSaveAndBuildHandler );
-				
-				processSavedTpl();
-				
-				AirBuildDialog.show();
-			}
-			
-		}
+        private function closeWithoutSaveHandler( event : Event ) : void
+        {
+            exitApplication( null, false );
+        }
 
-			
-		public function processOpenedTpl() : void
-		{
-			workStage.visible = true;
-			workStage.includeInLayout = true;
-			workStage.validateNow();
+        public function exitApplication( event : Event = null, askForSave : Boolean = true ) : void
+        {
+            if ( currentTemplate && currentTemplate.modified && askForSave )
+            {
+                AlertPopup.show( "Do you want to save file before exit?", LanguageManager.sentences['confirmation'], AlertPopup.YES | AlertPopup.NO | AlertPopup.CANCEL, Sprite( Application.application ), alertSaveBeforeExitHandler, null, AlertPopup.NO );
+            }
+            else
+            {
+                BuilderContextManager.saveSettings();
+                exit();
+            }
+
+            function alertSaveBeforeExitHandler( event : CloseEvent ) : void
+            {
+                if ( event.detail == AlertPopup.YES )
+                {
+                    saveTpl( templateSaveAndExitHandler );
+                }
+                else if ( event.detail == AlertPopup.NO )
+                {
+                    BuilderContextManager.saveSettings();
+                    exit();
+                }
+            }
+
+            function templateSaveAndExitHandler( event : Event ) : void
+            {
+                templateSaveHandler( event );
+
+                var tpl : BuilderTemplate = event.target as BuilderTemplate;
+                tpl.removeEventListener( Event.COMPLETE, templateSaveAndExitHandler );
+
+                processSavedTpl();
+
+                BuilderContextManager.saveSettings();
+                exit();
+            }
+
+        }
+
+        public function closeTpl( askForSave : Boolean = true, action : Function = null, args : Array = null ) : void
+        {
+            if ( currentTemplate && currentTemplate.modified && askForSave )
+            {
+                alertSaveAndCloseTemplate( action, args );
+                return;
+            }
+
+            if ( currentTemplate )
+            {
+                currentTemplate.dispose();
+
+                ContextManager.templates.removeItemAt( 0 );
+            }
+
+            ContextManager.instance.lastFile = false;
+
+            pnl_graphs.clear();
+            pnl_search.clear();
+
+            MenuManager.getInstance().noTemplate();
+
+            workStage.visible = false;
+            workStage.includeInLayout = false;
+
+            if ( action != null )
+                action.apply( this, args );
+        }
+
+        public function saveTpl( afterSaveHandler : Function, browseForSave : Boolean = false ) : void
+        {
+            if ( currentTemplate )
+            {
+                currentTemplate.addEventListener( Event.COMPLETE, afterSaveHandler );
+                currentTemplate.xmlStructure = pnl_graphs.toXML();
+
+                if ( browseForSave )
+                    currentTemplate.browseForSave();
+                else
+                    currentTemplate.save();
+            }
+
+        }
+
+        public function exportTpl() : void
+        {
+            if ( currentTemplate )
+            {
+                if ( currentTemplate.modified )
+                {
+                    currentTemplate.addEventListener( Event.COMPLETE, afterExportHandler );
+                    currentTemplate.xmlStructure = pnl_graphs.toXML();
+                }
+
+                currentTemplate.export();
+            }
+
+            function afterExportHandler( event : Event ) : void
+            {
+                currentTemplate.removeEventListener( Event.COMPLETE, afterExportHandler );
+
+                processSavedTpl();
+            }
+
+        }
+
+        public function alertSaveAndCloseTemplate( action : Function = null, args : Array = null ) : void
+        {
+            AlertPopup.show( "Do you want to save template?", LanguageManager.sentences['confirmation'], AlertPopup.YES | AlertPopup.NO | AlertPopup.CANCEL, this.nativeWindow as Sprite, alertSaveAndCloseHandler, null, AlertPopup.YES );
+
+            function alertSaveAndCloseHandler( event : CloseEvent ) : void
+            {
+                if ( event.detail == AlertPopup.YES )
+                {
+                    saveTpl( templateSaveAndCloseHandler );
+                }
+                else if ( event.detail == AlertPopup.NO )
+                {
+                    closeTpl( false, action, args );
+                }
+            }
+
+            function templateSaveAndCloseHandler( event : Event ) : void
+            {
+                var tpl : BuilderTemplate = event.target as BuilderTemplate;
+                tpl.removeEventListener( Event.COMPLETE, templateSaveAndCloseHandler );
+
+                processSavedTpl();
+
+                closeTpl( false, action, args );
+            }
+
+        }
+
+        public function alertSaveAndExportReleaseBuild() : void
+        {
+            if ( currentTemplate && currentTemplate.modified )
+            {
+                AlertPopup.show( "You must save template before building.\nDo you want to save template and launch building now?", LanguageManager.sentences['confirmation'], AlertPopup.YES | AlertPopup.NO, this.nativeWindow as Sprite, alertSaveAndCloseHandler, null, AlertPopup.YES );
+            }
+            else
+            {
+                AirBuildDialog.show();
+            }
+
+
+            function alertSaveAndCloseHandler( event : CloseEvent ) : void
+            {
+                if ( event.detail == AlertPopup.YES )
+                {
+                    saveTpl( templateSaveAndBuildHandler );
+                }
+            }
+
+            function templateSaveAndBuildHandler( event : Event ) : void
+            {
+                var tpl : BuilderTemplate = event.target as BuilderTemplate;
+                tpl.removeEventListener( Event.COMPLETE, templateSaveAndBuildHandler );
+
+                processSavedTpl();
+
+                AirBuildDialog.show();
+            }
+
+        }
+
+
+        public function processOpenedTpl() : void
+        {
+            workStage.visible = true;
+            workStage.includeInLayout = true;
+            workStage.validateNow();
 
             pnl_resources.refresh();
 
-			pnl_graphs.addEventListener(Graphs.TPL_POPULATE_COMPLETE, graphsPopulateCompleteHandler);
-			pnl_graphs.templateXML = currentTemplate.xmlStructure;
-			
-			currentTemplate.selectedProject.modified = false;
-			currentTemplate.modified = false;
-			
-			ContextManager.instance.lastFile = true;
-			BuilderContextManager.updateLastFiles( currentTemplate.file );
+            pnl_graphs.addEventListener( Graphs.TPL_POPULATE_COMPLETE, graphsPopulateCompleteHandler );
+            pnl_graphs.templateXML = currentTemplate.xmlStructure;
 
-			MenuManager.getInstance().updateLastFilesMenu();
-			MenuManager.getInstance().openedTemplate();
+            currentTemplate.selectedProject.modified = false;
+            currentTemplate.modified = false;
 
-			function graphsPopulateCompleteHandler (event : Event) : void
-			{
-				pnl_graphs.removeEventListener(Graphs.TPL_POPULATE_COMPLETE, graphsPopulateCompleteHandler);
-				
-				currentTemplate.selectedProject.modified = false;
-				currentTemplate.modified = false;
-			}
-		}
+            ContextManager.instance.lastFile = true;
+            BuilderContextManager.updateLastFiles( currentTemplate.file );
 
-		public function processSavedTpl() : void
-		{
-			workStage.visible = true;
-			workStage.includeInLayout = true;
+            MenuManager.getInstance().updateLastFilesMenu();
+            MenuManager.getInstance().openedTemplate();
 
-			currentTemplate.selectedProject.modified = false;
-			currentTemplate.modified = false;
-			
-			ContextManager.instance.lastFile = true;
-			BuilderContextManager.updateLastFiles( currentTemplate.file );
+            function graphsPopulateCompleteHandler( event : Event ) : void
+            {
+                pnl_graphs.removeEventListener( Graphs.TPL_POPULATE_COMPLETE, graphsPopulateCompleteHandler );
 
-			MenuManager.getInstance().updateLastFilesMenu();
-			MenuManager.getInstance().openedTemplate();
-		}
+                currentTemplate.selectedProject.modified = false;
+                currentTemplate.modified = false;
+            }
+        }
 
-		public function processNewTpl() : void
-		{
-			workStage.visible = true;
-			workStage.includeInLayout = true;
+        public function processSavedTpl() : void
+        {
+            workStage.visible = true;
+            workStage.includeInLayout = true;
 
-			if ( currentTemplate )
-			{
-				pnl_graphs.templateXML = currentTemplate.xmlStructure;
+            currentTemplate.selectedProject.modified = false;
+            currentTemplate.modified = false;
 
-				currentTemplate.selectedProject.modified = false;
-				currentTemplate.modified = false;
-			}
+            ContextManager.instance.lastFile = true;
+            BuilderContextManager.updateLastFiles( currentTemplate.file );
 
-			ContextManager.instance.lastFile = false;
+            MenuManager.getInstance().updateLastFilesMenu();
+            MenuManager.getInstance().openedTemplate();
+        }
 
-			MenuManager.getInstance().newTemplate();
+        public function processNewTpl() : void
+        {
+            workStage.visible = true;
+            workStage.includeInLayout = true;
+
+            if ( currentTemplate )
+            {
+                pnl_graphs.templateXML = currentTemplate.xmlStructure;
+
+                currentTemplate.selectedProject.modified = false;
+                currentTemplate.modified = false;
+            }
+
+            ContextManager.instance.lastFile = false;
+
+            MenuManager.getInstance().newTemplate();
 
             pnl_resources.refresh();
-		}
-
-		//--------------------------------------------------------------------------
-		//
-		//  Event handlers
-		//
-		//--------------------------------------------------------------------------
-
-		private function completeLangHandler( event : Event ) : void
-		{
-			var fileStream : FileStream = event.target as FileStream;
-			fileStream.removeEventListener( Event.COMPLETE, completeLangHandler );
-
-			var xml : XML = XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
-			fileStream.close();
-
-			LanguageManager.languageXML = xml;
-
-			ContextManager.instance.lang.label = LanguageManager.languageXML.@label.toLowerCase();
-			ContextManager.instance.lang.file = LanguageManager.languageXML.@data;
-		}
-
-		private function completeTemplateHandler( event : Event ) : void
-		{
-			var template : BuilderTemplate = event.target as BuilderTemplate;
-
-			template.removeEventListener( Event.COMPLETE, completeTemplateHandler );
-
-			closeTpl( false );
-
-			addTemplate(template);
-			
-			if ( template.isEncoded )
-			{
-				TemplateKey.show( onKeyDialogClose );
-			}
-			else
-			{
-				processOpenedTpl();
-			}
-		}
-
-		private function onKeyDialogClose( event : CloseEvent ) : void
-		{
-			if ( event.detail == ModalDialog.OK )
-			{
-				if ( event.target.txtKey.text )
-				{
-					selectedTemplateProject.key = event.target.txtKey.text;
-
-					ProgressManager.start( ProgressManager.DIALOG_MODE, false );
-
-					currentTemplate.processOpened();
-
-					ProgressManager.complete();
-
-					if ( !currentTemplate.isEncoded )
-					{
-						processOpenedTpl();
-						return;
-					}
-				}
-
-				AlertPopup.show( "Invalid secret key." );
-			}
-
-			closeTpl( false );
-		}
-
-		public function templateChanged() : void
-		{
-			if ( MenuManager.getInstance().state != MenuManager.STATE_MOD )
-				MenuManager.getInstance().modifiedTemplate();
-		}
-
-		public function newTpl() : void
-		{
-			var template : BuilderTemplate = new BuilderTemplate();
-
-			addTemplate(template);
-
-			processNewTpl();
-		}
-
-		public function openTpl( file : File = null ) : void
-		{
-			var tpl : BuilderTemplate = new BuilderTemplate();
-			tpl.addEventListener( Event.COMPLETE, completeTemplateHandler );
-
-			if ( file )
-				tpl.file = file;
-
-			tpl.open();
-		}
-
-		private function addDebugListeners(runMode : Boolean = false) : void
-		{
-			ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
-			ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
-			ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
-			
-			if (!runMode)
-				ContextManager.templateStruct.addEventListener( TemplateLibEvent.PROGRESS, progressHandler);
-		}
-			
-		private function removeDebugListeners() : void
-		{
-			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
-			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
-			ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
-			
-			if (ContextManager.templateStruct.hasEventListener(TemplateLibEvent.PROGRESS))
-				ContextManager.templateStruct.removeEventListener( TemplateLibEvent.PROGRESS, progressHandler);
-		}
-			
-		// Event handler for the MenuBar control's itemClick event.
-		private function menuHandler( event : FlexNativeMenuEvent , itemName : String = "") : void
-		{
-			if (event)
-				event.stopImmediatePropagation();
-
-			var menuItemName : String = itemName;
-			
-			if (event)
-			{
-				var menuItem : SuperNativeMenuItem = event.nativeMenuItem as SuperNativeMenuItem;
-				menuItemName = menuItem.name;
-			}
-			
-			var file : File = BuilderContextManager.instance.lastDir;
-			var fileStream : FileStream = new FileStream();
-			var tpl : BuilderTemplate;
-
-			switch ( menuItemName )
-			{
-				case "new_template":
-					closeTpl( true, newTpl );
-					break;
-
-				case "open_file":
-					closeTpl( true, openTpl );
-					break;
-
-				case "save":
-					saveTpl(templateSaveHandler);
-					break;
-
-				case "save_as":
-					saveTpl(templateSaveHandler, true);
-					break;
-				
-				case "export_xml" :
-					exportTpl();
-					break;
-				
-				case "close":
-					closeTpl();
-					break;
-
-
-				case "import_from_tpl":
-					ImportFromTpl.show( onImportFromTplClose );
-					break;
-
-				case "exit":
-					exitApplication();
-					break;
-
-				case "properties":
-					ProjectsSettingsDialog.show( Graphs.graphs );
-					break;
-				
-				case "air_builder":
-					alertSaveAndExportReleaseBuild();
-					break;
-
-				case "about_program":
-					AboutProgramDialog.show();
-					break;
-				
-				case "validate":
-					onValidate( new CloseEvent( CloseEvent.CLOSE, false, false, ModalDialog.OK ) );
-					break;
-
-				case "run":
-					Log.getInstance().clear();
-					runTemplate();
-					break;
-				
-				case "debug":
-				case "step_by_step":
-					{
-						saveTpl(templateSaveAndDebugHandler);
-						
-						function templateSaveAndDebugHandler (event : Event) : void
-						{
-							var tpl : BuilderTemplate = event.target as BuilderTemplate;
-							tpl.removeEventListener( Event.COMPLETE, templateSaveAndDebugHandler );
-							
-							processSavedTpl();
-							
-							Log.getInstance().clear();
-						
-							if ( ContextManager.templateStruct )
-								ContextManager.templateStruct.terminated = true;
-		
-							ContextManager.templateStruct = new TemplateStruct( currentTemplate.xmlStructure );
-							
-							switch ( menuItemName )
-							{
-								case 'debug':
-									ContextManager.templateStruct.isDebug = true;
-									ContextManager.templateStruct.isStepDebug = false;
-									break;
-								case 'step_by_step':
-									ContextManager.templateStruct.isDebug = true;
-									ContextManager.templateStruct.isStepDebug = true;
-									break;
-							}
-							// проверка графа на ошибки
-							var validateArr : Array = ContextManager.templateStruct.validate().array;
-		
-							pnl_problems.array = validateArr;
-		
-							function isError( element : *, index : int, arr : Array ) : Boolean
-							{
-								return (element.error.severity == BasicError.FATAL);
-							}
-		
-							if ( validateArr && validateArr.filter( isError ).length > 0 )
-							{
-								alertProceedRun();
-							}
-							else
-							{
-								switchDebug( true );
-								
-								Application.application.addEventListener( Event.ENTER_FRAME, startDebugProcess);
-							}
-						}
-						
-						function startDebugProcess (event : Event) : void
-						{
-							Application.application.removeEventListener( Event.ENTER_FRAME, startDebugProcess);
-							
-							ProgressManager.source = ContextManager.templateStruct;
-							ProgressManager.show(ProgressManager.WINDOW_MODE);
-							
-							addDebugListeners();
-							
-							ContextManager.templateStruct.generate();
-						}
-						
-					}
-					
-					break;
-
-				case "resume":
-				case "step_into":
-				case "step_over":
-				case "step_return":
-				case "break":
-					if ( !ContextManager.templateStruct )
-						return;
-
-					switch ( menuItemName )
-					{
-						case 'resume':
-							ProgressManager.source = ContextManager.templateStruct;
-							ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
-							ContextManager.templateStruct.isStepDebug = false;
-							ContextManager.templateStruct.generate( true );
-							break;
-						case 'step_into':
-							ProgressManager.source = ContextManager.templateStruct;
-							ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
-							ContextManager.templateStruct.isStepDebug = true;
-							ContextManager.templateStruct.generate( true );
-							break;
-						case 'step_over':
-							ProgressManager.source = ContextManager.templateStruct;
-							ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
-							ContextManager.templateStruct.isStepDebug = true;
-							ContextManager.templateStruct.generate( true, true );
-							break;
-						case 'step_return':
-							ProgressManager.source = ContextManager.templateStruct;
-							ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
-							ContextManager.templateStruct.isStepDebug = true;
-							ContextManager.templateStruct.generate( true, true, true );
-							break;
-						case 'break':
-							ProgressManager.complete();
-
-							removeDebugListeners();
-							updateStatusMsg();
-							
-							ContextManager.templateStruct.terminated = true;
-							ContextManager.templateStruct = null;
-							switchDebug( false );
-							break;
-					}
-					
-					break;
-			}
-
-			if (!event)
-				return;
-			
-			if ( menuItem.groupName == "lastfiles" )
-			{
-				closeTpl( true, openTpl, [new File( menuItem.data.toString() )] );
-			}
-			else if ( menuItem.groupName == "language" )
-			{
-				file = File.applicationDirectory.resolvePath( MenuManager.LANG_FOLDER ).resolvePath( menuItem.data.toString() );
-				fileStream.addEventListener( Event.COMPLETE, completeLangHandler );
-				fileStream.openAsync( file, FileMode.READ );
-			}
-
-		}
-			
-		private function progressHandler (event:TemplateLibEvent) : void
-		{
-			var value:Number = event.result.value as Number;
-			var description:String = event.result["description"] as String;
-			
-			updateStatusMsg ("\t" + value + "% - " + description);
-		}
-		
-		private function updateStatusMsg(msg:String = "") : void
-		{
-			status = msg;
-		}
-	
-		private function runTemplate () : void
-		{
-			if (currentTemplate && currentTemplate.modified)
-			{
-				AlertPopup.show(
-					"You must save template before running.\nDo you want to save template and run it now?",
-					LanguageManager.sentences['confirmation'],
-					AlertPopup.YES | AlertPopup.NO, this.nativeWindow as Sprite, alertSaveAndCloseHandler, null, AlertPopup.YES );
-			} 
-			else
-			{
-				showPlayer();
-			}
-			
-			function alertSaveAndCloseHandler( event : CloseEvent ) : void
-			{
-				if ( event.detail == AlertPopup.YES )
-				{
-					saveTpl(templateSaveAndRunHandler);
-				}
-			}
-			
-			function templateSaveAndRunHandler( event : Event ) : void
-			{
-				var tpl : BuilderTemplate = event.target as BuilderTemplate;
-				tpl.removeEventListener( Event.COMPLETE, templateSaveAndRunHandler );
-				
-				processSavedTpl();
-				
-				showPlayer();
-			}
-			
-		}
-		
-		private function showPlayer () : void
-		{
-			var playerObj : Player = new Player();
-			playerObj.isDesktopApplication = true;
-			
-			playerObj.minimizable = false;
-			playerObj.maximizable = false;
-			playerObj.closable = true;
-			
-			playerObj.addEventListener(FlexEvent.CREATION_COMPLETE, playerCreationCompleteHandler);
-			playerObj.addEventListener(Event.CLOSE, playerCloseHandler);
-			
-			playerObj.scrollRect = new Rectangle(0, 0, width, height);
-			
-			playerObj.addEventListener(MouseEvent.MOUSE_DOWN, playerMouseDownHandler);
-			playerObj.addEventListener(MouseEvent.MOUSE_UP, playerMouseUpHandler);
-			
-			PopUpManager.addPopUp(playerObj, this, true);
-			
-			function playerCreationCompleteHandler (event : FlexEvent) : void
-			{
-				playerObj.removeEventListener(FlexEvent.CREATION_COMPLETE, playerCreationCompleteHandler);
-			
-				PopUpManager.centerPopUp(playerObj);
-				
-				playerObj.openTemplate(true);
-				
-				pnl_log.clearLog();
-			}
-			
-			function playerCloseHandler (event : Event) : void
-			{
-				playerObj.removeEventListener(Event.CLOSE, playerCloseHandler)
-				
-				playerObj.terminateTemplate();
-					
-				PopUpManager.removePopUp(playerObj);
-				
-				playerObj = null;
-				
-				pnl_log.showLog();
-				
-			}
-			
-			function playerMouseDownHandler (event : MouseEvent) : void
-			{
-				if (event.target is ScrollBar || event.target is ScrollThumb)
-					return;
-				
-				playerObj.startDrag();
-			}
-			
-			function playerMouseUpHandler (event : MouseEvent) : void
-			{
-				playerObj.stopDrag();
-			}
-		}
-		
-		private function get currentTemplate() : BuilderTemplate
-		{
-			return BuilderContextManager.currentTemplate;
-		}
-		
-		private function onValidate( event : CloseEvent ) : void
-		{
-			if ( event.detail == ModalDialog.OK )
-			{
-				var dialog : ValidateDialog = event.target as ValidateDialog;
-				var flags : uint = 0;
-
-				if ( dialog )
-				{
-					if ( dialog.chkClean )	 flags |= TemplateValidateOptions.CLEAN;
-					if ( dialog.chkInitGr )	 flags |= TemplateValidateOptions.SET_INIT_GRAPH;
-					if ( dialog.chkInitNode )	 flags |= TemplateValidateOptions.SET_INIT_NODES;
-					if ( dialog.chkID )		 flags |= TemplateValidateOptions.SET_UIDS;
-					if ( dialog.chkAttr )		 flags |= TemplateValidateOptions.SET_ATTRIBUTES;
-					if ( dialog.chkNames )	 flags |= TemplateValidateOptions.SET_UNIQ_NAMES;
-				}
-
-				ContextManager.templateStruct = new TemplateStruct( currentTemplate.xmlStructure );
-
-				var validateArr : Array = ContextManager.templateStruct.validate( flags ).array;
-
-				pnl_problems.array = validateArr;
-			}
-		}
-
-		public function alertProceedRun() : void
-		{
-			AlertPopup.show( "The template contains error(s).\nDo you want to proceed launching?", "Errors in template", AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
-		}
-
-		private function alertProceedRunHandler( event : CloseEvent ) : void
-		{
-			if ( event.detail == AlertPopup.YES )
-			{
-				{
-					switchDebug( true );
-
-					ProgressManager.start( ProgressManager.WINDOW_MODE, false );
-
-					addDebugListeners(true);
-					ContextManager.templateStruct.generate();
-				}
-			}
-			else
-				ContextManager.templateStruct = null;
-		}
-
-		private function stepCompleteHandler( event : Event ) : void
-		{
-			ProgressManager.complete();
-			showDebugDetails();
-		}
-
-		public function showDebugDetails() : void
-		{
-			try
-			{
-
-				if ( !ContextManager.templateStruct || ContextManager.templateStruct.contextStack.length == 0 )
-					return;
-
-				var curGraphContext : GraphContext = ContextManager.templateStruct.curGraphContext;
-				var curNodeStruct : NodeStruct = curGraphContext.curNode;
-
-				pnl_graphs.showGraphByName( curGraphContext.curGraph.id );
-				var curNode : Node = pnl_graphs.showNodeByName( curNodeStruct.id );
-
-				curNode.setFocus();
-
-				if ( curDebugNode )
-				{
-					curDebugNode.filters = [];
-					for each( var arrow : Connector in curDebugNode.inArrows )
-						Connector( arrow ).highlighted = false;
-				}
-
-				curDebugNode = curNode;
-				curDebugNode.filters = [new GlowFilter( 0xff00ff )];
-
-				if ( ContextManager.templateStruct.nodeStack.length == 0 )
-					return;
-
-				var nodeContext : NodeContext = ContextManager.templateStruct.nodeStack[ContextManager.templateStruct.nodeStack.length - 1];
-
-				var prevNode : Node = pnl_graphs.getNodeByName( nodeContext.node.id );
-
-				for each( var arrow1 : Connector in prevNode.outArrows )
-					for each( var arrow2 : Connector in curNode.inArrows )
-						if ( arrow1 == arrow2 )
-							Connector( arrow1 ).highlighted = true;
-
-				// --------------------
-				// fill variables panel
-				// --------------------
-
-				// get local vars            	   
-				var subArr : Array = [];
-				
-				var value : Object ;
-				var fullValue : Object
-				for ( var obj : String in curGraphContext.context )
-				{
-					fullValue   = curGraphContext.context[obj];
-					if ( obj.search( /^__tmp_.*$/ ) < 0 )
-					{
-						if ( fullValue )
-							value = (  fullValue is XML ) ? "[Object XML]" :  fullValue;
-						else
-							value = fullValue = "null"
-					
-						subArr.push( {	 Name : "$" + obj, 	Value : value, FullValue : fullValue } );
-					}	
-				}
-				subArr.sortOn("Name", Array.CASEINSENSITIVE);
-
-				// get global vars
-				var arr : Array = [];
-				var subArr2 : Array = [];
-				var context : Dynamic = ContextManager.templateStruct.context
-				for ( obj in context )
-				{
-					if ( !(context[obj] is TemplateLib) )
-					{
-						if ( obj.search( /^__tmp_.*$/ ) < 0 )
-						{
-							fullValue  = context[obj];
-							value = (  context[obj] is XML ) ? "[Object XML]" :  fullValue;
-							
-							if ( obj.charAt(0) == "_" )
-								subArr2.push( { Name : "$" + obj, Value : value, FullValue : fullValue } ); 		
-							else	
-								arr.push( { Name : "$" + obj, Value : value, FullValue : fullValue } );
-						}
-					}
-				}
-				subArr2.sortOn("Name", Array.CASEINSENSITIVE);
-				
-				arr.push( { Name : "this", Value : curGraphContext.curGraph.name, children : subArr } );
-				arr.push( { Name : "special", Value : "_", children : subArr2 } );
-
-				pnl_variables.dataProvider = new HierarchicalData( arr.sortOn("Name", Array.CASEINSENSITIVE) );
-				
-				pnl_log.showLog();
-
-				// --------------------------
-				// fill current buffer output
-				// --------------------------
-
-				var str : String = "";
-
-				str = curGraphContext.buffer;
-				pnl_output.text = str;
-				pnl_output.textArea.validateNow();
-
-				var myformat : TextFormat = new TextFormat();
-				myformat.color = 0x000000;
-
-				if ( str.length > 0 )
-					pnl_output.textArea.field.setTextFormat( myformat, 0, str.length )
-
-				if ( curDebugBufLen < str.length )
-				{
-					myformat.color = 0xFF0000;
-
-					pnl_output.textArea.field.setTextFormat( myformat,
-							curDebugBufLen,
-							str.length );
-				}
-
-				curDebugBufLen = str.length;
-
-				// --------------------
-				// fill node values
-				// --------------------
-
-				if ( !pnl_node_value.array )
-				{
-					pnl_node_value.array = [];
-				}
-
-				var nodeCategory : String = nodeContext.node.category;
-				var nodeSubCategory : String = "";
-				str = "";
-				switch ( nodeCategory )
-				{
-					case NodeCategory.NORMAL:
-					case NodeCategory.SUBGRAPH:
-						str = nodeContext.block.lastExecutedFragment.retValue;
-						break;
-					case NodeCategory.RESOURCE:
-						str = nodeContext.block.retValue;
-						break;
-					case NodeCategory.COMMAND:
-						switch ( nodeContext.block.ctype )
-						{
-							case CodeFragment.CT_OPERATION:
-								nodeSubCategory = "Operation ";
-								str = nodeContext.node.text;
-								break;
-							case CodeFragment.CT_TEST:
-								nodeSubCategory = "Test ";
-								str = nodeContext.node.text +
-											  " => " + nodeContext.block.lastExecutedFragment.retValue;
-								break;
-							case CodeFragment.CT_FUNCTION:
-								nodeSubCategory = "Function ";
-								str = nodeContext.block.lastExecutedFragment.funcName +
-											  " => " +
-											  nodeContext.block.lastExecutedFragment.retValue;
-								break;
-						}
-						break;
-				}
-
-				pnl_node_value.array.push( { label : StringUtil.substitute( "State ({0}{1}): {2}",
-						nodeSubCategory,
-						nodeCategory,
-						str ), data : nodeContext.node } );
-
-				pnl_node_value.list.invalidateList();
-				pnl_node_value.list.selectedIndex = pnl_node_value.array.length - 1;
-				pnl_node_value.list.callLater( pnl_node_value.list.scrollToIndex, [pnl_node_value.array.length] );
-
-			}
-			catch ( e : * )
-			{
-			}
-		}
-		
-		public function switchDebug( enable : Boolean = true ) : void
-		{
-			MenuManager.getInstance().switchDebug(enable);
-			
-			if (enable)
-			{
-				pnl_log.clearLog();
-				pnl_variables.dataProvider = null;
-			}
-			else
-				pnl_log.showLog();
-			
-			pnl_node_value.array = [];
-			pnl_output.text = "";
-
-			curDebugBufLen = 0;
-			if ( curDebugNode )
-			{
-				curDebugNode.filters = [];
-
-				for each( var arrow : Connector in curDebugNode.inArrows )
-					Connector( arrow ).highlighted = false;
-
-				curDebugNode = null;
-			}
-			
-		}
-
-		//--------------------------------------------------------------------------
-		//
-		//  Event handlers
-		//
-		//--------------------------------------------------------------------------
-
-		private function problemsDoubleClickHandler( event : MouseEvent ) : void
-		{
-			var object : Object = event.target;
-			while ( object.parent )
-			{
-				if ( object is SuperDataGrid )
-					break;
-
-				object = object.parent;
-			}
-
-			var grid : SuperDataGrid = object as SuperDataGrid;
-
-			if ( !grid || !grid.selectedItem || !grid.selectedItem.data )
-				return;
-
-			if ( grid.selectedItem.data.node )
-			{
-				var node : Node = pnl_graphs.showNodeByName( grid.selectedItem.data.node.id );
-				if (node)
-					node.setFocus();
-			}
-			else if ( grid.selectedItem.data.graph )
-			{
-				pnl_graphs.showGraphByName( grid.selectedItem.data.graph.id );
-			}
-		}
-
-		private function templateSaveHandler( event : Event ) : void
-		{
-			var tpl : BuilderTemplate = event.target as BuilderTemplate;
-			tpl.removeEventListener( Event.COMPLETE, templateSaveHandler );
-
-			processSavedTpl();
-		}
-
-		private function onImportFromTplClose( event : Event ) : void
-		{
-			if ( event is CloseEvent && CloseEvent( event ).detail == ModalDialog.OK )
-			{
-				var tree : Tree = event.target.tplTree;
-				var tpl : BuilderTemplate = event.target.template;
-				var xmlListCol : XMLListCollection = new XMLListCollection();
-
-				ProgressManager.start( ProgressManager.WINDOW_MODE, false );
-
-				if ( ContextManager.templates.length == 0 )
-				{
-					newTpl();
-				}
-
-				if ( tpl && tpl.xmlStructure && tree.selectedItems.length > 0 )
-				{
-					for each( var node : Object in tree.selectedItems )
-					{
-						if ( node.@isBranch == 'true' )
-						{
-							var catList : XMLList = tpl.xmlStructure..graph.(@category == node.@label);
-
-							for each( var xml : XML in catList )
-								if ( xmlListCol.source.(@category == xml.@category && @name == xml.@name).length() == 0 )
-									xmlListCol.addItem( xml );
-						}
-						else
-						{
-							xml = null;
-							var lst : XMLList = tpl.xmlStructure..graph.(@category == node.@category && @name == node.@label);
-							if ( lst.length() > 0 )
-								xml = lst[0];
-
-							if ( xml && xmlListCol.source.(@category == xml.@category && @name == xml.@name).length() == 0 )
-								xmlListCol.addItem( xml );
-						}
-
-					}
-				}
-
-				for each ( var itm : XML in xmlListCol )
-					importTemplate(itm);
-			}
-
-			ProgressManager.complete();
-		}
-		
-		private function importTemplate (tplXML : XML) : void
-		{
-			var graph : GraphCanvas = new GraphCanvas();
-			graph.fromXML( tplXML );
-			
-			var newGraph : GraphCanvas = graph.clone();
-			newGraph.name = pnl_graphs.createUniqueGraphName("Imported_" + graph.name);
-			pnl_graphs.addGraph( newGraph );
-
-		}
-
-		private function addTemplate (template : BuilderTemplate) : void
-		{
-			ContextManager.templates.addItemAt( template, 0 );
-			
-			BindingUtils.bindSetter(templateChangeHandler, currentTemplate, 'modified');
-		}
-		
-		private function generationComplete( event : Event ) : void
-		{
-			ProgressManager.complete();
-
-			switchDebug( false );
-
-			if ( ContextManager.templateStruct.buffer )
-			{
-				var file : File = BuilderContextManager.instance.file;
-				var stream : FileStream = new FileStream();
-
-				stream.open( file, FileMode.WRITE );
-				stream.writeUTFBytes( ContextManager.templateStruct.buffer );
-				stream.close();
-
-				Console.show( StringUtil.substitute( "Data saved to {0}.\n{1}", BuilderContextManager.instance.file.nativePath,
-						ContextManager.templateStruct.buffer ), "Result" );
-			}
-
-			removeDebugListeners();
-			updateStatusMsg();
-
-			ContextManager.templateStruct = null;
-		}
-
-		private function debugErrorHandler( event : Event ) : void
-		{
-			var error : * = event.target.error;
-
-			ProgressManager.complete();
-
-			showDebugDetails();
-			AlertPopup.show( error.message, "Error!", 4, null, onErrAlertClose );
-		}
-
-		private function onErrAlertClose( event : Event ) : void
-		{
-			switchDebug( false );
-
-			removeDebugListeners();
-			updateStatusMsg();
-
-			ContextManager.templateStruct = null;
-		}
-		
-		private var builderUpdater : BuilderUpdater = new BuilderUpdater();
-		private function checkUpdate():void
-		{
-			builderUpdater.checkForUpdate();
-			
-		}
-		
-		protected function creationCompleteHandler(event:FlexEvent):void
-		{
-			addEventListener("closeWithoutSave", closeWithoutSaveHandler);
-			
-			addEventListener(CodeParserEvent.EXECUTE_CODE_FRAGMENT, executeCodeFragmentHandler);
-			
-			checkUpdate();
-		}
-		
-		private function executeCodeFragmentHandler (event : CodeParserEvent) : void
-		{
-			if (!event || !event.fragmentValue)
-				return;
-			
-			Log.getInstance().addNote(event.fragmentValue);
-		}
-		
-		private function templateChangeHandler (object:Object) : void 
-		{
-			if (object as Boolean == true)
-				templateChanged();
-		}
-				
-		private function get selectedTemplateProject () : BuilderTemplateProject
-		{
-			return currentTemplate.selectedProject as BuilderTemplateProject;
-		}
-		
-		
-		protected function powerpackcontrolbar_creationCompleteHandler(event:FlexEvent):void
-		{
-			powerpackControlBar.addEventListener(ControlBarEvent.EVENT_ITEM_CLICK, itemClickHandler);
-			
-			function itemClickHandler (controlBarEvent : ControlBarEvent) : void
-			{
-				menuHandler(null, controlBarEvent.targetItemType);
-			}
-			
-		}
-		
-		private function graphsChangeHandler () : void
-		{
-			if (currentTemplate)
-				currentTemplate.modified = true;
-		}
-		
-		protected function pnl_graphs_importGraphClickHandler(event:GraphsAccordionEvent):void
-		{
-			var accordChild : AccordionChild = event.target as AccordionChild;
-			
-			var categoryName : String = accordChild.label;
-			
-			var folder : File = BuilderContextManager.instance.lastDir;
-			
-			folder.addEventListener( Event.SELECT, graphFileSelectHandler );
-			
-			folder.browseForOpen( "Import graph", [new FileFilter("Graph xml", "*.xml")] );
-			
-			var graphFile : File;
-			var fileStream : FileStream;
-			
-			function graphFileSelectHandler (event : Event) : void
-			{
-				folder.removeEventListener( Event.SELECT, graphFileSelectHandler );
-				
-				graphFile = event.target as File;
-				
-				openFileStream();
-				
-				ProgressManager.source = fileStream;
-				ProgressManager.start();
-				
-				fileStream.openAsync( graphFile, FileMode.READ );
-			}
-			
-			function openFileStream() : void
-			{
-				fileStream = new FileStream();
-				
-				fileStream.addEventListener( Event.COMPLETE, graphFileOpenCompleteHandler );
-				fileStream.addEventListener( IOErrorEvent.IO_ERROR, graphFileOpenErrorHandler );
-			}
-			
-			function closeFileStream() : void
-			{
-				fileStream.removeEventListener( Event.COMPLETE, graphFileOpenCompleteHandler );
-				fileStream.removeEventListener( IOErrorEvent.IO_ERROR, graphFileOpenErrorHandler );
-				
-				fileStream.close();
-				fileStream = null;
-			}
-			
-			function graphFileOpenCompleteHandler (event : Event) : void
-			{
-				var strData : String = fileStream.readUTFBytes( fileStream.bytesAvailable );
-				
-				closeFileStream();
-				
-				var xmlData : XML = XML( strData );
-				
-				if (!xmlData || !xmlData.name())
-				{
-					ProgressManager.complete();
-					AlertPopup.show("Incorrect graph xml", "Error:");
-					return;
-				}
-					
-				var xmlName : String = xmlData.name() is QName ? QName(xmlData.name()).localName : xmlData.name().toString();
-				 
-				if (xmlName != "graph")
-				{
-					ProgressManager.complete();
-					AlertPopup.show("Incorrect graph xml", "Error:");
-					return;
-				}
-				
-				xmlData.@category = categoryName;
-				
-				importTemplate(xmlData);
-				
-				ProgressManager.complete();
-			}
-			
-			function graphFileOpenErrorHandler (event : IOErrorEvent) : void
-			{
-				closeFileStream();
-				
-				graphFile.cancel();
-				
-				ProgressManager.complete();
-				
-				AlertPopup.show(event.text, "Error:");
-			}
-			
-		}
-		
-		protected function applicationCompleteHandler(event:FlexEvent):void
-		{
-			addGlobalErrorListener();
-			
-			show();
-		}
-		
-		private function addGlobalErrorListener () : void
-		{
-			RuntimeUtils.addGlobalErrorListener(loaderInfo);
-		}
-		
-		]]>
+        }
+
+        //--------------------------------------------------------------------------
+        //
+        //  Event handlers
+        //
+        //--------------------------------------------------------------------------
+
+        private function completeLangHandler( event : Event ) : void
+        {
+            var fileStream : FileStream = event.target as FileStream;
+            fileStream.removeEventListener( Event.COMPLETE, completeLangHandler );
+
+            var xml : XML = XML( fileStream.readUTFBytes( fileStream.bytesAvailable ) );
+            fileStream.close();
+
+            LanguageManager.languageXML = xml;
+
+            ContextManager.instance.lang.label = LanguageManager.languageXML.@label.toLowerCase();
+            ContextManager.instance.lang.file = LanguageManager.languageXML.@data;
+        }
+
+        private function completeTemplateHandler( event : Event ) : void
+        {
+            var template : BuilderTemplate = event.target as BuilderTemplate;
+
+            template.removeEventListener( Event.COMPLETE, completeTemplateHandler );
+
+            closeTpl( false );
+
+            addTemplate( template );
+
+            if ( template.isEncoded )
+            {
+                TemplateKey.show( onKeyDialogClose );
+            }
+            else
+            {
+                processOpenedTpl();
+            }
+        }
+
+        private function onKeyDialogClose( event : CloseEvent ) : void
+        {
+            if ( event.detail == ModalDialog.OK )
+            {
+                if ( event.target.txtKey.text )
+                {
+                    selectedTemplateProject.key = event.target.txtKey.text;
+
+                    ProgressManager.start( ProgressManager.DIALOG_MODE, false );
+
+                    currentTemplate.processOpened();
+
+                    ProgressManager.complete();
+
+                    if ( !currentTemplate.isEncoded )
+                    {
+                        processOpenedTpl();
+                        return;
+                    }
+                }
+
+                AlertPopup.show( "Invalid secret key." );
+            }
+
+            closeTpl( false );
+        }
+
+        public function templateChanged() : void
+        {
+            if ( MenuManager.getInstance().state != MenuManager.STATE_MOD )
+                MenuManager.getInstance().modifiedTemplate();
+        }
+
+        public function newTpl() : void
+        {
+            var template : BuilderTemplate = new BuilderTemplate();
+
+            addTemplate( template );
+
+            processNewTpl();
+        }
+
+        public function openTpl( file : File = null ) : void
+        {
+            var tpl : BuilderTemplate = new BuilderTemplate();
+            tpl.addEventListener( Event.COMPLETE, completeTemplateHandler );
+
+            if ( file )
+                tpl.file = file;
+
+            tpl.open();
+        }
+
+        private function addDebugListeners( runMode : Boolean = false ) : void
+        {
+            ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+            ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
+            ContextManager.templateStruct.addEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
+
+            if ( !runMode )
+                ContextManager.templateStruct.addEventListener( TemplateLibEvent.PROGRESS, progressHandler );
+        }
+
+        private function removeDebugListeners() : void
+        {
+            ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_GENERATION_COMPLETE, generationComplete );
+            ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_STEP_COMPLETE, stepCompleteHandler );
+            ContextManager.templateStruct.removeEventListener( TemplateStruct.EVENT_ERROR, debugErrorHandler );
+
+            if ( ContextManager.templateStruct.hasEventListener( TemplateLibEvent.PROGRESS ) )
+                ContextManager.templateStruct.removeEventListener( TemplateLibEvent.PROGRESS, progressHandler );
+        }
+
+        // Event handler for the MenuBar control's itemClick event.
+        private function menuHandler( event : FlexNativeMenuEvent, itemName : String = "" ) : void
+        {
+            if ( event )
+                event.stopImmediatePropagation();
+
+            var menuItemName : String = itemName;
+
+            if ( event )
+            {
+                var menuItem : SuperNativeMenuItem = event.nativeMenuItem as SuperNativeMenuItem;
+                menuItemName = menuItem.name;
+            }
+
+            var file : File = BuilderContextManager.instance.lastDir;
+            var fileStream : FileStream = new FileStream();
+            var tpl : BuilderTemplate;
+
+            switch ( menuItemName )
+            {
+                case "new_template":
+                    closeTpl( true, newTpl );
+                    break;
+
+                case "open_file":
+                    closeTpl( true, openTpl );
+                    break;
+
+                case "save":
+                    saveTpl( templateSaveHandler );
+                    break;
+
+                case "save_as":
+                    saveTpl( templateSaveHandler, true );
+                    break;
+
+                case "export_xml" :
+                    exportTpl();
+                    break;
+
+                case "close":
+                    closeTpl();
+                    break;
+
+
+                case "import_from_tpl":
+                    ImportFromTpl.show( onImportFromTplClose );
+                    break;
+
+                case "exit":
+                    exitApplication();
+                    break;
+
+                case "properties":
+                    ProjectsSettingsDialog.show( Graphs.graphs );
+                    break;
+
+                case "air_builder":
+                    alertSaveAndExportReleaseBuild();
+                    break;
+
+                case "about_program":
+                    AboutProgramDialog.show();
+                    break;
+
+                case "validate":
+                    onValidate( new CloseEvent( CloseEvent.CLOSE, false, false, ModalDialog.OK ) );
+                    break;
+
+                case "run":
+                    Log.getInstance().clear();
+                    runTemplate();
+                    break;
+
+                case "debug":
+                case "step_by_step":
+                {
+                    saveTpl( templateSaveAndDebugHandler );
+
+                    function templateSaveAndDebugHandler( event : Event ) : void
+                    {
+                        var tpl : BuilderTemplate = event.target as BuilderTemplate;
+                        tpl.removeEventListener( Event.COMPLETE, templateSaveAndDebugHandler );
+
+                        processSavedTpl();
+
+                        Log.getInstance().clear();
+
+                        if ( ContextManager.templateStruct )
+                            ContextManager.templateStruct.terminated = true;
+
+                        ContextManager.templateStruct = new TemplateStruct( currentTemplate.xmlStructure );
+
+                        switch ( menuItemName )
+                        {
+                            case 'debug':
+                                ContextManager.templateStruct.isDebug = true;
+                                ContextManager.templateStruct.isStepDebug = false;
+                                break;
+                            case 'step_by_step':
+                                ContextManager.templateStruct.isDebug = true;
+                                ContextManager.templateStruct.isStepDebug = true;
+                                break;
+                        }
+                        // проверка графа на ошибки
+                        var validateArr : Array = ContextManager.templateStruct.validate().array;
+
+                        pnl_problems.array = validateArr;
+
+                        function isError( element : *, index : int, arr : Array ) : Boolean
+                        {
+                            return (element.error.severity == BasicError.FATAL);
+                        }
+
+                        if ( validateArr && validateArr.filter( isError ).length > 0 )
+                        {
+                            alertProceedRun();
+                        }
+                        else
+                        {
+                            switchDebug( true );
+
+                            Application.application.addEventListener( Event.ENTER_FRAME, startDebugProcess );
+                        }
+                    }
+
+                    function startDebugProcess( event : Event ) : void
+                    {
+                        Application.application.removeEventListener( Event.ENTER_FRAME, startDebugProcess );
+
+                        ProgressManager.source = ContextManager.templateStruct;
+                        ProgressManager.show( ProgressManager.WINDOW_MODE );
+
+                        addDebugListeners();
+
+                        ContextManager.templateStruct.generate();
+                    }
+
+                }
+
+                    break;
+
+                case "resume":
+                case "step_into":
+                case "step_over":
+                case "step_return":
+                case "break":
+                    if ( !ContextManager.templateStruct )
+                        return;
+
+                    switch ( menuItemName )
+                    {
+                        case 'resume':
+                            ProgressManager.source = ContextManager.templateStruct;
+                            ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
+                            ContextManager.templateStruct.isStepDebug = false;
+                            ContextManager.templateStruct.generate( true );
+                            break;
+                        case 'step_into':
+                            ProgressManager.source = ContextManager.templateStruct;
+                            ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
+                            ContextManager.templateStruct.isStepDebug = true;
+                            ContextManager.templateStruct.generate( true );
+                            break;
+                        case 'step_over':
+                            ProgressManager.source = ContextManager.templateStruct;
+                            ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
+                            ContextManager.templateStruct.isStepDebug = true;
+                            ContextManager.templateStruct.generate( true, true );
+                            break;
+                        case 'step_return':
+                            ProgressManager.source = ContextManager.templateStruct;
+                            ProgressManager.show( ProgressManager.WINDOW_MODE, true, true );
+                            ContextManager.templateStruct.isStepDebug = true;
+                            ContextManager.templateStruct.generate( true, true, true );
+                            break;
+                        case 'break':
+                            ProgressManager.complete();
+
+                            removeDebugListeners();
+                            updateStatusMsg();
+
+                            ContextManager.templateStruct.terminated = true;
+                            ContextManager.templateStruct = null;
+                            switchDebug( false );
+                            break;
+                    }
+
+                    break;
+            }
+
+            if ( !event )
+                return;
+
+            if ( menuItem.groupName == "lastfiles" )
+            {
+                closeTpl( true, openTpl, [new File( menuItem.data.toString() )] );
+            }
+            else if ( menuItem.groupName == "language" )
+            {
+                file = File.applicationDirectory.resolvePath( MenuManager.LANG_FOLDER ).resolvePath( menuItem.data.toString() );
+                fileStream.addEventListener( Event.COMPLETE, completeLangHandler );
+                fileStream.openAsync( file, FileMode.READ );
+            }
+
+        }
+
+        private function progressHandler( event : TemplateLibEvent ) : void
+        {
+            var value : Number = event.result.value as Number;
+            var description : String = event.result["description"] as String;
+
+            updateStatusMsg( "\t" + value + "% - " + description );
+        }
+
+        private function updateStatusMsg( msg : String = "" ) : void
+        {
+            status = msg;
+        }
+
+        private function runTemplate() : void
+        {
+            if ( currentTemplate && currentTemplate.modified )
+            {
+                AlertPopup.show( "You must save template before running.\nDo you want to save template and run it now?", LanguageManager.sentences['confirmation'], AlertPopup.YES | AlertPopup.NO, this.nativeWindow as Sprite, alertSaveAndCloseHandler, null, AlertPopup.YES );
+            }
+            else
+            {
+                showPlayer();
+            }
+
+            function alertSaveAndCloseHandler( event : CloseEvent ) : void
+            {
+                if ( event.detail == AlertPopup.YES )
+                {
+                    saveTpl( templateSaveAndRunHandler );
+                }
+            }
+
+            function templateSaveAndRunHandler( event : Event ) : void
+            {
+                var tpl : BuilderTemplate = event.target as BuilderTemplate;
+                tpl.removeEventListener( Event.COMPLETE, templateSaveAndRunHandler );
+
+                processSavedTpl();
+
+                showPlayer();
+            }
+
+        }
+
+        private function showPlayer() : void
+        {
+            var playerObj : Player = new Player();
+            playerObj.isDesktopApplication = true;
+
+            playerObj.minimizable = false;
+            playerObj.maximizable = false;
+            playerObj.closable = true;
+
+            playerObj.addEventListener( FlexEvent.CREATION_COMPLETE, playerCreationCompleteHandler );
+            playerObj.addEventListener( Event.CLOSE, playerCloseHandler );
+
+            playerObj.scrollRect = new Rectangle( 0, 0, width, height );
+
+            playerObj.addEventListener( MouseEvent.MOUSE_DOWN, playerMouseDownHandler );
+            playerObj.addEventListener( MouseEvent.MOUSE_UP, playerMouseUpHandler );
+
+            PopUpManager.addPopUp( playerObj, this, true );
+
+            function playerCreationCompleteHandler( event : FlexEvent ) : void
+            {
+                playerObj.removeEventListener( FlexEvent.CREATION_COMPLETE, playerCreationCompleteHandler );
+
+                PopUpManager.centerPopUp( playerObj );
+
+                playerObj.openTemplate( true );
+
+                pnl_log.clearLog();
+            }
+
+            function playerCloseHandler( event : Event ) : void
+            {
+                playerObj.removeEventListener( Event.CLOSE, playerCloseHandler )
+
+                playerObj.terminateTemplate();
+
+                PopUpManager.removePopUp( playerObj );
+
+                playerObj = null;
+
+                pnl_log.showLog();
+
+            }
+
+            function playerMouseDownHandler( event : MouseEvent ) : void
+            {
+                if ( event.target is ScrollBar || event.target is ScrollThumb )
+                    return;
+
+                playerObj.startDrag();
+            }
+
+            function playerMouseUpHandler( event : MouseEvent ) : void
+            {
+                playerObj.stopDrag();
+            }
+        }
+
+        private function get currentTemplate() : BuilderTemplate
+        {
+            return BuilderContextManager.currentTemplate;
+        }
+
+        private function onValidate( event : CloseEvent ) : void
+        {
+            if ( event.detail == ModalDialog.OK )
+            {
+                var dialog : ValidateDialog = event.target as ValidateDialog;
+                var flags : uint = 0;
+
+                if ( dialog )
+                {
+                    if ( dialog.chkClean )     flags |= TemplateValidateOptions.CLEAN;
+                    if ( dialog.chkInitGr )     flags |= TemplateValidateOptions.SET_INIT_GRAPH;
+                    if ( dialog.chkInitNode )     flags |= TemplateValidateOptions.SET_INIT_NODES;
+                    if ( dialog.chkID )         flags |= TemplateValidateOptions.SET_UIDS;
+                    if ( dialog.chkAttr )         flags |= TemplateValidateOptions.SET_ATTRIBUTES;
+                    if ( dialog.chkNames )     flags |= TemplateValidateOptions.SET_UNIQ_NAMES;
+                }
+
+                ContextManager.templateStruct = new TemplateStruct( currentTemplate.xmlStructure );
+
+                var validateArr : Array = ContextManager.templateStruct.validate( flags ).array;
+
+                pnl_problems.array = validateArr;
+            }
+        }
+
+        public function alertProceedRun() : void
+        {
+            AlertPopup.show( "The template contains error(s).\nDo you want to proceed launching?", "Errors in template", AlertPopup.YES | AlertPopup.NO, null, alertProceedRunHandler, null, AlertPopup.NO );
+        }
+
+        private function alertProceedRunHandler( event : CloseEvent ) : void
+        {
+            if ( event.detail == AlertPopup.YES )
+            {
+                {
+                    switchDebug( true );
+
+                    ProgressManager.start( ProgressManager.WINDOW_MODE, false );
+
+                    addDebugListeners( true );
+                    ContextManager.templateStruct.generate();
+                }
+            }
+            else
+                ContextManager.templateStruct = null;
+        }
+
+        private function stepCompleteHandler( event : Event ) : void
+        {
+            ProgressManager.complete();
+            showDebugDetails();
+        }
+
+        public function showDebugDetails() : void
+        {
+            try
+            {
+
+                if ( !ContextManager.templateStruct || ContextManager.templateStruct.contextStack.length == 0 )
+                    return;
+
+                var curGraphContext : GraphContext = ContextManager.templateStruct.curGraphContext;
+                var curNodeStruct : NodeStruct = curGraphContext.curNode;
+
+                pnl_graphs.showGraphByName( curGraphContext.curGraph.id );
+                var curNode : Node = pnl_graphs.showNodeByName( curNodeStruct.id );
+
+                curNode.setFocus();
+
+                if ( curDebugNode )
+                {
+                    curDebugNode.filters = [];
+                    for each( var arrow : Connector in curDebugNode.inArrows )
+                        Connector( arrow ).highlighted = false;
+                }
+
+                curDebugNode = curNode;
+                curDebugNode.filters = [new GlowFilter( 0xff00ff )];
+
+                if ( ContextManager.templateStruct.nodeStack.length == 0 )
+                    return;
+
+                var nodeContext : NodeContext = ContextManager.templateStruct.nodeStack[ContextManager.templateStruct.nodeStack.length - 1];
+
+                var prevNode : Node = pnl_graphs.getNodeByName( nodeContext.node.id );
+
+                for each( var arrow1 : Connector in prevNode.outArrows )
+                    for each( var arrow2 : Connector in curNode.inArrows )
+                        if ( arrow1 == arrow2 )
+                            Connector( arrow1 ).highlighted = true;
+
+                // --------------------
+                // fill variables panel
+                // --------------------
+
+                // get local vars
+                var subArr : Array = [];
+
+                var value : Object;
+                var fullValue : Object
+                for ( var obj : String in curGraphContext.context )
+                {
+                    fullValue = curGraphContext.context[obj];
+                    if ( obj.search( /^__tmp_.*$/ ) < 0 )
+                    {
+                        if ( fullValue )
+                            value = (  fullValue is XML ) ? "[Object XML]" : fullValue;
+                        else
+                            value = fullValue = "null"
+
+                        subArr.push( {     Name: "$" + obj, Value: value, FullValue: fullValue } );
+                    }
+                }
+                subArr.sortOn( "Name", Array.CASEINSENSITIVE );
+
+                // get global vars
+                var arr : Array = [];
+                var subArr2 : Array = [];
+                var context : Dynamic = ContextManager.templateStruct.context
+                for ( obj in context )
+                {
+                    if ( !(context[obj] is TemplateLib) )
+                    {
+                        if ( obj.search( /^__tmp_.*$/ ) < 0 )
+                        {
+                            fullValue = context[obj];
+                            value = (  context[obj] is XML ) ? "[Object XML]" : fullValue;
+
+                            if ( obj.charAt( 0 ) == "_" )
+                                subArr2.push( { Name: "$" + obj, Value: value, FullValue: fullValue } );
+                            else
+                                arr.push( { Name: "$" + obj, Value: value, FullValue: fullValue } );
+                        }
+                    }
+                }
+                subArr2.sortOn( "Name", Array.CASEINSENSITIVE );
+
+                arr.push( { Name: "this", Value: curGraphContext.curGraph.name, children: subArr } );
+                arr.push( { Name: "special", Value: "_", children: subArr2 } );
+
+                pnl_variables.dataProvider = new HierarchicalData( arr.sortOn( "Name", Array.CASEINSENSITIVE ) );
+
+                pnl_log.showLog();
+
+                // --------------------------
+                // fill current buffer output
+                // --------------------------
+
+                var str : String = "";
+
+                str = curGraphContext.buffer;
+                pnl_output.text = str;
+                pnl_output.textArea.validateNow();
+
+                var myformat : TextFormat = new TextFormat();
+                myformat.color = 0x000000;
+
+                if ( str.length > 0 )
+                    pnl_output.textArea.field.setTextFormat( myformat, 0, str.length )
+
+                if ( curDebugBufLen < str.length )
+                {
+                    myformat.color = 0xFF0000;
+
+                    pnl_output.textArea.field.setTextFormat( myformat, curDebugBufLen, str.length );
+                }
+
+                curDebugBufLen = str.length;
+
+                // --------------------
+                // fill node values
+                // --------------------
+
+                if ( !pnl_node_value.array )
+                {
+                    pnl_node_value.array = [];
+                }
+
+                var nodeCategory : String = nodeContext.node.category;
+                var nodeSubCategory : String = "";
+                str = "";
+                switch ( nodeCategory )
+                {
+                    case NodeCategory.NORMAL:
+                    case NodeCategory.SUBGRAPH:
+                        str = nodeContext.block.lastExecutedFragment.retValue;
+                        break;
+                    case NodeCategory.RESOURCE:
+                        str = nodeContext.block.retValue;
+                        break;
+                    case NodeCategory.COMMAND:
+                        switch ( nodeContext.block.ctype )
+                        {
+                            case CodeFragment.CT_OPERATION:
+                                nodeSubCategory = "Operation ";
+                                str = nodeContext.node.text;
+                                break;
+                            case CodeFragment.CT_TEST:
+                                nodeSubCategory = "Test ";
+                                str = nodeContext.node.text + " => " + nodeContext.block.lastExecutedFragment.retValue;
+                                break;
+                            case CodeFragment.CT_FUNCTION:
+                                nodeSubCategory = "Function ";
+                                str = nodeContext.block.lastExecutedFragment.funcName + " => " + nodeContext.block.lastExecutedFragment.retValue;
+                                break;
+                        }
+                        break;
+                }
+
+                pnl_node_value.array.push( { label: StringUtil.substitute( "State ({0}{1}): {2}", nodeSubCategory, nodeCategory, str ), data: nodeContext.node } );
+
+                pnl_node_value.list.invalidateList();
+                pnl_node_value.list.selectedIndex = pnl_node_value.array.length - 1;
+                pnl_node_value.list.callLater( pnl_node_value.list.scrollToIndex, [pnl_node_value.array.length] );
+
+            } catch ( e : * )
+            {
+            }
+        }
+
+        public function switchDebug( enable : Boolean = true ) : void
+        {
+            MenuManager.getInstance().switchDebug( enable );
+
+            if ( enable )
+            {
+                pnl_log.clearLog();
+                pnl_variables.dataProvider = null;
+            }
+            else
+                pnl_log.showLog();
+
+            pnl_node_value.array = [];
+            pnl_output.text = "";
+
+            curDebugBufLen = 0;
+            if ( curDebugNode )
+            {
+                curDebugNode.filters = [];
+
+                for each( var arrow : Connector in curDebugNode.inArrows )
+                    Connector( arrow ).highlighted = false;
+
+                curDebugNode = null;
+            }
+
+        }
+
+        //--------------------------------------------------------------------------
+        //
+        //  Event handlers
+        //
+        //--------------------------------------------------------------------------
+
+        private function problemsDoubleClickHandler( event : MouseEvent ) : void
+        {
+            var object : Object = event.target;
+            while ( object.parent )
+            {
+                if ( object is SuperDataGrid )
+                    break;
+
+                object = object.parent;
+            }
+
+            var grid : SuperDataGrid = object as SuperDataGrid;
+
+            if ( !grid || !grid.selectedItem || !grid.selectedItem.data )
+                return;
+
+            if ( grid.selectedItem.data.node )
+            {
+                var node : Node = pnl_graphs.showNodeByName( grid.selectedItem.data.node.id );
+                if ( node )
+                    node.setFocus();
+            }
+            else if ( grid.selectedItem.data.graph )
+            {
+                pnl_graphs.showGraphByName( grid.selectedItem.data.graph.id );
+            }
+        }
+
+        private function templateSaveHandler( event : Event ) : void
+        {
+            var tpl : BuilderTemplate = event.target as BuilderTemplate;
+            tpl.removeEventListener( Event.COMPLETE, templateSaveHandler );
+
+            processSavedTpl();
+        }
+
+        private function onImportFromTplClose( event : Event ) : void
+        {
+            if ( event is CloseEvent && CloseEvent( event ).detail == ModalDialog.OK )
+            {
+                var tree : Tree = event.target.tplTree;
+                var tpl : BuilderTemplate = event.target.template;
+                var xmlListCol : XMLListCollection = new XMLListCollection();
+
+                ProgressManager.start( ProgressManager.WINDOW_MODE, false );
+
+                if ( ContextManager.templates.length == 0 )
+                {
+                    newTpl();
+                }
+
+                if ( tpl && tpl.xmlStructure && tree.selectedItems.length > 0 )
+                {
+                    for each( var node : Object in tree.selectedItems )
+                    {
+                        if ( node.@isBranch == 'true' )
+                        {
+                            var catList : XMLList = tpl.xmlStructure..graph.(@category == node.@label);
+
+                            for each( var xml : XML in catList )
+                                if ( xmlListCol.source.(@category == xml.@category && @name == xml.@name).length() == 0 )
+                                    xmlListCol.addItem( xml );
+                        }
+                        else
+                        {
+                            xml = null;
+                            var lst : XMLList = tpl.xmlStructure..graph.(@category == node.@category && @name == node.@label);
+                            if ( lst.length() > 0 )
+                                xml = lst[0];
+
+                            if ( xml && xmlListCol.source.(@category == xml.@category && @name == xml.@name).length() == 0 )
+                                xmlListCol.addItem( xml );
+                        }
+
+                    }
+                }
+
+                for each ( var itm : XML in xmlListCol )
+                    importTemplate( itm );
+            }
+
+            ProgressManager.complete();
+        }
+
+        private function importTemplate( tplXML : XML ) : void
+        {
+            var graph : GraphCanvas = new GraphCanvas();
+            graph.fromXML( tplXML );
+
+            var newGraph : GraphCanvas = graph.clone();
+            newGraph.name = pnl_graphs.createUniqueGraphName( "Imported_" + graph.name );
+            pnl_graphs.addGraph( newGraph );
+
+        }
+
+        private function addTemplate( template : BuilderTemplate ) : void
+        {
+            ContextManager.templates.addItemAt( template, 0 );
+
+            BindingUtils.bindSetter( templateChangeHandler, currentTemplate, 'modified' );
+        }
+
+        private function generationComplete( event : Event ) : void
+        {
+            ProgressManager.complete();
+
+            switchDebug( false );
+
+            if ( ContextManager.templateStruct.buffer )
+            {
+                var file : File = BuilderContextManager.instance.file;
+                var stream : FileStream = new FileStream();
+
+                stream.open( file, FileMode.WRITE );
+                stream.writeUTFBytes( ContextManager.templateStruct.buffer );
+                stream.close();
+
+                Console.show( StringUtil.substitute( "Data saved to {0}.\n{1}", BuilderContextManager.instance.file.nativePath, ContextManager.templateStruct.buffer ), "Result" );
+            }
+
+            removeDebugListeners();
+            updateStatusMsg();
+
+            ContextManager.templateStruct = null;
+        }
+
+        private function debugErrorHandler( event : Event ) : void
+        {
+            var error : * = event.target.error;
+
+            ProgressManager.complete();
+
+            showDebugDetails();
+            AlertPopup.show( error.message, "Error!", 4, null, onErrAlertClose );
+        }
+
+        private function onErrAlertClose( event : Event ) : void
+        {
+            switchDebug( false );
+
+            removeDebugListeners();
+            updateStatusMsg();
+
+            ContextManager.templateStruct = null;
+        }
+
+        private var builderUpdater : BuilderUpdater = new BuilderUpdater();
+
+        private function checkUpdate() : void
+        {
+            builderUpdater.checkForUpdate();
+
+        }
+
+        protected function creationCompleteHandler( event : FlexEvent ) : void
+        {
+            addEventListener( "closeWithoutSave", closeWithoutSaveHandler );
+
+            addEventListener( CodeParserEvent.EXECUTE_CODE_FRAGMENT, executeCodeFragmentHandler );
+
+            checkUpdate();
+        }
+
+        private function executeCodeFragmentHandler( event : CodeParserEvent ) : void
+        {
+            if ( !event || !event.fragmentValue )
+                return;
+
+            Log.getInstance().addNote( event.fragmentValue );
+        }
+
+        private function templateChangeHandler( object : Object ) : void
+        {
+            if ( object as Boolean == true )
+                templateChanged();
+        }
+
+        private function get selectedTemplateProject() : BuilderTemplateProject
+        {
+            return currentTemplate.selectedProject as BuilderTemplateProject;
+        }
+
+
+        protected function powerpackcontrolbar_creationCompleteHandler( event : FlexEvent ) : void
+        {
+            powerpackControlBar.addEventListener( ControlBarEvent.EVENT_ITEM_CLICK, itemClickHandler );
+
+            function itemClickHandler( controlBarEvent : ControlBarEvent ) : void
+            {
+                menuHandler( null, controlBarEvent.targetItemType );
+            }
+
+        }
+
+        private function graphsChangeHandler() : void
+        {
+            if ( currentTemplate )
+                currentTemplate.modified = true;
+        }
+
+        protected function pnl_graphs_importGraphClickHandler( event : GraphsAccordionEvent ) : void
+        {
+            var accordChild : AccordionChild = event.target as AccordionChild;
+
+            var categoryName : String = accordChild.label;
+
+            var folder : File = BuilderContextManager.instance.lastDir;
+
+            folder.addEventListener( Event.SELECT, graphFileSelectHandler );
+
+            folder.browseForOpen( "Import graph", [new FileFilter( "Graph xml", "*.xml" )] );
+
+            var graphFile : File;
+            var fileStream : FileStream;
+
+            function graphFileSelectHandler( event : Event ) : void
+            {
+                folder.removeEventListener( Event.SELECT, graphFileSelectHandler );
+
+                graphFile = event.target as File;
+
+                openFileStream();
+
+                ProgressManager.source = fileStream;
+                ProgressManager.start();
+
+                fileStream.openAsync( graphFile, FileMode.READ );
+            }
+
+            function openFileStream() : void
+            {
+                fileStream = new FileStream();
+
+                fileStream.addEventListener( Event.COMPLETE, graphFileOpenCompleteHandler );
+                fileStream.addEventListener( IOErrorEvent.IO_ERROR, graphFileOpenErrorHandler );
+            }
+
+            function closeFileStream() : void
+            {
+                fileStream.removeEventListener( Event.COMPLETE, graphFileOpenCompleteHandler );
+                fileStream.removeEventListener( IOErrorEvent.IO_ERROR, graphFileOpenErrorHandler );
+
+                fileStream.close();
+                fileStream = null;
+            }
+
+            function graphFileOpenCompleteHandler( event : Event ) : void
+            {
+                var strData : String = fileStream.readUTFBytes( fileStream.bytesAvailable );
+
+                closeFileStream();
+
+                var xmlData : XML = XML( strData );
+
+                if ( !xmlData || !xmlData.name() )
+                {
+                    ProgressManager.complete();
+                    AlertPopup.show( "Incorrect graph xml", "Error:" );
+                    return;
+                }
+
+                var xmlName : String = xmlData.name() is QName ? QName( xmlData.name() ).localName : xmlData.name().toString();
+
+                if ( xmlName != "graph" )
+                {
+                    ProgressManager.complete();
+                    AlertPopup.show( "Incorrect graph xml", "Error:" );
+                    return;
+                }
+
+                xmlData.@category = categoryName;
+
+                importTemplate( xmlData );
+
+                ProgressManager.complete();
+            }
+
+            function graphFileOpenErrorHandler( event : IOErrorEvent ) : void
+            {
+                closeFileStream();
+
+                graphFile.cancel();
+
+                ProgressManager.complete();
+
+                AlertPopup.show( event.text, "Error:" );
+            }
+
+        }
+
+        protected function applicationCompleteHandler( event : FlexEvent ) : void
+        {
+            addGlobalErrorListener();
+
+            show();
+        }
+
+        private function addGlobalErrorListener() : void
+        {
+            RuntimeUtils.addGlobalErrorListener( loaderInfo );
+        }
+
+        private function builderKeyDownHandler( event : KeyboardEvent ) : void
+        {
+            if (event.ctrlKey && event.keyCode == Keyboard.F)
+            {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                openSearchTab();
+            }
+
+        }
+
+        private function openSearchTab() : void
+        {
+            tabNavigator.selectedChild = pnl_search;
+
+            pnl_search.setFocus();
+        }
+
+        ]]>
 	</mx:Script>
 	
 	<mx:VBox width="100%" height="100%">
@@ -1607,9 +1605,11 @@
 	
 								<mx:HDividedBox width="100%">
 	
-									<containers:SuperTabNavigator creationPolicy="all" width="100%" height="100%"
+									<containers:SuperTabNavigator creationPolicy="all"
+                                                                  width="100%" height="100%"
 																  dragEnabled="true" dropEnabled="true"
-																  closePolicy="{SuperTab.CLOSE_NEVER}">
+																  closePolicy="{SuperTab.CLOSE_NEVER}"
+                                                                    id="tabNavigator">
 	
 										<panel:Problems id="pnl_problems" />
 	

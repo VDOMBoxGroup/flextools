@@ -126,7 +126,16 @@
 				
 				clearResults();
 			}
-			
+
+            override public function setFocus() : void
+            {
+                if (!searchValue_TextInput)
+                    return;
+
+                searchValue_TextInput.setFocus();
+
+                clear();
+            }
 			
 		]]>
 	</mx:Script>
