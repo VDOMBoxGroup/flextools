@@ -81,12 +81,41 @@ package net.vdombox.ide.core.view
 
 		private var logOut : Boolean = false;
 
-		/**
-		 *
-		 */
+		private var statesProxy : StatesProxy;
+		
+		
+		override public function onRegister() : void
+		{
+			addHandlers();
+			
+			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
+			statesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
+		}
+		
+		override public function onRemove() : void
+		{
+			removeHandlers();
+		} 
+		
 		public function closeWindow() : void
 		{
 			windowManager.removeWindow( mainWindow );
+		}
+		
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
+			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
+			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
+			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
+			interests.push( ApplicationFacade.OPEN_MAIN_WINDOW );
+			interests.push( ApplicationFacade.APPLICATION_SAVE_CHECKED );
+			interests.push( ApplicationFacade.ALERT_WINDOW_CLOSE );
+			interests.push( ApplicationFacade.SIGNOUT );
+			
+			return interests;
 		}
 
 		override public function handleNotification( notification : INotification ) : void
@@ -191,22 +220,6 @@ package net.vdombox.ide.core.view
 
 		}
 
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
-			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
-			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
-			interests.push( ApplicationFacade.OPEN_MAIN_WINDOW );
-			interests.push( ApplicationFacade.APPLICATION_SAVE_CHECKED );
-			interests.push( ApplicationFacade.ALERT_WINDOW_CLOSE );
-			interests.push( ApplicationFacade.SIGNOUT );
-
-			return interests;
-		}
-
 		private function addHandlers() : void
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler, false, 0, true );
@@ -239,31 +252,12 @@ package net.vdombox.ide.core.view
 			return viewComponent as MainWindow;
 		}
 
-		override public function onRegister() : void
-		{
-			addHandlers();
-
-			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
-
-			sendNotification( ApplicationFacade.CHECK_UPDATE );
-		}
-
-		override public function onRemove() : void
-		{
-			removeHandlers();
-		}
-
 		/**
 		 *
 		 */
 		public function openWindow() : void
 		{
 			windowManager.addWindow( mainWindow );
-		}
-
-		public function get statesProxy() : StatesProxy
-		{
-			return facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 		}
 
 		private function appManagerHandler( event : MainWindowEvent ) : void

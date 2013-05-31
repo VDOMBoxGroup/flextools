@@ -21,14 +21,11 @@ package net.vdombox.ide.core.view.components
 	import mx.controls.Image;
 
 	import net.vdombox.ide.common.model._vo.ResourceVO;
-	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 
 	import spark.components.Group;
 	import spark.components.TextInput;
 	import spark.components.Window;
-
-	//	import spark.components.windowClasses.TitleBar;
 	/**
 	 *
 	 * @author andreev ap

@@ -5,7 +5,6 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ChangeLocaleCommand;
 	import net.vdombox.ide.core.controller.CheckIndexPageCommand;
 	import net.vdombox.ide.core.controller.CheckSelectedPageCommand;
-	import net.vdombox.ide.core.controller.CheckUpdateCommand;
 	import net.vdombox.ide.core.controller.ClearProxiesStorageCommand;
 	import net.vdombox.ide.core.controller.CloseApplicationManagerCommand;
 	import net.vdombox.ide.core.controller.CloseIDECommand;
@@ -456,10 +455,6 @@ package net.vdombox.ide.core
 		//		log
 		public static const SEND_TO_LOG : String = "sendToLog";
 
-		//		update
-
-		public static const CHECK_UPDATE : String = "checkUpdate";
-
 		//		applicationManager
 
 		public static const OPEN_APPLICATION_MANAGER : String = "openApplicationManager";
@@ -680,8 +675,6 @@ package net.vdombox.ide.core
 			//			registerCommand( LOGOFF_REQUEST, LogoffRequestCommand );
 
 			registerCommand( CLOSE_APPLICATION_MANAGER, CloseApplicationManagerCommand );
-
-			registerCommand( CHECK_UPDATE, CheckUpdateCommand );
 			registerCommand( WRITE_ERROR, AlertSystemCommand );
 			registerCommand( WRITE_QUESTION, AlertSystemCommand );
 
