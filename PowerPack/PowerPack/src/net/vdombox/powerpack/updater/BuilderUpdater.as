@@ -88,8 +88,8 @@ package net.vdombox.powerpack.updater
 		private function autoLoadUpdale():void
 		{
 			ProgressManager.source = urlLoader;
-			ProgressManager.show(ProgressManager.WINDOW_MODE, true);
-			
+			ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+
 			loadFile(releaseUrl, URLLoaderDataFormat.BINARY);
 		}
 		
