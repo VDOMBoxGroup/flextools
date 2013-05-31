@@ -917,6 +917,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				var childElement : RendererBase = rendProxy.getRendererByVO( child.vdomObjectVO );
 
+				if ( !childElement )
+					continue;
+				
 				var childBottomPosition : Number = childElement.y + childElement.height;
 
 				if ( childBottomPosition > maxBottom )

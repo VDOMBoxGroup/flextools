@@ -14,7 +14,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			//trace ('--- Wysiwyg: WysiwygGettedCommand');
 			var body : Object = notification.getBody();
 			var vdomObjectVO : IVDOMObjectVO = body.pageVO ? body.pageVO : body.objectVO;
 
@@ -26,21 +25,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 
 			var renderVO : RenderVO;
 
-			/*
-			   if ( vdomObjectVO is ObjectVO )
-			   {
-			   renderVO = renderProxy.generateRenderVO( (vdomObjectVO as ObjectVO).pageVO, wysiwygXML );
-			   renderer = renderProxy.getRendererByVO( (vdomObjectVO as ObjectVO).pageVO );
-			   renderer.renderVO = renderVO;
-			   }
-			 */
-
-
 			renderVO = renderProxy.generateRenderVO( vdomObjectVO, wysiwygXML );
 
 			var rendererBase : RendererBase = renderProxy.getRendererByVO( vdomObjectVO );
-
-
 			if ( rendererBase )
 				rendererBase.renderVO = renderVO;
 
