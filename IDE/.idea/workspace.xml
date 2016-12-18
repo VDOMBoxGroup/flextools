@@ -2,62 +2,64 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="8f9a5422-5edf-4986-b78b-45d5202af2ab" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/airglobal.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Tree/.idea/flexCompiler.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Tree/.idea/misc.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Tree/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Tree/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/VdomIDE-app.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../~Obsolete/Help/Editor/v.01/.idea/flexCompiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DB/DB.iml" afterPath="$PROJECT_DIR$/DB/DB.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/Events.iml" afterPath="$PROJECT_DIR$/Events/Events.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml" afterPath="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Preview/Preview.iml" afterPath="$PROJECT_DIR$/Preview/Preview.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ResourceBrowser/ResourceBrowser.iml" afterPath="$PROJECT_DIR$/ResourceBrowser/ResourceBrowser.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/Scripts.iml" afterPath="$PROJECT_DIR$/Scripts/Scripts.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/LibrariesPanel.mxml" afterPath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/LibrariesPanel.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/ServerScriptsPanel.mxml" afterPath="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/ServerScriptsPanel.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tree/Tree.iml" afterPath="$PROJECT_DIR$/Tree/Tree.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/Wysiwyg.iml" afterPath="$PROJECT_DIR$/Wysiwyg/Wysiwyg.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/model/MessageProxy.as" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/model/MessageProxy.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/model/vo/RenderVO.as" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/model/vo/RenderVO.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/ResourceSelectorWindowMediator.as" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/ResourceSelectorWindowMediator.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/attributeRenderers/ComboBoxAttribute.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/attributeRenderers/ComboBoxAttribute.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/attributeRenderers/ComboBoxObjectAttribute.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/attributeRenderers/ComboBoxObjectAttribute.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectAttributesPanel.mxml" afterPath="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectAttributesPanel.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/ide_lib.iml" afterPath="$PROJECT_DIR$/common/ide_lib.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/VdomIDE.iml" afterPath="$PROJECT_DIR$/core/VdomIDE.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/VdomIDE-app.xml" afterPath="$PROJECT_DIR$/core/src/VdomIDE-app.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/business/SOAP.as" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/business/SOAP.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/managers/CacheManager.as" afterPath="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/managers/CacheManager.as" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report.xml" afterPath="$PROJECT_DIR$/report.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../~Obsolete/Help/Editor/v.01/src/VdomHelpEditor.mxml" afterPath="$PROJECT_DIR$/../~Obsolete/Help/Editor/v.01/src/VdomHelpEditor.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../~Obsolete/Help/Editor/v.01/src/net/vdombox/helpeditor/view/components/TemplatesGroup.mxml" afterPath="$PROJECT_DIR$/../~Obsolete/Help/Editor/v.01/src/net/vdombox/helpeditor/view/components/TemplatesGroup.mxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../~Obsolete/Help/Editor/v.01/src/net/vdombox/helpeditor/view/spinner/SpinnerPopUp.mxml" afterPath="$PROJECT_DIR$/../~Obsolete/Help/Editor/v.01/src/net/vdombox/helpeditor/view/spinner/SpinnerPopUp.mxml" />
     </list>
     <ignored path="VdomIDE.IDEA.SDK.4.9.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/fragment.js2" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366450521568" ignored="false" />
-    <file path="/VdomIDE.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366008375749" ignored="false" />
-    <file path="/DummyFile.xpath" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366451084689" ignored="false" />
-    <file path="/a.dummy" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366445888558" ignored="false" />
-    <file path="/ModulesProxy.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366011289022" ignored="false" />
-    <file path="/DataBase.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366012685280" ignored="false" />
-    <file path="/DataTableMediator.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366012931962" ignored="false" />
-    <file path="/DataTablesTreeMediator.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366013297076" ignored="false" />
-    <file path="/NameObjectWindow.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366013363746" ignored="false" />
-    <file path="/TableElement.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366014643958" ignored="false" />
-    <file path="/BaseVisualEditor.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366016858121" ignored="false" />
-    <file path="/Toolset.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366018521821" ignored="false" />
-    <file path="/WindowManager.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366020196327" ignored="false" />
-    <file path="/ExternalEditorWindow.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366022098801" ignored="false" />
-    <file path="/ResourceItemRenderer.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366022189638" ignored="false" />
-    <file path="/ToolBoxPanel.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366022248184" ignored="false" />
-    <file path="/RichTextToolbar.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366022861013" ignored="false" />
-    <file path="/WorkAreaSkin.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366024612879" ignored="false" />
-    <file path="/a.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366450710782" ignored="false" />
-    <file path="/Preview2.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366045183240" ignored="false" />
-    <file path="$PROJECT_DIR$/../POWERPACK.IDEA/PowerPack_lib/src/net/vdombox/powerpack/lib/player/Player.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366095839622" ignored="false" />
-    <file path="$PROJECT_DIR$/../POWERPACK.IDEA/Singularity/src/Singularity/demos/PV3D/SimpleSphere.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366096185808" ignored="false" />
-    <file path="/BuilderTemplate.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366097430285" ignored="false" />
-    <file path="$PROJECT_DIR$/../POWERPACK.IDEA/PowerPack/bin-debug/assets/style/style.css" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366097603738" ignored="false" />
-    <file path="$PROJECT_DIR$/../POWERPACK.IDEA/PowerPack_lib/bin/PowerPack_lib.swc!/catalog.xml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366097603738" ignored="false" />
-    <file path="/CashManager.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366098549835" ignored="false" />
-    <file path="$PROJECT_DIR$/../POWERPACK.IDEA/PowerPack/src/net/vdombox/powerpack/managers/CashManager.as" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366098545617" ignored="false" />
-    <file path="$PROJECT_DIR$/../POWERPACK.IDEA/PowerPack/bin-debug/Builder-app.xml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366099322715" ignored="false" />
-    <file path="$PROJECT_DIR$/../SELF/StrToSQL/src/StrToSQL.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366182902112" ignored="false" />
-    <file path="/StrToSQL.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366182861499" ignored="false" />
-    <file path="$USER_HOME$/IdeaProjects/Krisiki/line to SQL/src/LinetoSQL.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366265143287" ignored="false" />
-    <file path="/LinetoSQL.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366264914730" ignored="false" />
-    <file path="/ObjectsTreePanel.mxml" changelist="8f9a5422-5edf-4986-b78b-45d5202af2ab" time="1366445947447" ignored="false" />
+    <ignored path="$PROJECT_DIR$/out/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CompilerWorkspaceConfiguration">
     <option name="MAKE_PROJECT_ON_SAVE" value="true" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
-  <component name="DaemonCodeAnalyzer">
-    <disable_hints />
-  </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
-    <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
+    <ui_properties converted="true" />
+    <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true" converted="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
         <option name="NOTIFY_UNCAUGHT" value="true" />
@@ -93,25 +95,141 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <breakpoint_rules />
-    <ui_properties />
+    <breakpoint_rules converted="true" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="VdomIDE.IDEA.SDK.4.9" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="VdomIDE.mxml" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/core/src/VdomIDE.mxml">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="ModulesProxy.as" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="66" selection-start="389" selection-end="389" vertical-scroll-proportion="0.048295453">
+            <state relative-caret-position="629">
+              <caret line="37" column="72" lean-forward="false" selection-start-line="37" selection-start-column="72" selection-end-line="37" selection-end-column="72" />
               <folding>
-                <marker date="1366257482558" expanded="true" signature="580:1249" placeholder="{...}" />
-                <marker date="1366257482558" expanded="true" signature="1270:1400" placeholder="{...}" />
-                <marker date="1366257482558" expanded="true" signature="1421:1551" placeholder="{...}" />
-                <marker date="1366257482558" expanded="false" signature="1605:1756" placeholder="..." />
-                <marker date="1366257482558" expanded="true" signature="1982:2152" placeholder="{...}" />
+                <element signature="e#38#68#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModuleManager.as" pinned="false" current-in-tab="false">
+        <entry file="file://C:/dev/sdks/4.15.0/frameworks/projects/framework/src/mx/modules/ModuleManager.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="12410">
+              <caret line="769" column="31" lean-forward="false" selection-start-line="769" selection-start-column="31" selection-end-line="769" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Tree.mxml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/Tree.mxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+              <folding>
+                <marker date="1480568770668" expanded="true" signature="547:580" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="602:1271" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="1292:1422" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="1443:1573" ph="{...}" />
+                <marker date="1480568770668" expanded="false" signature="1624:1784" ph="..." />
+                <marker date="1480568770668" expanded="true" signature="2076:2127" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="2184:2212" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="2271:2301" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="2357:2383" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="2443:2466" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="2527:2551" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="2608:2631" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="2681:2793" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="2846:2913" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="2973:3048" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="3102:3227" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="3279:3347" ph="{...}" />
+                <marker date="1480568770668" expanded="true" signature="3408:3480" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ServerProxy.as" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ServerProxy.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4097">
+              <caret line="259" column="0" lean-forward="false" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SOAP.as" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/business/SOAP.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="235">
+              <caret line="288" column="11" lean-forward="false" selection-start-line="288" selection-start-column="11" selection-end-line="288" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="library.swf" pinned="false" current-in-tab="false">
+        <entry file="jar://C:/dev/sdks/4.15.0/frameworks/libs/air/airglobal.swc!/library.swf">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="53567">
+              <caret line="3151" column="20" lean-forward="false" selection-start-line="3151" selection-start-column="20" selection-end-line="3151" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VersionUtils.as" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/common/src/net/vdombox/utils/VersionUtils.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="14" column="29" lean-forward="false" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UpdateMediator.as" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/UpdateMediator.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1989">
+              <caret line="133" column="50" lean-forward="false" selection-start-line="133" selection-start-column="50" selection-end-line="133" selection-end-column="50" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WorkAreaSkin.mxml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="969">
+              <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+              <folding>
+                <marker date="1481096135031" expanded="true" signature="714:1328" ph="..." />
+                <marker date="1481096135031" expanded="true" signature="1619:2088" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="2184:2465" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="2559:2650" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="2721:2975" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="3044:3675" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="3226:3315" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="3353:3445" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="3746:4686" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="3838:4419" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="3873:3971" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="4766:4898" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="4971:5232" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="5002:5180" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="5322:5471" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="5544:5566" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="5646:5728" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="5805:5842" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="5928:6249" ph="{...}" />
+                <marker date="1481096135031" expanded="true" signature="5976:6244" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -119,57 +237,73 @@
       </file>
     </leaf>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>setCaseInsensitive</find>
+      <find>NativeWindowBoundsEvent</find>
+      <find>soap_loginOKHandler</find>
+      <find>SOAPEvent.LOGIN_OK</find>
+      <find>errorHandler</find>
+      <find>logonCompleteHandler</find>
+      <find>update</find>
+      <find>isNewerVersion</find>
+      <find>VersionUtils</find>
+      <find>moduleErrorHandler</find>
+    </findStrings>
+  </component>
   <component name="FindManager">
     <FindUsagesManager>
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
   <component name="IdeDocumentHistory">
-    <option name="changedFiles">
+    <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/ObjectTreePanelItemRenderer.mxml" />
-        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/TypeItemRenderer.mxml" />
-        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/ImageToolbar.mxml" />
-        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/toolbars/RichTextToolbar.mxml" />
-        <option value="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as" />
-        <option value="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/Linkage.as" />
-        <option value="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/ActionElement.mxml" />
-        <option value="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/WorkArea.as" />
+        <option value="$PROJECT_DIR$/core/src/VdomIDE-app.xml" />
+        <option value="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/managers/CacheManager.as" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/model/vo/RenderVO.as" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectAttributesPanel.mxml" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/attributeRenderers/ComboBoxObjectAttribute.mxml" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/model/MessageProxy.as" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/ResourceSelectorWindowMediator.as" />
+        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/attributeRenderers/ComboBoxAttribute.mxml" />
+        <option value="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/LibrariesPanel.mxml" />
+        <option value="$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/ServerScriptsPanel.mxml" />
         <option value="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml" />
-        <option value="$PROJECT_DIR$/Preview/src/net/vdombox/ide/modules/Preview2.mxml" />
-        <option value="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/DataBase.mxml" />
-        <option value="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/SettingsScreen.mxml" />
-        <option value="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/Toolset.mxml" />
-        <option value="$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/dataBase/view/components/ToolsetButton.mxml" />
-        <option value="$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/Events.mxml" />
-        <option value="$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectsTreePanel.mxml" />
+        <option value="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as" />
+        <option value="$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/business/SOAP.as" />
       </list>
     </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1456" />
-    <option name="height" value="876" />
+    <option name="width" value="1040" />
+    <option name="height" value="744" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
-    <OptionsSetting value="true" id="Add" />
-    <OptionsSetting value="true" id="Remove" />
-    <OptionsSetting value="true" id="Checkout" />
-    <OptionsSetting value="true" id="Update" />
-    <OptionsSetting value="true" id="Status" />
-    <OptionsSetting value="true" id="Edit" />
-    <OptionsSetting value="true" id="Undo Check Out" />
-    <OptionsSetting value="true" id="Get Latest Version" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
-    <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
     <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+    <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -179,18 +313,13 @@
       <autoscrollToSource />
       <autoscrollFromSource />
       <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
@@ -215,17 +344,137 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="managers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VdomIDE.IDEA.SDK.4.9" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="business" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="88" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="88" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="34" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="88" />
-    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.proportion" value="0.15332031" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder0" value="0" />
@@ -244,7 +493,6 @@
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth3" value="73" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="47" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="304" />
@@ -261,12 +509,326 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
     <property name="options.searchVisible" value="true" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="js.eslint.eslintPackage" value="" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
   </component>
   <component name="RunManager" selected="Flash App.Core">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
       <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
+      <module name="" />
+      <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <Java />
+      <Profilers>
+        <option name="ENABLE_ADVANCED_PROFILING" value="true" />
+        <option name="GAPID_ENABLED" value="false" />
+        <option name="GAPID_DISABLE_PCS" value="false" />
+        <option name="SUPPORT_LIB_ENABLED" value="true" />
+        <option name="INSTRUMENTATION_ENABLED" value="true" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="EXTRA_OPTIONS" value="" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <Java />
+      <Profilers>
+        <option name="ENABLE_ADVANCED_PROFILING" value="true" />
+        <option name="GAPID_ENABLED" value="false" />
+        <option name="GAPID_DISABLE_PCS" value="false" />
+        <option name="SUPPORT_LIB_ENABLED" value="true" />
+        <option name="INSTRUMENTATION_ENABLED" value="true" />
+      </Profilers>
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="ArquillianTestNG" factoryName="">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Cold Fusion runner description" factoryName="Cold Fusion" custom_browser="" web_path="">
+      <method />
+    </configuration>
+    <configuration default="true" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="myFilePath" />
+      <option name="GLUE" />
+      <option name="myNameFilter" />
+      <option name="myGeneratedName" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" appDescriptorForEmulator="Android" class_name="" emulatorAdlOptions="" method_name="" package_name="" scope="Class">
+      <option name="BCName" value="" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="moduleName" value="" />
+      <option name="trusted" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="run-app" />
+      <setting name="passParentEnv" value="true" />
+      <setting name="launchBrowser" value="true" />
+      <setting name="launchBrowserUrl" value="" />
+      <setting name="depsClasspath" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="JarApplication" factoryName="JAR Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="Java Scratch" factoryName="Java Scratch">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="SCRATCH_FILE_ID" value="0" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="DB" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
@@ -277,17 +839,10 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" appDescriptorForEmulator="Android" class_name="" emulatorAdlOptions="" method_name="" output_log_level="null" package_name="" scope="Class">
-      <option name="BCName" value="" />
-      <option name="launcherParameters">
-        <LauncherParameters>
-          <option name="browserFamily" value="FIREFOX" />
-          <option name="launcherType" value="OSDefault" />
-          <option name="playerPath" value="FlashPlayerDebugger.exe" />
-        </LauncherParameters>
-      </option>
-      <option name="moduleName" value="" />
-      <option name="trusted" value="true" />
+    <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
@@ -318,87 +873,26 @@
       <listeners />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
-    <configuration default="true" type="Application" factoryName="Application">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="" />
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
       <envs />
       <method />
     </configuration>
-    <configuration default="true" type="JUnit" factoryName="JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run-script" />
+      <scripts />
+      <node-interpreter value="project" />
       <envs />
-      <patterns />
       <method />
     </configuration>
-    <configuration default="true" type="FlashRunConfigurationType" factoryName="Flash App">
-      <option name="BCName" value="" />
-      <option name="IOSSimulatorSdkPath" value="" />
-      <option name="adlOptions" value="" />
-      <option name="airProgramParameters" value="" />
-      <option name="appDescriptorForEmulator" value="Android" />
-      <option name="debugTransport" value="USB" />
-      <option name="debuggerSdkRaw" value="BC SDK" />
-      <option name="emulator" value="NexusOne" />
-      <option name="emulatorAdlOptions" value="" />
-      <option name="fastPackaging" value="true" />
-      <option name="fullScreenHeight" value="0" />
-      <option name="fullScreenWidth" value="0" />
-      <option name="launchUrl" value="false" />
-      <option name="launcherParameters">
-        <LauncherParameters>
-          <option name="browserFamily" value="FIREFOX" />
-          <option name="launcherType" value="OSDefault" />
-          <option name="playerPath" value="FlashPlayerDebugger.exe" />
-        </LauncherParameters>
-      </option>
-      <option name="mobileRunTarget" value="Emulator" />
-      <option name="moduleName" value="" />
-      <option name="overriddenMainClass" value="" />
-      <option name="overriddenOutputFileName" value="" />
-      <option name="overrideMainClass" value="false" />
-      <option name="runTrusted" value="true" />
-      <option name="screenDpi" value="0" />
-      <option name="screenHeight" value="0" />
-      <option name="screenWidth" value="0" />
-      <option name="url" value="http://" />
-      <option name="usbDebugPort" value="7936" />
+    <configuration default="true" type="osgi.bnd.run" factoryName="Run Launcher">
+      <method />
+    </configuration>
+    <configuration default="true" type="osgi.bnd.run" factoryName="Test Launcher (JUnit)">
       <method />
     </configuration>
     <configuration default="false" name="Core" type="FlashRunConfigurationType" factoryName="Flash App">
@@ -417,8 +911,9 @@
       <option name="launchUrl" value="false" />
       <option name="launcherParameters">
         <LauncherParameters>
-          <option name="browserFamily" value="FIREFOX" />
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
           <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
           <option name="playerPath" value="FlashPlayerDebugger.exe" />
         </LauncherParameters>
       </option>
@@ -455,8 +950,9 @@
       <option name="launchUrl" value="false" />
       <option name="launcherParameters">
         <LauncherParameters>
-          <option name="browserFamily" value="FIREFOX" />
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
           <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
           <option name="playerPath" value="FlashPlayerDebugger.exe" />
         </LauncherParameters>
       </option>
@@ -493,8 +989,9 @@
       <option name="launchUrl" value="false" />
       <option name="launcherParameters">
         <LauncherParameters>
-          <option name="browserFamily" value="FIREFOX" />
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
           <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
           <option name="playerPath" value="FlashPlayerDebugger.exe" />
         </LauncherParameters>
       </option>
@@ -529,8 +1026,9 @@
       <option name="launchUrl" value="false" />
       <option name="launcherParameters">
         <LauncherParameters>
-          <option name="browserFamily" value="FIREFOX" />
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
           <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
           <option name="playerPath" value="FlashPlayerDebugger.exe" />
         </LauncherParameters>
       </option>
@@ -565,8 +1063,9 @@
       <option name="launchUrl" value="false" />
       <option name="launcherParameters">
         <LauncherParameters>
-          <option name="browserFamily" value="FIREFOX" />
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
           <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
           <option name="playerPath" value="FlashPlayerDebugger.exe" />
         </LauncherParameters>
       </option>
@@ -601,8 +1100,9 @@
       <option name="launchUrl" value="false" />
       <option name="launcherParameters">
         <LauncherParameters>
-          <option name="browserFamily" value="FIREFOX" />
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
           <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
           <option name="playerPath" value="FlashPlayerDebugger.exe" />
         </LauncherParameters>
       </option>
@@ -635,8 +1135,9 @@
       <option name="launchUrl" value="false" />
       <option name="launcherParameters">
         <LauncherParameters>
-          <option name="browserFamily" value="FIREFOX" />
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
           <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
           <option name="playerPath" value="FlashPlayerDebugger.exe" />
         </LauncherParameters>
       </option>
@@ -669,8 +1170,9 @@
       <option name="launchUrl" value="false" />
       <option name="launcherParameters">
         <LauncherParameters>
-          <option name="browserFamily" value="FIREFOX" />
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
           <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
           <option name="playerPath" value="FlashPlayerDebugger.exe" />
         </LauncherParameters>
       </option>
@@ -702,87 +1204,27 @@
       <Port>5050</Port>
     </configuration>
   </component>
-  <component name="ShelveChangesManager" show_recycled="false" />
-  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="true" SSL_PROTOCOLS="all">
-    <option name="USER" value="" />
-    <option name="PASSWORD" value="" />
-    <option name="mySSHConnectionTimeout" value="30000" />
-    <option name="mySSHReadTimeout" value="30000" />
-    <option name="LAST_MERGED_REVISION" />
-    <option name="MERGE_DRY_RUN" value="false" />
-    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
-    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
-    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
-    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
-    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
-    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
-    <option name="FORCE_UPDATE" value="false" />
-    <option name="IGNORE_EXTERNALS" value="false" />
-    <configuration useDefault="false">C:\Users\andreev ap\AppData\Roaming\Subversion</configuration>
-    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
-    <supportedVersion>125</supportedVersion>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
   </component>
-  <component name="SvnFileUrlMappingImpl">
-    <option name="myMappingRoots">
-      <list>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\workspace\IDE" />
-          <option name="myCopyRoot" value="D:\workspace\IDE" />
-        </SvnCopyRootSimple>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\workspace\IDE\.idea" />
-          <option name="myCopyRoot" value="D:\workspace\IDE\.idea" />
-        </SvnCopyRootSimple>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\workspace\IDE\common" />
-          <option name="myCopyRoot" value="D:\workspace\IDE\common" />
-        </SvnCopyRootSimple>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\workspace\IDE\core" />
-          <option name="myCopyRoot" value="D:\workspace\IDE\core" />
-        </SvnCopyRootSimple>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\workspace\IDE\DB" />
-          <option name="myCopyRoot" value="D:\workspace\IDE\DB" />
-        </SvnCopyRootSimple>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\workspace\IDE\Events" />
-          <option name="myCopyRoot" value="D:\workspace\IDE\Events" />
-        </SvnCopyRootSimple>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\workspace\IDE\Preview" />
-          <option name="myCopyRoot" value="D:\workspace\IDE\Preview" />
-        </SvnCopyRootSimple>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\workspace\IDE\ResourceBrowser" />
-          <option name="myCopyRoot" value="D:\workspace\IDE\ResourceBrowser" />
-        </SvnCopyRootSimple>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\workspace\IDE\Scripts" />
-          <option name="myCopyRoot" value="D:\workspace\IDE\Scripts" />
-        </SvnCopyRootSimple>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\workspace\IDE\Wysiwyg" />
-          <option name="myCopyRoot" value="D:\workspace\IDE\Wysiwyg" />
-        </SvnCopyRootSimple>
-      </list>
-    </option>
-    <option name="myMoreRealMappingRoots">
-      <list>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="D:\workspace\IDE" />
-          <option name="myCopyRoot" value="D:\workspace\IDE" />
-        </SvnCopyRootSimple>
-      </list>
-    </option>
+  <component name="SvnConfiguration" myUseAcceleration="nothing" cleanupOnStartRun="true">
+    <configuration useDefault="false">C:\Users\andreev ap\AppData\Roaming\Subversion</configuration>
+    <supportedVersion>125</supportedVersion>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="8f9a5422-5edf-4986-b78b-45d5202af2ab" name="Default" comment="" />
       <created>1366007339145</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
       <updated>1366007339145</updated>
+      <workItem from="1481089219764" duration="13130000" />
+      <workItem from="1482057217445" duration="104000" />
     </task>
     <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="13234000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -805,107 +1247,73 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
+    <frame x="-8" y="-8" width="1040" height="744" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32914925" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32914925" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43933055" sideWeight="0.7790531" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="UML Diagrams" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.43810847" sideWeight="0.22094691" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.40864715" sideWeight="0.50143474" order="7" side_tool="false" content_ui="tabs" x="412" y="180" width="699" height="445" />
-      <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32914925" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="PlantUML" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14275466" sideWeight="0.5618915" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42677826" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Graphical Navigator" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.52022314" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.47698745" sideWeight="0.7661406" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32914925" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2752137" sideWeight="0.5064586" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42586398" sideWeight="0.49573562" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.40864715" sideWeight="0.50143474" order="7" side_tool="false" content_ui="tabs" x="412" y="180" width="699" height="445" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14795919" sideWeight="0.5618915" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44147158" sideWeight="0.608742" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="PlantUML" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="UML Diagrams" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="combo" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32914925" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33667782" sideWeight="0.6823028" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32914925" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2764505" sideWeight="0.49354145" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Graphical Navigator" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
     </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="processedProjectFiles" value="true" />
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
-    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="CHECK_NEW_TODO" value="true" />
-    <option name="myTodoPanelSettings">
-      <value>
-        <are-packages-shown value="false" />
-        <are-modules-shown value="false" />
-        <flatten-packages value="false" />
-        <is-autoscroll-to-source value="false" />
-      </value>
-    </option>
-    <option name="PERFORM_UPDATE_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_COMMIT_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
-    <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="false" />
-    <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
-    <option name="SHOW_ONLY_CHANGED_IN_SELECTION_DIFF" value="true" />
-    <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="true" />
-    <option name="DEFAULT_PATCH_EXTENSION" value="patch" />
-    <option name="SHORT_DIFF_HORIZONTALLY" value="true" />
-    <option name="SHORT_DIFF_EXTRA_LINES" value="2" />
-    <option name="SOFT_WRAPS_IN_SHORT_DIFF" value="true" />
-    <option name="INCLUDE_TEXT_INTO_PATCH" value="false" />
-    <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
-    <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
-    <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
-    <option name="SHOW_DIRTY_RECURSIVELY" value="false" />
-    <option name="LIMIT_HISTORY" value="true" />
-    <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
-    <option name="UPDATE_FILTER_SCOPE_NAME" />
-    <option name="USE_COMMIT_MESSAGE_MARGIN" value="false" />
-    <option name="COMMIT_MESSAGE_MARGIN_SIZE" value="72" />
-    <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
-    <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" />
-    <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
-    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
-    <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
-    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
-    <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
-    <option name="FILE_HISTORY_DIALOG_COMMENTS_SPLITTER_PROPORTION" value="0.8" />
-    <option name="FILE_HISTORY_DIALOG_SPLITTER_PROPORTION" value="0.5" />
-    <option name="ACTIVE_VCS_NAME" />
-    <option name="UPDATE_GROUP_BY_PACKAGES" value="false" />
-    <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
-    <option name="UPDATE_FILTER_BY_SCOPE" value="false" />
-    <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
-    <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="flex">
+          <url>file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/business/SOAP.as</url>
+          <line>190</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="flex">
           <url>file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as</url>
-          <line>203</line>
+          <line>207</line>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="1" />
+      <option name="time" value="5" />
     </breakpoint-manager>
+    <watches-manager />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />
@@ -916,107 +1324,439 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/DataBase.mxml">
+    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="61" selection-start="281" selection-end="281" vertical-scroll-proportion="0.05214724" />
+        <state relative-caret-position="629">
+          <caret line="37" column="72" lean-forward="false" selection-start-line="37" selection-start-column="72" selection-end-line="37" selection-end-column="72" />
+          <folding>
+            <element signature="e#38#68#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/dev/sdks/4.15.0/frameworks/projects/framework/src/mx/modules/ModuleManager.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12410">
+          <caret line="769" column="31" lean-forward="false" selection-start-line="769" selection-start-column="31" selection-end-line="769" selection-end-column="31" />
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/Tree.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="0" selection-start="625" selection-end="625" vertical-scroll-proportion="0.048991356" />
+        <state relative-caret-position="425">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding>
+            <marker date="1480568770668" expanded="true" signature="547:580" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="602:1271" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="1292:1422" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="1443:1573" ph="{...}" />
+            <marker date="1480568770668" expanded="false" signature="1624:1784" ph="..." />
+            <marker date="1480568770668" expanded="true" signature="2076:2127" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2184:2212" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2271:2301" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2357:2383" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2443:2466" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2527:2551" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2608:2631" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2681:2793" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2846:2913" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2973:3048" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="3102:3227" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="3279:3347" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="3408:3480" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ServerProxy.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4097">
+          <caret line="259" column="0" lean-forward="false" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/business/SOAP.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/dev/sdks/4.15.0/frameworks/libs/air/airglobal.swc!/library.swf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="53567">
+          <caret line="3151" column="20" lean-forward="false" selection-start-line="3151" selection-start-column="20" selection-end-line="3151" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/src/net/vdombox/utils/VersionUtils.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="14" column="29" lean-forward="false" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/UpdateMediator.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1989">
+          <caret line="133" column="50" lean-forward="true" selection-start-line="133" selection-start-column="50" selection-end-line="133" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="969">
+          <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+          <folding>
+            <marker date="1481096135031" expanded="true" signature="714:1328" ph="..." />
+            <marker date="1481096135031" expanded="true" signature="1619:2088" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="2184:2465" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="2559:2650" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="2721:2975" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3044:3675" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3226:3315" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3353:3445" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3746:4686" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3838:4419" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3873:3971" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="4766:4898" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="4971:5232" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5002:5180" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5322:5471" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5544:5566" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5646:5728" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5805:5842" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5928:6249" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5976:6244" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/VdomIDE.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DB/src/net/vdombox/ide/modules/DataBase.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="10" column="61" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/Scripts.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="580" selection-end="580" vertical-scroll-proportion="0.048991356" />
+        <state relative-caret-position="0">
+          <caret line="20" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ResourceBrowser/src/net/vdombox/ide/modules/ResourceBrowser.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="589" selection-end="589" vertical-scroll-proportion="0.048991356" />
+        <state relative-caret-position="0">
+          <caret line="20" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/common/src/net/vdombox/ide/common/view/skins/PopupWindowGripperSkin.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="44" selection-start="881" selection-end="881" vertical-scroll-proportion="0.2651297" />
+        <state relative-caret-position="0">
+          <caret line="36" column="44" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/EventElement.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="45" selection-start="2049" selection-end="2049" vertical-scroll-proportion="0.048991356" />
+        <state relative-caret-position="0">
+          <caret line="63" column="45" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/components/Body.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="47" selection-start="130" selection-end="130" vertical-scroll-proportion="0.048991356" />
+        <state relative-caret-position="0">
+          <caret line="2" column="47" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/Events.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="0" selection-start="1321" selection-end="1321" vertical-scroll-proportion="-0.65384614">
-          <folding />
+        <state relative-caret-position="0">
+          <caret line="35" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/framework/src/mx/binding/utils/BindingUtils.as">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="200" column="5" selection-start="8371" selection-end="8371" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ExternalEditorWindow.as">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="126" column="0" selection-start="3052" selection-end="3052" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/framework/src/mx/core/UIComponent.as">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13159" column="0" selection-start="428893" selection-end="428893" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/framework/src/mx/binding/utils/BindingUtils.as" />
+    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/framework/src/mx/core/UIComponent.as" />
     <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/itemrenderer/ObjectTreePanelItemRenderer.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="29" selection-start="1873" selection-end="1873" vertical-scroll-proportion="0.0">
-          <folding />
+        <state relative-caret-position="0">
+          <caret line="83" column="29" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectsTreePanel.mxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="245" column="71" selection-start="6879" selection-end="6879" vertical-scroll-proportion="0.38857144">
+        <state relative-caret-position="0">
+          <caret line="245" column="71" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/spark/src/spark/components/supportClasses/ListBase.as" />
+    <entry file="file://$PROJECT_DIR$/core/src/VdomIDE.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="20" column="37" lean-forward="false" selection-start-line="20" selection-start-column="37" selection-end-line="20" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/VdomIDE-app.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="213" column="29" lean-forward="false" selection-start-line="213" selection-start-column="29" selection-end-line="213" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/VdomIDE-app.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="110" column="8" lean-forward="false" selection-start-line="110" selection-start-column="8" selection-end-line="110" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/managers/CacheManager.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/windows/ExternalEditorWindow.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="15" column="35" lean-forward="false" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/dev/sdks/4.15.0/frameworks/projects/airspark/src/spark/components/Window.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="64" column="47" lean-forward="false" selection-start-line="64" selection-start-column="47" selection-end-line="64" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/model/vo/RenderVO.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="105" column="41" lean-forward="false" selection-start-line="105" selection-start-column="41" selection-end-line="105" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/panels/ObjectAttributesPanel.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-969">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/attributeRenderers/ComboBoxObjectAttribute.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1190">
+          <caret line="14" column="51" lean-forward="false" selection-start-line="14" selection-start-column="48" selection-end-line="14" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/HTML.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="9" column="46" lean-forward="false" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/model/MessageProxy.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/ResourceSelectorWindowMediator.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-321">
+          <caret line="25" column="22" lean-forward="false" selection-start-line="25" selection-start-column="22" selection-end-line="25" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Wysiwyg/src/net/vdombox/ide/modules/wysiwyg/view/components/attributeRenderers/ComboBoxAttribute.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="82" column="13" lean-forward="false" selection-start-line="82" selection-start-column="13" selection-end-line="82" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/dev/sdks/4.15.0/frameworks/projects/framework/src/mx/collections/SortField.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="141" column="42" lean-forward="false" selection-start-line="141" selection-start-column="27" selection-end-line="141" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/LibrariesPanel.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/src/net/vdombox/ide/modules/scripts/view/components/ServerScriptsPanel.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="84" column="49" lean-forward="false" selection-start-line="84" selection-start-column="49" selection-end-line="84" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/dev/sdks/4.15.0/frameworks/projects/apache/src/org/apache/flex/collections/VectorCollection.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="61" column="20" lean-forward="false" selection-start-line="61" selection-start-column="20" selection-end-line="61" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ServerProxy.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4097">
+          <caret line="259" column="0" lean-forward="false" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Events/src/net/vdombox/ide/modules/events/view/skins/WorkAreaSkin.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="969">
+          <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+          <folding>
+            <marker date="1481096135031" expanded="true" signature="714:1328" ph="..." />
+            <marker date="1481096135031" expanded="true" signature="1619:2088" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="2184:2465" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="2559:2650" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="2721:2975" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3044:3675" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3226:3315" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3353:3445" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3746:4686" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3838:4419" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="3873:3971" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="4766:4898" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="4971:5232" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5002:5180" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5322:5471" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5544:5566" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5646:5728" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5805:5842" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5928:6249" ph="{...}" />
+            <marker date="1481096135031" expanded="true" signature="5976:6244" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tree/src/net/vdombox/ide/modules/Tree.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding>
+            <marker date="1480568770668" expanded="true" signature="547:580" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="602:1271" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="1292:1422" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="1443:1573" ph="{...}" />
+            <marker date="1480568770668" expanded="false" signature="1624:1784" ph="..." />
+            <marker date="1480568770668" expanded="true" signature="2076:2127" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2184:2212" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2271:2301" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2357:2383" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2443:2466" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2527:2551" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2608:2631" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2681:2793" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2846:2913" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="2973:3048" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="3102:3227" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="3279:3347" ph="{...}" />
+            <marker date="1480568770668" expanded="true" signature="3408:3480" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tree/bin/net/vdombox/ide/modules/Tree.mxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="47" lean-forward="false" selection-start-line="2" selection-start-column="47" selection-end-line="2" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/dev/sdks/4.15.0/frameworks/projects/framework/src/mx/modules/ModuleManager.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12410">
+          <caret line="769" column="31" lean-forward="false" selection-start-line="769" selection-start-column="31" selection-end-line="769" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/ModulesProxy.as">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="205" column="48" selection-start="5560" selection-end="5560" vertical-scroll-proportion="0.53168046">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Program Files/Adobe/sdks/4.9.0/frameworks/projects/spark/src/spark/components/supportClasses/ListBase.as">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1643" column="52" selection-start="56485" selection-end="56538" vertical-scroll-proportion="0.045212764">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/VdomIDE.mxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="66" selection-start="389" selection-end="389" vertical-scroll-proportion="0.048295453">
+        <state relative-caret-position="629">
+          <caret line="37" column="72" lean-forward="false" selection-start-line="37" selection-start-column="72" selection-end-line="37" selection-end-column="72" />
           <folding>
-            <marker date="1366257482558" expanded="true" signature="580:1249" placeholder="{...}" />
-            <marker date="1366257482558" expanded="true" signature="1270:1400" placeholder="{...}" />
-            <marker date="1366257482558" expanded="true" signature="1421:1551" placeholder="{...}" />
-            <marker date="1366257482558" expanded="false" signature="1605:1756" placeholder="..." />
-            <marker date="1366257482558" expanded="true" signature="1982:2152" placeholder="{...}" />
+            <element signature="e#38#68#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/src/net/vdombox/utils/VersionUtils.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="14" column="29" lean-forward="false" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/view/UpdateMediator.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1989">
+          <caret line="133" column="50" lean-forward="false" selection-start-line="133" selection-start-column="50" selection-end-line="133" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/dev/sdks/4.15.0/frameworks/libs/air/airglobal.swc!/library.swf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="53567">
+          <caret line="3151" column="20" lean-forward="false" selection-start-line="3151" selection-start-column="20" selection-end-line="3151" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/dev/sdks/4.15.0/frameworks/projects/framework/src/mx/resources/ResourceManager.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-659">
+          <caret line="56" column="13" lean-forward="false" selection-start-line="56" selection-start-column="13" selection-end-line="56" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/net/vdombox/ide/core/model/business/SOAP.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="288" column="11" lean-forward="false" selection-start-line="288" selection-start-column="11" selection-end-line="288" selection-end-column="11" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1049,7 +1789,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
-          <last-edited>src</last-edited>
+          <last-edited>libs</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1061,7 +1801,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>4.9.0</last-edited>
+          <last-edited>4.15.0</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1073,7 +1813,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>Wysiwyg|Wysiwyg</last-edited>
+          <last-edited>Tree|Tree</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1085,7 +1825,7 @@
       </state>
       <state key="ProjectJDKs.UI">
         <settings>
-          <last-edited>4.5.1</last-edited>
+          <last-edited>4.6.0</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1097,6 +1837,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
+          <last-edited>airglobal</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1109,4 +1850,3 @@
     </states>
   </component>
 </project>
-

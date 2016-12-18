@@ -76,8 +76,7 @@
 
 					_scripts.sort = new Sort();
 
-					var sortField : SortField = new SortField( "name" );
-					sortField.caseInsensitive = true;
+					var sortField : SortField = new SortField( "name", true );
 
 					_scripts.sort.fields = [ sortField ];
 					_scripts.refresh();

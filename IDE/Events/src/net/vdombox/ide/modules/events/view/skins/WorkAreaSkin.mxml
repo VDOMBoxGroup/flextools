@@ -17,10 +17,12 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
-			import mx.collections.VectorCollection;
+
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
-			
+
+			import org.apache.flex.collections.VectorCollection;
+
 			import spark.events.IndexChangeEvent;
 			
 			import net.vdombox.ide.common.view.components.VDOMImage;

@@ -15,6 +15,8 @@ package net.vdombox.ide.core.model
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
+import spark.components.Window;
+
 	/**
 	 * @flowerModelElementId _DDnEgEomEeC-JfVEe_-0Aw
 	 */
@@ -33,7 +35,7 @@ package net.vdombox.ide.core.model
 				<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
 				<module name="Preview" path="/modules/Preview/Preview2.swf"/>
 				<module name="Events" path="app:/modules/Events/Events.swf"/>
-				<module name="Trees" path="/modules/Tree/Tree.swf"/>
+				<module name="Trees" path="app:/modules/Tree/Tree.swf"/>
 				<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
 				<module name="DB" path="/modules/DataBase/DataBase.swf"/>
 				<module name="Resources" path="app:/modules/ResourceBrowser/ResourceBrowser.swf"/>
@@ -167,8 +169,9 @@ package net.vdombox.ide.core.model
 				return;
 			}
 
-			var moduleVO : ModuleVO = modulesForLoadQue.shift();
 
+			var moduleVO : ModuleVO = modulesForLoadQue.shift();
+            trace(moduleVO.moduleName , " : ", moduleVO.path);
 			sendNotification( ApplicationFacade.MODULE_LOADING_START, moduleVO );
 
 			moduleInfo = ModuleManager.getModule( moduleVO.path );
@@ -201,7 +204,7 @@ package net.vdombox.ide.core.model
 
 		private function moduleErrorHandler( event : ModuleEvent ) : void
 		{
-			trace("moduleErrorHandler");
+			trace("moduleErrorHandler: " +event.errorText);
 			var moduleVO : ModuleVO = event.module.data as ModuleVO;
 			sendNotification( ApplicationFacade.MODULES_LOADING_ERROR, moduleVO );
 		}

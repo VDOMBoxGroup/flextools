@@ -72,8 +72,7 @@
 
 					_libraries.sort = new Sort();
 
-					var sortField : SortField = new SortField( "name" );
-					sortField.caseInsensitive = true;
+					var sortField : SortField = new SortField( "name", true );
 
 					_libraries.sort.fields = [ sortField ];
 					_libraries.refresh();

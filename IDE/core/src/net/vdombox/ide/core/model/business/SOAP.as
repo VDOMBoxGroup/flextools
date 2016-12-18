@@ -119,7 +119,7 @@ package net.vdombox.ide.core.model.business
 			throw new Error( message );
 		}
 
-		override flash_proxy function callProperty( name : *, ... args : Array ) : *
+		override flash_proxy function callProperty( name : *, ... args  ) : *
 		{
 			var functionName : String = getLocalName( name );
 			var operation : Operation = webService.getOperation( functionName ) as Operation;
@@ -230,6 +230,7 @@ package net.vdombox.ide.core.model.business
 		{
 			var resultXML : XML = new XML( <Result/> );
 
+			trace("Result: ", event.result );
 			try
 			{
 				resultXML.appendChild( XMLList( event.result ) );

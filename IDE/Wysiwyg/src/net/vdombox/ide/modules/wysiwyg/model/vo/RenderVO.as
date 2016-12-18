@@ -1,11 +1,13 @@
 package net.vdombox.ide.modules.wysiwyg.model.vo
 {
-	import mx.collections.VectorCollection;
+
 	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.model._vo.AttributeVO;
 
-	[Bindable]
+import org.apache.flex.collections.VectorCollection;
+
+[Bindable]
 	public class RenderVO
 	{
 		public function RenderVO( vdomObjectVO : IVDOMObjectVO )

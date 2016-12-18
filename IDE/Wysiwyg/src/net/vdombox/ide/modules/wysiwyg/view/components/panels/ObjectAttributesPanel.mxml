@@ -10,7 +10,6 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
-			import mx.collections.VectorCollection;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.common.model._vo.AttributeDescriptionVO;
@@ -26,6 +25,8 @@
 			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeBase;
 			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ComboBoxAttribute;
 			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ComboBoxObjectAttribute;
+
+			import org.apache.flex.collections.VectorCollection;
 
 			private var _attributesVO : VdomObjectAttributesVO;
 

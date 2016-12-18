@@ -23,7 +23,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
-	import mx.collections.VectorCollection;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	import mx.resources.ResourceManager;
@@ -42,8 +41,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.view.components.windows.resourceBrowserWindow.ResourcePreviewWindow;
 	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	import net.vdombox.utils.WindowManager;
-	
-	import org.puremvc.as3.multicore.interfaces.IMediator;
+
+import org.apache.flex.collections.VectorCollection;
+
+import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 

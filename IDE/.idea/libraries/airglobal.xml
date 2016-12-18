@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="airglobal" type="flex">
+    <CLASSES>
+      <root url="jar://C:/dev/sdks/4.15.0/frameworks/libs/air/airglobal.swc!/" />
+      <root url="jar://C:/dev/sdks/4.15.0/frameworks/libs/air/airspark.swc!/" />
+      <root url="file://C:/dev/sdks/4.15.0/frameworks/libs/air" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://C:/dev/sdks/4.15.0/frameworks/libs/air" recursive="false" />
+  </library>
+</component>

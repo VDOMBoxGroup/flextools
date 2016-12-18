@@ -9,7 +9,7 @@
               <dependency linkage="Merged" />
             </entry>
           </entries>
-          <sdk name="4.9.0" />
+          <sdk name="4.15.0" />
         </dependencies>
         <compiler-options>
           <map>
@@ -19,7 +19,6 @@
         </compiler-options>
         <packaging-air-desktop use-generated-descriptor="false" custom-descriptor-path="$MODULE_DIR$/src/VdomIDE-app.xml" package-file-name="VdomIDE">
           <files-to-package>
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/icons" path-in-package="icons" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/assets" path-in-package="assets" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/gallery" path-in-package="gallery" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/VdomIDE.css" path-in-package="VdomIDE.css" />
@@ -42,9 +41,8 @@
       <sourceFolder url="file://$MODULE_DIR$/locale/ru_RU" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/modules" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="4.9.0" jdkType="Flex SDK Type (new)" />
+    <orderEntry type="jdk" jdkName="4.15.0" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ide_lib" exported="" />
   </component>
 </module>
-

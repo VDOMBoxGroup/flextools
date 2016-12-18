@@ -9,9 +9,11 @@ package net.vdombox.ide.core.model.managers
 	import mx.collections.IViewCursor;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
-	import mx.collections.VectorCollection;
+//	import mx.collections.VectorCollection;
 
-	public class CacheManager
+import org.apache.flex.collections.VectorCollection;
+
+public class CacheManager
 	{
 
 		private static var instance : CacheManager;

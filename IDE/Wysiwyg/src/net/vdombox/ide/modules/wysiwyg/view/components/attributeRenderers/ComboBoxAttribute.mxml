@@ -8,9 +8,10 @@
 		<![CDATA[
 			import mx.collections.Sort;
 			import mx.collections.SortField;
-			import mx.collections.VectorCollection;
-			
+
 			import net.vdombox.ide.common.model._vo.AttributeVO;
+
+			import org.apache.flex.collections.VectorCollection;
 
 			private var _attributeVO : AttributeVO;
 			

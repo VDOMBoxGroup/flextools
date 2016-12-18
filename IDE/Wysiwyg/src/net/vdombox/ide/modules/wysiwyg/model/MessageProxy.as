@@ -1,6 +1,5 @@
 package net.vdombox.ide.modules.wysiwyg.model
 {
-	import mx.collections.VectorCollection;
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.controller.messages.ProxyMessage;
@@ -10,8 +9,10 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import net.vdombox.ide.common.model._vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.RendererBase;
-	
-	import org.puremvc.as3.multicore.interfaces.IProxy;
+
+import org.apache.flex.collections.VectorCollection;
+
+import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class MessageProxy extends Proxy implements IProxy
