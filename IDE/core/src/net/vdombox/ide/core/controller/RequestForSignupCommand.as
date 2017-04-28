@@ -5,7 +5,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.model.vo.HostVO;
 	import net.vdombox.ide.core.view.LoginViewMediator;
 	import net.vdombox.utils.MD5Utils;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -24,6 +24,8 @@ package net.vdombox.ide.core.controller
 			var hostname : String = loginViewMediator.hostname;
 			if ( hostname.substr( 0, 7 ) == "http://" )
 				hostname = hostname.substring( 7, hostname.length );
+			else if ( hostname.substr( 0, 8 ) == "https://" )
+				hostname = hostname.substring( 8, hostname.length );
 
 
 
@@ -43,8 +45,8 @@ package net.vdombox.ide.core.controller
 			{
 				password = MD5Utils.encrypt( loginViewMediator.password );
 			}
-
-			hostVO = new HostVO( hostname, loginViewMediator.username, password, loginViewMediator.selectedLanguage );
+			var ssl : Boolean = loginViewMediator.usedSSL;
+			hostVO = new HostVO( hostname, loginViewMediator.username, password, loginViewMediator.selectedLanguage, ssl );
 			hostVO = sharedObjectProxy.equalHost( hostVO );
 
 
@@ -54,7 +56,7 @@ package net.vdombox.ide.core.controller
 			}
 			else
 			{
-				hostVO = new HostVO( hostname, loginViewMediator.username, password, loginViewMediator.selectedLanguage );
+				hostVO = new HostVO( hostname, loginViewMediator.username, password, loginViewMediator.selectedLanguage, ssl );
 
 			}
 

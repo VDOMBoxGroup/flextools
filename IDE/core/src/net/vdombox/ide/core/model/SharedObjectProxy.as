@@ -4,12 +4,12 @@ package net.vdombox.ide.core.model
 	
 	import mx.collections.ArrayCollection;
 	
+	import net.vdombox.ide.common.model.LogProxy;
 	import net.vdombox.ide.core.model.vo.HostVO;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-	import net.vdombox.ide.common.model.LogProxy;
 
 	/**
 	 * ResourcesProxy is wrapper on SharedObject.
@@ -56,11 +56,14 @@ package net.vdombox.ide.core.model
 		private function buildHost() : HostVO
 		{
 			var host : String = shObjData.data[ "host" + strI ] as String;
+			var ssl : Boolean = shObjData.data[ "ssl" + strI ] as String == "true";
 			var user : String = shObjData.data[ "user" + strI ] as String;
 			var password : String = shObjData.data[ "password" + strI ] as String;
-			var local : LocaleVO = new LocaleVO( shObjData.data[ "localcode" + strI ] as String, shObjData.data[ "localdescription" + strI ] as String );
+			var localcode : String =shObjData.data[ "localcode" + strI ] as String;
+			var localdescription : String =shObjData.data[ "localdescription" + strI ] as String;
+			var local : LocaleVO = new LocaleVO( localcode,  localdescription);
 
-			return new HostVO( host, user, password, local );
+			return new HostVO( host, user, password, local, ssl );
 		}
 
 		public function get hosts() : ArrayCollection
@@ -85,7 +88,11 @@ package net.vdombox.ide.core.model
 			i = 0;
 			while ( shObjData.data[ "host" + i.toString() ] )
 			{
-				if ( hostValue.host == shObjData.data[ "host" + strI ] as String && hostValue.user == shObjData.data[ "user" + strI ] as String && hostValue.password == shObjData.data[ "password" + strI ] as String && hostValue.local.code == shObjData.data[ "localcode" + strI ] as String )
+				if ( hostValue.host == shObjData.data[ "host" + strI ] as String 
+					&& hostValue.ssl == (shObjData.data[ "ssl" + strI ] as String == "true") 
+					&& hostValue.user == shObjData.data[ "user" + strI ] as String 
+					&& hostValue.password == shObjData.data[ "password" + strI ] as String 
+					&& hostValue.local.code == shObjData.data[ "localcode" + strI ] as String )
 				{
 					hostVO = buildHost();
 					return hostVO;
@@ -137,6 +144,7 @@ package net.vdombox.ide.core.model
 			function setValue() : void
 			{
 				shObjData.data[ "host" + strI ] = value.host;
+				shObjData.data[ "ssl" + strI ] = value.ssl.toString();
 				shObjData.data[ "user" + strI ] = value.user;
 				shObjData.data[ "password" + strI ] = value.password;
 				if ( value.local )
@@ -158,6 +166,7 @@ package net.vdombox.ide.core.model
 				if ( decNeed )
 				{
 					shObjData.data[ "host" + ( i - 1 ).toString() ] = shObjData.data[ "host" + strI ];
+					shObjData.data[ "ssl" + ( i - 1 ).toString() ] = shObjData.data[ "ssl" + strI ];
 					shObjData.data[ "user" + ( i - 1 ).toString() ] = shObjData.data[ "user" + strI ];
 					shObjData.data[ "password" + ( i - 1 ).toString() ] = shObjData.data[ "password" + strI ];
 					shObjData.data[ "localcode" + ( i - 1 ).toString() ] = shObjData.data[ "localcode" + strI ];
@@ -200,6 +209,7 @@ package net.vdombox.ide.core.model
 			}
 
 			shObjData.data[ "lasthost" ] = value.host;
+			shObjData.data[ "lastssl" ] = value.ssl;
 			shObjData.data[ "lastuser" ] = value.user;
 			shObjData.data[ "lastpassword" ] = value.password;
 			shObjData.data[ "lastlocalcode" ] = value.local.code;
@@ -211,11 +221,12 @@ package net.vdombox.ide.core.model
 			if ( shObjData.data[ "lasthost" ] )
 			{
 				var host : String = shObjData.data[ "lasthost" ] as String;
+				var ssl : Boolean = shObjData.data[ "lastssl" ] as String == "true";
 				var user : String = shObjData.data[ "lastuser" ] as String;
 				var password : String = shObjData.data[ "lastpassword" ] as String;
 				var local : LocaleVO = new LocaleVO( shObjData.data[ "lastlocalcode" ] as String, shObjData.data[ "lastlocaldescription" ] as String );
 
-				return new HostVO( host, user, password, local );
+				return new HostVO( host, user, password, local, ssl );
 			}
 			else
 			{

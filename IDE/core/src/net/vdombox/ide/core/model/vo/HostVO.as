@@ -3,12 +3,13 @@ package net.vdombox.ide.core.model.vo
 
 	public class HostVO
 	{
-		public function HostVO( host : String, user : String, password : String, local : LocaleVO )
+		public function HostVO( host : String, user : String, password : String, local : LocaleVO, ssl : Boolean  )
 		{
 			_host = host;
 			_user = user;
 			_password = password;
 			_local = local;
+			_ssl = ssl;
 			save = false;
 		}
 
@@ -20,11 +21,23 @@ package net.vdombox.ide.core.model.vo
 
 		private var _local : LocaleVO;
 
+		private var _ssl : Boolean;
+		
 		public var save : Boolean;
 
 		public function get host() : String
 		{
 			return _host;
+		}
+		
+		public function get ssl() : Boolean
+		{
+			return _ssl;
+		}
+		
+		public function set ssl( value : Boolean ) : void
+		{
+			_ssl = value;
 		}
 
 		public function get user() : String

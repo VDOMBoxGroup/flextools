@@ -10,6 +10,7 @@ package net.vdombox.ide.core.model.vo
 		private var _hostname : String;
 
 		private var _serverVersion : String;
+		private var _useSSL : Boolean;
 
 		public function get username() : String
 		{
@@ -31,15 +32,21 @@ package net.vdombox.ide.core.model.vo
 			var wsdlPath : String;
 
 			if ( _hostname )
-				wsdlPath = "http://" + _hostname + "/vdom.wsdl";
-
+			{
+				wsdlPath = _useSSL ? "https://" : "http://";
+				wsdlPath +=  _hostname + "/vdom.wsdl";
+			}
+				
+			trace(wsdlPath);
 			return wsdlPath;
 		}
 
-		public function setHostname( value : String ) : void
+		public function setHostname( value : String, ssl :Boolean ) : void
 		{
 			_hostname = value;
+			_useSSL = ssl;
 		}
+		
 
 		public function setUsername( value : String ) : void
 		{

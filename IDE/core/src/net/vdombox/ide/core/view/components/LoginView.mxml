@@ -102,10 +102,11 @@
 
 			protected function saveButton_clickHandler( event : MouseEvent ) : void
 			{
-				if ( saveButton.currentState == "save" )
-					saveButton.currentState = "notsave";
+				var sButton: SaveButton = event.currentTarget as SaveButton;
+				if ( sButton.currentState == "save" )
+					sButton.currentState = "notsave";
 				else
-					saveButton.currentState = "save";
+					sButton.currentState = "save";
 			}
 
 			protected function selectLang_creationCompleteHandler( event : FlexEvent ) : void
@@ -132,16 +133,26 @@
 					 fontSize="14"
 					 textAlign="left"/>
 
-			<components:ComboBoxLogin id="host"
-									  openOnInput="false"
-									  labelField="host"
-									  width="100%"
-									  height="31"
-									  fontSize="18"
-									  fontFamily="Arial"
-									  focusIn="{deleteHost.visible = true}"
-									  focusOut="{deleteHost.visible = false}"
-									  keyDown="{keyDownHandler(event)}"/>
+			
+			<s:HGroup width="100%"
+					  gap="4">
+				<components:ComboBoxLogin id="host"
+											  openOnInput="false"
+											  labelField="host"
+											  width="100%"
+											  height="31"
+											  fontSize="18"
+											  fontFamily="Arial"
+											  focusIn="{deleteHost.visible = true}"
+											  focusOut="{deleteHost.visible = false}"
+											  keyDown="{keyDownHandler(event)}"/>
+				
+				<components:SaveButton id="ssl" btnLabel="SSL"
+									   height="31"
+									   width="58"
+									   click="saveButton_clickHandler(event)"/>
+				
+			</s:HGroup>
 
 		</s:VGroup>
 

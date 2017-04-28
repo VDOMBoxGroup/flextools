@@ -1,8 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <projectDescription>
-	<name>VdomIDE</name>
-	<comment></comment>
+	<name>core</name>
+	<comment/>
 	<projects>
+		<project>DB</project>
+		<project>Events</project>
+		<project>Preview</project>
+		<project>ResourceBrowser</project>
+		<project>Scripts</project>
+		<project>Tree</project>
+		<project>Wysiwyg</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -28,3 +35,4 @@
 		</variable>
 	</variableList>
 </projectDescription>
+

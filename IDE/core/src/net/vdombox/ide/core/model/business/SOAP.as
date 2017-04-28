@@ -5,7 +5,7 @@ package net.vdombox.ide.core.model.business
 	import flash.events.IEventDispatcher;
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
-
+	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	import mx.rpc.AsyncToken;
@@ -15,8 +15,8 @@ package net.vdombox.ide.core.model.business
 	import mx.rpc.soap.LoadEvent;
 	import mx.rpc.soap.Operation;
 	import mx.rpc.soap.SOAPFault;
-	import mx.rpc.soap.WebService;
-
+	import mx.rpc.soap.mxml.WebService;
+	
 	import net.vdombox.ide.core.events.SOAPErrorEvent;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.protect.Code;
@@ -63,7 +63,7 @@ package net.vdombox.ide.core.model.business
 			webService = new WebService();
 			webService.wsdl = wsdl;
 			webService.useProxy = false;
-
+			
 			webService.addEventListener( LoadEvent.LOAD, loadHandler );
 			webService.addEventListener( FaultEvent.FAULT, faultHandler );
 
@@ -115,7 +115,8 @@ package net.vdombox.ide.core.model.business
 
 		override flash_proxy function setProperty( name : *, value : * ) : void
 		{
-			var message : String = resourceManager.getString( "rpc", "operationsNotAllowedInService", [ getLocalName( name ) ] );
+			//var message : String = resourceManager.getString( "rpc", "operationsNotAllowedInService", [ getLocalName( name ) ] );
+            var message : String = "Error: " + getLocalName( name ) ;
 			throw new Error( message );
 		}
 
@@ -154,8 +155,7 @@ package net.vdombox.ide.core.model.business
 		{
 			if ( isLoadWSDLProcess )
 			{
-				isLoadWSDLProcess = false;
-
+				isLoadWSDLProcess = false;			
 				var see : SOAPErrorEvent = new SOAPErrorEvent( SOAPErrorEvent.CONNECTION_ERROR );
 
 				see.faultCode = event.fault.faultCode;
@@ -174,16 +174,28 @@ package net.vdombox.ide.core.model.business
 
 		private function logonCompleteHandler( event : ResultEvent ) : void
 		{
+			if(event.result == "None")
+			{
+				var see : SOAPErrorEvent = new SOAPErrorEvent( SOAPErrorEvent.LOGIN_ERROR );
+				
+				see.faultCode = "103";
+				see.faultString = "Login Error.";
+				see.faultDetail = "Please check your logind and password";
+				
+				dispatchEvent( see );
+				return;
+			}
+				
 			var resultXML : XML = new XML( <Result/> );
 			resultXML.appendChild( XMLList( event.result ) );
 
 			code.initialize( resultXML.Session.HashString, resultXML.Session.SessionKey );
 			code.sessionId = resultXML.Session.SessionId;
 
-			var see : SOAPEvent = new SOAPEvent( SOAPEvent.LOGIN_OK );
-			see.result = resultXML;
+			var se : SOAPEvent = new SOAPEvent( SOAPEvent.LOGIN_OK );
+			se.result = resultXML;
 
-			dispatchEvent( see );
+			dispatchEvent( se );
 		}
 
 		private function logonErrorHandler( event : FaultEvent ) : void

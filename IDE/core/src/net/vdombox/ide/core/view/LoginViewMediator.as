@@ -9,7 +9,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.LoginViewEvent;
 	import net.vdombox.ide.core.model.LocalesProxy;
-	import net.vdombox.ide.common.model.LogProxy;
+	
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	import net.vdombox.ide.core.model.vo.HostVO;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
@@ -54,6 +54,11 @@ package net.vdombox.ide.core.view
 		public function get needSave() : Boolean
 		{
 			return loginView.saveButton.currentState == "save";
+		}
+		
+		public function get usedSSL() : Boolean
+		{
+			return loginView.ssl.currentState == "save";
 		}
 
 		override public function onRegister() : void
@@ -200,6 +205,8 @@ package net.vdombox.ide.core.view
 					loginView.saveButton.currentState = "notsave";
 				else
 					loginView.saveButton.currentState = "save";
+				
+				loginView.ssl.currentState = selectedHost.ssl ? "save" : "notsave";
 			}
 		}
 
@@ -250,15 +257,10 @@ package net.vdombox.ide.core.view
 				for each ( var host : HostVO in data )
 				{
 					if ( host.host == sharedObjectProxy.selectedHost )
-					{
 						loginView.host.selectedItem = host;
-					}
 				}
 
-				//loginView.host.selectedIndex = sharedObjectProxy.selectedHost;
-				selectedHost = loginView.host.selectedItem as HostVO;
-
-					//selectedHostIndex = sharedObjectProxy.selectedHost;
+				selectedHost = loginView.host.selectedItem as HostVO;					
 			}
 
 			if ( selectedHost )
@@ -268,7 +270,9 @@ package net.vdombox.ide.core.view
 				loginView.hostname = selectedHost.host;
 
 				loginView.password = selectedHost.password;
-
+				
+				loginView.ssl.currentState = selectedHost.ssl ?  "save" : "notsave";
+					
 				if ( selectedHost.password == "" )
 					loginView.saveButton.currentState = "notsave";
 				else
@@ -279,6 +283,8 @@ package net.vdombox.ide.core.view
 			else
 			{
 				loginView.username = "";
+				
+				loginView.ssl.currentState  = "notsave";
 
 				loginView.hostname = "";
 

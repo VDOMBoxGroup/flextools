@@ -107,13 +107,13 @@ package net.vdombox.ide.core.model
 
 			hostVO = host;
 
-			_authInfo.setHostname( hostVO.host );
+			_authInfo.setHostname( hostVO.host, hostVO.ssl );
 			_authInfo.setUsername( hostVO.user );
 
 			sharedObjectProxy.lastHost = hostVO;
 
 			sendNotification( ApplicationFacade.SERVER_CONNECTION_START );
-
+			
 			soap.connect( _authInfo.WSDLFilePath );
 		}
 
@@ -307,8 +307,7 @@ package net.vdombox.ide.core.model
 		{
 			if ( !hostVO.save )
 				hostVO.password = "";
-			//if ( !sharedObjectProxy.equalHost( hostVO ) )	
-
+			
 			sharedObjectProxy.setHost( hostVO );
 
 			sharedObjectProxy.clearLastHost();

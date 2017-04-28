@@ -10,6 +10,16 @@
 		<s:State name="notsave"/>
 		<s:State name="save"/>
 	</s:states>
+<fx:Script>
+	<![CDATA[
+		public function set btnLabel (value : String):void
+		{
+			labelDisplay.text = value;
+		}
+		
+		
+	]]>
+</fx:Script>
 
 	<s:Rect width="100%"
 			height="100%"
