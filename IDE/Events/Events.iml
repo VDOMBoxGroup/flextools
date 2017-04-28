@@ -3,7 +3,7 @@
   <component name="FlexBuildConfigurationManager" active="Events">
     <configurations>
       <configuration name="Events" main-class="net.vdombox.ide.modules.Events" output-file="Events.swf" output-folder="$MODULE_DIR$/../core/src/modules/Events">
-        <dependencies target-player="20.0">
+        <dependencies target-player="23.0">
           <entries>
             <entry module-name="ide_lib" build-configuration-name="ide_lib">
               <dependency linkage="Merged" />

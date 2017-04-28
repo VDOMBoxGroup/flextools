@@ -19,7 +19,7 @@
 		<link>
 			<name>bin-debug</name>
 			<type>2</type>
-			<locationURI>DOCUMENTS/VdomIDE/src/modules/Events</locationURI>
+			<locationURI>DOCUMENTS/core/src/modules/Events</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

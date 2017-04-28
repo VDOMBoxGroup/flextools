@@ -3,7 +3,7 @@
   <component name="FlexBuildConfigurationManager" active="ResourceBrowser">
     <configurations>
       <configuration name="ResourceBrowser" main-class="net.vdombox.ide.modules.ResourceBrowser" output-file="ResourceBrowser.swf" output-folder="$MODULE_DIR$/../core/src/modules/ResourceBrowser">
-        <dependencies target-player="20.0">
+        <dependencies target-player="23.0">
           <entries>
             <entry module-name="ide_lib" build-configuration-name="ide_lib">
               <dependency linkage="Merged" />

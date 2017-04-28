@@ -3,7 +3,7 @@
   <component name="FlexBuildConfigurationManager" active="Tree">
     <configurations>
       <configuration name="Tree" main-class="net.vdombox.ide.modules.Tree" output-file="Tree.swf" output-folder="$MODULE_DIR$/../core/src/modules/Tree">
-        <dependencies target-player="20.0">
+        <dependencies target-player="23.0">
           <entries>
             <entry library-name="airglobal" library-level="project">
               <dependency linkage="Merged" />

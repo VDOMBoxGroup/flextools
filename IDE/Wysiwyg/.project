@@ -19,7 +19,7 @@
 		<link>
 			<name>bin-debug</name>
 			<type>2</type>
-			<locationURI>DOCUMENTS/VdomIDE/src/modules/Wysiwyg</locationURI>
+			<locationURI>DOCUMENTS/core/src/modules/Wysiwyg</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

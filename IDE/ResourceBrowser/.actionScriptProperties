@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties analytics="false" mainApplicationPath="net/vdombox/ide/modules/ResourceBrowser.mxml" projectUUID="6961c977-99dc-4b6e-a8cc-e265f31939ff" version="10">
-  <compiler additionalCompilerArguments="-locale en_US fr_FR ru_RU -source-path+=../locale/{locale} -load-externs=../../VdomIDE/bin-debug/report.xml" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderLocation="DOCUMENTS/VdomIDE/src/modules/ResourceBrowser" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+<actionScriptProperties analytics="false" mainApplicationPath="net/vdombox/ide/modules/ResourceBrowser.mxml" projectUUID="6961c977-99dc-4b6e-a8cc-e265f31939ff" version="11">
+  <compiler additionalCompilerArguments="-locale en_US fr_FR ru_RU -source-path+=../locale/{locale} -load-externs=../../core/bin-debug/report.xml" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderLocation="DOCUMENTS/core/src/modules/ResourceBrowser" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" useFlashSDK="false" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path="">
@@ -9,7 +9,7 @@
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/core.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
-      <libraryPathEntry kind="3" linkType="1" path="/ide_lib/bin/ide_lib.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="${DOCUMENTS}/common/bin/ide_lib.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="1" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air"/>
     </libraryPath>
     <sourceAttachmentPath/>
@@ -18,6 +18,7 @@
     <application path="net/vdombox/ide/modules/ResourceBrowser.mxml"/>
   </applications>
   <modules/>
+  <workers/>
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>

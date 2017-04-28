@@ -3,7 +3,7 @@
   <component name="FlexBuildConfigurationManager" active="DataBase">
     <configurations>
       <configuration name="DataBase" main-class="net.vdombox.ide.modules.DataBase" output-file="DataBase.swf" output-folder="$MODULE_DIR$/../core/src/modules/DataBase">
-        <dependencies target-player="20.0">
+        <dependencies target-player="23.0">
           <entries>
             <entry module-name="ide_lib" build-configuration-name="ide_lib">
               <dependency linkage="Merged" />

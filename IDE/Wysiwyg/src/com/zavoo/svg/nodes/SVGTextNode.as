@@ -255,7 +255,7 @@ public class SVGTextNode extends SVGNode
 
 				if (moveToLeft)
 				{
-					var textLineMetrics:TextLineMetrics = this._textField.getLineMetrics(0);
+					textLineMetrics = this._textField.getLineMetrics(0);
 					this._textBitmap.x = -textLineMetrics.x - 2; //account for 2px gutter
 					this._textBitmap.y =  -textLineMetrics.ascent - 2; //account for 2px gutter
 				}

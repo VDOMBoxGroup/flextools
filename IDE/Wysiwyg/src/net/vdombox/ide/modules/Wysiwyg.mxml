@@ -67,7 +67,7 @@
 		mx|ScrollBar
 		{
 			cornerRadius : 4;
-			fillColors  : #707070, #909090;
+			/*fillColors  : #707070, #909090;*/
 			gripColor  : #323232;
 			
 			downArrowUpSkin: ClassReference(null);
