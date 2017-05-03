@@ -26,10 +26,10 @@ package net.vdombox.ide.core.model
 	public class ServerProxy extends Proxy implements IProxy
 	{
 		/**
-		 * 15 minutes.
-		 * defolt SESSION-LIFETIME = 20 minutes.
+		 * 2 minutes.
+		 * defolt SESSION-LIFETIME = (?) minutes.
 		 */
-		private static const PING_TIMER : uint = 900000;
+		private static const PING_TIMER : uint = 1000 * 60 *2;
 
 		public static const NAME : String = "ServerProxy";
 
