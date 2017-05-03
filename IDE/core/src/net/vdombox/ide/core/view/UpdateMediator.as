@@ -1,8 +1,5 @@
 package net.vdombox.ide.core.view
 {
-	import air.update.ApplicationUpdaterUI;
-	import air.update.events.UpdateEvent;
-
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -10,11 +7,14 @@ package net.vdombox.ide.core.view
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
-
+	
 	import mx.controls.Alert;
-
+	
+	import air.update.ApplicationUpdaterUI;
+	import air.update.events.UpdateEvent;
+	
 	import net.vdombox.utils.VersionUtils;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
@@ -26,6 +26,9 @@ package net.vdombox.ide.core.view
 		private var applicationUpdater : ApplicationUpdaterUI;
 
 		private var dataXML : XML;
+		
+		private static var updateURL : String = "http://update.vdombox.ru/ide/update.xml";
+		//private static var updateURL : String ="http://adelfos.ru/test/update.xml";
 
 		public function UpdateMediator( viewComponent : Object = null )
 		{
@@ -46,9 +49,9 @@ package net.vdombox.ide.core.view
 
 		private function initialize() : void
 		{
-			var url : String = "http://update.vdombox.ru/ide/update45SDK.xml"
+			
 			var loader : URLLoader = new URLLoader();
-			var request : URLRequest = new URLRequest( url );
+			var request : URLRequest = new URLRequest( updateURL );
 
 			// pass the post data
 			request.method = URLRequestMethod.POST;
@@ -69,7 +72,7 @@ package net.vdombox.ide.core.view
 
 		private function on_complete( evt : Event ) : void
 		{
-			try
+			try	
 			{
 				dataXML = new XML( evt.target.data );
 
@@ -93,8 +96,9 @@ package net.vdombox.ide.core.view
 			if ( !applicationUpdater )
 				applicationUpdater = new ApplicationUpdaterUI();
 
-			applicationUpdater.updateURL = "http://update.vdombox.ru/ide/update45SDK.xml"
-
+			applicationUpdater.updateURL = updateURL;
+			
+			
 			applicationUpdater.isCheckForUpdateVisible = false; // We won't ask permission to check for an update
 
 			addHandlers();
