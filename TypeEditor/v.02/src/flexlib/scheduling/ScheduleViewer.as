@@ -31,20 +31,22 @@
  */
 package flexlib.scheduling
 {
+  import flash.events.Event;
+  import flash.events.MouseEvent;
+  
   import flexlib.scheduling.scheduleClasses.IScheduleEntry;
   import flexlib.scheduling.scheduleClasses.LayoutScrollEvent;
   import flexlib.scheduling.scheduleClasses.Schedule;
   import flexlib.scheduling.scheduleClasses.ScheduleNavigator;
   import flexlib.scheduling.scheduleClasses.layout.IEntryLayout;
   import flexlib.scheduling.scheduleClasses.schedule_internal;
-
-  import flash.events.Event;
-  import flash.events.MouseEvent;
-
+  import flexlib.styles.StyleDeclarationHelper;
+  
   import mx.collections.ArrayCollection;
   import mx.collections.ICollectionView;
   import mx.collections.IList;
   import mx.controls.scrollClasses.ScrollBar;
+  import mx.core.FlexGlobals;
   import mx.core.IFactory;
   import mx.core.ScrollControlBase;
   import mx.core.UIComponent;
@@ -52,7 +54,7 @@ package flexlib.scheduling
   import mx.events.CollectionEventKind;
   import mx.events.ScrollEvent;
   import mx.styles.CSSStyleDeclaration;
-  import mx.styles.StyleManager;
+
 
   [Event(name="itemScroll", type="flexlib.scheduling.scheduleClasses.LayoutScrollEvent")]
   [Event(name="pixelScroll", type="flexlib.scheduling.scheduleClasses.LayoutScrollEvent")]
@@ -255,7 +257,7 @@ package flexlib.scheduling
     // Define a static method to initialize the style.
     private static function classConstruct():Boolean
     {
-      if (!StyleManager.getStyleDeclaration(".scheduleViewer"))
+      if (!FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.scheduling.ScheduleViewer")))
       {
         // If ScheduleViewer has no CSS definition,
         // create one and set the default value.
@@ -269,7 +271,9 @@ package flexlib.scheduling
         newStyleDeclaration.setStyle("verticalGridLineColor", 0x000000);
         newStyleDeclaration.setStyle("verticalGridLineAlpha", .5);
 
-        StyleManager.setStyleDeclaration(".scheduleViewer", newStyleDeclaration, true);
+        FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration(
+			StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.scheduling.ScheduleViewer"), 
+			newStyleDeclaration, true);
       }
       return true;
     }
@@ -364,6 +368,10 @@ package flexlib.scheduling
         if (Object(schedule.verticalLinesViewerImpl).hasOwnProperty(styleProp))
         {
           schedule.verticalLinesViewerImpl[styleProp] = getStyle(styleProp);
+        }
+        if (Object(schedule.timeIndicatorViewerImpl).hasOwnProperty(styleProp))
+        {
+          schedule.timeIndicatorViewerImpl[styleProp] = getStyle(styleProp);
         }
       }
 
@@ -574,6 +582,17 @@ package flexlib.scheduling
       schedule.backgroundLayoutImpl.backgroundItems = value;
     }
 
+    [Bindable]
+    public function get timeIndicators():IList
+    {
+      return schedule.timeIndicatorLayoutImpl.timeIndicators;
+    }
+
+    public function set timeIndicators(value:IList):void
+    {
+      schedule.timeIndicatorLayoutImpl.timeIndicators = value;
+    }
+
     //Core--------------------------
 
     [Bindable]
@@ -651,6 +670,28 @@ package flexlib.scheduling
     public function set verticalLinesViewer(value:IFactory):void
     {
       schedule.verticalLinesViewer = value;
+    }
+
+    [Bindable]
+    public function get timeIndicatorLayout():IFactory
+    {
+      return schedule.timeIndicatorLayout;
+    }
+
+    public function set timeIndicatorLayout(value:IFactory):void
+    {
+      schedule.timeIndicatorLayout = value;
+    }
+
+    [Bindable]
+    public function get timeIndicatorViewer():IFactory
+    {
+      return schedule.timeIndicatorViewer;
+    }
+
+    public function set timeIndicatorViewer(value:IFactory):void
+    {
+      schedule.timeIndicatorViewer = value;
     }
 
     //Navigation--------------------------

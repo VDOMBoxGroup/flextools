@@ -2,6 +2,42 @@
 <mx:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009"
           xmlns:s="library://ns.adobe.com/flex/spark"
           xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			private var _oldValue:String;
+			
+			public function get oldValue():String {
+				return _oldValue;
+			}
+			
+			public function set oldValue(value:String):void {
+				_oldValue = value;
+				
+				if (oldValueTextArea)
+					oldValueTextArea.text = value;
+			}
+			
+			[Bindable]
+			private var _newValue:String;
+			
+			public function get newValue():String {
+				return newValueTextArea ? newValueTextArea.text : _newValue;
+			}
+			
+			public function set newValue(value:String):void {
+				_newValue = value;
+				
+				if (newValueTextArea)
+					newValueTextArea.text = value;
+			}
+			
+			private function oldValueTextArea_creationCompleteHandler(event:FlexEvent):void {
+				oldValueTextArea.skin.doubleClickEnabled = false;
+			}
+		]]>
+	</fx:Script>
 
     <s:VGroup width="100%" height="100%">
 
@@ -13,7 +49,7 @@
             <s:TextArea id="oldValueTextArea"
                         width="100%" height="100%"
                         editable="false"
-                        text="{oldValue}"
+                        
                         doubleClickEnabled="false"
                         creationComplete="oldValueTextArea_creationCompleteHandler(event)"/>
         </s:VGroup>
@@ -27,40 +63,6 @@
         </s:VGroup>
     </s:VGroup>
 
-    <fx:Script>
-        <![CDATA[
-        import mx.events.FlexEvent;
-
-        private var _oldValue:String;
-
-        public function get oldValue():String {
-            return _oldValue;
-        }
-
-        public function set oldValue(value:String):void {
-            _oldValue = value;
-
-            if (oldValueTextArea)
-                oldValueTextArea.text = value;
-        }
-
-        private var _newValue:String;
-
-        public function get newValue():String {
-            return newValueTextArea ? newValueTextArea.text : _newValue;
-        }
-
-        public function set newValue(value:String):void {
-            _newValue = value;
-
-            if (newValueTextArea)
-                newValueTextArea.text = value;
-        }
-
-        private function oldValueTextArea_creationCompleteHandler(event:FlexEvent):void {
-            oldValueTextArea.skin.doubleClickEnabled = false;
-        }
-        ]]>
-    </fx:Script>
+    
 
 </mx:Canvas>

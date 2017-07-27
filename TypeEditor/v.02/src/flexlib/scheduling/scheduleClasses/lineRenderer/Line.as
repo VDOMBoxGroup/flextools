@@ -40,20 +40,9 @@ package flexlib.scheduling.scheduleClasses.lineRenderer
       _alpha = value;
     }
 
-    FLEX_TARGET_VERSION::flex4
+    public function apply(g:Graphics, bounds:Rectangle, targetPoint:Point):void
     {
-      public function apply(g:Graphics, bounds:Rectangle, targetPoint:Point):void
-      {
-        g.lineStyle(weight, color, alpha);
-      }
-    }
-
-    FLEX_TARGET_VERSION::flex3
-    {
-      public function apply(g:Graphics):void
-      {
-        g.lineStyle(weight, color, alpha);
-      }
+      g.lineStyle(weight, color, alpha);
     }
   }
 }

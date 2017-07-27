@@ -33,8 +33,8 @@ package flexlib.controls
   import mx.controls.Menu;
   import mx.controls.listClasses.IListItemRenderer;
   import mx.controls.menuClasses.IMenuItemRenderer;
-  import mx.core.Application;
   import mx.core.EdgeMetrics;
+  import mx.core.FlexGlobals;
   import mx.core.ScrollPolicy;
   import mx.core.mx_internal;
   import mx.events.ScrollEvent;
@@ -76,7 +76,7 @@ package flexlib.controls
     {
       var menu:ScrollableMenu = new ScrollableMenu();
       menu.tabEnabled = false;
-      menu.owner = DisplayObjectContainer(Application.application);
+      menu.owner = DisplayObjectContainer(FlexGlobals.topLevelApplication);
       menu.showRoot = showRoot;
       popUpMenu(menu, parent, mdp);
       return menu;
@@ -395,7 +395,7 @@ package flexlib.controls
 
       if (explicitRowCount < 1)
       {
-        // Number of rows was not explicitly set so limit menu height to max height and 
+        // Number of rows was not explicitly set so limit menu height to max height and
         if (measuredHeight > this.maxHeight)
         {
           measuredHeight = this.maxHeight;

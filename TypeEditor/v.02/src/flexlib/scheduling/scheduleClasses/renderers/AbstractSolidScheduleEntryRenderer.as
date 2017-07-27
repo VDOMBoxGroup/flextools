@@ -34,13 +34,12 @@ package flexlib.scheduling.scheduleClasses.renderers
   import flexlib.scheduling.scheduleClasses.SimpleScheduleEntry;
 
   import mx.containers.Box;
-  import mx.controls.Alert;
   import mx.controls.Label;
   import mx.controls.Text;
-  import mx.core.ScrollPolicy;
+  import mx.core.FlexGlobals;
   import mx.formatters.DateFormatter;
   import mx.styles.CSSStyleDeclaration;
-  import mx.styles.StyleManager;
+
 
   import mx.core.mx_internal;
 
@@ -120,11 +119,11 @@ package flexlib.scheduling.scheduleClasses.renderers
       var effects:Array;
 
       // defaultTimeStyle
-      style = StyleManager.getStyleDeclaration(".defaultTimeStyle");
+      style = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(".defaultTimeStyle");
       if (!style)
       {
         style = new CSSStyleDeclaration();
-        StyleManager.setStyleDeclaration(".defaultTimeStyle", style, false);
+        FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration(".defaultTimeStyle", style, false);
       }
       if (style.factory == null)
       {
@@ -136,11 +135,11 @@ package flexlib.scheduling.scheduleClasses.renderers
         };
       }
       // defaultEntryStyle
-      style = StyleManager.getStyleDeclaration(".defaultEntryStyle");
+      style = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(".defaultEntryStyle");
       if (!style)
       {
         style = new CSSStyleDeclaration();
-        StyleManager.setStyleDeclaration(".defaultEntryStyle", style, false);
+        FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration(".defaultEntryStyle", style, false);
       }
       if (style.factory == null)
       {

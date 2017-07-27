@@ -8,7 +8,8 @@
 					   xmlns:containers="flexlib.containers.*"
 					   preinitialize="facade.preinitialize(this)"
 					   creationComplete="facade.startup(this)"
-                       minWidth="800" minHeight="600">
+                       minWidth="800"
+					   minHeight="600">
 
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects)  -->

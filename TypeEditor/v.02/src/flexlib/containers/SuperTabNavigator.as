@@ -34,6 +34,7 @@ package flexlib.containers
   import flexlib.events.SuperTabEvent;
   import flexlib.events.TabReorderEvent;
   import flexlib.skins.TabPopUpButtonSkin;
+  import flexlib.styles.StyleDeclarationHelper;
   
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
@@ -42,19 +43,18 @@ package flexlib.containers
   import mx.containers.Canvas;
   import mx.containers.TabNavigator;
   import mx.containers.ViewStack;
-  import mx.controls.Alert;
   import mx.controls.Menu;
   import mx.controls.PopUpButton;
   import mx.core.Container;
   import mx.core.EdgeMetrics;
+  import mx.core.FlexGlobals;
   import mx.core.ScrollPolicy;
   import mx.effects.Tween;
   import mx.events.ChildExistenceChangedEvent;
-  import mx.events.CloseEvent;
   import mx.events.IndexChangedEvent;
   import mx.events.MenuEvent;
   import mx.styles.CSSStyleDeclaration;
-  import mx.styles.StyleManager;
+
 
   [IconFile("SuperTabNavigator.png")]
 
@@ -501,7 +501,9 @@ package flexlib.containers
      */
     private static function initializeStyles():void
     {
-      var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("SuperTabNavigator");
+      var selector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(
+		  StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.containers.SuperTabNavigator")
+	  );
 
       if (!selector)
       {
@@ -523,7 +525,7 @@ package flexlib.containers
 
       // Style for the PopUpButton on the right
       var popupButtonStyleName:String = selector.getStyle("popupButtonStyleName");
-      var pSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + popupButtonStyleName);
+      var pSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + popupButtonStyleName);
 
       if (!pSelector)
       {
@@ -538,12 +540,12 @@ package flexlib.containers
         this.disabledSkin = TabPopUpButtonSkin;
       }
 
-      StyleManager.setStyleDeclaration("." + popupButtonStyleName, pSelector, false);
+      FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + popupButtonStyleName, pSelector, false);
 
 
       // Style for the SuperTabs
       var tabStyleName:String = selector.getStyle("tabStyleName");
-      var tSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + tabStyleName);
+      var tSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + tabStyleName);
 
       if (!tSelector)
       {
@@ -557,11 +559,11 @@ package flexlib.containers
         this.tabCloseButtonStyleName = "tabCloseButton";
       }
 
-      StyleManager.setStyleDeclaration("." + tabStyleName, tSelector, false);
+      FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + tabStyleName, tSelector, false);
 
       // Style for the close button on each tab
       var tabCloseStyleName:String = tSelector.getStyle("tabCloseButtonStyleName");
-      var cSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + tabCloseStyleName);
+      var cSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + tabCloseStyleName);
 
       if (!cSelector)
       {
@@ -576,11 +578,11 @@ package flexlib.containers
         this.disabledSkin = DEFAULT_CLOSE_DISABLED;
       }
 
-      StyleManager.setStyleDeclaration("." + tabCloseStyleName, cSelector, false);
+      FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + tabCloseStyleName, cSelector, false);
 
       // Style for the left arrow for tab scrolling
       var leftStyleName:String = selector.getStyle("leftButtonStyleName");
-      var lSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + leftStyleName);
+      var lSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + leftStyleName);
 
       if (!lSelector)
       {
@@ -594,11 +596,11 @@ package flexlib.containers
         this.cornerRadius = 0;
       }
 
-      StyleManager.setStyleDeclaration("." + leftStyleName, lSelector, false);
+      FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + leftStyleName, lSelector, false);
 
       // Style for the right arrow for tab scrolling
       var rightStyleName:String = selector.getStyle("rightButtonStyleName");
-      var rSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + rightStyleName);
+      var rSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + rightStyleName);
 
       if (!rSelector)
       {
@@ -612,11 +614,13 @@ package flexlib.containers
         this.cornerRadius = 0;
       }
 
-      StyleManager.setStyleDeclaration("." + rightStyleName, rSelector, false);
+      FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + rightStyleName, rSelector, false);
 
 
 
-      StyleManager.setStyleDeclaration("SuperTabNavigator", selector, false);
+      FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration(
+		  StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.containers.SuperTabNavigator"), 
+		  selector, false);
 
 
     }
@@ -705,7 +709,7 @@ package flexlib.containers
         canvas.stopScrollingEvent = _stopScrollingEvent;
         canvas.scrollSpeed = _scrollSpeed;
 
-        // So we can see our child heirarchy: 
+        // So we can see our child heirarchy:
         // holder (Box) -> canvas (ButtonScrollingCanvas) -> tabBar (SuperTabBar)
         canvas.addChild(tabBar);
         holder.addChild(canvas);
@@ -721,7 +725,7 @@ package flexlib.containers
         menu.setStyle("textAlign", "left");
 
         // If we wanted to change the scroll policy for the scrolling menu we
-        // could modify the following two lines. For example, turning 
+        // could modify the following two lines. For example, turning
         // verticalScrollPolicy to OFF will remove the side scrollbars and leave
         // just the arrow buttons on top and bottom.
         menu.verticalScrollPolicy = ScrollPolicy.AUTO;
@@ -779,21 +783,13 @@ package flexlib.containers
 
     private function handleTabClose(event:SuperTabEvent):void
     {
-		/*Alert.show("Do You want to close ?","Close",3, null, deleteResourceOk);
-		
-		function deleteResourceOk(ev:CloseEvent):void
-		{
-			if (ev.detail == Alert.YES)
-			{*/
-				var clone:SuperTabEvent = event.clone() as SuperTabEvent;
-				dispatchEvent(clone);
-				
-				if (clone.isDefaultPrevented())
-				{
-					event.preventDefault();
-				}
-			/*}				
-		}	*/	
+      var clone:SuperTabEvent = event.clone() as SuperTabEvent;
+      dispatchEvent(clone);
+
+      if (clone.isDefaultPrevented())
+      {
+        event.preventDefault();
+      }
     }
 
     private var _closePolicy:String = SuperTab.CLOSE_ROLLOVER;
@@ -908,7 +904,7 @@ package flexlib.containers
         //and we catch the event that gets dispatched with setChildIndex and stop
         //it from propogating. I don't know why there's a problem with the
         //setChildAt method dispatching an event with an incorrect oldIndex, but
-        //god it was hard to figure this one out. 
+        //god it was hard to figure this one out.
         if (event.oldIndex < event.newIndex)
         {
           event.newIndex--;
@@ -926,7 +922,7 @@ package flexlib.containers
         this.setChildIndex(getChildAt(event.oldIndex), event.newIndex);
       }
 
-      // Calling validateNow before calling selectedIndex makes sure we 
+      // Calling validateNow before calling selectedIndex makes sure we
       // don't get a little display bug that tends to creep up
       this.validateNow();
 
@@ -978,7 +974,7 @@ package flexlib.containers
 
       var th:Number = tabBarHeight + 1;
 
-      // tabBarSpace is used to try to figure out how much space we 
+      // tabBarSpace is used to try to figure out how much space we
       // need for the tabs, to figure out if we need to scroll them
       var tabBarSpace:Number = w;
       if (popupButton.includeInLayout)
@@ -1016,7 +1012,7 @@ package flexlib.containers
       }
 
       //now we're good to go with the tab widths, so this should be OK
-      //if we called this first we would see some flickering of the tabs 
+      //if we called this first we would see some flickering of the tabs
       //as they are resized quickly. No good.
       super.updateDisplayList(unscaledWidth, unscaledHeight);
 
@@ -1184,7 +1180,7 @@ package flexlib.containers
         var child:Container = this.getChildAt(i) as Container;
 
         var obj:Object = new Object();
-        //setting the type to an empty string bypasses a bug in MenuItemRenderer (or in 
+        //setting the type to an empty string bypasses a bug in MenuItemRenderer (or in
         //DefaultDataDescriptor, depending on how you look at it). Try commenting out the
         //line and check out the menu items.
         obj.type = "";
@@ -1199,7 +1195,7 @@ package flexlib.containers
       menu.dataProvider = popupMenuDP;
 
       //we re-assign the menu to the popup button each time just to be safe to
-      //ensure that the PopUpBUtton hasn't set its popUp to null, which it has a 
+      //ensure that the PopUpBUtton hasn't set its popUp to null, which it has a
       //tendency to do (I think only since Flex 3)
       //fixes issue #71: http://code.google.com/p/flexlib/issues/detail?id=71
       popupButton.popUp = menu;

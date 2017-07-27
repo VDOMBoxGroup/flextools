@@ -13,14 +13,12 @@ package flexlib.baseClasses
 {
 
   import flash.display.DisplayObject;
-  import flash.display.DisplayObjectContainer;
   import flash.events.Event;
   import flash.events.FocusEvent;
   import flash.events.KeyboardEvent;
   import flash.events.MouseEvent;
   import flash.geom.Rectangle;
   import flash.ui.Keyboard;
-  import flash.utils.getTimer;
   import mx.automation.IAutomationObject;
   import flexlib.containers.accordionClasses.AccordionHeader;
   import mx.controls.Button;
@@ -29,6 +27,7 @@ package flexlib.baseClasses
   import mx.core.Container;
   import mx.core.ContainerCreationPolicy;
   import mx.core.EdgeMetrics;
+  import mx.core.FlexGlobals;
   import mx.core.FlexVersion;
   import mx.core.IDataRenderer;
   import mx.core.IFactory;
@@ -44,19 +43,11 @@ package flexlib.baseClasses
   import mx.events.ChildExistenceChangedEvent;
   import mx.events.FlexEvent;
   import mx.events.IndexChangedEvent;
-  FLEX_TARGET_VERSION::flex4
-  {
-    import mx.geom.RoundedRectangle;
-  }
-  FLEX_TARGET_VERSION::flex3
-  {
-    import mx.graphics.RoundedRectangle;
-  }
+  import mx.geom.RoundedRectangle;
 
   import mx.managers.HistoryManager;
-  import mx.styles.StyleManager;
+
   import mx.styles.CSSStyleDeclaration;
-  import mx.styles.StyleProxy;
 
   use namespace mx_internal;
 
@@ -1080,7 +1071,7 @@ package flexlib.baseClasses
       {
         firstTime = false;
 
-        // Add "addedToStage" and "removedFromStage" listeners so we can 
+        // Add "addedToStage" and "removedFromStage" listeners so we can
         // register/un-register from the history manager when this component
         // is added or removed from the display list.
         addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true);
@@ -1392,10 +1383,10 @@ package flexlib.baseClasses
           if (FlexVersion.compatibilityVersion < FlexVersion.VERSION_3_0)
           {
             var headerStyleDecl:CSSStyleDeclaration =
-              StyleManager.getStyleDeclaration("." + headerStyleName);
+              FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + headerStyleName);
             if (headerStyleDecl)
             {
-              // Need to reset the header style declaration and 
+              // Need to reset the header style declaration and
               // regenerate their style cache
               for (var i:int = 0; i < numChildren; i++)
               {
@@ -1422,7 +1413,7 @@ package flexlib.baseClasses
           }
         }
       }
-      else if (StyleManager.isSizeInvalidatingStyle(styleProp))
+      else if (FlexGlobals.topLevelApplication.styleManager.isSizeInvalidatingStyle(styleProp))
       {
         layoutStyleChanged = true;
       }
@@ -1452,14 +1443,7 @@ package flexlib.baseClasses
       if (!overlayChild)
         return;
 
-      FLEX_TARGET_VERSION::flex4
-      {
-        effectOverlayColor = color;
-      }
-      FLEX_TARGET_VERSION::flex3
-      {
-        overlayColor = color;
-      }
+      effectOverlayColor = color;
       overlayTargetArea = targetArea;
 
       if (selectedChild && selectedChild.numChildrenCreated == -1) // No children have been created
@@ -1482,14 +1466,7 @@ package flexlib.baseClasses
      */
     private function initializeHandler(event:FlexEvent):void
     {
-      FLEX_TARGET_VERSION::flex4
-      {
-        UIComponent(overlayChild).addOverlay(effectOverlayColor, overlayTargetArea);
-      }
-      FLEX_TARGET_VERSION::flex3
-      {
-        UIComponent(overlayChild).addOverlay(overlayColor, overlayTargetArea);
-      }
+      UIComponent(overlayChild).addOverlay(effectOverlayColor, overlayTargetArea);
     }
 
     /**
@@ -1638,8 +1615,7 @@ package flexlib.baseClasses
       {
         if (FlexVersion.compatibilityVersion < FlexVersion.VERSION_3_0)
         {
-          var headerStyleDecl:CSSStyleDeclaration = StyleManager.
-            getStyleDeclaration("." + headerStyleName);
+          var headerStyleDecl:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + headerStyleName);
 
           if (headerStyleDecl)
             header.styleDeclaration = headerStyleDecl;
@@ -2336,7 +2312,7 @@ package flexlib.baseClasses
           newIndex = oldIndex;
 
           // can't do selectedChild because we need to actually do
-          // newIndex + 1 because currently that's what the index 
+          // newIndex + 1 because currently that's what the index
           // of the child is (SDK-12622) since this one isn't
           // actually removed from the display list yet
           instantiateChild(Container(getChildAt(newIndex + 1)));

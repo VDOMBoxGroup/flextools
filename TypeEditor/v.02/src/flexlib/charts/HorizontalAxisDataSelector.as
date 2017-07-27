@@ -28,14 +28,14 @@ package flexlib.charts
   import flash.events.Event;
   import flash.events.MouseEvent;
   import flash.geom.Point;
-
-  import mx.charts.chartClasses.CartesianChart;
+  
+  import flexlib.styles.StyleDeclarationHelper;
+  
   import mx.charts.chartClasses.ChartElement;
-  import mx.charts.chartClasses.IChartElement2;
-  import mx.charts.chartClasses.Series;
   import mx.core.EventPriority;
+  import mx.core.FlexGlobals;
   import mx.styles.CSSStyleDeclaration;
-  import mx.styles.StyleManager;
+
 
 
   // =================================================
@@ -74,14 +74,16 @@ package flexlib.charts
     /** Initialize styles to default values */
     private static function classConstruct():Boolean
     {
-      if (!StyleManager.getStyleDeclaration("HorizontalAxisDataSelector"))
+      if (!FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.charts.HorizontalAxisDataSelector")))
       {
-        // If HorizontalAxisDataSelector has no CSS definition, 
+        // If HorizontalAxisDataSelector has no CSS definition,
         // create one and set the default value.
         var newStyleDeclaration:CSSStyleDeclaration = new CSSStyleDeclaration();
         newStyleDeclaration.setStyle("selectorColor", 0xFF0000);
 
-        StyleManager.setStyleDeclaration("HorizontalAxisDataSelector", newStyleDeclaration, true);
+        FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration(
+			StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.charts.HorizontalAxisDataSelector"), 
+			newStyleDeclaration, true);
       }
       return true;
     }
@@ -95,7 +97,7 @@ package flexlib.charts
     //	/**
     //	 * When <code>true</code>, instructs the selector to snap to the nearest data point.
     //	 * When <code>false</code>, the selector will interpolate values based on mouse positions.
-    //	 * 
+    //	 *
     //	 * @default true
     //	 */
     //	public var snap:Boolean = true;
@@ -161,7 +163,7 @@ package flexlib.charts
       {
         var values:Array = dataValues;
         // Get the location of where the selection line should be drawn
-        var location:Point = chart.dataToLocal(values[0], values[1]);
+        var location:Point = dataToLocal(values[0], values[1]);
 
         // KLUDGE: We seem to off here by the width of the vertical axis.  Strange, not
         // quite what I expected.  Fix it by subtracting the different coordinate systems
@@ -248,7 +250,7 @@ package flexlib.charts
       var point:Point = new Point(chart.mouseX, chart.mouseY);
 
       // Get the data values that the point represents
-      var dataValues:Array = chart.localToData(point);
+      var dataValues:Array = localToData(point);
 
       // The first value in the dataValues in the target x field value
       var targetXFieldValue:Number = dataValues[0];

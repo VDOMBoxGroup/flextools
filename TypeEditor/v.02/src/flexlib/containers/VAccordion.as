@@ -23,44 +23,48 @@ SOFTWARE.
 
 package flexlib.containers
 {
+	import flash.geom.Rectangle;
+	
 	import flexlib.baseClasses.AccordionBase;
 	import flexlib.containers.accordionClasses.AccordionHeaderLocation;
-	
-	import flash.geom.Rectangle;
+	import flexlib.styles.StyleDeclarationHelper;
 	
 	import mx.controls.Button;
 	import mx.core.Container;
 	import mx.core.EdgeMetrics;
+	import mx.core.FlexGlobals;
 	import mx.core.IUIComponent;
-	import mx.core.mx_internal;
 	import mx.core.UIComponent;
+	import mx.core.mx_internal;
 	import mx.styles.CSSStyleDeclaration;
-	import mx.styles.StyleManager;
-	
+
+
 	use namespace mx_internal;
-	
+
 	[IconFile("VAccordion.png")]
-	
+
 	public class VAccordion extends AccordionBase
 	{
 		[Inspectable(enumeration="below,above", defaultValue="above")]
 		/**
 		 * Location of the header renderer for each content item. Must be either
 		 * <code>AccordionHeaderLocation.ABOVE</code> or <code>AccordionHeaderLocation.BELOW</code>
-		 * 
+		 *
 		 * @see flexlib.containers.accordionClasses.AccordionHeaderLocation
 		 */
 		public var headerLocation:String = AccordionHeaderLocation.ABOVE;
-		
+
 		private static function initializeStyles():void
 		{
-			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("VAccordion");
-			
+			var selector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(
+				StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.containers.VAccordion")
+			);
+
 			if(!selector)
 			{
 				selector = new CSSStyleDeclaration();
 			}
-			
+
 			selector.defaultFactory = function():void
 			{
 				this.backgroundColor = 0xFFFFFF;
@@ -72,29 +76,31 @@ package flexlib.containers
 				this.verticalGap = -1;
 				this.horizontalGap = -1;
 			}
-			
-			StyleManager.setStyleDeclaration("VAccordion", selector, false);
-				
+
+			FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration(
+				StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.containers.VAccordion"), 
+				selector, false);
+
 		}
-		
+
 		initializeStyles();
-		
+
 		/**
 	     *  @private
 	     */
 	    override protected function measure():void
 	    {
 	        super.measure();
-	
+
 	        var minWidth:Number = 0;
 	        var minHeight:Number = 0;
 	        var preferredWidth:Number = 0;
 	        var preferredHeight:Number = 0;
-	
+
 	        var paddingLeft:Number = getStyle("paddingLeft");
 	        var paddingRight:Number = getStyle("paddingRight");
 	        var headerHeight:Number = getHeaderHeight();
-	
+
 	        // Only measure once, unless resizeToContent='true'
 	        // Thereafter, we'll just use cached values.
 	        // (However, if a layout style like headerHeight changes,
@@ -113,53 +119,53 @@ package flexlib.containers
 	            measuredHeight = accPreferredHeight;
 	            return;
 	        }
-	
+
 	        layoutStyleChanged = false;
-	
+
 	        var n:int = numChildren;
 	        for (var i:int = 0; i < n; i++)
 	        {
 	            var button:Button = getHeaderAt(i);
 	            var child:IUIComponent = IUIComponent(getChildAt(i));
-	
+
 	            minWidth = Math.max(minWidth, button.minWidth);
 	            minHeight += headerHeight;
 	            preferredWidth = Math.max(preferredWidth, minWidth);
 	            preferredHeight += headerHeight;
-	
+
 	            // The headers preferredWidth is messing up the accordion measurement. This may not
 	            // be needed anyway because we're still using the headers minWidth to determine our overall
 	            // minWidth.
-	
+
 	            if (i == selectedIndex)
 	            {
 	                preferredWidth = Math.max(preferredWidth, child.getExplicitOrMeasuredWidth());
 	                preferredHeight += child.getExplicitOrMeasuredHeight();
-	
+
 	                minWidth = Math.max(minWidth, child.minWidth);
 	                minHeight += child.minHeight;
 	            }
-	
+
 	        }
-	
+
 	        // Add space for borders and margins
 	        var vm:EdgeMetrics = viewMetricsAndPadding;
 	        var widthPadding:Number = vm.left + vm.right;
 	        var heightPadding:Number = vm.top + vm.bottom;
-	
+
 	        // Need to adjust the widthPadding if paddingLeft and paddingRight are negative numbers
 	        // (see explanation in updateDisplayList())
 	        if (paddingLeft < 0)
 	            widthPadding -= paddingLeft;
-	
+
 	        if (paddingRight < 0)
 	            widthPadding -= paddingRight;
-	
+
 	        minWidth += widthPadding;
 	        preferredWidth += widthPadding;
 	        minHeight += heightPadding;
 	        preferredHeight += heightPadding;
-	
+
 	        measuredMinWidth = minWidth;
 	        measuredMinHeight = minHeight;
 	        measuredWidth = preferredWidth;
@@ -173,44 +179,44 @@ package flexlib.containers
 	        // here to fix bugs 103665/104213.
 	        if (selectedChild && Container(selectedChild).numChildrenCreated == -1)
 	            return;
-	
+
 	        // Don't remember sizes if we don't have any children
 	        if (numChildren == 0)
 	            return;
-	
+
 	        accMinWidth = minWidth;
 	        accMinHeight = minHeight;
 	        accPreferredWidth = preferredWidth;
 	        accPreferredHeight = preferredHeight;
 	    }
-	    
-	    
+
+
 	    override protected function updateDisplayList(unscaledWidth:Number,
                                                   unscaledHeight:Number):void
 	    {
 	        super.updateDisplayList(unscaledWidth, unscaledHeight);
-	
+
 	        // Don't do layout if we're tweening because the tweening
 	        // code is handling it.
 	        if (tween)
 	            return;
-	
+
 	        // Measure the border.
 	        var bm:EdgeMetrics = borderMetrics;
 	        var paddingLeft:Number = getStyle("paddingLeft");
 	        var paddingRight:Number = getStyle("paddingRight");
 	        var paddingTop:Number = getStyle("paddingTop");
 	        var verticalGap:Number = getStyle("verticalGap");
-	
+
 	        // Determine the width and height of the content area.
 	        var localContentWidth:Number = calcContentWidth();
 	        var localContentHeight:Number = calcContentHeight();
-	
+
 	        // Arrange the headers, the content clips,
 	        // based on selectedIndex.
 	        var x:Number = bm.left + paddingLeft;
 	        var y:Number = bm.top + paddingTop;
-	
+
 	        // Adjustments. These are required since the default halo
 	        // appearance has verticalGap and all margins set to -1
 	        // so the edges of the headers overlap each other and the
@@ -219,36 +225,36 @@ package flexlib.containers
 	        var contentX:Number = x;
 	        var adjContentWidth:Number = localContentWidth;
 	        var headerHeight:Number = getHeaderHeight();
-	
+
 	        if (paddingLeft < 0)
 	        {
 	            contentX -= paddingLeft;
 	            adjContentWidth += paddingLeft;
 	        }
-	
+
 	        if (paddingRight < 0)
 	            adjContentWidth += paddingRight;
-	
+
 	        var n:int = numChildren;
 	        for (var i:int = 0; i < n; i++)
 	        {
 	            var header:Button = getHeaderAt(i);
 	            var content:IUIComponent = IUIComponent(getChildAt(i));
-				
+
 				if(headerLocation != AccordionHeaderLocation.BELOW) {
 		            header.move(x, y);
 		            header.setActualSize(localContentWidth, headerHeight);
 		            y += headerHeight;
 				}
-				
+
 	            if (i == selectedIndex)
 	            {
 	                content.move(contentX, y);
 	                content.visible = true;
-	
+
 	                var contentW:Number = adjContentWidth;
 	                var contentH:Number = localContentHeight;
-	
+
 	                if (!isNaN(content.percentWidth))
 	                {
 	                    if (contentW > content.maxWidth)
@@ -259,7 +265,7 @@ package flexlib.containers
 	                    if (contentW > content.getExplicitOrMeasuredWidth())
 	                        contentW = content.getExplicitOrMeasuredWidth();
 	                }
-	
+
 	                if (!isNaN(content.percentHeight))
 	                {
 	                    if (contentH > content.maxHeight)
@@ -270,13 +276,13 @@ package flexlib.containers
 	                    if (contentH > content.getExplicitOrMeasuredHeight())
 	                        contentH = content.getExplicitOrMeasuredHeight();
 	                }
-	
+
 	                if (content.width != contentW ||
 	                    content.height != contentH)
 	                {
 	                    content.setActualSize(contentW, contentH);
 	                }
-	
+
 	                y += localContentHeight;
 	            }
 	            else
@@ -285,28 +291,28 @@ package flexlib.containers
 	                        ? y : y - localContentHeight);
 	                content.visible = false;
 	            }
-	            
+
 	            if(headerLocation == AccordionHeaderLocation.BELOW) {
 		            header.move(x, y);
 		            header.setActualSize(localContentWidth, headerHeight);
 		            y += headerHeight;
 				}
-	
+
 	            y += verticalGap;
 	        }
-	
+
 	        // Make sure blocker is in front
 	        if (blocker)
 	            rawChildren.setChildIndex(blocker, numChildren - 1);
-	
+
 	        // refresh the focus rect, the dimensions might have changed.
 	        drawHeaderFocus(focusedIndex, showFocusIndicator);
 	    }
-	    
-	    
-	    
-	    
-	    
+
+
+
+
+
 	    /**
 	     *  @private
 	     */
@@ -318,18 +324,18 @@ package flexlib.containers
 	        var contentHeight:Number = tweenContentHeight;
 	        var oldSelectedIndex:int = tweenOldSelectedIndex;
 	        var newSelectedIndex:int = tweenNewSelectedIndex;
-	
+
 	        // The tweened value is the height of the new content area, which varies
 	        // from 0 to the contentHeight. As the new content area grows, the
 	        // old content area shrinks.
 	        var newContentHeight:Number = value;
 	        var oldContentHeight:Number = contentHeight - value;
-	
+
 	        // These offsets for the Y position of the content clips make the content
 	        // clips appear to be pushed up and pulled down.
 	        var oldOffset:Number = oldSelectedIndex < newSelectedIndex ? -newContentHeight : newContentHeight;
 	        var newOffset:Number = newSelectedIndex > oldSelectedIndex ? oldContentHeight : -oldContentHeight;
-	
+
 	        // Loop over all the headers to arrange them vertically.
 	        // The loop is intentionally over ALL the headers, not just the ones that
 	        // need to move; this makes the animation look equally smooth
@@ -342,12 +348,12 @@ package flexlib.containers
 	        {
 	            var header:Button = getHeaderAt(i);
 	            var content:Container = Container(getChildAt(i));
-	
+
 				if(headerLocation == AccordionHeaderLocation.ABOVE) {
 	            	header.$y = y;
 	            	y += header.height;
 				}
-				
+
 	            if (i == oldSelectedIndex)
 	            {
 	                content.cacheAsBitmap = true;
@@ -355,7 +361,7 @@ package flexlib.containers
 	                        contentWidth, contentHeight);
 	                content.visible = true;
 	                y += oldContentHeight;
-	
+
 	            }
 	            else if (i == newSelectedIndex)
 	            {
@@ -365,44 +371,44 @@ package flexlib.containers
 	                content.visible = true;
 	                y += newContentHeight;
 	            }
-	            
+
 	            if(headerLocation == AccordionHeaderLocation.BELOW) {
 	            	header.$y = y;
 	            	y += header.height;
 				}
-	
+
 	            y += verticalGap;
 	        }
-	        
-	       
+
+
 	    }
-	
+
 	    /**
 	     *  @private
 	     */
 	    override mx_internal function onTweenEnd(value:Number):void
 	    {
 	        bSliding = false;
-	
+
 	        var oldSelectedIndex:int = tweenOldSelectedIndex;
-	
+
 	        var vm:EdgeMetrics = tweenViewMetrics;
-	
+
 	        var verticalGap:Number = getStyle("verticalGap");
 	        var headerHeight:Number = getHeaderHeight();
-	
+
 	        var localContentWidth:Number = calcContentWidth();
 	        var localContentHeight:Number = calcContentHeight();
-	
+
 	        var y:Number = vm.top;
 	        var content:Container;
-	
+
 			/*
 			 * OK, so we got a problem here. I *think* the problem is that the old
 			 * tween gets run a bit too much (ie if you select an item while a tween is
 			 * in progress, then the previous tween still finishes, which causes this function
 			 * to run and get passed an invaid value). The result is that the header jumps for
-			 * an instant before going back to the right position (which gets reset once the next 
+			 * an instant before going back to the right position (which gets reset once the next
 			 * onTweenUpdate of the new, correct Tween gets run).
 			 *
 			 * So what to do? Ideally we would check if the tween that triggered this function is
@@ -411,11 +417,11 @@ package flexlib.containers
 			 * to not update the header positions on tween end. I think this is OK since basically
 			 * onTweenUpdate gets run enough to put the headers in the right spots.
 			 *
-			 * Another note: this bug only appeared once I tried allowing the headers to be below the 
-			 * content. Otherwise it was unoticeable (but I believe still technically incorrect). 
-			 * 
+			 * Another note: this bug only appeared once I tried allowing the headers to be below the
+			 * content. Otherwise it was unoticeable (but I believe still technically incorrect).
+			 *
 			 * -Doug McCune
-			 * 
+			 *
 			 * UPDATE: 12-26-2007
 			 * Well, turns out that if you use the normal VAccordion then my hack to try to fix the animation
 			 * problem makes things worse. The lines I commented out actually do server a purpose, so
@@ -427,13 +433,13 @@ package flexlib.containers
 	        for (var i:int = 0; i < n; i++)
 	        {
 	            var header:Button = getHeaderAt(i);
-	            
+
 	            if(headerLocation == AccordionHeaderLocation.ABOVE) {
 	            	//
 	            	header.$y = y;
 	            	y += headerHeight;
 				}
-	
+
 	            if (i == selectedIndex)
 	            {
 	                content = Container(getChildAt(i));
@@ -444,16 +450,16 @@ package flexlib.containers
 	                content.visible = true;
 	                y += localContentHeight;
 	            }
-	            
+
 	            if(headerLocation == AccordionHeaderLocation.BELOW) {
 	            	//
 	            	header.$y = y;
 	            	y += headerHeight;
 				}
-				
+
 	            y += verticalGap;
 	        }
-	
+
 	        if (oldSelectedIndex != -1)
 	        {
 	            content = Container(getChildAt(oldSelectedIndex));
@@ -462,20 +468,20 @@ package flexlib.containers
 	            content.visible = false;
 	            content.tweeningProperties = null;
 	        }
-	
+
 	        // Delete the temporary tween invariants we set up in startTween.
 	        tweenViewMetrics = null;
 	        tweenContentWidth = NaN;
 	        tweenContentHeight = NaN;
 	        tweenOldSelectedIndex = 0;
 	        tweenNewSelectedIndex = 0;
-	
+
 	        tween = null;
-	
+
 	        UIComponent.resumeBackgroundProcessing();
-	
+
 	        Container(getChildAt(selectedIndex)).tweeningProperties = null;
-	
+
 	        // If we interrupted a Dissolve effect, restart it here
 	        if (currentDissolveEffect)
 	        {
@@ -488,23 +494,23 @@ package flexlib.containers
 	                currentDissolveEffect.play([this]);
 	            }
 	        }
-	
+
 	        // Let the screen render the last frame of the animation before
         	// we begin instantiating the new child.
         	callLater(instantiateChild, [selectedChild]);
 	    }
-	    
+
 	    override protected function startTween(oldSelectedIndex:int, newSelectedIndex:int):void
     	{
     		if(tween)
     			tween.pause();
-    			
+
     		super.startTween(oldSelectedIndex, newSelectedIndex);
-    		
+
     		 invalidateSize();
 	        invalidateDisplayList();
 	        validateNow();
-	       
+
     	}
 	}
 }

@@ -41,7 +41,10 @@ package net.vdombox.object_editor.controller
 			function saveData(event:Event):void 
 			{					
 				var newFile:File = event.target as File;
-				objTypeVO.filePath = newFile.nativePath + ".xml";
+				objTypeVO.filePath = newFile.nativePath;
+				if (newFile.extension != "xml")
+					objTypeVO.filePath = objTypeVO.filePath + ".xml";
+					
 				facade.sendNotification( ApplicationFacade.SAVE_OBJECT_TYPE, objTypeVO );				
 			}						
 		}

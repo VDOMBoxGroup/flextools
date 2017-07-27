@@ -11,7 +11,7 @@
         <s:VGroup width="100%" verticalAlign="middle" horizontalAlign="left">
             <s:Label text="Types documentation folder: " />
             <essence:FileBrowseBox id="typesDocFolderBox"
-                                   mode="{FileBrowseBox.MODE_DIR}" defaultPath="{File.desktopDirectory.nativePath}"
+                                   mode="{FileBrowseBox.MODE_DIR}" 
                                    browseTitle="Select types documentation folder"
                                    width="100%"/>
         </s:VGroup>

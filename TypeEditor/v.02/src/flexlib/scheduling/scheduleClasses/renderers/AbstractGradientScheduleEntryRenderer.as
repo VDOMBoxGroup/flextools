@@ -38,11 +38,12 @@ package flexlib.scheduling.scheduleClasses.renderers
   import mx.containers.Box;
   import mx.controls.Label;
   import mx.controls.Text;
+  import mx.core.FlexGlobals;
   import mx.core.ScrollPolicy;
   import mx.core.mx_internal;
   import mx.formatters.DateFormatter;
   import mx.styles.CSSStyleDeclaration;
-  import mx.styles.StyleManager;
+
   import mx.utils.ColorUtil;
 
   public class AbstractGradientScheduleEntryRenderer extends Box implements IScheduleEntryRenderer
@@ -133,11 +134,11 @@ package flexlib.scheduling.scheduleClasses.renderers
       var effects:Array;
 
       // defaultTimeStyle
-      style = StyleManager.getStyleDeclaration(".defaultTimeStyle");
+      style = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(".defaultTimeStyle");
       if (!style)
       {
         style = new CSSStyleDeclaration();
-        StyleManager.setStyleDeclaration(".defaultTimeStyle", style, false);
+        FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration(".defaultTimeStyle", style, false);
       }
       if (style.factory == null)
       {
@@ -149,11 +150,11 @@ package flexlib.scheduling.scheduleClasses.renderers
         };
       }
       // defaultEntryStyle
-      style = StyleManager.getStyleDeclaration(".defaultEntryStyle");
+      style = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(".defaultEntryStyle");
       if (!style)
       {
         style = new CSSStyleDeclaration();
-        StyleManager.setStyleDeclaration(".defaultEntryStyle", style, false);
+        FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration(".defaultEntryStyle", style, false);
       }
       if (style.factory == null)
       {
@@ -262,23 +263,20 @@ package flexlib.scheduling.scheduleClasses.renderers
       updateSelected();
     }
 
-    FLEX_TARGET_VERSION::flex4
+    override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
     {
-      override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+      super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+      if (gradientChanged)
       {
-        super.updateDisplayList(unscaledWidth, unscaledHeight);
+        var fillColors:Array = getStyle("fillColors");
+        var cornerRadius:int = getStyle("cornerRadius");
+        var matrix:Matrix = new Matrix();
+        matrix.createGradientBox(unscaledWidth, unscaledHeight, 90);
+        graphics.beginGradientFill(GradientType.LINEAR, fillColors, [1, 1], [0, 255], matrix);
+        graphics.drawRoundRect(0, 0, unscaledWidth, unscaledHeight, cornerRadius + 4);
 
-        if (gradientChanged)
-        {
-          var fillColors:Array = getStyle("fillColors");
-          var cornerRadius:int = getStyle("cornerRadius");
-          var matrix:Matrix = new Matrix();
-          matrix.createGradientBox(unscaledWidth, unscaledHeight, 90);
-          graphics.beginGradientFill(GradientType.LINEAR, fillColors, [1, 1], [0, 255], matrix);
-          graphics.drawRoundRect(0, 0, unscaledWidth, unscaledHeight, cornerRadius + 4);
-
-          gradientChanged = false;;
-        }
+        gradientChanged = false;;
       }
     }
   }

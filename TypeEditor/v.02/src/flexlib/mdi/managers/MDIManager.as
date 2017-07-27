@@ -44,9 +44,9 @@ package flexlib.mdi.managers
 	import flexlib.mdi.events.MDIWindowEvent;
 
 	import mx.collections.ArrayCollection;
-	import mx.core.Application;
 	import mx.core.EventPriority;
-	import mx.core.IFlexDisplayObject;
+    import mx.core.FlexGlobals;
+    import mx.core.IFlexDisplayObject;
 	import mx.core.UIComponent;
 	import mx.effects.CompositeEffect;
 	import mx.effects.Effect;
@@ -200,7 +200,7 @@ package flexlib.mdi.managers
 		{
 			if(MDIManager.globalMDIManager == null)
 			{
-				globalMDIManager = new MDIManager(Application.application as UIComponent);
+				globalMDIManager = new MDIManager(FlexGlobals.topLevelApplication as UIComponent);
 				globalMDIManager.isGlobal = true;
 			}
 			return MDIManager.globalMDIManager;
@@ -308,7 +308,7 @@ package flexlib.mdi.managers
 
 				if(this.isGlobal)
 				{
-					PopUpManager.addPopUp(window,Application.application as DisplayObject);
+					PopUpManager.addPopUp(window,FlexGlobals.topLevelApplication as DisplayObject);
 					this.position(window);
 				}
 				else
@@ -536,14 +536,18 @@ package flexlib.mdi.managers
 					break;
 				}
 
-				// add this event to collection for lookup in the effect handler
-				mgrEventCollection.addItem(mgrEvent);
+        // Play effect only if it is necessary
+        if(mgrEvent.effect is CompositeEffect || (mgrEvent.effect.targets && mgrEvent.effect.targets.length))
+        {
+          // add this event to collection for lookup in the effect handler
+          mgrEventCollection.addItem(mgrEvent);
 
-				// listen for start and end of effect
-				mgrEvent.effect.addEventListener(EffectEvent.EFFECT_START, onMgrEffectEvent)
-				mgrEvent.effect.addEventListener(EffectEvent.EFFECT_END, onMgrEffectEvent);
+          // listen for start and end of effect
+          mgrEvent.effect.addEventListener(EffectEvent.EFFECT_START, onMgrEffectEvent)
+          mgrEvent.effect.addEventListener(EffectEvent.EFFECT_END, onMgrEffectEvent);
 
-				mgrEvent.effect.play();
+          mgrEvent.effect.play();
+        }
 			}
 		}
 

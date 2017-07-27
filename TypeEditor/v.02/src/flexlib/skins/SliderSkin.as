@@ -12,9 +12,6 @@
 package flexlib.skins
 {
 
-  import flash.events.*;
-
-  import mx.managers.*;
   import mx.skins.Border;
 
   /**
@@ -84,10 +81,10 @@ package flexlib.skins
 
       super.updateDisplayList(w, h);
       var color:int = 0xE0E0E0;
-      
+
       graphics.clear();
-      
-      
+
+
       // Highlight
       drawRoundRect(
         0, h / 2, w, 1, 0,
@@ -98,7 +95,7 @@ package flexlib.skins
       drawRoundRect(
         0, h / 2 - 2, w, 1, 0,
         color, 0.4);
-      
+
     }
 
 

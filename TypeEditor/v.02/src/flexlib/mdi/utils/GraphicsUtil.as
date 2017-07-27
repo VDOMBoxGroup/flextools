@@ -65,15 +65,7 @@ package flexlib.mdi.utils
         {
           if (bDrawing)
           {
-            FLEX_TARGET_VERSION::flex4
-            {
-              stroke.apply(target, new Rectangle(x0, y0, x1 - x0, y1 - y0), new Point(0, 0));
-            }
-            FLEX_TARGET_VERSION::flex3
-            {
-              stroke.apply(target);
-            }
-
+            stroke.apply(target, new Rectangle(x0, y0, x1 - x0, y1 - y0), new Point(0, 0));
           }
           else
           {

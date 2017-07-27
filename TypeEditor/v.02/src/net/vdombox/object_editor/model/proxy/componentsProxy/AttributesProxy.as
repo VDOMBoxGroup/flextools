@@ -6,8 +6,10 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 import flash.filesystem.File;
 
 import mx.collections.ArrayCollection;
-	
-	import net.vdombox.object_editor.model.ErrorLogger;
+
+import net.vdombox.object_editor.Utils.StringUtils;
+
+import net.vdombox.object_editor.model.ErrorLogger;
 import net.vdombox.object_editor.model.proxy.FileProxy;
 import net.vdombox.object_editor.model.proxy.LaTexProxy;
 import net.vdombox.object_editor.model.vo.AttributeVO;
@@ -63,10 +65,10 @@ import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 					attrib.displayName	= attrinuteXML.DisplayName;
 					attrib.defaultValue	= attrinuteXML.DefaultValue;
 					attrib.visible		= attrinuteXML.Visible.toString() == "1";
-					attrib.help			= attrinuteXML.Help;
+					attrib.help			=  StringUtils.getValueFromXML(attrinuteXML, ["Help", "Description" ]).toString();
 					attrib.interfaceType	= attrinuteXML.InterfaceType;
 					attrib.codeInterface	= attrinuteXML.CodeInterface;
-					attrib.colorgroup	= attrinuteXML.Colorgroup;
+					attrib.colorgroup	= parseInt(StringUtils.getValueFromXML(attrinuteXML, ["ColorGroup"]).toString());
 					attrib.errorValidationMessage		= attrinuteXML.ErrorValidationMessage;
 					attrib.regularExpressionValidation	= attrinuteXML.RegularExpressionValidation;
 					
@@ -75,7 +77,7 @@ import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 			}		
 			catch(error:TypeError)
 			{	
-				ErrorLogger.instance.logError("Failed: not teg: <Attribute>", "AttributesProxy.createFromXML()");
+				ErrorLogger.instance.logError("Failed: did not teg: <Attribute>", "AttributesProxy.createFromXML()");
 			}
 			finally
 			{

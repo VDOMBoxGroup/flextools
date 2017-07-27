@@ -48,5 +48,33 @@ package net.vdombox.object_editor.Utils
 			
 			return count;
 		}
+
+		/**
+		 *
+		 * @param xml
+		 * @param atrs
+		 * @return
+		 */
+        public static  function getValueFromXML( xml:XML, atrs : Array ) : Object
+        {
+			var propertyName : String;
+
+			for each ( var property : XML in xml.* )
+			{
+				propertyName = property.localName();
+
+				if ( propertyName === null )
+					continue;
+
+				propertyName = propertyName.toLowerCase();
+				for each (var atr:String in atrs)
+				{
+					if(atr.toLowerCase() == propertyName)
+							return property[ 0 ];
+				}
+			}
+
+            return "" ;
+        }
 	}
 }

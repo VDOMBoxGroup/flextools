@@ -458,17 +458,10 @@ package flexlib.controls
 
       fill.entries = entries;
 
-      fill.angle = _angle;
+      fill.rotation = _angle;
       fill.focalPointRatio = .6;
 
-      FLEX_TARGET_VERSION::flex4
-      {
-        fill.begin(g, new Rectangle(0, 0, w, h), new Point(0, 0));
-      }
-      FLEX_TARGET_VERSION::flex3
-      {
-        fill.begin(g, new Rectangle(0, 0, w, h));
-      }
+      fill.begin(g, new Rectangle(0, 0, w, h), new Point(0, 0));
 
       g.drawRect(0, 0, w, h);
       fill.end(g);
@@ -519,7 +512,7 @@ package flexlib.controls
       fire.draw(input);
       fire.applyFilter(fire, fire.rect, new Point(0, 0), d);
 
-      //Now just drop the resulting bitmapData intop our output Bitmap and we're all done! 
+      //Now just drop the resulting bitmapData intop our output Bitmap and we're all done!
       output.bitmapData = fire;
     }
   }

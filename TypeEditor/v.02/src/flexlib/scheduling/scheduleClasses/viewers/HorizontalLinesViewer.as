@@ -98,7 +98,7 @@ package flexlib.scheduling.scheduleClasses.viewers
       _horizontalGridLineAlpha = value;
     }
 
-    //---------------------------------------------		
+    //---------------------------------------------
 
     public function update(event:LayoutUpdateEvent):void
     {
@@ -146,14 +146,7 @@ package flexlib.scheduling.scheduleClasses.viewers
     {
       var y:Number = item.y - layout.yPosition;
       lineRenderer.moveTo(graphics, 0, y);
-      FLEX_TARGET_VERSION::flex4
-      {
-        lineRenderer.apply(graphics, new Rectangle(0, 0, width, height), new Point(0, 0));
-      }
-      FLEX_TARGET_VERSION::flex3
-      {
-        lineRenderer.apply(graphics);
-      }
+      lineRenderer.apply(graphics, new Rectangle(0, 0, width, height), new Point(0, 0));
       lineRenderer.drawTo(graphics, item.width, y);
     }
   }

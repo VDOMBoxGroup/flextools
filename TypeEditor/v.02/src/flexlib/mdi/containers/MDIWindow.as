@@ -31,20 +31,22 @@ package flexlib.mdi.containers
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	import flash.utils.getQualifiedClassName;
-
+	
 	import flexlib.mdi.events.MDIWindowEvent;
 	import flexlib.mdi.managers.MDIManager;
-
+	import flexlib.styles.StyleDeclarationHelper;
+	
 	import mx.containers.Canvas;
 	import mx.containers.Panel;
 	import mx.controls.Button;
 	import mx.core.Container;
+	import mx.core.FlexGlobals;
 	import mx.core.UIComponent;
 	import mx.core.UITextField;
 	import mx.core.mx_internal;
 	import mx.managers.CursorManager;
 	import mx.styles.CSSStyleDeclaration;
-	import mx.styles.StyleManager;
+
 
 
 	//--------------------------------------
@@ -568,7 +570,10 @@ package flexlib.mdi.containers
 			//------------------------
 		    //  type selector
 		    //------------------------
-			var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("MDIWindow");
+			var selector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(
+				StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.mdi.containers.MDIWindow")
+			);
+			
 			if(!selector)
 			{
 				selector = new CSSStyleDeclaration();
@@ -610,7 +615,7 @@ package flexlib.mdi.containers
 		    //  focus style
 		    //------------------------
 			var styleNameFocus:String = selector.getStyle("styleNameFocus");
-			var winFocusSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + styleNameFocus);
+			var winFocusSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + styleNameFocus);
 			if(!winFocusSelector)
 			{
 				winFocusSelector = new CSSStyleDeclaration();
@@ -627,13 +632,13 @@ package flexlib.mdi.containers
 				this.borderAlpha = 1;
 				this.backgroundAlpha = 1;
 			}
-			StyleManager.setStyleDeclaration("." + styleNameFocus, winFocusSelector, false);
+			FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + styleNameFocus, winFocusSelector, false);
 
 			//------------------------
 		    //  no focus style
 		    //------------------------
 			var styleNameNoFocus:String = selector.getStyle("styleNameNoFocus");
-			var winNoFocusSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + styleNameNoFocus);
+			var winNoFocusSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + styleNameNoFocus);
 			if(!winNoFocusSelector)
 			{
 				winNoFocusSelector = new CSSStyleDeclaration();
@@ -650,13 +655,13 @@ package flexlib.mdi.containers
 				this.borderAlpha = .5;
 				this.backgroundAlpha = .5;
 			}
-			StyleManager.setStyleDeclaration("." + styleNameNoFocus, winNoFocusSelector, false);
+			FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + styleNameNoFocus, winNoFocusSelector, false);
 
 			//------------------------
 		    //  title style
 		    //------------------------
 			var titleStyleName:String = selector.getStyle("titleStyleName");
-			var winTitleSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + titleStyleName);
+			var winTitleSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + titleStyleName);
 			if(!winTitleSelector)
 			{
 				winTitleSelector = new CSSStyleDeclaration();
@@ -668,13 +673,13 @@ package flexlib.mdi.containers
 				this.fontWeight = "bold";
 				this.color = 0x000000;
 			}
-			StyleManager.setStyleDeclaration("." + titleStyleName, winTitleSelector, false);
+			FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + titleStyleName, winTitleSelector, false);
 
 			//------------------------
 		    //  minimize button
 		    //------------------------
 			var minimizeBtnStyleName:String = selector.getStyle("minimizeBtnStyleName");
-			var minimizeBtnSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + minimizeBtnStyleName);
+			var minimizeBtnSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + minimizeBtnStyleName);
 			if(!minimizeBtnSelector)
 			{
 				minimizeBtnSelector = new CSSStyleDeclaration();
@@ -686,13 +691,13 @@ package flexlib.mdi.containers
 				this.downSkin = DEFAULT_MINIMIZE_BUTTON;
 				this.disabledSkin = DEFAULT_MINIMIZE_BUTTON;
 			}
-			StyleManager.setStyleDeclaration("." + minimizeBtnStyleName, minimizeBtnSelector, false);
+			FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + minimizeBtnStyleName, minimizeBtnSelector, false);
 
 			//------------------------
 		    //  maximize button
 		    //------------------------
 			var maximizeBtnStyleName:String = selector.getStyle("maximizeBtnStyleName");
-			var maximizeBtnSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + maximizeBtnStyleName);
+			var maximizeBtnSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + maximizeBtnStyleName);
 			if(!maximizeBtnSelector)
 			{
 				maximizeBtnSelector = new CSSStyleDeclaration();
@@ -704,13 +709,13 @@ package flexlib.mdi.containers
 				this.downSkin = DEFAULT_MAXIMIZE_BUTTON;
 				this.disabledSkin = DEFAULT_MAXIMIZE_BUTTON;
 			}
-			StyleManager.setStyleDeclaration("." + maximizeBtnStyleName, maximizeBtnSelector, false);
+			FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + maximizeBtnStyleName, maximizeBtnSelector, false);
 
 			//------------------------
 		    //  restore button
 		    //------------------------
 			var restoreBtnStyleName:String = selector.getStyle("restoreBtnStyleName");
-			var restoreBtnSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + restoreBtnStyleName);
+			var restoreBtnSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + restoreBtnStyleName);
 			if(!restoreBtnSelector)
 			{
 				restoreBtnSelector = new CSSStyleDeclaration();
@@ -722,13 +727,13 @@ package flexlib.mdi.containers
 				this.downSkin = DEFAULT_RESTORE_BUTTON;
 				this.disabledSkin = DEFAULT_RESTORE_BUTTON;
 			}
-			StyleManager.setStyleDeclaration("." + restoreBtnStyleName, restoreBtnSelector, false);
+			FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + restoreBtnStyleName, restoreBtnSelector, false);
 
 			//------------------------
 		    //  close button
 		    //------------------------
 			var closeBtnStyleName:String = selector.getStyle("closeBtnStyleName");
-			var closeBtnSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + closeBtnStyleName);
+			var closeBtnSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + closeBtnStyleName);
 			if(!closeBtnSelector)
 			{
 				closeBtnSelector = new CSSStyleDeclaration();
@@ -740,10 +745,12 @@ package flexlib.mdi.containers
 				this.downSkin = DEFAULT_CLOSE_BUTTON;
 				this.disabledSkin = DEFAULT_CLOSE_BUTTON;
 			}
-			StyleManager.setStyleDeclaration("." + closeBtnStyleName, closeBtnSelector, false);
+			FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration("." + closeBtnStyleName, closeBtnSelector, false);
 
 			// apply it all
-			StyleManager.setStyleDeclaration("MDIWindow", selector, false);
+			FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration(
+				StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.mdi.containers.MDIWindow"), 
+				selector, false);
 
 			return true;
 		}
@@ -1069,14 +1076,14 @@ package flexlib.mdi.containers
 			if(windowStyleName)
 			{
 				// make sure a corresponding style actually exists
-				var classSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + windowStyleName);
+				var classSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + windowStyleName);
 				if(classSelector)
 				{
 					selectorList.push(classSelector);
 				}
 			}
 			// add type selector (created in classConstruct so we know it exists)
-			var typeSelector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("MDIWindow");
+			var typeSelector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("MDIWindow");
 			selectorList.push(typeSelector);
 
 			return selectorList;
@@ -1110,7 +1117,7 @@ package flexlib.mdi.containers
 				{
 					// if this is a style name make sure the style exists
 					if(typeof(selectorList[i].getStyle(style)) == "string"
-						&& !(StyleManager.getStyleDeclaration("." + selectorList[i].getStyle(style))))
+						&& !(FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration("." + selectorList[i].getStyle(style))))
 					{
 						continue;
 					}

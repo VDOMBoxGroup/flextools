@@ -11,7 +11,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 	import net.vdombox.object_editor.model.vo.LanguagesVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	
-	import org.puremvc.as3.interfaces.*;
+	import org.puremvc.as3.interfaces.IProxy;
 	import org.puremvc.as3.patterns.proxy.Proxy;
 
 	public class LanguagesProxy extends Proxy implements IProxy
@@ -108,6 +108,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					break;
 				}
 			}
+			
 			return retString;
 		}
 
@@ -170,8 +171,12 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function getRegExpID(code:String):String
 		{				
 			var regResource:RegExp = /#Lang\((\d+)\)/;
-			var matchResult:Array = code.match(regResource);			
-			return matchResult[1] ;
+			var matchResult:Array = code.match(regResource);	
+			if (matchResult)
+				return matchResult[1] ;
+			
+			ErrorLogger.instance.logError("Failed: lang Id",code  );
+			return null;
 		}
 		
 		/**

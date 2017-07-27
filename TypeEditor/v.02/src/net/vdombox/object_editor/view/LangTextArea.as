@@ -48,6 +48,12 @@ package net.vdombox.object_editor.view
 		public function completeStructure( langsVO:LanguagesVO, fildValue:String):void
 		{
 			var fildID:String = getRegExpWord(fildValue);
+			if(!fildID)
+			{
+				words = null;
+				text  = fildValue;
+				return;
+			}
 			currentLanguage = langsVO.currentLocation;
 			var wordsVO:ArrayCollection = langsVO.words;
 			
@@ -60,8 +66,7 @@ package net.vdombox.object_editor.view
 					return;
 				}
 			}
-			words = null;
-			text  = "";
+			
 			trace("completeStructure: ", fildValue);
 		}
 		
@@ -79,7 +84,7 @@ package net.vdombox.object_editor.view
 			{
 				return matchResult[1];
 			}
-			return "";
+			return null;
 		}
 	}
 }

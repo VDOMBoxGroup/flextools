@@ -13,18 +13,18 @@ package flexlib.containers.accordionClasses
 import flash.display.DisplayObject;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import mx.containers.Accordion;
-import mx.controls.Button;
+
+import flexlib.controls.CanvasButton;
+import flexlib.styles.StyleDeclarationHelper;
+
 import mx.core.Container;
-import mx.core.EdgeMetrics;
+import mx.core.FlexGlobals;
 import mx.core.IDataRenderer;
 import mx.core.IFlexDisplayObject;
 import mx.core.mx_internal;
+import mx.skins.halo.AccordionHeaderSkin;
 import mx.styles.CSSStyleDeclaration;
 import mx.styles.ISimpleStyleClient;
-import mx.styles.StyleManager;
-import flexlib.controls.CanvasButton;
-import mx.skins.halo.AccordionHeaderSkin;
 
 use namespace mx_internal;
 
@@ -33,7 +33,7 @@ use namespace mx_internal;
 /**
  * The <code>CanvasButtonAccordionHeader</code> class allows you to easily use a <code>CanvasButton</code> control as the header
  * renderer of an <code>Accordion</code>.
- * 
+ *
  * This class is a copy of the AccordionHeader class, but instead of subclassing <code>Button</code>, it subclasses
  * <code>CanvasButton</code>.
  *
@@ -42,7 +42,7 @@ use namespace mx_internal;
  */
 public class CanvasButtonAccordionHeader extends CanvasButton implements IDataRenderer
 {
-	
+
 	//--------------------------------------------------------------------------
 	//
 	//  Class mixins
@@ -116,7 +116,7 @@ public class CanvasButtonAccordionHeader extends CanvasButton implements IDataRe
 	{
 		return _data;
 	}
-	
+
 	/**
 	 *  @private
 	 */
@@ -124,7 +124,7 @@ public class CanvasButtonAccordionHeader extends CanvasButton implements IDataRe
 	{
 		_data = value;
 	}
-	
+
 	//----------------------------------
 	//  selected
 	//----------------------------------
@@ -141,13 +141,15 @@ public class CanvasButtonAccordionHeader extends CanvasButton implements IDataRe
 
 	private static function initializeStyles():void
 	{
-		var selector:CSSStyleDeclaration = StyleManager.getStyleDeclaration("CanvasButtonAccordionHeader");
-		
+		var selector:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(
+			StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.containers.accordionClasses.CanvasButtonAccordionHeader")
+		);
+
 		if(!selector)
 		{
 			selector = new CSSStyleDeclaration();
 		}
-		
+
 		selector.defaultFactory = function():void
 		{
 			this.fontSize = 10;
@@ -166,11 +168,12 @@ public class CanvasButtonAccordionHeader extends CanvasButton implements IDataRe
 			this.textAlign = "left";
 			this.upSkin = mx.skins.halo.AccordionHeaderSkin;
 		}
-		
-		StyleManager.setStyleDeclaration("CanvasButtonAccordionHeader", selector, false);
-			
+
+		FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration(
+			StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.containers.accordionClasses.CanvasButtonAccordionHeader"), 
+			selector, false);
 	}
-	
+
 	initializeStyles();
 
 
@@ -196,14 +199,14 @@ public class CanvasButtonAccordionHeader extends CanvasButton implements IDataRe
 	override protected function createChildren():void
 	{
 		super.createChildren();
-		
+
 		// AccordionHeader has a bit of a conflict here. Our styleName points to
 		// our parent Accordion, which has padding values defined. We also have
 		// padding values defined on our type selector, but since class selectors
 		// take precedence over type selectors, the type selector padding values
 		// are ignored. Force them in here.
-		var styleDecl:CSSStyleDeclaration = StyleManager.getStyleDeclaration(className);
-		
+		var styleDecl:CSSStyleDeclaration = FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(className);
+
 		if (styleDecl)
 		{
 			var value:Number = styleDecl.getStyle("paddingLeft");
@@ -214,7 +217,7 @@ public class CanvasButtonAccordionHeader extends CanvasButton implements IDataRe
 				setStyle("paddingRight", value);
 		}
 	}
-	
+
 	/**
 	 *  @private
 	 */

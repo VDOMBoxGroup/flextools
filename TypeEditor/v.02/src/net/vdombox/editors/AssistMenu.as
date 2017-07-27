@@ -64,7 +64,7 @@ package net.vdombox.editors
 			if ( a.length == 0 )
 				return false;
 			menu.setListData( a );
-			menu.setSelectedIndex( 0 );
+			menu.selectedIndex= 0 ;
 
 			rePositionMenu();
 			return true;
@@ -194,7 +194,7 @@ package net.vdombox.editors
 		{
 			var p : Point;
 			menu.setListData( vectorToArray( menuData ) );
-			menu.setSelectedIndex( 0 );
+			menu.selectedIndex= 0 ;
 
 			p = fld.getPointForIndex( index );
 			p.x += fld.scrollH;

@@ -24,18 +24,17 @@
 package flexlib.controls
 {
   import flash.display.Graphics;
-  import flash.display.SpreadMethod;
-  import flash.display.Sprite;
   import flash.events.MouseEvent;
-
+  
   import flexlib.events.ImageMapEvent;
-
-  import mx.collections.ArrayCollection;
+  import flexlib.styles.StyleDeclarationHelper;
+  
   import mx.controls.Image;
+  import mx.core.FlexGlobals;
   import mx.core.UIComponent;
   import mx.core.mx_internal;
   import mx.styles.CSSStyleDeclaration;
-  import mx.styles.StyleManager;
+
 
   use namespace mx_internal;
 
@@ -192,12 +191,16 @@ package flexlib.controls
     private static function initStyles():Boolean
     {
       var sd:CSSStyleDeclaration =
-        StyleManager.getStyleDeclaration("ImageMap");
+        FlexGlobals.topLevelApplication.styleManager.getStyleDeclaration(
+			StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.controls.ImageMap")
+		);
 
       if (!sd)
       {
         sd = new CSSStyleDeclaration();
-        StyleManager.setStyleDeclaration("ImageMap", sd, false);
+        FlexGlobals.topLevelApplication.styleManager.setStyleDeclaration(
+			StyleDeclarationHelper.getStyleSelectorForClassName("flexlib.controls.ImageMap"), 
+			sd, false);
       }
 
       sd.defaultFactory = function():void
@@ -256,17 +259,10 @@ package flexlib.controls
     {
       removeChildren();
 
-      FLEX_TARGET_VERSION::flex4
-      {
-        //TODO: this shouldn't be hardcoded...
-        // for some reason, flex4 won't pickup the outlineThickness style,
-        // fixing with a hardcoded thickness of 1 for now.
-        var outlineThickness:Number = 1;
-      }
-      FLEX_TARGET_VERSION::flex3
-      {
-        var outlineThickness:Number = getStyle("outlineThickness");
-      }
+      //TODO: this shouldn't be hardcoded...
+      // for some reason, flex4 won't pickup the outlineThickness style,
+      // fixing with a hardcoded thickness of 1 for now.
+      var outlineThickness:Number = 1;
 
       var outlineColor:uint = getStyle("outlineColor");
       var outlineAlpha:Number = getStyle("outlineAlpha");
@@ -354,7 +350,7 @@ package flexlib.controls
     {
       g.moveTo(coords[0], coords[1]);
 
-      //since we moved to the first point, we loop over all points starting on the second point	
+      //since we moved to the first point, we loop over all points starting on the second point
       for (var i:int = 2; i < coords.length; i += 2)
       {
         g.lineTo(coords[i], coords[i + 1]);
@@ -362,19 +358,6 @@ package flexlib.controls
 
       //got to remember to reconnect from the last point to the first point
       g.lineTo(coords[0], coords[1]);
-    }
-
-    /**
-     * @private
-     * I don't know why UIComponent doesn't have a removeAllChildren() method, but this
-     * method just does that, removes all children of the areaHolder.
-     */
-    private function removeChildren():void
-    {
-      while (areaHolder.numChildren > 0)
-      {
-        areaHolder.removeChildAt(0);
-      }
     }
 
     /**

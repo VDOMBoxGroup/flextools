@@ -12,18 +12,17 @@
     <fx:Script>
         <![CDATA[
 			import mx.collections.ArrayCollection;
-			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.object_editor.Utils.WindowManager;
 			import net.vdombox.object_editor.event.UpdateDescriptionEvent;
-			import net.vdombox.object_editor.model.vo.ActionsContainerVO;
-			import net.vdombox.object_editor.model.vo.DescriptionListItemVO;
+			
 			import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 
 //            TODO:
 //            сделать так, чтобы можно было отображать экшены из всех контейнеров, а не только из первого (htmlcontainer)
 
+		[Bindable]
         public var typeVO:ObjectTypeVO;
 
         private function creationCompleteHandler(event:FlexEvent) : void

@@ -16,10 +16,7 @@
 				dataProvider = new ArrayList( value );
 			}
 
-			public function setSelectedIndex( index : int ) : void
-			{
-				selectedIndex = index;
-			}
+
 
 			public function getSelectedValue() : String
 			{
