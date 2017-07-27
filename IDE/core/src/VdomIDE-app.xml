@@ -26,7 +26,7 @@
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
 	
-	<versionNumber>3.0.2</versionNumber>
+	<versionNumber>3.0.3</versionNumber>
 	<!-- versionNumber>2.0.2</versionNumber-->
 
 	<!-- Description, displayed in the AIR application installer.
@@ -47,7 +47,7 @@
 		<content>[This value will be overwritten by Flash Builder in the output app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
-		<title>Vdom IDE.v.3.0.1</title> 
+		<title>Vdom IDE.v.3.0.3</title> 
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
 		<!-- <systemChrome></systemChrome> -->

@@ -209,7 +209,6 @@ package net.vdombox.ide.modules.scripts.view
 					{
 						serverScriptsPanel.scripts.push( body.serverActionVO );
 						serverScriptsPanel.scripts = serverScriptsPanel.scripts;
-
 					}
 
 					break;
@@ -230,7 +229,6 @@ package net.vdombox.ide.modules.scripts.view
 							break;
 						}
 					}
-
 					break;
 				}
 			}

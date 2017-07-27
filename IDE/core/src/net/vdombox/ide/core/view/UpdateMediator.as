@@ -27,7 +27,7 @@ package net.vdombox.ide.core.view
 
 		private var dataXML : XML;
 		
-		private static var updateURL : String = "http://update.vdombox.ru/ide/update.xml";
+		private static var updateURL : String = "https://update.vdombox.ru/ide/update.xml";
 		//private static var updateURL : String ="http://adelfos.ru/test/update.xml";
 
 		public function UpdateMediator( viewComponent : Object = null )
@@ -49,6 +49,8 @@ package net.vdombox.ide.core.view
 
 		private function initialize() : void
 		{
+			//forTest();
+			//return;
 			
 			var loader : URLLoader = new URLLoader();
 			var request : URLRequest = new URLRequest( updateURL );
@@ -70,6 +72,23 @@ package net.vdombox.ide.core.view
 			facade.removeMediator( UpdateMediator.NAME );
 		}
 
+		private function forTest():void
+		{
+			//TODO: delete this function
+			if ( !applicationUpdater )
+				applicationUpdater = new ApplicationUpdaterUI();
+			
+			applicationUpdater.updateURL = updateURL;
+			
+			
+			applicationUpdater.isCheckForUpdateVisible = true; // We won't ask permission to check for an update
+			
+			addHandlers();
+			
+			applicationUpdater.initialize();
+		}
+				
+				
 		private function on_complete( evt : Event ) : void
 		{
 			try	
@@ -99,7 +118,7 @@ package net.vdombox.ide.core.view
 			applicationUpdater.updateURL = updateURL;
 			
 			
-			applicationUpdater.isCheckForUpdateVisible = false; // We won't ask permission to check for an update
+			applicationUpdater.isCheckForUpdateVisible = true; // We won't ask permission to check for an update
 
 			addHandlers();
 

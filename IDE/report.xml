@@ -223,7 +223,7 @@
       <dep id="net.vdombox.ide.core.model:ServerProxy" />
       <dep id="org.puremvc.as3.multicore.interfaces:INotification" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\spark_rb.swc$locale/en_US/layout.properties" mod="1492062286332" size="984" optimizedsize="921">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\spark_rb.swc$locale/en_US/layout.properties" mod="1492062286324" size="984" optimizedsize="921">
       <def id="fr_FR$layout_properties" />
       <def id="en_US$layout_properties" />
       <def id="ru_RU$layout_properties" />
@@ -250,7 +250,7 @@
       <dep id="mx.core:mx_internal" />
       <dep id="flash.events:Event" />
     </script>
-    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\view\skins\MainWindowSkin.mxml" mod="1491983746059" size="17380" optimizedsize="10550">
+    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\view\skins\MainWindowSkin.mxml" mod="1491983746059" size="17381" optimizedsize="10550">
       <def id="net.vdombox.ide.core.view.skins:MainWindowSkin" />
       <pre id="flash.events:IEventDispatcher" />
       <pre id="mx.binding:IBindingClient" />
@@ -329,7 +329,7 @@
       <dep id="mx.rpc:AbstractService" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_class_embed_css_win_max_over_png_1472555093_1722922033.as" mod="1451289688482" size="521" optimizedsize="301">
+    <script name="_class_embed_css_win_max_over_png_1472555093_1722922033.as" mod="1451289688457" size="521" optimizedsize="301">
       <def id="_class_embed_css_win_max_over_png_1472555093_1722922033" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -1215,7 +1215,7 @@
       <dep id="mx.resources:ResourceManager" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragLink_277963306.as" mod="1451881628482" size="635" optimizedsize="374">
+    <script name="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragLink_277963306.as" mod="1451881628457" size="635" optimizedsize="374">
       <def id="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragLink_277963306" />
       <pre id="mx.core:SpriteAsset" />
       <dep id="AS3" />
@@ -1267,7 +1267,7 @@
       <dep id="AS3" />
       <dep id="spark.effects.easing:EasingFraction" />
     </script>
-    <script name="_class_embed_css_mac_max_up_png_1304340681_1285422403.as" mod="1451289688483" size="515" optimizedsize="299">
+    <script name="_class_embed_css_mac_max_up_png_1304340681_1285422403.as" mod="1451289688457" size="515" optimizedsize="299">
       <def id="_class_embed_css_mac_max_up_png_1304340681_1285422403" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -1422,7 +1422,7 @@
       <dep id="AS3" />
       <dep id="mx.core:IContainer" />
     </script>
-    <script name="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragCopy_277701301.as" mod="1451881628482" size="635" optimizedsize="374">
+    <script name="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragCopy_277701301.as" mod="1451881628457" size="635" optimizedsize="374">
       <def id="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragCopy_277701301" />
       <pre id="mx.core:SpriteAsset" />
       <dep id="AS3" />
@@ -1497,7 +1497,7 @@
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
     </script>
-    <script name="_class_embed_css_win_min_over_png_1946981159_2040904769.as" mod="1451289688482" size="521" optimizedsize="301">
+    <script name="_class_embed_css_win_min_over_png_1946981159_2040904769.as" mod="1451289688457" size="521" optimizedsize="301">
       <def id="_class_embed_css_win_min_over_png_1946981159_2040904769" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -1910,7 +1910,7 @@
       <dep id="QName" />
       <dep id="mx.rpc.soap:SOAPEncoder" />
     </script>
-    <script name="_net_vdombox_ide_core_view_skins_MainWindowTitleBarSkinWatcherSetupUtil.as" mod="1493355442605" size="897" optimizedsize="428">
+    <script name="_net_vdombox_ide_core_view_skins_MainWindowTitleBarSkinWatcherSetupUtil.as" mod="1501145690416" size="897" optimizedsize="428">
       <def id="_net_vdombox_ide_core_view_skins_MainWindowTitleBarSkinWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -2252,7 +2252,7 @@
       <dep id="SecurityError" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\framework_rb.swc$locale/en_US/skins.properties" mod="1492062286323" size="572" optimizedsize="524">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\framework_rb.swc$locale/en_US/skins.properties" mod="1492062286317" size="572" optimizedsize="524">
       <def id="fr_FR$skins_properties" />
       <def id="ru_RU$skins_properties" />
       <def id="en_US$skins_properties" />
@@ -2323,7 +2323,7 @@
       <dep id="net.vdombox.ide.common.model:ProxyStorage" />
       <dep id="net.vdombox.ide.core:ApplicationFacade" />
     </script>
-    <script name="_net_vdombox_ide_core_view_skins_ApplicationsIconsChoosWindowSkinWatcherSetupUtil.as" mod="1493355441937" size="1260" optimizedsize="662">
+    <script name="_net_vdombox_ide_core_view_skins_ApplicationsIconsChoosWindowSkinWatcherSetupUtil.as" mod="1501145689872" size="1260" optimizedsize="662">
       <def id="_net_vdombox_ide_core_view_skins_ApplicationsIconsChoosWindowSkinWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -3295,7 +3295,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="_VdomIDE_mx_managers_SystemManager.as" mod="1493355443025" size="3861" optimizedsize="2714">
+    <script name="_VdomIDE_mx_managers_SystemManager.as" mod="1501145690817" size="3861" optimizedsize="2714">
       <def id="_VdomIDE_mx_managers_SystemManager" />
       <pre id="flashx.textLayout.compose:ISWFContext" />
       <pre id="mx.core:IFlexModuleFactory" />
@@ -3483,7 +3483,7 @@
       <dep id="mx.events:PropertyChangeEventKind" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_class_embed_css_win_restore_over_png__596538133_479228645.as" mod="1451289688483" size="530" optimizedsize="304">
+    <script name="_class_embed_css_win_restore_over_png__596538133_479228645.as" mod="1451289688457" size="530" optimizedsize="304">
       <def id="_class_embed_css_win_restore_over_png__596538133_479228645" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -3506,7 +3506,7 @@
       <dep id="mx.resources:IResourceManager" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\view\components\ApplicationListItemRenderer.mxml" mod="1491983746050" size="21910" optimizedsize="12044">
+    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\view\components\ApplicationListItemRenderer.mxml" mod="1491983746050" size="21889" optimizedsize="12055">
       <def id="net.vdombox.ide.core.view.components:ApplicationListItemRenderer" />
       <pre id="spark.components.supportClasses:ItemRenderer" />
       <pre id="flash.events:IEventDispatcher" />
@@ -3752,7 +3752,7 @@
       <dep id="mx.core:IWindow" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/styles.properties" mod="1492062286322" size="589" optimizedsize="541">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/styles.properties" mod="1492062286317" size="589" optimizedsize="541">
       <def id="en_US$styles_properties" />
       <def id="ru_RU$styles_properties" />
       <def id="fr_FR$styles_properties" />
@@ -4004,7 +4004,7 @@
       <dep id="AS3" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/logging.properties" mod="1492062286323" size="1075" optimizedsize="1012">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/logging.properties" mod="1492062286317" size="1075" optimizedsize="1012">
       <def id="fr_FR$logging_properties" />
       <def id="en_US$logging_properties" />
       <def id="ru_RU$logging_properties" />
@@ -4462,7 +4462,7 @@
       <dep id="AS3" />
       <dep id="flashx.textLayout.elements:TextFlow" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\spark_rb.swc$locale/en_US/collections.properties" mod="1492062286322" size="2743" optimizedsize="2608">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\spark_rb.swc$locale/en_US/collections.properties" mod="1492062286317" size="2743" optimizedsize="2608">
       <def id="en_US$collections_properties" />
       <def id="ru_RU$collections_properties" />
       <def id="fr_FR$collections_properties" />
@@ -4693,7 +4693,7 @@
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
     </script>
-    <script name="_class_embed_css_mac_close_over_png__996736594_1549598824.as" mod="1451289688483" size="527" optimizedsize="303">
+    <script name="_class_embed_css_mac_close_over_png__996736594_1549598824.as" mod="1451289688457" size="527" optimizedsize="303">
       <def id="_class_embed_css_mac_close_over_png__996736594_1549598824" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -5174,7 +5174,7 @@
       <dep id="mx.resources:ResourceManager" />
       <dep id="mx.messaging:MessageAgent" />
     </script>
-    <script name="_class_embed_css_win_min_down_png__1449991179_129250321.as" mod="1451289688483" size="521" optimizedsize="301">
+    <script name="_class_embed_css_win_min_down_png__1449991179_129250321.as" mod="1451289688457" size="521" optimizedsize="301">
       <def id="_class_embed_css_win_min_down_png__1449991179_129250321" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -5346,7 +5346,7 @@
       <dep id="mx.effects:IEffectInstance" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/utils.properties" mod="1492062286322" size="642" optimizedsize="594">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/utils.properties" mod="1492062286317" size="642" optimizedsize="594">
       <def id="fr_FR$utils_properties" />
       <def id="en_US$utils_properties" />
       <def id="ru_RU$utils_properties" />
@@ -5605,7 +5605,7 @@
       <dep id="AS3" />
       <dep id="flashx.textLayout.formats:ITextLayoutFormat" />
     </script>
-    <script name="_net_vdombox_ide_core_view_components_ErrorViewWatcherSetupUtil.as" mod="1493355442197" size="1233" optimizedsize="725">
+    <script name="_net_vdombox_ide_core_view_components_ErrorViewWatcherSetupUtil.as" mod="1501145690067" size="1233" optimizedsize="725">
       <def id="_net_vdombox_ide_core_view_components_ErrorViewWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -5837,16 +5837,16 @@
       <dep id="QName" />
       <dep id="mx.rpc.soap.mxml:WebService" />
       <dep id="mx.rpc:AsyncToken" />
-      <dep id="Error" />
       <dep id="XMLList" />
+      <dep id="Error" />
       <dep id="mx.rpc.events:ResultEvent" />
       <dep id="mx.resources:ResourceManager" />
       <dep id="mx.rpc.soap:SOAPFault" />
       <dep id="flash.events:Event" />
       <dep id="net.vdombox.ide.core.events:SOAPErrorEvent" />
       <dep id="net.vdombox.ide.core.events:SOAPEvent" />
-      <dep id="mx.rpc.soap:LoadEvent" />
       <dep id="trace" />
+      <dep id="mx.rpc.soap:LoadEvent" />
       <dep id="flash.events:EventDispatcher" />
       <dep id="XML" />
       <dep id="net.vdombox.ide.core.model.business.protect:Code" />
@@ -5919,7 +5919,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="_class_embed_css_Assets_swf__886165602_mx_skins_cursor_BusyCursor_49013237.as" mod="1451881562416" size="638" optimizedsize="375">
+    <script name="_class_embed_css_Assets_swf__886165602_mx_skins_cursor_BusyCursor_49013237.as" mod="1451881562403" size="638" optimizedsize="375">
       <def id="_class_embed_css_Assets_swf__886165602_mx_skins_cursor_BusyCursor_49013237" />
       <pre id="mx.core:SpriteAsset" />
       <dep id="AS3" />
@@ -6132,7 +6132,7 @@
       <dep id="AS3" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_net_vdombox_ide_core_view_skins_AlertWindowSkinWatcherSetupUtil.as" mod="1493355442314" size="1838" optimizedsize="1381">
+    <script name="_net_vdombox_ide_core_view_skins_AlertWindowSkinWatcherSetupUtil.as" mod="1501145690127" size="1838" optimizedsize="1381">
       <def id="_net_vdombox_ide_core_view_skins_AlertWindowSkinWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -6273,7 +6273,7 @@
       <dep id="mx.messaging.messages:ISmallMessage" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\spark_rb.swc$locale/en_US/components.properties" mod="1492062286332" size="5508" optimizedsize="5307">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\spark_rb.swc$locale/en_US/components.properties" mod="1492062286324" size="5508" optimizedsize="5307">
       <def id="en_US$components_properties" />
       <def id="fr_FR$components_properties" />
       <def id="ru_RU$components_properties" />
@@ -6666,7 +6666,7 @@
       <dep id="net.vdombox.ide.common.view.skins.VDOMScrollBarSkin.VDOMScrollBarSkin:VDOMHScrollBarTrumbSkin" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\view\skins\ApplicationManagerWindowSkin.mxml" mod="1491983746058" size="7965" optimizedsize="4886">
+    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\view\skins\ApplicationManagerWindowSkin.mxml" mod="1491983746058" size="7964" optimizedsize="4886">
       <def id="net.vdombox.ide.core.view.skins:ApplicationManagerWindowSkin" />
       <pre id="flash.events:IEventDispatcher" />
       <pre id="spark.skins:SparkSkin" />
@@ -6767,7 +6767,7 @@
       <dep id="mx.events:PropertyChangeEvent" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_net_vdombox_ide_core_view_components_SaveButtonWatcherSetupUtil.as" mod="1493355441930" size="1346" optimizedsize="895">
+    <script name="_net_vdombox_ide_core_view_components_SaveButtonWatcherSetupUtil.as" mod="1501145689866" size="1346" optimizedsize="895">
       <def id="_net_vdombox_ide_core_view_components_SaveButtonWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -7047,7 +7047,7 @@
       <dep id="mx.core:Singleton" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragMove_277988881.as" mod="1451881628482" size="635" optimizedsize="374">
+    <script name="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragMove_277988881.as" mod="1451881628457" size="635" optimizedsize="374">
       <def id="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragMove_277988881" />
       <pre id="mx.core:SpriteAsset" />
       <dep id="AS3" />
@@ -7813,7 +7813,7 @@
       <dep id="AS3" />
       <dep id="Math" />
     </script>
-    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\view\UpdateMediator.as" mod="1491983746049" size="3230" optimizedsize="2026">
+    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\view\UpdateMediator.as" mod="1501145655355" size="3417" optimizedsize="2103">
       <def id="net.vdombox.ide.core.view:UpdateMediator" />
       <pre id="org.puremvc.as3.multicore.interfaces:IMediator" />
       <pre id="org.puremvc.as3.multicore.patterns.mediator:Mediator" />
@@ -7900,7 +7900,7 @@
       <dep id="AS3" />
       <dep id="flashx.textLayout.elements:TableElement" />
     </script>
-    <script name="_net_vdombox_ide_core_view_components_ApplicationsViewWatcherSetupUtil.as" mod="1493355442173" size="1175" optimizedsize="632">
+    <script name="_net_vdombox_ide_core_view_components_ApplicationsViewWatcherSetupUtil.as" mod="1501145690134" size="1175" optimizedsize="632">
       <def id="_net_vdombox_ide_core_view_components_ApplicationsViewWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -7932,12 +7932,12 @@
       <dep id="Error" />
       <dep id="org.puremvc.as3.multicore.patterns.observer:Observer" />
     </script>
-    <script name="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragReject_1209551233.as" mod="1451881628482" size="644" optimizedsize="377">
+    <script name="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragReject_1209551233.as" mod="1451881628457" size="644" optimizedsize="377">
       <def id="_class_embed_css_Assets_swf__361771521_mx_skins_cursor_DragReject_1209551233" />
       <pre id="mx.core:SpriteAsset" />
       <dep id="AS3" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/core.properties" mod="1492062286323" size="2040" optimizedsize="1947">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/core.properties" mod="1492062286317" size="2040" optimizedsize="1947">
       <def id="en_US$core_properties" />
       <def id="fr_FR$core_properties" />
       <def id="ru_RU$core_properties" />
@@ -8192,12 +8192,12 @@
       <dep id="AS3" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_class_embed_css_mac_max_down_png_976622224_1415627494.as" mod="1451289688483" size="518" optimizedsize="300">
+    <script name="_class_embed_css_mac_max_down_png_976622224_1415627494.as" mod="1451289688457" size="518" optimizedsize="300">
       <def id="_class_embed_css_mac_max_down_png_976622224_1415627494" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
     </script>
-    <script name="_net_vdombox_ide_core_view_components_TaskWatcherSetupUtil.as" mod="1493355441921" size="1082" optimizedsize="601">
+    <script name="_net_vdombox_ide_core_view_components_TaskWatcherSetupUtil.as" mod="1501145689857" size="1082" optimizedsize="601">
       <def id="_net_vdombox_ide_core_view_components_TaskWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -8402,7 +8402,7 @@
       <dep id="spark.skins.spark.windowChrome:MacMaximizeButtonSkin__embed_mxml________________assets_mac_max_up_png_2037018678" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_class_embed_css_win_restore_up_png__358929870_1113061572.as" mod="1451289688483" size="527" optimizedsize="303">
+    <script name="_class_embed_css_win_restore_up_png__358929870_1113061572.as" mod="1451289688457" size="527" optimizedsize="303">
       <def id="_class_embed_css_win_restore_up_png__358929870_1113061572" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -8916,12 +8916,12 @@
       <dep id="flash.filesystem:FileMode" />
       <dep id="flash.events:ErrorEvent" />
     </script>
-    <script name="_class_embed_css_win_close_up_png__1155360184_712746434.as" mod="1451289688483" size="521" optimizedsize="301">
+    <script name="_class_embed_css_win_close_up_png__1155360184_712746434.as" mod="1451289688457" size="521" optimizedsize="301">
       <def id="_class_embed_css_win_close_up_png__1155360184_712746434" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
     </script>
-    <script name="_net_vdombox_ide_core_view_components_LoginViewWatcherSetupUtil.as" mod="1493355442188" size="2184" optimizedsize="1727">
+    <script name="_net_vdombox_ide_core_view_components_LoginViewWatcherSetupUtil.as" mod="1501145690060" size="2184" optimizedsize="1727">
       <def id="_net_vdombox_ide_core_view_components_LoginViewWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -9298,12 +9298,12 @@
       <dep id="mx.events:PropertyChangeEvent" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_class_embed_css_mac_min_up_png__518627301_1857734219.as" mod="1451289688482" size="515" optimizedsize="299">
+    <script name="_class_embed_css_mac_min_up_png__518627301_1857734219.as" mod="1451289688457" size="515" optimizedsize="299">
       <def id="_class_embed_css_mac_min_up_png__518627301_1857734219" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
     </script>
-    <script name="_class_embed_css_mac_min_down_png_1451048290_1770633588.as" mod="1451289688483" size="521" optimizedsize="301">
+    <script name="_class_embed_css_mac_min_down_png_1451048290_1770633588.as" mod="1451289688457" size="521" optimizedsize="301">
       <def id="_class_embed_css_mac_min_down_png_1451048290_1770633588" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -9423,7 +9423,7 @@
       <dep id="flash.geom:Rectangle" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\spark_rb.swc$locale/en_US/sparkEffects.properties" mod="1492062286332" size="1405" optimizedsize="1336">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\spark_rb.swc$locale/en_US/sparkEffects.properties" mod="1492062286324" size="1405" optimizedsize="1336">
       <def id="en_US$sparkEffects_properties" />
       <def id="fr_FR$sparkEffects_properties" />
       <def id="ru_RU$sparkEffects_properties" />
@@ -9468,7 +9468,7 @@
       <dep id="net.vdombox.ide.common.model._vo:AttributeVO" />
       <dep id="net.vdombox.ide.common.interfaces:IVDOMObjectVO" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\framework_rb.swc$locale/en_US/effects.properties" mod="1492062286322" size="701" optimizedsize="650">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\framework_rb.swc$locale/en_US/effects.properties" mod="1492062286317" size="701" optimizedsize="650">
       <def id="ru_RU$effects_properties" />
       <def id="fr_FR$effects_properties" />
       <def id="en_US$effects_properties" />
@@ -9754,7 +9754,7 @@
       <dep id="mx.rpc.xml:SchemaConstants" />
       <dep id="QName" />
     </script>
-    <script name="_net_vdombox_ide_core_view_skins_MainWindowSkinWatcherSetupUtil.as" mod="1493355442149" size="1150" optimizedsize="644">
+    <script name="_net_vdombox_ide_core_view_skins_MainWindowSkinWatcherSetupUtil.as" mod="1501145690047" size="1150" optimizedsize="644">
       <def id="_net_vdombox_ide_core_view_skins_MainWindowSkinWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -9904,7 +9904,7 @@
       <dep id="XML" />
       <dep id="mx.core:Singleton" />
     </script>
-    <script name="_class_embed_css_win_restore_down_png_301456825_83557933.as" mod="1451289688483" size="524" optimizedsize="302">
+    <script name="_class_embed_css_win_restore_down_png_301456825_83557933.as" mod="1451289688457" size="524" optimizedsize="302">
       <def id="_class_embed_css_win_restore_down_png_301456825_83557933" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -10309,7 +10309,7 @@
       <dep id="flash.events:Event" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/messaging.properties" mod="1492062286330" size="6956" optimizedsize="6697">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/messaging.properties" mod="1492062286323" size="6956" optimizedsize="6697">
       <def id="fr_FR$messaging_properties" />
       <def id="en_US$messaging_properties" />
       <def id="ru_RU$messaging_properties" />
@@ -10326,8 +10326,8 @@
       <dep id="flash.events:IOErrorEvent" />
       <dep id="flash.filesystem:File" />
       <dep id="flash.filesystem:FileStream" />
-      <dep id="flash.filesystem:FileMode" />
       <dep id="flash.utils:ByteArray" />
+      <dep id="flash.filesystem:FileMode" />
       <dep id="net.vdombox.ide.core:ApplicationFacade" />
       <dep id="flash.events:Event" />
     </script>
@@ -10398,7 +10398,7 @@
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
     </script>
-    <script name="_VdomIDE_Styles.as" mod="1493355442771" size="28219" optimizedsize="26661">
+    <script name="_VdomIDE_Styles.as" mod="1501145690572" size="28219" optimizedsize="26661">
       <def id="_VdomIDE_Styles" />
       <pre id="Object" />
       <dep id="_class_embed_css_win_close_down_png__563896241_2136825415" />
@@ -10542,7 +10542,7 @@
       <dep id="flash.display:Graphics" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_net_vdombox_ide_core_view_components_HostsNameRendererWatcherSetupUtil.as" mod="1493355441956" size="1116" optimizedsize="570">
+    <script name="_net_vdombox_ide_core_view_components_HostsNameRendererWatcherSetupUtil.as" mod="1501145689889" size="1116" optimizedsize="570">
       <def id="_net_vdombox_ide_core_view_components_HostsNameRendererWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -10694,7 +10694,7 @@
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
     </script>
-    <script name="_class_embed_css_win_max_up_png__383592420_1191087706.as" mod="1451289688483" size="515" optimizedsize="299">
+    <script name="_class_embed_css_win_max_up_png__383592420_1191087706.as" mod="1451289688457" size="515" optimizedsize="299">
       <def id="_class_embed_css_win_max_up_png__383592420_1191087706" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -10835,7 +10835,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="_class_embed_css_win_close_over_png__1461891199_1994497451.as" mod="1451289688482" size="530" optimizedsize="304">
+    <script name="_class_embed_css_win_close_over_png__1461891199_1994497451.as" mod="1451289688457" size="530" optimizedsize="304">
       <def id="_class_embed_css_win_close_over_png__1461891199_1994497451" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -10917,7 +10917,7 @@
       <dep id="mx.core:ApplicationDomainTarget" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_class_embed_css_Assets_swf__361771521___brokenImage_1186539723.as" mod="1451881628482" size="604" optimizedsize="364">
+    <script name="_class_embed_css_Assets_swf__361771521___brokenImage_1186539723.as" mod="1451881628457" size="604" optimizedsize="364">
       <def id="_class_embed_css_Assets_swf__361771521___brokenImage_1186539723" />
       <pre id="mx.core:SpriteAsset" />
       <dep id="AS3" />
@@ -11278,7 +11278,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="_class_embed_css_mac_close_down_png__98741636_299791482.as" mod="1451289688482" size="521" optimizedsize="301">
+    <script name="_class_embed_css_mac_close_down_png__98741636_299791482.as" mod="1451289688457" size="521" optimizedsize="301">
       <def id="_class_embed_css_mac_close_down_png__98741636_299791482" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -11790,8 +11790,8 @@
       <dep id="net.vdombox.ide.core.model.vo:ModuleVO" />
       <dep id="org.puremvc.as3.multicore.utilities.pipes.plumbing:TeeSplit" />
       <dep id="net.vdombox.ide.common.controller.messages:UIQueryMessage" />
-      <dep id="org.puremvc.as3.multicore.utilities.pipes.plumbing:Junction" />
       <dep id="org.puremvc.as3.multicore.utilities.pipes.plumbing:TeeMerge" />
+      <dep id="org.puremvc.as3.multicore.utilities.pipes.plumbing:Junction" />
       <dep id="net.vdombox.ide.common.controller.messages:LogMessage" />
       <dep id="org.puremvc.as3.multicore.utilities.pipes.interfaces:IPipeFitting" />
       <dep id="net.vdombox.ide.core.model:PipesProxy" />
@@ -11893,7 +11893,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="_class_embed_css_win_min_up_png_2088406894_1567212120.as" mod="1451289688483" size="515" optimizedsize="299">
+    <script name="_class_embed_css_win_min_up_png_2088406894_1567212120.as" mod="1451289688457" size="515" optimizedsize="299">
       <def id="_class_embed_css_win_min_up_png_2088406894_1567212120" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -11979,7 +11979,7 @@
       <dep id="mx.core:mx_internal" />
       <dep id="flash.events:Event" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\textLayout_rb.swc$locale/en_US/textLayout.properties" mod="1492062286333" size="2162" optimizedsize="2051">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\textLayout_rb.swc$locale/en_US/textLayout.properties" mod="1492062286325" size="2162" optimizedsize="2051">
       <def id="fr_FR$textLayout_properties" />
       <def id="ru_RU$textLayout_properties" />
       <def id="en_US$textLayout_properties" />
@@ -12073,7 +12073,7 @@
       <dep id="flashx.textLayout.elements:FlowElement" />
       <dep id="flash.events:MouseEvent" />
     </script>
-    <script name="_class_embed_css_win_close_down_png__563896241_2136825415.as" mod="1451289688482" size="527" optimizedsize="303">
+    <script name="_class_embed_css_win_close_down_png__563896241_2136825415.as" mod="1451289688457" size="527" optimizedsize="303">
       <def id="_class_embed_css_win_close_down_png__563896241_2136825415" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -12423,7 +12423,7 @@
       <dep id="mx.rpc:AsyncToken" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\view\ProxiesJunctionMediator.as" mod="1491983746048" size="4807" optimizedsize="3522">
+    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\view\ProxiesJunctionMediator.as" mod="1491983746048" size="4808" optimizedsize="3522">
       <def id="net.vdombox.ide.core.view:ProxiesJunctionMediator" />
       <pre id="org.puremvc.as3.multicore.utilities.pipes.plumbing:JunctionMediator" />
       <dep id="net.vdombox.ide.common.controller.names:PPMPlaceNames" />
@@ -12466,7 +12466,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="_class_embed_css_mac_min_over_png_553053332_1415558926.as" mod="1451289688483" size="518" optimizedsize="300">
+    <script name="_class_embed_css_mac_min_over_png_553053332_1415558926.as" mod="1451289688457" size="518" optimizedsize="300">
       <def id="_class_embed_css_mac_min_over_png_553053332_1415558926" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -12577,7 +12577,7 @@
       <dep id="mx.core:mx_internal" />
       <dep id="mx.core:IToolTip" />
     </script>
-    <script name="_net_vdombox_ide_core_view_components_InitialWindowWatcherSetupUtil.as" mod="1493355442306" size="1595" optimizedsize="1127">
+    <script name="_net_vdombox_ide_core_view_components_InitialWindowWatcherSetupUtil.as" mod="1501145690118" size="1595" optimizedsize="1127">
       <def id="_net_vdombox_ide_core_view_components_InitialWindowWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -12727,7 +12727,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="_class_embed_css_mac_max_over_png_78627266_1761649132.as" mod="1451289688482" size="515" optimizedsize="299">
+    <script name="_class_embed_css_mac_max_over_png_78627266_1761649132.as" mod="1451289688457" size="515" optimizedsize="299">
       <def id="_class_embed_css_mac_max_over_png_78627266_1761649132" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -12805,7 +12805,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="_net_vdombox_ide_core_view_components_SettingsWindowWatcherSetupUtil.as" mod="1493355442182" size="1505" optimizedsize="1033">
+    <script name="_net_vdombox_ide_core_view_components_SettingsWindowWatcherSetupUtil.as" mod="1501145690054" size="1505" optimizedsize="1033">
       <def id="_net_vdombox_ide_core_view_components_SettingsWindowWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -12850,7 +12850,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\mx_rb.swc$locale/en_US/containers.properties" mod="1492062286326" size="777" optimizedsize="720">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\mx_rb.swc$locale/en_US/containers.properties" mod="1492062286320" size="777" optimizedsize="720">
       <def id="en_US$containers_properties" />
       <def id="fr_FR$containers_properties" />
       <def id="ru_RU$containers_properties" />
@@ -12961,7 +12961,7 @@
       <dep id="flash.utils:flash_proxy" />
       <dep id="mx.utils:object_proxy" />
     </script>
-    <script name="_class_embed_css_win_min_dis_png__2025201487_692885429.as" mod="1451289688483" size="518" optimizedsize="300">
+    <script name="_class_embed_css_win_min_dis_png__2025201487_692885429.as" mod="1451289688457" size="518" optimizedsize="300">
       <def id="_class_embed_css_win_min_dis_png__2025201487_692885429" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -12983,7 +12983,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="_VdomIDE_FlexInit-generated.as" mod="1493355443024" size="7753" optimizedsize="7170">
+    <script name="_VdomIDE_FlexInit-generated.as" mod="1501145690816" size="7753" optimizedsize="7170">
       <def id="_VdomIDE_FlexInit" />
       <pre id="Object" />
       <dep id="flash.net:getClassByAlias" />
@@ -13272,7 +13272,7 @@
       <dep id="AS3" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_class_embed_css_gripper_up_png__1455415598_2026312540.as" mod="1451289688483" size="518" optimizedsize="300">
+    <script name="_class_embed_css_gripper_up_png__1455415598_2026312540.as" mod="1451289688457" size="518" optimizedsize="300">
       <def id="_class_embed_css_gripper_up_png__1455415598_2026312540" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -13369,7 +13369,7 @@
       <pre id="mx.core:ByteArrayAsset" />
       <dep id="AS3" />
     </script>
-    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\model\ServerProxy.as" mod="1493354866039" size="8561" optimizedsize="4996">
+    <script name="D:\FLEX\IDE2\IDE\core\src\net\vdombox\ide\core\model\ServerProxy.as" mod="1493790449648" size="8573" optimizedsize="5008">
       <def id="net.vdombox.ide.core.model:ServerProxy" />
       <pre id="org.puremvc.as3.multicore.interfaces:IProxy" />
       <pre id="org.puremvc.as3.multicore.patterns.proxy:Proxy" />
@@ -13670,7 +13670,7 @@
       <dep id="AS3" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\framework_rb.swc$locale/en_US/controls.properties" mod="1492062286323" size="3305" optimizedsize="3140">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\framework_rb.swc$locale/en_US/controls.properties" mod="1492062286317" size="3305" optimizedsize="3140">
       <def id="en_US$controls_properties" />
       <def id="fr_FR$controls_properties" />
       <def id="ru_RU$controls_properties" />
@@ -13730,7 +13730,7 @@
       <dep id="mx.rpc.events:XMLLoadEvent" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_class_embed_css_mac_max_dis_png__561450314_1878405696.as" mod="1451289688483" size="518" optimizedsize="300">
+    <script name="_class_embed_css_mac_max_dis_png__561450314_1878405696.as" mod="1451289688457" size="518" optimizedsize="300">
       <def id="_class_embed_css_mac_max_dis_png__561450314_1878405696" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -13920,7 +13920,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/rpc.properties" mod="1492062286330" size="4984" optimizedsize="4786">
+    <script name="C:\dev\sdks\4.15.0\frameworks\locale\en_US\rpc_rb.swc$locale/en_US/rpc.properties" mod="1492062286323" size="4984" optimizedsize="4786">
       <def id="fr_FR$rpc_properties" />
       <def id="en_US$rpc_properties" />
       <def id="ru_RU$rpc_properties" />
@@ -14193,7 +14193,7 @@
       <dep id="RegExp" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_net_vdombox_ide_core_view_skins_ErrorViewSkinWatcherSetupUtil.as" mod="1493355442611" size="1331" optimizedsize="891">
+    <script name="_net_vdombox_ide_core_view_skins_ErrorViewSkinWatcherSetupUtil.as" mod="1501145690421" size="1331" optimizedsize="891">
       <def id="_net_vdombox_ide_core_view_skins_ErrorViewSkinWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -14772,7 +14772,7 @@
       <dep id="mx.events:PropertyChangeEvent" />
       <dep id="flash.events:Event" />
     </script>
-    <script name="_class_embed_css_win_max_down_png__1924417245_267180621.as" mod="1451289688482" size="521" optimizedsize="301">
+    <script name="_class_embed_css_win_max_down_png__1924417245_267180621.as" mod="1451289688457" size="521" optimizedsize="301">
       <def id="_class_embed_css_win_max_down_png__1924417245_267180621" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -14917,7 +14917,7 @@
       <dep id="mx.events:PropertyChangeEvent" />
       <dep id="mx.core:mx_internal" />
     </script>
-    <script name="_net_vdombox_ide_core_view_components_ApplicationPropertiesViewWatcherSetupUtil.as" mod="1493355442163" size="1240" optimizedsize="649">
+    <script name="_net_vdombox_ide_core_view_components_ApplicationPropertiesViewWatcherSetupUtil.as" mod="1501145690031" size="1240" optimizedsize="649">
       <def id="_net_vdombox_ide_core_view_components_ApplicationPropertiesViewWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
@@ -15450,7 +15450,7 @@
       <dep id="AS3" />
       <dep id="RegExp" />
     </script>
-    <script name="_class_embed_css_mac_close_up_png_1745679285_1650091089.as" mod="1451289688483" size="521" optimizedsize="301">
+    <script name="_class_embed_css_mac_close_up_png_1745679285_1650091089.as" mod="1451289688457" size="521" optimizedsize="301">
       <def id="_class_embed_css_mac_close_up_png_1745679285_1650091089" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -15941,7 +15941,7 @@
       <pre id="Object" />
       <dep id="AS3" />
     </script>
-    <script name="_class_embed_css_win_max_dis_png__1347768893_509122493.as" mod="1451289688482" size="518" optimizedsize="300">
+    <script name="_class_embed_css_win_max_dis_png__1347768893_509122493.as" mod="1451289688457" size="518" optimizedsize="300">
       <def id="_class_embed_css_win_max_dis_png__1347768893_509122493" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -16993,7 +16993,7 @@
       <dep id="net.vdombox.ide.common.model._vo:ObjectVO" />
       <dep id="net.vdombox.ide.core.model:PageProxy" />
     </script>
-    <script name="_class_embed_css_mac_min_dis_png__1238882908_405000434.as" mod="1451289688483" size="518" optimizedsize="300">
+    <script name="_class_embed_css_mac_min_dis_png__1238882908_405000434.as" mod="1451289688457" size="518" optimizedsize="300">
       <def id="_class_embed_css_mac_min_dis_png__1238882908_405000434" />
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
@@ -17141,7 +17141,7 @@
       <pre id="mx.core:BitmapAsset" />
       <dep id="AS3" />
     </script>
-    <script name="_net_vdombox_ide_core_view_components_ApplicationListItemRendererWatcherSetupUtil.as" mod="1493355441897" size="1204" optimizedsize="606">
+    <script name="_net_vdombox_ide_core_view_components_ApplicationListItemRendererWatcherSetupUtil.as" mod="1501145689835" size="1204" optimizedsize="606">
       <def id="_net_vdombox_ide_core_view_components_ApplicationListItemRendererWatcherSetupUtil" />
       <pre id="mx.binding:IWatcherSetupUtil2" />
       <pre id="Object" />
