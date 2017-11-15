@@ -94,7 +94,8 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );	
 
 			view.tabNavigator.selectedChild = objView;
-			view.validateNow();
+			//view.validateNow();
+			view.invalidateDisplayList();
 		}
 		
 		private var popup:ProgressPopUp;
