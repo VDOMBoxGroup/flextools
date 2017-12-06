@@ -96,7 +96,8 @@ package net.vdombox.object_editor.view.mediators
 			view.fCategory.addEventListener( Event.CHANGE,validateObjectTypeVO )
 			view.fcurrentLocation.addEventListener(Event.CHANGE, changeCurrentLocation);
 			view.editContainersBt.addEventListener(MouseEvent.CLICK, editContainersBtClick); 
-			view.validateNow();
+			//view.validateNow();
+			view.invalidateDisplayList();
 		}
 
 		public function validateObjectTypeVO(event:Event):void

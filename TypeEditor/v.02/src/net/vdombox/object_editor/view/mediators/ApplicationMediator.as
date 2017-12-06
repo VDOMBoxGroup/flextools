@@ -94,7 +94,8 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );	
 
 			view.tabNavigator.selectedChild = objView;
-			view.validateNow();
+			//view.validateNow();
+			view.invalidateDisplayList();
 		}
 		
 		private var popup:ProgressPopUp;
@@ -113,8 +114,8 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			var countChilds:uint = view.tabNavigator.length;
 			var objView:ObjectView = view.tabNavigator.getChildAt( countChilds - 1 ) as ObjectView;
-			view.tabNavigator.removeChild( objView );
-			view.tabNavigator.addChildAt( objView, objTabIndex );
+			//view.tabNavigator.removeChild( objView );
+			//view.tabNavigator.addChildAt( objView, objTabIndex );
 						
 			view.tabNavigator.selectedChild = objView;
 			objView.tabNavigator.selectedIndex = selTab;

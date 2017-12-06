@@ -84,8 +84,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 					{
 						var actVO:ActionVO  = new ActionVO();
 						actVO.help			= actXML.@Help[0] ? actXML.@Help : actXML.@Description;
-						actVO.interfaceName	= actXML.@InterfaceName;
-						actVO.methodName	= actXML.@MethodName;
+						actVO.interfaceName	= actXML.@InterfaceName[0] ? actXML.@InterfaceName : actXML.@DisplayName ;
+						actVO.methodName	= actXML.@MethodName[0] ? actXML.@MethodName : actXML.@Name;
 						actVO.code			= getSourceCode(actXML);
 						
 						for each (var parameterXML : XML in actXML.descendants("Parameter"))
@@ -94,9 +94,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 							
 							actParameter.defaultValue	= parameterXML.@DefaultValue;
 							actParameter.interfacePar	= parameterXML.@Interface;
-							actParameter.interfaceName	= parameterXML.@InterfaceName;
-							actParameter.scriptName		= parameterXML.@ScriptName;
-							actParameter.help			= parameterXML.@Help;
+							actParameter.interfaceName	= parameterXML.@InterfaceName[0] ? parameterXML.@InterfaceName : parameterXML.@DisplayName;
+							actParameter.scriptName		= parameterXML.@ScriptName[0] ? parameterXML.@ScriptName : parameterXML.@Name;
+							actParameter.help			= parameterXML.@Help[0] ? parameterXML.@Help  : parameterXML.@Description ;
 							actParameter.regExp			= parameterXML.@RegularExpressionValidation;
 												
 							actVO.parameters.addItem({label:actParameter.scriptName, data:actParameter});	

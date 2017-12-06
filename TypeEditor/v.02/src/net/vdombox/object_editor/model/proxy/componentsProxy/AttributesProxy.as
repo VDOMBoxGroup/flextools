@@ -68,7 +68,7 @@ import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 					attrib.help			=  StringUtils.getValueFromXML(attrinuteXML, ["Help", "Description" ]).toString();
 					attrib.interfaceType	= attrinuteXML.InterfaceType;
 					attrib.codeInterface	= attrinuteXML.CodeInterface;
-					attrib.colorgroup	= parseInt(StringUtils.getValueFromXML(attrinuteXML, ["ColorGroup"]).toString());
+					attrib.colorgroup	= parseInt(StringUtils.getValueFromXML(attrinuteXML, ["ColorGroup", "Colorgroup"]).toString());
 					attrib.errorValidationMessage		= attrinuteXML.ErrorValidationMessage;
 					attrib.regularExpressionValidation	= attrinuteXML.RegularExpressionValidation;
 					

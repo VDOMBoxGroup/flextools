@@ -140,8 +140,9 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			var id : String = geResourseID(idRes);
 			var b64:Base64Decoder = new Base64Decoder();
 
+			trace(id, "\nb64: \n", readResouce(id));
 			b64.decode(readResouce(id));
-
+			//trace("\nb64: \n", b64);
 			return  b64.toByteArray();
 		}
 

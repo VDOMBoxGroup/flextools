@@ -159,7 +159,7 @@
 				<s:ComboBox id="fResizable" dataProvider="{aResizable}" change="{viewChanged()}" />
 			</mx:FormItem>
 			
-			<mx:FormItem label="Container" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
+			<mx:FormItem label="Container" toolTip="1 - Ordinary Object, 2 - Container, 3 - Top-level container">
 				<s:ComboBox id="fContainerI"  change="{viewChanged()}" >
 					<s:dataProvider>
 						<s:ArrayList>
