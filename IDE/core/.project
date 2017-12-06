@@ -1,15 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>core</name>
-	<comment/>
+	<comment></comment>
 	<projects>
-		<project>DB</project>
-		<project>Events</project>
-		<project>Preview</project>
-		<project>ResourceBrowser</project>
-		<project>Scripts</project>
-		<project>Tree</project>
-		<project>Wysiwyg</project>
+		<project>common</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -35,4 +29,3 @@
 		</variable>
 	</variableList>
 </projectDescription>
-
